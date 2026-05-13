@@ -10,7 +10,7 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 1 Task 1 foundation initialized**.
+Current package state: **Week 1 Task 3 environment validation implemented**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Product features are not implemented yet.
 
@@ -236,10 +236,11 @@ Current implemented files:
 
 ```txt
 src/config/app.ts
+src/config/env.ts
 src/config/features.ts
 ```
 
-`src/config/env.ts` is not implemented yet.
+`src/config/env.ts` contains server-only Zod environment validation. It does not connect to MongoDB, Auth.js, or AI providers.
 
 ### `.github/`
 
@@ -280,6 +281,8 @@ Current implemented tests:
 
 ```txt
 tests/unit/foundation.test.ts
+tests/unit/ui-foundation.test.ts
+tests/unit/env.test.ts
 ```
 
 Playwright config exists, but E2E tests and browsers are not installed/run yet.

@@ -4,6 +4,60 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-13 — Week 1 Task 3 Environment Validation
+
+### Task
+
+Create server-only Zod environment validation without implementing MongoDB, Auth.js, AI providers, or business features.
+
+### Files Added
+
+```txt
+src/config/env.ts
+tests/unit/env.test.ts
+```
+
+### Files Updated
+
+```txt
+package.json
+package-lock.json
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Dependencies Added
+
+```txt
+server-only
+zod
+```
+
+### Reason
+
+Week 1 Task 3 required repeatable validation for environment variables, including production-required secrets, strict feature flag parsing, optional AI and image credentials unless gated features are enabled, URL validation, MongoDB URI format validation, and empty-string normalization for `.env.example` style placeholders.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 3 files, 27 tests
+npm.cmd run build: Pass
+npm run test:e2e: Not run — Playwright browsers not installed yet.
+```
+
+### Notes
+
+- No MongoDB helper was implemented.
+- No Auth.js setup, dashboard, AI provider, AI API call, routine, journal, product, ingredient, upload, or business feature was implemented.
+- `src/config/env.ts` imports `server-only`, exports `parseEnv(source: NodeJS.ProcessEnv)`, and exports `env = parseEnv(process.env)`.
+- `parseEnv` does not read `.env.local`, does not log secrets, and does not generate secrets.
+- npm reported 2 moderate audit vulnerabilities; `npm audit fix --force` was not run by task constraint.
+
 ## 2026-05-13 — Week 1 Task 2 Tooling and UI Foundation
 
 ### Task

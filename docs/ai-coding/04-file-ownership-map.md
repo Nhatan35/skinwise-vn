@@ -41,7 +41,16 @@ Rules:
 - `src/config/app.ts` owns static app metadata.
 - `src/config/features.ts` owns server-side feature flags.
 - incomplete or future features must remain disabled by default.
-- `src/config/env.ts` will own environment validation when implemented.
+- `src/config/env.ts` owns server-only environment validation.
+- `src/config/env.ts` must not connect to MongoDB, Auth.js, or AI providers.
+
+Current status:
+
+```txt
+src/config/app.ts
+src/config/env.ts
+src/config/features.ts
+```
 
 ## 3. Database ownership
 
@@ -67,7 +76,7 @@ Current status:
 src/infrastructure/database/ensure-indexes.ts
 ```
 
-`ensure-indexes.ts` exists as a safe Week 1 Task 1 placeholder. `mongodb.ts`, `collections.ts`, and `env.ts` are not implemented yet.
+`ensure-indexes.ts` exists as a safe Week 1 Task 1 placeholder. `src/config/env.ts` is implemented. `mongodb.ts` and `collections.ts` are not implemented yet.
 
 ## 4. Skin Profile ownership
 

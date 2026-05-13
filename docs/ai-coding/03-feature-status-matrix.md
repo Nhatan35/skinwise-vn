@@ -10,7 +10,7 @@ Last updated: 2026-05-13
 | Engineering guardrails | Done | N/A | N/A | N/A | N/A | ADRs, PR checklist, CI template, execution checklist |
 | Next.js foundation | Done | N/A | Basic home placeholder | N/A | Smoke | Week 1 Task 1 initialized |
 | Tooling and UI foundation | Done | N/A | Shared UI primitives and state components | N/A | Smoke | shadcn/ui initialized under `src/shared/components/ui` |
-| Environment validation | Not Started | N/A | N/A | N/A | No | Week 1 |
+| Environment validation | Done | N/A | N/A | N/A | Unit | Zod parser in `src/config/env.ts`; no DB/Auth/AI calls |
 | Feature flags | Done | N/A | N/A | N/A | Smoke | Week 1 config only; incomplete features false |
 | MongoDB connection | Not Started | N/A | N/A | No | No | Week 1 |
 | DB index script | In Progress | N/A | N/A | No | No | `npm run db:indexes` placeholder exists; real indexes later |

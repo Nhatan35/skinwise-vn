@@ -7,10 +7,10 @@ Last updated: 2026-05-13
 ## 1. Current phase
 
 ```txt
-Week 1 Task 1 foundation initialized
+Week 1 Task 3 environment validation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Task 1 has initialized the Next.js App Router foundation, package scripts, base folder structure, feature flag config, database index placeholder, and smoke test setup. Product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-3 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, database index placeholder, and Zod environment validation. Product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -54,7 +54,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Task 1 has initialized the Next.
 [x] Tailwind configured
 [x] shadcn/ui initialized
 [x] Base folder structure created
-[ ] Environment validation implemented
+[x] Environment validation implemented
 [ ] MongoDB helper implemented
 [ ] Auth.js foundation implemented
 [ ] Protected dashboard shell implemented
@@ -76,7 +76,6 @@ None
 
 ```txt
 Auth implementation
-Environment validation
 MongoDB client helper
 Skin Profile module
 Product module
@@ -95,7 +94,6 @@ Deployment setup
 ## 6. Known gaps
 
 ```txt
-No environment validation exists yet.
 No actual MongoDB connection exists yet.
 No Auth.js foundation or auth middleware exists yet.
 No protected dashboard route exists yet.
@@ -122,13 +120,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Continue Week 1 Task 3 — Environment validation.
+Continue Week 1 Task 4 — MongoDB foundation.
 ```
 
 Recommended next coding task:
 
 ```txt
-Create `src/config/env.ts` with Zod-based environment validation and unit tests.
+Create `src/infrastructure/database/mongodb.ts` and `src/infrastructure/database/collections.ts` without implementing product repositories.
 ```
 
 ## 9. Update rule
