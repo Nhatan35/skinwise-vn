@@ -4,6 +4,83 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-13 — Week 1 Task 2 Tooling and UI Foundation
+
+### Task
+
+Initialize shadcn/ui and add shared UI foundation components without implementing business features.
+
+### Files Added
+
+```txt
+components.json
+src/shared/components/app-shell.tsx
+src/shared/components/empty-state.tsx
+src/shared/components/error-state.tsx
+src/shared/components/loading-state.tsx
+src/shared/components/ui/alert.tsx
+src/shared/components/ui/badge.tsx
+src/shared/components/ui/button.tsx
+src/shared/components/ui/card.tsx
+src/shared/components/ui/dropdown-menu.tsx
+src/shared/components/ui/input.tsx
+src/shared/components/ui/label.tsx
+src/shared/components/ui/select.tsx
+src/shared/components/ui/skeleton.tsx
+src/shared/components/ui/textarea.tsx
+src/shared/utils/cn.ts
+src/shared/utils/index.ts
+tests/unit/ui-foundation.test.ts
+```
+
+### Files Updated
+
+```txt
+package.json
+package-lock.json
+src/app/globals.css
+src/app/layout.tsx
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Dependencies Added
+
+```txt
+class-variance-authority
+clsx
+lucide-react
+radix-ui
+shadcn
+tailwind-merge
+tw-animate-css
+```
+
+### Reason
+
+Week 1 Task 2 required shadcn/ui setup, UI primitives, shared layout/state components, and a `cn` utility under the SkinWise project structure.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 2 files, 6 tests
+npm.cmd run build: Pass
+npm run test:e2e: Not run — Playwright browsers not installed yet.
+```
+
+### Notes
+
+- No product feature was implemented.
+- No Auth, MongoDB, environment validation, protected dashboard, AI, routine, journal, product, ingredient, notification, marketplace, payment, admin, community, diagnosis, or fake result was implemented.
+- `components.json` aliases point to `@/shared/components`, `@/shared/components/ui`, and `@/shared/utils`.
+- `src/shared/components/ui/` exists.
+- `src/components/ui/` does not exist.
+- shadcn CLI initially created default `src/components/ui` and `src/lib` paths; generated files were moved to the approved `src/shared` structure and the empty wrong folders were removed.
+
 ## 2026-05-13 — Week 1 Task 1 Project Foundation
 
 ### Task

@@ -52,7 +52,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Task 1 has initialized the Next.
 [x] Next.js project initialized
 [x] TypeScript configured
 [x] Tailwind configured
-[ ] shadcn/ui initialized
+[x] shadcn/ui initialized
 [x] Base folder structure created
 [ ] Environment validation implemented
 [ ] MongoDB helper implemented
@@ -63,6 +63,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Task 1 has initialized the Next.
 [x] Database index script placeholder implemented
 [x] CI exists in implementation repo
 [x] Basic package scripts configured
+[x] Shared UI foundation components implemented
 ```
 
 ## 4. In progress
@@ -98,7 +99,6 @@ No environment validation exists yet.
 No actual MongoDB connection exists yet.
 No Auth.js foundation or auth middleware exists yet.
 No protected dashboard route exists yet.
-shadcn/ui is not initialized yet.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 ```
@@ -122,13 +122,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Continue Week 1 Task 2 — Tooling and UI foundation.
+Continue Week 1 Task 3 — Environment validation.
 ```
 
 Recommended next coding task:
 
 ```txt
-Initialize shadcn/ui and add basic shared UI components without implementing product features.
+Create `src/config/env.ts` with Zod-based environment validation and unit tests.
 ```
 
 ## 9. Update rule

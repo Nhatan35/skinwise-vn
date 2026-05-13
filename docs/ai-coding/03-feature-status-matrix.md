@@ -9,6 +9,7 @@ Last updated: 2026-05-13
 | Documentation SDD | Done | N/A | N/A | N/A | N/A | v1.2.6 final freeze ready |
 | Engineering guardrails | Done | N/A | N/A | N/A | N/A | ADRs, PR checklist, CI template, execution checklist |
 | Next.js foundation | Done | N/A | Basic home placeholder | N/A | Smoke | Week 1 Task 1 initialized |
+| Tooling and UI foundation | Done | N/A | Shared UI primitives and state components | N/A | Smoke | shadcn/ui initialized under `src/shared/components/ui` |
 | Environment validation | Not Started | N/A | N/A | N/A | No | Week 1 |
 | Feature flags | Done | N/A | N/A | N/A | Smoke | Week 1 config only; incomplete features false |
 | MongoDB connection | Not Started | N/A | N/A | No | No | Week 1 |

@@ -225,11 +225,15 @@ Rules:
 Planned owned files:
 
 ```txt
+components.json
 src/shared/components/app-shell.tsx
 src/shared/components/empty-state.tsx
 src/shared/components/error-state.tsx
 src/shared/components/loading-state.tsx
+src/shared/components/ui/
 src/shared/constants/routes.ts
+src/shared/utils/cn.ts
+src/shared/utils/index.ts
 src/shared/types/result.ts
 ```
 
@@ -241,11 +245,19 @@ Rules:
 Current status:
 
 ```txt
+components.json
+src/shared/components/app-shell.tsx
+src/shared/components/empty-state.tsx
+src/shared/components/error-state.tsx
+src/shared/components/loading-state.tsx
+src/shared/components/ui/
 src/shared/constants/routes.ts
+src/shared/utils/cn.ts
+src/shared/utils/index.ts
 src/shared/types/result.ts
 ```
 
-Shared UI components are not implemented yet.
+Shared UI foundation components are implemented. shadcn/ui components must remain under `src/shared/components/ui/`; do not create `src/components/ui/`.
 
 ## 12. Reserved future ownership
 
