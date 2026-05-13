@@ -26,6 +26,23 @@ Rules:
 - never trust `userId` from request body;
 - admin checks must be centralized.
 
+## 2.1 Foundation config ownership
+
+Owned files:
+
+```txt
+src/config/app.ts
+src/config/features.ts
+src/config/env.ts
+```
+
+Rules:
+
+- `src/config/app.ts` owns static app metadata.
+- `src/config/features.ts` owns server-side feature flags.
+- incomplete or future features must remain disabled by default.
+- `src/config/env.ts` will own environment validation when implemented.
+
 ## 3. Database ownership
 
 Planned owned files:
@@ -43,6 +60,14 @@ Rules:
 - all environment variables must be validated through `src/config/env.ts`;
 - repositories must use shared database helpers;
 - required indexes must be created through `ensure-indexes.ts`, not route handlers.
+
+Current status:
+
+```txt
+src/infrastructure/database/ensure-indexes.ts
+```
+
+`ensure-indexes.ts` exists as a safe Week 1 Task 1 placeholder. `mongodb.ts`, `collections.ts`, and `env.ts` are not implemented yet.
 
 ## 4. Skin Profile ownership
 
@@ -205,12 +230,22 @@ src/shared/components/empty-state.tsx
 src/shared/components/error-state.tsx
 src/shared/components/loading-state.tsx
 src/shared/constants/routes.ts
+src/shared/types/result.ts
 ```
 
 Rules:
 
 - shared UI components should not contain business logic;
 - feature-specific UI can live inside module folders or route segments later.
+
+Current status:
+
+```txt
+src/shared/constants/routes.ts
+src/shared/types/result.ts
+```
+
+Shared UI components are not implemented yet.
 
 ## 12. Reserved future ownership
 
@@ -242,3 +277,30 @@ Rules:
 - update ADRs when a major architecture decision changes;
 - keep CI commands aligned with `package.json`;
 - keep PR checklist aligned with source-of-truth rules.
+
+## 13. Week 1 Task 1 placeholder ownership
+
+Placeholder folders created:
+
+```txt
+src/modules/auth/
+src/modules/users/
+src/modules/skin-profile/
+src/modules/products/
+src/modules/ingredients/
+src/modules/routines/
+src/modules/routine-logs/
+src/modules/ai-analysis/
+src/modules/journals/
+src/domain/
+tests/unit/
+tests/integration/
+tests/e2e/
+tests/evals/
+```
+
+Rules:
+
+- these folders are structure placeholders only;
+- no product feature logic is implemented in these folders yet;
+- `src/modules/notifications/` must not be created during MVP Week 1.

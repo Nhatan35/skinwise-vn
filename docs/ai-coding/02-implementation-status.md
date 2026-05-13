@@ -7,10 +7,10 @@ Last updated: 2026-05-13
 ## 1. Current phase
 
 ```txt
-Pre-implementation / Week 1 preparation
+Week 1 Task 1 foundation initialized
 ```
 
-The SDD v1.2.6 final freeze is complete. The package is ready for Week 1 implementation. The current package primarily contains documentation, prompts, ADRs, and engineering guardrail templates.
+The SDD v1.2.6 final freeze is complete. Week 1 Task 1 has initialized the Next.js App Router foundation, package scripts, base folder structure, feature flag config, database index placeholder, and smoke test setup. Product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -49,31 +49,34 @@ The SDD v1.2.6 final freeze is complete. The package is ready for Week 1 impleme
 ## 3. Completed code
 
 ```txt
-[ ] Next.js project initialized
-[ ] TypeScript configured
-[ ] Tailwind configured
+[x] Next.js project initialized
+[x] TypeScript configured
+[x] Tailwind configured
 [ ] shadcn/ui initialized
-[ ] Base folder structure created
+[x] Base folder structure created
 [ ] Environment validation implemented
 [ ] MongoDB helper implemented
 [ ] Auth.js foundation implemented
 [ ] Protected dashboard shell implemented
-[ ] Test setup implemented
-[ ] Feature flag config implemented
-[ ] Database index script implemented
-[ ] CI copied into implementation repo
+[x] Test setup implemented
+[x] Feature flag config implemented
+[x] Database index script placeholder implemented
+[x] CI exists in implementation repo
+[x] Basic package scripts configured
 ```
 
 ## 4. In progress
 
 ```txt
-None yet
+None
 ```
 
 ## 5. Not started
 
 ```txt
 Auth implementation
+Environment validation
+MongoDB client helper
 Skin Profile module
 Product module
 Ingredient module
@@ -91,13 +94,13 @@ Deployment setup
 ## 6. Known gaps
 
 ```txt
-No application code exists yet in this SDD package.
-No package.json exists yet in this SDD package.
+No environment validation exists yet.
 No actual MongoDB connection exists yet.
-No auth middleware exists yet.
+No Auth.js foundation or auth middleware exists yet.
 No protected dashboard route exists yet.
-No tests exist yet.
-SDD v1.2.6 final freeze completed.
+shadcn/ui is not initialized yet.
+Playwright browsers are not installed yet; E2E tests were not run.
+npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 ```
 
 ## 7. Do not work on yet
@@ -119,13 +122,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Start Week 1 Task 1 — Project initialization.
+Continue Week 1 Task 2 — Tooling and UI foundation.
 ```
 
-Recommended first coding task:
+Recommended next coding task:
 
 ```txt
-Initialize Next.js App Router project and create the base source structure according to docs/10-project-structure.md, docs/12-week-1-implementation-plan.md, and docs/19-engineering-execution-checklist.md.
+Initialize shadcn/ui and add basic shared UI components without implementing product features.
 ```
 
 ## 9. Update rule

@@ -8,11 +8,12 @@ Last updated: 2026-05-13
 |---|---|---|---|---|---|---|
 | Documentation SDD | Done | N/A | N/A | N/A | N/A | v1.2.6 final freeze ready |
 | Engineering guardrails | Done | N/A | N/A | N/A | N/A | ADRs, PR checklist, CI template, execution checklist |
-| Next.js foundation | Not Started | N/A | No | N/A | No | Week 1 |
+| Next.js foundation | Done | N/A | Basic home placeholder | N/A | Smoke | Week 1 Task 1 initialized |
 | Environment validation | Not Started | N/A | N/A | N/A | No | Week 1 |
-| Feature flags | Not Started | N/A | N/A | N/A | No | Week 1 config only |
+| Feature flags | Done | N/A | N/A | N/A | Smoke | Week 1 config only; incomplete features false |
 | MongoDB connection | Not Started | N/A | N/A | No | No | Week 1 |
-| DB index script | Not Started | N/A | N/A | No | No | `npm run db:indexes` placeholder in Week 1 |
+| DB index script | In Progress | N/A | N/A | No | No | `npm run db:indexes` placeholder exists; real indexes later |
+| Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Not Started | Partial later | Partial later | Auth.js adapter later | No | Week 1; `/api/me` lazy profile creation |
 | Protected dashboard shell | Not Started | N/A | No | N/A | No | Week 1 |
 | Skin Profile | Not Started | No | No | No | No | Week 2 |

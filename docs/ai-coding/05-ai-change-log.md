@@ -4,6 +4,76 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-13 — Week 1 Task 1 Project Foundation
+
+### Task
+
+Initialize the real repo's Next.js App Router foundation without rerunning create-next-app or implementing product features.
+
+### Files Added
+
+```txt
+vitest.config.ts
+playwright.config.ts
+src/config/app.ts
+src/config/features.ts
+src/shared/constants/routes.ts
+src/shared/types/result.ts
+src/infrastructure/database/ensure-indexes.ts
+tests/unit/foundation.test.ts
+src/modules/auth/.gitkeep
+src/modules/users/.gitkeep
+src/modules/skin-profile/.gitkeep
+src/modules/products/.gitkeep
+src/modules/ingredients/.gitkeep
+src/modules/routines/.gitkeep
+src/modules/routine-logs/.gitkeep
+src/modules/ai-analysis/.gitkeep
+src/modules/journals/.gitkeep
+src/domain/.gitkeep
+tests/integration/.gitkeep
+tests/e2e/.gitkeep
+tests/evals/.gitkeep
+```
+
+### Files Updated
+
+```txt
+package.json
+package-lock.json
+src/app/layout.tsx
+src/app/page.tsx
+src/app/globals.css
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+Week 1 Task 1 required normalizing the copied Next.js foundation inside the real repository, adding package scripts, base folder structure, test configs, safe feature flags, a repeatable `db:indexes` placeholder, and a minimal smoke test.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 1 file, 3 tests
+npm.cmd run build: Pass
+npm run test:e2e: Not run — Playwright browsers not installed yet.
+```
+
+### Notes
+
+- No product feature was implemented.
+- No AI provider, AI API call, image upload, marketplace, notifications, skin score, admin, payment, or community feature was implemented.
+- `src/modules/notifications/` was not created.
+- `npm.cmd install -D vitest @vitest/ui playwright tsx` was run to update test tooling and `package-lock.json`.
+- `src/shared/constants/routes.ts` uses the final Week 1 uppercase route constants.
+- `src/shared/types/result.ts` uses the simple `Result<T, E = Error>` union.
+- npm reported 2 moderate audit vulnerabilities; `npm audit fix --force` was not run by task constraint.
 
 ## 2026-05-13 — v1.2.6 final freeze and engineering execution guardrails
 
