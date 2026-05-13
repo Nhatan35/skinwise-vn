@@ -4,6 +4,66 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-13 — Week 1 Task 4 MongoDB Foundation
+
+### Task
+
+Create MongoDB infrastructure foundation without implementing Auth.js, API routes, repositories, seed data, or business features.
+
+### Files Added
+
+```txt
+src/infrastructure/database/mongodb.ts
+src/infrastructure/database/collections.ts
+tests/unit/mongodb.test.ts
+tests/unit/database-collections.test.ts
+tests/unit/database-indexes.test.ts
+```
+
+### Files Updated
+
+```txt
+src/infrastructure/database/ensure-indexes.ts
+package.json
+package-lock.json
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Dependencies Added
+
+```txt
+mongodb
+```
+
+### Reason
+
+Week 1 Task 4 required a server-only MongoDB client helper, centralized collection names, and a repeatable index script aligned with the v1.2.6 data model and ADR-0006. The implementation keeps `MONGODB_URI` access centralized through `src/config/env.ts`, avoids connection at import time, and exposes index definitions for unit tests without a real MongoDB server.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 6 files, 46 tests
+npm.cmd run build: Pass
+npm.cmd run db:indexes: Not run — requires MONGODB_URI and was not run against a real database.
+npm run test:e2e: Not run — Playwright browsers are not installed yet.
+```
+
+### Notes
+
+- No Auth.js implementation was added.
+- `next-auth` and `@auth/mongodb-adapter` were not installed.
+- No API routes, repositories, seed data, fake data, or business features were implemented.
+- Unit tests do not call a real MongoDB server.
+- `ensure-indexes.ts` does not create indexes on import and does not create Auth.js adapter indexes.
+- `DATABASE_INDEX_DEFINITIONS` excludes future/out-of-scope image upload, notifications, marketplace, skin score, face analysis, payment, and subscription fields.
+- npm reported 2 moderate audit vulnerabilities; `npm audit fix --force` was not run by task constraint.
+
 ## 2026-05-13 — Week 1 Task 3 Environment Validation
 
 ### Task

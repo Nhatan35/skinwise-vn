@@ -12,8 +12,8 @@ Last updated: 2026-05-13
 | Tooling and UI foundation | Done | N/A | Shared UI primitives and state components | N/A | Smoke | shadcn/ui initialized under `src/shared/components/ui` |
 | Environment validation | Done | N/A | N/A | N/A | Unit | Zod parser in `src/config/env.ts`; no DB/Auth/AI calls |
 | Feature flags | Done | N/A | N/A | N/A | Smoke | Week 1 config only; incomplete features false |
-| MongoDB connection | Not Started | N/A | N/A | No | No | Week 1 |
-| DB index script | In Progress | N/A | N/A | No | No | `npm run db:indexes` placeholder exists; real indexes later |
+| MongoDB connection | Done | N/A | N/A | Helper only | Unit | Server-only helper exists; no real DB call in unit tests |
+| DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented; real run requires `MONGODB_URI` |
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Not Started | Partial later | Partial later | Auth.js adapter later | No | Week 1; `/api/me` lazy profile creation |
 | Protected dashboard shell | Not Started | N/A | No | N/A | No | Week 1 |

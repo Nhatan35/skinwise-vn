@@ -7,10 +7,10 @@ Last updated: 2026-05-13
 ## 1. Current phase
 
 ```txt
-Week 1 Task 3 environment validation implemented
+Week 1 Task 4 MongoDB foundation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-3 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, database index placeholder, and Zod environment validation. Product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-4 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB driver dependency, MongoDB client helper, centralized collection names, and repeatable database index definitions. Product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -55,12 +55,12 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-3 have initialized the N
 [x] shadcn/ui initialized
 [x] Base folder structure created
 [x] Environment validation implemented
-[ ] MongoDB helper implemented
+[x] MongoDB helper implemented
 [ ] Auth.js foundation implemented
 [ ] Protected dashboard shell implemented
 [x] Test setup implemented
 [x] Feature flag config implemented
-[x] Database index script placeholder implemented
+[x] Database index script implemented
 [x] CI exists in implementation repo
 [x] Basic package scripts configured
 [x] Shared UI foundation components implemented
@@ -76,7 +76,6 @@ None
 
 ```txt
 Auth implementation
-MongoDB client helper
 Skin Profile module
 Product module
 Ingredient module
@@ -94,7 +93,7 @@ Deployment setup
 ## 6. Known gaps
 
 ```txt
-No actual MongoDB connection exists yet.
+MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
 No Auth.js foundation or auth middleware exists yet.
 No protected dashboard route exists yet.
 Playwright browsers are not installed yet; E2E tests were not run.
@@ -120,13 +119,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Continue Week 1 Task 4 — MongoDB foundation.
+Continue Week 1 Task 5 — Auth foundation.
 ```
 
 Recommended next coding task:
 
 ```txt
-Create `src/infrastructure/database/mongodb.ts` and `src/infrastructure/database/collections.ts` without implementing product repositories.
+Create `src/modules/auth/auth.config.ts`, `src/modules/auth/get-current-user.ts`, Auth.js route foundation, and middleware without implementing product features.
 ```
 
 ## 9. Update rule

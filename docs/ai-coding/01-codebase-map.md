@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 1 Task 3 environment validation implemented**.
+Current package state: **Week 1 Task 4 MongoDB foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-4 have added project foundation, UI tooling, environment validation, and MongoDB infrastructure foundation. Product features are not implemented yet.
 
 ## 3. Root structure
 
@@ -189,10 +189,12 @@ Rules:
 Current implemented files:
 
 ```txt
+src/infrastructure/database/collections.ts
 src/infrastructure/database/ensure-indexes.ts
+src/infrastructure/database/mongodb.ts
 ```
 
-`ensure-indexes.ts` is a safe Week 1 Task 1 placeholder. MongoDB client and collection helpers are not implemented yet.
+`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. No repositories or business queries are implemented yet.
 
 ### `src/shared/`
 
@@ -280,9 +282,12 @@ Rules:
 Current implemented tests:
 
 ```txt
-tests/unit/foundation.test.ts
-tests/unit/ui-foundation.test.ts
+tests/unit/database-collections.test.ts
+tests/unit/database-indexes.test.ts
 tests/unit/env.test.ts
+tests/unit/foundation.test.ts
+tests/unit/mongodb.test.ts
+tests/unit/ui-foundation.test.ts
 ```
 
 Playwright config exists, but E2E tests and browsers are not installed/run yet.

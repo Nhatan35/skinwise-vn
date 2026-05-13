@@ -68,15 +68,19 @@ Rules:
 - do not create multiple MongoDB clients;
 - all environment variables must be validated through `src/config/env.ts`;
 - repositories must use shared database helpers;
-- required indexes must be created through `ensure-indexes.ts`, not route handlers.
+- required indexes must be created through `ensure-indexes.ts`, not route handlers;
+- route handlers must not query MongoDB directly;
+- Auth.js adapter later must reuse the shared MongoClient or provider from `mongodb.ts`.
 
 Current status:
 
 ```txt
+src/infrastructure/database/collections.ts
 src/infrastructure/database/ensure-indexes.ts
+src/infrastructure/database/mongodb.ts
 ```
 
-`ensure-indexes.ts` exists as a safe Week 1 Task 1 placeholder. `src/config/env.ts` is implemented. `mongodb.ts` and `collections.ts` are not implemented yet.
+`mongodb.ts` owns the shared MongoDB client helper and lazy client promise. `collections.ts` owns collection names/helpers. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`. No repositories or business logic were implemented in Task 4.
 
 ## 4. Skin Profile ownership
 

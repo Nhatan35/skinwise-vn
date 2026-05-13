@@ -12,12 +12,13 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
-    "db:indexes": "tsx src/infrastructure/database/ensure-indexes.ts"
+    "db:indexes": "node --conditions=react-server --import tsx src/infrastructure/database/ensure-indexes.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",
+    "mongodb": "^7.2.0",
     "next": "16.2.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
