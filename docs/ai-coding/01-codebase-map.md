@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 1 Task 4 MongoDB foundation implemented**.
+Current package state: **Week 1 Task 5 Auth.js foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-4 have added project foundation, UI tooling, environment validation, and MongoDB infrastructure foundation. Product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-5 have added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, and Auth.js foundation. Product features are not implemented yet.
 
 ## 3. Root structure
 
@@ -89,9 +89,12 @@ Current implemented files:
 ```txt
 src/app/layout.tsx
 src/app/page.tsx
+src/app/api/auth/[...nextauth]/route.ts
 src/app/globals.css
 src/app/favicon.ico
 ```
+
+Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js handlers and does not use the SkinWise `{ data, error }` response wrapper.
 
 ### `src/modules/`
 
@@ -125,7 +128,20 @@ Reserved future module:
 notifications
 ```
 
-Week 1 Task 1 created placeholder module folders only:
+Current implemented auth files:
+
+```txt
+src/auth.ts
+src/middleware.ts
+src/modules/auth/auth.config.ts
+src/modules/auth/get-current-user.ts
+src/modules/auth/next-auth.d.ts
+src/modules/auth/types.ts
+```
+
+`auth.config.ts` is edge-safe and owns pure provider/config helpers. `src/auth.ts` owns the full server-side Auth.js setup with MongoDB Adapter gating. `get-current-user.ts` maps Auth.js sessions to a minimal `CurrentUser` without querying `AppUserProfile`.
+
+Week 1 Task 1 created these additional placeholder module folders only:
 
 ```txt
 src/modules/auth/
@@ -139,7 +155,7 @@ src/modules/ai-analysis/
 src/modules/journals/
 ```
 
-No module business logic has been implemented yet.
+No product module business logic has been implemented yet.
 
 ### `src/domain/`
 
@@ -285,7 +301,11 @@ Current implemented tests:
 tests/unit/database-collections.test.ts
 tests/unit/database-indexes.test.ts
 tests/unit/env.test.ts
+tests/unit/auth-config.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/auth-route.test.ts
 tests/unit/foundation.test.ts
+tests/unit/get-current-user.test.ts
 tests/unit/mongodb.test.ts
 tests/unit/ui-foundation.test.ts
 ```

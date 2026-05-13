@@ -7,10 +7,10 @@ Last updated: 2026-05-13
 ## 1. Current phase
 
 ```txt
-Week 1 Task 4 MongoDB foundation implemented
+Week 1 Task 5 Auth.js foundation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-4 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB driver dependency, MongoDB client helper, centralized collection names, and repeatable database index definitions. Product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-5 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, and Auth.js foundation. Product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -56,7 +56,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-4 have initialized the N
 [x] Base folder structure created
 [x] Environment validation implemented
 [x] MongoDB helper implemented
-[ ] Auth.js foundation implemented
+[x] Auth.js foundation implemented
 [ ] Protected dashboard shell implemented
 [x] Test setup implemented
 [x] Feature flag config implemented
@@ -75,7 +75,6 @@ None
 ## 5. Not started
 
 ```txt
-Auth implementation
 Skin Profile module
 Product module
 Ingredient module
@@ -94,7 +93,7 @@ Deployment setup
 
 ```txt
 MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
-No Auth.js foundation or auth middleware exists yet.
+Auth.js foundation exists, but `/api/me` lazy AppUserProfile creation is not implemented yet.
 No protected dashboard route exists yet.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
@@ -119,13 +118,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Continue Week 1 Task 5 — Auth foundation.
+Continue Week 1 Task 6 — Dashboard shell.
 ```
 
 Recommended next coding task:
 
 ```txt
-Create `src/modules/auth/auth.config.ts`, `src/modules/auth/get-current-user.ts`, Auth.js route foundation, and middleware without implementing product features.
+Create `src/app/(dashboard)/layout.tsx` and `src/app/(dashboard)/dashboard/page.tsx` with protected dashboard shell patterns, without implementing product features.
 ```
 
 ## 9. Update rule

@@ -4,6 +4,87 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-13 — Week 1 Task 5 Auth.js Foundation
+
+### Task
+
+Create Auth.js foundation without implementing `/api/me`, AppUserProfile lazy creation, dashboard shell, repositories, business features, or sign-in UI.
+
+### Files Added
+
+```txt
+src/auth.ts
+src/app/api/auth/[...nextauth]/route.ts
+src/middleware.ts
+src/modules/auth/auth.config.ts
+src/modules/auth/get-current-user.ts
+src/modules/auth/next-auth.d.ts
+src/modules/auth/types.ts
+tests/unit/auth-config.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/auth-route.test.ts
+tests/unit/get-current-user.test.ts
+```
+
+### Files Updated
+
+```txt
+package.json
+package-lock.json
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Dependencies Added
+
+```txt
+next-auth@5.0.0-beta.31
+@auth/mongodb-adapter@3.11.2
+```
+
+### Dependency Notes
+
+`@auth/mongodb-adapter@3.11.2` requires `mongodb@^6`, so the existing MongoDB driver dependency was aligned from `mongodb@^7.2.0` to `mongodb@^6.21.0` instead of using `--force` or `--legacy-peer-deps`.
+
+### Reason
+
+Week 1 Task 5 required Auth.js / NextAuth v5-style foundation with a MongoDB Adapter that reuses the shared MongoDB client provider. The implementation separates edge-safe config from full server-side runtime so middleware does not import database code.
+
+### Adapter Gating Behavior
+
+```txt
+production:
+  Requires MONGODB_URI through env validation and uses MongoDB Adapter.
+
+development/test with MONGODB_URI:
+  Uses MongoDB Adapter with the shared getMongoClientPromise provider.
+
+development/test without MONGODB_URI:
+  Falls back to JWT session strategy so lint/typecheck/test/build do not require a real database.
+```
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 10 files, 68 tests
+npm.cmd run build: Pass
+```
+
+`next build` reports a Next.js 16 warning that the `middleware` file convention is deprecated in favor of `proxy`; Task 5 keeps `src/middleware.ts` because it is the current SDD-requested file.
+
+### Notes
+
+- `auth.config.ts` is edge-safe and does not import `server-only`, `src/config/env.ts`, MongoDB Adapter, MongoDB helper, or `src/auth.ts`.
+- Auth.js owns `/api/auth/*`; the route does not use the SkinWise `{ data, error }` response wrapper.
+- `get-current-user.ts` maps session data only and does not query `AppUserProfile`.
+- No `/api/me`, AppUserProfile lazy creation, dashboard shell, repositories, sign-in UI, or business features were implemented.
+- No tokens or secrets are exposed or logged.
+
 ## 2026-05-13 — Week 1 Task 4 MongoDB Foundation
 
 ### Task

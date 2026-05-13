@@ -15,7 +15,7 @@ Last updated: 2026-05-13
 | MongoDB connection | Done | N/A | N/A | Helper only | Unit | Server-only helper exists; no real DB call in unit tests |
 | DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented; real run requires `MONGODB_URI` |
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
-| Auth foundation | Not Started | Partial later | Partial later | Auth.js adapter later | No | Week 1; `/api/me` lazy profile creation |
+| Auth foundation | Done | Auth.js route only | No sign-in UI | MongoDB Adapter gated | Unit | `/api/me` lazy profile creation not implemented in Task 5 |
 | Protected dashboard shell | Not Started | N/A | No | N/A | No | Week 1 |
 | Skin Profile | Not Started | No | No | No | No | Week 2 |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |

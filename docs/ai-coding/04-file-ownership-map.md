@@ -13,8 +13,11 @@ Update this file when new implementation files are added.
 Planned owned files:
 
 ```txt
+src/auth.ts
 src/modules/auth/auth.config.ts
 src/modules/auth/get-current-user.ts
+src/modules/auth/next-auth.d.ts
+src/modules/auth/types.ts
 src/middleware.ts
 src/app/api/auth/[...nextauth]/route.ts
 ```
@@ -24,7 +27,24 @@ Rules:
 - do not duplicate auth logic inside route handlers;
 - always use a shared auth helper for protected APIs;
 - never trust `userId` from request body;
-- admin checks must be centralized.
+- admin checks must be centralized;
+- `auth.config.ts` must remain edge-safe and must not import the MongoDB adapter, MongoDB helper, `src/auth.ts`, `server-only`, or `src/config/env.ts`;
+- `src/auth.ts` owns full server-side Auth.js setup and adapter wiring;
+- `src/app/api/auth/[...nextauth]/route.ts` is owned by Auth.js and must not use the SkinWise response wrapper.
+
+Current status:
+
+```txt
+src/auth.ts
+src/app/api/auth/[...nextauth]/route.ts
+src/middleware.ts
+src/modules/auth/auth.config.ts
+src/modules/auth/get-current-user.ts
+src/modules/auth/next-auth.d.ts
+src/modules/auth/types.ts
+```
+
+Task 5 implements Auth.js foundation only. It does not implement `/api/me`, AppUserProfile lazy creation, sign-in UI, repositories, or product business logic.
 
 ## 2.1 Foundation config ownership
 
