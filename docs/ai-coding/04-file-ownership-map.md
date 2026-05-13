@@ -253,7 +253,41 @@ Rules:
 - no appearance scoring;
 - journal entries are private.
 
-## 11. UI shared ownership
+## 11. Dashboard shell ownership
+
+Owned files:
+
+```txt
+src/app/(dashboard)/layout.tsx
+src/app/(dashboard)/dashboard/page.tsx
+src/modules/dashboard/dashboard-shell.config.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/dashboard-routes.test.ts
+```
+
+Rules:
+
+- `src/app/(dashboard)/dashboard/page.tsx` owns the real `/dashboard` route.
+- do not create `src/app/(dashboard)/page.tsx`;
+- dashboard config must contain safe metadata only;
+- dashboard config must not import auth, database, `server-only`, or API code;
+- only `/dashboard` is an enabled route in the dashboard nav;
+- unimplemented feature nav items must use `href: null` and `disabled: true`;
+- placeholder cards must not contain fake skincare, routine, product, journal, ingredient, or AI results.
+
+Current status:
+
+```txt
+src/app/(dashboard)/layout.tsx
+src/app/(dashboard)/dashboard/page.tsx
+src/modules/dashboard/dashboard-shell.config.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/dashboard-routes.test.ts
+```
+
+Task 6 implements the protected dashboard shell only. It does not implement `/api/me`, AppUserProfile lazy creation, database queries, business APIs, feature routes, fake data, or medical diagnosis.
+
+## 12. UI shared ownership
 
 Planned owned files:
 
@@ -292,7 +326,7 @@ src/shared/types/result.ts
 
 Shared UI foundation components are implemented. shadcn/ui components must remain under `src/shared/components/ui/`; do not create `src/components/ui/`.
 
-## 12. Reserved future ownership
+## 13. Reserved future ownership
 
 Do not implement yet:
 
@@ -304,7 +338,7 @@ src/infrastructure/storage/
 These are reserved for future scope.
 
 
-## 12. Engineering governance ownership
+## 14. Engineering governance ownership
 
 Owned files:
 
@@ -323,7 +357,7 @@ Rules:
 - keep CI commands aligned with `package.json`;
 - keep PR checklist aligned with source-of-truth rules.
 
-## 13. Week 1 Task 1 placeholder ownership
+## 15. Week 1 Task 1 placeholder ownership
 
 Placeholder folders created:
 

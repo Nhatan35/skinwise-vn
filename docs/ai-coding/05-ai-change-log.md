@@ -4,6 +4,54 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 — Week 1 Task 6 Protected Dashboard Shell
+
+### Task
+
+Create the protected `/dashboard` shell without implementing product features, business APIs, `/api/me`, AppUserProfile lazy creation, database queries, fake dashboard data, or custom sign-in UI.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/layout.tsx
+src/app/(dashboard)/dashboard/page.tsx
+src/modules/dashboard/dashboard-shell.config.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/dashboard-routes.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+Week 1 Task 6 required a protected dashboard foundation route. The implementation uses `getCurrentUser()` in the dashboard route group layout and redirects unauthenticated users to the Auth.js default sign-in endpoint at `/api/auth/signin?callbackUrl=/dashboard`.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass — 12 files, 76 tests
+npm.cmd run build: Pass
+```
+
+### Notes
+
+- `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL; it does not create `/dashboard/dashboard`.
+- Dashboard nav metadata keeps only `/dashboard` enabled.
+- Skin Profile, Routines, Today Log, Journal, Products, and Ingredients nav items use `href: null` and `disabled: true`.
+- Dashboard cards cover Skin Profile, Routines, Today Log, Journal, Products, Ingredients, and Safety Analysis.
+- Each placeholder card states `Chưa implement trong Task 6` and `Sẽ được kết nối ở task/module sau`.
+- No feature routes, marketplace, community, skin score, admin, subscription, notifications, custom login page, or Auth.js `pages.signIn` config were added.
+
 ## 2026-05-13 — Week 1 Task 5 Auth.js Foundation
 
 ### Task

@@ -2,7 +2,7 @@
 
 # Feature Status Matrix — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 | Feature | Status | API | UI | DB | Tests | Notes |
 |---|---|---|---|---|---|---|
@@ -16,7 +16,7 @@ Last updated: 2026-05-13
 | DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented; real run requires `MONGODB_URI` |
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Done | Auth.js route only | No sign-in UI | MongoDB Adapter gated | Unit | `/api/me` lazy profile creation not implemented in Task 5 |
-| Protected dashboard shell | Not Started | N/A | No | N/A | No | Week 1 |
+| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders | N/A | Unit | Week 1 Task 6; no dashboard data integration |
 | Skin Profile | Not Started | No | No | No | No | Week 2 |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |

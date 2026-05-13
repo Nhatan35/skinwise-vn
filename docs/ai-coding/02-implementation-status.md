@@ -2,15 +2,15 @@
 
 # Implementation Status — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## 1. Current phase
 
 ```txt
-Week 1 Task 5 Auth.js foundation implemented
+Week 1 Task 6 Protected dashboard shell implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-5 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, and Auth.js foundation. Product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-6 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, and a protected dashboard shell. Product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -57,7 +57,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-5 have initialized the N
 [x] Environment validation implemented
 [x] MongoDB helper implemented
 [x] Auth.js foundation implemented
-[ ] Protected dashboard shell implemented
+[x] Protected dashboard shell implemented
 [x] Test setup implemented
 [x] Feature flag config implemented
 [x] Database index script implemented
@@ -94,7 +94,7 @@ Deployment setup
 ```txt
 MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
 Auth.js foundation exists, but `/api/me` lazy AppUserProfile creation is not implemented yet.
-No protected dashboard route exists yet.
+Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 ```
@@ -118,13 +118,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Continue Week 1 Task 6 — Dashboard shell.
+Continue with the next explicitly scoped Week 1 task after review.
 ```
 
 Recommended next coding task:
 
 ```txt
-Create `src/app/(dashboard)/layout.tsx` and `src/app/(dashboard)/dashboard/page.tsx` with protected dashboard shell patterns, without implementing product features.
+Review remaining Week 1 completion criteria without starting product feature implementation.
 ```
 
 ## 9. Update rule

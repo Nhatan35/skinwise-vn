@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 1 Task 5 Auth.js foundation implemented**.
+Current package state: **Week 1 Task 6 Protected dashboard shell implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-5 have added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, and Auth.js foundation. Product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-6 have added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, and a protected dashboard shell. Product features are not implemented yet.
 
 ## 3. Root structure
 
@@ -89,12 +89,16 @@ Current implemented files:
 ```txt
 src/app/layout.tsx
 src/app/page.tsx
+src/app/(dashboard)/layout.tsx
+src/app/(dashboard)/dashboard/page.tsx
 src/app/api/auth/[...nextauth]/route.ts
 src/app/globals.css
 src/app/favicon.ico
 ```
 
 Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js handlers and does not use the SkinWise `{ data, error }` response wrapper.
+
+`src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only; no feature routes are implemented.
 
 ### `src/modules/`
 
@@ -156,6 +160,14 @@ src/modules/journals/
 ```
 
 No product module business logic has been implemented yet.
+
+Current implemented dashboard files:
+
+```txt
+src/modules/dashboard/dashboard-shell.config.ts
+```
+
+`dashboard-shell.config.ts` owns safe dashboard nav and card metadata. It does not import auth, database, `server-only`, or API code. Only `/dashboard` is an enabled route; feature areas remain disabled metadata with `href: null`.
 
 ### `src/domain/`
 
@@ -304,6 +316,8 @@ tests/unit/env.test.ts
 tests/unit/auth-config.test.ts
 tests/unit/auth-middleware.test.ts
 tests/unit/auth-route.test.ts
+tests/unit/dashboard-routes.test.ts
+tests/unit/dashboard-shell.test.ts
 tests/unit/foundation.test.ts
 tests/unit/get-current-user.test.ts
 tests/unit/mongodb.test.ts
