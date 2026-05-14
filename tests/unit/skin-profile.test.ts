@@ -98,6 +98,31 @@ describe("SkinProfile schemas", () => {
     ).toThrow(ZodError);
   });
 
+  it("rejects client-owned id fields on create", () => {
+    expect(() =>
+      createSkinProfileSchema.parse({
+        ...validCreateInput,
+        id: "profile-id",
+      }),
+    ).toThrow(ZodError);
+
+    expect(() =>
+      createSkinProfileSchema.parse({
+        ...validCreateInput,
+        _id: "profile-id",
+      }),
+    ).toThrow(ZodError);
+  });
+
+  it("rejects onboardingCompleted in create input", () => {
+    expect(() =>
+      createSkinProfileSchema.parse({
+        ...validCreateInput,
+        onboardingCompleted: true,
+      }),
+    ).toThrow(ZodError);
+  });
+
   it("rejects more than 30 avoid ingredients", () => {
     expect(() =>
       createSkinProfileSchema.parse({
@@ -126,6 +151,28 @@ describe("SkinProfile schemas", () => {
       updateSkinProfileSchema.parse({
         skinType: "dry",
         userId: "other-user-id",
+      }),
+    ).toThrow(ZodError);
+  });
+
+  it("rejects client-owned id fields on update", () => {
+    expect(() =>
+      updateSkinProfileSchema.parse({
+        id: "profile-id",
+      }),
+    ).toThrow(ZodError);
+
+    expect(() =>
+      updateSkinProfileSchema.parse({
+        _id: "profile-id",
+      }),
+    ).toThrow(ZodError);
+  });
+
+  it("rejects onboardingCompleted in update input", () => {
+    expect(() =>
+      updateSkinProfileSchema.parse({
+        onboardingCompleted: true,
       }),
     ).toThrow(ZodError);
   });

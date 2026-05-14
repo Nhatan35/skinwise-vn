@@ -1,8 +1,15 @@
-export const dashboardRoute = "/dashboard" as const;
+import { routes } from "@/shared/constants/routes";
+
+export const dashboardRoute = routes.DASHBOARD;
+export const skinProfileOnboardingRoute = routes.ONBOARDING_SKIN_PROFILE;
+
+type DashboardNavHref =
+  | typeof dashboardRoute
+  | typeof skinProfileOnboardingRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
-  href: typeof dashboardRoute | null;
+  href: DashboardNavHref | null;
   label: string;
   status: "Active" | "Chưa implement";
 };
@@ -21,10 +28,10 @@ export const dashboardNavItems = [
     status: "Active",
   },
   {
-    disabled: true,
-    href: null,
+    disabled: false,
+    href: skinProfileOnboardingRoute,
     label: "Skin Profile",
-    status: "Chưa implement",
+    status: "Active",
   },
   {
     disabled: true,

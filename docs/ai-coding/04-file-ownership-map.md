@@ -83,6 +83,7 @@ src/modules/users/app-user-profile.repository.ts
 src/modules/users/app-user-profile.mapper.ts
 tests/unit/app-user-profile.test.ts
 tests/unit/me-api-contract.test.ts
+tests/unit/skin-profile-use-case.test.ts
 ```
 
 Rules:
@@ -96,6 +97,8 @@ Rules:
 - `/api/me` must not accept or trust `userId` from body/query data.
 - `/api/me` DTO must return only `id`, `email`, `name`, `role`, and `onboardingCompleted`.
 - `/api/me` must not expose `_id`, ObjectId, `userId`, `image`, raw session data, tokens, secrets, or raw database errors.
+- AppUserProfile onboarding completion must happen server-side through a userId-scoped repository function.
+- Successful `POST /api/skin-profile` may mark `onboardingCompleted = true`; `PATCH /api/skin-profile` must not reset or change onboarding state.
 - This ownership does not include SkinProfile, Routine, Journal, Product, Ingredient, AI, or dashboard data integration.
 
 Current status:
@@ -107,6 +110,7 @@ src/modules/users/app-user-profile.repository.ts
 src/modules/users/app-user-profile.mapper.ts
 tests/unit/app-user-profile.test.ts
 tests/unit/me-api-contract.test.ts
+tests/unit/skin-profile-use-case.test.ts
 ```
 
 ## 3. Database ownership
@@ -155,6 +159,7 @@ src/app/api/skin-profile/route.ts
 src/app/(dashboard)/onboarding/skin-profile/page.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
+tests/unit/skin-profile-use-case.test.ts
 tests/unit/skin-profile-onboarding.test.ts
 ```
 
@@ -165,6 +170,8 @@ Rules:
 - request bodies must not accept `userId`;
 - repository reads, updates, and deletes must filter by authenticated `userId`;
 - API responses must use SkinProfile DTOs and must not expose `_id` or `userId`;
+- successful create/replace may mark AppUserProfile onboarding complete server-side, after SkinProfile persistence succeeds;
+- PATCH must update only SkinProfile fields and must not change AppUserProfile onboarding state;
 - onboarding UI must call `/api/skin-profile` with `fetch` and must not import repository, database, use-case, or `server-only` modules;
 - no medical diagnosis fields.
 
@@ -181,6 +188,7 @@ src/modules/skin-profile/skin-profile.use-case.ts
 src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
+tests/unit/skin-profile-use-case.test.ts
 tests/unit/skin-profile-onboarding.test.ts
 src/app/(dashboard)/onboarding/skin-profile/page.tsx
 ```
@@ -334,7 +342,7 @@ Rules:
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
-- only `/dashboard` is an enabled route in the dashboard nav;
+- `/dashboard` and `/onboarding/skin-profile` are enabled routes in the dashboard nav;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - placeholder cards must not contain fake skincare, routine, product, journal, ingredient, or AI results.
 
@@ -348,7 +356,7 @@ tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
 ```
 
-Task 6 implements the protected dashboard shell only. It does not implement dashboard data integration, database queries, business APIs, feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell only. Week 2 Task 2.1 enables the Skin Profile onboarding nav link. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 12. UI shared ownership
 

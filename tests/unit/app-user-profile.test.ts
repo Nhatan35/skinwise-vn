@@ -15,6 +15,7 @@ vi.mock("@/infrastructure/database/collections", () => ({
 import {
   ensureAppUserProfile,
   findAppUserProfileByUserId,
+  markAppUserProfileOnboardingCompleted,
 } from "@/modules/users/app-user-profile.repository";
 import { toMeUserDto } from "@/modules/users/app-user-profile.mapper";
 import {
@@ -36,7 +37,7 @@ function createCurrentUser(): CurrentUser {
   };
 }
 
-function createProfile(): AppUserProfile {
+function createProfile(overrides: Partial<AppUserProfile> = {}): AppUserProfile {
   return {
     _id: new ObjectId("665000000000000000000001"),
     userId: authUserId,
@@ -44,6 +45,7 @@ function createProfile(): AppUserProfile {
     onboardingCompleted: false,
     createdAt: fixedNow,
     updatedAt: fixedNow,
+    ...overrides,
   };
 }
 
@@ -166,5 +168,55 @@ describe("AppUserProfile repository", () => {
 
     expect(update).not.toHaveProperty("$set");
     expect(update).toHaveProperty("$setOnInsert");
+  });
+
+  it("marks onboarding as completed with an atomic upsert", async () => {
+    const completedProfile = createProfile({ onboardingCompleted: true });
+    collectionMock.findOneAndUpdate.mockResolvedValue(completedProfile);
+
+    await expect(
+      markAppUserProfileOnboardingCompleted(authUserId),
+    ).resolves.toBe(completedProfile);
+
+    expect(collectionMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { userId: authUserId },
+      {
+        $set: {
+          onboardingCompleted: true,
+          updatedAt: fixedNow,
+        },
+        $setOnInsert: {
+          userId: authUserId,
+          role: "USER",
+          createdAt: fixedNow,
+        },
+      },
+      {
+        upsert: true,
+        returnDocument: "after",
+      },
+    );
+  });
+
+  it("preserves existing roles when marking onboarding complete", async () => {
+    collectionMock.findOneAndUpdate.mockResolvedValue(
+      createProfile({ onboardingCompleted: true, role: "ADMIN" }),
+    );
+
+    await markAppUserProfileOnboardingCompleted(authUserId);
+
+    const update = collectionMock.findOneAndUpdate.mock.calls[0]?.[1] as Record<
+      string,
+      Record<string, unknown>
+    >;
+
+    expect(update.$set).toEqual({
+      onboardingCompleted: true,
+      updatedAt: fixedNow,
+    });
+    expect(update.$set).not.toHaveProperty("role");
+    expect(update.$setOnInsert).toMatchObject({
+      role: "USER",
+    });
   });
 });

@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 2 Task 2 Skin Profile Onboarding UI implemented**.
+Current package state: **Week 2 Task 2.1 Skin Profile Onboarding Flow Integration implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 2 adds the protected Skin Profile onboarding UI at `/onboarding/skin-profile`. Other product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 2 added the protected Skin Profile onboarding UI at `/onboarding/skin-profile`. Week 2 Task 2.1 connects the onboarding flow so successful `POST /api/skin-profile` marks `AppUserProfile.onboardingCompleted = true`, `/api/me` can reflect that state, `/onboarding/skin-profile` is discoverable from protected dashboard navigation, and `/onboarding/:path*` is covered by the proxy matcher. Other product features are not implemented yet.
 
 ## 3. Root structure
 
@@ -103,7 +103,7 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 
 `src/app/api/me/route.ts` is a SkinWise-owned app API. It uses `getCurrentUser()`, returns `UNAUTHORIZED` for unauthenticated requests, lazily ensures `AppUserProfile` for authenticated users, and returns only the safe current-user DTO.
 
-`src/app/api/skin-profile/route.ts` is a SkinWise-owned protected API. It validates create/update input with Zod, derives user ownership from `getCurrentUser()`, calls Skin Profile use-case functions, and returns only SkinProfile DTOs without `_id` or `userId`.
+`src/app/api/skin-profile/route.ts` is a SkinWise-owned protected API. It validates create/update input with Zod, derives user ownership from `getCurrentUser()`, calls Skin Profile use-case functions, and returns only SkinProfile DTOs without `_id` or `userId`. Successful `POST /api/skin-profile` marks AppUserProfile onboarding complete inside the Skin Profile use case; `PATCH /api/skin-profile` updates only SkinProfile fields.
 
 `src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only. `src/app/(dashboard)/onboarding/skin-profile/page.tsx` creates the protected `/onboarding/skin-profile` URL and renders the Skin Profile onboarding form.
 
@@ -160,7 +160,7 @@ src/modules/users/app-user-profile.repository.ts
 src/modules/users/app-user-profile.mapper.ts
 ```
 
-`app-user-profile.repository.ts` owns AppUserProfile lookup and atomic lazy creation through `findOneAndUpdate` upsert using `getAppUserProfilesCollection()`. It stores the Auth.js current user id as an opaque string at the repository/API boundary to avoid coercing session ids into MongoDB `ObjectId`. `app-user-profile.mapper.ts` maps Auth.js current-user data plus AppUserProfile fields into the `/api/me` DTO without exposing MongoDB internals, raw session data, tokens, or `image`.
+`app-user-profile.repository.ts` owns AppUserProfile lookup, atomic lazy creation, and the server-side onboarding completion marker through `findOneAndUpdate` upserts using `getAppUserProfilesCollection()`. It stores the Auth.js current user id as an opaque string at the repository/API boundary to avoid coercing session ids into MongoDB `ObjectId`. `app-user-profile.mapper.ts` maps Auth.js current-user data plus AppUserProfile fields into the `/api/me` DTO without exposing MongoDB internals, raw session data, tokens, or `image`.
 
 Current implemented skin-profile files:
 
@@ -174,7 +174,7 @@ src/modules/skin-profile/skin-profile.use-case.ts
 src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
 ```
 
-`skin-profile.schema.ts` owns create/update Zod validation. `skin-profile.repository.ts` owns user-scoped SkinProfile persistence through `getSkinProfilesCollection()`. `skin-profile.use-case.ts` provides the thin orchestration layer used by the route handler. `skin-profile.mapper.ts` converts database documents into API DTOs. `components/skin-profile-onboarding-form.tsx` is the client-side onboarding form; it calls `/api/skin-profile` with `fetch` and must not import repository, database, use-case, or `server-only` modules.
+`skin-profile.schema.ts` owns create/update Zod validation. `skin-profile.repository.ts` owns user-scoped SkinProfile persistence through `getSkinProfilesCollection()`. `skin-profile.use-case.ts` provides the thin orchestration layer used by the route handler and marks AppUserProfile onboarding complete only after successful SkinProfile create/replace. `skin-profile.mapper.ts` converts database documents into API DTOs. `components/skin-profile-onboarding-form.tsx` is the client-side onboarding form; it calls `/api/skin-profile` with `fetch` and must not import repository, database, use-case, or `server-only` modules.
 
 Week 1 Task 1 created these additional placeholder module folders only:
 
@@ -198,7 +198,7 @@ Current implemented dashboard files:
 src/modules/dashboard/dashboard-shell.config.ts
 ```
 
-`dashboard-shell.config.ts` owns safe dashboard nav and card metadata. It does not import auth, database, `server-only`, or API code. Only `/dashboard` is an enabled route; feature areas remain disabled metadata with `href: null`.
+`dashboard-shell.config.ts` owns safe dashboard nav and card metadata. It does not import auth, database, `server-only`, or API code. `/dashboard` and `/onboarding/skin-profile` are enabled protected routes; unrelated feature areas remain disabled metadata with `href: null`.
 
 ### `src/domain/`
 
@@ -359,6 +359,7 @@ tests/unit/mongodb.test.ts
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
 tests/unit/skin-profile-onboarding.test.ts
+tests/unit/skin-profile-use-case.test.ts
 tests/unit/ui-foundation.test.ts
 ```
 

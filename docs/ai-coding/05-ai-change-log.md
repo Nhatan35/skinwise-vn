@@ -4,6 +4,66 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 2 Task 2.1 Skin Profile Onboarding Flow Integration
+
+### Task
+
+Connect the completed Skin Profile onboarding UI into the authenticated app flow without starting unrelated features.
+
+### Files Added
+
+```txt
+tests/unit/skin-profile-use-case.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/users/app-user-profile.repository.ts
+src/modules/skin-profile/skin-profile.use-case.ts
+src/modules/dashboard/dashboard-shell.config.ts
+src/proxy.ts
+tests/unit/app-user-profile.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/me-api-contract.test.ts
+tests/unit/skin-profile.test.ts
+tests/unit/skin-profile-api-contract.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 2 Task 2.1 requires `/onboarding/skin-profile` to be discoverable from the protected dashboard area and requires successful `POST /api/skin-profile` to mark `AppUserProfile.onboardingCompleted = true` server-side.
+
+### Implementation Notes
+
+- Added `markAppUserProfileOnboardingCompleted(userId)` with atomic `findOneAndUpdate`, `upsert: true`, and `returnDocument: "after"`.
+- The onboarding completion marker uses `$set` for `onboardingCompleted: true` and `updatedAt`, and uses `$setOnInsert` only for `userId`, default `USER` role, and `createdAt`.
+- `createOrReplaceSkinProfileForCurrentUser` now marks onboarding complete after SkinProfile create/replace succeeds, then returns the SkinProfile unchanged.
+- `PATCH /api/skin-profile` still updates only SkinProfile fields and does not reset or change AppUserProfile onboarding state.
+- `GET /api/me` can reflect `onboardingCompleted: true` through the existing AppUserProfile mapper flow.
+- Dashboard navigation now links Skin Profile to `routes.ONBOARDING_SKIN_PROFILE`.
+- `src/proxy.ts` now protects `/dashboard/:path*` and `/onboarding/:path*`.
+
+### Tests
+
+```txt
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 18 files, 137 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No AI, Routine Builder, Product module, Ingredient module, Journal, dashboard data integration, image upload, skin score, product recommendations, medical diagnosis, `/skin-profile` page, new dependencies, or Auth.js built-in route changes were implemented.
+
 ## 2026-05-14 - Week 2 Task 2 Skin Profile Onboarding UI
 
 ### Task
@@ -56,7 +116,7 @@ cmd /c npm run build: Pass
 ### Notes
 
 - No Routine Builder, Product module, Ingredient module, AI provider, AI recommendations, Routine Analysis, Journal, dashboard data integration, medical diagnosis, skin score, image upload, product recommendations, or Auth.js route behavior was implemented.
-- Successful save redirects to `/dashboard`; `AppUserProfile.onboardingCompleted` remains a follow-up because the SDD requirement is not explicit.
+- Successful save redirects to `/dashboard`; the `AppUserProfile.onboardingCompleted` follow-up was implemented later in Week 2 Task 2.1.
 
 ## 2026-05-14 - Week 2 Task 1.1 Foundation Stabilization Patch
 
@@ -146,7 +206,7 @@ Week 2 Task 1 requires a protected `/api/skin-profile` API foundation for the cu
 - Create/update schemas are strict and reject client-provided `userId`.
 - SkinProfile DTOs convert `_id` to `id`, Dates to ISO strings, and omit `userId`.
 - The repository uses `getSkinProfilesCollection()` and does not create a MongoClient or query Auth.js-owned collections.
-- Successful `POST /api/skin-profile` does not update `AppUserProfile.onboardingCompleted`; this remains a follow-up because the requirement is not explicit in the current SDD.
+- At the time of Week 2 Task 1, successful `POST /api/skin-profile` did not update `AppUserProfile.onboardingCompleted`; this follow-up was implemented later in Week 2 Task 2.1.
 - The initial `npm run lint` Phase 0 command was blocked by Windows PowerShell execution policy for `npm.ps1`, so checks were run with `npm.cmd`.
 
 ### Tests

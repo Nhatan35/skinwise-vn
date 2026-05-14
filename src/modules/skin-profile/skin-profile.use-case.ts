@@ -2,6 +2,7 @@ import type {
   CreateSkinProfileInput,
   UpdateSkinProfileInput,
 } from "@/modules/skin-profile/skin-profile.schema";
+import { markAppUserProfileOnboardingCompleted } from "@/modules/users/app-user-profile.repository";
 import {
   createOrReplaceSkinProfileForUser,
   deleteSkinProfileByUserId,
@@ -17,7 +18,11 @@ export async function createOrReplaceSkinProfileForCurrentUser(
   userId: string,
   input: CreateSkinProfileInput,
 ) {
-  return createOrReplaceSkinProfileForUser(userId, input);
+  const profile = await createOrReplaceSkinProfileForUser(userId, input);
+
+  await markAppUserProfileOnboardingCompleted(userId);
+
+  return profile;
 }
 
 export async function updateSkinProfileForUser(

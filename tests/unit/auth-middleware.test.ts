@@ -9,8 +9,10 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches only dashboard routes", () => {
-    expect(proxySource).toContain('matcher: ["/dashboard/:path*"]');
+  it("matches protected dashboard and onboarding routes", () => {
+    expect(proxySource).toContain(
+      'matcher: ["/dashboard/:path*", "/onboarding/:path*"]',
+    );
   });
 
   it("does not protect Auth.js routes or the public home page", () => {

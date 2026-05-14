@@ -112,6 +112,21 @@ describe("/api/skin-profile contract", () => {
     expect(mockedGetSkinProfileForUser).not.toHaveBeenCalled();
   });
 
+  it("does not create or mark onboarding for unauthenticated POST requests", async () => {
+    mockedGetCurrentUser.mockResolvedValue(null);
+
+    const response = await skinProfileRoute.POST(jsonRequest(validRequestBody));
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "UNAUTHORIZED",
+      },
+    });
+    expect(response.status).toBe(401);
+    expect(mockedCreateOrReplaceSkinProfileForCurrentUser).not.toHaveBeenCalled();
+  });
+
   it("returns NOT_FOUND when the current user has no profile", async () => {
     mockAuthenticatedUser();
     mockedGetSkinProfileForUser.mockResolvedValue(null);
@@ -160,7 +175,7 @@ describe("/api/skin-profile contract", () => {
     expect(serializedBody).not.toContain("userId");
   });
 
-  it("creates or replaces a profile for the authenticated user", async () => {
+  it("creates or replaces a profile for the authenticated user through the onboarding use case", async () => {
     mockAuthenticatedUser();
     mockedCreateOrReplaceSkinProfileForCurrentUser.mockResolvedValue(
       createProfile(),
@@ -195,6 +210,26 @@ describe("/api/skin-profile contract", () => {
     expect(mockedCreateOrReplaceSkinProfileForCurrentUser).not.toHaveBeenCalled();
   });
 
+  it("rejects request body onboardingCompleted on create", async () => {
+    mockAuthenticatedUser();
+
+    const response = await skinProfileRoute.POST(
+      jsonRequest({
+        ...validRequestBody,
+        onboardingCompleted: true,
+      }),
+    );
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(response.status).toBe(400);
+    expect(mockedCreateOrReplaceSkinProfileForCurrentUser).not.toHaveBeenCalled();
+  });
+
   it("rejects request body userId and never uses it", async () => {
     mockAuthenticatedUser();
 
@@ -212,6 +247,39 @@ describe("/api/skin-profile contract", () => {
       },
     });
     expect(response.status).toBe(400);
+    expect(mockedCreateOrReplaceSkinProfileForCurrentUser).not.toHaveBeenCalled();
+  });
+
+  it("rejects request body id fields on create", async () => {
+    mockAuthenticatedUser();
+
+    const idResponse = await skinProfileRoute.POST(
+      jsonRequest({
+        ...validRequestBody,
+        id: "profile-id",
+      }),
+    );
+    const objectIdResponse = await skinProfileRoute.POST(
+      jsonRequest({
+        ...validRequestBody,
+        _id: "profile-id",
+      }),
+    );
+
+    await expect(readJson(idResponse)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    await expect(readJson(objectIdResponse)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(idResponse.status).toBe(400);
+    expect(objectIdResponse.status).toBe(400);
     expect(mockedCreateOrReplaceSkinProfileForCurrentUser).not.toHaveBeenCalled();
   });
 
@@ -260,6 +328,50 @@ describe("/api/skin-profile contract", () => {
       },
     });
     expect(response.status).toBe(400);
+    expect(mockedUpdateSkinProfileForUser).not.toHaveBeenCalled();
+  });
+
+  it("rejects request body onboardingCompleted on update", async () => {
+    mockAuthenticatedUser();
+
+    const response = await skinProfileRoute.PATCH(
+      jsonRequest({ onboardingCompleted: true }),
+    );
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(response.status).toBe(400);
+    expect(mockedUpdateSkinProfileForUser).not.toHaveBeenCalled();
+  });
+
+  it("rejects request body id fields on update", async () => {
+    mockAuthenticatedUser();
+
+    const idResponse = await skinProfileRoute.PATCH(
+      jsonRequest({ id: "profile-id" }),
+    );
+    const objectIdResponse = await skinProfileRoute.PATCH(
+      jsonRequest({ _id: "profile-id" }),
+    );
+
+    await expect(readJson(idResponse)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    await expect(readJson(objectIdResponse)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(idResponse.status).toBe(400);
+    expect(objectIdResponse.status).toBe(400);
     expect(mockedUpdateSkinProfileForUser).not.toHaveBeenCalled();
   });
 

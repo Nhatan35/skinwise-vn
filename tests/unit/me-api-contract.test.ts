@@ -26,6 +26,10 @@ const profile = {
   createdAt: new Date("2026-05-14T00:00:00.000Z"),
   updatedAt: new Date("2026-05-14T00:00:00.000Z"),
 };
+const completedProfile = {
+  ...profile,
+  onboardingCompleted: true,
+};
 
 async function readJson(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
@@ -87,6 +91,31 @@ describe("GET /api/me contract", () => {
     });
     expect(response.status).toBe(200);
     expect(mockedEnsureAppUserProfile).toHaveBeenCalledWith(authUserId);
+  });
+
+  it("can return onboardingCompleted true from AppUserProfile data", async () => {
+    mockedGetCurrentUser.mockResolvedValue({
+      id: authUserId,
+      email: "an@example.com",
+      name: "An",
+    });
+    mockedEnsureAppUserProfile.mockResolvedValue(completedProfile);
+
+    const response = await meRoute.GET();
+
+    await expect(readJson(response)).resolves.toEqual({
+      data: {
+        user: {
+          id: authUserId,
+          email: "an@example.com",
+          name: "An",
+          role: "USER",
+          onboardingCompleted: true,
+        },
+      },
+      error: null,
+    });
+    expect(response.status).toBe(200);
   });
 
   it("does not expose AppUserProfile userId in the API response", async () => {

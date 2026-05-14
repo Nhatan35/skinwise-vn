@@ -16,9 +16,9 @@ Last updated: 2026-05-14
 | DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented; real run requires `MONGODB_URI` |
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Done | Auth.js route + `GET /api/me` | No sign-in UI | MongoDB Adapter gated + AppUserProfile lazy upsert | Unit | Week 1 Task 7 added current-user API without wrapping `/api/auth/*` |
-| AppUserProfile foundation | Done | `GET /api/me` | N/A | `app_user_profiles` lazy upsert | Unit | Role/onboarding only; no SkinProfile or dashboard data integration |
-| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders | N/A | Unit | Week 1 Task 6; no dashboard data integration |
-| Skin Profile | In Progress | `/api/skin-profile` GET/POST/PATCH/DELETE | Onboarding form at `/onboarding/skin-profile`; `/skin-profile` view not implemented | User-scoped `skin_profiles` repository | Unit/API/source checks | Week 2 Task 2 adds onboarding UI only; no dashboard data integration |
+| AppUserProfile foundation | Done | `GET /api/me` reflects onboarding state | N/A | `app_user_profiles` lazy upsert + onboarding completion marker | Unit | Successful SkinProfile POST marks onboarding complete server-side; no dashboard data integration |
+| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders and Skin Profile onboarding nav link | N/A | Unit | Week 2 Task 2.1 exposes `/onboarding/skin-profile`; no dashboard data fetches |
+| Skin Profile | In Progress | `/api/skin-profile` GET/POST/PATCH/DELETE | Onboarding form at `/onboarding/skin-profile`; `/skin-profile` view not implemented | User-scoped `skin_profiles` repository | Unit/API/source checks | Week 2 Task 2.1 marks onboarding complete on POST; PATCH does not reset onboarding state |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
 | Routine Builder | Not Started | No | No | No | No | Week 3 |

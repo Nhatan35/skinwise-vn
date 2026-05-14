@@ -51,3 +51,35 @@ export async function ensureAppUserProfile(
 
   return profile;
 }
+
+export async function markAppUserProfileOnboardingCompleted(
+  userId: string,
+): Promise<AppUserProfile> {
+  const collection = await getAppUserProfileCollection();
+  const now = new Date();
+
+  const profile = await collection.findOneAndUpdate(
+    { userId },
+    {
+      $set: {
+        onboardingCompleted: true,
+        updatedAt: now,
+      },
+      $setOnInsert: {
+        userId,
+        role: DEFAULT_APP_USER_PROFILE.role,
+        createdAt: now,
+      },
+    },
+    {
+      upsert: true,
+      returnDocument: "after",
+    },
+  );
+
+  if (!profile) {
+    throw new Error("Failed to mark AppUserProfile onboarding completed.");
+  }
+
+  return profile;
+}

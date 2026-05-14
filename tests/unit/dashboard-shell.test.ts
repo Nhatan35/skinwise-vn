@@ -7,7 +7,9 @@ import {
   dashboardNavItems,
   dashboardPlaceholderCards,
   dashboardRoute,
+  skinProfileOnboardingRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
+import { routes } from "@/shared/constants/routes";
 
 const dashboardConfigSource = readFileSync(
   resolve(process.cwd(), "src/modules/dashboard/dashboard-shell.config.ts"),
@@ -15,10 +17,11 @@ const dashboardConfigSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("keeps only /dashboard as an enabled real route", () => {
+  it("exposes dashboard and Skin Profile onboarding as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
+    expect(skinProfileOnboardingRoute).toBe(routes.ONBOARDING_SKIN_PROFILE);
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -26,14 +29,19 @@ describe("dashboard shell config", () => {
         label: "Dashboard",
         status: "Active",
       },
+      {
+        disabled: false,
+        href: "/onboarding/skin-profile",
+        label: "Skin Profile",
+        status: "Active",
+      },
     ]);
   });
 
-  it("keeps unimplemented navigation items disabled without hrefs", () => {
+  it("keeps unrelated unimplemented navigation items disabled without hrefs", () => {
     const disabledItems = dashboardNavItems.filter((item) => item.disabled);
 
     expect(disabledItems.map((item) => item.label)).toEqual([
-      "Skin Profile",
       "Routines",
       "Today Log",
       "Journal",
@@ -85,7 +93,7 @@ describe("dashboard shell config", () => {
   });
 
   it("does not import auth, database, server-only, or API code", () => {
-    expect(dashboardConfigSource).not.toMatch(/^import\s/m);
+    expect(dashboardConfigSource).toContain("@/shared/constants/routes");
     expect(dashboardConfigSource).not.toContain("auth");
     expect(dashboardConfigSource).not.toContain("mongodb");
     expect(dashboardConfigSource).not.toContain("server-only");
