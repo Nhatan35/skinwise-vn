@@ -5,24 +5,25 @@ Last updated: 2026-05-14
 ## 1. Current sprint
 
 ```txt
-Week 3 - Routine API Foundation
+Week 3 - Routine Builder UI Foundation
 ```
 
 ## 2. Sprint goal
 
-Implement the Routine API/domain foundation so authenticated users can create, list, read, update, and delete their own routines through protected API routes without starting Routine Builder UI or unrelated product modules.
+Implement the protected `/routines` UI foundation so authenticated users can list, create, edit, and delete routines through the existing Routine API without starting Product picker, Routine Analysis, or unrelated product modules.
 
 ## 3. Allowed tasks this sprint
 
 ```txt
-Add /api/routines authenticated list/create
-Add /api/routines/[id] authenticated read/update/delete
-Scope every routine operation to authenticated userId
-Reject client userId, id, _id, createdAt, updatedAt, stepId, and snapshot fields
-Generate stepId server-side
-Convert MongoDB _id to id in DTOs
-Convert Date fields to ISO strings in DTOs
-Return NOT_FOUND for invalid, missing, or not-owned routine ids
+Add protected /routines page
+Load routines with GET /api/routines
+Create routines with POST /api/routines
+Edit routines with PATCH /api/routines/[id]
+Delete routines with DELETE /api/routines/[id]
+Use customProductName instead of Product picker
+Submit only allowed Routine API fields
+Enable dashboard Routines navigation to routes.ROUTINES
+Protect /routines/:path* in src/proxy.ts
 Add lightweight Vitest checks
 Update implementation status docs
 ```
@@ -30,10 +31,12 @@ Update implementation status docs
 ## 4. Not allowed this sprint
 
 ```txt
-Routine Builder
-Routine Builder UI routes
+Create /routines/new
+Create /routines/[id]
+Create /routines/[id]/analysis
 Product module
 Ingredient module
+Product picker
 AI provider
 Routine Analysis
 Journal
@@ -85,18 +88,39 @@ docs/ai-coding/05-ai-change-log.md updated
 docs/ai-coding/06-current-sprint-plan.md updated
 ```
 
+### Task 3.2 - Routine Builder UI foundation
+
+Expected output:
+
+```txt
+src/app/(dashboard)/routines/page.tsx added
+src/modules/routines/components/routine-builder.tsx added
+src/modules/dashboard/dashboard-shell.config.ts updated
+src/proxy.ts updated
+tests/unit/routine-builder-ui.test.ts added
+relevant existing unit tests updated
+docs/ai-coding/01-codebase-map.md updated
+docs/ai-coding/02-implementation-status.md updated
+docs/ai-coding/03-feature-status-matrix.md updated
+docs/ai-coding/04-file-ownership-map.md updated
+docs/ai-coding/05-ai-change-log.md updated
+docs/ai-coding/06-current-sprint-plan.md updated
+```
+
 ## 6. Sprint Definition of Done
 
 ```txt
-[x] `/api/routines` supports authenticated list/create.
-[x] `/api/routines/[id]` supports authenticated read/update/delete.
-[x] Routine operations are scoped to authenticated userId.
-[x] Client-provided userId, id, _id, timestamps, stepId, and snapshot fields are rejected.
-[x] stepId is generated server-side.
-[x] DTOs convert MongoDB `_id` to `id` and Dates to ISO strings.
-[x] Invalid, missing, or not-owned routine ids return NOT_FOUND.
+[x] `/routines` protected UI route exists.
+[x] `/routines` loads routines with `GET /api/routines`.
+[x] `/routines` creates routines with `POST /api/routines`.
+[x] `/routines` edits routines with `PATCH /api/routines/[id]`.
+[x] `/routines` deletes routines with `DELETE /api/routines/[id]`.
+[x] UI uses `customProductName` instead of Product picker.
+[x] UI does not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields.
+[x] Dashboard Routines navigation points to `/routines`.
+[x] `/routines/:path*` is protected by `src/proxy.ts`.
 [x] Product snapshot lookup was not implemented.
-[x] Routine Builder UI was not implemented.
+[x] Product picker was not implemented.
 [x] Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis were not implemented.
 [x] Lightweight unit/API/source tests exist.
 [x] Final lint/typecheck/test/build pass after implementation.
@@ -109,5 +133,5 @@ Use this prompt shape for the next scoped task:
 
 ```txt
 Implement the next explicitly scoped Week 3 task only.
-Do not start Routine Builder UI, Routine Analysis, Product, Ingredient, AI, Journal, Routine Logs, dashboard data integration, or any out-of-scope MVP feature unless explicitly requested.
+Do not start Routine Analysis, Product, Ingredient, AI, Journal, Routine Logs, Product picker, dashboard data integration, or any out-of-scope MVP feature unless explicitly requested.
 ```

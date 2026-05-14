@@ -506,16 +506,26 @@ describe("/api/routines contract", () => {
 });
 
 describe("Routine API scope guard", () => {
-  it("does not add Routine Builder UI routes", () => {
+  it("does not add out-of-scope routine UI routes", () => {
     const projectRoot = process.cwd();
 
-    expect(existsSync(join(projectRoot, "src/app/(dashboard)/routines"))).toBe(
+    expect(
+      existsSync(join(projectRoot, "src/app/(dashboard)/routines/page.tsx")),
+    ).toBe(true);
+    expect(
+      existsSync(join(projectRoot, "src/app/(dashboard)/routines/new")),
+    ).toBe(false);
+    expect(
+      existsSync(join(projectRoot, "src/app/(dashboard)/routines/[id]")),
+    ).toBe(false);
+    expect(
+      existsSync(
+        join(projectRoot, "src/app/(dashboard)/routines/[id]/analysis"),
+      ),
+    ).toBe(false);
+    expect(existsSync(join(projectRoot, "src/app/routines"))).toBe(
       false,
     );
-    expect(existsSync(join(projectRoot, "src/app/(dashboard)/routines/new"))).toBe(
-      false,
-    );
-    expect(existsSync(join(projectRoot, "src/app/routines"))).toBe(false);
   });
 
   it("does not import out-of-scope modules into the routine foundation", () => {

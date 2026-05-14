@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 3 Task 1 Routine API Foundation implemented**.
+Current package state: **Week 3 Task 2 Routine Builder UI Foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation: `/api/routines` supports authenticated list/create, `/api/routines/[id]` supports authenticated read/update/delete, all operations are scoped to the authenticated user, `userId` is never accepted from the client, MongoDB `_id` is converted to `id` at the DTO boundary, and routine step IDs are generated server-side. Product snapshot lookup, Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, and dashboard data integration are not implemented.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation. Week 3 Task 2 added the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API. The UI uses `customProductName` only, lets the API generate `stepId`, and does not submit Product snapshot fields. Product picker, Product/Ingredient modules, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis are not implemented.
 
 ## 3. Root structure
 
@@ -92,6 +92,7 @@ src/app/page.tsx
 src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/app/(dashboard)/onboarding/skin-profile/page.tsx
+src/app/(dashboard)/routines/page.tsx
 src/app/(dashboard)/skin-profile/page.tsx
 src/app/api/auth/[...nextauth]/route.ts
 src/app/api/me/route.ts
@@ -110,7 +111,7 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 
 `src/app/api/routines/route.ts` and `src/app/api/routines/[id]/route.ts` are SkinWise-owned protected Routine API routes. They validate input with Zod, derive `userId` from `getCurrentUser()`, call Routine use-case functions, return `{ data, error }`, map MongoDB `_id` to `id`, and never expose `userId` or raw ObjectId values. `/api/routines` lists and creates routines for the authenticated user. `/api/routines/[id]` reads, updates, and deletes only routines owned by the authenticated user. Client input cannot provide `userId`, `id`, `_id`, timestamps, `stepId`, or snapshot fields.
 
-`src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only. `src/app/(dashboard)/onboarding/skin-profile/page.tsx` creates the protected `/onboarding/skin-profile` URL and renders the Skin Profile onboarding form.
+`src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only. `src/app/(dashboard)/onboarding/skin-profile/page.tsx` creates the protected `/onboarding/skin-profile` URL and renders the Skin Profile onboarding form. `src/app/(dashboard)/routines/page.tsx` creates the protected `/routines` URL and renders the Routine Builder client component.
 
 ### `src/modules/`
 
@@ -155,7 +156,7 @@ src/modules/auth/next-auth.d.ts
 src/modules/auth/types.ts
 ```
 
-`auth.config.ts` is edge-safe and owns pure provider/config helpers. `src/auth.ts` owns the full server-side Auth.js setup with MongoDB Adapter gating. `src/proxy.ts` owns the Next.js 16 proxy wrapper for protected dashboard routes. `get-current-user.ts` maps Auth.js sessions to a minimal `CurrentUser` without querying `AppUserProfile`.
+`auth.config.ts` is edge-safe and owns pure provider/config helpers. `src/auth.ts` owns the full server-side Auth.js setup with MongoDB Adapter gating. `src/proxy.ts` owns the Next.js 16 proxy wrapper for `/dashboard/:path*`, `/onboarding/:path*`, `/skin-profile/:path*`, and `/routines/:path*`. `get-current-user.ts` maps Auth.js sessions to a minimal `CurrentUser` without querying `AppUserProfile`.
 
 Current implemented users files:
 
@@ -191,9 +192,10 @@ src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
+src/modules/routines/components/routine-builder.tsx
 ```
 
-`routine.schema.ts` owns strict create/update validation for Routine API input. It rejects unknown fields, client-provided `userId`, `id`, `_id`, timestamps, `stepId`, and Product snapshot fields. `routine.use-case.ts` generates server-side `stepId` values for submitted steps before persistence. `routine.repository.ts` imports `server-only`, uses `getRoutinesCollection()`, never creates a MongoClient, handles invalid routine ids safely, and always filters read/update/delete operations by `_id + userId`. `routine.mapper.ts` converts `_id` to `id`, Date fields to ISO strings, and omits `userId`.
+`routine.schema.ts` owns strict create/update validation for Routine API input. It rejects unknown fields, client-provided `userId`, `id`, `_id`, timestamps, `stepId`, and Product snapshot fields. `routine.use-case.ts` generates server-side `stepId` values for submitted steps before persistence. `routine.repository.ts` imports `server-only`, uses `getRoutinesCollection()`, never creates a MongoClient, handles invalid routine ids safely, and always filters read/update/delete operations by `_id + userId`. `routine.mapper.ts` converts `_id` to `id`, Date fields to ISO strings, and omits `userId`. `components/routine-builder.tsx` is the client-side `/routines` UI; it calls `GET /api/routines`, `POST /api/routines`, `PATCH /api/routines/[id]`, and `DELETE /api/routines/[id]` with `fetch`, uses `customProductName` instead of a Product picker, and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules.
 
 Week 1 Task 1 created these additional placeholder module folders only:
 
@@ -209,7 +211,7 @@ src/modules/ai-analysis/
 src/modules/journals/
 ```
 
-No product module business logic has been implemented yet. Routine API CRUD is implemented, but Routine Builder UI, Product snapshot lookup, Routine Analysis, Routine Logs, AI, and dashboard data integration are not implemented.
+No product module business logic has been implemented yet. Routine API CRUD and the `/routines` UI foundation are implemented, but Product picker, Product snapshot lookup, Routine Analysis, Routine Logs, AI, Product/Ingredient modules, skin score, image upload, medical diagnosis, and dashboard data integration are not implemented.
 
 Current implemented dashboard files:
 
@@ -217,7 +219,7 @@ Current implemented dashboard files:
 src/modules/dashboard/dashboard-shell.config.ts
 ```
 
-`dashboard-shell.config.ts` owns safe dashboard nav and card metadata. It does not import auth, database, `server-only`, or API code. `/dashboard` and `/skin-profile` are enabled protected dashboard navigation routes; `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA; unrelated feature areas remain disabled metadata with `href: null`.
+`dashboard-shell.config.ts` owns safe dashboard nav and card metadata. It does not import auth, database, `server-only`, or API code. `/dashboard`, `/skin-profile`, and `/routines` are enabled protected dashboard navigation routes; `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA; unrelated feature areas remain disabled metadata with `href: null`.
 
 ### `src/domain/`
 
@@ -296,7 +298,7 @@ src/shared/constants/routes.ts
 src/shared/types/result.ts
 ```
 
-`routes.SKIN_PROFILE` points to `/skin-profile`, and `routes.ONBOARDING_SKIN_PROFILE` points to `/onboarding/skin-profile`.
+`routes.SKIN_PROFILE` points to `/skin-profile`, `routes.ONBOARDING_SKIN_PROFILE` points to `/onboarding/skin-profile`, and `routes.ROUTINES` points to `/routines`.
 
 ### `src/config/`
 
@@ -377,6 +379,7 @@ tests/unit/me-api-contract.test.ts
 tests/unit/mongodb.test.ts
 tests/unit/routine.test.ts
 tests/unit/routine-api-contract.test.ts
+tests/unit/routine-builder-ui.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts

@@ -17,12 +17,12 @@ Last updated: 2026-05-14
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Done | Auth.js route + `GET /api/me` | No sign-in UI | MongoDB Adapter gated + AppUserProfile lazy upsert | Unit | Week 1 Task 7 added current-user API without wrapping `/api/auth/*` |
 | AppUserProfile foundation | Done | `GET /api/me` reflects onboarding state | N/A | `app_user_profiles` lazy upsert + onboarding completion marker | Unit | Successful SkinProfile POST marks onboarding complete server-side; no dashboard data integration |
-| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders and Skin Profile nav link to `/skin-profile` | N/A | Unit | Week 2 Task 2.2 points Skin Profile navigation to `/skin-profile`; no dashboard data fetches |
+| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders plus Skin Profile and Routines nav links | N/A | Unit | Routines navigation now points to `/routines`; no dashboard data fetches |
 | Skin Profile | Done | `/api/skin-profile` GET/POST/PATCH/DELETE | First-time onboarding at `/onboarding/skin-profile`; main view/edit route at `/skin-profile` | User-scoped `skin_profiles` repository | Unit/API/source checks | `/skin-profile` loads with GET and updates with PATCH only; onboarding POST still marks onboarding complete |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
-| Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | No Routine UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated, no Product snapshot lookup |
-| Routine Builder | Not Started | API foundation only | No | Routine collection foundation exists | API tests only | UI route and dashboard nav enablement not implemented |
+| Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | Used by `/routines` UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated, no Product snapshot lookup |
+| Routine Builder UI foundation | Done | Existing Routine API only | Protected `/routines` list/create/edit/delete UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
 | Routine Safety Engine | Not Started | No | No | No | No | Rule engine before AI |

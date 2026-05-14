@@ -255,11 +255,14 @@ src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
+src/modules/routines/components/routine-builder.tsx
 src/app/api/routines/route.ts
 src/app/api/routines/[id]/route.ts
+src/app/(dashboard)/routines/page.tsx
 tests/unit/routine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
+tests/unit/routine-builder-ui.test.ts
 ```
 
 Rules:
@@ -271,7 +274,10 @@ Rules:
 - convert MongoDB `_id` to `id` and Dates to ISO strings at the DTO boundary;
 - handle invalid routine ids safely as not found;
 - preserve product snapshots when they already exist in documents, but do not accept or populate snapshots from client input in Week 3 Task 1;
-- no Product lookup, Product repository, AI logic, Routine Analysis, Routine Builder UI, Routine Logs, or dashboard data integration inside basic CRUD use cases.
+- `/routines` UI must call the existing Routine API with `fetch` and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules;
+- `/routines` UI must submit only `name`, `timeOfDay`, and steps with `customProductName`, `category`, `order`, `frequency`, and optional `instructions`;
+- `/routines` UI must not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields;
+- no Product lookup, Product picker, Product repository, AI logic, Routine Analysis, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside basic CRUD use cases or the Week 3 Task 2 UI foundation.
 
 Current status:
 
@@ -284,12 +290,15 @@ src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
+src/modules/routines/components/routine-builder.tsx
+src/app/(dashboard)/routines/page.tsx
 tests/unit/routine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
+tests/unit/routine-builder-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation only. Routine Builder UI, Routine Analysis, Product snapshot lookup/population, Product/Ingredient modules, AI, Journal, Routine Logs, image upload, skin score, medical diagnosis, and dashboard data integration remain outside this ownership status.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, image upload, skin score, medical diagnosis, and dashboard data integration remain outside this ownership status.
 
 ## 8. Routine analysis ownership
 
@@ -375,7 +384,7 @@ Rules:
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
-- `/dashboard` and `/skin-profile` are enabled routes in the dashboard nav;
+- `/dashboard`, `/skin-profile`, and `/routines` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - placeholder cards must not contain fake skincare, routine, product, journal, ingredient, or AI results.
@@ -390,7 +399,7 @@ tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
 ```
 
-Task 6 implemented the protected dashboard shell only. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell only. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 12. UI shared ownership
 

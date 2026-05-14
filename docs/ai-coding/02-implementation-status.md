@@ -7,10 +7,10 @@ Last updated: 2026-05-14
 ## 1. Current phase
 
 ```txt
-Week 3 Task 1 Routine API Foundation implemented
+Week 3 Task 2 Routine Builder UI Foundation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. `/api/routines` supports authenticated list and create. `/api/routines/[id]` supports authenticated read, update, and delete. All routine operations are scoped to the authenticated user. `userId` is never accepted from the client. MongoDB `_id` is converted to `id` in DTOs. `stepId` is generated server-side. Product snapshot lookup, Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, and dashboard data integration were not implemented.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation. `/routines` lists routines with `GET /api/routines`, creates with `POST /api/routines`, edits with `PATCH /api/routines/[id]`, and deletes with `DELETE /api/routines/[id]`. Dashboard Routines navigation now points to `/routines`, and `/routines/:path*` is protected by the app auth/proxy flow. The UI uses `customProductName` instead of a Product picker. Product picker, Product module, Ingredient module, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
 
 ## 2. Completed documentation
 
@@ -71,6 +71,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] Skin Profile onboarding flow integration implemented
 [x] Skin Profile view/edit route implemented
 [x] Routine API foundation implemented
+[x] Routine Builder UI foundation implemented
 ```
 
 ## 4. In progress
@@ -84,7 +85,6 @@ None
 ```txt
 Product module
 Ingredient module
-Routine Builder UI
 RoutineLog module
 SkinJournal module
 Routine Safety Engine
@@ -99,9 +99,9 @@ Deployment setup
 
 ```txt
 MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
-Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes a minimal navigation link to `/skin-profile`.
+Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes minimal navigation links to `/skin-profile` and `/routines`.
 Skin Profile onboarding UI remains available at `/onboarding/skin-profile` for first-time onboarding, while `/skin-profile` is the main protected view/edit route.
-Routine API CRUD exists for authenticated users, but Routine Builder UI, Product snapshot lookup/population, Routine Analysis, Routine Logs, and dashboard data integration are intentionally not implemented.
+Routine API CRUD exists for authenticated users, and `/routines` provides the first UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Analysis, Routine Logs, and dashboard data integration are intentionally not implemented.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.
@@ -132,7 +132,7 @@ Continue Week 3 only with the next explicitly scoped task after review.
 Recommended next coding task:
 
 ```txt
-Prepare the next explicitly scoped Week 3 task after review; do not begin Routine Builder UI, Routine Analysis, Product, Ingredient, AI, Journal, Routine Logs, or dashboard data integration without a new task.
+Prepare the next explicitly scoped Week 3 task after review; do not begin Routine Analysis, Product, Ingredient, AI, Journal, Routine Logs, dashboard data integration, Product picker, skin score, image upload, or medical diagnosis without a new task.
 ```
 
 ## 9. Update rule

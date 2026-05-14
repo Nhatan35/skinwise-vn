@@ -9,10 +9,11 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches protected dashboard, onboarding, and Skin Profile routes", () => {
-    expect(proxySource).toContain(
-      'matcher: ["/dashboard/:path*", "/onboarding/:path*", "/skin-profile/:path*"]',
-    );
+  it("matches protected dashboard, onboarding, Skin Profile, and Routines routes", () => {
+    expect(proxySource).toContain('"/dashboard/:path*"');
+    expect(proxySource).toContain('"/onboarding/:path*"');
+    expect(proxySource).toContain('"/skin-profile/:path*"');
+    expect(proxySource).toContain('"/routines/:path*"');
   });
 
   it("does not protect Auth.js routes or the public home page", () => {

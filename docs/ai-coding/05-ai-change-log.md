@@ -4,6 +4,70 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 3 Task 2 Routine Builder UI Foundation
+
+### Task
+
+Implement the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/routines/page.tsx
+src/modules/routines/components/routine-builder.tsx
+tests/unit/routine-builder-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/dashboard/dashboard-shell.config.ts
+src/proxy.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/routine-api-contract.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 3 Task 2 requires the first Routine Builder UI foundation on `/routines` only, while reusing the completed Routine API and avoiding out-of-scope routine detail routes or product features.
+
+### Implementation Notes
+
+- `/routines` is a protected dashboard route group page that renders a module-owned client component.
+- The UI loads routines with `GET /api/routines`.
+- The UI creates routines with `POST /api/routines`.
+- The UI edits routines inline with `PATCH /api/routines/[id]`.
+- The UI deletes routines with `DELETE /api/routines/[id]`.
+- The UI shows loading, empty, list, create, edit, validation error, API error, saving, deleting, and success states.
+- Submitted payloads include only `name`, `timeOfDay`, and steps with `customProductName`, `category`, `order`, `frequency`, and optional `instructions`.
+- The UI does not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields.
+- Dashboard Routines navigation now points to `/routines` and is enabled.
+- `src/proxy.ts` now protects `/routines/:path*` while preserving `/dashboard/:path*`, `/onboarding/:path*`, and `/skin-profile/:path*`.
+- Product picker, Product module, Ingredient module, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+
+### Tests
+
+```txt
+cmd /c npm test -- tests/unit/routine-builder-ui.test.ts tests/unit/dashboard-shell.test.ts tests/unit/auth-middleware.test.ts tests/unit/routine-api-contract.test.ts: Pass - 4 files, 35 tests
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 23 files, 201 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No `/routines/new`, `/routines/[id]`, or `/routines/[id]/analysis` route was created.
+- No new dependencies were added.
+- No commit was created.
+
 ## 2026-05-14 - Week 3 Task 1 Routine API Foundation
 
 ### Task
