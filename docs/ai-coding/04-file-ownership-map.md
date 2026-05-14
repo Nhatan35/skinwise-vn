@@ -144,20 +144,39 @@ src/infrastructure/database/mongodb.ts
 Planned owned files:
 
 ```txt
+src/modules/skin-profile/skin-profile.types.ts
 src/modules/skin-profile/skin-profile.schema.ts
 src/modules/skin-profile/skin-profile.dto.ts
 src/modules/skin-profile/skin-profile.mapper.ts
 src/modules/skin-profile/skin-profile.repository.ts
-src/modules/skin-profile/create-skin-profile.use-case.ts
-src/modules/skin-profile/update-skin-profile.use-case.ts
+src/modules/skin-profile/skin-profile.use-case.ts
 src/app/api/skin-profile/route.ts
+tests/unit/skin-profile.test.ts
+tests/unit/skin-profile-api-contract.test.ts
 ```
 
 Rules:
 
 - one profile per user;
 - user identity comes from session;
+- request bodies must not accept `userId`;
+- repository reads, updates, and deletes must filter by authenticated `userId`;
+- API responses must use SkinProfile DTOs and must not expose `_id` or `userId`;
 - no medical diagnosis fields.
+
+Current status:
+
+```txt
+src/app/api/skin-profile/route.ts
+src/modules/skin-profile/skin-profile.types.ts
+src/modules/skin-profile/skin-profile.schema.ts
+src/modules/skin-profile/skin-profile.dto.ts
+src/modules/skin-profile/skin-profile.mapper.ts
+src/modules/skin-profile/skin-profile.repository.ts
+src/modules/skin-profile/skin-profile.use-case.ts
+tests/unit/skin-profile.test.ts
+tests/unit/skin-profile-api-contract.test.ts
+```
 
 ## 5. Product ownership
 

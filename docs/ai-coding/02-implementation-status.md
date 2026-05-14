@@ -7,10 +7,10 @@ Last updated: 2026-05-14
 ## 1. Current phase
 
 ```txt
-Week 1 Task 7 GET /api/me lazy AppUserProfile implemented
+Week 2 Task 1 Skin Profile API foundation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 have initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 Task 1 added the Skin Profile API foundation. Other product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -65,6 +65,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 have initialized the N
 [x] CI exists in implementation repo
 [x] Basic package scripts configured
 [x] Shared UI foundation components implemented
+[x] Skin Profile API foundation implemented
 ```
 
 ## 4. In progress
@@ -76,7 +77,6 @@ None
 ## 5. Not started
 
 ```txt
-Skin Profile module
 Product module
 Ingredient module
 Routine module
@@ -97,6 +97,7 @@ MongoDB helper and index definitions exist, but `npm run db:indexes` has not bee
 Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
+Successful `POST /api/skin-profile` does not update `AppUserProfile.onboardingCompleted`; this remains a follow-up because the requirement is not explicit in the current SDD.
 ```
 
 ## 7. Do not work on yet
@@ -118,13 +119,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Review Week 1 foundation output and only start Week 2 after an explicit scoped task.
+Continue Week 2 only with the next explicitly scoped task after review.
 ```
 
 Recommended next coding task:
 
 ```txt
-Prepare the next explicitly scoped task after review; do not begin Skin Profile, Routine, Journal, Product, Ingredient, AI, or dashboard data integration without a new task.
+Prepare the next explicitly scoped Week 2 task after review; do not begin Routine, Journal, Product, Ingredient, AI, or dashboard data integration without a new task.
 ```
 
 ## 9. Update rule
@@ -140,4 +141,4 @@ docs/ai-coding/05-ai-change-log.md
 
 ## Final Freeze Cleanup
 
-Final documentation cleanup completed for v1.2.6. Seed data spec now aligns with the canonical data model, README/release-plan version wording is corrected, and MongoDB Adapter client-sharing wording is clarified. Phase remains Pre-implementation / Week 1 preparation.
+Final documentation cleanup completed for v1.2.6. Seed data spec now aligns with the canonical data model, README/release-plan version wording is corrected, and MongoDB Adapter client-sharing wording is clarified. Current implementation phase is tracked in section 1 above.

@@ -4,6 +4,66 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 2 Task 1 Skin Profile API Foundation
+
+### Task
+
+Implement the Skin Profile API foundation without starting other Week 2 modules or adding UI.
+
+### Files Added
+
+```txt
+src/app/api/skin-profile/route.ts
+src/modules/skin-profile/skin-profile.types.ts
+src/modules/skin-profile/skin-profile.schema.ts
+src/modules/skin-profile/skin-profile.dto.ts
+src/modules/skin-profile/skin-profile.mapper.ts
+src/modules/skin-profile/skin-profile.repository.ts
+src/modules/skin-profile/skin-profile.use-case.ts
+tests/unit/skin-profile.test.ts
+tests/unit/skin-profile-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 2 Task 1 requires a protected `/api/skin-profile` API foundation for the current authenticated user. The implementation covers schema validation, DTO mapping, user-scoped repository operations, thin use-case functions, and route handlers for `GET`, `POST`, `PATCH`, and `DELETE`.
+
+### Implementation Notes
+
+- `GET /api/skin-profile` returns the current user's profile or `NOT_FOUND`.
+- `POST /api/skin-profile` atomically creates or replaces the current user's profile by authenticated `userId`.
+- `PATCH /api/skin-profile` partially updates allowed SkinProfile fields and rejects empty update bodies.
+- `DELETE /api/skin-profile` deletes only the current user's profile.
+- Create/update schemas are strict and reject client-provided `userId`.
+- SkinProfile DTOs convert `_id` to `id`, Dates to ISO strings, and omit `userId`.
+- The repository uses `getSkinProfilesCollection()` and does not create a MongoClient or query Auth.js-owned collections.
+- Successful `POST /api/skin-profile` does not update `AppUserProfile.onboardingCompleted`; this remains a follow-up because the requirement is not explicit in the current SDD.
+- The initial `npm run lint` Phase 0 command was blocked by Windows PowerShell execution policy for `npm.ps1`, so checks were run with `npm.cmd`.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass - 16 files, 119 tests
+npm.cmd run build: Pass
+```
+
+### Notes
+
+- No Routine Builder, Product/Ingredient module, AI provider, Routine Analysis, Journal, skincare advice generation, medical diagnosis, skin score, onboarding UI, or Auth.js route behavior was implemented.
+
 ## 2026-05-14 - Week 1 Task 7 GET /api/me Lazy AppUserProfile
 
 ### Task

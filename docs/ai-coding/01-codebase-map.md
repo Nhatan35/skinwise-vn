@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 1 Task 7 GET /api/me lazy AppUserProfile implemented**.
+Current package state: **Week 2 Task 1 Skin Profile API foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 have added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 Task 1 adds the Skin Profile API foundation only. Other product features are not implemented yet.
 
 ## 3. Root structure
 
@@ -93,6 +93,7 @@ src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/app/api/auth/[...nextauth]/route.ts
 src/app/api/me/route.ts
+src/app/api/skin-profile/route.ts
 src/app/globals.css
 src/app/favicon.ico
 ```
@@ -100,6 +101,8 @@ src/app/favicon.ico
 Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js handlers and does not use the SkinWise `{ data, error }` response wrapper.
 
 `src/app/api/me/route.ts` is a SkinWise-owned app API. It uses `getCurrentUser()`, returns `UNAUTHORIZED` for unauthenticated requests, lazily ensures `AppUserProfile` for authenticated users, and returns only the safe current-user DTO.
+
+`src/app/api/skin-profile/route.ts` is a SkinWise-owned protected API. It validates create/update input with Zod, derives user ownership from `getCurrentUser()`, calls Skin Profile use-case functions, and returns only SkinProfile DTOs without `_id` or `userId`.
 
 `src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only; no feature routes are implemented.
 
@@ -157,6 +160,19 @@ src/modules/users/app-user-profile.mapper.ts
 ```
 
 `app-user-profile.repository.ts` owns AppUserProfile lookup and atomic lazy creation through `findOneAndUpdate` upsert using `getAppUserProfilesCollection()`. It stores the Auth.js current user id as an opaque string at the repository/API boundary to avoid coercing session ids into MongoDB `ObjectId`. `app-user-profile.mapper.ts` maps Auth.js current-user data plus AppUserProfile fields into the `/api/me` DTO without exposing MongoDB internals, raw session data, tokens, or `image`.
+
+Current implemented skin-profile files:
+
+```txt
+src/modules/skin-profile/skin-profile.types.ts
+src/modules/skin-profile/skin-profile.schema.ts
+src/modules/skin-profile/skin-profile.dto.ts
+src/modules/skin-profile/skin-profile.mapper.ts
+src/modules/skin-profile/skin-profile.repository.ts
+src/modules/skin-profile/skin-profile.use-case.ts
+```
+
+`skin-profile.schema.ts` owns create/update Zod validation. `skin-profile.repository.ts` owns user-scoped SkinProfile persistence through `getSkinProfilesCollection()`. `skin-profile.use-case.ts` provides the thin orchestration layer used by the route handler. `skin-profile.mapper.ts` converts database documents into API DTOs.
 
 Week 1 Task 1 created these additional placeholder module folders only:
 
@@ -336,6 +352,8 @@ tests/unit/foundation.test.ts
 tests/unit/get-current-user.test.ts
 tests/unit/me-api-contract.test.ts
 tests/unit/mongodb.test.ts
+tests/unit/skin-profile.test.ts
+tests/unit/skin-profile-api-contract.test.ts
 tests/unit/ui-foundation.test.ts
 ```
 
