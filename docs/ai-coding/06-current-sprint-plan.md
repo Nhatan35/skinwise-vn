@@ -5,23 +5,22 @@ Last updated: 2026-05-14
 ## 1. Current sprint
 
 ```txt
-Week 2 - Skin Profile API Foundation
+Week 2 - Skin Profile Onboarding UI
 ```
 
 ## 2. Sprint goal
 
-Implement the Skin Profile API foundation for authenticated users without adding UI or starting unrelated product modules.
+Implement the Skin Profile onboarding UI for authenticated users using the existing `/api/skin-profile` endpoint without starting unrelated product modules.
 
 ## 3. Allowed tasks this sprint
 
 ```txt
-Create SkinProfile types and enums
-Create SkinProfile create/update Zod schemas
-Create SkinProfile DTO and mapper
-Create SkinProfile repository
-Create SkinProfile use-case functions
-Create /api/skin-profile route handlers
-Add schema, mapper, repository, and API contract tests
+Create protected /onboarding/skin-profile page
+Create Skin Profile onboarding client form
+Call existing /api/skin-profile with fetch
+Prefill form from existing profile
+Submit POST for create mode and PATCH for update mode
+Add lightweight node-only Vitest checks
 Update implementation status docs
 ```
 
@@ -49,24 +48,19 @@ Admin review UI
 Microservices
 RAG/vector database
 Queue/background jobs
+Dashboard data integration
 ```
 
 ## 5. Sprint task breakdown
 
-### Task 1 - Skin Profile API foundation
+### Task 2 - Skin Profile onboarding UI
 
 Expected output:
 
 ```txt
-src/app/api/skin-profile/route.ts
-src/modules/skin-profile/skin-profile.types.ts
-src/modules/skin-profile/skin-profile.schema.ts
-src/modules/skin-profile/skin-profile.dto.ts
-src/modules/skin-profile/skin-profile.mapper.ts
-src/modules/skin-profile/skin-profile.repository.ts
-src/modules/skin-profile/skin-profile.use-case.ts
-tests/unit/skin-profile.test.ts
-tests/unit/skin-profile-api-contract.test.ts
+src/app/(dashboard)/onboarding/skin-profile/page.tsx
+src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
+tests/unit/skin-profile-onboarding.test.ts
 docs/ai-coding/02-implementation-status.md updated
 docs/ai-coding/03-feature-status-matrix.md updated
 docs/ai-coding/05-ai-change-log.md updated
@@ -75,12 +69,12 @@ docs/ai-coding/05-ai-change-log.md updated
 ## 6. Sprint Definition of Done
 
 ```txt
-[x] Authenticated Skin Profile API exists.
-[x] Input validation exists.
-[x] User ownership comes only from the server session.
-[x] DTO mapper hides MongoDB internals and userId.
-[x] Repository operations filter by authenticated userId.
-[x] Unit/API contract tests exist.
+[x] Protected Skin Profile onboarding page exists.
+[x] Form uses the existing Skin Profile API.
+[x] Form uses existing Skin Profile schema/types.
+[x] Form supports loading, blank create state, prefilled update state, validation errors, API errors, saving, and success.
+[x] Form does not import repository, database, use-case, or server-only modules.
+[x] Lightweight UI source tests exist.
 [x] Final lint/typecheck/test/build pass after implementation.
 [x] No out-of-scope features implemented.
 [x] Status docs updated.
@@ -92,5 +86,5 @@ Use this prompt shape for the next scoped task:
 
 ```txt
 Implement the next explicitly scoped Week 2 task only.
-Do not start Routine, Journal, Product, Ingredient, AI, dashboard data integration, onboarding UI, or any out-of-scope MVP feature unless explicitly requested.
+Do not start Routine, Journal, Product, Ingredient, AI, dashboard data integration, or any out-of-scope MVP feature unless explicitly requested.
 ```

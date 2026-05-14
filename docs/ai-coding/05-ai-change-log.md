@@ -4,6 +4,60 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 2 Task 2 Skin Profile Onboarding UI
+
+### Task
+
+Implement the protected Skin Profile onboarding UI only.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/onboarding/skin-profile/page.tsx
+src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
+tests/unit/skin-profile-onboarding.test.ts
+```
+
+### Files Updated
+
+```txt
+src/shared/constants/routes.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 2 Task 2 requires an authenticated onboarding page where users can create or update their Skin Profile through the existing `/api/skin-profile` endpoint.
+
+### Implementation Notes
+
+- Added `/onboarding/skin-profile` under the protected `(dashboard)` route group.
+- Added `routes.ONBOARDING_SKIN_PROFILE`.
+- Added a client form component under `src/modules/skin-profile/components`.
+- The form calls `GET /api/skin-profile` on load, prefills when a profile exists, and shows a blank create form for `NOT_FOUND`.
+- The form submits with `POST` for create mode and `PATCH` for update mode.
+- The form reuses the existing Skin Profile Zod schemas and does not submit `id`, `_id`, `userId`, `createdAt`, or `updatedAt`.
+- The client component does not import repository, database, use-case, or `server-only` modules.
+
+### Tests
+
+```txt
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 17 files, 126 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No Routine Builder, Product module, Ingredient module, AI provider, AI recommendations, Routine Analysis, Journal, dashboard data integration, medical diagnosis, skin score, image upload, product recommendations, or Auth.js route behavior was implemented.
+- Successful save redirects to `/dashboard`; `AppUserProfile.onboardingCompleted` remains a follow-up because the SDD requirement is not explicit.
+
 ## 2026-05-14 - Week 2 Task 1.1 Foundation Stabilization Patch
 
 ### Task

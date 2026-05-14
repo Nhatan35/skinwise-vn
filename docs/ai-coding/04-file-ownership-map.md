@@ -150,9 +150,12 @@ src/modules/skin-profile/skin-profile.dto.ts
 src/modules/skin-profile/skin-profile.mapper.ts
 src/modules/skin-profile/skin-profile.repository.ts
 src/modules/skin-profile/skin-profile.use-case.ts
+src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
 src/app/api/skin-profile/route.ts
+src/app/(dashboard)/onboarding/skin-profile/page.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
+tests/unit/skin-profile-onboarding.test.ts
 ```
 
 Rules:
@@ -162,6 +165,7 @@ Rules:
 - request bodies must not accept `userId`;
 - repository reads, updates, and deletes must filter by authenticated `userId`;
 - API responses must use SkinProfile DTOs and must not expose `_id` or `userId`;
+- onboarding UI must call `/api/skin-profile` with `fetch` and must not import repository, database, use-case, or `server-only` modules;
 - no medical diagnosis fields.
 
 Current status:
@@ -174,8 +178,11 @@ src/modules/skin-profile/skin-profile.dto.ts
 src/modules/skin-profile/skin-profile.mapper.ts
 src/modules/skin-profile/skin-profile.repository.ts
 src/modules/skin-profile/skin-profile.use-case.ts
+src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
+tests/unit/skin-profile-onboarding.test.ts
+src/app/(dashboard)/onboarding/skin-profile/page.tsx
 ```
 
 ## 5. Product ownership

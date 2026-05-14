@@ -18,7 +18,7 @@ Last updated: 2026-05-14
 | Auth foundation | Done | Auth.js route + `GET /api/me` | No sign-in UI | MongoDB Adapter gated + AppUserProfile lazy upsert | Unit | Week 1 Task 7 added current-user API without wrapping `/api/auth/*` |
 | AppUserProfile foundation | Done | `GET /api/me` | N/A | `app_user_profiles` lazy upsert | Unit | Role/onboarding only; no SkinProfile or dashboard data integration |
 | Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders | N/A | Unit | Week 1 Task 6; no dashboard data integration |
-| Skin Profile | In Progress | `/api/skin-profile` GET/POST/PATCH/DELETE | No UI | User-scoped `skin_profiles` repository | Unit/API contract | Week 2 Task 1 API foundation only; no onboarding UI |
+| Skin Profile | In Progress | `/api/skin-profile` GET/POST/PATCH/DELETE | Onboarding form at `/onboarding/skin-profile`; `/skin-profile` view not implemented | User-scoped `skin_profiles` repository | Unit/API/source checks | Week 2 Task 2 adds onboarding UI only; no dashboard data integration |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
 | Routine Builder | Not Started | No | No | No | No | Week 3 |
