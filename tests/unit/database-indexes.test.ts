@@ -53,6 +53,11 @@ describe("database index definitions", () => {
     expectUniqueIndex(COLLECTION_NAMES.INGREDIENTS, { inciName: 1 });
   });
 
+  it("defines routine ownership query indexes", () => {
+    expectIndex(COLLECTION_NAMES.ROUTINES, { userId: 1, timeOfDay: 1 });
+    expectIndex(COLLECTION_NAMES.ROUTINES, { userId: 1, updatedAt: -1 });
+  });
+
   it("defines routine log unique daily upsert index", () => {
     expectUniqueIndex(COLLECTION_NAMES.ROUTINE_LOGS, {
       userId: 1,

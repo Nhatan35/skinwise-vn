@@ -249,22 +249,47 @@ Rules:
 Planned owned files:
 
 ```txt
+src/modules/routines/routine.types.ts
 src/modules/routines/routine.schema.ts
 src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
-src/modules/routines/create-routine.use-case.ts
-src/modules/routines/update-routine.use-case.ts
-src/modules/routines/get-routine.use-case.ts
+src/modules/routines/routine.use-case.ts
 src/app/api/routines/route.ts
 src/app/api/routines/[id]/route.ts
+tests/unit/routine.test.ts
+tests/unit/routine-use-case.test.ts
+tests/unit/routine-api-contract.test.ts
 ```
 
 Rules:
 
 - always query by `routineId + userId`;
-- preserve product snapshots when possible;
-- no AI logic inside basic CRUD use cases.
+- derive `userId` from the authenticated server session only;
+- never accept client-provided `userId`, `id`, `_id`, timestamps, `stepId`, or snapshot fields;
+- generate `stepId` server-side for submitted routine steps;
+- convert MongoDB `_id` to `id` and Dates to ISO strings at the DTO boundary;
+- handle invalid routine ids safely as not found;
+- preserve product snapshots when they already exist in documents, but do not accept or populate snapshots from client input in Week 3 Task 1;
+- no Product lookup, Product repository, AI logic, Routine Analysis, Routine Builder UI, Routine Logs, or dashboard data integration inside basic CRUD use cases.
+
+Current status:
+
+```txt
+src/app/api/routines/route.ts
+src/app/api/routines/[id]/route.ts
+src/modules/routines/routine.types.ts
+src/modules/routines/routine.schema.ts
+src/modules/routines/routine.dto.ts
+src/modules/routines/routine.mapper.ts
+src/modules/routines/routine.repository.ts
+src/modules/routines/routine.use-case.ts
+tests/unit/routine.test.ts
+tests/unit/routine-use-case.test.ts
+tests/unit/routine-api-contract.test.ts
+```
+
+Week 3 Task 1 implemented Routine API foundation only. Routine Builder UI, Routine Analysis, Product snapshot lookup/population, Product/Ingredient modules, AI, Journal, Routine Logs, image upload, skin score, medical diagnosis, and dashboard data integration remain outside this ownership status.
 
 ## 8. Routine analysis ownership
 

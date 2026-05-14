@@ -21,7 +21,8 @@ Last updated: 2026-05-14
 | Skin Profile | Done | `/api/skin-profile` GET/POST/PATCH/DELETE | First-time onboarding at `/onboarding/skin-profile`; main view/edit route at `/skin-profile` | User-scoped `skin_profiles` repository | Unit/API/source checks | `/skin-profile` loads with GET and updates with PATCH only; onboarding POST still marks onboarding complete |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
-| Routine Builder | Not Started | No | No | No | No | Week 3 |
+| Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | No Routine UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated, no Product snapshot lookup |
+| Routine Builder | Not Started | API foundation only | No | Routine collection foundation exists | API tests only | UI route and dashboard nav enablement not implemented |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
 | Routine Safety Engine | Not Started | No | No | No | No | Rule engine before AI |

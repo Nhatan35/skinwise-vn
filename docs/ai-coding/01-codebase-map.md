@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 2 Task 2.2 Skin Profile View/Edit Route implemented**.
+Current package state: **Week 3 Task 1 Routine API Foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 2 added the protected Skin Profile onboarding UI at `/onboarding/skin-profile`. Week 2 Task 2.1 connects the onboarding flow so successful `POST /api/skin-profile` marks `AppUserProfile.onboardingCompleted = true`, `/api/me` can reflect that state, `/onboarding/skin-profile` remains available for first-time onboarding, and `/onboarding/:path*` is covered by the proxy matcher. Week 2 Task 2.2 added the protected `/skin-profile` view/edit route, made it the main dashboard Skin Profile navigation target, protected it through `src/proxy.ts`, and uses the existing `/api/skin-profile` endpoint with `GET` to load and `PATCH` to update existing profiles only. Other product features are not implemented yet.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation: `/api/routines` supports authenticated list/create, `/api/routines/[id]` supports authenticated read/update/delete, all operations are scoped to the authenticated user, `userId` is never accepted from the client, MongoDB `_id` is converted to `id` at the DTO boundary, and routine step IDs are generated server-side. Product snapshot lookup, Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, and dashboard data integration are not implemented.
 
 ## 3. Root structure
 
@@ -95,6 +95,8 @@ src/app/(dashboard)/onboarding/skin-profile/page.tsx
 src/app/(dashboard)/skin-profile/page.tsx
 src/app/api/auth/[...nextauth]/route.ts
 src/app/api/me/route.ts
+src/app/api/routines/route.ts
+src/app/api/routines/[id]/route.ts
 src/app/api/skin-profile/route.ts
 src/app/globals.css
 src/app/favicon.ico
@@ -105,6 +107,8 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 `src/app/api/me/route.ts` is a SkinWise-owned app API. It uses `getCurrentUser()`, returns `UNAUTHORIZED` for unauthenticated requests, lazily ensures `AppUserProfile` for authenticated users, and returns only the safe current-user DTO.
 
 `src/app/api/skin-profile/route.ts` is a SkinWise-owned protected API. It validates create/update input with Zod, derives user ownership from `getCurrentUser()`, calls Skin Profile use-case functions, and returns only SkinProfile DTOs without `_id` or `userId`. Successful `POST /api/skin-profile` marks AppUserProfile onboarding complete inside the Skin Profile use case; `PATCH /api/skin-profile` updates only SkinProfile fields.
+
+`src/app/api/routines/route.ts` and `src/app/api/routines/[id]/route.ts` are SkinWise-owned protected Routine API routes. They validate input with Zod, derive `userId` from `getCurrentUser()`, call Routine use-case functions, return `{ data, error }`, map MongoDB `_id` to `id`, and never expose `userId` or raw ObjectId values. `/api/routines` lists and creates routines for the authenticated user. `/api/routines/[id]` reads, updates, and deletes only routines owned by the authenticated user. Client input cannot provide `userId`, `id`, `_id`, timestamps, `stepId`, or snapshot fields.
 
 `src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only. `src/app/(dashboard)/onboarding/skin-profile/page.tsx` creates the protected `/onboarding/skin-profile` URL and renders the Skin Profile onboarding form.
 
@@ -178,6 +182,19 @@ src/modules/skin-profile/components/skin-profile-view-edit.tsx
 
 `skin-profile.schema.ts` owns create/update Zod validation. `skin-profile.repository.ts` owns user-scoped SkinProfile persistence through `getSkinProfilesCollection()`. `skin-profile.use-case.ts` provides the thin orchestration layer used by the route handler and marks AppUserProfile onboarding complete only after successful SkinProfile create/replace. `skin-profile.mapper.ts` converts database documents into API DTOs. `components/skin-profile-onboarding-form.tsx` is the client-side first-time onboarding form; it calls `/api/skin-profile` with `fetch`, may use `POST`/`PATCH` according to onboarding behavior, and must not import repository, database, use-case, or `server-only` modules. `components/skin-profile-view-edit.tsx` is the client-side `/skin-profile` view/edit UI; it calls `GET /api/skin-profile` on load, shows an empty state linking to `/onboarding/skin-profile` when missing, updates existing profiles with `PATCH /api/skin-profile`, stays on `/skin-profile` after save, and does not use `POST`.
 
+Current implemented routine files:
+
+```txt
+src/modules/routines/routine.types.ts
+src/modules/routines/routine.schema.ts
+src/modules/routines/routine.dto.ts
+src/modules/routines/routine.mapper.ts
+src/modules/routines/routine.repository.ts
+src/modules/routines/routine.use-case.ts
+```
+
+`routine.schema.ts` owns strict create/update validation for Routine API input. It rejects unknown fields, client-provided `userId`, `id`, `_id`, timestamps, `stepId`, and Product snapshot fields. `routine.use-case.ts` generates server-side `stepId` values for submitted steps before persistence. `routine.repository.ts` imports `server-only`, uses `getRoutinesCollection()`, never creates a MongoClient, handles invalid routine ids safely, and always filters read/update/delete operations by `_id + userId`. `routine.mapper.ts` converts `_id` to `id`, Date fields to ISO strings, and omits `userId`.
+
 Week 1 Task 1 created these additional placeholder module folders only:
 
 ```txt
@@ -192,7 +209,7 @@ src/modules/ai-analysis/
 src/modules/journals/
 ```
 
-No product module business logic has been implemented yet.
+No product module business logic has been implemented yet. Routine API CRUD is implemented, but Routine Builder UI, Product snapshot lookup, Routine Analysis, Routine Logs, AI, and dashboard data integration are not implemented.
 
 Current implemented dashboard files:
 
@@ -255,7 +272,7 @@ src/infrastructure/database/ensure-indexes.ts
 src/infrastructure/database/mongodb.ts
 ```
 
-`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. No repositories or business queries are implemented yet.
+`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. Routine ownership query indexes are defined for `{ userId, timeOfDay }` and `{ userId, updatedAt }`.
 
 ### `src/shared/`
 
@@ -358,6 +375,9 @@ tests/unit/foundation.test.ts
 tests/unit/get-current-user.test.ts
 tests/unit/me-api-contract.test.ts
 tests/unit/mongodb.test.ts
+tests/unit/routine.test.ts
+tests/unit/routine-api-contract.test.ts
+tests/unit/routine-use-case.test.ts
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
 tests/unit/skin-profile-onboarding.test.ts

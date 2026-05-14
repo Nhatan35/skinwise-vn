@@ -4,6 +4,71 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 3 Task 1 Routine API Foundation
+
+### Task
+
+Implement the Routine API foundation so authenticated users can list, create, read, update, and delete their own routines through API routes.
+
+### Files Added
+
+```txt
+src/app/api/routines/route.ts
+src/app/api/routines/[id]/route.ts
+src/modules/routines/routine.types.ts
+src/modules/routines/routine.schema.ts
+src/modules/routines/routine.dto.ts
+src/modules/routines/routine.mapper.ts
+src/modules/routines/routine.repository.ts
+src/modules/routines/routine.use-case.ts
+tests/unit/routine.test.ts
+tests/unit/routine-use-case.test.ts
+tests/unit/routine-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+tests/unit/database-indexes.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 3 Task 1 requires Routine API/domain foundation only, using the Skin Profile module pattern and keeping Routine Builder UI and unrelated product features out of scope.
+
+### Implementation Notes
+
+- `/api/routines` supports authenticated `GET` list and `POST` create.
+- `/api/routines/[id]` supports authenticated `GET`, `PATCH`, and `DELETE`.
+- All routine operations are scoped to the authenticated user.
+- `userId` is derived from `getCurrentUser()` and is never accepted from client input.
+- MongoDB `_id` is converted to `id` in Routine DTOs, and Date fields are converted to ISO strings.
+- Routine `stepId` is generated server-side before persistence.
+- Create/update validation rejects client-provided `userId`, `id`, `_id`, `createdAt`, `updatedAt`, `stepId`, and Product snapshot fields.
+- Invalid routine ids, missing routines, and routines owned by another user return `NOT_FOUND`.
+- Product snapshot lookup was not implemented and snapshot fields are not accepted from client input.
+- Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+
+### Tests
+
+```txt
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 22 files, 190 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No new dependencies were added.
+- No commit was created.
+
 ## 2026-05-14 - Week 2 Task 2.2 Skin Profile View/Edit Route
 
 ### Task
