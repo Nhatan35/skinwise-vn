@@ -9,9 +9,9 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches protected dashboard and onboarding routes", () => {
+  it("matches protected dashboard, onboarding, and Skin Profile routes", () => {
     expect(proxySource).toContain(
-      'matcher: ["/dashboard/:path*", "/onboarding/:path*"]',
+      'matcher: ["/dashboard/:path*", "/onboarding/:path*", "/skin-profile/:path*"]',
     );
   });
 

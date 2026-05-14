@@ -17,8 +17,8 @@ Last updated: 2026-05-14
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Done | Auth.js route + `GET /api/me` | No sign-in UI | MongoDB Adapter gated + AppUserProfile lazy upsert | Unit | Week 1 Task 7 added current-user API without wrapping `/api/auth/*` |
 | AppUserProfile foundation | Done | `GET /api/me` reflects onboarding state | N/A | `app_user_profiles` lazy upsert + onboarding completion marker | Unit | Successful SkinProfile POST marks onboarding complete server-side; no dashboard data integration |
-| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders and Skin Profile onboarding nav link | N/A | Unit | Week 2 Task 2.1 exposes `/onboarding/skin-profile`; no dashboard data fetches |
-| Skin Profile | In Progress | `/api/skin-profile` GET/POST/PATCH/DELETE | Onboarding form at `/onboarding/skin-profile`; `/skin-profile` view not implemented | User-scoped `skin_profiles` repository | Unit/API/source checks | Week 2 Task 2.1 marks onboarding complete on POST; PATCH does not reset onboarding state |
+| Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders and Skin Profile nav link to `/skin-profile` | N/A | Unit | Week 2 Task 2.2 points Skin Profile navigation to `/skin-profile`; no dashboard data fetches |
+| Skin Profile | Done | `/api/skin-profile` GET/POST/PATCH/DELETE | First-time onboarding at `/onboarding/skin-profile`; main view/edit route at `/skin-profile` | User-scoped `skin_profiles` repository | Unit/API/source checks | `/skin-profile` loads with GET and updates with PATCH only; onboarding POST still marks onboarding complete |
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
 | Routine Builder | Not Started | No | No | No | No | Week 3 |

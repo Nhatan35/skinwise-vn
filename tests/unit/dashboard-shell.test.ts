@@ -7,7 +7,7 @@ import {
   dashboardNavItems,
   dashboardPlaceholderCards,
   dashboardRoute,
-  skinProfileOnboardingRoute,
+  skinProfileRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
 import { routes } from "@/shared/constants/routes";
 
@@ -17,11 +17,12 @@ const dashboardConfigSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard and Skin Profile onboarding as enabled protected routes", () => {
+  it("exposes dashboard and Skin Profile view/edit as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
-    expect(skinProfileOnboardingRoute).toBe(routes.ONBOARDING_SKIN_PROFILE);
+    expect(skinProfileRoute).toBe(routes.SKIN_PROFILE);
+    expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -31,7 +32,7 @@ describe("dashboard shell config", () => {
       },
       {
         disabled: false,
-        href: "/onboarding/skin-profile",
+        href: "/skin-profile",
         label: "Skin Profile",
         status: "Active",
       },

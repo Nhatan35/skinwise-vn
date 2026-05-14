@@ -7,10 +7,10 @@ Last updated: 2026-05-14
 ## 1. Current phase
 
 ```txt
-Week 2 Task 2.1 Skin Profile Onboarding Flow Integration implemented
+Week 2 Task 2.2 Skin Profile View/Edit Route implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 1.1 stabilized the production build by removing `next/font/google` usage and moving from `middleware.ts` to the Next.js 16 `proxy.ts` convention. Week 2 Task 2 added the protected Skin Profile onboarding UI at `/onboarding/skin-profile`. Week 2 Task 2.1 connected the onboarding flow so the dashboard can link to `/onboarding/skin-profile`, successful `POST /api/skin-profile` marks `AppUserProfile.onboardingCompleted = true`, `GET /api/me` can reflect the completed state, and `PATCH /api/skin-profile` leaves onboarding state unchanged. Other product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 1.1 stabilized the production build by removing `next/font/google` usage and moving from `middleware.ts` to the Next.js 16 `proxy.ts` convention. Week 2 Task 2 added the protected Skin Profile onboarding UI at `/onboarding/skin-profile`. Week 2 Task 2.1 connected the onboarding flow so successful `POST /api/skin-profile` marks `AppUserProfile.onboardingCompleted = true`, `GET /api/me` can reflect the completed state, and `PATCH /api/skin-profile` leaves onboarding state unchanged. Week 2 Task 2.2 added the protected `/skin-profile` view/edit route as the main dashboard Skin Profile navigation target. `/skin-profile` uses the existing `/api/skin-profile` endpoint, loads with `GET /api/skin-profile`, updates existing profiles with `PATCH /api/skin-profile`, stays on `/skin-profile` after save, and does not add POST-based profile creation. `/onboarding/skin-profile` remains available for first-time onboarding. Other product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -69,6 +69,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] Foundation stabilization patch implemented
 [x] Skin Profile onboarding UI implemented
 [x] Skin Profile onboarding flow integration implemented
+[x] Skin Profile view/edit route implemented
 ```
 
 ## 4. In progress
@@ -97,8 +98,8 @@ Deployment setup
 
 ```txt
 MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
-Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes a minimal navigation link to `/onboarding/skin-profile`.
-Skin Profile onboarding UI exists at `/onboarding/skin-profile`, but the separate `/skin-profile` view/edit route is not implemented yet.
+Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes a minimal navigation link to `/skin-profile`.
+Skin Profile onboarding UI remains available at `/onboarding/skin-profile` for first-time onboarding, while `/skin-profile` is the main protected view/edit route.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.

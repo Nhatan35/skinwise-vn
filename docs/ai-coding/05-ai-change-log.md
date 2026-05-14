@@ -4,6 +4,68 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 2 Task 2.2 Skin Profile View/Edit Route
+
+### Task
+
+Add the protected `/skin-profile` route where authenticated users can view and edit their existing Skin Profile after onboarding.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/skin-profile/page.tsx
+src/modules/skin-profile/components/skin-profile-view-edit.tsx
+tests/unit/skin-profile-view-edit.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/dashboard/dashboard-shell.config.ts
+src/proxy.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/dashboard-shell.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 2 Task 2.2 requires `/skin-profile` to become the main protected Skin Profile view/edit route while preserving `/onboarding/skin-profile` for first-time setup.
+
+### Implementation Notes
+
+- Added `src/app/(dashboard)/skin-profile/page.tsx` as a thin protected route page in the existing dashboard route group.
+- Added `SkinProfileViewEdit` as a client component that uses the existing `/api/skin-profile` endpoint.
+- `GET /api/skin-profile` loads the current user's profile on initial page load.
+- A missing profile shows an empty state with a CTA to `/onboarding/skin-profile`.
+- Existing profiles render in view mode and can switch to editing mode.
+- Saves use `PATCH /api/skin-profile` only and stay on `/skin-profile` after success.
+- The `/skin-profile` edit payload includes only SkinProfile fields and does not submit `id`, `_id`, `userId`, `onboardingCompleted`, `createdAt`, or `updatedAt`.
+- Dashboard Skin Profile navigation now points to `routes.SKIN_PROFILE`.
+- `src/proxy.ts` now protects `/dashboard/:path*`, `/onboarding/:path*`, and `/skin-profile/:path*`.
+- `/onboarding/skin-profile` remains available and its existing POST/PATCH plus dashboard redirect behavior was not changed.
+
+### Tests
+
+```txt
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 19 files, 149 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No `/api/skin-profile` response shape or route handler behavior was changed.
+- No POST-based profile creation was added to `/skin-profile`.
+- No Routine Builder, Product module, Ingredient module, Journal, AI provider, AI recommendations, dashboard data integration, image upload, skin score, medical diagnosis, notifications, payment/subscription, analytics, or admin features were implemented.
+- No new dependencies were added.
+
 ## 2026-05-14 - Week 2 Task 2.1 Skin Profile Onboarding Flow Integration
 
 ### Task

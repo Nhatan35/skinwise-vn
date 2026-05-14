@@ -155,12 +155,15 @@ src/modules/skin-profile/skin-profile.mapper.ts
 src/modules/skin-profile/skin-profile.repository.ts
 src/modules/skin-profile/skin-profile.use-case.ts
 src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
+src/modules/skin-profile/components/skin-profile-view-edit.tsx
 src/app/api/skin-profile/route.ts
 src/app/(dashboard)/onboarding/skin-profile/page.tsx
+src/app/(dashboard)/skin-profile/page.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
 tests/unit/skin-profile-use-case.test.ts
 tests/unit/skin-profile-onboarding.test.ts
+tests/unit/skin-profile-view-edit.test.ts
 ```
 
 Rules:
@@ -173,6 +176,8 @@ Rules:
 - successful create/replace may mark AppUserProfile onboarding complete server-side, after SkinProfile persistence succeeds;
 - PATCH must update only SkinProfile fields and must not change AppUserProfile onboarding state;
 - onboarding UI must call `/api/skin-profile` with `fetch` and must not import repository, database, use-case, or `server-only` modules;
+- `/skin-profile` view/edit UI must call `GET /api/skin-profile` on load, update existing profiles with `PATCH /api/skin-profile`, stay on `/skin-profile` after save, and must not use `POST`;
+- `/skin-profile` view/edit UI must link missing profiles to `/onboarding/skin-profile`;
 - no medical diagnosis fields.
 
 Current status:
@@ -186,11 +191,14 @@ src/modules/skin-profile/skin-profile.mapper.ts
 src/modules/skin-profile/skin-profile.repository.ts
 src/modules/skin-profile/skin-profile.use-case.ts
 src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
+src/modules/skin-profile/components/skin-profile-view-edit.tsx
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts
 tests/unit/skin-profile-use-case.test.ts
 tests/unit/skin-profile-onboarding.test.ts
+tests/unit/skin-profile-view-edit.test.ts
 src/app/(dashboard)/onboarding/skin-profile/page.tsx
+src/app/(dashboard)/skin-profile/page.tsx
 ```
 
 ## 5. Product ownership
@@ -342,7 +350,8 @@ Rules:
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
-- `/dashboard` and `/onboarding/skin-profile` are enabled routes in the dashboard nav;
+- `/dashboard` and `/skin-profile` are enabled routes in the dashboard nav;
+- `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - placeholder cards must not contain fake skincare, routine, product, journal, ingredient, or AI results.
 
@@ -356,7 +365,7 @@ tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
 ```
 
-Task 6 implemented the protected dashboard shell only. Week 2 Task 2.1 enables the Skin Profile onboarding nav link. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell only. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 12. UI shared ownership
 

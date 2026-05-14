@@ -1,11 +1,11 @@
 import { routes } from "@/shared/constants/routes";
 
 export const dashboardRoute = routes.DASHBOARD;
-export const skinProfileOnboardingRoute = routes.ONBOARDING_SKIN_PROFILE;
+export const skinProfileRoute = routes.SKIN_PROFILE;
 
 type DashboardNavHref =
   | typeof dashboardRoute
-  | typeof skinProfileOnboardingRoute;
+  | typeof skinProfileRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
@@ -29,7 +29,7 @@ export const dashboardNavItems = [
   },
   {
     disabled: false,
-    href: skinProfileOnboardingRoute,
+    href: skinProfileRoute,
     label: "Skin Profile",
     status: "Active",
   },
