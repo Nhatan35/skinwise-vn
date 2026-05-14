@@ -7,10 +7,10 @@ Last updated: 2026-05-14
 ## 1. Current phase
 
 ```txt
-Week 2 Task 1 Skin Profile API foundation implemented
+Week 2 Task 1.1 Foundation Stabilization Patch implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 Task 1 added the Skin Profile API foundation. Other product features are not implemented yet.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 Task 1 added the Skin Profile API foundation. Week 2 Task 1.1 stabilized the production build by removing `next/font/google` usage and moving from `middleware.ts` to the Next.js 16 `proxy.ts` convention. Other product features are not implemented yet.
 
 ## 2. Completed documentation
 
@@ -66,6 +66,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] Basic package scripts configured
 [x] Shared UI foundation components implemented
 [x] Skin Profile API foundation implemented
+[x] Foundation stabilization patch implemented
 ```
 
 ## 4. In progress

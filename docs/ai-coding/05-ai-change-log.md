@@ -4,6 +4,50 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 2 Task 1.1 Foundation Stabilization Patch
+
+### Task
+
+Fix the reproducible production build foundation before starting any new feature.
+
+### Files Updated
+
+```txt
+src/app/layout.tsx
+src/proxy.ts
+tests/unit/auth-middleware.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+Next.js production build should not depend on fetching Google font assets, and Next.js 16 expects the proxy convention instead of the deprecated middleware convention.
+
+### Implementation Notes
+
+- Removed `next/font/google` and `Geist` usage from `src/app/layout.tsx`.
+- Kept the existing Tailwind/system `font-sans` stack.
+- Renamed `src/middleware.ts` to `src/proxy.ts`.
+- Exported `proxy` from the Auth.js wrapper instead of default-exporting `auth`.
+- Updated the auth proxy test to read `src/proxy.ts`.
+
+### Tests
+
+```txt
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 16 files, 120 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- No onboarding UI, Routine Builder, Product module, Ingredient module, AI provider, Journal, or dashboard data integration was implemented.
+
 ## 2026-05-14 - Week 2 Task 1 Skin Profile API Foundation
 
 ### Task

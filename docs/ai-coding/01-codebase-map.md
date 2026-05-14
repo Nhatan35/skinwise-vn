@@ -142,14 +142,14 @@ Current implemented auth files:
 
 ```txt
 src/auth.ts
-src/middleware.ts
+src/proxy.ts
 src/modules/auth/auth.config.ts
 src/modules/auth/get-current-user.ts
 src/modules/auth/next-auth.d.ts
 src/modules/auth/types.ts
 ```
 
-`auth.config.ts` is edge-safe and owns pure provider/config helpers. `src/auth.ts` owns the full server-side Auth.js setup with MongoDB Adapter gating. `get-current-user.ts` maps Auth.js sessions to a minimal `CurrentUser` without querying `AppUserProfile`.
+`auth.config.ts` is edge-safe and owns pure provider/config helpers. `src/auth.ts` owns the full server-side Auth.js setup with MongoDB Adapter gating. `src/proxy.ts` owns the Next.js 16 proxy wrapper for protected dashboard routes. `get-current-user.ts` maps Auth.js sessions to a minimal `CurrentUser` without querying `AppUserProfile`.
 
 Current implemented users files:
 

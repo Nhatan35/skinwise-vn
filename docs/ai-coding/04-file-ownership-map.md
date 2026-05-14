@@ -18,7 +18,7 @@ src/modules/auth/auth.config.ts
 src/modules/auth/get-current-user.ts
 src/modules/auth/next-auth.d.ts
 src/modules/auth/types.ts
-src/middleware.ts
+src/proxy.ts
 src/app/api/auth/[...nextauth]/route.ts
 ```
 
@@ -37,7 +37,7 @@ Current status:
 ```txt
 src/auth.ts
 src/app/api/auth/[...nextauth]/route.ts
-src/middleware.ts
+src/proxy.ts
 src/modules/auth/auth.config.ts
 src/modules/auth/get-current-user.ts
 src/modules/auth/next-auth.d.ts
