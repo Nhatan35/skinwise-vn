@@ -2,7 +2,7 @@
 
 # Current Sprint Plan — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## 1. Current sprint
 
@@ -124,11 +124,17 @@ empty states
 no fake product feature implementation
 ```
 
-### Task 7 — Status update
+### Task 7 — GET /api/me lazy AppUserProfile + Week 1 gate
 
 Expected output:
 
 ```txt
+src/app/api/me/route.ts
+src/modules/users/app-user-profile.types.ts
+src/modules/users/app-user-profile.repository.ts
+src/modules/users/app-user-profile.mapper.ts
+tests/unit/app-user-profile.test.ts
+tests/unit/me-api-contract.test.ts
 docs/ai-coding/02-implementation-status.md updated
 docs/ai-coding/03-feature-status-matrix.md updated
 docs/ai-coding/05-ai-change-log.md updated
@@ -137,20 +143,21 @@ docs/ai-coding/05-ai-change-log.md updated
 ## 6. Sprint Definition of Done
 
 ```txt
-[ ] App runs locally.
-[ ] Build passes.
-[ ] Lint passes.
-[ ] Basic tests run.
-[ ] Feature flag config exists.
-[ ] Repeatable database index script placeholder exists.
-[ ] CI template exists or is copied into the implementation repo.
-[ ] Folder structure matches docs/10-project-structure.md.
-[ ] Environment validation exists.
-[ ] MongoDB helper exists.
-[ ] Auth foundation exists.
-[ ] Dashboard shell exists.
-[ ] No out-of-scope features implemented.
-[ ] Status docs updated.
+[x] App runs locally.
+[x] Build passes.
+[x] Lint passes.
+[x] Basic tests run.
+[x] Feature flag config exists.
+[x] Repeatable database index script placeholder exists.
+[x] CI template exists or is copied into the implementation repo.
+[x] Folder structure matches docs/10-project-structure.md.
+[x] Environment validation exists.
+[x] MongoDB helper exists.
+[x] Auth foundation exists.
+[x] Dashboard shell exists.
+[x] GET /api/me lazy AppUserProfile creation exists.
+[x] No out-of-scope features implemented.
+[x] Status docs updated.
 ```
 
 ## 7. Prompt to start sprint implementation

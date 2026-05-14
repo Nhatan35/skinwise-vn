@@ -4,6 +4,67 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-14 - Week 1 Task 7 GET /api/me Lazy AppUserProfile
+
+### Task
+
+Implement `GET /api/me` with lazy `AppUserProfile` creation and complete the Week 1 foundation gate without starting Week 2 or adding product features.
+
+### Files Added
+
+```txt
+src/app/api/me/route.ts
+src/modules/users/app-user-profile.types.ts
+src/modules/users/app-user-profile.repository.ts
+src/modules/users/app-user-profile.mapper.ts
+tests/unit/app-user-profile.test.ts
+tests/unit/me-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+docs/19-engineering-execution-checklist.md
+```
+
+### Reason
+
+`GET /api/me` is the canonical SkinWise current-user endpoint. It returns Auth.js current-user identity plus app-specific `role` and `onboardingCompleted` from `AppUserProfile`. Missing AppUserProfile records are created lazily with default `USER` role and `onboardingCompleted = false`.
+
+### Implementation Notes
+
+- `GET /api/me` uses `getCurrentUser()` and returns `UNAUTHORIZED` for expected unauthenticated requests.
+- `ensureAppUserProfile(userId)` uses atomic `findOneAndUpdate` upsert with `$setOnInsert`.
+- The repository stores the Auth.js current user id as a string for `AppUserProfile.userId`; this avoids coercing opaque Auth.js session ids into MongoDB `ObjectId`.
+- The `/api/me` DTO keeps `id` as a string and never exposes MongoDB `_id`.
+- Existing profiles do not get `updatedAt` changed on every `GET /api/me`.
+- The users repository uses `getAppUserProfilesCollection()` and does not create a MongoClient.
+- The `/api/me` DTO omits `_id`, ObjectId, `userId`, `image`, raw session data, tokens, and raw database errors.
+- The repository imports the collection helper dynamically inside functions so `next build` does not require real MongoDB/Auth env variables while collecting route data.
+
+### Tests
+
+```txt
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd run test: Pass - 14 files, 90 tests
+npm.cmd run build: Pass
+npm.cmd run test:e2e: Not run - not required for this task; Playwright browsers are not installed yet.
+npm.cmd run db:indexes: Not run - requires MONGODB_URI and was not required for this task.
+```
+
+### Notes
+
+- No Skin Profile, Routine, Journal, Product, Ingredient, AI, dashboard data integration, fake data, sample data, or medical claim was implemented.
+- No `src/modules/users/ensure-app-user-profile.ts` file was created because `app-user-profile.repository.ts` owns the lazy ensure responsibility.
+- No commit was created.
+
 ## 2026-05-14 — Week 1 Task 6 Protected Dashboard Shell
 
 ### Task

@@ -44,7 +44,7 @@ src/modules/auth/next-auth.d.ts
 src/modules/auth/types.ts
 ```
 
-Task 5 implements Auth.js foundation only. It does not implement `/api/me`, AppUserProfile lazy creation, sign-in UI, repositories, or product business logic.
+Task 5 implemented Auth.js foundation only. Task 7 adds the separate SkinWise-owned `/api/me` and AppUserProfile foundation without changing Auth.js built-in route ownership.
 
 ## 2.1 Foundation config ownership
 
@@ -70,6 +70,43 @@ Current status:
 src/config/app.ts
 src/config/env.ts
 src/config/features.ts
+```
+
+## 2.2 AppUserProfile and `/api/me` ownership
+
+Owned files:
+
+```txt
+src/app/api/me/route.ts
+src/modules/users/app-user-profile.types.ts
+src/modules/users/app-user-profile.repository.ts
+src/modules/users/app-user-profile.mapper.ts
+tests/unit/app-user-profile.test.ts
+tests/unit/me-api-contract.test.ts
+```
+
+Rules:
+
+- `GET /api/me` must use `getCurrentUser()` and return `UNAUTHORIZED` for expected unauthenticated requests.
+- `GET /api/me` must lazily ensure `AppUserProfile` for authenticated users.
+- AppUserProfile lazy creation must use atomic upsert through `findOneAndUpdate`.
+- AppUserProfile `userId` stores the Auth.js current user id as a string at the repository/API boundary.
+- Do not coerce opaque Auth.js session user ids into MongoDB `ObjectId`.
+- AppUserProfile repository must use `getAppUserProfilesCollection()` and must not create a MongoClient.
+- `/api/me` must not accept or trust `userId` from body/query data.
+- `/api/me` DTO must return only `id`, `email`, `name`, `role`, and `onboardingCompleted`.
+- `/api/me` must not expose `_id`, ObjectId, `userId`, `image`, raw session data, tokens, secrets, or raw database errors.
+- This ownership does not include SkinProfile, Routine, Journal, Product, Ingredient, AI, or dashboard data integration.
+
+Current status:
+
+```txt
+src/app/api/me/route.ts
+src/modules/users/app-user-profile.types.ts
+src/modules/users/app-user-profile.repository.ts
+src/modules/users/app-user-profile.mapper.ts
+tests/unit/app-user-profile.test.ts
+tests/unit/me-api-contract.test.ts
 ```
 
 ## 3. Database ownership
@@ -285,7 +322,7 @@ tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
 ```
 
-Task 6 implements the protected dashboard shell only. It does not implement `/api/me`, AppUserProfile lazy creation, database queries, business APIs, feature routes, fake data, or medical diagnosis.
+Task 6 implements the protected dashboard shell only. It does not implement dashboard data integration, database queries, business APIs, feature routes, fake data, or medical diagnosis.
 
 ## 12. UI shared ownership
 

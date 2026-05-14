@@ -305,20 +305,31 @@ store AI metadata, not hidden chain-of-thought
 Week 1 is complete only when:
 
 ```txt
-[ ] Next.js App Router project exists.
-[ ] TypeScript is configured.
-[ ] Tailwind CSS is configured.
-[ ] shadcn/ui is initialized.
-[ ] Base folder structure matches `docs/10-project-structure.md`.
-[ ] `src/config/env.ts` validates required environment variables.
-[ ] MongoDB reusable client helper exists.
-[ ] Auth.js foundation exists.
-[ ] `GET /api/me` behavior is decided and implemented as lazy AppUserProfile creation.
-[ ] Protected dashboard shell exists.
-[ ] Basic loading, error, and empty state patterns exist.
-[ ] Vitest setup exists.
-[ ] CI template exists or is copied into the repo.
-[ ] Implementation status docs are updated.
+[x] Next.js App Router project exists.
+[x] TypeScript is configured.
+[x] Tailwind CSS is configured.
+[x] shadcn/ui is initialized.
+[x] Base folder structure matches `docs/10-project-structure.md`.
+[x] `src/config/env.ts` validates required environment variables.
+[x] MongoDB reusable client helper exists.
+[x] Auth.js foundation exists.
+[x] `GET /api/me` behavior is decided and implemented as lazy AppUserProfile creation.
+[x] Protected dashboard shell exists.
+[x] Basic loading, error, and empty state patterns exist.
+[x] Vitest setup exists.
+[x] CI template exists or is copied into the repo.
+[x] Implementation status docs are updated.
+```
+
+Verification note, updated 2026-05-14 after Week 1 Task 7:
+
+```txt
+[x] npm.cmd run lint
+[x] npm.cmd run typecheck
+[x] npm.cmd run test
+[x] npm.cmd run build
+[ ] npm.cmd run test:e2e - not run; Playwright browsers are not installed yet.
+[ ] npm.cmd run db:indexes - not run; requires MONGODB_URI for a real database.
 ```
 
 ## 15. Do not optimize prematurely
