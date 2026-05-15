@@ -18,6 +18,7 @@ describe("database collection names", () => {
         "routines",
         "routine_logs",
         "routine_analyses",
+        "rate_limits",
         "skin_journals",
       ]),
     );

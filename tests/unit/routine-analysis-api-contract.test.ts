@@ -12,8 +12,13 @@ vi.mock("@/modules/ai-analysis/analyze-routine.use-case", () => ({
   listRoutineAnalysesForCurrentUser: vi.fn(),
 }));
 
+vi.mock("@/infrastructure/rate-limiting/rate-limit", () => ({
+  checkRateLimit: vi.fn(),
+}));
+
 import * as analyzeRoute from "@/app/api/routines/[id]/analyze/route";
 import * as analysesRoute from "@/app/api/routines/[id]/analyses/route";
+import { checkRateLimit } from "@/infrastructure/rate-limiting/rate-limit";
 import { getCurrentUser } from "@/modules/auth/get-current-user";
 import {
   analyzeRoutineForCurrentUser,
@@ -28,6 +33,7 @@ const mockedAnalyzeRoutineForCurrentUser = vi.mocked(
 const mockedListRoutineAnalysesForCurrentUser = vi.mocked(
   listRoutineAnalysesForCurrentUser,
 );
+const mockedCheckRateLimit = vi.mocked(checkRateLimit);
 
 const projectRoot = process.cwd();
 const userId = "auth-user-id";
@@ -90,6 +96,13 @@ describe("Routine Analysis API contract", () => {
     mockedGetCurrentUser.mockReset();
     mockedAnalyzeRoutineForCurrentUser.mockReset();
     mockedListRoutineAnalysesForCurrentUser.mockReset();
+    mockedCheckRateLimit.mockReset();
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: true,
+      limit: 10,
+      remaining: 9,
+      retryAfterSeconds: 3600,
+    });
   });
 
   it("adds POST analyze and GET analyses routes", () => {
@@ -136,6 +149,7 @@ describe("Routine Analysis API contract", () => {
     }
     expect(mockedAnalyzeRoutineForCurrentUser).not.toHaveBeenCalled();
     expect(mockedListRoutineAnalysesForCurrentUser).not.toHaveBeenCalled();
+    expect(mockedCheckRateLimit).not.toHaveBeenCalled();
   });
 
   it("analyzes a routine without requiring a client body", async () => {
@@ -158,6 +172,11 @@ describe("Routine Analysis API contract", () => {
     expect(mockedAnalyzeRoutineForCurrentUser).toHaveBeenCalledWith({
       routineId,
       currentUserId: userId,
+    });
+    expect(mockedCheckRateLimit).toHaveBeenCalledWith({
+      key: `routine_analysis:${userId}`,
+      limit: 10,
+      windowMs: 60 * 60 * 1000,
     });
   });
 
@@ -191,6 +210,39 @@ describe("Routine Analysis API contract", () => {
       });
       expect(response.status).toBe(400);
     }
+    expect(mockedAnalyzeRoutineForCurrentUser).not.toHaveBeenCalled();
+    expect(mockedCheckRateLimit).not.toHaveBeenCalled();
+  });
+
+  it("returns RATE_LIMITED with Retry-After when the user exceeds the analyze limit", async () => {
+    mockAuthenticatedUser();
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: false,
+      limit: 10,
+      remaining: 0,
+      retryAfterSeconds: 120,
+    });
+
+    const response = await analyzeRoute.POST(
+      new Request(`http://localhost/api/routines/${routineId}/analyze`, {
+        method: "POST",
+      }),
+      routeContext(routineId),
+    );
+
+    await expect(readJson(response)).resolves.toEqual({
+      data: null,
+      error: {
+        code: "RATE_LIMITED",
+        message:
+          "You have reached the routine analysis limit. Please try again later.",
+        details: {
+          retryAfterSeconds: 120,
+        },
+      },
+    });
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("120");
     expect(mockedAnalyzeRoutineForCurrentUser).not.toHaveBeenCalled();
   });
 
@@ -295,6 +347,7 @@ describe("Routine Analysis API contract", () => {
       "src/modules/ai-analysis/routine-analysis.repository.ts",
       "src/modules/ai-analysis/analyze-routine.use-case.ts",
       "src/modules/ai-analysis/index.ts",
+      "src/infrastructure/rate-limiting/rate-limit.ts",
     ];
     const combinedSource = implementedFiles
       .map((filePath) => readFileSync(join(projectRoot, filePath), "utf8"))
@@ -311,9 +364,6 @@ describe("Routine Analysis API contract", () => {
       "@/modules/routine-logs",
       "@/modules/dashboard",
       "components/",
-      "rateLimit",
-      "rate-limit",
-      "RATE_LIMITED",
       "fetch(",
       "skinScore",
       "image upload",
@@ -323,13 +373,13 @@ describe("Routine Analysis API contract", () => {
     }
   });
 
-  it("documents rate limiting as a follow-up instead of adding a local system", () => {
+  it("documents Routine Analysis rate limiting as implemented", () => {
     const changeLog = readFileSync(
       join(projectRoot, "docs/ai-coding/05-ai-change-log.md"),
       "utf8",
     );
 
-    expect(changeLog).toContain("Rate limiting remains a known follow-up");
-    expect(changeLog).toContain("no existing rate-limit utility");
+    expect(changeLog).toContain("TASK-RA-001");
+    expect(changeLog).toContain("routine_analysis:${userId}");
   });
 });

@@ -12,6 +12,7 @@ export const COLLECTION_NAMES = {
   ROUTINES: "routines",
   ROUTINE_LOGS: "routine_logs",
   ROUTINE_ANALYSES: "routine_analyses",
+  RATE_LIMITS: "rate_limits",
   SKIN_JOURNALS: "skin_journals",
 } as const;
 
@@ -63,6 +64,10 @@ export function getRoutineAnalysesCollection<
   TSchema extends Document = Document,
 >() {
   return getCollection<TSchema>(COLLECTION_NAMES.ROUTINE_ANALYSES);
+}
+
+export function getRateLimitsCollection<TSchema extends Document = Document>() {
+  return getCollection<TSchema>(COLLECTION_NAMES.RATE_LIMITS);
 }
 
 export function getSkinJournalsCollection<

@@ -92,8 +92,10 @@ Anonymous endpoints: stricter limits
 
 Implementation note:
 
-- Start with in-memory rate limits only for local development.
-- Use Redis or a managed rate-limit store before production deployment.
+- `POST /api/routines/:id/analyze` uses a MongoDB-backed per-user limiter.
+- Routine analysis uses key format `routine_analysis:${userId}` and allows 10 requests per 60 minutes.
+- Store rate limit counters in the `rate_limits` collection with a unique `key` index and TTL `expiresAt` index.
+- Do not use in-memory rate limiting for production API behavior.
 - Return `RATE_LIMITED` with a human-readable message when the limit is exceeded.
 
 ## 7. Sensitive data handling

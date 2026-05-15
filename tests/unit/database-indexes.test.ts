@@ -35,6 +35,20 @@ function expectIndex(collectionName: string, keys: ExpectedIndexKeys) {
   expect(findIndex(collectionName, keys)).toBeDefined();
 }
 
+function expectTtlIndex(
+  collectionName: string,
+  keys: ExpectedIndexKeys,
+  expireAfterSeconds: number,
+) {
+  const index = findIndex(collectionName, keys);
+  const options = index?.options as
+    | { expireAfterSeconds?: number }
+    | undefined;
+
+  expect(index).toBeDefined();
+  expect(options?.expireAfterSeconds).toBe(expireAfterSeconds);
+}
+
 describe("database index definitions", () => {
   it("defines unique user profile indexes", () => {
     expectUniqueIndex(COLLECTION_NAMES.APP_USER_PROFILES, { userId: 1 });
@@ -89,6 +103,11 @@ describe("database index definitions", () => {
     });
     expectIndex(COLLECTION_NAMES.ROUTINE_ANALYSES, { promptVersion: 1 });
     expectIndex(COLLECTION_NAMES.ROUTINE_ANALYSES, { modelName: 1 });
+  });
+
+  it("defines rate limit indexes", () => {
+    expectUniqueIndex(COLLECTION_NAMES.RATE_LIMITS, { key: 1 });
+    expectTtlIndex(COLLECTION_NAMES.RATE_LIMITS, { expiresAt: 1 }, 0);
   });
 
   it("does not define indexes for out-of-scope fields", () => {

@@ -512,7 +512,15 @@ Validation:
 
 - routine id is required.
 - routine must belong to current user.
-- user must be rate-limit checked.
+- user must be rate-limit checked after authentication and request validation.
+
+Rate limit:
+
+- Applies only to authenticated `POST /api/routines/:id/analyze` requests.
+- Key format: `routine_analysis:${userId}`.
+- Limit: 10 requests per authenticated user per 60 minutes.
+- Unauthenticated requests return the existing `UNAUTHORIZED` response and do not consume quota.
+- When exceeded, return HTTP `429`, include `Retry-After`, and do not run routine analysis.
 
 Response:
 
@@ -541,6 +549,21 @@ Response:
     "disclaimer": "Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y tế."
   },
   "error": null
+}
+```
+
+Rate-limited response:
+
+```json
+{
+  "data": null,
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "You have reached the routine analysis limit. Please try again later.",
+    "details": {
+      "retryAfterSeconds": 120
+    }
+  }
 }
 ```
 

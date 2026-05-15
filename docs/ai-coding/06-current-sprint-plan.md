@@ -5,12 +5,12 @@ Last updated: 2026-05-15
 ## 1. Current sprint
 
 ```txt
-Week 3 - Routine Analysis UI Foundation
+Routine Analysis API hardening - TASK-RA-001
 ```
 
 ## 2. Sprint goal
 
-Implement the Routine Analysis UI foundation inside the existing `/routines` page so users can run analysis and view previous analyses for each routine, without creating new routes or starting real AI provider integration, external API calls, rate limiting, Product lookup, dashboard integration, or tracking features.
+Add per-user abuse protection to the existing Routine Analysis API before real AI-provider integration, without changing deterministic analysis business logic or adding Redis/new dependencies.
 
 ## 3. Allowed tasks this sprint
 
@@ -21,6 +21,8 @@ Call POST /api/routines/[id]/analyze through fetch
 Call GET /api/routines/[id]/analyses through fetch
 Display API-provided analysis DTO fields only
 Keep Routine Analysis UI inside existing /routines page
+Add MongoDB-backed rate limiting to POST /api/routines/[id]/analyze
+Add rate_limits collection and repeatable indexes
 Add focused Vitest checks
 Update implementation status docs
 ```
@@ -37,7 +39,6 @@ Product picker
 AI provider
 OpenAI or LLM client calls
 External API calls
-New rate-limiting system
 Journal
 Routine Logs
 Product lookup
@@ -202,8 +203,11 @@ docs/ai-coding/06-current-sprint-plan.md updated
 [x] Public Routine Analysis DTOs do not expose `_id`, `userId`, or internal `ruleResults`.
 [x] RoutineAnalysis metadata uses deterministic fallback constants only.
 [x] No OpenAI, LLM client, external API call, Product/Ingredient integration, dashboard, Journal, Routine Logs, skin score, image upload, or medical diagnosis was implemented.
-[x] No new rate-limiting system was implemented because no shared rate-limit utility exists.
-[x] Rate limiting is documented as a follow-up.
+[x] POST /api/routines/[id]/analyze rate-limits authenticated users with `routine_analysis:${userId}`.
+[x] Routine Analysis rate limit is 10 requests per 60 minutes.
+[x] Rate-limited requests return `RATE_LIMITED`, HTTP 429, `Retry-After`, and `details.retryAfterSeconds`.
+[x] Unauthenticated analyze requests do not call the rate limiter.
+[x] Rate-limited analyze requests do not call `analyzeRoutineForCurrentUser()`.
 [x] Routine Analysis UI exists only inside the existing `/routines` page.
 [x] No `/routines/[id]`, `/routines/[id]/analysis`, or `/routines/[id]/analyses` UI route was created.
 [x] Analyze buttons call `POST /api/routines/[id]/analyze` with no request body.
@@ -219,6 +223,6 @@ docs/ai-coding/06-current-sprint-plan.md updated
 Use this prompt shape for the next scoped task:
 
 ```txt
-Implement the next explicitly scoped Week 3 task only.
-Do not start Product, Ingredient, real AI provider integration, rate limiting, Journal, Routine Logs, Product picker, dashboard data integration, new routine routes, or any out-of-scope MVP feature unless explicitly requested.
+Implement the next explicitly scoped task only.
+Do not start Product, Ingredient, real AI provider integration, Journal, Routine Logs, Product picker, dashboard data integration, new routine routes, or any out-of-scope MVP feature unless explicitly requested.
 ```

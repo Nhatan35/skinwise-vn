@@ -13,7 +13,7 @@ Last updated: 2026-05-15
 | Environment validation | Done | N/A | N/A | N/A | Unit | Zod parser in `src/config/env.ts`; no DB/Auth/AI calls |
 | Feature flags | Done | N/A | N/A | N/A | Smoke | Week 1 config only; incomplete features false |
 | MongoDB connection | Done | N/A | N/A | Helper only | Unit | Server-only helper exists; no real DB call in unit tests |
-| DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented; real run requires `MONGODB_URI` |
+| DB index script | Done | N/A | N/A | Index definitions | Unit | Repeatable `npm run db:indexes` implemented, including rate limit unique/TTL indexes; real run requires `MONGODB_URI` |
 | Testing foundation | Done | N/A | N/A | N/A | Smoke | Vitest and Playwright configs created; unit smoke test added |
 | Auth foundation | Done | Auth.js route + `GET /api/me` | No sign-in UI | MongoDB Adapter gated + AppUserProfile lazy upsert | Unit | Week 1 Task 7 added current-user API without wrapping `/api/auth/*` |
 | AppUserProfile foundation | Done | `GET /api/me` reflects onboarding state | N/A | `app_user_profiles` lazy upsert + onboarding completion marker | Unit | Successful SkinProfile POST marks onboarding complete server-side; no dashboard data integration |
@@ -26,7 +26,7 @@ Last updated: 2026-05-15
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
 | Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |
-| Routine Analysis API | Done (foundation) | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses` | No | `routine_analyses` repository and existing indexes | Unit/API/source checks | Deterministic fallback only; stores all rule results internally and returns triggered warnings only; real AI and rate limiting not implemented |
+| Routine Analysis API | Done | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses`; per-user 429 rate limit on analyze | No | `routine_analyses` repository; `rate_limits` collection with unique key + TTL indexes | Unit/API/source checks | Deterministic fallback only; stores all rule results internally and returns triggered warnings only; real AI not implemented |
 | Routine Analysis UI foundation | Done | Uses `POST /api/routines/:id/analyze` and `GET /api/routines/:id/analyses` | Per-routine panel inside existing `/routines` page | No new DB | Unit/source checks | Displays API-provided DTO data only; no new routes, client rules, real AI, or dashboard integration |
 | AI Provider Abstraction | Not Started | No | N/A | No | No | Server-only |
 | Ingredient Explanation | Not Started | No | No | No | No | Safety classifier when needed |

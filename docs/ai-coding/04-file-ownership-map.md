@@ -121,6 +121,7 @@ Planned owned files:
 src/infrastructure/database/mongodb.ts
 src/infrastructure/database/collections.ts
 src/infrastructure/database/ensure-indexes.ts
+src/infrastructure/rate-limiting/rate-limit.ts
 src/config/env.ts
 ```
 
@@ -131,6 +132,7 @@ Rules:
 - repositories must use shared database helpers;
 - required indexes must be created through `ensure-indexes.ts`, not route handlers;
 - route handlers must not query MongoDB directly;
+- rate limit code must use `getRateLimitsCollection()` and must not create a MongoDB client;
 - Auth.js adapter later must reuse the shared MongoClient or provider from `mongodb.ts`.
 
 Current status:
@@ -139,9 +141,10 @@ Current status:
 src/infrastructure/database/collections.ts
 src/infrastructure/database/ensure-indexes.ts
 src/infrastructure/database/mongodb.ts
+src/infrastructure/rate-limiting/rate-limit.ts
 ```
 
-`mongodb.ts` owns the shared MongoDB client helper and lazy client promise. `collections.ts` owns collection names/helpers. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`. No repositories or business logic were implemented in Task 4.
+`mongodb.ts` owns the shared MongoDB client helper and lazy client promise. `collections.ts` owns collection names/helpers, including `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including the rate limit unique key and TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
 
 ## 4. Skin Profile ownership
 
@@ -357,9 +360,11 @@ src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
 src/app/api/routines/[id]/analyze/route.ts
 src/app/api/routines/[id]/analyses/route.ts
+src/infrastructure/rate-limiting/rate-limit.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
+tests/unit/rate-limit.test.ts
 ```
 
 Rules:
@@ -376,8 +381,10 @@ Rules:
 - derive top-level `riskLevel` from the Routine Safety Engine;
 - public DTOs expose triggered warnings only and must not expose `_id`, `userId`, or internal `ruleResults`;
 - fallback content uses deterministic metadata only: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
+- `POST /api/routines/[id]/analyze` must check `routine_analysis:${userId}` after authentication and request validation, before calling `analyzeRoutineForCurrentUser()`;
+- unauthenticated requests must return the existing `UNAUTHORIZED` response and must not call the rate limiter;
+- rate-limited requests must return `RATE_LIMITED` with HTTP 429, `Retry-After`, and must not call the use case;
 - do not import OpenAI, LLM clients, external APIs, Product/Ingredient modules, UI components, dashboard modules, Journal, or RoutineLog features;
-- rate limiting remains a follow-up because no shared rate-limit utility exists and this task did not add a new rate-limiting system.
 
 Current status:
 
@@ -391,12 +398,14 @@ src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
+src/infrastructure/rate-limiting/rate-limit.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
+tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation only. Real AI provider integration, OpenAI/LLM calls, external API calls, new rate limiting, Product/Ingredient integration, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. Real AI provider integration, OpenAI/LLM calls, external API calls, Product/Ingredient integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
 
 ## 10. RoutineLog ownership
 

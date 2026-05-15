@@ -4,6 +4,70 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-15 - TASK-RA-001 Routine Analysis API Rate Limiting
+
+### Task
+
+Add per-user rate limiting to `POST /api/routines/[id]/analyze` before future AI-provider integration.
+
+### Files Added
+
+```txt
+src/infrastructure/rate-limiting/rate-limit.ts
+tests/unit/rate-limit.test.ts
+```
+
+### Files Updated
+
+```txt
+src/app/api/routines/[id]/analyze/route.ts
+src/infrastructure/database/collections.ts
+src/infrastructure/database/ensure-indexes.ts
+tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/database-collections.test.ts
+tests/unit/database-indexes.test.ts
+docs/05-api-contract.md
+docs/07-security-privacy.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Routine analysis is an AI-adjacent endpoint. It needs abuse protection before real AI-provider integration while preserving the existing deterministic analysis flow.
+
+### Implementation Notes
+
+- Added a server-only MongoDB-backed `checkRateLimit()` helper.
+- Added the `rate_limits` collection constant and helper.
+- Added a unique `{ key: 1 }` index and TTL `{ expiresAt: 1 }` index with `expireAfterSeconds: 0`.
+- `POST /api/routines/[id]/analyze` authenticates first, validates the request body, then checks `routine_analysis:${userId}`.
+- The analyze limit is 10 requests per authenticated user per 60 minutes.
+- Unauthenticated requests keep the existing `UNAUTHORIZED` behavior and do not call the rate limiter.
+- Rate-limited requests return `RATE_LIMITED` with HTTP 429, `Retry-After`, and `details.retryAfterSeconds`.
+- `analyzeRoutineForCurrentUser()` is not called when the user is rate-limited.
+- No Redis, in-memory production limiter, new dependency, AI provider, Product/Ingredient integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, or broad refactor was added.
+
+### Tests
+
+```txt
+npm.cmd test -- tests/unit/rate-limit.test.ts tests/unit/routine-analysis-api-contract.test.ts tests/unit/database-collections.test.ts tests/unit/database-indexes.test.ts: Pass - 4 files, 29 tests
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd test: Pass - 29 files, 272 tests
+npm.cmd run build: Pass
+npm.cmd run test:e2e: Smoke test reported ok, but the command wrapper timed out waiting for process exit.
+```
+
+### Notes
+
+- `npm run db:indexes` should be run in real environments so the `rate_limits` unique and TTL indexes are present.
+- No commit was created.
+
 ## 2026-05-15 - Week 3 Task 5 Routine Analysis UI Foundation
 
 ### Task
@@ -59,7 +123,7 @@ cmd /c npm run build: Pass
 ### Notes
 
 - The UI shows deterministic fallback analysis returned by the existing API; it does not know or compute safety rules.
-- Rate limiting remains a server/API follow-up and was not implemented in this UI task.
+- Server-side Routine Analysis rate limiting is handled separately by TASK-RA-001.
 - No commit was created.
 
 ## 2026-05-15 - Week 3 Task 4 Routine Analysis API Foundation
@@ -112,7 +176,7 @@ Week 3 Task 4 requires the canonical Routine Analysis API foundation from the SD
 - Public DTOs return triggered warnings only and do not expose MongoDB `_id`, `userId`, or internal `ruleResults`.
 - Deterministic fallback metadata is stored as `modelProvider: "deterministic"`, `modelName: "routine-safety-engine"`, and `promptVersion: "routine-analysis-fallback-v1"`.
 - No OpenAI, LLM client, external API call, Product/Ingredient module, Product lookup, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, skin score, image upload, medical diagnosis, new dependency, or broad refactor was added.
-- Rate limiting remains a known follow-up because no existing rate-limit utility exists and this task explicitly did not add a new rate-limiting system.
+- At the time of Task 4, no rate-limit utility existed; TASK-RA-001 later added the scoped MongoDB-backed limiter for the analyze route.
 - Review before commit kept `GET /api/routines/[id]/analyses` as `data: { analyses: [...] }` because `docs/05-api-contract.md` does not define a different response body for the history endpoint and the existing `GET /api/routines` list API convention returns a named list wrapper as `data: { routines: [...] }`.
 
 ### Tests
@@ -127,7 +191,7 @@ cmd /c npm run build: Pass
 
 ### Notes
 
-- Rate limiting remains a known follow-up and should be implemented through a shared project utility when explicitly scoped.
+- TASK-RA-001 later implemented the scoped MongoDB-backed limiter for the analyze route.
 - The deterministic fallback is stored as fallback metadata, not as successful AI provider output.
 - No commit was created.
 

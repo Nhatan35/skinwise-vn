@@ -135,6 +135,22 @@ export const DATABASE_INDEX_DEFINITIONS = [
     ],
   },
   {
+    collectionName: COLLECTION_NAMES.RATE_LIMITS,
+    indexes: [
+      {
+        keys: { key: 1 },
+        options: { name: "rate_limits_key_unique", unique: true },
+      },
+      {
+        keys: { expiresAt: 1 },
+        options: {
+          name: "rate_limits_expiresAt_ttl",
+          expireAfterSeconds: 0,
+        },
+      },
+    ],
+  },
+  {
     collectionName: COLLECTION_NAMES.SKIN_JOURNALS,
     indexes: [
       {
