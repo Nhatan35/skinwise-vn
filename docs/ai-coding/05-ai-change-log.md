@@ -4,6 +4,75 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-15 - Week 3 Task 4 Routine Analysis API Foundation
+
+### Task
+
+Implement the Routine Analysis API foundation only: protected analyze/history routes, a RoutineAnalysis module, deterministic Routine Safety Engine orchestration, persistence, and public DTO mapping.
+
+### Files Added
+
+```txt
+src/app/api/routines/[id]/analyze/route.ts
+src/app/api/routines/[id]/analyses/route.ts
+src/modules/ai-analysis/routine-analysis.types.ts
+src/modules/ai-analysis/routine-analysis.schema.ts
+src/modules/ai-analysis/routine-analysis.dto.ts
+src/modules/ai-analysis/routine-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/index.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/routine-analysis-use-case.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 3 Task 4 requires the canonical Routine Analysis API foundation from the SDD without starting real AI provider integration or unrelated feature areas.
+
+### Implementation Notes
+
+- Added `POST /api/routines/[id]/analyze` and `GET /api/routines/[id]/analyses`.
+- Both routes require authentication and derive `userId` from `getCurrentUser()`.
+- Routine ownership is checked through `routineId + userId`; missing and not-owned routines return `NOT_FOUND`.
+- `POST /api/routines/[id]/analyze` does not require a client body and rejects non-empty client fields with `VALIDATION_ERROR`.
+- The use case runs the deterministic Routine Safety Engine before persistence.
+- Skin Profile context is passed to the safety engine when available, and analysis still runs when no Skin Profile exists.
+- RoutineAnalysis persistence stores `routineSnapshot`, top-level deterministic `riskLevel`, and all rule results including `triggered: false`.
+- Public DTOs return triggered warnings only and do not expose MongoDB `_id`, `userId`, or internal `ruleResults`.
+- Deterministic fallback metadata is stored as `modelProvider: "deterministic"`, `modelName: "routine-safety-engine"`, and `promptVersion: "routine-analysis-fallback-v1"`.
+- No OpenAI, LLM client, external API call, Product/Ingredient module, Product lookup, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, skin score, image upload, medical diagnosis, new dependency, or broad refactor was added.
+- Rate limiting remains a known follow-up because no existing rate-limit utility exists and this task explicitly did not add a new rate-limiting system.
+- Review before commit kept `GET /api/routines/[id]/analyses` as `data: { analyses: [...] }` because `docs/05-api-contract.md` does not define a different response body for the history endpoint and the existing `GET /api/routines` list API convention returns a named list wrapper as `data: { routines: [...] }`.
+
+### Tests
+
+```txt
+cmd /c npm test -- tests/unit/routine-analysis.test.ts tests/unit/routine-analysis-use-case.test.ts tests/unit/routine-analysis-api-contract.test.ts: Pass - 3 files, 28 tests
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 27 files, 257 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- Rate limiting remains a known follow-up and should be implemented through a shared project utility when explicitly scoped.
+- The deterministic fallback is stored as fallback metadata, not as successful AI provider output.
+- No commit was created.
+
 ## 2026-05-15 - Week 3 Task 3 Routine Safety Engine Foundation
 
 ### Task

@@ -338,25 +338,58 @@ Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Ana
 
 ## 9. Routine analysis ownership
 
-Planned owned files:
+Owned files:
 
 ```txt
-src/modules/ai-analysis/ai-analysis.schema.ts
-src/modules/ai-analysis/ai-analysis.dto.ts
-src/modules/ai-analysis/ai-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.types.ts
+src/modules/ai-analysis/routine-analysis.schema.ts
+src/modules/ai-analysis/routine-analysis.dto.ts
+src/modules/ai-analysis/routine-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.repository.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
-src/infrastructure/ai/ai-provider.ts
-src/infrastructure/ai/openai-provider.ts
+src/modules/ai-analysis/index.ts
 src/app/api/routines/[id]/analyze/route.ts
 src/app/api/routines/[id]/analyses/route.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/routine-analysis-use-case.test.ts
 ```
 
 Rules:
 
 - rule engine must run first;
-- AI provider must be server-only;
-- AI response must pass schema validation;
-- fallback behavior must follow `docs/16-ai-fallback-policy.md`.
+- route handlers derive `userId` from the authenticated session only;
+- route handlers derive `routineId` from route params only;
+- `POST /api/routines/[id]/analyze` accepts an empty request body only and rejects client-provided analysis fields;
+- missing routines and not-owned routines both return `NOT_FOUND`;
+- use cases verify routine ownership before analysis or history reads;
+- repository writes must use `getRoutineAnalysesCollection()` and must not create a MongoClient;
+- repository history reads must filter by `userId + routineId` and return newest first;
+- store all deterministic rule results, including `triggered: false`;
+- derive top-level `riskLevel` from the Routine Safety Engine;
+- public DTOs expose triggered warnings only and must not expose `_id`, `userId`, or internal `ruleResults`;
+- fallback content uses deterministic metadata only: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
+- do not import OpenAI, LLM clients, external APIs, Product/Ingredient modules, UI components, dashboard modules, Journal, or RoutineLog features;
+- rate limiting remains a follow-up because no shared rate-limit utility exists and this task did not add a new rate-limiting system.
+
+Current status:
+
+```txt
+src/app/api/routines/[id]/analyze/route.ts
+src/app/api/routines/[id]/analyses/route.ts
+src/modules/ai-analysis/routine-analysis.types.ts
+src/modules/ai-analysis/routine-analysis.schema.ts
+src/modules/ai-analysis/routine-analysis.dto.ts
+src/modules/ai-analysis/routine-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/index.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/routine-analysis-use-case.test.ts
+```
+
+Week 3 Task 4 implemented Routine Analysis API Foundation only. Real AI provider integration, OpenAI/LLM calls, external API calls, new rate limiting, Product/Ingredient integration, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
 
 ## 10. RoutineLog ownership
 

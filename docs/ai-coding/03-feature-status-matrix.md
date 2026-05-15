@@ -25,8 +25,8 @@ Last updated: 2026-05-15
 | Routine Builder UI foundation | Done | Existing Routine API only | Protected `/routines` list/create/edit/delete UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
-| Routine Safety Engine | Done | No | No | No | Unit | Domain-only deterministic engine under `src/domain/routine-safety`; not wired to Routine Analysis API or AI |
-| Routine Analysis API | Not Started | No | No | No | No | `POST /api/routines/:id/analyze` |
+| Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |
+| Routine Analysis API | Done (foundation) | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses` | No | `routine_analyses` repository and existing indexes | Unit/API/source checks | Deterministic fallback only; stores all rule results internally and returns triggered warnings only; real AI and rate limiting not implemented |
 | AI Provider Abstraction | Not Started | No | N/A | No | No | Server-only |
 | Ingredient Explanation | Not Started | No | No | No | No | Safety classifier when needed |
 | Deployment | Not Started | N/A | N/A | N/A | No | Use deployment checklist |

@@ -7,10 +7,10 @@ Last updated: 2026-05-15
 ## 1. Current phase
 
 ```txt
-Week 3 Task 3 Routine Safety Engine Foundation implemented
+Week 3 Task 4 Routine Analysis API Foundation implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation. Week 3 Task 3 implemented the domain-only Routine Safety Engine foundation. The engine normalizes active signals, evaluates the seven MVP deterministic routine safety rules, returns all rule results plus triggered rules, and derives risk level without AI, API routes, database queries, repositories, use cases, or UI changes. Product picker, Product module, Ingredient module, Routine Analysis API, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation. Week 3 Task 3 implemented the domain-only Routine Safety Engine foundation. Week 3 Task 4 implemented the Routine Analysis API foundation. The analysis use case verifies routine ownership, optionally passes Skin Profile context to the deterministic safety engine, stores all rule results internally, derives top-level risk level from the engine, and returns public DTOs with triggered warnings only. Product picker, Product module, Ingredient module, real AI provider integration, external LLM/API calls, rate limiting, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
 
 ## 2. Completed documentation
 
@@ -73,6 +73,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] Routine API foundation implemented
 [x] Routine Builder UI foundation implemented
 [x] Routine Safety Engine foundation implemented
+[x] Routine Analysis API foundation implemented
 ```
 
 ## 4. In progress
@@ -89,7 +90,6 @@ Ingredient module
 RoutineLog module
 SkinJournal module
 AI provider abstraction
-Routine analysis API
 Ingredient explanation API
 Dashboard data integration
 Deployment setup
@@ -101,8 +101,10 @@ Deployment setup
 MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI.
 Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes minimal navigation links to `/skin-profile` and `/routines`.
 Skin Profile onboarding UI remains available at `/onboarding/skin-profile` for first-time onboarding, while `/skin-profile` is the main protected view/edit route.
-Routine API CRUD exists for authenticated users, and `/routines` provides the first UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Analysis, Routine Logs, and dashboard data integration are intentionally not implemented.
-Routine Safety Engine exists as a domain-only deterministic foundation under `src/domain/routine-safety`; it is not wired into API routes, persistence, AI explanation, or UI.
+Routine API CRUD exists for authenticated users, and `/routines` provides the first UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Logs, and dashboard data integration are intentionally not implemented.
+Routine Safety Engine exists as a deterministic foundation under `src/domain/routine-safety`; Week 3 Task 4 wires it into Routine Analysis API persistence and public DTO mapping only.
+Routine Analysis API exists with deterministic fallback metadata only. It does not call OpenAI, LLM clients, external APIs, Product/Ingredient modules, UI, dashboard, Journal, or RoutineLog features.
+Rate limiting remains a known follow-up for Routine Analysis because no existing rate-limit utility exists and Week 3 Task 4 explicitly did not add a new rate-limiting system.
 Playwright browsers are not installed yet; E2E tests were not run.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.
@@ -133,7 +135,7 @@ Continue Week 3 only with the next explicitly scoped task after review.
 Recommended next coding task:
 
 ```txt
-Prepare the next explicitly scoped Week 3 task after review; do not begin Routine Analysis API, Product, Ingredient, AI, Journal, Routine Logs, dashboard data integration, Product picker, skin score, image upload, or medical diagnosis without a new task.
+Prepare the next explicitly scoped Week 3 task after review. Rate limiting for Routine Analysis is a known follow-up but should use a shared project utility when one is explicitly scoped. Do not begin Product, Ingredient, real AI provider integration, Journal, Routine Logs, dashboard data integration, Product picker, skin score, image upload, or medical diagnosis without a new task.
 ```
 
 ## 9. Update rule

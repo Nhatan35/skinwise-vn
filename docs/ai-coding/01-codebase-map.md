@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 3 Task 3 Routine Safety Engine Foundation implemented**.
+Current package state: **Week 3 Task 4 Routine Analysis API Foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation. Week 3 Task 2 added the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API. Week 3 Task 3 added the domain-only Routine Safety Engine foundation with deterministic active-signal normalization and MVP rule evaluation. The Routine Builder UI uses `customProductName` only, lets the API generate `stepId`, and does not submit Product snapshot fields. Product picker, Product/Ingredient modules, Routine Analysis API, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis are not implemented.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation. Week 3 Task 2 added the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API. Week 3 Task 3 added the domain-only Routine Safety Engine foundation with deterministic active-signal normalization and MVP rule evaluation. Week 3 Task 4 added the Routine Analysis API foundation that runs the deterministic safety engine, persists RoutineAnalysis documents, stores all rule results internally, and returns public analysis DTOs with triggered warnings only. The Routine Builder UI uses `customProductName` only, lets the API generate `stepId`, and does not submit Product snapshot fields. Product picker, Product/Ingredient modules, real AI provider integration, external LLM/API calls, rate limiting, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis are not implemented.
 
 ## 3. Root structure
 
@@ -98,6 +98,8 @@ src/app/api/auth/[...nextauth]/route.ts
 src/app/api/me/route.ts
 src/app/api/routines/route.ts
 src/app/api/routines/[id]/route.ts
+src/app/api/routines/[id]/analyze/route.ts
+src/app/api/routines/[id]/analyses/route.ts
 src/app/api/skin-profile/route.ts
 src/app/globals.css
 src/app/favicon.ico
@@ -110,6 +112,8 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 `src/app/api/skin-profile/route.ts` is a SkinWise-owned protected API. It validates create/update input with Zod, derives user ownership from `getCurrentUser()`, calls Skin Profile use-case functions, and returns only SkinProfile DTOs without `_id` or `userId`. Successful `POST /api/skin-profile` marks AppUserProfile onboarding complete inside the Skin Profile use case; `PATCH /api/skin-profile` updates only SkinProfile fields.
 
 `src/app/api/routines/route.ts` and `src/app/api/routines/[id]/route.ts` are SkinWise-owned protected Routine API routes. They validate input with Zod, derive `userId` from `getCurrentUser()`, call Routine use-case functions, return `{ data, error }`, map MongoDB `_id` to `id`, and never expose `userId` or raw ObjectId values. `/api/routines` lists and creates routines for the authenticated user. `/api/routines/[id]` reads, updates, and deletes only routines owned by the authenticated user. Client input cannot provide `userId`, `id`, `_id`, timestamps, `stepId`, or snapshot fields.
+
+`src/app/api/routines/[id]/analyze/route.ts` and `src/app/api/routines/[id]/analyses/route.ts` are SkinWise-owned protected Routine Analysis API routes. They derive `userId` from `getCurrentUser()`, derive `routineId` from route params, call the Routine Analysis use case, return `{ data, error }`, and never accept client-provided analysis ownership, risk, rule, AI, model, or timestamp fields. `POST /api/routines/[id]/analyze` accepts an empty body only, runs deterministic analysis, persists the result, and returns a public DTO. `GET /api/routines/[id]/analyses` returns the authenticated user's analysis history for that routine.
 
 `src/app/(dashboard)/layout.tsx` protects the dashboard route group with `getCurrentUser()` and redirects unauthenticated users to `/api/auth/signin?callbackUrl=/dashboard`. `src/app/(dashboard)/dashboard/page.tsx` creates the real `/dashboard` URL and renders placeholder cards only. `src/app/(dashboard)/onboarding/skin-profile/page.tsx` creates the protected `/onboarding/skin-profile` URL and renders the Skin Profile onboarding form. `src/app/(dashboard)/routines/page.tsx` creates the protected `/routines` URL and renders the Routine Builder client component.
 
@@ -197,6 +201,20 @@ src/modules/routines/components/routine-builder.tsx
 
 `routine.schema.ts` owns strict create/update validation for Routine API input. It rejects unknown fields, client-provided `userId`, `id`, `_id`, timestamps, `stepId`, and Product snapshot fields. `routine.use-case.ts` generates server-side `stepId` values for submitted steps before persistence. `routine.repository.ts` imports `server-only`, uses `getRoutinesCollection()`, never creates a MongoClient, handles invalid routine ids safely, and always filters read/update/delete operations by `_id + userId`. `routine.mapper.ts` converts `_id` to `id`, Date fields to ISO strings, and omits `userId`. `components/routine-builder.tsx` is the client-side `/routines` UI; it calls `GET /api/routines`, `POST /api/routines`, `PATCH /api/routines/[id]`, and `DELETE /api/routines/[id]` with `fetch`, uses `customProductName` instead of a Product picker, and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules.
 
+Current implemented routine analysis files:
+
+```txt
+src/modules/ai-analysis/routine-analysis.types.ts
+src/modules/ai-analysis/routine-analysis.schema.ts
+src/modules/ai-analysis/routine-analysis.dto.ts
+src/modules/ai-analysis/routine-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/index.ts
+```
+
+`routine-analysis.schema.ts` owns strict empty-body validation for `POST /api/routines/[id]/analyze`. `routine-analysis.repository.ts` imports `server-only`, uses `getRoutineAnalysesCollection()`, creates RoutineAnalysis documents for the authenticated user, and lists analysis history by `userId + routineId` newest first. `analyze-routine.use-case.ts` verifies routine ownership through the Routine repository, optionally loads Skin Profile context, runs the deterministic Routine Safety Engine, stores all rule results including non-triggered rules, builds deterministic fallback warnings and suggestions, and persists deterministic metadata only. `routine-analysis.mapper.ts` converts MongoDB ids and Dates to public strings and omits `userId`, `_id`, and internal `ruleResults`. This foundation does not import an AI provider, OpenAI, external APIs, Product/Ingredient modules, UI components, or dashboard modules.
+
 Week 1 Task 1 created these additional placeholder module folders only:
 
 ```txt
@@ -211,7 +229,7 @@ src/modules/ai-analysis/
 src/modules/journals/
 ```
 
-No product module business logic has been implemented yet. Routine API CRUD and the `/routines` UI foundation are implemented, but Product picker, Product snapshot lookup, Routine Analysis, Routine Logs, AI, Product/Ingredient modules, skin score, image upload, medical diagnosis, and dashboard data integration are not implemented.
+No product module business logic has been implemented yet. Routine API CRUD, the `/routines` UI foundation, the Routine Safety Engine, and the Routine Analysis API foundation are implemented. Product picker, Product snapshot lookup/backfill, real AI provider integration, external LLM/API calls, rate limiting, Routine Logs, Product/Ingredient modules, skin score, image upload, medical diagnosis, and dashboard data integration are not implemented.
 
 Current implemented dashboard files:
 
@@ -278,7 +296,7 @@ src/infrastructure/database/ensure-indexes.ts
 src/infrastructure/database/mongodb.ts
 ```
 
-`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. Routine ownership query indexes are defined for `{ userId, timeOfDay }` and `{ userId, updatedAt }`.
+`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references, including `routine_analyses`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. Routine ownership query indexes are defined for `{ userId, timeOfDay }` and `{ userId, updatedAt }`. RoutineAnalysis indexes already exist for `userId + routineId`, `userId + createdAt`, `userId + riskLevel + createdAt`, `promptVersion`, and `modelName`.
 
 ### `src/shared/`
 
@@ -384,6 +402,9 @@ tests/unit/mongodb.test.ts
 tests/unit/routine.test.ts
 tests/unit/routine-api-contract.test.ts
 tests/unit/routine-builder-ui.test.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/routine-analysis-use-case.test.ts
 tests/unit/routine-safety-engine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/skin-profile.test.ts
