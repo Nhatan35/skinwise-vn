@@ -22,11 +22,12 @@ Last updated: 2026-05-15
 | Product mini database | Not Started | No | No | No | No | Seed spec added |
 | Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
 | Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | Used by `/routines` UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated, no Product snapshot lookup |
-| Routine Builder UI foundation | Done | Existing Routine API only | Protected `/routines` list/create/edit/delete UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
+| Routine Builder UI foundation | Done | Existing Routine API + Routine Analysis API | Protected `/routines` list/create/edit/delete/analyze UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
 | Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |
 | Routine Analysis API | Done (foundation) | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses` | No | `routine_analyses` repository and existing indexes | Unit/API/source checks | Deterministic fallback only; stores all rule results internally and returns triggered warnings only; real AI and rate limiting not implemented |
+| Routine Analysis UI foundation | Done | Uses `POST /api/routines/:id/analyze` and `GET /api/routines/:id/analyses` | Per-routine panel inside existing `/routines` page | No new DB | Unit/source checks | Displays API-provided DTO data only; no new routes, client rules, real AI, or dashboard integration |
 | AI Provider Abstraction | Not Started | No | N/A | No | No | Server-only |
 | Ingredient Explanation | Not Started | No | No | No | No | Safety classifier when needed |
 | Deployment | Not Started | N/A | N/A | N/A | No | Use deployment checklist |

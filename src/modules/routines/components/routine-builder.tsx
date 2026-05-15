@@ -12,6 +12,8 @@ import {
 import { useEffect, useState, type FormEvent } from "react";
 import type { ZodIssue } from "zod";
 
+import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
+import { RoutineAnalysisPanel } from "@/modules/routines/components/routine-analysis-panel";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
 import {
   createRoutineSchema,
@@ -50,6 +52,8 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { cn } from "@/shared/utils";
 
 const ROUTINES_API_PATH = "/api/routines";
+const ANALYZE_ROUTE_SEGMENT = "analyze";
+const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
 
 type ApiError = {
   code: string;
@@ -189,6 +193,30 @@ function getApiErrorMessage(error?: ApiError | null) {
   return "Hiện chưa thể xử lý routine. Vui lòng thử lại sau.";
 }
 
+function getAnalysisApiErrorMessage(error?: ApiError | null) {
+  if (error?.code === "UNAUTHORIZED") {
+    return "Bạn cần đăng nhập để tiếp tục.";
+  }
+
+  if (error?.code === "VALIDATION_ERROR") {
+    return "Yêu cầu phân tích chưa hợp lệ. Vui lòng thử lại.";
+  }
+
+  if (error?.code === "NOT_FOUND") {
+    return "Không tìm thấy routine này. Vui lòng tải lại trang và thử lại.";
+  }
+
+  return "Hiện chưa thể phân tích routine. Vui lòng thử lại sau.";
+}
+
+function getAnalyzeEndpoint(routineId: string) {
+  return `${ROUTINES_API_PATH}/${routineId}/${ANALYZE_ROUTE_SEGMENT}`;
+}
+
+function getAnalysisHistoryEndpoint(routineId: string) {
+  return `${ROUTINES_API_PATH}/${routineId}/${ANALYSIS_HISTORY_ROUTE_SEGMENT}`;
+}
+
 function getIssueKey(issue: ZodIssue) {
   const [root, index, field] = issue.path;
 
@@ -264,6 +292,25 @@ export function RoutineBuilder() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [deletingRoutineId, setDeletingRoutineId] = useState<string | null>(null);
+  const [latestAnalysisByRoutineId, setLatestAnalysisByRoutineId] = useState<
+    Record<string, RoutineAnalysisDto | null>
+  >({});
+  const [analysisHistoryByRoutineId, setAnalysisHistoryByRoutineId] = useState<
+    Record<string, RoutineAnalysisDto[]>
+  >({});
+  const [
+    analysisHistoryLoadedByRoutineId,
+    setAnalysisHistoryLoadedByRoutineId,
+  ] = useState<Record<string, boolean>>({});
+  const [analysisErrorByRoutineId, setAnalysisErrorByRoutineId] = useState<
+    Record<string, string | null>
+  >({});
+  const [analyzingRoutineIds, setAnalyzingRoutineIds] = useState<
+    Record<string, boolean>
+  >({});
+  const [loadingHistoryRoutineIds, setLoadingHistoryRoutineIds] = useState<
+    Record<string, boolean>
+  >({});
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -447,6 +494,12 @@ export function RoutineBuilder() {
               routine.id === body.data.routine.id ? body.data.routine : routine,
             ),
       );
+      if (formMode === "edit" && editingRoutineId) {
+        setLatestAnalysisByRoutineId((current) => ({
+          ...current,
+          [editingRoutineId]: null,
+        }));
+      }
       setSuccessMessage(
         formMode === "create" ? "Đã tạo routine." : "Đã lưu routine.",
       );
@@ -492,6 +545,26 @@ export function RoutineBuilder() {
       setRoutines((current) =>
         current.filter((item) => item.id !== routine.id),
       );
+      setLatestAnalysisByRoutineId((current) => {
+        const next = { ...current };
+        delete next[routine.id];
+        return next;
+      });
+      setAnalysisHistoryByRoutineId((current) => {
+        const next = { ...current };
+        delete next[routine.id];
+        return next;
+      });
+      setAnalysisHistoryLoadedByRoutineId((current) => {
+        const next = { ...current };
+        delete next[routine.id];
+        return next;
+      });
+      setAnalysisErrorByRoutineId((current) => {
+        const next = { ...current };
+        delete next[routine.id];
+        return next;
+      });
       if (editingRoutineId === routine.id) {
         cancelForm();
       }
@@ -500,6 +573,130 @@ export function RoutineBuilder() {
       setApiError("Hiện chưa thể xóa routine. Vui lòng thử lại sau.");
     } finally {
       setDeletingRoutineId(null);
+    }
+  }
+
+  async function analyzeRoutine(routine: RoutineDto) {
+    if (analyzingRoutineIds[routine.id]) {
+      return;
+    }
+
+    setApiError(null);
+    setSuccessMessage(null);
+    setAnalysisErrorByRoutineId((current) => ({
+      ...current,
+      [routine.id]: null,
+    }));
+    setAnalyzingRoutineIds((current) => ({
+      ...current,
+      [routine.id]: true,
+    }));
+
+    try {
+      const response = await fetch(getAnalyzeEndpoint(routine.id), {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "POST",
+      });
+      const body = await readApiResponse<RoutineAnalysisDto>(response);
+
+      if (!response.ok || body.error) {
+        setAnalysisErrorByRoutineId((current) => ({
+          ...current,
+          [routine.id]: getAnalysisApiErrorMessage(body.error),
+        }));
+        return;
+      }
+
+      setLatestAnalysisByRoutineId((current) => ({
+        ...current,
+        [routine.id]: body.data,
+      }));
+      setAnalysisHistoryByRoutineId((current) => ({
+        ...current,
+        [routine.id]: [
+          body.data,
+          ...(current[routine.id] ?? []).filter(
+            (analysis) => analysis.analysisId !== body.data.analysisId,
+          ),
+        ],
+      }));
+      setAnalysisHistoryLoadedByRoutineId((current) => ({
+        ...current,
+        [routine.id]: true,
+      }));
+      setSuccessMessage("Đã phân tích routine.");
+    } catch {
+      setAnalysisErrorByRoutineId((current) => ({
+        ...current,
+        [routine.id]:
+          "Hiện chưa thể phân tích routine. Vui lòng thử lại sau.",
+      }));
+    } finally {
+      setAnalyzingRoutineIds((current) => ({
+        ...current,
+        [routine.id]: false,
+      }));
+    }
+  }
+
+  async function loadAnalysisHistory(routine: RoutineDto) {
+    if (loadingHistoryRoutineIds[routine.id]) {
+      return;
+    }
+
+    setAnalysisErrorByRoutineId((current) => ({
+      ...current,
+      [routine.id]: null,
+    }));
+    setLoadingHistoryRoutineIds((current) => ({
+      ...current,
+      [routine.id]: true,
+    }));
+
+    try {
+      const response = await fetch(getAnalysisHistoryEndpoint(routine.id), {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "GET",
+      });
+      const body = await readApiResponse<{ analyses: RoutineAnalysisDto[] }>(
+        response,
+      );
+
+      if (!response.ok || body.error) {
+        setAnalysisErrorByRoutineId((current) => ({
+          ...current,
+          [routine.id]: getAnalysisApiErrorMessage(body.error),
+        }));
+        return;
+      }
+
+      setAnalysisHistoryByRoutineId((current) => ({
+        ...current,
+        [routine.id]: body.data.analyses,
+      }));
+      setAnalysisHistoryLoadedByRoutineId((current) => ({
+        ...current,
+        [routine.id]: true,
+      }));
+      setLatestAnalysisByRoutineId((current) => ({
+        ...current,
+        [routine.id]: current[routine.id] ?? body.data.analyses[0] ?? null,
+      }));
+    } catch {
+      setAnalysisErrorByRoutineId((current) => ({
+        ...current,
+        [routine.id]:
+          "Hiện chưa thể tải lịch sử phân tích. Vui lòng thử lại sau.",
+      }));
+    } finally {
+      setLoadingHistoryRoutineIds((current) => ({
+        ...current,
+        [routine.id]: false,
+      }));
     }
   }
 
@@ -576,10 +773,18 @@ export function RoutineBuilder() {
         />
       ) : (
         <RoutineList
+          analysisErrorByRoutineId={analysisErrorByRoutineId}
+          analysisHistoryByRoutineId={analysisHistoryByRoutineId}
+          analysisHistoryLoadedByRoutineId={analysisHistoryLoadedByRoutineId}
+          analyzingRoutineIds={analyzingRoutineIds}
           deletingRoutineId={deletingRoutineId}
+          latestAnalysisByRoutineId={latestAnalysisByRoutineId}
+          loadingHistoryRoutineIds={loadingHistoryRoutineIds}
+          onAnalyze={analyzeRoutine}
           onCreate={startCreate}
           onDelete={deleteRoutine}
           onEdit={startEdit}
+          onLoadAnalysisHistory={loadAnalysisHistory}
           routines={routines}
         />
       )}
@@ -851,18 +1056,34 @@ function RoutineForm({
 }
 
 type RoutineListProps = {
+  analysisErrorByRoutineId: Record<string, string | null>;
+  analysisHistoryByRoutineId: Record<string, RoutineAnalysisDto[]>;
+  analysisHistoryLoadedByRoutineId: Record<string, boolean>;
+  analyzingRoutineIds: Record<string, boolean>;
   deletingRoutineId: string | null;
+  latestAnalysisByRoutineId: Record<string, RoutineAnalysisDto | null>;
+  loadingHistoryRoutineIds: Record<string, boolean>;
+  onAnalyze: (routine: RoutineDto) => void;
   onCreate: () => void;
   onDelete: (routine: RoutineDto) => void;
   onEdit: (routine: RoutineDto) => void;
+  onLoadAnalysisHistory: (routine: RoutineDto) => void;
   routines: RoutineDto[];
 };
 
 function RoutineList({
+  analysisErrorByRoutineId,
+  analysisHistoryByRoutineId,
+  analysisHistoryLoadedByRoutineId,
+  analyzingRoutineIds,
   deletingRoutineId,
+  latestAnalysisByRoutineId,
+  loadingHistoryRoutineIds,
+  onAnalyze,
   onCreate,
   onDelete,
   onEdit,
+  onLoadAnalysisHistory,
   routines,
 }: RoutineListProps) {
   if (routines.length === 0) {
@@ -943,6 +1164,19 @@ function RoutineList({
                 </li>
               ))}
             </ol>
+
+            <RoutineAnalysisPanel
+              error={analysisErrorByRoutineId[routine.id] ?? null}
+              history={analysisHistoryByRoutineId[routine.id] ?? []}
+              isAnalyzing={analyzingRoutineIds[routine.id] ?? false}
+              isHistoryLoaded={
+                analysisHistoryLoadedByRoutineId[routine.id] ?? false
+              }
+              isHistoryLoading={loadingHistoryRoutineIds[routine.id] ?? false}
+              latestAnalysis={latestAnalysisByRoutineId[routine.id] ?? null}
+              onAnalyze={() => onAnalyze(routine)}
+              onLoadHistory={() => onLoadAnalysisHistory(routine)}
+            />
           </div>
         ))}
       </CardContent>

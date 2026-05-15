@@ -255,6 +255,7 @@ src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
+src/modules/routines/components/routine-analysis-panel.tsx
 src/modules/routines/components/routine-builder.tsx
 src/app/api/routines/route.ts
 src/app/api/routines/[id]/route.ts
@@ -262,6 +263,7 @@ src/app/(dashboard)/routines/page.tsx
 tests/unit/routine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
+tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-builder-ui.test.ts
 ```
 
@@ -275,9 +277,12 @@ Rules:
 - handle invalid routine ids safely as not found;
 - preserve product snapshots when they already exist in documents, but do not accept or populate snapshots from client input in Week 3 Task 1;
 - `/routines` UI must call the existing Routine API with `fetch` and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules;
+- `/routines` UI may call the existing Routine Analysis API with `fetch` and must not import ai-analysis use cases, repositories, mappers, database helpers, auth helpers, Routine Safety Engine, AI/provider modules, or `server-only` modules;
 - `/routines` UI must submit only `name`, `timeOfDay`, and steps with `customProductName`, `category`, `order`, `frequency`, and optional `instructions`;
 - `/routines` UI must not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields;
-- no Product lookup, Product picker, Product repository, AI logic, Routine Analysis, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside basic CRUD use cases or the Week 3 Task 2 UI foundation.
+- `/routines` analysis UI must not pass `userId`, `routineId`, `riskLevel`, warnings, suggestions, summary, or analysis content in request bodies;
+- `/routines` analysis UI may format API-provided `riskLevel` and suggestion priority labels for readability, but must not generate new risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, or skin score;
+- no Product lookup, Product picker, Product repository, real AI provider integration, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside basic CRUD use cases or the `/routines` UI foundation.
 
 Current status:
 
@@ -290,15 +295,17 @@ src/modules/routines/routine.dto.ts
 src/modules/routines/routine.mapper.ts
 src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
+src/modules/routines/components/routine-analysis-panel.tsx
 src/modules/routines/components/routine-builder.tsx
 src/app/(dashboard)/routines/page.tsx
 tests/unit/routine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
+tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-builder-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, image upload, skin score, medical diagnosis, and dashboard data integration remain outside this ownership status.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product picker, Product snapshot lookup/population, Product/Ingredient modules, real AI provider integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
 
 ## 8. Routine Safety Engine ownership
 

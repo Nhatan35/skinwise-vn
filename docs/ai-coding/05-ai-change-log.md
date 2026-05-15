@@ -4,6 +4,64 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-15 - Week 3 Task 5 Routine Analysis UI Foundation
+
+### Task
+
+Implement the Routine Analysis UI foundation inside the existing `/routines` page only.
+
+### Files Added
+
+```txt
+src/modules/routines/components/routine-analysis-panel.tsx
+tests/unit/routine-analysis-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/routines/components/routine-builder.tsx
+tests/unit/routine-builder-ui.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 3 Task 5 requires users to run and view routine analysis from the existing `/routines` UI without adding new routes or expanding into real AI/provider, product, dashboard, or tracking features.
+
+### Implementation Notes
+
+- Added a focused `RoutineAnalysisPanel` display component.
+- Kept routine loading, create, edit, delete, analyze, and history state ownership in `routine-builder.tsx`.
+- Added per-routine Analyze actions that call `POST /api/routines/[id]/analyze` through `fetch` with no request body.
+- Added per-routine history loading that calls `GET /api/routines/[id]/analyses` and reads the actual `body.data.analyses` response shape.
+- The UI displays API-provided `analysisId`, `createdAt`, `riskLevel`, `summary`, `warnings`, `suggestions`, `shouldSeeProfessional`, and `disclaimer`.
+- The client formats API-provided risk and priority values as Vietnamese labels only.
+- The client does not generate risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, skin scores, or analysis conclusions.
+- Client components use type-only `RoutineAnalysisDto` imports and do not import repositories, use cases, MongoDB helpers, auth helpers, Routine Safety Engine, or AI provider modules.
+- No `/routines/[id]`, `/routines/[id]/analysis`, `/routines/[id]/analyses`, dashboard analysis card, Product/Ingredient module, Product picker, Product lookup, Routine Logs, Journal, image upload, skin score, medical diagnosis, real AI provider integration, external API call, new dependency, or broad refactor was added.
+
+### Tests
+
+```txt
+cmd /c npm test -- tests/unit/routine-builder-ui.test.ts tests/unit/routine-analysis-ui.test.ts: Pass - 2 files, 19 tests
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 28 files, 266 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- The UI shows deterministic fallback analysis returned by the existing API; it does not know or compute safety rules.
+- Rate limiting remains a server/API follow-up and was not implemented in this UI task.
+- No commit was created.
+
 ## 2026-05-15 - Week 3 Task 4 Routine Analysis API Foundation
 
 ### Task
