@@ -10,9 +10,9 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **Week 3 Task 2 Routine Builder UI Foundation implemented**.
+Current package state: **Week 3 Task 3 Routine Safety Engine Foundation implemented**.
 
-The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation. Week 3 Task 2 added the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API. The UI uses `customProductName` only, lets the API generate `stepId`, and does not submit Product snapshot fields. Product picker, Product/Ingredient modules, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis are not implemented.
+The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard shell, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 added the Routine API foundation. Week 3 Task 2 added the protected `/routines` UI foundation for listing, creating, editing, and deleting routines through the existing Routine API. Week 3 Task 3 added the domain-only Routine Safety Engine foundation with deterministic active-signal normalization and MVP rule evaluation. The Routine Builder UI uses `customProductName` only, lets the API generate `stepId`, and does not submit Product snapshot fields. Product picker, Product/Ingredient modules, Routine Analysis API, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis are not implemented.
 
 ## 3. Root structure
 
@@ -230,23 +230,27 @@ Purpose:
 - value objects;
 - domain errors.
 
-Key future files:
+Current implemented files:
 
 ```txt
-src/domain/rules/routine-safety-engine.ts
-src/domain/rules/routine-safety-rules.ts
+src/domain/routine-safety/routine-safety.types.ts
+src/domain/routine-safety/active-signal-normalizer.ts
+src/domain/routine-safety/routine-safety-engine.ts
+src/domain/routine-safety/index.ts
 ```
 
 Rules:
 
 - routine safety rules must be deterministic;
 - no AI provider calls here;
-- no UI code here.
+- no UI code here;
+- no API, database, repository, use-case, Auth.js, Next.js, environment, or config imports here;
+- do not load Product data when `productId` exists but snapshots are missing.
 
 Current status:
 
 ```txt
-src/domain/ exists as a tracked placeholder.
+src/domain/routine-safety/ implements the domain-only Routine Safety Engine foundation.
 ```
 
 ### `src/infrastructure/`
@@ -380,6 +384,7 @@ tests/unit/mongodb.test.ts
 tests/unit/routine.test.ts
 tests/unit/routine-api-contract.test.ts
 tests/unit/routine-builder-ui.test.ts
+tests/unit/routine-safety-engine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/skin-profile.test.ts
 tests/unit/skin-profile-api-contract.test.ts

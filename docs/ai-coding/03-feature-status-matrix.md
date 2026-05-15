@@ -2,7 +2,7 @@
 
 # Feature Status Matrix — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-14
+Last updated: 2026-05-15
 
 | Feature | Status | API | UI | DB | Tests | Notes |
 |---|---|---|---|---|---|---|
@@ -25,7 +25,7 @@ Last updated: 2026-05-14
 | Routine Builder UI foundation | Done | Existing Routine API only | Protected `/routines` list/create/edit/delete UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
-| Routine Safety Engine | Not Started | No | No | No | No | Rule engine before AI |
+| Routine Safety Engine | Done | No | No | No | Unit | Domain-only deterministic engine under `src/domain/routine-safety`; not wired to Routine Analysis API or AI |
 | Routine Analysis API | Not Started | No | No | No | No | `POST /api/routines/:id/analyze` |
 | AI Provider Abstraction | Not Started | No | N/A | No | No | Server-only |
 | Ingredient Explanation | Not Started | No | No | No | No | Safety classifier when needed |

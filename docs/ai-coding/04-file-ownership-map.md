@@ -300,13 +300,47 @@ tests/unit/routine-builder-ui.test.ts
 
 Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Product picker, Product snapshot lookup/population, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, image upload, skin score, medical diagnosis, and dashboard data integration remain outside this ownership status.
 
-## 8. Routine analysis ownership
+## 8. Routine Safety Engine ownership
+
+Owned files:
+
+```txt
+src/domain/routine-safety/routine-safety.types.ts
+src/domain/routine-safety/active-signal-normalizer.ts
+src/domain/routine-safety/routine-safety-engine.ts
+src/domain/routine-safety/index.ts
+tests/unit/routine-safety-engine.test.ts
+```
+
+Rules:
+
+- deterministic rule engine only;
+- implement exactly the MVP rules from `docs/11-routine-safety-rules.md`;
+- normalize active signals before rule checks;
+- PHA counts for `TOO_MANY_ACTIVES`, `RETINOID_PLUS_EXFOLIANT`, and `MISSING_MOISTURIZER` exfoliant behavior;
+- FRAGRANCE must not count for `TOO_MANY_ACTIVES`;
+- return all rule results and a triggered-only subset;
+- derive risk level from deterministic rule results;
+- do not load Product data when `productId` exists but snapshots are missing;
+- do not import Next.js, Auth.js, MongoDB, database modules, repositories, use cases, API routes, UI components, AI/provider modules, environment modules, or config modules.
+
+Current status:
+
+```txt
+src/domain/routine-safety/routine-safety.types.ts
+src/domain/routine-safety/active-signal-normalizer.ts
+src/domain/routine-safety/routine-safety-engine.ts
+src/domain/routine-safety/index.ts
+tests/unit/routine-safety-engine.test.ts
+```
+
+Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Analysis API, AI explanation, persistence, Product lookup, Product snapshot population, UI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis remain outside this ownership status.
+
+## 9. Routine analysis ownership
 
 Planned owned files:
 
 ```txt
-src/domain/rules/routine-safety-engine.ts
-src/domain/rules/routine-safety-rules.ts
 src/modules/ai-analysis/ai-analysis.schema.ts
 src/modules/ai-analysis/ai-analysis.dto.ts
 src/modules/ai-analysis/ai-analysis.mapper.ts
@@ -324,7 +358,7 @@ Rules:
 - AI response must pass schema validation;
 - fallback behavior must follow `docs/16-ai-fallback-policy.md`.
 
-## 9. RoutineLog ownership
+## 10. RoutineLog ownership
 
 Planned owned files:
 
@@ -344,7 +378,7 @@ Rules:
 - do not create duplicates;
 - keep separate from SkinJournal.
 
-## 10. SkinJournal ownership
+## 11. SkinJournal ownership
 
 Planned owned files:
 
@@ -366,7 +400,7 @@ Rules:
 - no appearance scoring;
 - journal entries are private.
 
-## 11. Dashboard shell ownership
+## 12. Dashboard shell ownership
 
 Owned files:
 
@@ -401,7 +435,7 @@ tests/unit/dashboard-routes.test.ts
 
 Task 6 implemented the protected dashboard shell only. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
 
-## 12. UI shared ownership
+## 13. UI shared ownership
 
 Planned owned files:
 
@@ -440,7 +474,7 @@ src/shared/types/result.ts
 
 Shared UI foundation components are implemented. shadcn/ui components must remain under `src/shared/components/ui/`; do not create `src/components/ui/`.
 
-## 13. Reserved future ownership
+## 14. Reserved future ownership
 
 Do not implement yet:
 
@@ -452,7 +486,7 @@ src/infrastructure/storage/
 These are reserved for future scope.
 
 
-## 14. Engineering governance ownership
+## 15. Engineering governance ownership
 
 Owned files:
 
@@ -471,7 +505,7 @@ Rules:
 - keep CI commands aligned with `package.json`;
 - keep PR checklist aligned with source-of-truth rules.
 
-## 15. Week 1 Task 1 placeholder ownership
+## 16. Week 1 Task 1 placeholder ownership
 
 Placeholder folders created:
 

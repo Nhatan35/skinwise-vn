@@ -4,6 +4,67 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-15 - Week 3 Task 3 Routine Safety Engine Foundation
+
+### Task
+
+Implement the domain-only Routine Safety Engine foundation without adding AI integration, API routes, database queries, repositories, use cases, UI changes, or new dependencies.
+
+### Files Added
+
+```txt
+src/domain/routine-safety/routine-safety.types.ts
+src/domain/routine-safety/active-signal-normalizer.ts
+src/domain/routine-safety/routine-safety-engine.ts
+src/domain/routine-safety/index.ts
+tests/unit/routine-safety-engine.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Week 3 Task 3 requires the deterministic rule engine foundation from `docs/11-routine-safety-rules.md` so future routine analysis can run rules before AI while keeping this task independent from application, persistence, and UI layers.
+
+### Implementation Notes
+
+- Added `src/domain/routine-safety` as the task-scoped domain location.
+- Added active-signal normalization for AHA, BHA, PHA, RETINOID, BENZOYL_PEROXIDE, VITAMIN_C_STRONG, and FRAGRANCE.
+- The normalizer reads `keyActivesSnapshot`, then `ingredientTextSnapshot`, and only uses `customProductName` text when snapshot ingredient fields are missing.
+- The engine implements `MISSING_SUNSCREEN_AM`, `TOO_MANY_ACTIVES`, `RETINOID_PLUS_EXFOLIANT`, `TOO_MANY_STEPS_BEGINNER`, `FRAGRANCE_SENSITIVE_CAUTION`, `MISSING_MOISTURIZER`, and `TOO_MANY_CUSTOM_PRODUCTS`.
+- PHA counts for `TOO_MANY_ACTIVES`, `RETINOID_PLUS_EXFOLIANT`, and `MISSING_MOISTURIZER` exfoliant behavior.
+- FRAGRANCE is normalized for fragrance-sensitive caution but does not count as a strong active.
+- `MISSING_MOISTURIZER` detects exfoliant behavior through normalized AHA/BHA/PHA signals, not through a category.
+- The engine returns `allRuleResults`, `triggeredRules`, deterministic `riskLevel`, and normalized signal metadata.
+- Product data is not loaded when `productId` exists but snapshots are missing.
+- No Routine Analysis API, AI integration, database persistence, Product lookup, Product snapshot population, UI, Journal, Routine Logs, dashboard data integration, skin score, image upload, or medical diagnosis was implemented.
+- Follow-up review tightened custom product snapshot detection so product name, brand, key active, or ingredient snapshots prevent a custom product from being counted as missing snapshot data. `productId` alone still does not count as snapshot data.
+
+### Tests
+
+```txt
+cmd /c npm test -- tests/unit/routine-safety-engine.test.ts: Pass - 1 file, 28 tests
+cmd /c npm run lint: Pass
+cmd /c npm run typecheck: Pass
+cmd /c npm test: Pass - 24 files, 229 tests
+cmd /c npm run build: Pass
+```
+
+### Notes
+
+- The engine is not yet wired into `POST /api/routines/:id/analyze`.
+- The engine does not query products or backfill snapshots; missing product snapshots intentionally produce lower available signal context.
+- No commit was created.
+
 ## 2026-05-14 - Week 3 Task 2 Routine Builder UI Foundation
 
 ### Task
