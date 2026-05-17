@@ -1,6 +1,10 @@
 import { ObjectId } from "mongodb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("@/modules/products/product.use-case", () => ({
+  getProductById: vi.fn(),
+}));
+
 vi.mock("@/modules/routines/routine.repository", () => ({
   createRoutineForUser: vi.fn(),
   deleteRoutineByIdAndUserId: vi.fn(),
@@ -9,11 +13,14 @@ vi.mock("@/modules/routines/routine.repository", () => ({
   updateRoutineByIdAndUserId: vi.fn(),
 }));
 
+import { getProductById } from "@/modules/products/product.use-case";
+import type { Product } from "@/modules/products/product.types";
 import {
   createRoutineForCurrentUser,
   deleteRoutineForUser,
   getRoutineForUser,
   listRoutinesForUser,
+  RoutineValidationError,
   updateRoutineForUser,
 } from "@/modules/routines/routine.use-case";
 import {
@@ -33,6 +40,7 @@ import type {
   RoutinePersistenceUpdateInput,
 } from "@/modules/routines/routine.types";
 
+const mockedGetProductById = vi.mocked(getProductById);
 const mockedCreateRoutineForUser = vi.mocked(createRoutineForUser);
 const mockedListRoutinesByUserId = vi.mocked(listRoutinesByUserId);
 const mockedFindRoutineByIdAndUserId = vi.mocked(findRoutineByIdAndUserId);
@@ -41,7 +49,28 @@ const mockedDeleteRoutineByIdAndUserId = vi.mocked(deleteRoutineByIdAndUserId);
 
 const authUserId = "auth-user-id";
 const routineId = "665000000000000000000120";
+const productId = "665000000000000000000121";
 const fixedNow = new Date("2026-05-14T00:00:00.000Z");
+
+const product = {
+  _id: new ObjectId(productId),
+  name: "Example Gentle Cleanser",
+  brand: "Example Brand",
+  category: "cleanser",
+  priceRange: "budget",
+  ingredientsText: "Water, Glycerin, Panthenol",
+  keyActives: ["Panthenol"],
+  tags: ["gentle"],
+  warnings: [],
+  skinTypes: ["sensitive"],
+  concerns: ["barrier_support"],
+  suitableFor: ["basic routine"],
+  notRecommendedFor: [],
+  source: "manual",
+  verificationStatus: "reviewed",
+  createdAt: fixedNow,
+  updatedAt: fixedNow,
+} satisfies Product;
 
 const validCreateInput = {
   name: "Routine buoi sang",
@@ -56,10 +85,24 @@ const validCreateInput = {
   ],
 } as const satisfies CreateRoutineInput;
 
+const validProductCreateInput = {
+  name: "Routine san pham co san",
+  timeOfDay: "morning",
+  steps: [
+    {
+      productId,
+      customProductName: "Client name must be ignored",
+      category: "cleanser",
+      order: 1,
+      frequency: "daily",
+    },
+  ],
+} as const satisfies CreateRoutineInput;
+
 const validUpdateInput = {
   steps: [
     {
-      productId: "665000000000000000000121",
+      productId,
       category: "moisturizer",
       order: 1,
       frequency: "daily",
@@ -87,6 +130,7 @@ const routine = {
 
 describe("Routine use cases", () => {
   beforeEach(() => {
+    mockedGetProductById.mockReset();
     mockedCreateRoutineForUser.mockReset();
     mockedListRoutinesByUserId.mockReset();
     mockedFindRoutineByIdAndUserId.mockReset();
@@ -114,9 +158,47 @@ describe("Routine use cases", () => {
     );
     expect(persistenceInput?.steps[0]?.stepId).toBeTypeOf("string");
     expect(persistenceInput?.steps[0]?.stepId.length).toBeGreaterThan(0);
+    expect(persistenceInput?.steps[0]).toMatchObject({
+      customProductName: "Sua rua mat diu nhe",
+    });
+    expect(persistenceInput?.steps[0]).not.toHaveProperty("productId");
     expect(persistenceInput?.steps[0]).not.toHaveProperty(
       "productNameSnapshot",
     );
+    expect(mockedGetProductById).not.toHaveBeenCalled();
+  });
+
+  it("populates product snapshots server-side when productId is provided", async () => {
+    mockedGetProductById.mockResolvedValue(product);
+    mockedCreateRoutineForUser.mockResolvedValue(routine);
+
+    await createRoutineForCurrentUser(authUserId, validProductCreateInput);
+
+    const persistenceInput = mockedCreateRoutineForUser.mock.calls[0]?.[1] as
+      | RoutinePersistenceInput
+      | undefined;
+
+    expect(mockedGetProductById).toHaveBeenCalledWith(productId);
+    expect(persistenceInput?.steps[0]).toMatchObject({
+      productId,
+      productNameSnapshot: product.name,
+      brandSnapshot: product.brand,
+      keyActivesSnapshot: product.keyActives,
+      ingredientTextSnapshot: product.ingredientsText,
+    });
+    expect(persistenceInput?.steps[0]).not.toHaveProperty("customProductName");
+    expect(persistenceInput?.steps[0]?.keyActivesSnapshot).not.toBe(
+      product.keyActives,
+    );
+  });
+
+  it("rejects unavailable product ids with validation-style behavior", async () => {
+    mockedGetProductById.mockResolvedValue(null);
+
+    await expect(
+      createRoutineForCurrentUser(authUserId, validProductCreateInput),
+    ).rejects.toBeInstanceOf(RoutineValidationError);
+    expect(mockedCreateRoutineForUser).not.toHaveBeenCalled();
   });
 
   it("lists routines for the authenticated user", async () => {
@@ -139,6 +221,7 @@ describe("Routine use cases", () => {
   });
 
   it("updates routines by routine id and userId and regenerates stepId when steps change", async () => {
+    mockedGetProductById.mockResolvedValue(product);
     mockedUpdateRoutineByIdAndUserId.mockResolvedValue(routine);
 
     await expect(
@@ -157,8 +240,15 @@ describe("Routine use cases", () => {
       }),
     );
     expect(persistenceInput?.steps?.[0]?.stepId).toBeTypeOf("string");
-    expect(persistenceInput?.steps?.[0]?.productId).toBe(
-      "665000000000000000000121",
+    expect(persistenceInput?.steps?.[0]).toMatchObject({
+      productId,
+      productNameSnapshot: product.name,
+      brandSnapshot: product.brand,
+      keyActivesSnapshot: product.keyActives,
+      ingredientTextSnapshot: product.ingredientsText,
+    });
+    expect(persistenceInput?.steps?.[0]).not.toHaveProperty(
+      "customProductName",
     );
   });
 
@@ -174,6 +264,7 @@ describe("Routine use cases", () => {
         name: "Routine toi",
       },
     );
+    expect(mockedGetProductById).not.toHaveBeenCalled();
   });
 
   it("deletes routines by routine id and userId", async () => {

@@ -206,18 +206,22 @@ src/app/(dashboard)/skin-profile/page.tsx
 
 ## 5. Product ownership
 
-Planned owned files:
+Owned files:
 
 ```txt
+src/modules/products/product.types.ts
 src/modules/products/product.schema.ts
 src/modules/products/product.dto.ts
 src/modules/products/product.mapper.ts
 src/modules/products/product.repository.ts
-src/modules/products/list-products.use-case.ts
-src/modules/products/create-product.use-case.ts
-src/modules/products/get-product.use-case.ts
+src/modules/products/product.use-case.ts
+src/modules/products/index.ts
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
+tests/unit/product.test.ts
+tests/unit/product-use-case.test.ts
+tests/unit/product-api-contract.test.ts
+tests/unit/database-indexes.test.ts
 ```
 
 Rules:
@@ -225,27 +229,75 @@ Rules:
 - visibility rules live in use case/repository;
 - normal users cannot set `source` or `verificationStatus`;
 - product APIs require authentication in MVP.
+- TASK PI-001 implements read-only list/detail only.
+- public Product DTOs must not expose `_id`, raw ObjectId values, `createdByUserId`, or `source`.
+- `GET /api/products` and `GET /api/products/[id]` return only `reviewed` or `verified` products in this foundation.
+- `POST /api/products`, `includeMine`, Product UI pages, admin product management, seed scripts, external product APIs, image upload, and medical diagnosis are out of scope for this ownership status.
+
+Current status:
+
+```txt
+src/modules/products/product.types.ts
+src/modules/products/product.schema.ts
+src/modules/products/product.dto.ts
+src/modules/products/product.mapper.ts
+src/modules/products/product.repository.ts
+src/modules/products/product.use-case.ts
+src/modules/products/index.ts
+src/app/api/products/route.ts
+src/app/api/products/[id]/route.ts
+tests/unit/product.test.ts
+tests/unit/product-use-case.test.ts
+tests/unit/product-api-contract.test.ts
+tests/unit/database-indexes.test.ts
+```
 
 ## 6. Ingredient ownership
 
-Planned owned files:
+Owned files:
 
 ```txt
+src/modules/ingredients/ingredient.types.ts
 src/modules/ingredients/ingredient.schema.ts
 src/modules/ingredients/ingredient.dto.ts
 src/modules/ingredients/ingredient.mapper.ts
 src/modules/ingredients/ingredient.repository.ts
-src/modules/ingredients/search-ingredients.use-case.ts
-src/modules/ingredients/get-ingredient.use-case.ts
+src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/index.ts
 src/app/api/ingredients/route.ts
 src/app/api/ingredients/[id]/route.ts
-src/app/api/ingredients/explain/route.ts
+tests/unit/ingredient.test.ts
+tests/unit/ingredient-use-case.test.ts
+tests/unit/ingredient-api-contract.test.ts
+tests/unit/database-indexes.test.ts
 ```
 
 Rules:
 
 - ingredient search/detail is separate from product visibility;
 - AI explanation orchestration belongs to `ai-analysis`.
+- TASK PI-001 implements read-only list/detail only.
+- public Ingredient DTOs must not expose `_id` or raw ObjectId values.
+- Ingredient APIs must not use Product `verificationStatus`, `includeMine`, or `createdByUserId` logic.
+- `POST /api/ingredients/explain`, admin ingredient management, seed scripts, safety-classifier integration, AI provider integration, and medical diagnosis are out of scope for this ownership status.
+
+Current status:
+
+```txt
+src/modules/ingredients/ingredient.types.ts
+src/modules/ingredients/ingredient.schema.ts
+src/modules/ingredients/ingredient.dto.ts
+src/modules/ingredients/ingredient.mapper.ts
+src/modules/ingredients/ingredient.repository.ts
+src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/index.ts
+src/app/api/ingredients/route.ts
+src/app/api/ingredients/[id]/route.ts
+tests/unit/ingredient.test.ts
+tests/unit/ingredient-use-case.test.ts
+tests/unit/ingredient-api-contract.test.ts
+tests/unit/database-indexes.test.ts
+```
 
 ## 7. Routine ownership
 
@@ -278,14 +330,14 @@ Rules:
 - generate `stepId` server-side for submitted routine steps;
 - convert MongoDB `_id` to `id` and Dates to ISO strings at the DTO boundary;
 - handle invalid routine ids safely as not found;
-- preserve product snapshots when they already exist in documents, but do not accept or populate snapshots from client input in Week 3 Task 1;
-- `/routines` UI must call the existing Routine API with `fetch` and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules;
+- preserve product snapshots when they already exist in documents, and populate Product snapshots server-side only from the existing Product use-case path when a visible `productId` is submitted;
+- `/routines` UI must call the existing Routine API and Product API with `fetch` and must not import repository, use-case, database, MongoDB, auth helper, or `server-only` modules; a type-only Product DTO import is allowed;
 - `/routines` UI may call the existing Routine Analysis API with `fetch` and must not import ai-analysis use cases, repositories, mappers, database helpers, auth helpers, Routine Safety Engine, AI/provider modules, or `server-only` modules;
-- `/routines` UI must submit only `name`, `timeOfDay`, and steps with `customProductName`, `category`, `order`, `frequency`, and optional `instructions`;
-- `/routines` UI must not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields;
+- `/routines` UI must submit only `name`, `timeOfDay`, and steps with either `productId` or `customProductName`, plus `category`, `order`, `frequency`, and optional `instructions`;
+- `/routines` UI must not submit `stepId`, `userId`, `id`, `_id`, timestamps, Product snapshot fields, risk fields, analysis fields, or AI fields;
 - `/routines` analysis UI must not pass `userId`, `routineId`, `riskLevel`, warnings, suggestions, summary, or analysis content in request bodies;
 - `/routines` analysis UI may format API-provided `riskLevel` and suggestion priority labels for readability, but must not generate new risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, or skin score;
-- no Product lookup, Product picker, Product repository, real AI provider integration, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside basic CRUD use cases or the `/routines` UI foundation.
+- Routine use cases may call the Product use-case to validate visible selected products and populate server-owned snapshots, but must not import Product repositories directly. No Product UI page, Product submission, real AI provider integration, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside the `/routines` UI foundation.
 
 Current status:
 
@@ -308,7 +360,7 @@ tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-builder-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product picker, Product snapshot lookup/population, Product/Ingredient modules, real AI provider integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are now owned by the Routine Builder/use-case boundary for TASK PP-001. Product UI pages, Product submission, Ingredient modules, real AI provider integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
 
 ## 8. Routine Safety Engine ownership
 
@@ -344,7 +396,7 @@ src/domain/routine-safety/index.ts
 tests/unit/routine-safety-engine.test.ts
 ```
 
-Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Analysis API, AI explanation, persistence, Product lookup, Product snapshot population, UI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis remain outside this ownership status.
+Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Analysis API, AI explanation, persistence, Product lookup/backfill, UI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis remain outside this ownership status.
 
 ## 9. Routine analysis ownership
 
@@ -405,7 +457,7 @@ tests/unit/routine-analysis-use-case.test.ts
 tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. Real AI provider integration, OpenAI/LLM calls, external API calls, Product/Ingredient integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. Real AI provider integration, OpenAI/LLM calls, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
 
 ## 10. RoutineLog ownership
 

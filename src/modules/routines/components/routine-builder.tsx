@@ -13,6 +13,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { ZodIssue } from "zod";
 
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
+import type { ProductDto } from "@/modules/products/product.dto";
 import { RoutineAnalysisPanel } from "@/modules/routines/components/routine-analysis-panel";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
 import {
@@ -52,6 +53,8 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { cn } from "@/shared/utils";
 
 const ROUTINES_API_PATH = "/api/routines";
+const PRODUCTS_API_PATH = "/api/products?limit=50";
+const MANUAL_PRODUCT_VALUE = "__manual_product__";
 const ANALYZE_ROUTE_SEGMENT = "analyze";
 const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
 
@@ -72,8 +75,9 @@ type ApiResponse<TData> =
     };
 
 type RoutineFormStepState = {
-  category: RoutineStepCategory | "";
+  productId?: string;
   customProductName: string;
+  category: RoutineStepCategory | "";
   frequency: RoutineStepFrequency | "";
   instructions: string;
 };
@@ -112,8 +116,9 @@ const frequencyLabels: Record<RoutineStepFrequency, string> = {
 
 function createBlankStep(): RoutineFormStepState {
   return {
-    category: "cleanser",
+    productId: undefined,
     customProductName: "",
+    category: "cleanser",
     frequency: "daily",
     instructions: "",
   };
@@ -133,8 +138,9 @@ function routineToFormState(routine: RoutineDto): RoutineFormState {
     steps:
       routine.steps.length > 0
         ? routine.steps.map((step) => ({
-            category: step.category,
+            productId: step.productId,
             customProductName: step.customProductName ?? "",
+            category: step.category,
             frequency: step.frequency,
             instructions: step.instructions ?? "",
           }))
@@ -147,15 +153,28 @@ function buildRoutinePayload(formState: RoutineFormState) {
   const routinePayload = {
     name: formState.name,
     timeOfDay: formState.timeOfDay,
-    steps: formState.steps.map((step, index) => ({
-      customProductName: step.customProductName,
-      category: step.category,
-      order: index + 1,
-      frequency: step.frequency,
-      ...(step.instructions.trim()
-        ? { instructions: step.instructions.trim() }
-        : {}),
-    })),
+    steps: formState.steps.map((step, index) => {
+      const baseStep = {
+        category: step.category,
+        order: index + 1,
+        frequency: step.frequency,
+        ...(step.instructions.trim()
+          ? { instructions: step.instructions.trim() }
+          : {}),
+      };
+
+      if (step.productId) {
+        return {
+          ...baseStep,
+          productId: step.productId,
+        };
+      }
+
+      return {
+        ...baseStep,
+        customProductName: step.customProductName.trim(),
+      };
+    }),
   };
 
   return routinePayload;
@@ -242,8 +261,12 @@ function getIssueMessage(issue: ZodIssue) {
     return "Vui lòng chọn buổi sử dụng routine.";
   }
 
+  if (key.endsWith(".productId")) {
+    return "Sản phẩm đã chọn chưa hợp lệ. Vui lòng chọn lại hoặc nhập thủ công.";
+  }
+
   if (key.endsWith(".customProductName")) {
-    return "Vui lòng nhập tên sản phẩm tùy chỉnh.";
+    return "Vui lòng chọn sản phẩm có sẵn hoặc nhập tên sản phẩm thủ công.";
   }
 
   if (key.endsWith(".category")) {
@@ -278,6 +301,26 @@ function formatUpdatedAt(value: string) {
   }).format(new Date(value));
 }
 
+function getProductLabel(product: ProductDto) {
+  return product.brand ? `${product.brand} — ${product.name}` : product.name;
+}
+
+function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
+  if (step.productNameSnapshot && step.brandSnapshot) {
+    return `${step.brandSnapshot} — ${step.productNameSnapshot}`;
+  }
+
+  if (step.productNameSnapshot) {
+    return step.productNameSnapshot;
+  }
+
+  if (step.customProductName) {
+    return step.customProductName;
+  }
+
+  return "Sản phẩm chưa xác định";
+}
+
 export function RoutineBuilder() {
   const [routines, setRoutines] = useState<RoutineDto[]>([]);
   const [formState, setFormState] = useState<RoutineFormState>(
@@ -291,6 +334,9 @@ export function RoutineBuilder() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [productLoadError, setProductLoadError] = useState<string | null>(null);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [deletingRoutineId, setDeletingRoutineId] = useState<string | null>(null);
   const [latestAnalysisByRoutineId, setLatestAnalysisByRoutineId] = useState<
     Record<string, RoutineAnalysisDto | null>
@@ -312,6 +358,56 @@ export function RoutineBuilder() {
     Record<string, boolean>
   >({});
   const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProducts() {
+      setIsProductLoading(true);
+      setProductLoadError(null);
+
+      try {
+        const response = await fetch(PRODUCTS_API_PATH, {
+          headers: {
+            Accept: "application/json",
+          },
+          method: "GET",
+        });
+        const body = await readApiResponse<{ items: ProductDto[] }>(response);
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (!response.ok || body.error) {
+          setProducts([]);
+          setProductLoadError(
+            "Chưa tải được danh sách sản phẩm. Bạn vẫn có thể nhập thủ công.",
+          );
+          return;
+        }
+
+        setProducts(body.data.items);
+      } catch {
+        if (isMounted) {
+          setProducts([]);
+          setProductLoadError(
+            "Chưa tải được danh sách sản phẩm. Bạn vẫn có thể nhập thủ công.",
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setIsProductLoading(false);
+        }
+      }
+    }
+
+    void loadProducts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -419,6 +515,59 @@ export function RoutineBuilder() {
       ),
     }));
     clearFieldError(`steps.${index}.${field}`);
+  }
+
+  function clearStepProductErrors(index: number) {
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next[`steps.${index}.productId`];
+      delete next[`steps.${index}.customProductName`];
+      delete next[`steps.${index}.category`];
+      return next;
+    });
+  }
+
+  function updateStepProductSelection(index: number, value: string) {
+    setFormState((current) => ({
+      ...current,
+      steps: current.steps.map((step, stepIndex) => {
+        if (stepIndex !== index) {
+          return step;
+        }
+
+        if (value === MANUAL_PRODUCT_VALUE) {
+          return {
+            ...step,
+            productId: undefined,
+          };
+        }
+
+        const selectedProduct = products.find((product) => product.id === value);
+
+        if (!selectedProduct) {
+          return {
+            ...step,
+            productId: undefined,
+          };
+        }
+
+        const previousProduct = products.find(
+          (product) => product.id === step.productId,
+        );
+        const shouldAutoSetCategory =
+          !step.category ||
+          !step.productId ||
+          (previousProduct && step.category === previousProduct.category);
+
+        return {
+          ...step,
+          productId: selectedProduct.id,
+          customProductName: "",
+          category: shouldAutoSetCategory ? selectedProduct.category : step.category,
+        };
+      }),
+    }));
+    clearStepProductErrors(index);
   }
 
   function addStep() {
@@ -750,13 +899,17 @@ export function RoutineBuilder() {
           fieldErrors={fieldErrors}
           formMode={formMode}
           formState={formState}
+          isProductLoading={isProductLoading}
           isSaving={isSaving}
           onAddStep={addStep}
           onCancel={cancelForm}
           onRemoveStep={removeStep}
           onRoutineFieldChange={updateRoutineField}
           onStepFieldChange={updateStepField}
+          onStepProductSelectionChange={updateStepProductSelection}
           onSubmit={handleSubmit}
+          productLoadError={productLoadError}
+          products={products}
         />
       ) : null}
 
@@ -796,6 +949,7 @@ type RoutineFormProps = {
   fieldErrors: FieldErrors;
   formMode: Exclude<FormMode, "none">;
   formState: RoutineFormState;
+  isProductLoading: boolean;
   isSaving: boolean;
   onAddStep: () => void;
   onCancel: () => void;
@@ -809,20 +963,27 @@ type RoutineFormProps = {
     field: Field,
     value: RoutineFormStepState[Field],
   ) => void;
+  onStepProductSelectionChange: (index: number, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  productLoadError: string | null;
+  products: ProductDto[];
 };
 
 function RoutineForm({
   fieldErrors,
   formMode,
   formState,
+  isProductLoading,
   isSaving,
   onAddStep,
   onCancel,
   onRemoveStep,
   onRoutineFieldChange,
   onStepFieldChange,
+  onStepProductSelectionChange,
   onSubmit,
+  productLoadError,
+  products,
 }: RoutineFormProps) {
   return (
     <Card className="border-stone-200 bg-white">
@@ -875,6 +1036,7 @@ function RoutineForm({
                   Các bước trong routine
                 </h3>
                 <p className="mt-1 text-sm text-stone-600">
+                  Product Picker cho phép chọn sản phẩm đã duyệt hoặc nhập thủ công.
                   Thứ tự được tính từ trên xuống dưới. Cần có ít nhất một bước.
                 </p>
               </div>
@@ -889,6 +1051,13 @@ function RoutineForm({
               </Button>
             </div>
 
+            {productLoadError ? (
+              <Alert>
+                <AlertTitle>Chưa tải được Product Picker</AlertTitle>
+                <AlertDescription>{productLoadError}</AlertDescription>
+              </Alert>
+            ) : null}
+
             <div className="space-y-4">
               {formState.steps.map((step, index) => (
                 <div
@@ -901,7 +1070,7 @@ function RoutineForm({
                         Bước {index + 1}
                       </p>
                       <p className="text-xs text-stone-600">
-                        Nhập tên sản phẩm tùy chỉnh.
+                        Chọn sản phẩm đã duyệt hoặc nhập sản phẩm thủ công.
                       </p>
                     </div>
                     <Button
@@ -915,9 +1084,72 @@ function RoutineForm({
                     </Button>
                   </div>
 
-                  <div className="grid gap-4 lg:grid-cols-3">
+                  <div className="grid gap-4 lg:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor={`step-name-${index}`}>Tên sản phẩm</Label>
+                      <Label htmlFor={`step-product-${index}`}>Sản phẩm</Label>
+                      <Select
+                        onValueChange={(value) =>
+                          onStepProductSelectionChange(index, value)
+                        }
+                        value={step.productId ?? MANUAL_PRODUCT_VALUE}
+                      >
+                        <SelectTrigger
+                          aria-describedby={
+                            fieldErrors[`steps.${index}.productId`]
+                              ? `step-product-${index}-error`
+                              : undefined
+                          }
+                          aria-invalid={
+                            fieldErrors[`steps.${index}.productId`]
+                              ? true
+                              : undefined
+                          }
+                          className={cn(
+                            "w-full",
+                            fieldErrors[`steps.${index}.productId`]
+                              ? "border-red-400"
+                              : "",
+                          )}
+                          id={`step-product-${index}`}
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={MANUAL_PRODUCT_VALUE}>
+                            Nhập sản phẩm thủ công
+                          </SelectItem>
+                          {products.map((product) => (
+                            <SelectItem key={product.id} value={product.id}>
+                              {getProductLabel(product)}
+                            </SelectItem>
+                          ))}
+                          {step.productId &&
+                          !products.some(
+                            (product) => product.id === step.productId,
+                          ) ? (
+                            <SelectItem value={step.productId}>
+                              Sản phẩm đã chọn trước đó
+                            </SelectItem>
+                          ) : null}
+                        </SelectContent>
+                      </Select>
+                      {isProductLoading ? (
+                        <p className="text-xs text-stone-600">
+                          Đang tải danh sách sản phẩm...
+                        </p>
+                      ) : null}
+                      {fieldErrors[`steps.${index}.productId`] ? (
+                        <p
+                          className="text-sm text-red-700"
+                          id={`step-product-${index}-error`}
+                        >
+                          {fieldErrors[`steps.${index}.productId`]}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`step-name-${index}`}>Tên sản phẩm thủ công</Label>
                       <Input
                         aria-describedby={
                           fieldErrors[`steps.${index}.customProductName`]
@@ -929,6 +1161,7 @@ function RoutineForm({
                             ? true
                             : undefined
                         }
+                        disabled={Boolean(step.productId)}
                         id={`step-name-${index}`}
                         onChange={(event) =>
                           onStepFieldChange(
@@ -937,7 +1170,11 @@ function RoutineForm({
                             event.target.value,
                           )
                         }
-                        placeholder="Ví dụ: Sữa rửa mặt dịu nhẹ"
+                        placeholder={
+                          step.productId
+                            ? "Đang dùng sản phẩm đã chọn"
+                            : "Ví dụ: Sữa rửa mặt dịu nhẹ"
+                        }
                         value={step.customProductName}
                       />
                       {fieldErrors[`steps.${index}.customProductName`] ? (
@@ -949,7 +1186,9 @@ function RoutineForm({
                         </p>
                       ) : null}
                     </div>
+                  </div>
 
+                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
                     <SelectField
                       error={fieldErrors[`steps.${index}.category`]}
                       id={`step-category-${index}`}
@@ -1148,8 +1387,17 @@ function RoutineList({
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="font-medium text-stone-950">
-                        {index + 1}. {step.customProductName ?? "Sản phẩm tùy chỉnh"}
+                        {index + 1}. {getRoutineStepDisplayName(step)}
                       </p>
+                      {step.keyActivesSnapshot?.length ? (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {step.keyActivesSnapshot.map((active) => (
+                            <Badge key={active} variant="secondary">
+                              {active}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : null}
                       {step.instructions ? (
                         <p className="mt-1 text-sm text-stone-600">
                           {step.instructions}

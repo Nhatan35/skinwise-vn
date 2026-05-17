@@ -8,13 +8,23 @@ vi.mock("@/modules/auth/get-current-user", () => ({
   getCurrentUser: vi.fn(),
 }));
 
-vi.mock("@/modules/routines/routine.use-case", () => ({
-  createRoutineForCurrentUser: vi.fn(),
-  deleteRoutineForUser: vi.fn(),
-  getRoutineForUser: vi.fn(),
-  listRoutinesForUser: vi.fn(),
-  updateRoutineForUser: vi.fn(),
-}));
+vi.mock("@/modules/routines/routine.use-case", () => {
+  class RoutineValidationError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "RoutineValidationError";
+    }
+  }
+
+  return {
+    createRoutineForCurrentUser: vi.fn(),
+    deleteRoutineForUser: vi.fn(),
+    getRoutineForUser: vi.fn(),
+    listRoutinesForUser: vi.fn(),
+    RoutineValidationError,
+    updateRoutineForUser: vi.fn(),
+  };
+});
 
 import * as routinesRoute from "@/app/api/routines/route";
 import * as routineByIdRoute from "@/app/api/routines/[id]/route";
@@ -24,6 +34,7 @@ import {
   deleteRoutineForUser,
   getRoutineForUser,
   listRoutinesForUser,
+  RoutineValidationError,
   updateRoutineForUser,
 } from "@/modules/routines/routine.use-case";
 import type { Routine } from "@/modules/routines/routine.types";
@@ -255,6 +266,35 @@ describe("/api/routines contract", () => {
     );
   });
 
+  it("returns VALIDATION_ERROR when create use case rejects a missing productId", async () => {
+    mockAuthenticatedUser();
+    mockedCreateRoutineForCurrentUser.mockRejectedValue(
+      new RoutineValidationError("Selected product is not available."),
+    );
+
+    const response = await routinesRoute.POST(
+      jsonRequest("http://localhost/api/routines", "POST", {
+        ...validRequestBody,
+        steps: [
+          {
+            productId: "665000000000000000000199",
+            category: "cleanser",
+            order: 1,
+            frequency: "daily",
+          },
+        ],
+      }),
+    );
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(response.status).toBe(400);
+  });
+
   it("rejects invalid create payloads and forbidden create fields", async () => {
     mockAuthenticatedUser();
 
@@ -382,6 +422,35 @@ describe("/api/routines contract", () => {
         name: "Routine toi",
       },
     );
+  });
+
+  it("returns VALIDATION_ERROR when patch use case rejects a missing productId", async () => {
+    mockAuthenticatedUser();
+    mockedUpdateRoutineForUser.mockRejectedValue(
+      new RoutineValidationError("Selected product is not available."),
+    );
+
+    const response = await routineByIdRoute.PATCH(
+      jsonRequest(`http://localhost/api/routines/${routineId}`, "PATCH", {
+        steps: [
+          {
+            productId: "665000000000000000000199",
+            category: "cleanser",
+            order: 1,
+            frequency: "daily",
+          },
+        ],
+      }),
+      routeContext(routineId),
+    );
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+    });
+    expect(response.status).toBe(400);
   });
 
   it("rejects invalid patch payloads and forbidden patch fields", async () => {
@@ -545,7 +614,6 @@ describe("Routine API scope guard", () => {
       .join("\n");
 
     for (const forbiddenScope of [
-      "@/modules/products",
       "@/modules/ingredients",
       "@/modules/ai-analysis",
       "@/modules/journals",

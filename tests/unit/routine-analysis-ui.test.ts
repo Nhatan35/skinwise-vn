@@ -160,12 +160,10 @@ describe("Routine Analysis UI foundation", () => {
 
   it("does not introduce out-of-scope feature modules or new analysis UI routes", () => {
     for (const forbiddenScope of [
-      "@/modules/products",
       "@/modules/ingredients",
       "@/modules/journals",
       "@/modules/routine-logs",
       "@/modules/dashboard",
-      "/api/products",
       "/api/ingredients",
       "ProductPicker",
       "Dashboard",

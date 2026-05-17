@@ -2,7 +2,7 @@
 
 # Feature Status Matrix — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-15
+Last updated: 2026-05-17
 
 | Feature | Status | API | UI | DB | Tests | Notes |
 |---|---|---|---|---|---|---|
@@ -19,10 +19,11 @@ Last updated: 2026-05-15
 | AppUserProfile foundation | Done | `GET /api/me` reflects onboarding state | N/A | `app_user_profiles` lazy upsert + onboarding completion marker | Unit | Successful SkinProfile POST marks onboarding complete server-side; no dashboard data integration |
 | Protected dashboard shell | Done | N/A | Protected `/dashboard` shell with placeholders plus Skin Profile and Routines nav links | N/A | Unit | Routines navigation now points to `/routines`; no dashboard data fetches |
 | Skin Profile | Done | `/api/skin-profile` GET/POST/PATCH/DELETE | First-time onboarding at `/onboarding/skin-profile`; main view/edit route at `/skin-profile` | User-scoped `skin_profiles` repository | Unit/API/source checks | `/skin-profile` loads with GET and updates with PATCH only; onboarding POST still marks onboarding complete |
-| Product mini database | Not Started | No | No | No | No | Seed spec added |
-| Ingredient knowledge base | Not Started | No | No | No | No | Seed spec added |
-| Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | Used by `/routines` UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated, no Product snapshot lookup |
-| Routine Builder UI foundation | Done | Existing Routine API + Routine Analysis API | Protected `/routines` list/create/edit/delete/analyze UI | Routine collection foundation exists | Unit/source checks | Uses `customProductName`; no Product picker, Product module, detail route, analysis route, or dashboard data integration |
+| Product mini database | Done | `GET /api/products`; `GET /api/products/[id]` | Consumed by Routine Builder Product Picker only | `products` collection helpers and canonical indexes | Unit/API/index checks | Read-only authenticated foundation; returns only reviewed/verified products; no Product UI page, POST API, includeMine, admin, seed script, external APIs, or image upload |
+| Ingredient knowledge base | Done | `GET /api/ingredients`; `GET /api/ingredients/[id]` | No | `ingredients` collection helpers and canonical indexes | Unit/API/index checks | Read-only authenticated foundation; no Ingredient explanation AI API, admin UI, seed script, or safety classifier integration |
+| Routine API foundation | Done | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | Used by `/routines` UI | User-scoped `routines` repository and indexes | Unit/API/source checks | `userId` is session-derived, `_id` maps to `id`, `stepId` is server-generated; selected product steps get server-populated snapshots |
+| Routine Builder UI foundation | Done | Existing Routine API + Product API + Routine Analysis API | Protected `/routines` list/create/edit/delete/analyze UI with Product Picker | Routine collection foundation exists | Unit/source checks | Supports visible product selection via `/api/products?limit=50` and manual `customProductName`; no Product UI page, detail route, analysis route, or dashboard data integration |
+| Routine Product Picker + Snapshot Population | Done | Routine create/update calls Product use-case for selected visible `productId`; invalid product returns `VALIDATION_ERROR` | Product Picker inside existing Routine Builder; manual fallback preserved | Routine steps persist `productId` plus server-owned Product snapshots | Unit/API/source checks | Client never submits snapshot fields or client-owned fields; Product API response shape remains `data.items` |
 | RoutineLog | Not Started | No | No | No | No | Must use upsert |
 | SkinJournal | Not Started | No | No | No | No | One entry per localDate |
 | Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |

@@ -55,16 +55,29 @@ describe("database index definitions", () => {
     expectUniqueIndex(COLLECTION_NAMES.SKIN_PROFILES, { userId: 1 });
   });
 
-  it("defines product text search index", () => {
+  it("defines product canonical search and filter indexes", () => {
     expectIndex(COLLECTION_NAMES.PRODUCTS, {
       name: "text",
       brand: "text",
       ingredientsText: "text",
     });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { brand: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { category: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { priceRange: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { keyActives: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { skinTypes: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { concerns: 1 });
+    expectIndex(COLLECTION_NAMES.PRODUCTS, { verificationStatus: 1 });
   });
 
-  it("defines unique ingredient INCI name index", () => {
+  it("defines ingredient canonical indexes", () => {
     expectUniqueIndex(COLLECTION_NAMES.INGREDIENTS, { inciName: 1 });
+    expectIndex(COLLECTION_NAMES.INGREDIENTS, { aliases: 1 });
+    expectIndex(COLLECTION_NAMES.INGREDIENTS, {
+      inciName: "text",
+      aliases: "text",
+      functions: "text",
+    });
   });
 
   it("defines routine ownership query indexes", () => {
@@ -123,6 +136,9 @@ describe("database index definitions", () => {
       "faceAnalysis",
       "payment",
       "subscription",
+      "slug",
+      "isPublished",
+      "activeSignals",
     ]) {
       expect(serializedDefinitions).not.toContain(outOfScopeField);
     }

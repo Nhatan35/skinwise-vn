@@ -8,6 +8,7 @@ import { createRoutineSchema } from "@/modules/routines/routine.schema";
 import {
   createRoutineForCurrentUser,
   listRoutinesForUser,
+  RoutineValidationError,
 } from "@/modules/routines/routine.use-case";
 
 export const runtime = "nodejs";
@@ -122,7 +123,7 @@ export async function POST(request: Request) {
       201,
     );
   } catch (error) {
-    if (error instanceof ZodError) {
+    if (error instanceof ZodError || error instanceof RoutineValidationError) {
       return validationErrorResponse();
     }
 

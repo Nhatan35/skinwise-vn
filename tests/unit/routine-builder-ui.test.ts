@@ -23,7 +23,7 @@ const proxySource = readFileSync(proxyPath, "utf8");
 
 function getPayloadSource() {
   const match = routineBuilderSource.match(
-    /const routinePayload = \{[\s\S]*?\n  \};/,
+    /function buildRoutinePayload\([\s\S]*?\n}\n\nasync function readApiResponse/,
   );
 
   return match?.[0] ?? "";
@@ -90,13 +90,14 @@ describe("Routine Builder UI foundation", () => {
     }
   });
 
-  it("builds a safe payload with only allowed custom routine fields", () => {
+  it("builds a safe payload with productId or custom product fields only", () => {
     const payloadSource = getPayloadSource();
 
     for (const allowedField of [
       "name",
       "timeOfDay",
       "steps",
+      "productId",
       "customProductName",
       "category",
       "order",
@@ -107,9 +108,8 @@ describe("Routine Builder UI foundation", () => {
     }
 
     for (const forbiddenField of [
-      /\bproductId\b/,
       /\bstepId\b/,
-      /\bid\b/,
+      /\bid:\s/,
       /\b_id\b/,
       /\buserId\b/,
       /\bcreatedAt\b/,
@@ -123,12 +123,31 @@ describe("Routine Builder UI foundation", () => {
     }
   });
 
-  it("uses custom product names without implementing a product picker", () => {
+  it("integrates the Product Picker while preserving manual product fallback", () => {
+    expect(routineBuilderSource).toContain("Product Picker");
+    expect(routineBuilderSource).toContain('const PRODUCTS_API_PATH = "/api/products?limit=50"');
+    expect(routineBuilderSource).toContain("fetch(PRODUCTS_API_PATH");
+    expect(routineBuilderSource).toContain("body.data.items");
+    expect(routineBuilderSource).toContain("Nhập sản phẩm thủ công");
     expect(routineBuilderSource).toContain("customProductName");
-    expect(routineBuilderSource).not.toContain("ProductPicker");
-    expect(routineBuilderSource).not.toContain("product picker");
-    expect(routineBuilderSource).not.toContain("@/modules/products");
-    expect(routineBuilderSource).not.toContain("/api/products");
+    expect(routineBuilderSource).toContain("productLoadError");
+  });
+
+  it("keeps Product imports client-safe", () => {
+    expect(routineBuilderSource).toContain(
+      'import type { ProductDto } from "@/modules/products/product.dto";',
+    );
+
+    for (const forbiddenImport of [
+      "product.repository",
+      "product.use-case",
+      "@/infrastructure/database",
+      "mongodb",
+      "server-only",
+      "getCurrentUser",
+    ]) {
+      expect(routineBuilderSource).not.toContain(forbiddenImport);
+    }
   });
 
   it("enables only the dashboard Routines navigation item for this task", () => {
@@ -185,9 +204,7 @@ describe("Routine Builder UI foundation", () => {
 
     for (const forbiddenScope of [
       "AIProvider",
-      "Routine Analysis",
       "Product module",
-      "Product picker",
       "Ingredient module",
       "Product recommendations",
       "Journal",

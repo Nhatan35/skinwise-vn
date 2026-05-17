@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 
+import { getProductById } from "@/modules/products/product.use-case";
 import type {
   CreateRoutineInput,
   RoutineStepInput,
@@ -18,30 +19,78 @@ import type {
   RoutineStep,
 } from "@/modules/routines/routine.types";
 
-function withServerGeneratedStepIds(steps: RoutineStepInput[]): RoutineStep[] {
-  return steps.map((step) => ({
-    ...step,
-    stepId: randomUUID(),
-  }));
+export class RoutineValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RoutineValidationError";
+  }
 }
 
-function toRoutinePersistenceInput(
-  input: CreateRoutineInput,
-): RoutinePersistenceInput {
+async function toServerOwnedRoutineStep(
+  step: RoutineStepInput,
+): Promise<RoutineStep> {
+  const baseStep = {
+    category: step.category,
+    order: step.order,
+    frequency: step.frequency,
+    ...(step.instructions ? { instructions: step.instructions } : {}),
+    stepId: randomUUID(),
+  } satisfies Omit<
+    RoutineStep,
+    | "productId"
+    | "customProductName"
+    | "productNameSnapshot"
+    | "brandSnapshot"
+    | "keyActivesSnapshot"
+    | "ingredientTextSnapshot"
+  >;
+
+  if (step.productId) {
+    const product = await getProductById(step.productId);
+
+    if (!product) {
+      throw new RoutineValidationError("Selected product is not available.");
+    }
+
+    return {
+      ...baseStep,
+      productId: step.productId,
+      productNameSnapshot: product.name,
+      ...(product.brand ? { brandSnapshot: product.brand } : {}),
+      keyActivesSnapshot: [...product.keyActives],
+      ingredientTextSnapshot: product.ingredientsText,
+    };
+  }
+
   return {
-    ...input,
-    steps: withServerGeneratedStepIds(input.steps),
+    ...baseStep,
+    customProductName: step.customProductName,
   };
 }
 
-function toRoutinePersistenceUpdateInput(
+async function withServerGeneratedStepIdsAndSnapshots(
+  steps: RoutineStepInput[],
+): Promise<RoutineStep[]> {
+  return Promise.all(steps.map(toServerOwnedRoutineStep));
+}
+
+async function toRoutinePersistenceInput(
+  input: CreateRoutineInput,
+): Promise<RoutinePersistenceInput> {
+  return {
+    ...input,
+    steps: await withServerGeneratedStepIdsAndSnapshots(input.steps),
+  };
+}
+
+async function toRoutinePersistenceUpdateInput(
   input: UpdateRoutineInput,
-): RoutinePersistenceUpdateInput {
+): Promise<RoutinePersistenceUpdateInput> {
   const { steps, ...rest } = input;
 
   return {
     ...rest,
-    ...(steps ? { steps: withServerGeneratedStepIds(steps) } : {}),
+    ...(steps ? { steps: await withServerGeneratedStepIdsAndSnapshots(steps) } : {}),
   };
 }
 
@@ -49,7 +98,7 @@ export async function createRoutineForCurrentUser(
   userId: string,
   input: CreateRoutineInput,
 ) {
-  return createRoutineForUser(userId, toRoutinePersistenceInput(input));
+  return createRoutineForUser(userId, await toRoutinePersistenceInput(input));
 }
 
 export async function listRoutinesForUser(userId: string) {
@@ -68,7 +117,7 @@ export async function updateRoutineForUser(
   return updateRoutineByIdAndUserId(
     routineId,
     userId,
-    toRoutinePersistenceUpdateInput(input),
+    await toRoutinePersistenceUpdateInput(input),
   );
 }
 

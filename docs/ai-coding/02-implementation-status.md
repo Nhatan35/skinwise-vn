@@ -2,15 +2,15 @@
 
 # Implementation Status — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-15
+Last updated: 2026-05-17
 
 ## 1. Current phase
 
 ```txt
-TASK-RA-001 Routine Analysis API rate limiting implemented
+TASK PP-001 Product Picker + Routine Product Snapshot implemented
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation. Week 3 Task 3 implemented the domain-only Routine Safety Engine foundation. Week 3 Task 4 implemented the Routine Analysis API foundation. Week 3 Task 5 implemented the Routine Analysis UI foundation inside the existing `/routines` page. TASK-RA-001 implemented MongoDB-backed per-user rate limiting for `POST /api/routines/[id]/analyze` using `routine_analysis:${userId}`, 10 requests per 60 minutes, `RATE_LIMITED` 429 responses, and `Retry-After`. The analysis UI calls the existing API routes with `fetch`, sends no client-owned analysis data, reads `body.data.analyses` for history, and displays only API-provided DTO fields. Product picker, Product module, Ingredient module, real AI provider integration, external LLM/API calls, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 Task 1 implemented the Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation. Week 3 Task 3 implemented the domain-only Routine Safety Engine foundation. Week 3 Task 4 implemented the Routine Analysis API foundation. Week 3 Task 5 implemented the Routine Analysis UI foundation inside the existing `/routines` page. TASK-RA-001 implemented MongoDB-backed per-user rate limiting for `POST /api/routines/[id]/analyze` using `routine_analysis:${userId}`, 10 requests per 60 minutes, `RATE_LIMITED` 429 responses, and `Retry-After`. TASK PI-001 implemented the read-only Product and Ingredient API foundation with authenticated list/detail endpoints, strict Zod query validation, repositories, use cases, DTO mappers, and unit/API/index tests. TASK PP-001 integrated the Product Picker into the Routine Builder, preserved manual custom product fallback, and added server-side Routine Product Snapshot population for selected visible products. Product UI pages, Product submission POST API, Ingredient explanation AI API, real AI provider integration, external LLM/API calls, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
 
 ## 2. Completed documentation
 
@@ -76,6 +76,10 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] Routine Analysis API foundation implemented
 [x] Routine Analysis UI foundation implemented
 [x] Routine Analysis API per-user rate limiting implemented
+[x] Product API foundation implemented
+[x] Ingredient API foundation implemented
+[x] Product Picker integration into Routine Builder implemented
+[x] Routine Product Snapshot population implemented
 ```
 
 ## 4. In progress
@@ -87,8 +91,6 @@ None
 ## 5. Not started
 
 ```txt
-Product module
-Ingredient module
 RoutineLog module
 SkinJournal module
 AI provider abstraction
@@ -100,12 +102,14 @@ Deployment setup
 ## 6. Known gaps
 
 ```txt
-MongoDB helper and index definitions exist, but `npm run db:indexes` has not been run against a real database in this task because it requires MONGODB_URI. Real environments must run it to ensure the `rate_limits` unique key and TTL indexes.
+MongoDB helper and index definitions exist, but `npm run db:indexes` was not run against a real database in TASK PI-001 because `MONGODB_URI` and `APP_ENV` were missing from the shell, so the intended database target could not be verified. Product and Ingredient index definitions remain covered by unit tests, and real environments must run `npm run db:indexes` to ensure canonical indexes exist.
 Protected `/dashboard` shell exists, but it intentionally renders placeholder cards only and does not call business APIs or query dashboard data. It now exposes minimal navigation links to `/skin-profile` and `/routines`.
 Skin Profile onboarding UI remains available at `/onboarding/skin-profile` for first-time onboarding, while `/skin-profile` is the main protected view/edit route.
-Routine API CRUD exists for authenticated users, and `/routines` provides the UI foundation for listing, creating, editing, deleting, analyzing, and viewing analysis history for routines. Product picker, Product snapshot lookup/population, Routine Logs, and dashboard data integration are intentionally not implemented.
+Routine API CRUD exists for authenticated users, and `/routines` provides the UI foundation for listing, creating, editing, deleting, analyzing, and viewing analysis history for routines. TASK PP-001 adds Product Picker selection and server-owned Product snapshot population for selected visible products while preserving manual custom product fallback. Routine Logs and dashboard data integration are intentionally not implemented.
 Routine Safety Engine exists as a deterministic foundation under `src/domain/routine-safety`; Week 3 Task 4 wires it into Routine Analysis API persistence and public DTO mapping only.
 Routine Analysis API exists with deterministic fallback metadata only and now rate-limits authenticated analyze requests per user. It does not call OpenAI, LLM clients, external APIs, Product/Ingredient modules, dashboard, Journal, or RoutineLog features.
+Product API foundation exists for authenticated read-only `GET /api/products` and `GET /api/products/:id`. It returns only `reviewed` or `verified` products and is now consumed by the Routine Builder Product Picker. It intentionally does not include Product UI pages, `POST /api/products`, `includeMine`, admin product management, seed scripts, external product APIs, image upload, or medical diagnosis.
+Ingredient API foundation exists for authenticated read-only `GET /api/ingredients` and `GET /api/ingredients/:id`. It intentionally does not include Ingredient explanation AI API, safety-classifier integration, admin ingredient management, seed scripts, or medical diagnosis.
 Routine Analysis UI exists only inside `/routines`; no `/routines/[id]`, `/routines/[id]/analysis`, or `/routines/[id]/analyses` UI routes were created.
 Routine Analysis rate limiting uses the MongoDB `rate_limits` collection and requires `npm run db:indexes` to ensure the unique key and TTL indexes in real environments.
 Optional `npm run test:e2e` reported the smoke test as `ok` during TASK-RA-001, but the command wrapper timed out waiting for the process to exit.
@@ -138,7 +142,7 @@ Continue only with the next explicitly scoped task after review.
 Recommended next coding task:
 
 ```txt
-Prepare the next explicitly scoped task after review. Do not begin Product, Ingredient, real AI provider integration, Journal, Routine Logs, dashboard data integration, Product picker, skin score, image upload, or medical diagnosis without a new task.
+RoutineLog foundation or another explicitly scoped next task. Do not begin Product submission, admin product management, Ingredient explanation AI API, real AI provider integration, Journal, dashboard data integration, skin score, image upload, or medical diagnosis without a new task.
 ```
 
 ## 9. Update rule

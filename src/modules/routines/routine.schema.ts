@@ -8,7 +8,9 @@ import {
 
 const mongoObjectIdPattern = /^[a-f\d]{24}$/i;
 const routineNameSchema = z.string().trim().min(1).max(100);
-const productIdSchema = z.string().regex(mongoObjectIdPattern);
+const productIdSchema = z.string().regex(mongoObjectIdPattern, {
+  message: "Product id must be a valid MongoDB ObjectId.",
+});
 const customProductNameSchema = z.string().trim().min(1).max(160);
 const instructionsSchema = z.string().trim().min(1).max(1000);
 
@@ -22,8 +24,14 @@ export const routineStepInputSchema = z
     instructions: instructionsSchema.optional(),
   })
   .strict()
-  .refine((value) => value.productId || value.customProductName, {
-    message: "A routine step requires productId or customProductName.",
+  .superRefine((value, context) => {
+    if (!value.productId && !value.customProductName) {
+      context.addIssue({
+        code: "custom",
+        message: "A routine step requires productId or customProductName.",
+        path: ["customProductName"],
+      });
+    }
   });
 
 const routineStepsSchema = z.array(routineStepInputSchema).min(1).max(15);

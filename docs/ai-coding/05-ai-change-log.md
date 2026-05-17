@@ -4,6 +4,152 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-17 - TASK PP-001 Product Picker + Routine Product Snapshot Population
+
+### Task
+
+Integrate the existing read-only Product API into the existing Routine Builder form and populate server-owned Routine step Product snapshots when a selected visible `productId` is submitted.
+
+### Files Added
+
+```txt
+None
+```
+
+### Files Updated
+
+```txt
+src/modules/routines/components/routine-builder.tsx
+src/modules/routines/routine.schema.ts
+src/modules/routines/routine.use-case.ts
+src/app/api/routines/route.ts
+src/app/api/routines/[id]/route.ts
+tests/unit/routine-builder-ui.test.ts
+tests/unit/routine-analysis-ui.test.ts
+tests/unit/routine-use-case.test.ts
+tests/unit/routine-api-contract.test.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+Routine steps need to support both curated reviewed/verified products and manual products. Selected Product steps must persist `productId` plus server-populated snapshots so analysis and display can use trusted Product data without trusting client-submitted snapshot fields.
+
+### Implementation Notes
+
+- Added client-side Product loading in `routine-builder.tsx` through `GET /api/products?limit=50`.
+- The client reads Product list data from the existing `body.data.items` response shape.
+- Added a Product Picker select for each Routine step with a manual fallback option: `Nhập sản phẩm thủ công`.
+- Selected product mode sets `productId`, clears `customProductName`, and keeps selected product steps intact when editing existing routines.
+- Manual mode clears `productId` and submits trimmed `customProductName`.
+- `buildRoutinePayload` now sends only allowed Routine input fields: `productId` or `customProductName`, `category`, `order`, `frequency`, and optional `instructions`.
+- The client does not submit `stepId`, `userId`, `id`, `_id`, timestamps, risk/analysis/AI fields, or Product snapshot fields.
+- The Routine use-case now looks up selected products through the existing Product use-case path.
+- If a submitted `productId` is missing, invalid, or not visible, the use-case throws `RoutineValidationError`; Routine routes return `VALIDATION_ERROR` with status 400 instead of `INTERNAL_ERROR`.
+- Server-side Routine persistence now populates `productNameSnapshot`, `brandSnapshot`, `keyActivesSnapshot`, and `ingredientTextSnapshot` from the Product document only.
+- Manual custom product steps keep `customProductName` and do not require a Product document.
+- Routine list display now prefers `brandSnapshot — productNameSnapshot`, then `productNameSnapshot`, then `customProductName`, then `Sản phẩm chưa xác định`.
+- Optional key active badges are shown for Product snapshot steps.
+- No Product UI page, Product submission workflow, admin Product management, seed script, Product creation form, external product API call, Ingredient explanation AI, RoutineLog, SkinJournal, dashboard data integration, skin score, image upload, barcode scanner, or medical diagnosis was added.
+
+### Tests
+
+```txt
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 35 files, 324 tests
+npm run build: Timed out in this sandbox while collecting page data after successful compilation and TypeScript phase
+```
+
+### Notes
+
+- Product API response shape remains unchanged as `data: { items: ProductDto[] }`.
+- Client imports `ProductDto` as a type-only import and does not import Product repository, Product use-case, MongoDB helpers, auth helpers, or server-only code.
+- No commit was created.
+
+## 2026-05-16 - TASK PI-001 Product + Ingredient API Foundation
+
+### Task
+
+Implement the read-only Product and Ingredient API foundation using the existing Next.js App Router, Zod, repository/use-case/mapper, DTO, and test conventions.
+
+### Files Added
+
+```txt
+src/app/api/ingredients/route.ts
+src/app/api/ingredients/[id]/route.ts
+src/app/api/products/route.ts
+src/app/api/products/[id]/route.ts
+src/modules/ingredients/ingredient.types.ts
+src/modules/ingredients/ingredient.schema.ts
+src/modules/ingredients/ingredient.dto.ts
+src/modules/ingredients/ingredient.mapper.ts
+src/modules/ingredients/ingredient.repository.ts
+src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/index.ts
+src/modules/products/product.types.ts
+src/modules/products/product.schema.ts
+src/modules/products/product.dto.ts
+src/modules/products/product.mapper.ts
+src/modules/products/product.repository.ts
+src/modules/products/product.use-case.ts
+src/modules/products/index.ts
+tests/unit/ingredient.test.ts
+tests/unit/ingredient-use-case.test.ts
+tests/unit/ingredient-api-contract.test.ts
+tests/unit/product.test.ts
+tests/unit/product-use-case.test.ts
+tests/unit/product-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+tests/unit/database-indexes.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Product and Ingredient read APIs are needed before Product Picker integration and future Ingredient explanation work, while keeping this task limited to authenticated backend/API foundation.
+
+### Implementation Notes
+
+- Added `GET /api/products` and `GET /api/products/[id]`.
+- Added `GET /api/ingredients` and `GET /api/ingredients/[id]`.
+- All four routes require `getCurrentUser()` and return `UNAUTHORIZED` when unauthenticated.
+- Product list/detail returns only `reviewed` or `verified` products.
+- Ingredient list/detail does not use Product visibility, `includeMine`, or created-by-user logic.
+- List routes use strict Zod query schemas and reject unknown query params.
+- DTO mappers convert `_id` to `id`, Dates to ISO strings, and copy arrays.
+- Product DTOs omit `createdByUserId`, `source`, `_id`, and raw ObjectId values.
+- Existing canonical Product and Ingredient collection helpers and index definitions were reused; no repository-created indexes were added.
+- No Product UI, Product Picker integration, Routine product snapshot population, `POST /api/products`, admin product management, Ingredient explanation AI API, seed script, external product API, image upload, or medical diagnosis was added.
+
+### Tests
+
+```txt
+npm.cmd test -- tests/unit/ingredient.test.ts tests/unit/ingredient-use-case.test.ts tests/unit/ingredient-api-contract.test.ts tests/unit/product.test.ts tests/unit/product-use-case.test.ts tests/unit/product-api-contract.test.ts tests/unit/database-indexes.test.ts: Pass - 7 files, 56 tests
+npm.cmd run lint: Pass
+npm.cmd run typecheck: Pass
+npm.cmd test: Pass - 35 files, 319 tests
+npm.cmd run build: Pass
+npm.cmd run db:indexes: Not run - MONGODB_URI and APP_ENV were missing from the shell, so the intended database target could not be verified.
+```
+
+### Notes
+
+- `npm run db:indexes` should only be run when `MONGODB_URI` is available and clearly points at the intended development database.
+- No commit was created.
+
 ## 2026-05-15 - TASK-RA-001 Routine Analysis API Rate Limiting
 
 ### Task

@@ -8,6 +8,7 @@ import { updateRoutineSchema } from "@/modules/routines/routine.schema";
 import {
   deleteRoutineForUser,
   getRoutineForUser,
+  RoutineValidationError,
   updateRoutineForUser,
 } from "@/modules/routines/routine.use-case";
 
@@ -148,7 +149,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       routine: toRoutineDto(routine),
     });
   } catch (error) {
-    if (error instanceof ZodError) {
+    if (error instanceof ZodError || error instanceof RoutineValidationError) {
       return validationErrorResponse();
     }
 
