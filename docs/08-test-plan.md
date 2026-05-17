@@ -327,7 +327,7 @@ Cases:
 
 ```txt
 [ ] POST /api/skin-journal returns CONFLICT for duplicate localDate.
-[ ] POST /api/routine-logs upserts existing log instead of duplicating.
+[ ] PUT /api/routine-logs upserts existing log instead of duplicating.
 [ ] README version matches current SDD version.
 [ ] source-notes version matches current SDD version.
 ```

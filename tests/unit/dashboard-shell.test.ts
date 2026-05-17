@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   dashboardNavItems,
-  dashboardPlaceholderCards,
   dashboardRoute,
   routinesRoute,
   skinProfileRoute,
@@ -64,9 +63,16 @@ describe("dashboard shell config", () => {
     ).toBe(true);
   });
 
+  it("does not include placeholder dashboard card metadata after DB-001", () => {
+    expect(dashboardConfigSource).not.toContain("dashboardPlaceholderCards");
+    expect(dashboardConfigSource).not.toContain("Chưa implement trong Task 6");
+    expect(dashboardConfigSource).not.toContain(
+      "Sẽ được kết nối ở task/module sau",
+    );
+  });
+
   it("does not include out-of-scope navigation metadata", () => {
     const metadata = JSON.stringify({
-      cards: dashboardPlaceholderCards,
       nav: dashboardNavItems,
     }).toLowerCase();
 
@@ -77,28 +83,6 @@ describe("dashboard shell config", () => {
     expect(metadata).not.toContain("admin");
     expect(metadata).not.toContain("subscription");
     expect(metadata).not.toContain("notifications");
-  });
-
-  it("defines the seven required placeholder card areas", () => {
-    expect(dashboardPlaceholderCards.map((card) => card.label)).toEqual([
-      "Skin Profile",
-      "Routines",
-      "Today Log",
-      "Journal",
-      "Products",
-      "Ingredients",
-      "Safety Analysis",
-    ]);
-  });
-
-  it("keeps placeholder card copy explicit about Task 6 scope", () => {
-    expect(
-      dashboardPlaceholderCards.every(
-        (card) =>
-          card.scopeText === "Chưa implement trong Task 6" &&
-          card.connectionText === "Sẽ được kết nối ở task/module sau",
-      ),
-    ).toBe(true);
   });
 
   it("does not import auth, database, server-only, or API code", () => {

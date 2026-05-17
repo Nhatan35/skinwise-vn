@@ -64,3 +64,11 @@ export async function listRoutineAnalysesByRoutineIdAndUserId(
     .sort({ createdAt: -1 })
     .toArray();
 }
+
+export async function findLatestRoutineAnalysisByUserId(
+  userId: string,
+): Promise<RoutineAnalysis | null> {
+  const collection = await getRoutineAnalysisCollection();
+
+  return collection.find({ userId }).sort({ createdAt: -1 }).limit(1).next();
+}

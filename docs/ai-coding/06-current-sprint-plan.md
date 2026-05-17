@@ -5,70 +5,69 @@ Last updated: 2026-05-17
 ## 1. Current sprint
 
 ```txt
-RoutineLog UI Integration - TASK RL-002
+Dashboard Data Integration - TASK DB-001
 ```
 
 ## 2. Sprint goal
 
-Add RoutineLog UI integration to the existing protected `/routines` page so users can load today's routine logs using browser localDate, see each routine's current status, and mark a routine as completed, skipped, or partially completed with selected routine steps.
+Replace the placeholder `/dashboard` with a real authenticated MVP dashboard that summarizes Skin Profile setup, Routine counts, today's RoutineLog progress by browser localDate, latest Routine Analysis, and simple next actions.
 
 ## 3. Allowed tasks this sprint
 
 ```txt
-Load GET /api/routine-logs?localDate=YYYY-MM-DD from the /routines UI
-Generate localDate from browser local date parts, not UTC ISO slicing
-Derive timezone with Intl.DateTimeFormat().resolvedOptions().timeZone and fallback to UTC
-Display Vietnamese RoutineLog status badges
-Add completed and skipped quick actions
-Add partial step checklist with safe client validation
-Call canonical PUT /api/routine-logs only
-Update local UI state after successful save
-Show friendly Vietnamese loading, success, and error states
-Add pure helper and source-level tests
+Add GET /api/dashboard?localDate=YYYY-MM-DD
+Validate localDate and derive userId from authenticated session
+Summarize Skin Profile exists/missing state
+Summarize Routine counts for morning and evening only
+Summarize today's RoutineLogs using completed + partial * 0.5 completion rule
+Show latest Routine Analysis if available
+Render /dashboard cards using the Dashboard API
+Reuse getBrowserLocalDate from RoutineLog client helpers
+Add dashboard use-case, API contract, and source-level UI tests
 Update AI coding context docs
 ```
 
 ## 4. Not allowed this sprint
 
 ```txt
-Dashboard data integration
-Streak calculation
-Weekly/monthly analytics
-AI insights
-AI provider integration
-Ingredient explanation AI API
-SkinJournal implementation
+AI Provider abstraction
+Ingredient Explanation AI
+OpenAI or external LLM/API calls
+SkinJournal
 Image upload
 Skin score
+Advanced streak logic
+Weekly/monthly analytics or charts
+Notifications or reminders
 Product submission
 Admin product management
 Authentication architecture changes
-External APIs
 New dependencies
-RoutineLog note input
 ```
 
 ## 5. Sprint Definition of Done
 
 ```txt
-[x] /routines loads today's RoutineLogs with localDate.
-[x] localDate is generated from browser local date parts.
-[x] timezone is included in RoutineLog PUT payloads.
-[x] Status badge supports Chưa ghi nhận, Hoàn thành, Một phần, and Bỏ qua.
-[x] Users can mark a routine completed.
-[x] Users can mark a routine skipped.
-[x] Users can mark a routine partial by selecting completed steps.
-[x] Partial state rejects zero selected steps and all selected steps.
-[x] Partial action is disabled for routines with fewer than 2 steps.
-[x] Successful PUT updates local UI state.
-[x] Failed GET/PUT shows friendly Vietnamese errors.
-[x] No server-only code is imported into client components.
-[x] Routine Builder create/edit/delete, Product Picker, and Routine Analysis UI remain in place.
+[x] Correct dashboard page path is used: src/app/(dashboard)/dashboard/page.tsx.
+[x] No mistaken src/app/dashboard/page.tsx route is created.
+[x] GET /api/dashboard?localDate=YYYY-MM-DD exists.
+[x] API requires authentication and rejects missing/invalid localDate.
+[x] API derives userId from session and rejects client userId query fields.
+[x] API returns { data: { dashboard }, error: null }.
+[x] Dashboard DTO does not expose userId, _id, ObjectId, or MongoDB internals.
+[x] Missing skin profile maps to exists=false.
+[x] Missing latest analysis maps to exists=false.
+[x] No routines maps to a valid empty dashboard state with completionRate 0.
+[x] Routine counts use morning and evening only.
+[x] Today routine progress uses RoutineLogs for localDate.
+[x] completionRate uses the simple completed + partial * 0.5 rule.
+[x] Dashboard UI has loading, error, empty/missing-data, and real card states.
+[x] Existing Routine Builder, RoutineLog UI, and Routine Analysis behavior remain in place.
 [x] Tests and docs are updated.
 ```
 
 ## 6. Recommended next task
 
 ```txt
-TASK DB-001 — Dashboard Data Integration
+TASK AI-001 — AI Provider Abstraction, or TASK ING-AI-001 — Ingredient Explanation Foundation depending on the sprint plan.
 ```

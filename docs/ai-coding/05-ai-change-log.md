@@ -4,6 +4,84 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-17 - TASK DB-001 Dashboard Data Integration
+
+### Task
+
+Replace the placeholder dashboard with a real data-driven dashboard for the authenticated user.
+
+### Files Added
+
+```txt
+src/app/api/dashboard/route.ts
+src/modules/dashboard/dashboard.types.ts
+src/modules/dashboard/dashboard.dto.ts
+src/modules/dashboard/dashboard.schema.ts
+src/modules/dashboard/dashboard.mapper.ts
+src/modules/dashboard/dashboard.use-case.ts
+src/modules/dashboard/index.ts
+src/modules/dashboard/components/dashboard-overview.tsx
+src/modules/dashboard/components/dashboard-card.tsx
+src/modules/dashboard/components/skin-profile-summary-card.tsx
+src/modules/dashboard/components/today-routine-progress-card.tsx
+src/modules/dashboard/components/routine-summary-card.tsx
+src/modules/dashboard/components/latest-analysis-card.tsx
+src/modules/dashboard/components/next-actions-card.tsx
+tests/unit/dashboard-use-case.test.ts
+tests/unit/dashboard-api-contract.test.ts
+tests/unit/dashboard-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/app/(dashboard)/dashboard/page.tsx
+src/modules/dashboard/dashboard-shell.config.ts
+src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/index.ts
+tests/unit/dashboard-shell.test.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+The protected dashboard shell needed to stop showing placeholder cards and summarize existing MVP data: Skin Profile, Routines, today's RoutineLogs, latest Routine Analysis, and next actions.
+
+### Implementation Notes
+
+- Added authenticated `GET /api/dashboard?localDate=YYYY-MM-DD` with strict query validation.
+- Dashboard API derives `userId` from `getCurrentUser()` and rejects client-submitted `userId` query fields through strict schema parsing.
+- Added Dashboard DTO/use-case/mapper boundaries.
+- Dashboard DTO omits `userId`, `_id`, raw `ObjectId`, and MongoDB internals.
+- Missing Skin Profile maps to `skinProfile.exists = false` and is not treated as an API error.
+- Missing latest Routine Analysis maps to `latestRoutineAnalysis.exists = false` and is not treated as an API error.
+- Routine counts use existing `morning` and `evening` `timeOfDay` values only; no unsupported `both` field was added.
+- Today's RoutineLog progress uses the requested `localDate` and counts only logs matching the authenticated user's routines.
+- Completion rate uses the documented MVP rule: completed = 1, partial = 0.5, skipped/notLogged = 0.
+- Added latest routine analysis repository helper scoped by `userId`, sorted by `createdAt` descending.
+- Replaced `/dashboard` placeholder cards with a client DashboardOverview that calls `GET /api/dashboard?localDate=...` using `getBrowserLocalDate()` from RoutineLog client helpers.
+- Added cards for Skin Profile, today's progress, Routine summary, latest analysis, and next actions.
+- No Dashboard charts, weekly/monthly analytics, streak calculation, AI insights, SkinJournal, image upload, skin score, external API call, or new dependency was added.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 43 files, 390 tests
+npm run build: Pending local verification if sandbox build times out
+```
+
+### Notes
+
+- Dashboard API response shape is `data.dashboard`.
+- Dashboard UI reads from `body.data.dashboard`.
+- Next recommended task is TASK AI-001 — AI Provider Abstraction, or TASK ING-AI-001 — Ingredient Explanation Foundation depending on the sprint plan.
+
 ## 2026-05-17 - TASK RL-002 RoutineLog UI Integration
 
 ### Task

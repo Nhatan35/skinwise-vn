@@ -530,8 +530,25 @@ Owned files:
 src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
+src/modules/dashboard/dashboard.types.ts
+src/modules/dashboard/dashboard.dto.ts
+src/modules/dashboard/dashboard.schema.ts
+src/modules/dashboard/dashboard.mapper.ts
+src/modules/dashboard/dashboard.use-case.ts
+src/modules/dashboard/index.ts
+src/modules/dashboard/components/dashboard-overview.tsx
+src/modules/dashboard/components/dashboard-card.tsx
+src/modules/dashboard/components/skin-profile-summary-card.tsx
+src/modules/dashboard/components/today-routine-progress-card.tsx
+src/modules/dashboard/components/routine-summary-card.tsx
+src/modules/dashboard/components/latest-analysis-card.tsx
+src/modules/dashboard/components/next-actions-card.tsx
+src/app/api/dashboard/route.ts
 tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
+tests/unit/dashboard-use-case.test.ts
+tests/unit/dashboard-api-contract.test.ts
+tests/unit/dashboard-ui.test.ts
 ```
 
 Rules:
@@ -543,7 +560,7 @@ Rules:
 - `/dashboard`, `/skin-profile`, and `/routines` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
-- placeholder cards must not contain fake skincare, routine, product, journal, ingredient, or AI results.
+- dashboard cards must render API-provided dashboard summary data only and must not contain fake skincare, routine, product, journal, ingredient, or AI results.
 
 Current status:
 
@@ -551,11 +568,28 @@ Current status:
 src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
+src/modules/dashboard/dashboard.types.ts
+src/modules/dashboard/dashboard.dto.ts
+src/modules/dashboard/dashboard.schema.ts
+src/modules/dashboard/dashboard.mapper.ts
+src/modules/dashboard/dashboard.use-case.ts
+src/modules/dashboard/index.ts
+src/modules/dashboard/components/dashboard-overview.tsx
+src/modules/dashboard/components/dashboard-card.tsx
+src/modules/dashboard/components/skin-profile-summary-card.tsx
+src/modules/dashboard/components/today-routine-progress-card.tsx
+src/modules/dashboard/components/routine-summary-card.tsx
+src/modules/dashboard/components/latest-analysis-card.tsx
+src/modules/dashboard/components/next-actions-card.tsx
+src/app/api/dashboard/route.ts
 tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-routes.test.ts
+tests/unit/dashboard-use-case.test.ts
+tests/unit/dashboard-api-contract.test.ts
+tests/unit/dashboard-ui.test.ts
 ```
 
-Task 6 implemented the protected dashboard shell only. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. The dashboard still does not implement data integration, database queries, business APIs, unrelated feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI insights, SkinJournal, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 13. UI shared ownership
 

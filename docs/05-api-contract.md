@@ -702,7 +702,7 @@ Notes:
 
 - `POST /api/routine-logs` is not implemented for RL-001.
 - `DELETE /api/routine-logs/:id` is not implemented for RL-001.
-- RoutineLog UI will be handled later in TASK RL-002.
+- RoutineLog UI is implemented on the existing /routines page by TASK RL-002.
 
 ## 9. Skin Journal
 
