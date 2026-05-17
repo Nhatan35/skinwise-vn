@@ -586,76 +586,123 @@ Errors:
 
 ## 8. Routine Logs
 
-### POST /api/routine-logs
+RoutineLog API is implemented as the TASK RL-001 backend foundation. It has no UI in RL-001.
 
-Create or update a routine log for a date.
+### PUT /api/routine-logs
+
+Canonical upsert endpoint for one routine log.
+
+Authentication:
+
+- Requires authenticated user.
+- Server derives `userId` from the session.
+- Client must not submit `userId`.
 
 Upsert behavior:
 
 - If no RoutineLog exists for `userId + routineId + localDate`, create one.
-- If a RoutineLog already exists for `userId + routineId + localDate`, update `completedStepIds`, `skippedStepIds`, `notes`, `timezone`, and `updatedAt`.
+- If a RoutineLog already exists for `userId + routineId + localDate`, update it.
 - Do not create duplicate RoutineLog records for the same `userId + routineId + localDate`.
 
 Request:
 
 ```json
 {
-  "routineId": "routine_123",
-  "localDate": "2026-05-12",
+  "routineId": "665000000000000000000460",
+  "localDate": "2026-05-17",
   "timezone": "Asia/Ho_Chi_Minh",
-  "completedStepIds": ["step_1", "step_2"],
-  "skippedStepIds": ["step_3"],
-  "notes": "Bỏ qua treatment hôm nay."
+  "status": "partial",
+  "completedStepIds": ["step_1"],
+  "note": "Bỏ qua kem chống nắng hôm nay."
 }
 ```
 
 Validation:
 
-- routineId required.
-- routine must belong to current user.
-- localDate required in YYYY-MM-DD format and must match `/^\d{4}-\d{2}-\d{2}$/`.
-- timezone required as IANA timezone string.
-- completedStepIds max 30.
-- skippedStepIds max 30.
-- notes max 1000 chars.
+- `routineId` is required.
+- target routine must belong to the authenticated user.
+- `localDate` is required and must use `YYYY-MM-DD`.
+- `localDate` is stored as a string, not a JavaScript Date.
+- `timezone` is required as a non-empty string.
+- `status` must be one of `completed`, `partial`, or `skipped`.
+- `completedStepIds` is optional and must contain RoutineStep `stepId` values from the target routine when provided.
+- unknown completed step IDs return `VALIDATION_ERROR`.
+- `partial` logs require at least one completed step and fewer than all routine steps.
+- `skipped` logs must omit `completedStepIds` or keep it empty.
+- `note` is optional, trimmed, and max 500 characters.
+- client-submitted `userId`, `id`, `_id`, `createdAt`, `updatedAt`, and unknown fields are rejected.
+
+Response:
+
+```json
+{
+  "data": {
+    "routineLog": {
+      "id": "665000000000000000000471",
+      "routineId": "665000000000000000000460",
+      "localDate": "2026-05-17",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "status": "partial",
+      "completedStepIds": ["step_1"],
+      "note": "Bỏ qua kem chống nắng hôm nay.",
+      "createdAt": "2026-05-17T00:00:00.000Z",
+      "updatedAt": "2026-05-17T00:00:00.000Z"
+    }
+  },
+  "error": null
+}
+```
 
 Errors:
 
 - UNAUTHORIZED
 - NOT_FOUND
 - VALIDATION_ERROR
+- INTERNAL_ERROR
 
-### GET /api/routine-logs
+### GET /api/routine-logs?localDate=YYYY-MM-DD
+
+Returns RoutineLog DTOs for the authenticated user on a required local calendar date.
 
 Query params:
 
 ```txt
-routineId?: string
-from?: localDate
-to?: localDate
-limit?: number
+localDate: string // required, YYYY-MM-DD
 ```
 
-Validation:
+Response:
 
-- `from` and `to` must match `/^\d{4}-\d{2}-\d{2}$/` when provided.
-- Date range query may compare `localDate` lexicographically because `YYYY-MM-DD` sorts correctly.
-
-Returns current user's routine logs.
+```json
+{
+  "data": {
+    "routineLogs": [
+      {
+        "id": "665000000000000000000471",
+        "routineId": "665000000000000000000460",
+        "localDate": "2026-05-17",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "status": "completed",
+        "completedStepIds": ["step_1", "step_2"],
+        "createdAt": "2026-05-17T00:00:00.000Z",
+        "updatedAt": "2026-05-17T00:00:00.000Z"
+      }
+    ]
+  },
+  "error": null
+}
+```
 
 Errors:
 
 - UNAUTHORIZED
 - VALIDATION_ERROR
+- INTERNAL_ERROR
 
-### DELETE /api/routine-logs/:id
+Notes:
 
-Delete a routine log owned by current user.
-
-Errors:
-
-- UNAUTHORIZED
-- NOT_FOUND
+- `POST /api/routine-logs` is not implemented for RL-001.
+- `DELETE /api/routine-logs/:id` is not implemented for RL-001.
+- RoutineLog UI will be handled later in TASK RL-002.
 
 ## 9. Skin Journal
 

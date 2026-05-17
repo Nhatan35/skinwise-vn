@@ -85,12 +85,14 @@ describe("database index definitions", () => {
     expectIndex(COLLECTION_NAMES.ROUTINES, { userId: 1, updatedAt: -1 });
   });
 
-  it("defines routine log unique daily upsert index", () => {
+  it("defines routine log unique daily upsert and query indexes", () => {
     expectUniqueIndex(COLLECTION_NAMES.ROUTINE_LOGS, {
       userId: 1,
       routineId: 1,
       localDate: 1,
     });
+    expectIndex(COLLECTION_NAMES.ROUTINE_LOGS, { userId: 1, localDate: 1 });
+    expectIndex(COLLECTION_NAMES.ROUTINE_LOGS, { userId: 1, routineId: 1 });
   });
 
   it("defines skin journal unique daily entry index", () => {

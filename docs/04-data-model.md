@@ -211,13 +211,13 @@ compound index: userId, updatedAt
 ```ts
 type RoutineLog = {
   _id: ObjectId;
-  userId: ObjectId;
-  routineId: ObjectId;
+  userId: string;
+  routineId: string;
   localDate: string; // YYYY-MM-DD in user's local timezone
   timezone: string; // IANA timezone, e.g. Asia/Ho_Chi_Minh
-  completedStepIds: string[];
-  skippedStepIds: string[];
-  notes?: string;
+  status: "completed" | "partial" | "skipped";
+  completedStepIds?: string[]; // RoutineStep.stepId values
+  note?: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -225,7 +225,18 @@ type RoutineLog = {
 
 ### Why separate RoutineLog from SkinJournal?
 
-RoutineLog tracks behavior: what the user completed or skipped. SkinJournal tracks observations: what the user noticed about their skin. Keeping them separate improves analytics and avoids mixing objective routine completion with subjective skin notes.
+RoutineLog tracks behavior: whether a user completed, partially completed, or skipped a routine on a local calendar date. SkinJournal tracks observations: what the user noticed about their skin. Keeping them separate improves analytics and avoids mixing objective routine completion with subjective skin notes.
+
+### RoutineLog MVP rules
+
+```txt
+localDate is stored as a YYYY-MM-DD string, not as a JavaScript Date.
+timezone is stored as a string, for example Asia/Ho_Chi_Minh.
+One log is allowed per userId + routineId + localDate.
+completedStepIds refer to RoutineStep.stepId values.
+status controls the behavior meaning: completed, partial, skipped.
+note is optional and short-form only.
+```
 
 ### Indexes
 

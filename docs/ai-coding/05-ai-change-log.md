@@ -1425,6 +1425,66 @@ v1.2.4 improves implementation readiness and AI coding governance only.
 - Rule engine must still run before AI.
 - RoutineLog and SkinJournal remain separate.
 
+## 2026-05-17 — TASK RL-001 RoutineLog Foundation
+
+### Task
+
+Implemented the RoutineLog backend foundation for recording completed, partially completed, or skipped routines on a specific local calendar date.
+
+### Files Added
+
+```txt
+src/modules/routine-logs/index.ts
+src/modules/routine-logs/routine-log.types.ts
+src/modules/routine-logs/routine-log.schema.ts
+src/modules/routine-logs/routine-log.dto.ts
+src/modules/routine-logs/routine-log.mapper.ts
+src/modules/routine-logs/routine-log.repository.ts
+src/modules/routine-logs/routine-log.use-case.ts
+src/app/api/routine-logs/route.ts
+tests/unit/routine-log.test.ts
+tests/unit/routine-log-use-case.test.ts
+tests/unit/routine-log-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/04-data-model.md
+docs/05-api-contract.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+tests/unit/database-indexes.test.ts
+```
+
+### Reason
+
+RoutineLog is needed before daily completion UI, dashboard cards, consistency tracking, streaks, and future AI insights can be built. The implementation keeps local calendar behavior explicit by storing `localDate` as a `YYYY-MM-DD` string and `timezone` as a string.
+
+### Implementation Notes
+
+- Added strict Zod schemas for RoutineLog date query and PUT upsert input.
+- Added DTO and mapper that expose `id` but not `userId`, `_id`, or raw MongoDB internals.
+- Added repository functions for finding logs by local date, finding one log by routine/date, and upserting by `userId + routineId + localDate`.
+- Added use-case validation that checks routine ownership and validates `completedStepIds` against the target routine's `stepId` values.
+- Added authenticated `GET /api/routine-logs?localDate=YYYY-MM-DD`.
+- Added canonical authenticated `PUT /api/routine-logs` upsert endpoint.
+- Reused existing `routine_logs` collection helper and unique/query index definitions.
+
+### Tests
+
+- Unit: RoutineLog schema, mapper, repository, use-case, API contract, and index tests added/updated.
+- Commands: `npm run lint`, `npm run typecheck`, and `npm run test` passed during implementation.
+
+### Notes
+
+- No RoutineLog UI was implemented.
+- No dashboard integration, streak calculation, analytics, AI insights, SkinJournal, image upload, skin score, or medical diagnosis was implemented.
+- Next recommended task is TASK RL-002 — RoutineLog UI integration.
+
 ## Template for future entries
 
 ```md

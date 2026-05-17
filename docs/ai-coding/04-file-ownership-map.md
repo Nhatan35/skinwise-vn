@@ -461,23 +461,32 @@ Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added Mon
 
 ## 10. RoutineLog ownership
 
-Planned owned files:
+Owned files implemented by TASK RL-001:
 
 ```txt
+src/modules/routine-logs/index.ts
+src/modules/routine-logs/routine-log.types.ts
 src/modules/routine-logs/routine-log.schema.ts
 src/modules/routine-logs/routine-log.dto.ts
 src/modules/routine-logs/routine-log.mapper.ts
 src/modules/routine-logs/routine-log.repository.ts
-src/modules/routine-logs/upsert-routine-log.use-case.ts
-src/modules/routine-logs/list-routine-logs.use-case.ts
+src/modules/routine-logs/routine-log.use-case.ts
 src/app/api/routine-logs/route.ts
+tests/unit/routine-log.test.ts
+tests/unit/routine-log-use-case.test.ts
+tests/unit/routine-log-api-contract.test.ts
 ```
 
 Rules:
 
-- same `userId + routineId + localDate` updates existing log;
-- do not create duplicates;
-- keep separate from SkinJournal.
+- same `userId + routineId + localDate` updates existing log through canonical `PUT /api/routine-logs`;
+- `GET /api/routine-logs?localDate=YYYY-MM-DD` returns only the authenticated user's logs for that local date;
+- `userId`, `id`, `_id`, `createdAt`, and `updatedAt` are server-owned and rejected from client input;
+- `localDate` is stored as `YYYY-MM-DD` string and `timezone` is stored as a string;
+- `status` is one of `completed`, `partial`, or `skipped`;
+- completed step IDs must belong to the target routine;
+- no RoutineLog UI, dashboard card, streak calculation, AI insight, or analytics feature belongs in RL-001;
+- keep RoutineLog separate from SkinJournal.
 
 ## 11. SkinJournal ownership
 
