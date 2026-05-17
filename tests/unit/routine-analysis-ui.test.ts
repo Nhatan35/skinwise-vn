@@ -162,7 +162,6 @@ describe("Routine Analysis UI foundation", () => {
     for (const forbiddenScope of [
       "@/modules/ingredients",
       "@/modules/journals",
-      "@/modules/routine-logs",
       "@/modules/dashboard",
       "/api/ingredients",
       "ProductPicker",

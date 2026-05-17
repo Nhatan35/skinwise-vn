@@ -312,6 +312,8 @@ src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
 src/modules/routines/components/routine-analysis-panel.tsx
 src/modules/routines/components/routine-builder.tsx
+src/modules/routines/components/routine-log-controls.tsx
+src/modules/routines/components/routine-log-status-badge.tsx
 src/app/api/routines/route.ts
 src/app/api/routines/[id]/route.ts
 src/app/(dashboard)/routines/page.tsx
@@ -320,6 +322,7 @@ tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
 tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-builder-ui.test.ts
+tests/unit/routine-log-ui.test.ts
 ```
 
 Rules:
@@ -337,7 +340,8 @@ Rules:
 - `/routines` UI must not submit `stepId`, `userId`, `id`, `_id`, timestamps, Product snapshot fields, risk fields, analysis fields, or AI fields;
 - `/routines` analysis UI must not pass `userId`, `routineId`, `riskLevel`, warnings, suggestions, summary, or analysis content in request bodies;
 - `/routines` analysis UI may format API-provided `riskLevel` and suggestion priority labels for readability, but must not generate new risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, or skin score;
-- Routine use cases may call the Product use-case to validate visible selected products and populate server-owned snapshots, but must not import Product repositories directly. No Product UI page, Product submission, real AI provider integration, Routine Logs, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside the `/routines` UI foundation.
+- `/routines` RoutineLog UI may call only `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs` with `fetch`, must use browser localDate and timezone, and must not import RoutineLog repositories, use cases, database helpers, auth helpers, or `server-only` modules;
+- Routine use cases may call the Product use-case to validate visible selected products and populate server-owned snapshots, but must not import Product repositories directly. No Product UI page, Product submission, real AI provider integration, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside the `/routines` UI foundation.
 
 Current status:
 
@@ -352,15 +356,18 @@ src/modules/routines/routine.repository.ts
 src/modules/routines/routine.use-case.ts
 src/modules/routines/components/routine-analysis-panel.tsx
 src/modules/routines/components/routine-builder.tsx
+src/modules/routines/components/routine-log-controls.tsx
+src/modules/routines/components/routine-log-status-badge.tsx
 src/app/(dashboard)/routines/page.tsx
 tests/unit/routine.test.ts
 tests/unit/routine-use-case.test.ts
 tests/unit/routine-api-contract.test.ts
 tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-builder-ui.test.ts
+tests/unit/routine-log-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are now owned by the Routine Builder/use-case boundary for TASK PP-001. Product UI pages, Product submission, Ingredient modules, real AI provider integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are owned by the Routine Builder/use-case boundary for TASK PP-001. TASK RL-002 added RoutineLog status badges and completed/skipped/partial controls inside the existing `/routines` UI. Product UI pages, Product submission, Ingredient modules, real AI provider integration, Journal, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
 
 ## 8. Routine Safety Engine ownership
 
@@ -461,7 +468,7 @@ Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added Mon
 
 ## 10. RoutineLog ownership
 
-Owned files implemented by TASK RL-001:
+Owned files implemented by TASK RL-001 and TASK RL-002:
 
 ```txt
 src/modules/routine-logs/index.ts
@@ -471,10 +478,13 @@ src/modules/routine-logs/routine-log.dto.ts
 src/modules/routine-logs/routine-log.mapper.ts
 src/modules/routine-logs/routine-log.repository.ts
 src/modules/routine-logs/routine-log.use-case.ts
+src/modules/routine-logs/routine-log.client.ts
 src/app/api/routine-logs/route.ts
 tests/unit/routine-log.test.ts
 tests/unit/routine-log-use-case.test.ts
 tests/unit/routine-log-api-contract.test.ts
+tests/unit/routine-log-client.test.ts
+tests/unit/routine-log-ui.test.ts
 ```
 
 Rules:
@@ -485,7 +495,9 @@ Rules:
 - `localDate` is stored as `YYYY-MM-DD` string and `timezone` is stored as a string;
 - `status` is one of `completed`, `partial`, or `skipped`;
 - completed step IDs must belong to the target routine;
-- no RoutineLog UI, dashboard card, streak calculation, AI insight, or analytics feature belongs in RL-001;
+- RoutineLog UI belongs on the existing `/routines` page only for RL-002; no separate RoutineLog page exists;
+- RoutineLog client helpers must not include `userId`, `id`, `_id`, `createdAt`, or `updatedAt` in PUT payloads;
+- RoutineLog UI must not add dashboard cards, streak calculation, AI insight, analytics, or note input;
 - keep RoutineLog separate from SkinJournal.
 
 ## 11. SkinJournal ownership

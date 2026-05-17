@@ -4,6 +4,66 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-17 - TASK RL-002 RoutineLog UI Integration
+
+### Task
+
+Integrate RoutineLog UI into the existing protected `/routines` page so users can see today's log status and mark routines as completed, skipped, or partially completed with selected steps.
+
+### Files Added
+
+```txt
+src/modules/routine-logs/routine-log.client.ts
+src/modules/routines/components/routine-log-controls.tsx
+src/modules/routines/components/routine-log-status-badge.tsx
+tests/unit/routine-log-client.test.ts
+tests/unit/routine-log-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/routines/components/routine-builder.tsx
+tests/unit/routine-analysis-ui.test.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+RoutineLog backend foundation exists from RL-001. RL-002 adds the minimal frontend integration needed for users to record daily completion status from the current `/routines` page without creating a new route or dashboard feature.
+
+### Implementation Notes
+
+- `/routines` now loads today's logs through `GET /api/routine-logs?localDate=YYYY-MM-DD` and reads `body.data.routineLogs`.
+- Added `getBrowserLocalDate()` using browser local date parts, not UTC `toISOString()` slicing.
+- Added `getBrowserTimezone()` using `Intl.DateTimeFormat().resolvedOptions().timeZone` with `UTC` fallback.
+- Added status badges for `Chưa ghi nhận`, `Hoàn thành`, `Một phần`, and `Bỏ qua`.
+- Added per-routine controls for completed, skipped, and partial logs.
+- Completed saves all known routine `stepId` values.
+- Skipped saves an empty `completedStepIds` array.
+- Partial opens an inline checklist, requires at least one selected step, rejects all selected steps, and is disabled for routines with fewer than 2 steps.
+- PUT saves read the finalized response shape from `body.data.routineLog` and update local UI state only after success.
+- Friendly Vietnamese loading, success, and error copy was added for load/save states.
+- Client components use API routes only and do not import repositories, use cases, MongoDB helpers, auth helpers, or server-only modules.
+
+### Tests
+
+```txt
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 40 files, 377 tests
+npm run build: Timed out in this sandbox while collecting page data after successful compilation and TypeScript phase; local verification recommended
+```
+
+### Notes
+
+- No Dashboard integration, streak calculation, weekly/monthly analytics, AI insights, RoutineLog note input, SkinJournal, image upload, skin score, product submission, admin product management, external API call, or new dependency was added.
+- Next recommended task is TASK DB-001 — Dashboard Data Integration.
+
 ## 2026-05-17 - TASK PP-001 Product Picker + Routine Product Snapshot Population
 
 ### Task

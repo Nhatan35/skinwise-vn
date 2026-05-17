@@ -1,20 +1,20 @@
 "use client";
 
-import {
-  Check,
-  Pencil,
-  Plus,
-  RotateCcw,
-  Save,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Check, Pencil, Plus, RotateCcw, Save, Trash2, X } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import type { ZodIssue } from "zod";
 
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
 import type { ProductDto } from "@/modules/products/product.dto";
+import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
+import {
+  getBrowserLocalDate,
+  getBrowserTimezone,
+  groupRoutineLogsByRoutineId,
+} from "@/modules/routine-logs/routine-log.client";
 import { RoutineAnalysisPanel } from "@/modules/routines/components/routine-analysis-panel";
+import { RoutineLogControls } from "@/modules/routines/components/routine-log-controls";
+import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
 import {
   createRoutineSchema,
@@ -31,7 +31,11 @@ import {
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/components/ui/alert";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/shared/components/ui/alert";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -54,6 +58,7 @@ import { cn } from "@/shared/utils";
 
 const ROUTINES_API_PATH = "/api/routines";
 const PRODUCTS_API_PATH = "/api/products?limit=50";
+const ROUTINE_LOGS_API_PATH = "/api/routine-logs";
 const MANUAL_PRODUCT_VALUE = "__manual_product__";
 const ANALYZE_ROUTE_SEGMENT = "analyze";
 const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
@@ -228,6 +233,22 @@ function getAnalysisApiErrorMessage(error?: ApiError | null) {
   return "Hiện chưa thể phân tích routine. Vui lòng thử lại sau.";
 }
 
+function getRoutineLogLoadErrorMessage(error?: ApiError | null) {
+  if (error?.code === "UNAUTHORIZED") {
+    return "Bạn cần đăng nhập để tải nhật ký routine hôm nay.";
+  }
+
+  if (error?.code === "VALIDATION_ERROR") {
+    return "Ngày ghi nhận routine chưa hợp lệ. Vui lòng tải lại trang.";
+  }
+
+  return "Không thể tải nhật ký routine hôm nay.";
+}
+
+function getRoutineLogsEndpoint(localDate: string) {
+  return `${ROUTINE_LOGS_API_PATH}?localDate=${encodeURIComponent(localDate)}`;
+}
+
 function getAnalyzeEndpoint(routineId: string) {
   return `${ROUTINES_API_PATH}/${routineId}/${ANALYZE_ROUTE_SEGMENT}`;
 }
@@ -323,9 +344,8 @@ function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
 
 export function RoutineBuilder() {
   const [routines, setRoutines] = useState<RoutineDto[]>([]);
-  const [formState, setFormState] = useState<RoutineFormState>(
-    createBlankFormState,
-  );
+  const [formState, setFormState] =
+    useState<RoutineFormState>(createBlankFormState);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formMode, setFormMode] = useState<FormMode>("none");
   const [editingRoutineId, setEditingRoutineId] = useState<string | null>(null);
@@ -337,7 +357,18 @@ export function RoutineBuilder() {
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [productLoadError, setProductLoadError] = useState<string | null>(null);
   const [isProductLoading, setIsProductLoading] = useState(false);
-  const [deletingRoutineId, setDeletingRoutineId] = useState<string | null>(null);
+  const [routineLogLocalDate] = useState(() => getBrowserLocalDate());
+  const [routineLogTimezone] = useState(() => getBrowserTimezone());
+  const [routineLogsByRoutineId, setRoutineLogsByRoutineId] = useState<
+    Record<string, RoutineLogDto>
+  >({});
+  const [isRoutineLogLoading, setIsRoutineLogLoading] = useState(false);
+  const [routineLogLoadError, setRoutineLogLoadError] = useState<string | null>(
+    null,
+  );
+  const [deletingRoutineId, setDeletingRoutineId] = useState<string | null>(
+    null,
+  );
   const [latestAnalysisByRoutineId, setLatestAnalysisByRoutineId] = useState<
     Record<string, RoutineAnalysisDto | null>
   >({});
@@ -423,7 +454,9 @@ export function RoutineBuilder() {
           },
           method: "GET",
         });
-        const body = await readApiResponse<{ routines: RoutineDto[] }>(response);
+        const body = await readApiResponse<{ routines: RoutineDto[] }>(
+          response,
+        );
 
         if (!isMounted) {
           return;
@@ -452,6 +485,67 @@ export function RoutineBuilder() {
       isMounted = false;
     };
   }, [reloadKey]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadRoutineLogs() {
+      setIsRoutineLogLoading(true);
+      setRoutineLogLoadError(null);
+
+      try {
+        const response = await fetch(
+          getRoutineLogsEndpoint(routineLogLocalDate),
+          {
+            headers: {
+              Accept: "application/json",
+            },
+            method: "GET",
+          },
+        );
+        const body = await readApiResponse<{ routineLogs: RoutineLogDto[] }>(
+          response,
+        );
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (!response.ok || body.error) {
+          setRoutineLogsByRoutineId({});
+          setRoutineLogLoadError(getRoutineLogLoadErrorMessage(body.error));
+          return;
+        }
+
+        setRoutineLogsByRoutineId(
+          groupRoutineLogsByRoutineId(body.data.routineLogs),
+        );
+      } catch {
+        if (isMounted) {
+          setRoutineLogsByRoutineId({});
+          setRoutineLogLoadError("Không thể tải nhật ký routine hôm nay.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsRoutineLogLoading(false);
+        }
+      }
+    }
+
+    void loadRoutineLogs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [routineLogLocalDate, reloadKey]);
+
+  function handleRoutineLogSaved(routineLog: RoutineLogDto) {
+    setRoutineLogsByRoutineId((current) => ({
+      ...current,
+      [routineLog.routineId]: routineLog,
+    }));
+    setRoutineLogLoadError(null);
+  }
 
   function startCreate() {
     setFormState(createBlankFormState());
@@ -487,10 +581,9 @@ export function RoutineBuilder() {
     });
   }
 
-  function updateRoutineField<Field extends keyof Omit<RoutineFormState, "steps">>(
-    field: Field,
-    value: RoutineFormState[Field],
-  ) {
+  function updateRoutineField<
+    Field extends keyof Omit<RoutineFormState, "steps">,
+  >(field: Field, value: RoutineFormState[Field]) {
     setFormState((current) => ({
       ...current,
       [field]: value,
@@ -542,7 +635,9 @@ export function RoutineBuilder() {
           };
         }
 
-        const selectedProduct = products.find((product) => product.id === value);
+        const selectedProduct = products.find(
+          (product) => product.id === value,
+        );
 
         if (!selectedProduct) {
           return {
@@ -563,7 +658,9 @@ export function RoutineBuilder() {
           ...step,
           productId: selectedProduct.id,
           customProductName: "",
-          category: shouldAutoSetCategory ? selectedProduct.category : step.category,
+          category: shouldAutoSetCategory
+            ? selectedProduct.category
+            : step.category,
         };
       }),
     }));
@@ -714,6 +811,11 @@ export function RoutineBuilder() {
         delete next[routine.id];
         return next;
       });
+      setRoutineLogsByRoutineId((current) => {
+        const next = { ...current };
+        delete next[routine.id];
+        return next;
+      });
       if (editingRoutineId === routine.id) {
         cancelForm();
       }
@@ -779,8 +881,7 @@ export function RoutineBuilder() {
     } catch {
       setAnalysisErrorByRoutineId((current) => ({
         ...current,
-        [routine.id]:
-          "Hiện chưa thể phân tích routine. Vui lòng thử lại sau.",
+        [routine.id]: "Hiện chưa thể phân tích routine. Vui lòng thử lại sau.",
       }));
     } finally {
       setAnalyzingRoutineIds((current) => ({
@@ -931,6 +1032,7 @@ export function RoutineBuilder() {
           analysisHistoryLoadedByRoutineId={analysisHistoryLoadedByRoutineId}
           analyzingRoutineIds={analyzingRoutineIds}
           deletingRoutineId={deletingRoutineId}
+          isRoutineLogLoading={isRoutineLogLoading}
           latestAnalysisByRoutineId={latestAnalysisByRoutineId}
           loadingHistoryRoutineIds={loadingHistoryRoutineIds}
           onAnalyze={analyzeRoutine}
@@ -938,6 +1040,11 @@ export function RoutineBuilder() {
           onDelete={deleteRoutine}
           onEdit={startEdit}
           onLoadAnalysisHistory={loadAnalysisHistory}
+          onRoutineLogSaved={handleRoutineLogSaved}
+          routineLogLoadError={routineLogLoadError}
+          routineLogLocalDate={routineLogLocalDate}
+          routineLogTimezone={routineLogTimezone}
+          routineLogsByRoutineId={routineLogsByRoutineId}
           routines={routines}
         />
       )}
@@ -998,7 +1105,9 @@ function RoutineForm({
             <div className="space-y-2">
               <Label htmlFor="routine-name">Tên routine</Label>
               <Input
-                aria-describedby={fieldErrors.name ? "routine-name-error" : undefined}
+                aria-describedby={
+                  fieldErrors.name ? "routine-name-error" : undefined
+                }
                 aria-invalid={fieldErrors.name ? true : undefined}
                 id="routine-name"
                 onChange={(event) =>
@@ -1036,8 +1145,9 @@ function RoutineForm({
                   Các bước trong routine
                 </h3>
                 <p className="mt-1 text-sm text-stone-600">
-                  Product Picker cho phép chọn sản phẩm đã duyệt hoặc nhập thủ công.
-                  Thứ tự được tính từ trên xuống dưới. Cần có ít nhất một bước.
+                  Product Picker cho phép chọn sản phẩm đã duyệt hoặc nhập thủ
+                  công. Thứ tự được tính từ trên xuống dưới. Cần có ít nhất một
+                  bước.
                 </p>
               </div>
               <Button
@@ -1149,7 +1259,9 @@ function RoutineForm({
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`step-name-${index}`}>Tên sản phẩm thủ công</Label>
+                      <Label htmlFor={`step-name-${index}`}>
+                        Tên sản phẩm thủ công
+                      </Label>
                       <Input
                         aria-describedby={
                           fieldErrors[`steps.${index}.customProductName`]
@@ -1300,6 +1412,7 @@ type RoutineListProps = {
   analysisHistoryLoadedByRoutineId: Record<string, boolean>;
   analyzingRoutineIds: Record<string, boolean>;
   deletingRoutineId: string | null;
+  isRoutineLogLoading: boolean;
   latestAnalysisByRoutineId: Record<string, RoutineAnalysisDto | null>;
   loadingHistoryRoutineIds: Record<string, boolean>;
   onAnalyze: (routine: RoutineDto) => void;
@@ -1307,6 +1420,11 @@ type RoutineListProps = {
   onDelete: (routine: RoutineDto) => void;
   onEdit: (routine: RoutineDto) => void;
   onLoadAnalysisHistory: (routine: RoutineDto) => void;
+  onRoutineLogSaved: (routineLog: RoutineLogDto) => void;
+  routineLogLoadError: string | null;
+  routineLogLocalDate: string;
+  routineLogTimezone: string;
+  routineLogsByRoutineId: Record<string, RoutineLogDto>;
   routines: RoutineDto[];
 };
 
@@ -1316,6 +1434,7 @@ function RoutineList({
   analysisHistoryLoadedByRoutineId,
   analyzingRoutineIds,
   deletingRoutineId,
+  isRoutineLogLoading,
   latestAnalysisByRoutineId,
   loadingHistoryRoutineIds,
   onAnalyze,
@@ -1323,6 +1442,11 @@ function RoutineList({
   onDelete,
   onEdit,
   onLoadAnalysisHistory,
+  onRoutineLogSaved,
+  routineLogLoadError,
+  routineLogLocalDate,
+  routineLogTimezone,
+  routineLogsByRoutineId,
   routines,
 }: RoutineListProps) {
   if (routines.length === 0) {
@@ -1341,6 +1465,19 @@ function RoutineList({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        {isRoutineLogLoading ? (
+          <p className="text-sm text-stone-600">
+            Đang tải nhật ký routine hôm nay...
+          </p>
+        ) : null}
+
+        {routineLogLoadError ? (
+          <Alert variant="destructive">
+            <AlertTitle>Chưa tải được nhật ký hôm nay</AlertTitle>
+            <AlertDescription>{routineLogLoadError}</AlertDescription>
+          </Alert>
+        ) : null}
+
         {routines.map((routine) => (
           <div
             className="border border-stone-200 bg-stone-50 p-4"
@@ -1355,6 +1492,10 @@ function RoutineList({
                   <Badge variant="secondary">
                     {timeOfDayLabels[routine.timeOfDay]}
                   </Badge>
+                  <RoutineLogStatusBadge
+                    hasLog={Boolean(routineLogsByRoutineId[routine.id])}
+                    status={routineLogsByRoutineId[routine.id]?.status}
+                  />
                 </div>
                 <p className="mt-2 text-sm text-stone-600">
                   Cập nhật: {formatUpdatedAt(routine.updatedAt)}
@@ -1362,7 +1503,11 @@ function RoutineList({
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row">
-                <Button onClick={() => onEdit(routine)} type="button" variant="outline">
+                <Button
+                  onClick={() => onEdit(routine)}
+                  type="button"
+                  variant="outline"
+                >
                   <Pencil aria-hidden="true" />
                   Sửa
                 </Button>
@@ -1405,13 +1550,26 @@ function RoutineList({
                       ) : null}
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline">{categoryLabels[step.category]}</Badge>
-                      <Badge variant="outline">{frequencyLabels[step.frequency]}</Badge>
+                      <Badge variant="outline">
+                        {categoryLabels[step.category]}
+                      </Badge>
+                      <Badge variant="outline">
+                        {frequencyLabels[step.frequency]}
+                      </Badge>
                     </div>
                   </div>
                 </li>
               ))}
             </ol>
+
+            <RoutineLogControls
+              disabled={isRoutineLogLoading}
+              localDate={routineLogLocalDate}
+              log={routineLogsByRoutineId[routine.id]}
+              onSaved={onRoutineLogSaved}
+              routine={routine}
+              timezone={routineLogTimezone}
+            />
 
             <RoutineAnalysisPanel
               error={analysisErrorByRoutineId[routine.id] ?? null}

@@ -5,32 +5,32 @@ Last updated: 2026-05-17
 ## 1. Current sprint
 
 ```txt
-RoutineLog Foundation - TASK RL-001
+RoutineLog UI Integration - TASK RL-002
 ```
 
 ## 2. Sprint goal
 
-Implement the authenticated backend foundation for RoutineLog so users can record whether they completed, partially completed, or skipped one routine on a specific local calendar date. The foundation stores `localDate` as a `YYYY-MM-DD` string, stores `timezone`, upserts by `userId + routineId + localDate`, and validates ownership plus completed routine step IDs.
+Add RoutineLog UI integration to the existing protected `/routines` page so users can load today's routine logs using browser localDate, see each routine's current status, and mark a routine as completed, skipped, or partially completed with selected routine steps.
 
 ## 3. Allowed tasks this sprint
 
 ```txt
-Create RoutineLog module types/schema/dto/mapper/repository/use-case
-Create GET /api/routine-logs?localDate=YYYY-MM-DD
-Create PUT /api/routine-logs as canonical upsert endpoint
-Use existing routine_logs collection helper and indexes
-Validate routine ownership through the Routine repository/use-case boundary
-Validate completedStepIds against Routine.steps stepId values
-Reject client-submitted userId/id/_id/timestamps/unknown fields
-Add schema, mapper, repository, use-case, API, and index unit tests
-Update AI coding context docs, data model docs, and API contract docs
+Load GET /api/routine-logs?localDate=YYYY-MM-DD from the /routines UI
+Generate localDate from browser local date parts, not UTC ISO slicing
+Derive timezone with Intl.DateTimeFormat().resolvedOptions().timeZone and fallback to UTC
+Display Vietnamese RoutineLog status badges
+Add completed and skipped quick actions
+Add partial step checklist with safe client validation
+Call canonical PUT /api/routine-logs only
+Update local UI state after successful save
+Show friendly Vietnamese loading, success, and error states
+Add pure helper and source-level tests
+Update AI coding context docs
 ```
 
 ## 4. Not allowed this sprint
 
 ```txt
-RoutineLog UI
-Routine page checkboxes
 Dashboard data integration
 Streak calculation
 Weekly/monthly analytics
@@ -45,27 +45,30 @@ Admin product management
 Authentication architecture changes
 External APIs
 New dependencies
+RoutineLog note input
 ```
 
 ## 5. Sprint Definition of Done
 
 ```txt
-[x] src/modules/routine-logs foundation files exist.
-[x] RoutineLog schema is strict and rejects unknown/server-owned fields.
-[x] RoutineLog DTO maps _id to id and omits userId/_id/ObjectId internals.
-[x] RoutineLog repository supports upsert by userId + routineId + localDate.
-[x] RoutineLog use-case validates routine ownership.
-[x] RoutineLog use-case validates completedStepIds against Routine.steps.
-[x] GET /api/routine-logs?localDate=YYYY-MM-DD requires authentication.
-[x] GET returns only logs for the authenticated user and localDate.
-[x] PUT /api/routine-logs requires authentication and derives userId from session.
-[x] PUT /api/routine-logs is the canonical upsert endpoint.
-[x] Existing Routine/Product/Ingredient behavior remains covered by tests.
-[x] No RoutineLog UI, dashboard integration, streaks, AI insights, Journal, image upload, or medical diagnosis was implemented.
+[x] /routines loads today's RoutineLogs with localDate.
+[x] localDate is generated from browser local date parts.
+[x] timezone is included in RoutineLog PUT payloads.
+[x] Status badge supports Chưa ghi nhận, Hoàn thành, Một phần, and Bỏ qua.
+[x] Users can mark a routine completed.
+[x] Users can mark a routine skipped.
+[x] Users can mark a routine partial by selecting completed steps.
+[x] Partial state rejects zero selected steps and all selected steps.
+[x] Partial action is disabled for routines with fewer than 2 steps.
+[x] Successful PUT updates local UI state.
+[x] Failed GET/PUT shows friendly Vietnamese errors.
+[x] No server-only code is imported into client components.
+[x] Routine Builder create/edit/delete, Product Picker, and Routine Analysis UI remain in place.
+[x] Tests and docs are updated.
 ```
 
 ## 6. Recommended next task
 
 ```txt
-TASK RL-002 — RoutineLog UI integration
+TASK DB-001 — Dashboard Data Integration
 ```
