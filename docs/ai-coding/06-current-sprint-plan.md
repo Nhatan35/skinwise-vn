@@ -1,73 +1,77 @@
 # Current Sprint Plan - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-17
+Last updated: 2026-05-20
 
 ## 1. Current sprint
 
 ```txt
-Dashboard Data Integration - TASK DB-001
+TASK AI-001 - AI Provider Abstraction
 ```
 
 ## 2. Sprint goal
 
-Replace the placeholder `/dashboard` with a real authenticated MVP dashboard that summarizes Skin Profile setup, Routine counts, today's RoutineLog progress by browser localDate, latest Routine Analysis, and simple next actions.
+Implement a clean, testable, server-only AI Provider Abstraction for future OpenAI/Gemini integration without calling external AI APIs, requiring AI keys, changing UI/client components, or changing existing routine safety logic.
 
-## 3. Allowed tasks this sprint
+## 3. Completed before this sprint
 
 ```txt
-Add GET /api/dashboard?localDate=YYYY-MM-DD
-Validate localDate and derive userId from authenticated session
-Summarize Skin Profile exists/missing state
-Summarize Routine counts for morning and evening only
-Summarize today's RoutineLogs using completed + partial * 0.5 completion rule
-Show latest Routine Analysis if available
-Render /dashboard cards using the Dashboard API
-Reuse getBrowserLocalDate from RoutineLog client helpers
-Add dashboard use-case, API contract, and source-level UI tests
-Update AI coding context docs
+TASK DOC-001 - Documentation Consistency Cleanup after DB-001 completed
 ```
 
-## 4. Not allowed this sprint
+TASK DOC-001 synchronized documentation after DB-001 and set TASK AI-001 as the next recommended task.
+
+## 4. Allowed tasks this sprint
 
 ```txt
-AI Provider abstraction
-Ingredient Explanation AI
-OpenAI or external LLM/API calls
+Add src/infrastructure/ai/ai-provider.ts with the exact TASK AI-001 AIProvider contract
+Add MockAIProvider only
+Add AI provider error classes
+Add getAIProvider() factory behavior for mock/openai/gemini/unsupported names
+Add focused unit tests for factory and MockAIProvider behavior
+Update AI coding context docs
+Run npm run typecheck, npm run lint, and npm run test
+```
+
+## 5. Not allowed this sprint
+
+```txt
+External AI API calls
+Real OpenAI provider implementation
+Real Gemini provider implementation
+AI key requirements
+New dependencies
+Routine Analysis API behavior changes
+Ingredient Explanation API implementation
+UI or client component changes
+Routine Safety Engine changes
+Product UI pages
+Product submission
+Admin product management
 SkinJournal
 Image upload
 Skin score
-Advanced streak logic
-Weekly/monthly analytics or charts
-Notifications or reminders
-Product submission
-Admin product management
-Authentication architecture changes
-New dependencies
+Medical diagnosis or medical recommendation features
+Advanced dashboard analytics or charts
 ```
 
-## 5. Sprint Definition of Done
+## 6. Sprint Definition of Done
 
 ```txt
-[x] Correct dashboard page path is used: src/app/(dashboard)/dashboard/page.tsx.
-[x] No mistaken src/app/dashboard/page.tsx route is created.
-[x] GET /api/dashboard?localDate=YYYY-MM-DD exists.
-[x] API requires authentication and rejects missing/invalid localDate.
-[x] API derives userId from session and rejects client userId query fields.
-[x] API returns { data: { dashboard }, error: null }.
-[x] Dashboard DTO does not expose userId, _id, ObjectId, or MongoDB internals.
-[x] Missing skin profile maps to exists=false.
-[x] Missing latest analysis maps to exists=false.
-[x] No routines maps to a valid empty dashboard state with completionRate 0.
-[x] Routine counts use morning and evening only.
-[x] Today routine progress uses RoutineLogs for localDate.
-[x] completionRate uses the simple completed + partial * 0.5 rule.
-[x] Dashboard UI has loading, error, empty/missing-data, and real card states.
-[x] Existing Routine Builder, RoutineLog UI, and Routine Analysis behavior remain in place.
-[x] Tests and docs are updated.
+[x] src/infrastructure/ai/ai-provider.ts defines the exact TASK AI-001 AIProvider interface.
+[x] src/infrastructure/ai/mock-ai-provider.ts implements deterministic MockAIProvider.
+[x] src/infrastructure/ai/ai-provider.errors.ts defines AIProviderError, AIProviderConfigurationError, and AIProviderResponseError.
+[x] src/infrastructure/ai/ai-provider.factory.ts defaults missing/empty/mock AI_PROVIDER values to MockAIProvider.
+[x] src/infrastructure/ai/ai-provider.factory.ts throws configuration errors for openai, gemini, and unsupported providers.
+[x] src/infrastructure/ai/index.ts re-exports provider types, MockAIProvider, factory, and error classes.
+[x] tests/unit/ai-provider.test.ts covers factory and MockAIProvider behavior.
+[x] No external AI API is called.
+[x] No AI key is required.
+[x] OpenAI provider is not implemented yet.
+[x] Gemini provider is not implemented yet.
 ```
 
-## 6. Recommended next task
+## 7. Recommended next task
 
 ```txt
-TASK AI-001 — AI Provider Abstraction, or TASK ING-AI-001 — Ingredient Explanation Foundation depending on the sprint plan.
+TASK AI-002 — Structured Output Validation
 ```

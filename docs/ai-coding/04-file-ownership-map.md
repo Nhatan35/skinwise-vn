@@ -146,6 +146,44 @@ src/infrastructure/rate-limiting/rate-limit.ts
 
 `mongodb.ts` owns the shared MongoDB client helper and lazy client promise. `collections.ts` owns collection names/helpers, including `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including the rate limit unique key and TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
 
+## 3.1 AI Provider ownership
+
+Owned files:
+
+```txt
+src/infrastructure/ai/ai-provider.ts
+src/infrastructure/ai/ai-provider.errors.ts
+src/infrastructure/ai/ai-provider.factory.ts
+src/infrastructure/ai/mock-ai-provider.ts
+src/infrastructure/ai/index.ts
+tests/unit/ai-provider.test.ts
+```
+
+Rules:
+
+- `src/infrastructure/ai/ai-provider.ts` owns the server-only `AIProvider` interface and provider DTO types for routine analysis, ingredient explanation, and safety classification.
+- `MockAIProvider` is the only provider implementation in TASK AI-001.
+- `getAIProvider()` reads `process.env.AI_PROVIDER` directly, trims and lowercases it, and defaults missing, empty, or `mock` values to `MockAIProvider`.
+- OpenAI and Gemini provider names must throw `AIProviderConfigurationError` until their real providers are explicitly implemented in a later task.
+- Do not initialize external clients in TASK AI-001.
+- Do not call external AI APIs in TASK AI-001.
+- Do not require or read `AI_API_KEY` in TASK AI-001.
+- Do not import AI provider infrastructure from client components.
+- Do not wire Routine Analysis API, Ingredient Explanation API, or safety-classifier use cases to the provider abstraction until a separately scoped task.
+
+Current status:
+
+```txt
+src/infrastructure/ai/ai-provider.ts
+src/infrastructure/ai/ai-provider.errors.ts
+src/infrastructure/ai/ai-provider.factory.ts
+src/infrastructure/ai/mock-ai-provider.ts
+src/infrastructure/ai/index.ts
+tests/unit/ai-provider.test.ts
+```
+
+TASK AI-001 implemented the AI Provider Abstraction and deterministic `MockAIProvider`. OpenAI provider is not implemented yet. Gemini provider is not implemented yet. No external AI API is called, and no AI key is required.
+
 ## 4. Skin Profile ownership
 
 Planned owned files:
@@ -367,7 +405,7 @@ tests/unit/routine-builder-ui.test.ts
 tests/unit/routine-log-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are owned by the Routine Builder/use-case boundary for TASK PP-001. TASK RL-002 added RoutineLog status badges and completed/skipped/partial controls inside the existing `/routines` UI. Product UI pages, Product submission, Ingredient modules, real AI provider integration, Journal, image upload, skin score, medical diagnosis, dashboard data integration, and new analysis UI routes remain outside this ownership status.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are owned by the Routine Builder/use-case boundary for TASK PP-001. TASK RL-002 added RoutineLog status badges and completed/skipped/partial controls inside the existing `/routines` UI. Product UI pages, Product submission, Ingredient explanation modules, real AI provider integration, Journal, image upload, skin score, medical diagnosis, and new analysis UI routes remain outside Routine ownership. Dashboard data integration is owned by the Dashboard module/task.
 
 ## 8. Routine Safety Engine ownership
 
@@ -403,7 +441,7 @@ src/domain/routine-safety/index.ts
 tests/unit/routine-safety-engine.test.ts
 ```
 
-Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Analysis API, AI explanation, persistence, Product lookup/backfill, UI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis remain outside this ownership status.
+Week 3 Task 3 implemented the Routine Safety Engine foundation only. Routine Analysis API, AI explanation, persistence, Product lookup/backfill, UI, Journal, Routine Logs, dashboard data integration, image upload, skin score, and medical diagnosis remain outside the Routine Safety Engine ownership boundary and are owned by their respective modules/tasks where implemented.
 
 ## 9. Routine analysis ownership
 
@@ -464,7 +502,7 @@ tests/unit/routine-analysis-use-case.test.ts
 tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. Real AI provider integration, OpenAI/LLM calls, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis remain outside this ownership status.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction but did not wire it into Routine Analysis API behavior. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
 
 ## 10. RoutineLog ownership
 
@@ -522,7 +560,7 @@ Rules:
 - no appearance scoring;
 - journal entries are private.
 
-## 12. Dashboard shell ownership
+## 12. Dashboard ownership
 
 Owned files:
 

@@ -4,6 +4,118 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+
+## 2026-05-20 - TASK AI-001 AI Provider Abstraction
+
+### Task
+
+Implement the server-only AI Provider Abstraction for future provider integration while adding only `MockAIProvider`.
+
+### Files Added
+
+```txt
+src/infrastructure/ai/ai-provider.ts
+src/infrastructure/ai/ai-provider.errors.ts
+src/infrastructure/ai/ai-provider.factory.ts
+src/infrastructure/ai/mock-ai-provider.ts
+src/infrastructure/ai/index.ts
+tests/unit/ai-provider.test.ts
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+TASK AI-001 required a clean, testable provider boundary before future OpenAI/Gemini implementation.
+
+### Implementation Notes
+
+- Added the exact TASK AI-001 `AIProvider` interface with `analyzeRoutine`, `explainIngredient`, and `classifySafety`.
+- Added explicit provider input/output types and metadata types without using `any`.
+- Added deterministic `MockAIProvider` with fixed provider metadata.
+- Added `AIProviderError`, `AIProviderConfigurationError`, and `AIProviderResponseError`.
+- Added `getAIProvider()` that reads `process.env.AI_PROVIDER`, defaults missing/empty/mock values to `MockAIProvider`, and throws configuration errors for OpenAI, Gemini, and unsupported providers.
+- OpenAI provider is not implemented yet.
+- Gemini provider is not implemented yet.
+- No external AI API is called.
+- No AI key is required.
+- Existing Routine Analysis API/UI behavior and Routine Safety Engine logic were not changed.
+
+### Tests
+
+```txt
+npm.cmd test -- tests/unit/ai-provider.test.ts: Pass - 1 file, 12 tests
+npm.cmd run typecheck: Pass
+npm.cmd run lint: Pass
+npm.cmd test: Pass - 44 files, 402 tests
+```
+
+### Notes
+
+- Next recommended task is TASK AI-002 - Structured Output Validation.
+
+## 2026-05-18 - TASK DOC-001 Documentation Consistency Cleanup after DB-001
+
+### Task
+
+Synchronize AI coding documentation and public project docs with the current source state after TASK DB-001.
+
+### Files Added
+
+```txt
+None
+```
+
+### Files Updated
+
+```txt
+docs/ai-coding/01-codebase-map.md
+docs/05-api-contract.md
+docs/13-ui-route-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+TASK DB-001 implemented the authenticated Dashboard API and replaced the placeholder `/dashboard` with `DashboardOverview`, but some documentation still described the current source as if Product Picker, Product Snapshot Population, RoutineLog, and Dashboard Data Integration were not implemented.
+
+### Implementation Notes
+
+- Updated documentation only.
+- Documented `GET /api/dashboard?localDate=YYYY-MM-DD` in the API contract.
+- Updated `/dashboard` route documentation to describe `DashboardOverview` and its displayed dashboard summary cards.
+- Removed stale current-state statements saying Product Picker, Product Snapshot Population, RoutineLog, or Dashboard Data Integration were not implemented.
+- Confirmed DB-001 is completed and documented.
+- Set the next recommended task to `TASK AI-001 — AI Provider Abstraction`.
+- No source feature was added.
+- No AI Provider Abstraction, Ingredient Explanation, Product UI, Journal, image upload, skin score, diagnosis, medical recommendation, product submission, or admin product feature was implemented.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 43 files, 390 tests
+```
+
+### Notes
+
+- This task synchronizes documentation only after DB-001.
+- Historical task notes remain unchanged except where current-state guidance would otherwise be misleading.
+
 ## 2026-05-17 - TASK DB-001 Dashboard Data Integration
 
 ### Task
@@ -80,7 +192,7 @@ npm run build: Pending local verification if sandbox build times out
 
 - Dashboard API response shape is `data.dashboard`.
 - Dashboard UI reads from `body.data.dashboard`.
-- Next recommended task is TASK AI-001 — AI Provider Abstraction, or TASK ING-AI-001 — Ingredient Explanation Foundation depending on the sprint plan.
+- Next recommended task is TASK AI-001 — AI Provider Abstraction.
 
 ## 2026-05-17 - TASK RL-002 RoutineLog UI Integration
 
