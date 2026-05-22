@@ -6,6 +6,7 @@ import {
   AIProviderConfigurationError,
   getAIProvider,
   MockAIProvider,
+  ValidatedAIProvider,
   type AIProviderMetadata,
   type AIProviderRoutineAnalysisInput,
 } from "@/infrastructure/ai";
@@ -64,28 +65,28 @@ describe("getAIProvider", () => {
     restoreAIProviderEnv();
   });
 
-  it("returns MockAIProvider when AI_PROVIDER is undefined", () => {
+  it("returns ValidatedAIProvider when AI_PROVIDER is undefined", () => {
     delete process.env.AI_PROVIDER;
 
-    expect(getAIProvider()).toBeInstanceOf(MockAIProvider);
+    expect(getAIProvider()).toBeInstanceOf(ValidatedAIProvider);
   });
 
-  it("returns MockAIProvider when AI_PROVIDER is empty", () => {
+  it("returns ValidatedAIProvider when AI_PROVIDER is empty", () => {
     process.env.AI_PROVIDER = "";
 
-    expect(getAIProvider()).toBeInstanceOf(MockAIProvider);
+    expect(getAIProvider()).toBeInstanceOf(ValidatedAIProvider);
   });
 
-  it("returns MockAIProvider when AI_PROVIDER is mock", () => {
+  it("returns ValidatedAIProvider when AI_PROVIDER is mock", () => {
     process.env.AI_PROVIDER = "mock";
 
-    expect(getAIProvider()).toBeInstanceOf(MockAIProvider);
+    expect(getAIProvider()).toBeInstanceOf(ValidatedAIProvider);
   });
 
-  it("returns MockAIProvider when AI_PROVIDER has whitespace and casing", () => {
+  it("returns ValidatedAIProvider when AI_PROVIDER has whitespace and casing", () => {
     process.env.AI_PROVIDER = " MOCK ";
 
-    expect(getAIProvider()).toBeInstanceOf(MockAIProvider);
+    expect(getAIProvider()).toBeInstanceOf(ValidatedAIProvider);
   });
 
   it("throws AIProviderConfigurationError for OpenAI", () => {

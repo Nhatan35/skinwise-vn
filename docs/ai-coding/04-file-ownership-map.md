@@ -157,9 +157,11 @@ src/infrastructure/ai/ai-provider.factory.ts
 src/infrastructure/ai/ai-output.schema.ts
 src/infrastructure/ai/ai-output.validator.ts
 src/infrastructure/ai/mock-ai-provider.ts
+src/infrastructure/ai/validated-ai-provider.ts
 src/infrastructure/ai/index.ts
 tests/unit/ai-output-validation.test.ts
 tests/unit/ai-provider.test.ts
+tests/unit/validated-ai-provider.test.ts
 ```
 
 Rules:
@@ -167,14 +169,16 @@ Rules:
 - `src/infrastructure/ai/ai-provider.ts` owns the server-only `AIProvider` interface and provider DTO types for routine analysis, ingredient explanation, and safety classification.
 - `src/infrastructure/ai/ai-output.schema.ts` owns strict Zod schemas for the current `AIProvider` output shape, including `aiProviderMetadataSchema`, `aiProviderRoutineAnalysisResultSchema`, `aiProviderIngredientExplanationResultSchema`, and `aiProviderSafetyClassifierResultSchema`.
 - `src/infrastructure/ai/ai-output.validator.ts` owns `validateRoutineAnalysisOutput`, `validateIngredientExplanationOutput`, and `validateSafetyClassifierOutput`; invalid AI output must throw `AIProviderResponseError`.
+- `src/infrastructure/ai/validated-ai-provider.ts` owns provider-level output validation by wrapping an inner `AIProvider`, validating each method output, and returning only validated output.
 - `MockAIProvider` is the only provider implementation in TASK AI-001.
-- `getAIProvider()` reads `process.env.AI_PROVIDER` directly, trims and lowercases it, and defaults missing, empty, or `mock` values to `MockAIProvider`.
+- `getAIProvider()` reads `process.env.AI_PROVIDER` directly, trims and lowercases it, defaults missing, empty, or `mock` values to a raw `MockAIProvider`, and wraps successful raw providers with `ValidatedAIProvider`.
 - OpenAI and Gemini provider names must throw `AIProviderConfigurationError` until their real providers are explicitly implemented in a later task.
 - Do not initialize external clients in TASK AI-001.
 - Do not call external AI APIs in TASK AI-001.
 - Do not require or read `AI_API_KEY` in TASK AI-001.
 - Do not import AI provider infrastructure from client components.
 - TASK AI-002 validates the current `src/infrastructure/ai/ai-provider.ts` output types exactly and does not rename fields to match `docs/06-ai-contract.md`.
+- TASK AI-003 must not add validation logic inside `MockAIProvider`; validation belongs in `ValidatedAIProvider`.
 - Do not wire Routine Analysis API, Ingredient Explanation API, or safety-classifier use cases to the provider abstraction until a separately scoped task.
 
 Current status:
@@ -186,12 +190,14 @@ src/infrastructure/ai/ai-provider.factory.ts
 src/infrastructure/ai/ai-output.schema.ts
 src/infrastructure/ai/ai-output.validator.ts
 src/infrastructure/ai/mock-ai-provider.ts
+src/infrastructure/ai/validated-ai-provider.ts
 src/infrastructure/ai/index.ts
 tests/unit/ai-output-validation.test.ts
 tests/unit/ai-provider.test.ts
+tests/unit/validated-ai-provider.test.ts
 ```
 
-TASK AI-001 implemented the AI Provider Abstraction and deterministic `MockAIProvider`. TASK AI-002 added strict Zod structured output validation for the current provider output types and unit tests covering valid output, missing required fields, invalid enum values, maxLength/maxItems violations, unknown extra fields, invalid `providerMetadata`, error behavior, and MockAIProvider compatibility. OpenAI provider is not implemented yet. Gemini provider is not implemented yet. No external AI API is called, and no AI key is required.
+TASK AI-001 implemented the AI Provider Abstraction and deterministic `MockAIProvider`. TASK AI-002 added strict Zod structured output validation for the current provider output types and unit tests covering valid output, missing required fields, invalid enum values, maxLength/maxItems violations, unknown extra fields, invalid `providerMetadata`, error behavior, and MockAIProvider compatibility. TASK AI-003 added `ValidatedAIProvider`, updated `getAIProvider()` to return validated providers in mock mode, and added provider-flow validation tests. OpenAI provider is not implemented yet. Gemini provider is not implemented yet. No external AI API is called, and no AI key is required.
 
 ## 4. Skin Profile ownership
 

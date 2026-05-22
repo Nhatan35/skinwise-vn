@@ -30,8 +30,9 @@ Last updated: 2026-05-22
 | Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |
 | Routine Analysis API | Done | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses`; per-user 429 rate limit on analyze | No | `routine_analyses` repository; `rate_limits` collection with unique key + TTL indexes | Unit/API/source checks | Deterministic fallback only; stores all rule results internally and returns triggered warnings only; real AI not implemented |
 | Routine Analysis UI foundation | Done | Uses `POST /api/routines/:id/analyze` and `GET /api/routines/:id/analyses` | Per-routine panel inside existing `/routines` page | No new DB | Unit/source checks | Displays API-provided DTO data only; no new routes, client rules, real AI, or dashboard integration |
-| AI Provider Abstraction | Done | No public API | N/A | No | Unit | Server-only `src/infrastructure/ai`; `MockAIProvider` and `getAIProvider()` implemented; OpenAI/Gemini not implemented; no external AI API calls; no AI key required |
-| AI Structured Output Validation | Done | No public API | N/A | No | Unit | Strict Zod validation for current AIProvider output types; no external AI call |
+| AI Provider Abstraction | Done | No public API | N/A | No | Unit | Server-only `src/infrastructure/ai`; `MockAIProvider`, `ValidatedAIProvider`, and `getAIProvider()` implemented; OpenAI/Gemini not implemented; no external AI API calls; no AI key required |
+| AI Structured Output Validation | Done | No public API | N/A | No | Unit | Strict Zod validation for current AIProvider output types; invalid output throws `AIProviderResponseError`; no external AI call |
+| AI Provider Flow Validation | Done | No public API | N/A | No | Unit | `getAIProvider()` wraps successfully constructed providers with `ValidatedAIProvider`; mock mode returns `ValidatedAIProvider` around `MockAIProvider` |
 | Ingredient Explanation | Not Started | No | No | No | No | Safety classifier when needed |
 | Deployment | Not Started | N/A | N/A | N/A | No | Use deployment checklist |
 | Notifications | Out of Scope | No | No | No | No | Reserved future only |

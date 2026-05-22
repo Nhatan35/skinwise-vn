@@ -5,6 +5,74 @@
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
 
+## 2026-05-22 - TASK AI-003 Provider Flow Validation
+
+### Task
+
+Integrate the TASK AI-002 structured output validators into the AI provider flow without changing provider output shape or wiring Routine Analysis API to provider calls.
+
+### Files Added
+
+```txt
+src/infrastructure/ai/validated-ai-provider.ts
+tests/unit/validated-ai-provider.test.ts
+```
+
+### Files Updated
+
+```txt
+src/infrastructure/ai/ai-provider.factory.ts
+src/infrastructure/ai/index.ts
+tests/unit/ai-provider.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+TASK AI-003 required every successfully constructed `AIProvider` to be wrapped in a validation decorator so provider outputs are validated before future application flows use them.
+
+### Implementation Notes
+
+- Added `ValidatedAIProvider`.
+- `ValidatedAIProvider` implements `AIProvider`.
+- `ValidatedAIProvider` accepts an inner `AIProvider` through its constructor.
+- `analyzeRoutine()` calls the inner provider, validates with `validateRoutineAnalysisOutput()`, and returns the validated output.
+- `explainIngredient()` calls the inner provider, validates with `validateIngredientExplanationOutput()`, and returns the validated output.
+- `classifySafety()` calls the inner provider, validates with `validateSafetyClassifierOutput()`, and returns the validated output.
+- Invalid output lets the existing validator throw `AIProviderResponseError`.
+- The wrapper does not swallow, replace, or convert `AIProviderResponseError`.
+- `MockAIProvider` output shape was not changed.
+- Validation logic was not added inside `MockAIProvider`.
+- `getAIProvider()` now builds a raw provider first and wraps successful providers with `ValidatedAIProvider`.
+- Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`.
+- Existing OpenAI and Gemini unsupported-provider behavior remains unchanged.
+- No OpenAI provider was implemented.
+- No Gemini provider was implemented.
+- No external AI API call was added.
+- No AI key requirement was added.
+- No Routine Analysis API behavior was changed.
+- No UI, database schema, or unrelated module was changed.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 46 files, 444 tests
+```
+
+### Notes
+
+- `tests/unit/validated-ai-provider.test.ts` covers valid and invalid routine analysis, ingredient explanation, and safety classifier outputs.
+- Tests verify inner provider calls, pass-through inputs, returned validated output, invalid-output errors, mock-mode factory wrapping, and MockAIProvider compatibility through the wrapper.
+- The Routine Analysis API still uses deterministic fallback only.
+- The recommended next task is to align or map AI provider output contracts before wiring provider-backed Routine Analysis behavior.
+
 ## 2026-05-22 - TASK AI-002 Structured Output Validation
 
 ### Task

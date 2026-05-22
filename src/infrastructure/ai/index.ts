@@ -18,6 +18,7 @@ export {
   validateSafetyClassifierOutput,
 } from "./ai-output.validator";
 export { MockAIProvider } from "./mock-ai-provider";
+export { ValidatedAIProvider } from "./validated-ai-provider";
 export type {
   AIProvider,
   AIProviderIngredientExplanationInput,
