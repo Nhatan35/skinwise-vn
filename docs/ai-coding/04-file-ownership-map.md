@@ -493,9 +493,18 @@ Rules:
 - repository writes must use `getRoutineAnalysesCollection()` and must not create a MongoClient;
 - repository history reads must filter by `userId + routineId` and return newest first;
 - store all deterministic rule results, including `triggered: false`;
-- derive top-level `riskLevel` from the Routine Safety Engine;
-- public DTOs expose triggered warnings only and must not expose `_id`, `userId`, or internal `ruleResults`;
-- fallback content uses deterministic metadata only: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
+- run the Routine Safety Engine before any provider call;
+- provider-backed analysis must call `getAIProvider().analyzeRoutine()` and must not instantiate `MockAIProvider` directly;
+- provider-backed analysis must rely on `ValidatedAIProvider` for output validation and must not call `validateRoutineAnalysisOutput()` directly in the use case;
+- provider-backed analysis must use `mapAIProviderRoutineAnalysisToRoutineAnalysisResult()` and must not duplicate provider-to-product mapping logic;
+- derive final top-level `riskLevel` from the safety guard: `max(safetyResult.riskLevel, mappedProviderResult.riskLevel)`;
+- persisted `aiResult.riskLevel` must use the same safety-guarded final risk;
+- provider success uses `aiStatus = "provider_used"` and `promptVersion = "routine-analysis-provider-v1"`;
+- fallback uses `aiStatus = "fallback_used"` and deterministic metadata: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
+- provider construction/call/validation/mapping/guard failures fall back to deterministic analysis;
+- repository persistence errors must not be swallowed as provider fallback;
+- provider success must preserve deterministic rule warnings and suggestions and may append provider warnings/suggestions as additional educational guidance;
+- public DTOs expose only the stable RoutineAnalysis DTO shape and must not expose `_id`, `userId`, internal `ruleResults`, model metadata, provider metadata, educational notes, raw provider errors, or stack traces;
 - `routine-analysis.constants.ts` owns shared Routine Analysis constants such as the educational disclaimer;
 - `ai-provider-routine-analysis.mapper.ts` owns the pure mapping from validated `AIProviderRoutineAnalysisResult` to product-facing `RoutineAnalysisResult`;
 - provider-to-product mapping must not expose `providerMetadata` or `educationalNotes`;
@@ -526,7 +535,7 @@ tests/unit/routine-analysis-use-case.test.ts
 tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction but did not wire it into Routine Analysis API behavior. TASK AI-004 added the provider-to-product Routine Analysis mapper and shared disclaimer constant. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction. TASK AI-004 added the provider-to-product Routine Analysis mapper and shared disclaimer constant. TASK AI-005 wired validated provider-backed routine analysis into the use case with safe deterministic fallback, max-risk safety guarding, and provider metadata isolation. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
 
 ## 10. RoutineLog ownership
 

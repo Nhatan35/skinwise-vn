@@ -337,27 +337,35 @@ describe("Routine Analysis API contract", () => {
   });
 
   it("keeps Routine Analysis API scope small", () => {
-    const implementedFiles = [
+    const routeFiles = [
       "src/app/api/routines/[id]/analyze/route.ts",
       "src/app/api/routines/[id]/analyses/route.ts",
+    ];
+    const implementedFiles = [
+      ...routeFiles,
       "src/modules/ai-analysis/routine-analysis.types.ts",
       "src/modules/ai-analysis/routine-analysis.schema.ts",
       "src/modules/ai-analysis/routine-analysis.dto.ts",
       "src/modules/ai-analysis/routine-analysis.mapper.ts",
       "src/modules/ai-analysis/routine-analysis.repository.ts",
+      "src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts",
       "src/modules/ai-analysis/analyze-routine.use-case.ts",
       "src/modules/ai-analysis/index.ts",
       "src/infrastructure/rate-limiting/rate-limit.ts",
     ];
+    const routeSource = routeFiles
+      .map((filePath) => readFileSync(join(projectRoot, filePath), "utf8"))
+      .join("\n");
     const combinedSource = implementedFiles
       .map((filePath) => readFileSync(join(projectRoot, filePath), "utf8"))
       .join("\n");
+
+    expect(routeSource).not.toContain("@/infrastructure/ai");
 
     for (const forbiddenScope of [
       "openai",
       "OpenAI",
       "LLM",
-      "@/infrastructure/ai",
       "@/modules/products",
       "@/modules/ingredients",
       "@/modules/journals",

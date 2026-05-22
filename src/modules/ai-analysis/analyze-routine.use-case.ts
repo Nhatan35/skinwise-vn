@@ -1,8 +1,15 @@
+import {
+  getAIProvider,
+  type AIProviderRoutineAnalysisInput,
+  type AIProviderRoutineStepInput,
+} from "@/infrastructure/ai";
 import { analyzeRoutineSafety } from "@/domain/routine-safety";
 import type {
+  RoutineSafetyRiskLevel,
   RoutineSafetyRuleCode,
   RoutineSafetyRuleResult,
 } from "@/domain/routine-safety";
+import { mapAIProviderRoutineAnalysisToRoutineAnalysisResult } from "@/modules/ai-analysis/ai-provider-routine-analysis.mapper";
 import { ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER } from "@/modules/ai-analysis/routine-analysis.constants";
 import {
   createRoutineAnalysisForUser,
@@ -12,6 +19,8 @@ import {
   ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
   ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
   ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION,
+  ROUTINE_ANALYSIS_PROVIDER_PROMPT_VERSION,
+  type CreateRoutineAnalysisInput,
   type RoutineAnalysisResult,
   type RoutineAnalysisSuggestion,
   type RoutineAnalysisWarning,
@@ -33,6 +42,22 @@ type AnalyzeRoutineForCurrentUserInput = {
   routineId: string;
   currentUserId: string;
 };
+
+type RoutineAnalysisExecutionResult = Pick<
+  CreateRoutineAnalysisInput,
+  | "riskLevel"
+  | "aiResult"
+  | "aiStatus"
+  | "modelProvider"
+  | "modelName"
+  | "promptVersion"
+>;
+
+const RISK_LEVEL_RANK = {
+  low: 0,
+  medium: 1,
+  high: 2,
+} as const satisfies Record<RoutineSafetyRiskLevel, number>;
 
 const RULE_REASONS = {
   MISSING_SUNSCREEN_AM:
@@ -140,11 +165,45 @@ function buildDeterministicFallbackResult(
   };
 }
 
+function buildFallbackExecutionResult(
+  riskLevel: RoutineAnalysisResult["riskLevel"],
+  triggeredRules: RoutineSafetyRuleResult[],
+): RoutineAnalysisExecutionResult {
+  const aiResult = buildDeterministicFallbackResult(riskLevel, triggeredRules);
+
+  return {
+    riskLevel: aiResult.riskLevel,
+    aiResult,
+    aiStatus: "fallback_used",
+    modelProvider: ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
+    modelName: ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
+    promptVersion: ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION,
+  };
+}
+
 function buildRoutineSnapshot(routine: Routine) {
   return {
     name: routine.name,
     timeOfDay: routine.timeOfDay,
     steps: routine.steps.map((step) => ({ ...step })),
+  };
+}
+
+function buildAIProviderStepInput(
+  step: Routine["steps"][number],
+): AIProviderRoutineStepInput {
+  const productName = step.productNameSnapshot ?? step.customProductName;
+  const ingredients = [
+    ...(step.keyActivesSnapshot ?? []),
+    ...(step.ingredientTextSnapshot ? [step.ingredientTextSnapshot] : []),
+  ].filter((ingredient) => ingredient.trim().length > 0);
+
+  return {
+    stepOrder: step.order,
+    ...(productName ? { productName } : {}),
+    productCategory: step.category,
+    ...(ingredients.length > 0 ? { ingredients } : {}),
+    ...(step.instructions ? { instructions: step.instructions } : {}),
   };
 }
 
@@ -157,6 +216,135 @@ function buildSkinProfileContext(profile: SkinProfile | null) {
     skinType: profile.skinType,
     sensitivityLevel: profile.sensitivityLevel,
     experienceLevel: profile.experienceLevel,
+  };
+}
+
+function buildAIProviderSkinProfileContext(profile: SkinProfile | null) {
+  if (!profile) {
+    return undefined;
+  }
+
+  return {
+    skinType: profile.skinType,
+    sensitivityLevel: profile.sensitivityLevel,
+    concerns: [...profile.concerns],
+    experienceLevel: profile.experienceLevel,
+  };
+}
+
+function buildAIProviderRoutineInput(
+  routine: Routine,
+  skinProfile: SkinProfile | null,
+): AIProviderRoutineAnalysisInput {
+  const providerSkinProfile = buildAIProviderSkinProfileContext(skinProfile);
+
+  return {
+    routineId: routine._id.toString(),
+    routineName: routine.name,
+    timeOfDay: routine.timeOfDay,
+    steps: routine.steps.map(buildAIProviderStepInput),
+    ...(providerSkinProfile ? { skinProfile: providerSkinProfile } : {}),
+    locale: "vi-VN",
+  };
+}
+
+function maxRiskLevel(
+  firstRiskLevel: RoutineSafetyRiskLevel,
+  secondRiskLevel: RoutineSafetyRiskLevel,
+): RoutineSafetyRiskLevel {
+  return RISK_LEVEL_RANK[firstRiskLevel] >= RISK_LEVEL_RANK[secondRiskLevel]
+    ? firstRiskLevel
+    : secondRiskLevel;
+}
+
+function mergeWarnings(
+  deterministicWarnings: RoutineAnalysisWarning[],
+  providerWarnings: RoutineAnalysisWarning[],
+) {
+  const seenMessages = new Set<string>();
+  const mergedWarnings: RoutineAnalysisWarning[] = [];
+
+  for (const warning of [...deterministicWarnings, ...providerWarnings]) {
+    if (seenMessages.has(warning.message)) {
+      continue;
+    }
+
+    seenMessages.add(warning.message);
+    mergedWarnings.push({ ...warning });
+  }
+
+  return mergedWarnings;
+}
+
+function mergeSuggestions(
+  deterministicSuggestions: RoutineAnalysisSuggestion[],
+  providerSuggestions: RoutineAnalysisSuggestion[],
+) {
+  const seenDescriptions = new Set<string>();
+  const mergedSuggestions: RoutineAnalysisSuggestion[] = [];
+
+  for (const suggestion of [
+    ...deterministicSuggestions,
+    ...providerSuggestions,
+  ]) {
+    if (seenDescriptions.has(suggestion.description)) {
+      continue;
+    }
+
+    seenDescriptions.add(suggestion.description);
+    mergedSuggestions.push({ ...suggestion });
+  }
+
+  return mergedSuggestions;
+}
+
+function applyDeterministicSafetyGuard(
+  deterministicResult: RoutineAnalysisResult,
+  providerResult: RoutineAnalysisResult,
+): RoutineAnalysisResult {
+  const guardedRiskLevel = maxRiskLevel(
+    deterministicResult.riskLevel,
+    providerResult.riskLevel,
+  );
+
+  return {
+    ...providerResult,
+    riskLevel: guardedRiskLevel,
+    warnings: mergeWarnings(
+      deterministicResult.warnings,
+      providerResult.warnings,
+    ),
+    suggestions: mergeSuggestions(
+      deterministicResult.suggestions,
+      providerResult.suggestions,
+    ),
+    shouldSeeProfessional: guardedRiskLevel === "high",
+  };
+}
+
+async function buildProviderExecutionResult(
+  routine: Routine,
+  skinProfile: SkinProfile | null,
+  deterministicResult: RoutineAnalysisResult,
+): Promise<RoutineAnalysisExecutionResult> {
+  const provider = getAIProvider();
+  const providerResult = await provider.analyzeRoutine(
+    buildAIProviderRoutineInput(routine, skinProfile),
+  );
+  const mappedProviderResult =
+    mapAIProviderRoutineAnalysisToRoutineAnalysisResult(providerResult);
+  const aiResult = applyDeterministicSafetyGuard(
+    deterministicResult,
+    mappedProviderResult,
+  );
+
+  return {
+    riskLevel: aiResult.riskLevel,
+    aiResult,
+    aiStatus: "provider_used",
+    modelProvider: providerResult.providerMetadata.provider,
+    modelName: providerResult.providerMetadata.model,
+    promptVersion: ROUTINE_ANALYSIS_PROVIDER_PROMPT_VERSION,
   };
 }
 
@@ -181,20 +369,32 @@ export async function analyzeRoutineForCurrentUser(
     },
     skinProfile: buildSkinProfileContext(skinProfile),
   });
-  const aiResult = buildDeterministicFallbackResult(
+  const fallbackExecutionResult = buildFallbackExecutionResult(
     safetyResult.riskLevel,
     safetyResult.triggeredRules,
   );
+  let executionResult = fallbackExecutionResult;
+
+  try {
+    executionResult = await buildProviderExecutionResult(
+      routine,
+      skinProfile,
+      fallbackExecutionResult.aiResult,
+    );
+  } catch {
+    executionResult = fallbackExecutionResult;
+  }
+
   const analysis = await createRoutineAnalysisForUser(input.currentUserId, {
     routineId: routine._id,
     routineSnapshot: buildRoutineSnapshot(routine),
-    riskLevel: safetyResult.riskLevel,
+    riskLevel: executionResult.riskLevel,
     ruleResults: safetyResult.allRuleResults,
-    aiResult,
-    aiStatus: "fallback_used",
-    modelProvider: ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
-    modelName: ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
-    promptVersion: ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION,
+    aiResult: executionResult.aiResult,
+    aiStatus: executionResult.aiStatus,
+    modelProvider: executionResult.modelProvider,
+    modelName: executionResult.modelName,
+    promptVersion: executionResult.promptVersion,
   });
 
   return toRoutineAnalysisDto(analysis);

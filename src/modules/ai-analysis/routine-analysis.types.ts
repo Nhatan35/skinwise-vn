@@ -13,6 +13,8 @@ export const ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER = "deterministic";
 export const ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME = "routine-safety-engine";
 export const ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION =
   "routine-analysis-fallback-v1";
+export const ROUTINE_ANALYSIS_PROVIDER_PROMPT_VERSION =
+  "routine-analysis-provider-v1";
 
 export type RoutineAnalysisSuggestionPriority =
   | "must_fix"
@@ -41,7 +43,7 @@ export type RoutineAnalysisResult = {
   disclaimer: string;
 };
 
-export type RoutineAnalysisAiStatus = "fallback_used";
+export type RoutineAnalysisAiStatus = "provider_used" | "fallback_used";
 
 export type RoutineAnalysisSnapshot = {
   name: string;
@@ -57,9 +59,9 @@ export type RoutineAnalysisDocument = {
   ruleResults: RoutineSafetyRuleResult[];
   aiResult: RoutineAnalysisResult;
   aiStatus: RoutineAnalysisAiStatus;
-  modelProvider: typeof ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER;
-  modelName: typeof ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME;
-  promptVersion: typeof ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION;
+  modelProvider: string;
+  modelName: string;
+  promptVersion: string;
   createdAt: Date;
 };
 

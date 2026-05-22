@@ -4,6 +4,79 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-22 - TASK AI-005 Validated AI Provider Routine Analysis Wiring
+
+### Task
+
+Wire the validated AI provider into `analyzeRoutineForCurrentUser()` while preserving deterministic Routine Safety Engine guidance and safe fallback behavior.
+
+### Files Added
+
+```txt
+None
+```
+
+### Files Updated
+
+```txt
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/routine-analysis.types.ts
+tests/unit/routine-analysis-use-case.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+docs/06-ai-contract.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+TASK AI-005 required Routine Analysis to use the already validated provider flow and AI-004 mapper before saving routine analysis results, without implementing real OpenAI/Gemini providers, changing route handlers, changing the public DTO, or weakening deterministic fallback behavior.
+
+### Implementation Notes
+
+- `analyzeRoutineForCurrentUser()` still verifies routine ownership and runs the deterministic Routine Safety Engine first.
+- The use case now builds `AIProviderRoutineAnalysisInput` from the routine and optional Skin Profile context.
+- Provider-backed analysis is obtained only through `getAIProvider().analyzeRoutine(providerInput)`.
+- Provider output validation remains inside `ValidatedAIProvider`; the use case does not call `validateRoutineAnalysisOutput()`.
+- Provider output is mapped only through `mapAIProviderRoutineAnalysisToRoutineAnalysisResult()`.
+- Provider success persists `aiStatus = "provider_used"`.
+- Provider success persists provider-backed `modelProvider`, `modelName`, and `promptVersion = "routine-analysis-provider-v1"`.
+- Fallback persists `aiStatus = "fallback_used"` and the existing deterministic fallback model metadata.
+- The safety guard sets final stored `riskLevel` to `max(safetyResult.riskLevel, mappedProviderResult.riskLevel)` using `low < medium < high`.
+- The persisted `aiResult.riskLevel` uses the same safety-guarded final risk.
+- Provider lower risk does not trigger fallback; the provider-backed analysis still succeeds with the guarded higher risk.
+- Provider higher risk raises the final stored risk.
+- Provider success keeps deterministic safety warnings and suggestions and appends provider guidance when it is not an exact duplicate.
+- Provider construction, call, validation, mapping, or safety-guard errors fall back to deterministic analysis.
+- Repository persistence errors are outside the provider fallback boundary and still propagate.
+- `providerMetadata` and `educationalNotes` are not persisted inside `aiResult` and are not returned in `RoutineAnalysisDto`.
+- Raw provider errors and stack traces are not returned in the public DTO.
+- `RoutineAnalysisAiStatus` is now exactly `"provider_used" | "fallback_used"`.
+- `RoutineAnalysisDocument` model metadata fields now accept string provider-backed metadata.
+- No OpenAI provider was implemented.
+- No Gemini provider was implemented.
+- No external AI API call was added.
+- No AI key requirement was added.
+- No UI, API route handler, database schema, migration, dependency, Routine Safety Engine, `MockAIProvider`, `ValidatedAIProvider`, or Zod schema change was made.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 47 files, 465 tests
+```
+
+### Notes
+
+- `tests/unit/routine-analysis-use-case.test.ts` now covers provider success, provider construction/config failure, provider validation failure, unexpected provider failure, missing/inaccessible routines, safety-guarded max risk behavior, deterministic guidance preservation, repository persistence error propagation, provider/fallback metadata persistence, and public DTO metadata/error isolation.
+- `tests/unit/routine-analysis-api-contract.test.ts` now keeps route handlers free of AI infrastructure imports while allowing the use case and mapper to own the provider boundary.
+- Current provider-backed Routine Analysis uses the validated mock provider unless configuration selects an unsupported provider.
+- Continue only with the next explicitly scoped task after review; do not start AI-006 without a new task.
 
 ## 2026-05-22 - TASK AI-004 AI Provider Routine Analysis Contract Mapping
 

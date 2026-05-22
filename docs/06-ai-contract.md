@@ -140,6 +140,8 @@ Raw provider output
 => Provider-level validated output
 => AI provider routine analysis mapper
 => Product-facing RoutineAnalysisResult
+=> Routine Analysis use-case deterministic safety guard
+=> Stored and returned RoutineAnalysisResult
 ```
 
 Rules:
@@ -150,6 +152,15 @@ Rules:
 - Provider `recommendations` map to product-facing `suggestions`.
 - Provider output must pass through validation first, then mapping, before application use.
 - The mapper does not replace deterministic rule analysis and does not call external AI providers.
+- `analyzeRoutineForCurrentUser()` calls `getAIProvider().analyzeRoutine()` after the deterministic Routine Safety Engine runs.
+- Provider success persists `aiStatus = "provider_used"` and `promptVersion = "routine-analysis-provider-v1"`.
+- Fallback persists `aiStatus = "fallback_used"` with deterministic fallback metadata.
+- The final stored `riskLevel` is the maximum of the deterministic safety-engine risk and mapped provider risk using `low < medium < high`.
+- The persisted `aiResult.riskLevel` uses the same safety-guarded final risk.
+- Provider success preserves rule-based warnings and suggestions and appends provider guidance when it is not an exact duplicate.
+- Provider construction, call, validation, mapping, or safety-guard errors fall back to deterministic analysis without exposing raw provider errors.
+- Repository persistence errors are not treated as provider fallback errors.
+- OpenAI and Gemini providers remain unimplemented; current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
 ## 6. IngredientExplanationResult JSON schema
 

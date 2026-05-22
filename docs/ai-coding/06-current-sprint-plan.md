@@ -5,12 +5,12 @@ Last updated: 2026-05-22
 ## 1. Current sprint
 
 ```txt
-TASK AI-004 - Align AI provider output contract/mapping before any provider-backed Routine Analysis wiring
+TASK AI-005 - Wire Validated AI Provider into Routine Analysis Use Case with Safe Fallback
 ```
 
 ## 2. Sprint goal
 
-Add an explicit mapping boundary between validated provider-level routine analysis output and product-facing `RoutineAnalysisResult`, while keeping Routine Analysis API behavior deterministic fallback only and avoiding provider wiring, external AI calls, UI changes, and database changes.
+Use the existing validated AI provider flow and AI-004 mapper inside `analyzeRoutineForCurrentUser()` while preserving deterministic Routine Safety Engine guidance, applying a max-risk safety guard, and falling back to deterministic output when provider construction, calls, validation, mapping, or guard logic fails.
 
 ## 3. Completed before this sprint
 
@@ -18,20 +18,23 @@ Add an explicit mapping boundary between validated provider-level routine analys
 TASK AI-001 - AI Provider Abstraction completed
 TASK AI-002 - Structured Output Validation completed
 TASK AI-003 - Provider Flow Validation completed
+TASK AI-004 - Provider-to-product Routine Analysis Contract Mapping completed
 ```
 
-TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, `getAIProvider()`, and provider error classes. TASK AI-002 added strict Zod structured output schemas and validator functions for current `AIProvider` outputs. TASK AI-003 wrapped successfully constructed providers with `ValidatedAIProvider`. OpenAI and Gemini providers remain intentionally unimplemented.
+TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, `getAIProvider()`, and provider error classes. TASK AI-002 added strict Zod structured output schemas and validator functions for current `AIProvider` outputs. TASK AI-003 wrapped successfully constructed providers with `ValidatedAIProvider`. TASK AI-004 added the explicit provider-to-product Routine Analysis mapper. OpenAI and Gemini providers remain intentionally unimplemented.
 
 ## 4. Allowed tasks this sprint
 
 ```txt
-Add provider-to-product Routine Analysis mapper
-Map AIProviderRoutineAnalysisResult into RoutineAnalysisResult
-Move the existing Routine Analysis disclaimer to a shared constants file
-Keep deterministic fallback behavior unchanged
-Do not wire AIProvider into analyze-routine.use-case.ts
-Document the provider validation and mapping boundary
-Add focused unit tests for mapping behavior and metadata isolation
+Wire `getAIProvider().analyzeRoutine()` into `analyzeRoutineForCurrentUser()`
+Use `ValidatedAIProvider` output validation through the provider factory
+Use `mapAIProviderRoutineAnalysisToRoutineAnalysisResult()`
+Apply deterministic safety guard with `max(safety risk, provider risk)`
+Persist provider success as `aiStatus = "provider_used"`
+Persist provider failures as `aiStatus = "fallback_used"`
+Preserve deterministic rule warnings and suggestions on provider success
+Keep public RoutineAnalysisDto shape unchanged
+Add focused unit tests for success, fallback, safety guard, metadata isolation, and persistence error behavior
 Update AI coding context docs
 Run npm run typecheck, npm run lint, and npm run test
 ```
@@ -46,7 +49,7 @@ Real OpenAI provider implementation
 Real Gemini provider implementation
 AI key requirements
 New dependencies
-Routine Analysis API wiring or behavior changes
+Public RoutineAnalysisDto shape changes
 Ingredient Explanation API implementation
 UI or client component changes
 Database schema changes
@@ -55,6 +58,8 @@ Routine Safety Engine changes
 MockAIProvider output shape changes
 Validation logic inside MockAIProvider
 ValidatedAIProvider removal or weakening
+Direct calls to validateRoutineAnalysisOutput() from the use case
+Direct MockAIProvider instantiation from the use case
 Product UI pages
 Product submission
 Admin product management
@@ -68,21 +73,21 @@ Advanced dashboard analytics or charts
 ## 6. Sprint Definition of Done
 
 ```txt
-[x] TASK AI-004 - Align AI provider output contract/mapping before provider-backed Routine Analysis wiring is completed.
-[x] src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts exists.
-[x] src/modules/ai-analysis/routine-analysis.constants.ts exists.
-[x] mapAIProviderRoutineAnalysisToRoutineAnalysisResult maps AIProviderRoutineAnalysisResult to RoutineAnalysisResult.
-[x] provider.overallRiskLevel maps to result.riskLevel.
-[x] provider.summary maps to result.summary.
-[x] provider.warnings map to structured RoutineAnalysisWarning objects.
-[x] provider.recommendations map to structured RoutineAnalysisSuggestion objects.
-[x] suggestion priority is deterministic from risk level.
-[x] shouldSeeProfessional is true only for high risk.
-[x] providerMetadata is not exposed.
-[x] educationalNotes are not exposed.
-[x] The existing disclaimer text is shared through routine-analysis.constants.ts.
-[x] analyze-routine.use-case.ts imports the shared disclaimer only.
-[x] Deterministic fallback behavior is unchanged.
+[x] TASK AI-005 - Wire Validated AI Provider into Routine Analysis Use Case with Safe Fallback is completed.
+[x] `analyzeRoutineForCurrentUser()` obtains providers through `getAIProvider()`.
+[x] Provider routine analysis output is validated by `ValidatedAIProvider`.
+[x] Provider output is mapped through `mapAIProviderRoutineAnalysisToRoutineAnalysisResult()`.
+[x] Provider success persists `aiStatus = "provider_used"`.
+[x] Provider success persists `promptVersion = "routine-analysis-provider-v1"`.
+[x] Fallback persists `aiStatus = "fallback_used"` with existing deterministic metadata.
+[x] Final stored `riskLevel` is `max(safetyResult.riskLevel, mappedProviderResult.riskLevel)`.
+[x] Persisted `aiResult.riskLevel` uses the same safety-guarded final risk.
+[x] Deterministic rule warnings and suggestions remain in provider-backed `aiResult`.
+[x] Provider warnings and suggestions are appended as educational guidance without simple exact duplicates.
+[x] Provider metadata is not exposed in persisted `aiResult` or returned DTO.
+[x] Raw provider errors are not exposed in persisted `aiResult` or returned DTO.
+[x] Repository persistence errors are not swallowed as provider fallback.
+[x] Public RoutineAnalysisDto shape is unchanged.
 [x] No external AI provider was called.
 [x] No OpenAI call was added.
 [x] No Gemini call was added.
@@ -94,24 +99,23 @@ Advanced dashboard analytics or charts
 [x] OpenAI provider was not implemented.
 [x] Gemini provider was not implemented.
 [x] Ingredient Explanation API was not implemented.
-[x] Routine Analysis API behavior was not changed.
 [x] MockAIProvider output shape was not changed.
 [x] npm run typecheck passed.
 [x] npm run lint passed.
-[x] npm run test passed - 47 files, 456 tests.
+[x] npm run test passed - 47 files, 465 tests.
 ```
 
 ## 7. Known follow-up
 
 ```txt
-docs/06-ai-contract.md differs from src/infrastructure/ai/ai-provider.ts.
-TASK AI-002 and TASK AI-003 intentionally validate the current ai-provider.ts output shape exactly.
-TASK AI-004 adds explicit routine analysis mapping for riskLevel vs overallRiskLevel and suggestions vs recommendations before provider-backed Routine Analysis wiring.
-Ingredient explanation and safety-classifier contract alignment remain future work.
+OpenAI and Gemini providers remain intentionally unsupported and throw configuration errors.
+Current provider-backed Routine Analysis uses the validated mock provider unless configuration selects an unsupported provider.
+Provider failures fall back to deterministic Routine Safety Engine output, but repository persistence errors still propagate.
+Ingredient explanation and safety-classifier use-case integration remain future work.
 ```
 
 ## 8. Recommended next task
 
 ```txt
-TASK AI-005 - Wire Validated AI Provider into Routine Analysis Use Case with Safe Fallback
+Continue only with the next explicitly scoped task after TASK AI-005 review. Do not start AI-006 without a new task.
 ```
