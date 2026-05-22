@@ -704,7 +704,60 @@ Notes:
 - `DELETE /api/routine-logs/:id` is not implemented for RL-001.
 - RoutineLog UI is implemented on the existing /routines page by TASK RL-002.
 
-## 9. Skin Journal
+
+## 9. Dashboard
+
+### GET /api/dashboard?localDate=YYYY-MM-DD
+
+Returns the authenticated user's MVP dashboard summary for the requested browser/user local date.
+
+Authentication and ownership:
+
+- Authentication is required.
+- `userId` is derived from the authenticated session through `getCurrentUser()`.
+- The client must not send `userId` in the query string or request body.
+- The route supports `GET` only.
+
+Query parameters:
+
+| Field | Required | Format | Notes |
+|---|---:|---|---|
+| `localDate` | Yes | `YYYY-MM-DD` | Browser/user local date used for today's RoutineLog summary |
+
+Validation:
+
+- `localDate` is required.
+- `localDate` must use `YYYY-MM-DD` format.
+- Unknown query fields must be rejected.
+- Client-owned `userId` input must be rejected if passed as an unknown query field.
+
+Successful response:
+
+```json
+{
+  "data": {
+    "dashboard": {}
+  },
+  "error": null
+}
+```
+
+Response safety:
+
+- Must not expose `userId`.
+- Must not expose `_id`.
+- Must not expose raw `ObjectId` values.
+- Must not expose MongoDB internals.
+
+Expected errors:
+
+| Status | Code | Reason |
+|---:|---|---|
+| 401 | `UNAUTHORIZED` | User is not authenticated |
+| 400 | `VALIDATION_ERROR` | `localDate` is missing, invalid, or unknown query fields are passed |
+| 500 | `INTERNAL_ERROR` | Unexpected server error |
+
+## 10. Skin Journal
 
 ### POST /api/skin-journal
 

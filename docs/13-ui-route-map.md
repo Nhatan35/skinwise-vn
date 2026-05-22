@@ -16,39 +16,60 @@ AI coding assistants must use this file before creating new pages or route group
 - Protected app routes belong under `src/app/(dashboard)/`.
 - Auth-related pages belong under `src/app/(auth)/`.
 - API route handlers must follow `docs/05-api-contract.md`.
+- Do not mark routes as implemented unless matching source files exist.
 
 ## 3. Public routes
 
-| Route | Purpose | MVP | Notes |
-|---|---|---:|---|
-| `/` | Landing page explaining SkinWise VN | Yes | Must not claim medical diagnosis |
-| `/login` | Login page | Yes | Auth.js provider entry |
-| `/privacy` | Privacy explanation | Recommended | Can be static initially |
-| `/terms` | Terms/disclaimer | Recommended | Can be static initially |
+| Route | Purpose | Current source status | Notes |
+|---|---|---|---|
+| `/` | Landing page explaining SkinWise VN | Implemented basic route | Must not claim medical diagnosis |
+| `/login` | Login page | Not implemented as a dedicated page | Auth.js provider entry exists through `/api/auth/*` |
+| `/privacy` | Privacy explanation | Not implemented | Static page may be added only when scheduled |
+| `/terms` | Terms/disclaimer | Not implemented | Static page may be added only when scheduled |
 
 ## 4. Protected dashboard routes
 
-| Route | Purpose | MVP | API dependency | Notes |
-|---|---|---:|---|---|
-| `/dashboard` | Overview of routine, journal, safety status | Yes | multiple later | Week 1 shell only |
-| `/onboarding/skin-profile` | Create/update skin profile | Yes | `/api/skin-profile` | Should redirect if already completed later |
-| `/skin-profile` | View/edit profile | Yes | `/api/skin-profile` | May reuse onboarding form |
-| `/products` | Search/list products | Yes | `/api/products` | Auth required in MVP |
-| `/products/new` | Submit product | Yes | `POST /api/products` | User cannot set verification status |
-| `/products/[id]` | Product detail | Yes | `/api/products/:id` | Visibility rules apply |
-| `/ingredients` | Search ingredients | Yes | `/api/ingredients` | Auth required |
-| `/ingredients/[id]` | Ingredient detail | Yes | `/api/ingredients/:id` | Educational content only |
-| `/routines` | Routine list | Yes | `/api/routines` | Must show empty state |
-| `/routines/new` | Create routine | Yes | `POST /api/routines` | Morning/evening routine builder |
-| `/routines/[id]` | Routine detail | Yes | `/api/routines/:id` | Ownership required |
-| `/routines/[id]/analysis` | Routine analysis result/history | Yes | `/api/routines/:id/analyze`, `/api/routines/:id/analyses` | Rule engine before AI |
-| `/routine-logs/today` | Today's routine checklist | Yes | `/api/routine-logs` | Uses upsert behavior |
-| `/journal` | Skin journal timeline | Yes | `/api/skin-journal` | Privacy-first |
-| `/journal/new` | Create journal entry | Yes | `POST /api/skin-journal` | One entry per localDate |
-| `/journal/[id]` | View/edit journal entry | Yes | `/api/skin-journal/:id` | Ownership required |
-| `/settings` | App/account settings | Optional | auth/profile later | Do not overbuild in Week 1 |
+| Route | Purpose | Current source status | API dependency | Notes |
+|---|---|---|---|---|
+| `/dashboard` | Authenticated dashboard overview for Skin Profile, routines, today's routine log status, latest routine analysis, and next actions | Implemented | `GET /api/dashboard?localDate=YYYY-MM-DD` | Renders `DashboardOverview`; data-driven dashboard route |
+| `/onboarding/skin-profile` | First-time Skin Profile onboarding | Implemented | `/api/skin-profile` | Protected route; remains available for onboarding empty-state CTA |
+| `/skin-profile` | View/edit Skin Profile | Implemented | `/api/skin-profile` | Loads profile through GET and updates through PATCH |
+| `/routines` | Routine list/create/edit/delete, Product Picker, Routine Analysis panel, and today's RoutineLog controls | Implemented | `/api/routines`, `/api/products`, `/api/routines/:id/analyze`, `/api/routines/:id/analyses`, `/api/routine-logs` | Existing single protected routines page only |
+| `/products` | Product UI search/list page | Not implemented | `GET /api/products` exists | Do not create unless Product UI task is scheduled |
+| `/products/new` | Product submission page | Not implemented | `POST /api/products` not implemented | Do not mark as implemented |
+| `/products/[id]` | Product detail UI page | Not implemented | `GET /api/products/:id` exists | Do not create unless Product UI task is scheduled |
+| `/ingredients` | Ingredient UI search/list page | Not implemented | `GET /api/ingredients` exists | Do not create unless Ingredient UI task is scheduled |
+| `/ingredients/[id]` | Ingredient detail UI page | Not implemented | `GET /api/ingredients/:id` exists | Educational content only when implemented |
+| `/routines/new` | Separate routine creation page | Not implemented | `POST /api/routines` exists | Existing `/routines` page owns create/edit UI |
+| `/routines/[id]` | Separate routine detail page | Not implemented | `/api/routines/:id` exists | Existing `/routines` page owns routine UI |
+| `/routines/[id]/analysis` | Separate routine analysis page | Not implemented | `/api/routines/:id/analyze`, `/api/routines/:id/analyses` exist | Existing `/routines` page owns analysis panel |
+| `/routine-logs/today` | Separate routine log checklist page | Not implemented | `/api/routine-logs` exists | Existing `/routines` page owns RoutineLog UI controls |
+| `/journal` | Skin journal timeline | Not implemented | `/api/skin-journal` not implemented | Do not create until SkinJournal task is scheduled |
+| `/journal/new` | Create journal entry | Not implemented | `POST /api/skin-journal` not implemented | Do not create until SkinJournal task is scheduled |
+| `/journal/[id]` | View/edit journal entry | Not implemented | `/api/skin-journal/:id` not implemented | Do not create until SkinJournal task is scheduled |
+| `/settings` | App/account settings | Not implemented | Auth/profile later | Optional; do not overbuild |
 
-## 5. Post-MVP routes not allowed during Week 1
+### `/dashboard` implementation note
+
+`/dashboard` renders `DashboardOverview` from `src/modules/dashboard/components/dashboard-overview.tsx`.
+
+`DashboardOverview` fetches:
+
+```txt
+GET /api/dashboard?localDate=YYYY-MM-DD
+```
+
+The page displays:
+
+- skin profile summary;
+- routine completion summary;
+- today's routine log status;
+- latest routine analysis summary;
+- next suggested actions.
+
+It must not display fake Product UI, Journal, skin score, image upload, diagnosis, marketplace, or medical recommendation features.
+
+## 5. Post-MVP routes not allowed during current implementation
 
 Do not create:
 
@@ -66,33 +87,33 @@ Do not create:
 
 Admin routes may be added later only when the admin review workflow is explicitly scheduled.
 
-## 6. Week 1 UI target
+## 6. Current implemented UI target
 
-Week 1 should create only:
+Current implemented user-facing routes are:
 
 ```txt
 /
-/login
 /dashboard
+/onboarding/skin-profile
+/skin-profile
+/routines
 ```
 
-Optional placeholders may be linked from dashboard, but they should clearly say the feature is not implemented yet.
+The `/dashboard` page is now data-driven through `DashboardOverview`. Product UI pages, Ingredient UI pages, Journal routes, skin score, image upload, diagnosis, marketplace, and admin routes are not implemented.
 
 ## 7. Navigation groups
 
-Recommended dashboard navigation:
+Current dashboard navigation enables:
 
 ```txt
 Dashboard
 Skin Profile
 Routines
-Today Log
-Journal
-Products
-Ingredients
 ```
 
-Do not include marketplace, community, image analysis, or skin scoring links.
+Disabled or future navigation metadata may exist for unimplemented feature areas, but unimplemented items must use `href: null` and `disabled: true`.
+
+Do not include marketplace, community, image analysis, skin scoring, medical diagnosis, or Product submission links.
 
 ## 8. UX copy requirements
 
