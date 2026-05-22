@@ -468,11 +468,14 @@ src/modules/ai-analysis/routine-analysis.schema.ts
 src/modules/ai-analysis/routine-analysis.dto.ts
 src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/routine-analysis.constants.ts
+src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
 src/app/api/routines/[id]/analyze/route.ts
 src/app/api/routines/[id]/analyses/route.ts
 src/infrastructure/rate-limiting/rate-limit.ts
+tests/unit/ai-provider-routine-analysis-mapper.test.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
@@ -493,6 +496,9 @@ Rules:
 - derive top-level `riskLevel` from the Routine Safety Engine;
 - public DTOs expose triggered warnings only and must not expose `_id`, `userId`, or internal `ruleResults`;
 - fallback content uses deterministic metadata only: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
+- `routine-analysis.constants.ts` owns shared Routine Analysis constants such as the educational disclaimer;
+- `ai-provider-routine-analysis.mapper.ts` owns the pure mapping from validated `AIProviderRoutineAnalysisResult` to product-facing `RoutineAnalysisResult`;
+- provider-to-product mapping must not expose `providerMetadata` or `educationalNotes`;
 - `POST /api/routines/[id]/analyze` must check `routine_analysis:${userId}` after authentication and request validation, before calling `analyzeRoutineForCurrentUser()`;
 - unauthenticated requests must return the existing `UNAUTHORIZED` response and must not call the rate limiter;
 - rate-limited requests must return `RATE_LIMITED` with HTTP 429, `Retry-After`, and must not call the use case;
@@ -508,16 +514,19 @@ src/modules/ai-analysis/routine-analysis.schema.ts
 src/modules/ai-analysis/routine-analysis.dto.ts
 src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/routine-analysis.constants.ts
+src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
 src/infrastructure/rate-limiting/rate-limit.ts
+tests/unit/ai-provider-routine-analysis-mapper.test.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
 tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction but did not wire it into Routine Analysis API behavior. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction but did not wire it into Routine Analysis API behavior. TASK AI-004 added the provider-to-product Routine Analysis mapper and shared disclaimer constant. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
 
 ## 10. RoutineLog ownership
 

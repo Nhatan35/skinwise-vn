@@ -2,6 +2,7 @@ export {
   analyzeRoutineForCurrentUser,
   listRoutineAnalysesForCurrentUser,
 } from "./analyze-routine.use-case";
+export { mapAIProviderRoutineAnalysisToRoutineAnalysisResult } from "./ai-provider-routine-analysis.mapper";
 export { findLatestRoutineAnalysisByUserId } from "./routine-analysis.repository";
 export { parseAnalyzeRoutineRequestText } from "./routine-analysis.schema";
 export {

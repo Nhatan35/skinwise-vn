@@ -104,6 +104,53 @@ Internally, the use case may call `AIAnalysisService`, but public API routes sho
 }
 ```
 
+### 5.1 Provider-to-product routine analysis boundary
+
+The AI provider routine analysis output is an internal provider-level contract. It is validated before use, then mapped into the product-facing `RoutineAnalysisResult` contract above.
+
+Provider-level validated output currently uses:
+
+```txt
+AIProviderRoutineAnalysisResult
+- overallRiskLevel
+- summary
+- warnings
+- recommendations
+- educationalNotes
+- providerMetadata
+```
+
+Product-facing Routine Analysis uses:
+
+```txt
+RoutineAnalysisResult
+- riskLevel
+- summary
+- warnings
+- suggestions
+- shouldSeeProfessional
+- disclaimer
+```
+
+The boundary flow is:
+
+```txt
+Raw provider output
+=> ValidatedAIProvider
+=> Provider-level validated output
+=> AI provider routine analysis mapper
+=> Product-facing RoutineAnalysisResult
+```
+
+Rules:
+
+- `providerMetadata` is internal and must not be exposed in the public Routine Analysis API response.
+- `educationalNotes` are intentionally not exposed in `RoutineAnalysisResult` for now.
+- Provider `overallRiskLevel` maps to product-facing `riskLevel`.
+- Provider `recommendations` map to product-facing `suggestions`.
+- Provider output must pass through validation first, then mapping, before application use.
+- The mapper does not replace deterministic rule analysis and does not call external AI providers.
+
 ## 6. IngredientExplanationResult JSON schema
 
 ```json

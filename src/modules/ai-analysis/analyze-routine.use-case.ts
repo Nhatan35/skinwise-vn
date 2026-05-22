@@ -3,6 +3,7 @@ import type {
   RoutineSafetyRuleCode,
   RoutineSafetyRuleResult,
 } from "@/domain/routine-safety";
+import { ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER } from "@/modules/ai-analysis/routine-analysis.constants";
 import {
   createRoutineAnalysisForUser,
   listRoutineAnalysesByRoutineIdAndUserId,
@@ -32,9 +33,6 @@ type AnalyzeRoutineForCurrentUserInput = {
   routineId: string;
   currentUserId: string;
 };
-
-const EDUCATIONAL_DISCLAIMER =
-  "Thong tin nay chi mang tinh giao duc ve my pham va khong thay the tu van y te.";
 
 const RULE_REASONS = {
   MISSING_SUNSCREEN_AM:
@@ -138,7 +136,7 @@ function buildDeterministicFallbackResult(
     warnings: triggeredRules.map(toWarning),
     suggestions: triggeredRules.map(toSuggestion),
     shouldSeeProfessional: false,
-    disclaimer: EDUCATIONAL_DISCLAIMER,
+    disclaimer: ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER,
   };
 }
 

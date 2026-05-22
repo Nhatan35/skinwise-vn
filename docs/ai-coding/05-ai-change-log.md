@@ -5,6 +5,73 @@
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
 
+## 2026-05-22 - TASK AI-004 AI Provider Routine Analysis Contract Mapping
+
+### Task
+
+Add an explicit mapper between validated provider-level routine analysis output and the product-facing `RoutineAnalysisResult` contract before any future provider-backed Routine Analysis wiring.
+
+### Files Added
+
+```txt
+src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
+src/modules/ai-analysis/routine-analysis.constants.ts
+tests/unit/ai-provider-routine-analysis-mapper.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/index.ts
+docs/06-ai-contract.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+The provider-level routine analysis output uses `overallRiskLevel`, string warnings, string recommendations, `educationalNotes`, and `providerMetadata`, while the product-facing Routine Analysis module uses `riskLevel`, structured warnings, structured suggestions, `shouldSeeProfessional`, and `disclaimer`. TASK AI-004 makes that boundary explicit before TASK AI-005 can wire provider-backed routine analysis safely.
+
+### Implementation Notes
+
+- Added `mapAIProviderRoutineAnalysisToRoutineAnalysisResult`.
+- The mapper accepts `AIProviderRoutineAnalysisResult` and returns `RoutineAnalysisResult`.
+- The mapper is pure and deterministic.
+- The mapper does not call `validateRoutineAnalysisOutput()` because validation belongs to `ValidatedAIProvider`.
+- Provider `overallRiskLevel` maps to product-facing `riskLevel`.
+- Provider `summary` maps to product-facing `summary`.
+- Provider warning strings map to structured `RoutineAnalysisWarning` objects with `code = "AI_PROVIDER_WARNING"`.
+- Provider recommendations map to structured `RoutineAnalysisSuggestion` objects with deterministic priority from risk level.
+- `shouldSeeProfessional` is true only for high risk.
+- `providerMetadata` is not exposed in `RoutineAnalysisResult`.
+- `educationalNotes` are not exposed in `RoutineAnalysisResult`.
+- Moved the existing Routine Analysis disclaimer string into `routine-analysis.constants.ts`.
+- `analyze-routine.use-case.ts` now imports the shared disclaimer constant; deterministic fallback behavior is unchanged.
+- No OpenAI provider was implemented.
+- No Gemini provider was implemented.
+- No external AI API call was added.
+- No AI key requirement was added.
+- No Routine Analysis API provider wiring was added.
+- No UI, route behavior, database schema, migration, dependency, or Routine Safety Engine change was made.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 47 files, 456 tests
+```
+
+### Notes
+
+- `tests/unit/ai-provider-routine-analysis-mapper.test.ts` covers risk, summary, warning, recommendation, priority, empty arrays, metadata isolation, educational note isolation, disclaimer, professional-help flag, and input immutability.
+- The recommended next task is TASK AI-005 - Wire Validated AI Provider into Routine Analysis Use Case with Safe Fallback.
+
 ## 2026-05-22 - TASK AI-003 Provider Flow Validation
 
 ### Task

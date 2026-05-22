@@ -10,11 +10,11 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **TASK AI-003 Provider Flow Validation implemented**.
+Current package state: **TASK AI-004 AI Provider Routine Analysis Contract Mapping implemented**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard route group, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API foundation, protected `/routines` UI foundation, deterministic Routine Safety Engine, Routine Analysis API foundation, Routine Analysis UI panel, and MongoDB-backed per-user rate limiting for routine analysis. TASK PI-001 added authenticated read-only Product and Ingredient API foundations with strict query validation, DTO mappers, repositories, use cases, and API contract tests. TASK PP-001 integrated the Product Picker into the existing Routine Builder and added server-side Routine Product Snapshot population for selected visible products. TASK RL-001 implemented the RoutineLog backend foundation, and TASK RL-002 integrated RoutineLog UI controls into the existing `/routines` page. TASK DB-001 replaced the placeholder dashboard with a real authenticated dashboard that renders `DashboardOverview` and fetches `GET /api/dashboard?localDate=YYYY-MM-DD` to summarize Skin Profile setup, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next suggested actions. TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, provider factory, and AI provider error classes. OpenAI and Gemini providers are intentionally not implemented yet.
 
-TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. The Routine Analysis API remains deterministic fallback only and is not wired to call the AI provider abstraction yet.
+TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. The Routine Analysis API remains deterministic fallback only and is not wired to call the AI provider abstraction yet.
 
 Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, Ingredient explanation AI API, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
 
@@ -256,11 +256,13 @@ src/modules/ai-analysis/routine-analysis.schema.ts
 src/modules/ai-analysis/routine-analysis.dto.ts
 src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
+src/modules/ai-analysis/routine-analysis.constants.ts
+src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
 ```
 
-`routine-analysis.schema.ts` owns strict empty-body validation for `POST /api/routines/[id]/analyze`. `routine-analysis.repository.ts` imports `server-only`, uses `getRoutineAnalysesCollection()`, creates RoutineAnalysis documents for the authenticated user, and lists analysis history by `userId + routineId` newest first. `analyze-routine.use-case.ts` verifies routine ownership through the Routine repository, optionally loads Skin Profile context, runs the deterministic Routine Safety Engine, stores all rule results including non-triggered rules, builds deterministic fallback warnings and suggestions, and persists deterministic metadata only. `routine-analysis.mapper.ts` converts MongoDB ids and Dates to public strings and omits `userId`, `_id`, and internal `ruleResults`. This foundation is not wired to the AI provider abstraction yet and does not import OpenAI, Gemini, external APIs, Product/Ingredient modules, UI components, or dashboard modules.
+`routine-analysis.schema.ts` owns strict empty-body validation for `POST /api/routines/[id]/analyze`. `routine-analysis.repository.ts` imports `server-only`, uses `getRoutineAnalysesCollection()`, creates RoutineAnalysis documents for the authenticated user, and lists analysis history by `userId + routineId` newest first. `routine-analysis.constants.ts` owns shared Routine Analysis constants such as the educational disclaimer. `ai-provider-routine-analysis.mapper.ts` owns the pure provider-to-product mapping from validated `AIProviderRoutineAnalysisResult` into `RoutineAnalysisResult`, without exposing `providerMetadata` or `educationalNotes`. `analyze-routine.use-case.ts` verifies routine ownership through the Routine repository, optionally loads Skin Profile context, runs the deterministic Routine Safety Engine, stores all rule results including non-triggered rules, builds deterministic fallback warnings and suggestions, and persists deterministic metadata only. `routine-analysis.mapper.ts` converts MongoDB ids and Dates to public strings and omits `userId`, `_id`, and internal `ruleResults`. This foundation is not wired to the AI provider abstraction yet and does not import OpenAI, Gemini, external APIs, Product/Ingredient modules, UI components, or dashboard modules.
 
 
 Current implemented routine-log files:
@@ -507,6 +509,7 @@ tests/unit/routine-api-contract.test.ts
 tests/unit/routine-builder-ui.test.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
+tests/unit/ai-provider-routine-analysis-mapper.test.ts
 tests/unit/routine-analysis-ui.test.ts
 tests/unit/routine-analysis-use-case.test.ts
 tests/unit/routine-safety-engine.test.ts

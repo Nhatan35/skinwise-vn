@@ -5,31 +5,33 @@ Last updated: 2026-05-22
 ## 1. Current sprint
 
 ```txt
-TASK AI-003 - Integrate AI Output Validation into Provider Flow
+TASK AI-004 - Align AI provider output contract/mapping before any provider-backed Routine Analysis wiring
 ```
 
 ## 2. Sprint goal
 
-Integrate existing AI output validators into the provider flow by wrapping successfully constructed providers with `ValidatedAIProvider`, while keeping provider output shape unchanged and avoiding external AI calls, UI changes, database changes, and Routine Analysis API wiring.
+Add an explicit mapping boundary between validated provider-level routine analysis output and product-facing `RoutineAnalysisResult`, while keeping Routine Analysis API behavior deterministic fallback only and avoiding provider wiring, external AI calls, UI changes, and database changes.
 
 ## 3. Completed before this sprint
 
 ```txt
 TASK AI-001 - AI Provider Abstraction completed
 TASK AI-002 - Structured Output Validation completed
+TASK AI-003 - Provider Flow Validation completed
 ```
 
-TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, `getAIProvider()`, and provider error classes. TASK AI-002 added strict Zod structured output schemas and validator functions for current `AIProvider` outputs. OpenAI and Gemini providers remain intentionally unimplemented.
+TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, `getAIProvider()`, and provider error classes. TASK AI-002 added strict Zod structured output schemas and validator functions for current `AIProvider` outputs. TASK AI-003 wrapped successfully constructed providers with `ValidatedAIProvider`. OpenAI and Gemini providers remain intentionally unimplemented.
 
 ## 4. Allowed tasks this sprint
 
 ```txt
-Add ValidatedAIProvider as an AIProvider wrapper/decorator
-Call the inner provider once per method and validate returned output
-Let AIProviderResponseError propagate from existing validators
-Wrap successful getAIProvider() raw providers with ValidatedAIProvider
-Export ValidatedAIProvider from src/infrastructure/ai/index.ts
-Add focused unit tests for valid output, invalid output, factory wrapping, and MockAIProvider compatibility
+Add provider-to-product Routine Analysis mapper
+Map AIProviderRoutineAnalysisResult into RoutineAnalysisResult
+Move the existing Routine Analysis disclaimer to a shared constants file
+Keep deterministic fallback behavior unchanged
+Do not wire AIProvider into analyze-routine.use-case.ts
+Document the provider validation and mapping boundary
+Add focused unit tests for mapping behavior and metadata isolation
 Update AI coding context docs
 Run npm run typecheck, npm run lint, and npm run test
 ```
@@ -48,9 +50,11 @@ Routine Analysis API wiring or behavior changes
 Ingredient Explanation API implementation
 UI or client component changes
 Database schema changes
+Migrations
 Routine Safety Engine changes
 MockAIProvider output shape changes
 Validation logic inside MockAIProvider
+ValidatedAIProvider removal or weakening
 Product UI pages
 Product submission
 Admin product management
@@ -64,21 +68,21 @@ Advanced dashboard analytics or charts
 ## 6. Sprint Definition of Done
 
 ```txt
-[x] TASK AI-003 - Integrate AI Output Validation into Provider Flow is completed.
-[x] src/infrastructure/ai/validated-ai-provider.ts exists.
-[x] ValidatedAIProvider implements AIProvider.
-[x] ValidatedAIProvider accepts an inner AIProvider through its constructor.
-[x] analyzeRoutine() validates output with validateRoutineAnalysisOutput().
-[x] explainIngredient() validates output with validateIngredientExplanationOutput().
-[x] classifySafety() validates output with validateSafetyClassifierOutput().
-[x] Invalid provider output throws AIProviderResponseError from the existing validators.
-[x] AIProviderResponseError is not swallowed or converted to a generic Error.
-[x] getAIProvider() builds a raw provider first and wraps successful providers with ValidatedAIProvider.
-[x] Missing, empty, or mock AI_PROVIDER returns ValidatedAIProvider around MockAIProvider.
-[x] OpenAI and Gemini unsupported-provider behavior remains unchanged.
-[x] src/infrastructure/ai/index.ts exports ValidatedAIProvider.
-[x] tests/unit/validated-ai-provider.test.ts covers valid and invalid outputs for all provider methods.
-[x] tests/unit/ai-provider.test.ts expects getAIProvider() to return ValidatedAIProvider in mock mode.
+[x] TASK AI-004 - Align AI provider output contract/mapping before provider-backed Routine Analysis wiring is completed.
+[x] src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts exists.
+[x] src/modules/ai-analysis/routine-analysis.constants.ts exists.
+[x] mapAIProviderRoutineAnalysisToRoutineAnalysisResult maps AIProviderRoutineAnalysisResult to RoutineAnalysisResult.
+[x] provider.overallRiskLevel maps to result.riskLevel.
+[x] provider.summary maps to result.summary.
+[x] provider.warnings map to structured RoutineAnalysisWarning objects.
+[x] provider.recommendations map to structured RoutineAnalysisSuggestion objects.
+[x] suggestion priority is deterministic from risk level.
+[x] shouldSeeProfessional is true only for high risk.
+[x] providerMetadata is not exposed.
+[x] educationalNotes are not exposed.
+[x] The existing disclaimer text is shared through routine-analysis.constants.ts.
+[x] analyze-routine.use-case.ts imports the shared disclaimer only.
+[x] Deterministic fallback behavior is unchanged.
 [x] No external AI provider was called.
 [x] No OpenAI call was added.
 [x] No Gemini call was added.
@@ -86,6 +90,7 @@ Advanced dashboard analytics or charts
 [x] No new dependency was added.
 [x] UI was not changed.
 [x] Database schema was not changed.
+[x] No migration was created.
 [x] OpenAI provider was not implemented.
 [x] Gemini provider was not implemented.
 [x] Ingredient Explanation API was not implemented.
@@ -93,7 +98,7 @@ Advanced dashboard analytics or charts
 [x] MockAIProvider output shape was not changed.
 [x] npm run typecheck passed.
 [x] npm run lint passed.
-[x] npm run test passed - 46 files, 444 tests.
+[x] npm run test passed - 47 files, 456 tests.
 ```
 
 ## 7. Known follow-up
@@ -101,11 +106,12 @@ Advanced dashboard analytics or charts
 ```txt
 docs/06-ai-contract.md differs from src/infrastructure/ai/ai-provider.ts.
 TASK AI-002 and TASK AI-003 intentionally validate the current ai-provider.ts output shape exactly.
-It does not reconcile riskLevel vs overallRiskLevel, suggestions vs recommendations, simpleExplanation vs shortExplanation, shouldBlockAIAnswer vs isAllowed, or docs schemas missing providerMetadata.
+TASK AI-004 adds explicit routine analysis mapping for riskLevel vs overallRiskLevel and suggestions vs recommendations before provider-backed Routine Analysis wiring.
+Ingredient explanation and safety-classifier contract alignment remain future work.
 ```
 
 ## 8. Recommended next task
 
 ```txt
-TASK AI-004 - Align AI provider output contract/mapping before any provider-backed Routine Analysis wiring
+TASK AI-005 - Wire Validated AI Provider into Routine Analysis Use Case with Safe Fallback
 ```
