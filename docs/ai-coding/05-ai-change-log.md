@@ -5,6 +5,86 @@
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
 
+## 2026-05-22 - TASK AI-002 Structured Output Validation
+
+### Task
+
+Add strict Zod validation for structured AI provider outputs before later tasks use provider responses in application flows.
+
+### Files Added
+
+```txt
+src/infrastructure/ai/ai-output.schema.ts
+src/infrastructure/ai/ai-output.validator.ts
+tests/unit/ai-output-validation.test.ts
+```
+
+### Files Updated
+
+```txt
+src/infrastructure/ai/index.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+TASK AI-002 required a validation layer for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts` before future provider-flow integration.
+
+### Implementation Notes
+
+- Added `aiProviderMetadataSchema`.
+- Added `aiProviderRoutineAnalysisResultSchema`.
+- Added `aiProviderIngredientExplanationResultSchema`.
+- Added `aiProviderSafetyClassifierResultSchema`.
+- All output object schemas use strict Zod validation and reject unknown extra fields.
+- Required fields are required, enum values match the current `ai-provider.ts` types, strings have max length limits, arrays have max item limits, and `providerMetadata.generatedAt` must be an ISO datetime string.
+- Added `validateRoutineAnalysisOutput`, `validateIngredientExplanationOutput`, and `validateSafetyClassifierOutput`.
+- Invalid AI output throws `AIProviderResponseError` with a short Zod issue summary containing issue path and issue message.
+- Exported the new schemas and validators from `src/infrastructure/ai/index.ts`.
+- Added unit tests for valid output, missing required fields, invalid enum values, maxLength violations, maxItems violations, unknown extra fields, invalid `providerMetadata`, error behavior, and MockAIProvider compatibility.
+- No external AI provider was called.
+- No OpenAI call was added.
+- No Gemini call was added.
+- No API key was added.
+- No new dependency was added.
+- UI was not changed.
+- Database schema was not changed.
+- OpenAI provider was not implemented.
+- Gemini provider was not implemented.
+- Ingredient Explanation API was not implemented.
+- AI Provider validation was not wired into Routine Analysis API in this task.
+- MockAIProvider output shape was not changed.
+
+### Known Contract Mismatch / Follow-up
+
+`docs/06-ai-contract.md` differs from `src/infrastructure/ai/ai-provider.ts`. TASK AI-002 intentionally validates the current `ai-provider.ts` output shape exactly and does not reconcile:
+
+- `riskLevel` vs `overallRiskLevel`;
+- `suggestions` vs `recommendations`;
+- `simpleExplanation` vs `shortExplanation`;
+- `shouldBlockAIAnswer` vs `isAllowed`;
+- docs schemas missing `providerMetadata`.
+
+A later TASK AI-003 should integrate output validation into provider flow. A separate explicit contract-alignment task should decide whether to update docs, change provider types, or introduce mapping between provider outputs and product-facing AI DTOs.
+
+### Tests
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 45 files, 436 tests
+```
+
+### Notes
+
+- The source of truth for TASK AI-002 was `src/infrastructure/ai/ai-provider.ts`.
+- The validation layer is exported but not wired into Routine Analysis API behavior yet.
+
 ## 2026-05-20 - TASK AI-001 AI Provider Abstraction
 
 ### Task

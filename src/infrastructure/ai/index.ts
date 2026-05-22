@@ -6,6 +6,17 @@ export {
   AIProviderError,
   AIProviderResponseError,
 } from "./ai-provider.errors";
+export {
+  aiProviderIngredientExplanationResultSchema,
+  aiProviderMetadataSchema,
+  aiProviderRoutineAnalysisResultSchema,
+  aiProviderSafetyClassifierResultSchema,
+} from "./ai-output.schema";
+export {
+  validateIngredientExplanationOutput,
+  validateRoutineAnalysisOutput,
+  validateSafetyClassifierOutput,
+} from "./ai-output.validator";
 export { MockAIProvider } from "./mock-ai-provider";
 export type {
   AIProvider,

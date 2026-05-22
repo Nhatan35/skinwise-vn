@@ -10,9 +10,11 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **TASK AI-001 AI Provider Abstraction implemented**.
+Current package state: **TASK AI-002 Structured Output Validation implemented**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard route group, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API foundation, protected `/routines` UI foundation, deterministic Routine Safety Engine, Routine Analysis API foundation, Routine Analysis UI panel, and MongoDB-backed per-user rate limiting for routine analysis. TASK PI-001 added authenticated read-only Product and Ingredient API foundations with strict query validation, DTO mappers, repositories, use cases, and API contract tests. TASK PP-001 integrated the Product Picker into the existing Routine Builder and added server-side Routine Product Snapshot population for selected visible products. TASK RL-001 implemented the RoutineLog backend foundation, and TASK RL-002 integrated RoutineLog UI controls into the existing `/routines` page. TASK DB-001 replaced the placeholder dashboard with a real authenticated dashboard that renders `DashboardOverview` and fetches `GET /api/dashboard?localDate=YYYY-MM-DD` to summarize Skin Profile setup, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next suggested actions. TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, provider factory, and AI provider error classes. OpenAI and Gemini providers are intentionally not implemented yet.
+
+TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. The validation layer is not wired into Routine Analysis API behavior yet.
 
 Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, Ingredient explanation AI API, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
 
@@ -373,12 +375,14 @@ src/infrastructure/database/mongodb.ts
 src/infrastructure/ai/ai-provider.ts
 src/infrastructure/ai/ai-provider.errors.ts
 src/infrastructure/ai/ai-provider.factory.ts
+src/infrastructure/ai/ai-output.schema.ts
+src/infrastructure/ai/ai-output.validator.ts
 src/infrastructure/ai/mock-ai-provider.ts
 src/infrastructure/ai/index.ts
 src/infrastructure/rate-limiting/rate-limit.ts
 ```
 
-`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references, including `routine_logs`, `routine_analyses`, and `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. Routine ownership query indexes are defined for `{ userId, timeOfDay }` and `{ userId, updatedAt }`. RoutineAnalysis indexes already exist for `userId + routineId`, `userId + createdAt`, `userId + riskLevel + createdAt`, `promptVersion`, and `modelName`. Rate limit indexes include unique `{ key: 1 }` and TTL `{ expiresAt: 1 }` with `expireAfterSeconds: 0`. `rate-limit.ts` owns the server-only MongoDB-backed rate limit helper and must not be imported by client components. `src/infrastructure/ai/` owns the server-only AI Provider Abstraction from TASK AI-001. It exports the exact `AIProvider` interface for routine analysis, ingredient explanation, and safety classification, plus `MockAIProvider`, `getAIProvider()`, and provider error classes. `getAIProvider()` reads `process.env.AI_PROVIDER`, defaults missing/empty/mock values to `MockAIProvider`, throws configuration errors for OpenAI and Gemini because they are not implemented yet, does not initialize external clients, does not call external AI APIs, and does not require an AI key.
+`mongodb.ts` owns the server-only MongoDB client helper and lazy client promise. `collections.ts` centralizes SkinWise and Auth.js-owned collection name references, including `routine_logs`, `routine_analyses`, and `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` script entrypoint. Routine ownership query indexes are defined for `{ userId, timeOfDay }` and `{ userId, updatedAt }`. RoutineAnalysis indexes already exist for `userId + routineId`, `userId + createdAt`, `userId + riskLevel + createdAt`, `promptVersion`, and `modelName`. Rate limit indexes include unique `{ key: 1 }` and TTL `{ expiresAt: 1 }` with `expireAfterSeconds: 0`. `rate-limit.ts` owns the server-only MongoDB-backed rate limit helper and must not be imported by client components. `src/infrastructure/ai/` owns the server-only AI Provider Abstraction from TASK AI-001 and the structured output validation layer from TASK AI-002. It exports the exact `AIProvider` interface for routine analysis, ingredient explanation, and safety classification, plus `MockAIProvider`, `getAIProvider()`, provider error classes, strict Zod schemas for current AIProvider outputs, and validator functions that throw `AIProviderResponseError` for invalid AI output. `getAIProvider()` reads `process.env.AI_PROVIDER`, defaults missing/empty/mock values to `MockAIProvider`, throws configuration errors for OpenAI and Gemini because they are not implemented yet, does not initialize external clients, does not call external AI APIs, and does not require an AI key.
 
 ### `src/shared/`
 
@@ -480,6 +484,7 @@ tests/unit/dashboard-shell.test.ts
 tests/unit/dashboard-api-contract.test.ts
 tests/unit/dashboard-ui.test.ts
 tests/unit/dashboard-use-case.test.ts
+tests/unit/ai-output-validation.test.ts
 tests/unit/ai-provider.test.ts
 tests/unit/foundation.test.ts
 tests/unit/get-current-user.test.ts
