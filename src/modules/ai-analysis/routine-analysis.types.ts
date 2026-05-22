@@ -8,6 +8,7 @@ import type {
   RoutineStep,
   RoutineTimeOfDay,
 } from "@/modules/routines/routine.types";
+import type { RoutineAnalysisProviderFailureReason } from "@/modules/ai-analysis/ai-provider-failure-observability";
 
 export const ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER = "deterministic";
 export const ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME = "routine-safety-engine";
@@ -62,6 +63,7 @@ export type RoutineAnalysisDocument = {
   modelProvider: string;
   modelName: string;
   promptVersion: string;
+  providerFailureReason?: RoutineAnalysisProviderFailureReason;
   createdAt: Date;
 };
 

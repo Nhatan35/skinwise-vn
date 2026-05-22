@@ -164,6 +164,30 @@ describe("RoutineAnalysis repository", () => {
     });
   });
 
+  it("persists an internal provider failure reason when present", async () => {
+    const inputWithProviderFailureReason = {
+      ...createAnalysisInput,
+      providerFailureReason: "provider_response_error",
+    } as const satisfies CreateRoutineAnalysisInput;
+    collectionMock.insertOne.mockResolvedValue({
+      insertedId: new ObjectId(analysisId),
+    });
+
+    await expect(
+      createRoutineAnalysisForUser(userId, inputWithProviderFailureReason),
+    ).resolves.toEqual(
+      createAnalysis({
+        providerFailureReason: "provider_response_error",
+      }),
+    );
+
+    expect(collectionMock.insertOne).toHaveBeenCalledWith({
+      ...inputWithProviderFailureReason,
+      userId,
+      createdAt: fixedNow,
+    });
+  });
+
   it("lists analysis history scoped by userId and routineId newest first", async () => {
     const analysis = createAnalysis();
     toArrayMock.mockResolvedValue([analysis]);
@@ -227,6 +251,7 @@ describe("RoutineAnalysis mapper", () => {
     expect(dto).not.toHaveProperty("_id");
     expect(dto).not.toHaveProperty("userId");
     expect(dto).not.toHaveProperty("ruleResults");
+    expect(dto).not.toHaveProperty("providerFailureReason");
     expect(serializedDto).not.toContain("ObjectId");
   });
 

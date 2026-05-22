@@ -4,6 +4,89 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-22 - TASK AI-006 Routine Analysis Provider Failure Observability
+
+### Task
+
+Add safe internal observability for Routine Analysis provider fallback without changing public API responses.
+
+### Files Added
+
+```txt
+src/modules/ai-analysis/ai-provider-failure-observability.ts
+tests/unit/ai-provider-failure-observability.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/ai-analysis/analyze-routine.use-case.ts
+src/modules/ai-analysis/routine-analysis.types.ts
+src/modules/ai-analysis/index.ts
+tests/unit/routine-analysis-use-case.test.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+docs/06-ai-contract.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Provider-backed Routine Analysis already fell back safely to deterministic output, but provider failures lacked an internal reason code for debugging. TASK AI-006 records only safe failure categories while preserving deterministic fallback, Routine Safety Engine behavior, repository error propagation, and public DTO safety.
+
+### Implementation Notes
+
+- Added `classifyRoutineAnalysisProviderFailure(error: unknown)`.
+- Added `RoutineAnalysisProviderFailureReason`.
+- Added explicit `RoutineAnalysisProviderMappingError` for typed mapping-error classification.
+- `AIProviderConfigurationError` maps to `provider_configuration_error`.
+- `AIProviderResponseError`, including `ValidatedAIProvider` validation failures, maps to `provider_response_error`.
+- Explicit mapping errors map to `provider_mapping_error`.
+- Unknown errors, null, undefined, strings, and plain objects map to `provider_unexpected_error`.
+- The classifier never throws and does not parse raw error messages.
+- `RoutineAnalysisDocument` now supports optional internal `providerFailureReason`.
+- Provider success does not persist `providerFailureReason`.
+- Provider fallback persists `providerFailureReason` only after the provider path is attempted and fails.
+- The provider fallback catch still covers only provider construction/call/validation/mapping/guard behavior.
+- `createRoutineAnalysisForUser()` remains outside the provider fallback catch, so repository/database errors still propagate.
+- `RoutineAnalysisDto` and `routine-analysis.mapper.ts` remain unchanged and do not expose `providerFailureReason`.
+- Raw provider errors, stack traces, `providerMetadata`, and `educationalNotes` are not exposed publicly.
+- No OpenAI provider was implemented.
+- No Gemini provider was implemented.
+- No external AI API call was added.
+- No dependency, UI, database schema, Prisma schema, or migration change was made.
+
+### Tests
+
+```txt
+tests/unit/ai-provider-failure-observability.test.ts
+tests/unit/routine-analysis-use-case.test.ts
+tests/unit/routine-analysis.test.ts
+tests/unit/routine-analysis-api-contract.test.ts
+```
+
+Coverage added for classifier categories, non-Error thrown values, provider configuration fallback, provider response fallback, provider mapping fallback, unexpected provider fallback, provider success metadata absence, repository persistence error propagation, missing routine behavior, and public DTO safety.
+
+### Validation
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 48 files, 472 tests
+npm run build: Not run - command could not start due to a local sandbox spawn setup error.
+```
+
+### Notes
+
+- Provider failure reason is internal-only persistence metadata.
+- Current provider-backed Routine Analysis still uses the validated mock provider unless configuration selects an unsupported provider.
+- Next recommended task is TASK AI-007 - Implement Ingredient Explanation API using Validated AI Provider with Safe Fallback.
+
 ## 2026-05-22 - TASK AI-005 Validated AI Provider Routine Analysis Wiring
 
 ### Task

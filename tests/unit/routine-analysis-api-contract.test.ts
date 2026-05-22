@@ -334,6 +334,7 @@ describe("Routine Analysis API contract", () => {
     expect(serializedBody).not.toContain("ObjectId");
     expect(serializedBody).not.toContain("userId");
     expect(serializedBody).not.toContain("ruleResults");
+    expect(serializedBody).not.toContain("providerFailureReason");
   });
 
   it("keeps Routine Analysis API scope small", () => {
@@ -348,6 +349,7 @@ describe("Routine Analysis API contract", () => {
       "src/modules/ai-analysis/routine-analysis.dto.ts",
       "src/modules/ai-analysis/routine-analysis.mapper.ts",
       "src/modules/ai-analysis/routine-analysis.repository.ts",
+      "src/modules/ai-analysis/ai-provider-failure-observability.ts",
       "src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts",
       "src/modules/ai-analysis/analyze-routine.use-case.ts",
       "src/modules/ai-analysis/index.ts",

@@ -469,6 +469,7 @@ src/modules/ai-analysis/routine-analysis.dto.ts
 src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
 src/modules/ai-analysis/routine-analysis.constants.ts
+src/modules/ai-analysis/ai-provider-failure-observability.ts
 src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
@@ -476,6 +477,7 @@ src/app/api/routines/[id]/analyze/route.ts
 src/app/api/routines/[id]/analyses/route.ts
 src/infrastructure/rate-limiting/rate-limit.ts
 tests/unit/ai-provider-routine-analysis-mapper.test.ts
+tests/unit/ai-provider-failure-observability.test.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
@@ -502,10 +504,12 @@ Rules:
 - provider success uses `aiStatus = "provider_used"` and `promptVersion = "routine-analysis-provider-v1"`;
 - fallback uses `aiStatus = "fallback_used"` and deterministic metadata: `deterministic`, `routine-safety-engine`, and `routine-analysis-fallback-v1`;
 - provider construction/call/validation/mapping/guard failures fall back to deterministic analysis;
+- provider fallback persists only safe internal provider failure reason codes and must not expose those reason codes in public DTOs;
 - repository persistence errors must not be swallowed as provider fallback;
 - provider success must preserve deterministic rule warnings and suggestions and may append provider warnings/suggestions as additional educational guidance;
 - public DTOs expose only the stable RoutineAnalysis DTO shape and must not expose `_id`, `userId`, internal `ruleResults`, model metadata, provider metadata, educational notes, raw provider errors, or stack traces;
 - `routine-analysis.constants.ts` owns shared Routine Analysis constants such as the educational disclaimer;
+- `ai-provider-failure-observability.ts` owns safe internal provider failure classification for Routine Analysis fallback and must not expose raw provider errors;
 - `ai-provider-routine-analysis.mapper.ts` owns the pure mapping from validated `AIProviderRoutineAnalysisResult` to product-facing `RoutineAnalysisResult`;
 - provider-to-product mapping must not expose `providerMetadata` or `educationalNotes`;
 - `POST /api/routines/[id]/analyze` must check `routine_analysis:${userId}` after authentication and request validation, before calling `analyzeRoutineForCurrentUser()`;
@@ -524,18 +528,20 @@ src/modules/ai-analysis/routine-analysis.dto.ts
 src/modules/ai-analysis/routine-analysis.mapper.ts
 src/modules/ai-analysis/routine-analysis.repository.ts
 src/modules/ai-analysis/routine-analysis.constants.ts
+src/modules/ai-analysis/ai-provider-failure-observability.ts
 src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts
 src/modules/ai-analysis/analyze-routine.use-case.ts
 src/modules/ai-analysis/index.ts
 src/infrastructure/rate-limiting/rate-limit.ts
 tests/unit/ai-provider-routine-analysis-mapper.test.ts
+tests/unit/ai-provider-failure-observability.test.ts
 tests/unit/routine-analysis.test.ts
 tests/unit/routine-analysis-api-contract.test.ts
 tests/unit/routine-analysis-use-case.test.ts
 tests/unit/rate-limit.test.ts
 ```
 
-Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction. TASK AI-004 added the provider-to-product Routine Analysis mapper and shared disclaimer constant. TASK AI-005 wired validated provider-backed routine analysis into the use case with safe deterministic fallback, max-risk safety guarding, and provider metadata isolation. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
+Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added MongoDB-backed per-user rate limiting for the analyze route. TASK AI-001 added the server-only AI Provider Abstraction. TASK AI-004 added the provider-to-product Routine Analysis mapper and shared disclaimer constant. TASK AI-005 wired validated provider-backed routine analysis into the use case with safe deterministic fallback, max-risk safety guarding, and provider metadata isolation. TASK AI-006 added safe internal provider failure observability for Routine Analysis fallback without changing the public API shape. Real OpenAI/Gemini provider integration, external API calls, Product/Ingredient explanation integration, Product snapshot backfill, dashboard integration, Journal, Routine Logs, image upload, skin score, and medical diagnosis are outside the Routine Analysis ownership boundary; Product snapshots, RoutineLogs, and dashboard integration are owned by their respective modules/tasks where implemented.
 
 ## 10. RoutineLog ownership
 

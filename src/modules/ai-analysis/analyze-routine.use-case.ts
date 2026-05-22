@@ -1,5 +1,6 @@
 import {
   getAIProvider,
+  type AIProviderRoutineAnalysisResult,
   type AIProviderRoutineAnalysisInput,
   type AIProviderRoutineStepInput,
 } from "@/infrastructure/ai";
@@ -10,6 +11,10 @@ import type {
   RoutineSafetyRuleResult,
 } from "@/domain/routine-safety";
 import { mapAIProviderRoutineAnalysisToRoutineAnalysisResult } from "@/modules/ai-analysis/ai-provider-routine-analysis.mapper";
+import {
+  classifyRoutineAnalysisProviderFailure,
+  RoutineAnalysisProviderMappingError,
+} from "@/modules/ai-analysis/ai-provider-failure-observability";
 import { ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER } from "@/modules/ai-analysis/routine-analysis.constants";
 import {
   createRoutineAnalysisForUser,
@@ -51,6 +56,7 @@ type RoutineAnalysisExecutionResult = Pick<
   | "modelProvider"
   | "modelName"
   | "promptVersion"
+  | "providerFailureReason"
 >;
 
 const RISK_LEVEL_RANK = {
@@ -322,6 +328,16 @@ function applyDeterministicSafetyGuard(
   };
 }
 
+function mapProviderRoutineAnalysisResult(
+  providerResult: AIProviderRoutineAnalysisResult,
+): RoutineAnalysisResult {
+  try {
+    return mapAIProviderRoutineAnalysisToRoutineAnalysisResult(providerResult);
+  } catch {
+    throw new RoutineAnalysisProviderMappingError();
+  }
+}
+
 async function buildProviderExecutionResult(
   routine: Routine,
   skinProfile: SkinProfile | null,
@@ -331,8 +347,7 @@ async function buildProviderExecutionResult(
   const providerResult = await provider.analyzeRoutine(
     buildAIProviderRoutineInput(routine, skinProfile),
   );
-  const mappedProviderResult =
-    mapAIProviderRoutineAnalysisToRoutineAnalysisResult(providerResult);
+  const mappedProviderResult = mapProviderRoutineAnalysisResult(providerResult);
   const aiResult = applyDeterministicSafetyGuard(
     deterministicResult,
     mappedProviderResult,
@@ -381,8 +396,11 @@ export async function analyzeRoutineForCurrentUser(
       skinProfile,
       fallbackExecutionResult.aiResult,
     );
-  } catch {
-    executionResult = fallbackExecutionResult;
+  } catch (error) {
+    executionResult = {
+      ...fallbackExecutionResult,
+      providerFailureReason: classifyRoutineAnalysisProviderFailure(error),
+    };
   }
 
   const analysis = await createRoutineAnalysisForUser(input.currentUserId, {
@@ -395,6 +413,9 @@ export async function analyzeRoutineForCurrentUser(
     modelProvider: executionResult.modelProvider,
     modelName: executionResult.modelName,
     promptVersion: executionResult.promptVersion,
+    ...(executionResult.providerFailureReason
+      ? { providerFailureReason: executionResult.providerFailureReason }
+      : {}),
   });
 
   return toRoutineAnalysisDto(analysis);

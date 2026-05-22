@@ -20,6 +20,23 @@ vi.mock("@/modules/ai-analysis/routine-analysis.repository", () => ({
   listRoutineAnalysesByRoutineIdAndUserId: vi.fn(),
 }));
 
+vi.mock(
+  "@/modules/ai-analysis/ai-provider-routine-analysis.mapper",
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import("@/modules/ai-analysis/ai-provider-routine-analysis.mapper")
+      >();
+
+    return {
+      ...actual,
+      mapAIProviderRoutineAnalysisToRoutineAnalysisResult: vi.fn(
+        actual.mapAIProviderRoutineAnalysisToRoutineAnalysisResult,
+      ),
+    };
+  },
+);
+
 import {
   analyzeRoutineForCurrentUser,
   listRoutineAnalysesForCurrentUser,
@@ -37,6 +54,7 @@ import {
   createRoutineAnalysisForUser,
   listRoutineAnalysesByRoutineIdAndUserId,
 } from "@/modules/ai-analysis/routine-analysis.repository";
+import { mapAIProviderRoutineAnalysisToRoutineAnalysisResult } from "@/modules/ai-analysis/ai-provider-routine-analysis.mapper";
 import {
   ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
   ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
@@ -58,6 +76,9 @@ const mockedCreateRoutineAnalysisForUser = vi.mocked(
 );
 const mockedListRoutineAnalysesByRoutineIdAndUserId = vi.mocked(
   listRoutineAnalysesByRoutineIdAndUserId,
+);
+const mockedMapAIProviderRoutineAnalysisToRoutineAnalysisResult = vi.mocked(
+  mapAIProviderRoutineAnalysisToRoutineAnalysisResult,
 );
 
 const userId = "auth-user-id";
@@ -206,6 +227,7 @@ describe("AnalyzeRoutine use case", () => {
     mockedFindSkinProfileByUserId.mockReset();
     mockedCreateRoutineAnalysisForUser.mockReset();
     mockedListRoutineAnalysesByRoutineIdAndUserId.mockReset();
+    mockedMapAIProviderRoutineAnalysisToRoutineAnalysisResult.mockClear();
     mockedGetAIProvider.mockReturnValue(mockedProvider);
     mockedAnalyzeRoutine.mockResolvedValue(createProviderRoutineAnalysisResult());
     mockedCreateRoutineAnalysisForUser.mockImplementation(
@@ -368,6 +390,7 @@ describe("AnalyzeRoutine use case", () => {
       modelName: "mock-ai-provider",
       promptVersion: ROUTINE_ANALYSIS_PROVIDER_PROMPT_VERSION,
     });
+    expect(persistedInput).not.toHaveProperty("providerFailureReason");
     expect(persistedInput.aiResult).toMatchObject({
       riskLevel: "medium",
       summary: "Provider educational summary.",
@@ -391,6 +414,7 @@ describe("AnalyzeRoutine use case", () => {
     expect(persistedAiResultJson).not.toContain("educationalNotes");
     expect(dtoJson).not.toContain("providerMetadata");
     expect(dtoJson).not.toContain("educationalNotes");
+    expect(dtoJson).not.toContain("providerFailureReason");
   });
 
   it("stores all rule results including non-triggered rules", async () => {
@@ -443,6 +467,7 @@ describe("AnalyzeRoutine use case", () => {
       modelName: "mock-ai-provider",
       promptVersion: ROUTINE_ANALYSIS_PROVIDER_PROMPT_VERSION,
     });
+    expect(persistedInput).not.toHaveProperty("providerFailureReason");
   });
 
   it("falls back when provider construction fails and returns a public DTO", async () => {
@@ -467,6 +492,7 @@ describe("AnalyzeRoutine use case", () => {
       modelProvider: ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
       modelName: ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
       promptVersion: ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION,
+      providerFailureReason: "provider_configuration_error",
     });
     expect(dto).toMatchObject({
       riskLevel: "medium",
@@ -476,6 +502,10 @@ describe("AnalyzeRoutine use case", () => {
         }),
       ],
     });
+    expect(dto).not.toHaveProperty("providerFailureReason");
+    expect(JSON.stringify(dto)).not.toContain(
+      "OpenAI provider is not implemented yet.",
+    );
   });
 
   it("falls back when provider validation fails", async () => {
@@ -485,7 +515,7 @@ describe("AnalyzeRoutine use case", () => {
       new AIProviderResponseError("Invalid routine analysis output."),
     );
 
-    await analyzeRoutineForCurrentUser({
+    const dto = await analyzeRoutineForCurrentUser({
       routineId,
       currentUserId: userId,
     });
@@ -495,7 +525,37 @@ describe("AnalyzeRoutine use case", () => {
       modelProvider: ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
       modelName: ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
       promptVersion: ROUTINE_ANALYSIS_FALLBACK_PROMPT_VERSION,
+      providerFailureReason: "provider_response_error",
     });
+    expect(dto).not.toHaveProperty("providerFailureReason");
+    expect(JSON.stringify(dto)).not.toContain(
+      "Invalid routine analysis output.",
+    );
+  });
+
+  it("falls back when provider output mapping fails", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(createRoutine());
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockedMapAIProviderRoutineAnalysisToRoutineAnalysisResult.mockImplementationOnce(
+      () => {
+        throw new Error("secret mapping failure");
+      },
+    );
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+    const dtoJson = JSON.stringify(dto);
+
+    expect(mockedAnalyzeRoutine).toHaveBeenCalledTimes(1);
+    expect(getPersistedInput()).toMatchObject({
+      aiStatus: "fallback_used",
+      providerFailureReason: "provider_mapping_error",
+    });
+    expect(dtoJson).not.toContain("secret mapping failure");
+    expect(dtoJson).not.toContain("providerFailureReason");
+    expect(dtoJson).not.toContain("stack");
   });
 
   it("falls back when provider analysis throws an unexpected error without exposing the error", async () => {
@@ -511,8 +571,10 @@ describe("AnalyzeRoutine use case", () => {
 
     expect(getPersistedInput()).toMatchObject({
       aiStatus: "fallback_used",
+      providerFailureReason: "provider_unexpected_error",
     });
     expect(dtoJson).not.toContain("Provider exploded");
+    expect(dtoJson).not.toContain("providerFailureReason");
     expect(dtoJson).not.toContain("stack");
   });
 
@@ -632,6 +694,7 @@ describe("AnalyzeRoutine use case", () => {
 
     expect(mockedAnalyzeRoutine).toHaveBeenCalledTimes(1);
     expect(mockedCreateRoutineAnalysisForUser).toHaveBeenCalledTimes(1);
+    expect(getPersistedInput()).not.toHaveProperty("providerFailureReason");
   });
 
   it("stores a stable routine snapshot", async () => {

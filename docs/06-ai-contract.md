@@ -159,6 +159,9 @@ Rules:
 - The persisted `aiResult.riskLevel` uses the same safety-guarded final risk.
 - Provider success preserves rule-based warnings and suggestions and appends provider guidance when it is not an exact duplicate.
 - Provider construction, call, validation, mapping, or safety-guard errors fall back to deterministic analysis without exposing raw provider errors.
+- Routine Analysis provider failures are classified internally into safe reason codes for configuration, response/validation, explicit mapping, or unexpected provider errors.
+- Provider failure reason is internal-only persistence metadata and must not appear in the public Routine Analysis API response.
+- Raw provider errors, stack traces, `providerMetadata`, and `educationalNotes` must not be exposed to users when deterministic fallback is used.
 - Repository persistence errors are not treated as provider fallback errors.
 - OpenAI and Gemini providers remain unimplemented; current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
