@@ -4,6 +4,86 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-22 - TASK AI-007 Ingredient Explanation API with Validated AI Provider Fallback
+
+### Task
+
+Add authenticated, rate-limited `POST /api/ingredients/explain` using the existing validated AI provider path and safe deterministic fallback.
+
+### Files Added
+
+```txt
+src/app/api/ingredients/explain/route.ts
+src/modules/ingredients/ingredient-explanation.constants.ts
+src/modules/ingredients/ingredient-explanation.dto.ts
+src/modules/ingredients/ingredient-explanation.schema.ts
+src/modules/ingredients/ingredient-explanation.mapper.ts
+src/modules/ingredients/explain-ingredient.use-case.ts
+tests/unit/ingredient-explanation.test.ts
+tests/unit/ingredient-explanation-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/ingredients/index.ts
+docs/05-api-contract.md
+docs/06-ai-contract.md
+docs/16-ai-fallback-policy.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+SkinWise VN needed the Ingredient Explanation endpoint wired to the already implemented `AIProvider.explainIngredient()` capability without adding real external AI integrations. The implementation keeps the public API stable and safe by validating input, relying on `ValidatedAIProvider` for provider output validation, mapping provider output into a public DTO, and falling back deterministically on provider-path failures.
+
+### Implementation Notes
+
+- Added `POST /api/ingredients/explain`.
+- The route requires `getCurrentUser()` authentication.
+- The route validates strict JSON request input before rate limiting.
+- The route rate-limits authenticated valid requests with `ingredient_explanation:${userId}` at 10 requests per 60 minutes.
+- The Ingredient explanation use case calls `getAIProvider().explainIngredient()`.
+- Provider output validation remains inside `ValidatedAIProvider`.
+- Added a provider-to-public mapper from `AIProviderIngredientExplanationResult` to `IngredientExplanationDto`.
+- Provider success returns `source = "ai"`.
+- Provider construction, call, validation, or mapping failure returns deterministic fallback with `source = "fallback"`.
+- Invalid client input returns `VALIDATION_ERROR` and does not use fallback.
+- Public responses do not expose raw provider errors, stack traces, `providerMetadata`, `educationalNotes`, `providerFailureReason`, OpenAI/Gemini metadata, or internal provider details.
+- No explanation persistence was added.
+- Routine Analysis behavior was not changed.
+- No OpenAI provider was implemented.
+- No Gemini provider was implemented.
+- No external AI API call was added.
+- No dependency, UI, database schema, Prisma schema, or migration change was made.
+
+### Tests
+
+```txt
+tests/unit/ingredient-explanation.test.ts
+tests/unit/ingredient-explanation-api-contract.test.ts
+```
+
+Coverage added for strict request parsing, malformed JSON, numeric and empty ingredient names, invalid skin type/concerns, too many concerns, provider-to-public mapping, provider metadata and educational note isolation, provider success, provider throw fallback, validated-provider malformed output fallback, mapper failure fallback, provider construction fallback, authentication, rate limiting, response envelope stability, and generic route error safety.
+
+### Validation
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 50 files, 489 tests
+```
+
+### Notes
+
+- Current Ingredient Explanation behavior uses the validated mock provider unless configuration selects an unsupported provider.
+- Safety-classifier use-case integration remains future work for broader/free-form high-risk ingredient explanation inputs.
+
 ## 2026-05-22 - TASK AI-006 Routine Analysis Provider Failure Observability
 
 ### Task

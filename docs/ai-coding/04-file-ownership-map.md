@@ -316,12 +316,20 @@ src/modules/ingredients/ingredient.dto.ts
 src/modules/ingredients/ingredient.mapper.ts
 src/modules/ingredients/ingredient.repository.ts
 src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/ingredient-explanation.constants.ts
+src/modules/ingredients/ingredient-explanation.dto.ts
+src/modules/ingredients/ingredient-explanation.schema.ts
+src/modules/ingredients/ingredient-explanation.mapper.ts
+src/modules/ingredients/explain-ingredient.use-case.ts
 src/modules/ingredients/index.ts
 src/app/api/ingredients/route.ts
 src/app/api/ingredients/[id]/route.ts
+src/app/api/ingredients/explain/route.ts
 tests/unit/ingredient.test.ts
 tests/unit/ingredient-use-case.test.ts
 tests/unit/ingredient-api-contract.test.ts
+tests/unit/ingredient-explanation.test.ts
+tests/unit/ingredient-explanation-api-contract.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
@@ -332,7 +340,9 @@ Rules:
 - TASK PI-001 implements read-only list/detail only.
 - public Ingredient DTOs must not expose `_id` or raw ObjectId values.
 - Ingredient APIs must not use Product `verificationStatus`, `includeMine`, or `createdByUserId` logic.
-- `POST /api/ingredients/explain`, admin ingredient management, seed scripts, safety-classifier integration, AI provider integration, and medical diagnosis are out of scope for this ownership status.
+- `POST /api/ingredients/explain` is owned by the Ingredient module. It must use strict request validation, authenticate with `getCurrentUser()`, rate-limit with `ingredient_explanation:${userId}`, call `getAIProvider().explainIngredient()` only through the Ingredient explanation use case, rely on `ValidatedAIProvider`, map provider output to the public DTO, and return deterministic fallback when provider construction/call/validation/mapping fails.
+- Ingredient Explanation public DTOs must not expose `providerMetadata`, `educationalNotes`, `providerFailureReason`, raw provider errors, stack traces, provider configuration details, or OpenAI/Gemini metadata.
+- Admin ingredient management, seed scripts, safety-classifier integration, persistence of explanations, real external AI provider integration, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 
@@ -343,12 +353,20 @@ src/modules/ingredients/ingredient.dto.ts
 src/modules/ingredients/ingredient.mapper.ts
 src/modules/ingredients/ingredient.repository.ts
 src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/ingredient-explanation.constants.ts
+src/modules/ingredients/ingredient-explanation.dto.ts
+src/modules/ingredients/ingredient-explanation.schema.ts
+src/modules/ingredients/ingredient-explanation.mapper.ts
+src/modules/ingredients/explain-ingredient.use-case.ts
 src/modules/ingredients/index.ts
 src/app/api/ingredients/route.ts
 src/app/api/ingredients/[id]/route.ts
+src/app/api/ingredients/explain/route.ts
 tests/unit/ingredient.test.ts
 tests/unit/ingredient-use-case.test.ts
 tests/unit/ingredient-api-contract.test.ts
+tests/unit/ingredient-explanation.test.ts
+tests/unit/ingredient-explanation-api-contract.test.ts
 tests/unit/database-indexes.test.ts
 ```
 

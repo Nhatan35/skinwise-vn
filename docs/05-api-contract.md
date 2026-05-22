@@ -377,40 +377,56 @@ Request:
 
 ```json
 {
-  "ingredientName": "salicylic acid",
-  "skinProfileId": "optional_profile_id"
+  "ingredientName": "niacinamide",
+  "skinType": "oily",
+  "concerns": ["acne", "redness", "oiliness"]
 }
 ```
 
 Validation:
 
-- ingredientName required, max 160 chars.
-- skinProfileId optional.
-- If skinProfileId is provided, it must belong to current user.
-- User must be rate-limit checked.
+- `ingredientName` is required, trimmed, non-empty, and max 160 chars.
+- `skinType` is optional and must use the Skin Profile skin type enum when provided.
+- `concerns` is optional and must use the Skin Profile concern enum when provided.
+- Unknown fields are rejected.
+- Malformed JSON returns `VALIDATION_ERROR`.
+- User must be rate-limit checked after authentication and request validation.
+
+Rate limit:
+
+- Applies only to authenticated valid `POST /api/ingredients/explain` requests.
+- Key format: `ingredient_explanation:${userId}`.
+- Limit: 10 requests per authenticated user per 60 minutes.
+- Unauthenticated requests return `UNAUTHORIZED` and do not consume quota.
+- Invalid requests return `VALIDATION_ERROR` and do not consume quota.
+- When exceeded, return HTTP `429`, include `Retry-After`, and do not call the use case.
 
 Response:
 
 ```json
 {
   "data": {
-    "ingredientName": "Salicylic Acid",
-    "simpleExplanation": "Salicylic Acid là một dạng BHA thường dùng trong mỹ phẩm cho da dầu và lỗ chân lông.",
-    "commonUses": ["Hỗ trợ làm sạch dầu thừa trên bề mặt da"],
-    "suitableFor": ["Da dầu", "Người đã có routine cơ bản ổn định"],
-    "cautions": ["Có thể gây khô hoặc châm chích nếu dùng quá thường xuyên"],
-    "avoidWith": ["Không nên kết hợp quá dày với nhiều acid hoặc retinoid nếu mới bắt đầu"],
-    "beginnerAdvice": "Người mới nên ưu tiên routine cơ bản trước khi thêm hoạt chất mạnh.",
-    "disclaimer": "Thông tin này chỉ mang tính giáo dục về mỹ phẩm và không thay thế tư vấn y tế."
+    "explanation": {
+      "ingredientName": "niacinamide",
+      "simpleExplanation": "Niacinamide is explained in simple skincare terms.",
+      "commonUses": ["Supports cosmetic ingredient education."],
+      "suitableFor": ["oily skin"],
+      "cautions": ["Tolerance can vary."],
+      "avoidWith": ["known sensitivity"],
+      "beginnerAdvice": "Introduce gradually and follow product instructions.",
+      "disclaimer": "Thông tin này chỉ mang tính giáo dục về mỹ phẩm và không thay thế tư vấn y tế.",
+      "source": "ai"
+    }
   },
   "error": null
 }
 ```
 
+If the provider fails, returns malformed output, or provider-to-public mapping fails, the endpoint returns a deterministic fallback explanation with `source = "fallback"` and does not expose raw provider errors, stack traces, `providerMetadata`, `educationalNotes`, `providerFailureReason`, or internal provider details.
+
 Errors:
 
 - UNAUTHORIZED
-- NOT_FOUND
 - RATE_LIMITED
 - VALIDATION_ERROR
 - INTERNAL_ERROR

@@ -10,13 +10,13 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **TASK AI-006 Provider Failure Observability for Routine Analysis**.
+Current package state: **TASK AI-007 Ingredient Explanation API with Validated AI Provider Fallback**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard route group, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API foundation, protected `/routines` UI foundation, deterministic Routine Safety Engine, Routine Analysis API foundation, Routine Analysis UI panel, and MongoDB-backed per-user rate limiting for routine analysis. TASK PI-001 added authenticated read-only Product and Ingredient API foundations with strict query validation, DTO mappers, repositories, use cases, and API contract tests. TASK PP-001 integrated the Product Picker into the existing Routine Builder and added server-side Routine Product Snapshot population for selected visible products. TASK RL-001 implemented the RoutineLog backend foundation, and TASK RL-002 integrated RoutineLog UI controls into the existing `/routines` page. TASK DB-001 replaced the placeholder dashboard with a real authenticated dashboard that renders `DashboardOverview` and fetches `GET /api/dashboard?localDate=YYYY-MM-DD` to summarize Skin Profile setup, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next suggested actions. TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, provider factory, and AI provider error classes. OpenAI and Gemini providers are intentionally not implemented yet.
 
-TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. TASK AI-005 wired `getAIProvider().analyzeRoutine()` into the Routine Analysis use case with deterministic safety guarding and fallback persistence. TASK AI-006 added safe internal provider failure classification and optional internal `providerFailureReason` persistence for provider fallback. OpenAI and Gemini remain unsupported, so current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
+TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. TASK AI-005 wired `getAIProvider().analyzeRoutine()` into the Routine Analysis use case with deterministic safety guarding and fallback persistence. TASK AI-006 added safe internal provider failure classification and optional internal `providerFailureReason` persistence for provider fallback. TASK AI-007 added authenticated, rate-limited `POST /api/ingredients/explain` using `getAIProvider().explainIngredient()` through `ValidatedAIProvider`, provider-to-public mapping, and deterministic fallback. OpenAI and Gemini remain unsupported, so current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
-Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, Ingredient explanation AI API, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
+Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
 
 ## 3. Root structure
 
@@ -102,6 +102,7 @@ src/app/api/auth/[...nextauth]/route.ts
 src/app/api/me/route.ts
 src/app/api/ingredients/route.ts
 src/app/api/ingredients/[id]/route.ts
+src/app/api/ingredients/explain/route.ts
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 src/app/api/routines/route.ts
@@ -127,7 +128,7 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 
 `src/app/api/products/route.ts` and `src/app/api/products/[id]/route.ts` are SkinWise-owned protected Product API read routes. They require `getCurrentUser()`, validate list query params with Zod, call Product use cases, and return Product DTOs without `_id`, raw ObjectId values, `createdByUserId`, or `source`. This foundation returns only `reviewed` or `verified` products and is consumed by the Routine Builder Product Picker. It does not implement `POST /api/products`, `includeMine`, admin visibility, Product UI pages, Product submission, or Product detail UI routes.
 
-`src/app/api/ingredients/route.ts` and `src/app/api/ingredients/[id]/route.ts` are SkinWise-owned protected Ingredient API read routes. They require `getCurrentUser()`, validate list query params with Zod, call Ingredient use cases, and return Ingredient DTOs without `_id` or raw ObjectId values. Ingredient APIs do not use Product visibility, `includeMine`, or `createdByUserId` logic, and the Ingredient explanation AI API remains unimplemented.
+`src/app/api/ingredients/route.ts` and `src/app/api/ingredients/[id]/route.ts` are SkinWise-owned protected Ingredient API read routes. They require `getCurrentUser()`, validate list query params with Zod, call Ingredient use cases, and return Ingredient DTOs without `_id` or raw ObjectId values. `src/app/api/ingredients/explain/route.ts` is a SkinWise-owned protected Ingredient Explanation API route. It requires authentication, validates strict JSON input, checks `ingredient_explanation:${userId}` after validation, calls the Ingredient explanation use case, and returns `{ data: { explanation }, error: null }`. Ingredient APIs do not use Product visibility, `includeMine`, or `createdByUserId` logic.
 
 `src/app/api/routine-logs/route.ts` is a SkinWise-owned protected RoutineLog API route. It derives `userId` from `getCurrentUser()`, validates strict `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs` inputs, canonicalizes daily logs by `userId + routineId + localDate`, and never accepts client-owned `userId`, `id`, `_id`, or timestamps.
 
@@ -243,10 +244,15 @@ src/modules/ingredients/ingredient.dto.ts
 src/modules/ingredients/ingredient.mapper.ts
 src/modules/ingredients/ingredient.repository.ts
 src/modules/ingredients/ingredient.use-case.ts
+src/modules/ingredients/ingredient-explanation.constants.ts
+src/modules/ingredients/ingredient-explanation.dto.ts
+src/modules/ingredients/ingredient-explanation.schema.ts
+src/modules/ingredients/ingredient-explanation.mapper.ts
+src/modules/ingredients/explain-ingredient.use-case.ts
 src/modules/ingredients/index.ts
 ```
 
-`ingredient.schema.ts` owns strict list query validation for `GET /api/ingredients`. `ingredient.repository.ts` imports `server-only`, uses `getIngredientsCollection()`, searches canonical ingredient fields, filters by `functions`, and returns `null` for invalid ObjectId detail lookups without querying. `ingredient.mapper.ts` converts `_id` to `id`, Dates to ISO strings, and copies arrays. Ingredient explanation AI, safety classifier integration, and admin ingredient management remain unimplemented.
+`ingredient.schema.ts` owns strict list query validation for `GET /api/ingredients`. `ingredient.repository.ts` imports `server-only`, uses `getIngredientsCollection()`, searches canonical ingredient fields, filters by `functions`, and returns `null` for invalid ObjectId detail lookups without querying. `ingredient.mapper.ts` converts `_id` to `id`, Dates to ISO strings, and copies arrays. `ingredient-explanation.schema.ts` owns strict request validation for `POST /api/ingredients/explain`. `ingredient-explanation.mapper.ts` maps validated provider ingredient explanation output into the public Ingredient Explanation DTO without exposing `providerMetadata` or `educationalNotes`. `explain-ingredient.use-case.ts` calls `getAIProvider().explainIngredient()`, relies on `ValidatedAIProvider`, and returns deterministic fallback with `source = "fallback"` when provider construction/call/validation/mapping fails. Safety classifier integration and admin ingredient management remain unimplemented.
 
 Current implemented routine analysis files:
 
@@ -297,7 +303,7 @@ src/modules/journals/
 
 Routine API CRUD, the `/routines` UI foundation, the Routine Safety Engine, the Routine Analysis API foundation, Routine Analysis API rate limiting, the `/routines` Routine Analysis UI panel, read-only Product/Ingredient API foundations, Product Picker, server-side Routine Product Snapshot population, RoutineLog backend/UI integration, and Dashboard Data Integration are implemented.
 
-Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, Ingredient explanation AI API, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
+Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
 
 Current implemented dashboard files:
 
@@ -494,6 +500,8 @@ tests/unit/foundation.test.ts
 tests/unit/get-current-user.test.ts
 tests/unit/ingredient.test.ts
 tests/unit/ingredient-api-contract.test.ts
+tests/unit/ingredient-explanation.test.ts
+tests/unit/ingredient-explanation-api-contract.test.ts
 tests/unit/ingredient-use-case.test.ts
 tests/unit/me-api-contract.test.ts
 tests/unit/mongodb.test.ts

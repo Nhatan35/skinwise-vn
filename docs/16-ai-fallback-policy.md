@@ -62,11 +62,12 @@ When rule engine succeeds and AI fails:
 If ingredient explanation AI fails:
 
 ```txt
-1. Return existing ingredient database summary if available.
+1. Return a deterministic generic educational fallback response.
 2. Do not generate unsupported claims.
-3. Set aiStatus = "fallback_used".
-4. Show educational disclaimer.
-5. Allow retry.
+3. Set public `source = "fallback"`.
+4. Show the educational disclaimer.
+5. Do not expose raw provider errors, stack traces, provider metadata, or educational notes.
+6. Allow retry.
 ```
 
 ## 7. Safety classifier fallback

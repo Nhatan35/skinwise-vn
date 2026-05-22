@@ -179,7 +179,8 @@ Rules:
     "cautions",
     "avoidWith",
     "beginnerAdvice",
-    "disclaimer"
+    "disclaimer",
+    "source"
   ],
   "properties": {
     "ingredientName": { "type": "string" },
@@ -205,10 +206,57 @@ Rules:
       "maxItems": 8
     },
     "beginnerAdvice": { "type": "string", "maxLength": 600 },
-    "disclaimer": { "type": "string", "maxLength": 300 }
+    "disclaimer": { "type": "string", "maxLength": 300 },
+    "source": { "type": "string", "enum": ["ai", "fallback"] }
   }
 }
 ```
+
+### 6.1 Provider-to-public ingredient explanation boundary
+
+`POST /api/ingredients/explain` is authenticated and rate-limited. It validates request input before any provider call, then calls `getAIProvider().explainIngredient()` through the existing validated provider path.
+
+Provider-level validated output currently uses:
+
+```txt
+AIProviderIngredientExplanationResult
+- ingredientName
+- shortExplanation
+- benefits
+- cautions
+- suitableFor
+- notSuitableFor
+- educationalNotes
+- providerMetadata
+```
+
+Product-facing Ingredient Explanation uses:
+
+```txt
+IngredientExplanationDto
+- ingredientName
+- simpleExplanation
+- commonUses
+- suitableFor
+- cautions
+- avoidWith
+- beginnerAdvice
+- disclaimer
+- source
+```
+
+Rules:
+
+- `providerMetadata` is internal and must not be exposed in the public Ingredient Explanation API response.
+- `educationalNotes` are intentionally not exposed in the public Ingredient Explanation API response.
+- Provider `shortExplanation` maps to public `simpleExplanation`.
+- Provider `benefits` map to public `commonUses`.
+- Provider `notSuitableFor` maps to public `avoidWith`.
+- Provider output must pass through `ValidatedAIProvider` before application mapping.
+- Provider construction, call, validation, or mapping errors return deterministic fallback with `source = "fallback"`.
+- Invalid client input returns `VALIDATION_ERROR` and must not use fallback.
+- Raw provider errors, stack traces, `providerMetadata`, `educationalNotes`, `providerFailureReason`, and provider configuration details must not be exposed publicly.
+- OpenAI and Gemini providers remain unimplemented; current ingredient explanation behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
 ## 7. SafetyClassifierResult JSON schema
 
@@ -332,11 +380,7 @@ interface AIProvider {
 
 Safety classifier is internal only in MVP. It is not exposed as a public API endpoint.
 
-It runs before:
-
-- `POST /api/ingredients/explain`;
-- routine AI explanation when user notes or custom product text are included;
-- future journal-related AI explanation features.
+It runs before high-risk or free-form AI explanation requests, including future ingredient explanation variants that accept user notes, claims, or other broader prompt text. TASK AI-007 keeps `POST /api/ingredients/explain` limited to `ingredientName`, optional enum `skinType`, and optional enum `concerns`; dedicated safety-classifier orchestration for broader user input remains future work.
 
 Recommended use case location:
 
