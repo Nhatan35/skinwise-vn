@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   dashboardNavItems,
   dashboardRoute,
+  journalRoute,
   routinesRoute,
   skinProfileRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
@@ -17,14 +18,16 @@ const dashboardConfigSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, and Routines as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, and Journal as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
     expect(skinProfileRoute).toBe(routes.SKIN_PROFILE);
     expect(routinesRoute).toBe(routes.ROUTINES);
+    expect(journalRoute).toBe(routes.JOURNAL);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(routes.ROUTINES).toBe("/routines");
+    expect(routes.JOURNAL).toBe("/journal");
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -44,6 +47,12 @@ describe("dashboard shell config", () => {
         label: "Routines",
         status: "Active",
       },
+      {
+        disabled: false,
+        href: "/journal",
+        label: "Journal",
+        status: "Active",
+      },
     ]);
   });
 
@@ -52,7 +61,6 @@ describe("dashboard shell config", () => {
 
     expect(disabledItems.map((item) => item.label)).toEqual([
       "Today Log",
-      "Journal",
       "Products",
       "Ingredients",
     ]);

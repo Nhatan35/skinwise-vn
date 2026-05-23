@@ -4,6 +4,81 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-23 - TASK SJ-002 SkinJournal Timeline UI
+
+### Task
+
+Implement the protected SkinJournal Timeline UI on `/journal` using the existing SJ-001 backend API contract.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/journal/page.tsx
+src/modules/journals/skin-journal.client.ts
+src/modules/journals/skin-journal-form.validation.ts
+src/modules/journals/components/skin-journal-timeline.tsx
+src/modules/journals/components/skin-journal-entry-card.tsx
+src/modules/journals/components/skin-journal-entry-form.tsx
+tests/unit/skin-journal-client.test.ts
+tests/unit/skin-journal-form-validation.test.ts
+tests/unit/skin-journal-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/dashboard/dashboard-shell.config.ts
+src/proxy.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/routine-builder-ui.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+SkinWise VN needed the frontend timeline for authenticated users to work with their private SkinJournal entries after SJ-001 added the backend API.
+
+### Implementation Notes
+
+- Added the protected `/journal` dashboard page and `SkinJournalTimeline` client component.
+- Enabled Journal in the dashboard navigation and protected `/journal/:path*` through the auth proxy.
+- Added a client helper for `GET`, `POST`, `PATCH`, and `DELETE` against `/api/skin-journal`.
+- Added client-side form validation and payload builders that mirror the SJ-001 MVP contract.
+- Users can list, create, edit, and delete journal entries with loading, empty, success, and error states.
+- The UI consumes existing API envelopes and maps duplicate local-date conflicts to a friendly message.
+- Create/update payloads are built from canonical fields only and do not send server-owned, future image/photo, provider, or internal fields.
+
+### Tests
+
+```txt
+tests/unit/skin-journal-client.test.ts
+tests/unit/skin-journal-form-validation.test.ts
+tests/unit/skin-journal-ui.test.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/routine-builder-ui.test.ts
+```
+
+### Validation
+
+```txt
+npm run typecheck
+npm run lint
+npm run test
+```
+
+### Notes
+
+- SJ-001 backend behavior and API contract were not changed.
+- Image upload, image storage, calendar heatmap, analytics/insight view, product name resolution, AI journal analysis, skin score, and medical diagnosis remain out of scope.
+- Recommended next SkinJournal task should be selected from product priorities, such as product linking/name resolution, calendar/insight view, or private image upload.
+
 ## 2026-05-23 - TASK SJ-001 SkinJournal Backend API Foundation
 
 ### Task

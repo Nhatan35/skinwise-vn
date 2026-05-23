@@ -3,11 +3,13 @@ import { routes } from "@/shared/constants/routes";
 export const dashboardRoute = routes.DASHBOARD;
 export const skinProfileRoute = routes.SKIN_PROFILE;
 export const routinesRoute = routes.ROUTINES;
+export const journalRoute = routes.JOURNAL;
 
 type DashboardNavHref =
   | typeof dashboardRoute
   | typeof skinProfileRoute
-  | typeof routinesRoute;
+  | typeof routinesRoute
+  | typeof journalRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
@@ -42,10 +44,10 @@ export const dashboardNavItems = [
     status: "Chưa implement",
   },
   {
-    disabled: true,
-    href: null,
+    disabled: false,
+    href: journalRoute,
     label: "Journal",
-    status: "Chưa implement",
+    status: "Active",
   },
   {
     disabled: true,

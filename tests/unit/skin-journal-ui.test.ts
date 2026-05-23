@@ -1,0 +1,186 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { describe, expect, it } from "vitest";
+
+import { dashboardNavItems } from "@/modules/dashboard/dashboard-shell.config";
+import { routes } from "@/shared/constants/routes";
+
+const projectRoot = process.cwd();
+const journalPagePath = join(projectRoot, "src/app/(dashboard)/journal/page.tsx");
+const mistakenSkinJournalPagePath = join(
+  projectRoot,
+  "src/app/(dashboard)/skin-journal/page.tsx",
+);
+const mistakenDashboardSkinJournalPagePath = join(
+  projectRoot,
+  "src/app/(dashboard)/dashboard/skin-journal/page.tsx",
+);
+const timelinePath = join(
+  projectRoot,
+  "src/modules/journals/components/skin-journal-timeline.tsx",
+);
+const cardPath = join(
+  projectRoot,
+  "src/modules/journals/components/skin-journal-entry-card.tsx",
+);
+const formPath = join(
+  projectRoot,
+  "src/modules/journals/components/skin-journal-entry-form.tsx",
+);
+const clientPath = join(
+  projectRoot,
+  "src/modules/journals/skin-journal.client.ts",
+);
+const validationPath = join(
+  projectRoot,
+  "src/modules/journals/skin-journal-form.validation.ts",
+);
+const proxyPath = join(projectRoot, "src/proxy.ts");
+
+const journalPageSource = readFileSync(journalPagePath, "utf8");
+const timelineSource = readFileSync(timelinePath, "utf8");
+const cardSource = readFileSync(cardPath, "utf8");
+const formSource = readFileSync(formPath, "utf8");
+const clientSource = readFileSync(clientPath, "utf8");
+const validationSource = readFileSync(validationPath, "utf8");
+const proxySource = readFileSync(proxyPath, "utf8");
+const combinedUiSource = `${journalPageSource}\n${timelineSource}\n${cardSource}\n${formSource}\n${clientSource}\n${validationSource}`;
+
+describe("SkinJournal Timeline UI", () => {
+  it("adds the protected /journal page and renders SkinJournalTimeline", () => {
+    expect(existsSync(journalPagePath)).toBe(true);
+    expect(existsSync(mistakenSkinJournalPagePath)).toBe(false);
+    expect(existsSync(mistakenDashboardSkinJournalPagePath)).toBe(false);
+    expect(routes.JOURNAL).toBe("/journal");
+    expect(journalPageSource).toContain(
+      "@/modules/journals/components/skin-journal-timeline",
+    );
+    expect(journalPageSource).toContain("<SkinJournalTimeline />");
+    expect(journalPageSource).toContain("routes.JOURNAL");
+    expect(journalPageSource).toContain("data-route={routes.JOURNAL}");
+  });
+
+  it("enables Journal navigation while keeping future routes disabled", () => {
+    expect(
+      dashboardNavItems.find((item) => item.label === "Journal"),
+    ).toEqual({
+      disabled: false,
+      href: routes.JOURNAL,
+      label: "Journal",
+      status: "Active",
+    });
+
+    for (const disabledLabel of ["Today Log", "Products", "Ingredients"]) {
+      expect(
+        dashboardNavItems.find((item) => item.label === disabledLabel),
+      ).toMatchObject({
+        disabled: true,
+        href: null,
+      });
+    }
+  });
+
+  it("protects /journal through the existing auth proxy matcher", () => {
+    expect(proxySource).toContain('"/journal/:path*"');
+    expect(proxySource).toContain('"/dashboard/:path*"');
+    expect(proxySource).toContain('"/routines/:path*"');
+  });
+
+  it("keeps journal UI components client-safe", () => {
+    expect(timelineSource.startsWith('"use client";')).toBe(true);
+    expect(formSource.startsWith('"use client";')).toBe(true);
+
+    for (const forbiddenImport of [
+      "@/modules/journals/index",
+      "skin-journal.repository",
+      "create-skin-journal.use-case",
+      "list-skin-journal.use-case",
+      "update-skin-journal.use-case",
+      "delete-skin-journal.use-case",
+      "@/infrastructure/database",
+      "mongodb",
+      "server-only",
+      "getCurrentUser",
+      "@/modules/auth",
+    ]) {
+      expect(combinedUiSource).not.toContain(forbiddenImport);
+    }
+  });
+
+  it("uses the existing SkinJournal API contract from the client helper", () => {
+    expect(clientSource).toContain('const SKIN_JOURNAL_API_PATH = "/api/skin-journal"');
+    expect(clientSource).toContain('method: "GET"');
+    expect(clientSource).toContain('method: "POST"');
+    expect(clientSource).toContain('method: "PATCH"');
+    expect(clientSource).toContain('method: "DELETE"');
+    expect(clientSource).toContain("data.skinJournals");
+    expect(clientSource).toContain("data.skinJournal");
+    expect(clientSource).toContain("data.deleted");
+    expect(clientSource).toContain(
+      "You already have a journal entry for this date.",
+    );
+  });
+
+  it("renders loading, error, empty, success, create, edit, and delete flows", () => {
+    for (const requiredCopy of [
+      "Loading Skin Journal",
+      "Unable to load Skin Journal",
+      "No journal entries yet",
+      "Journal entry created.",
+      "Journal entry updated.",
+      "Journal entry deleted.",
+      "Create journal entry",
+      "Edit journal entry",
+      "New entry",
+      "Delete",
+      "window.confirm",
+    ]) {
+      expect(combinedUiSource).toContain(requiredCopy);
+    }
+  });
+
+  it("uses only canonical SkinJournal UI fields", () => {
+    for (const allowedField of [
+      "localDate",
+      "timezone",
+      "productsUsed",
+      "observations",
+      "symptoms",
+      "sleepHours",
+      "stressLevel",
+      "notes",
+      "createdAt",
+      "updatedAt",
+    ]) {
+      expect(combinedUiSource).toContain(allowedField);
+    }
+
+    for (const forbiddenField of [
+      "mood",
+      "skinCondition",
+      "acneLevel",
+      "rednessLevel",
+      "drynessLevel",
+      "oilinessLevel",
+      "sensitivityLevel",
+    ]) {
+      expect(combinedUiSource).not.toContain(forbiddenField);
+    }
+  });
+
+  it("does not implement out-of-scope SkinJournal features", () => {
+    for (const forbiddenScope of [
+      "calendar heatmap",
+      "AI journal analysis",
+      "analytics view",
+      "insight view",
+      "Product Picker",
+      "product lookup",
+      "image upload",
+      "image preview",
+    ]) {
+      expect(combinedUiSource).not.toContain(forbiddenScope);
+    }
+  });
+});

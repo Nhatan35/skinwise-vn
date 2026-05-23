@@ -12,5 +12,6 @@ export const config = {
     "/onboarding/:path*",
     "/skin-profile/:path*",
     "/routines/:path*",
+    "/journal/:path*",
   ],
 };

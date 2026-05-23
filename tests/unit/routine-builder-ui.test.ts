@@ -150,9 +150,12 @@ describe("Routine Builder UI foundation", () => {
     }
   });
 
-  it("enables only the dashboard Routines navigation item for this task", () => {
+  it("keeps the dashboard Routines navigation item enabled", () => {
     const routinesItem = dashboardNavItems.find(
       (item) => item.label === "Routines",
+    );
+    const journalItem = dashboardNavItems.find(
+      (item) => item.label === "Journal",
     );
 
     expect(routinesItem).toEqual({
@@ -161,10 +164,15 @@ describe("Routine Builder UI foundation", () => {
       label: "Routines",
       status: "Active",
     });
+    expect(journalItem).toEqual({
+      disabled: false,
+      href: routes.JOURNAL,
+      label: "Journal",
+      status: "Active",
+    });
 
     for (const disabledLabel of [
       "Today Log",
-      "Journal",
       "Products",
       "Ingredients",
     ]) {
@@ -182,6 +190,7 @@ describe("Routine Builder UI foundation", () => {
     expect(proxySource).toContain('"/onboarding/:path*"');
     expect(proxySource).toContain('"/skin-profile/:path*"');
     expect(proxySource).toContain('"/routines/:path*"');
+    expect(proxySource).toContain('"/journal/:path*"');
   });
 
   it("does not add out-of-scope routine UI routes", () => {

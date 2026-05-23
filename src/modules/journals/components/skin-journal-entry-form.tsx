@@ -1,0 +1,511 @@
+"use client";
+
+import { Save, X } from "lucide-react";
+import { useState, type FormEvent } from "react";
+
+import {
+  createSkinJournal,
+  SkinJournalClientError,
+  updateSkinJournal,
+} from "@/modules/journals/skin-journal.client";
+import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
+import {
+  createBlankSkinJournalFormState,
+  type SkinJournalFieldErrors,
+  type SkinJournalFormField,
+  type SkinJournalFormState,
+  validateCreateSkinJournalForm,
+  validateUpdateSkinJournalForm,
+} from "@/modules/journals/skin-journal-form.validation";
+import type {
+  SkinJournalStressLevel,
+  SkinJournalSymptom,
+} from "@/modules/journals/skin-journal.types";
+import {
+  SKIN_JOURNAL_STRESS_LEVELS,
+  SKIN_JOURNAL_SYMPTOMS,
+} from "@/modules/journals/skin-journal.types";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/shared/components/ui/alert";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { cn } from "@/shared/utils";
+
+type SkinJournalEntryFormProps = {
+  entry?: SkinJournalDto;
+  mode: "create" | "edit";
+  onCancel: () => void;
+  onSaved: (entry: SkinJournalDto) => void;
+};
+
+const symptomLabels: Record<SkinJournalSymptom, string> = {
+  dryness: "Dryness",
+  oiliness: "Oiliness",
+  redness: "Redness",
+  stinging: "Stinging",
+  new_breakouts: "New breakouts",
+  itchiness: "Itchiness",
+  other: "Other",
+};
+
+const stressLabels: Record<SkinJournalStressLevel, string> = {
+  low: "Low",
+  medium: "Medium",
+  high: "High",
+};
+
+function entryToFormState(entry?: SkinJournalDto): SkinJournalFormState {
+  if (!entry) {
+    return createBlankSkinJournalFormState();
+  }
+
+  return {
+    localDate: entry.localDate,
+    timezone: entry.timezone,
+    productsUsedText: entry.productsUsed.join("\n"),
+    observationsText: entry.observations.join("\n"),
+    symptoms: [...entry.symptoms],
+    sleepHours:
+      entry.sleepHours !== undefined ? String(entry.sleepHours) : "",
+    stressLevel: entry.stressLevel ?? "",
+    notes: entry.notes ?? "",
+  };
+}
+
+function getFormErrorMessage(error: unknown) {
+  if (error instanceof SkinJournalClientError) {
+    return error.message;
+  }
+
+  return "Unable to save this journal entry. Please try again.";
+}
+
+export function SkinJournalEntryForm({
+  entry,
+  mode,
+  onCancel,
+  onSaved,
+}: SkinJournalEntryFormProps) {
+  const [formState, setFormState] = useState<SkinJournalFormState>(() =>
+    entryToFormState(entry),
+  );
+  const [fieldErrors, setFieldErrors] = useState<SkinJournalFieldErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  function clearFieldError(field: SkinJournalFormField) {
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  }
+
+  function updateField<Field extends keyof SkinJournalFormState>(
+    field: Field,
+    value: SkinJournalFormState[Field],
+  ) {
+    setFormState((current) => ({
+      ...current,
+      [field]: value,
+    }));
+    clearFieldError(field);
+  }
+
+  function toggleSymptom(symptom: SkinJournalSymptom, checked: boolean) {
+    setFormState((current) => ({
+      ...current,
+      symptoms: checked
+        ? Array.from(new Set([...current.symptoms, symptom]))
+        : current.symptoms.filter((item) => item !== symptom),
+    }));
+    clearFieldError("symptoms");
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (isSaving) {
+      return;
+    }
+
+    setFieldErrors({});
+    setFormError(null);
+
+    setIsSaving(true);
+
+    try {
+      if (mode === "create") {
+        const validation = validateCreateSkinJournalForm(formState);
+
+        if (!validation.success) {
+          setFieldErrors(validation.errors);
+          return;
+        }
+
+        const savedEntry = await createSkinJournal(validation.data);
+
+        onSaved(savedEntry);
+        return;
+      }
+
+      const validation = validateUpdateSkinJournalForm(formState);
+
+      if (!validation.success) {
+        setFieldErrors(validation.errors);
+        return;
+      }
+
+      const savedEntry = await updateSkinJournal(entry?.id ?? "", validation.data);
+
+      onSaved(savedEntry);
+    } catch (error) {
+      setFormError(getFormErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <Card className="border-stone-200 bg-white">
+      <CardHeader>
+        <CardTitle>
+          {mode === "create" ? "Create journal entry" : "Edit journal entry"}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {formError ? (
+            <Alert variant="destructive">
+              <AlertTitle>Journal entry was not saved</AlertTitle>
+              <AlertDescription>{formError}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="skin-journal-local-date">Date</Label>
+              {mode === "create" ? (
+                <Input
+                  aria-describedby={
+                    fieldErrors.localDate
+                      ? "skin-journal-local-date-error"
+                      : undefined
+                  }
+                  aria-invalid={fieldErrors.localDate ? true : undefined}
+                  id="skin-journal-local-date"
+                  onChange={(event) =>
+                    updateField("localDate", event.target.value)
+                  }
+                  type="date"
+                  value={formState.localDate}
+                />
+              ) : (
+                <p className="border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-700">
+                  {formState.localDate}
+                </p>
+              )}
+              {fieldErrors.localDate ? (
+                <p
+                  className="text-sm text-red-700"
+                  id="skin-journal-local-date-error"
+                >
+                  {fieldErrors.localDate}
+                </p>
+              ) : null}
+            </div>
+
+            <TextField
+              error={fieldErrors.timezone}
+              id="skin-journal-timezone"
+              label="Timezone"
+              onChange={(value) => updateField("timezone", value)}
+              value={formState.timezone}
+            />
+          </div>
+
+          <TextareaField
+            description="Use one product per line or separate items with commas."
+            error={fieldErrors.productsUsedText}
+            id="skin-journal-products-used"
+            label="Products used"
+            onChange={(value) => updateField("productsUsedText", value)}
+            rows={3}
+            value={formState.productsUsedText}
+          />
+
+          <TextareaField
+            description="Use one observation per line or separate items with commas."
+            error={fieldErrors.observationsText}
+            id="skin-journal-observations"
+            label="Observations"
+            onChange={(value) => updateField("observationsText", value)}
+            rows={4}
+            value={formState.observationsText}
+          />
+
+          <fieldset
+            aria-describedby={
+              fieldErrors.symptoms ? "skin-journal-symptoms-error" : undefined
+            }
+            className="space-y-3"
+          >
+            <legend className="text-sm font-medium text-stone-900">
+              Symptoms
+            </legend>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {SKIN_JOURNAL_SYMPTOMS.map((symptom) => {
+                const inputId = `skin-journal-symptom-${symptom}`;
+                const checked = formState.symptoms.includes(symptom);
+
+                return (
+                  <div
+                    className="flex items-start gap-3 border border-stone-200 bg-stone-50 px-3 py-3"
+                    key={symptom}
+                  >
+                    <input
+                      checked={checked}
+                      className="mt-1 size-4 accent-emerald-700"
+                      id={inputId}
+                      onChange={(event) =>
+                        toggleSymptom(symptom, event.target.checked)
+                      }
+                      type="checkbox"
+                    />
+                    <Label className="leading-5" htmlFor={inputId}>
+                      {symptomLabels[symptom]}
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+            {fieldErrors.symptoms ? (
+              <p
+                className="text-sm text-red-700"
+                id="skin-journal-symptoms-error"
+              >
+                {fieldErrors.symptoms}
+              </p>
+            ) : null}
+          </fieldset>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <TextField
+              error={fieldErrors.sleepHours}
+              id="skin-journal-sleep-hours"
+              inputMode="decimal"
+              label="Sleep hours"
+              max="24"
+              min="0"
+              onChange={(value) => updateField("sleepHours", value)}
+              placeholder="7"
+              step="0.25"
+              type="number"
+              value={formState.sleepHours}
+            />
+
+            <div className="space-y-2">
+              <Label htmlFor="skin-journal-stress-level">Stress level</Label>
+              <Select
+                onValueChange={(value) =>
+                  updateField(
+                    "stressLevel",
+                    value === "none"
+                      ? ""
+                      : (value as SkinJournalStressLevel),
+                  )
+                }
+                value={formState.stressLevel || "none"}
+              >
+                <SelectTrigger
+                  aria-describedby={
+                    fieldErrors.stressLevel
+                      ? "skin-journal-stress-level-error"
+                      : undefined
+                  }
+                  aria-invalid={fieldErrors.stressLevel ? true : undefined}
+                  className={cn(
+                    "w-full",
+                    fieldErrors.stressLevel ? "border-red-400" : "",
+                  )}
+                  id="skin-journal-stress-level"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Not tracked</SelectItem>
+                  {SKIN_JOURNAL_STRESS_LEVELS.map((stressLevel) => (
+                    <SelectItem key={stressLevel} value={stressLevel}>
+                      {stressLabels[stressLevel]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {fieldErrors.stressLevel ? (
+                <p
+                  className="text-sm text-red-700"
+                  id="skin-journal-stress-level-error"
+                >
+                  {fieldErrors.stressLevel}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <TextareaField
+            error={fieldErrors.notes}
+            id="skin-journal-notes"
+            label="Notes"
+            maxLength={3000}
+            onChange={(value) => updateField("notes", value)}
+            rows={5}
+            value={formState.notes}
+          />
+
+          <div className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-stone-600">
+              Skin Journal is for tracking observations, not diagnosis or
+              treatment advice.
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                disabled={isSaving}
+                onClick={onCancel}
+                type="button"
+                variant="outline"
+              >
+                <X aria-hidden="true" />
+                Cancel
+              </Button>
+              <Button disabled={isSaving} type="submit">
+                <Save aria-hidden="true" />
+                {isSaving ? "Saving..." : "Save entry"}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
+type TextFieldProps = {
+  error?: string;
+  id: string;
+  inputMode?: "decimal";
+  label: string;
+  max?: string;
+  min?: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  step?: string;
+  type?: "number" | "text";
+  value: string;
+};
+
+function TextField({
+  error,
+  id,
+  inputMode,
+  label,
+  max,
+  min,
+  onChange,
+  placeholder,
+  step,
+  type = "text",
+  value,
+}: TextFieldProps) {
+  const errorId = `${id}-error`;
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Input
+        aria-describedby={error ? errorId : undefined}
+        aria-invalid={error ? true : undefined}
+        className={cn(error ? "border-red-400" : "")}
+        id={id}
+        inputMode={inputMode}
+        max={max}
+        min={min}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        step={step}
+        type={type}
+        value={value}
+      />
+      {error ? (
+        <p className="text-sm text-red-700" id={errorId}>
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+type TextareaFieldProps = {
+  description?: string;
+  error?: string;
+  id: string;
+  label: string;
+  maxLength?: number;
+  onChange: (value: string) => void;
+  rows: number;
+  value: string;
+};
+
+function TextareaField({
+  description,
+  error,
+  id,
+  label,
+  maxLength,
+  onChange,
+  rows,
+  value,
+}: TextareaFieldProps) {
+  const errorId = `${id}-error`;
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Textarea
+        aria-describedby={error ? errorId : undefined}
+        aria-invalid={error ? true : undefined}
+        className={cn(error ? "border-red-400" : "")}
+        id={id}
+        maxLength={maxLength}
+        onChange={(event) => onChange(event.target.value)}
+        rows={rows}
+        value={value}
+      />
+      {description ? (
+        <p className="text-sm text-stone-600">{description}</p>
+      ) : null}
+      {error ? (
+        <p className="text-sm text-red-700" id={errorId}>
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}

@@ -597,7 +597,7 @@ Rules:
 
 ## 11. SkinJournal ownership
 
-Owned files implemented by TASK SJ-001:
+Owned files implemented by TASK SJ-001 and TASK SJ-002:
 
 ```txt
 src/modules/journals/skin-journal.types.ts
@@ -610,11 +610,20 @@ src/modules/journals/list-skin-journal.use-case.ts
 src/modules/journals/update-skin-journal.use-case.ts
 src/modules/journals/delete-skin-journal.use-case.ts
 src/modules/journals/index.ts
+src/modules/journals/skin-journal.client.ts
+src/modules/journals/skin-journal-form.validation.ts
+src/modules/journals/components/skin-journal-timeline.tsx
+src/modules/journals/components/skin-journal-entry-card.tsx
+src/modules/journals/components/skin-journal-entry-form.tsx
 src/app/api/skin-journal/route.ts
 src/app/api/skin-journal/[id]/route.ts
+src/app/(dashboard)/journal/page.tsx
 tests/unit/skin-journal.test.ts
 tests/unit/skin-journal-use-case.test.ts
 tests/unit/skin-journal-api-contract.test.ts
+tests/unit/skin-journal-client.test.ts
+tests/unit/skin-journal-form-validation.test.ts
+tests/unit/skin-journal-ui.test.ts
 ```
 
 Rules:
@@ -627,9 +636,12 @@ Rules:
 - `productsUsed` remains a string array in SJ-001 and is not product-validated yet;
 - public DTOs must not expose `userId`, `_id`, raw ObjectId values, `imageUrl`, `imageStorageKey`, `imageVisibility`, or `photoUrls`;
 - request schemas must reject unknown fields and future image/photo fields;
+- `/journal` is the protected dashboard route for the SkinJournal Timeline UI;
+- SkinJournal client UI must consume the existing SJ-001 API contract and must not import `src/modules/journals/index.ts`, repositories, use cases, auth helpers, database helpers, `server-only`, or `mongodb`;
+- create/update client payloads must include only canonical SkinJournal fields and must not send `userId`, `_id`, `id`, timestamps, localDate in PATCH, future image/photo fields, provider fields, or internal fields;
 - no appearance scoring;
 - journal entries are private;
-- no UI, image upload, image storage, AI journal analysis, dashboard integration, or medical diagnosis in SJ-001.
+- no image upload, image storage, calendar heatmap, analytics/insight view, AI journal analysis, or medical diagnosis in SJ-002.
 
 ## 12. Dashboard ownership
 
@@ -666,7 +678,7 @@ Rules:
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
-- `/dashboard`, `/skin-profile`, and `/routines` are enabled routes in the dashboard nav;
+- `/dashboard`, `/skin-profile`, `/routines`, and `/journal` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - dashboard cards must render API-provided dashboard summary data only and must not contain fake skincare, routine, product, journal, ingredient, or AI results.
