@@ -20,7 +20,7 @@ function createFormState(
   return {
     localDate: "2026-05-22",
     timezone: "Asia/Ho_Chi_Minh",
-    productsUsedText: "product_123",
+    productsUsed: ["product_123"],
     observationsText: "Dry cheeks",
     symptoms: ["dryness"],
     sleepHours: "7",
@@ -107,6 +107,31 @@ describe("SkinJournal form validation", () => {
     expect(payload).not.toHaveProperty("userId");
   });
 
+  it("keeps product payloads as product ids only", () => {
+    const formState = {
+      ...createFormState({
+        productsUsed: ["product_123", "product_456"],
+      }),
+      brand: "Example Brand",
+      product: {
+        id: "product_123",
+        name: "Example Gentle Cleanser",
+      },
+      productName: "Example Gentle Cleanser",
+    } as unknown as SkinJournalFormState;
+    const createPayload = buildCreateSkinJournalPayload(formState);
+    const updatePayload = buildUpdateSkinJournalPayload(formState);
+
+    for (const payload of [createPayload, updatePayload]) {
+      expect(payload.productsUsed).toEqual(["product_123", "product_456"]);
+      expect(payload).not.toHaveProperty("product");
+      expect(payload).not.toHaveProperty("productName");
+      expect(payload).not.toHaveProperty("brand");
+      expect(payload).not.toHaveProperty("imageUrl");
+      expect(payload).not.toHaveProperty("photoUrls");
+    }
+  });
+
   it("validates create payloads", () => {
     expect(validateCreateSkinJournalForm(createFormState()).success).toBe(true);
     expect(
@@ -172,15 +197,15 @@ describe("SkinJournal form validation", () => {
     expect(
       validateCreateSkinJournalForm(
         createFormState({
-          productsUsedText: Array.from(
+          productsUsed: Array.from(
             { length: 31 },
             (_, index) => `product_${index}`,
-          ).join("\n"),
+          ),
         }),
       ),
     ).toMatchObject({
       errors: {
-        productsUsedText: "Products used can include at most 30 items.",
+        productsUsed: "Products used can include at most 30 items.",
       },
       success: false,
     });
@@ -221,10 +246,10 @@ describe("SkinJournal form validation", () => {
     ).toBe(false);
   });
 
-  it("creates a blank form state with default arrays represented as text fields", () => {
+  it("creates a blank form state with default product and observation fields", () => {
     const formState = createBlankSkinJournalFormState();
 
-    expect(formState.productsUsedText).toBe("");
+    expect(formState.productsUsed).toEqual([]);
     expect(formState.observationsText).toBe("");
     expect(formState.symptoms).toEqual([]);
     expect(formState.stressLevel).toBe("");

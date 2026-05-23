@@ -268,12 +268,14 @@ src/modules/products/product.dto.ts
 src/modules/products/product.mapper.ts
 src/modules/products/product.repository.ts
 src/modules/products/product.use-case.ts
+src/modules/products/product.client.ts
 src/modules/products/index.ts
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
+tests/unit/product-client.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
@@ -285,7 +287,8 @@ Rules:
 - TASK PI-001 implements read-only list/detail only.
 - public Product DTOs must not expose `_id`, raw ObjectId values, `createdByUserId`, or `source`.
 - `GET /api/products` and `GET /api/products/[id]` return only `reviewed` or `verified` products in this foundation.
-- `POST /api/products`, `includeMine`, Product UI pages, admin product management, seed scripts, external product APIs, image upload, and medical diagnosis are out of scope for this ownership status.
+- `src/modules/products/product.client.ts` is client-safe, uses `GET /api/products?limit=50`, parses products from `data.items`, and must not import repositories, use cases, database helpers, auth helpers, MongoDB, or `server-only`.
+- `POST /api/products`, `includeMine`, Product UI pages, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 
@@ -296,12 +299,14 @@ src/modules/products/product.dto.ts
 src/modules/products/product.mapper.ts
 src/modules/products/product.repository.ts
 src/modules/products/product.use-case.ts
+src/modules/products/product.client.ts
 src/modules/products/index.ts
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
+tests/unit/product-client.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
@@ -597,7 +602,7 @@ Rules:
 
 ## 11. SkinJournal ownership
 
-Owned files implemented by TASK SJ-001 and TASK SJ-002:
+Owned files implemented by TASK SJ-001, TASK SJ-002, and TASK SJ-003:
 
 ```txt
 src/modules/journals/skin-journal.types.ts
@@ -612,6 +617,7 @@ src/modules/journals/delete-skin-journal.use-case.ts
 src/modules/journals/index.ts
 src/modules/journals/skin-journal.client.ts
 src/modules/journals/skin-journal-form.validation.ts
+src/modules/journals/skin-journal-product-display.ts
 src/modules/journals/components/skin-journal-timeline.tsx
 src/modules/journals/components/skin-journal-entry-card.tsx
 src/modules/journals/components/skin-journal-entry-form.tsx
@@ -623,6 +629,7 @@ tests/unit/skin-journal-use-case.test.ts
 tests/unit/skin-journal-api-contract.test.ts
 tests/unit/skin-journal-client.test.ts
 tests/unit/skin-journal-form-validation.test.ts
+tests/unit/skin-journal-product-display.test.ts
 tests/unit/skin-journal-ui.test.ts
 ```
 
@@ -633,7 +640,10 @@ Rules:
 - invalid, missing, or not-owned `id` values return `NOT_FOUND`;
 - `localDate` is stored as `YYYY-MM-DD` string and cannot be changed through PATCH;
 - `timezone` is stored as an IANA timezone string;
-- `productsUsed` remains a string array in SJ-001 and is not product-validated yet;
+- `productsUsed` remains a string array of product IDs in the SkinJournal API and database;
+- SJ-003 resolves product IDs to readable labels in the UI only by using the existing visible Product catalogue from `GET /api/products?limit=50`;
+- SkinJournal must not store product names, brand names, Product DTO objects, or product snapshots in journal entries;
+- missing, deleted, or unresolved product IDs must display as `Unknown product`;
 - public DTOs must not expose `userId`, `_id`, raw ObjectId values, `imageUrl`, `imageStorageKey`, `imageVisibility`, or `photoUrls`;
 - request schemas must reject unknown fields and future image/photo fields;
 - `/journal` is the protected dashboard route for the SkinJournal Timeline UI;
@@ -641,7 +651,7 @@ Rules:
 - create/update client payloads must include only canonical SkinJournal fields and must not send `userId`, `_id`, `id`, timestamps, localDate in PATCH, future image/photo fields, provider fields, or internal fields;
 - no appearance scoring;
 - journal entries are private;
-- no image upload, image storage, calendar heatmap, analytics/insight view, AI journal analysis, or medical diagnosis in SJ-002.
+- no image upload, image storage, saved product library, Product CRUD UI, backend product ownership system, calendar heatmap, analytics/insight view, AI journal analysis, or medical diagnosis in SJ-003.
 
 ## 12. Dashboard ownership
 

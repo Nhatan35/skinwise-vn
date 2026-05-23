@@ -62,7 +62,7 @@ export type UpdateSkinJournalClientInput = z.infer<
 export type SkinJournalFormState = {
   localDate: string;
   timezone: string;
-  productsUsedText: string;
+  productsUsed: string[];
   observationsText: string;
   symptoms: SkinJournalSymptom[];
   sleepHours: string;
@@ -73,7 +73,7 @@ export type SkinJournalFormState = {
 export type SkinJournalFormField =
   | "localDate"
   | "timezone"
-  | "productsUsedText"
+  | "productsUsed"
   | "observationsText"
   | "symptoms"
   | "sleepHours"
@@ -100,7 +100,7 @@ export type SkinJournalValidationResult<TData> =
 const fieldMessages: Record<SkinJournalFormField, string> = {
   localDate: "Choose a date using YYYY-MM-DD.",
   timezone: "Timezone is required.",
-  productsUsedText: "Products used can include at most 30 items.",
+  productsUsed: "Products used can include at most 30 items.",
   observationsText: "Observations can include at most 20 items.",
   symptoms: "Choose only supported symptom values.",
   sleepHours: "Sleep hours must be between 0 and 24.",
@@ -136,7 +136,7 @@ export function createBlankSkinJournalFormState(): SkinJournalFormState {
   return {
     localDate: getDefaultSkinJournalLocalDate(),
     timezone: getDefaultSkinJournalTimezone(),
-    productsUsedText: "",
+    productsUsed: [],
     observationsText: "",
     symptoms: [],
     sleepHours: "",
@@ -155,6 +155,10 @@ function parseSleepHours(value: string) {
   return Number(normalizedValue);
 }
 
+function normalizeProductsUsed(productsUsed: string[]) {
+  return productsUsed.map((productId) => productId.trim()).filter(Boolean);
+}
+
 export function buildCreateSkinJournalPayload(formState: SkinJournalFormState) {
   const sleepHours = parseSleepHours(formState.sleepHours);
   const notes = formState.notes.trim();
@@ -162,7 +166,7 @@ export function buildCreateSkinJournalPayload(formState: SkinJournalFormState) {
   return {
     localDate: formState.localDate,
     timezone: formState.timezone,
-    productsUsed: parseListInput(formState.productsUsedText),
+    productsUsed: normalizeProductsUsed(formState.productsUsed),
     observations: parseListInput(formState.observationsText),
     symptoms: [...formState.symptoms],
     ...(sleepHours !== undefined ? { sleepHours } : {}),
@@ -176,7 +180,7 @@ export function buildUpdateSkinJournalPayload(formState: SkinJournalFormState) {
 
   return {
     timezone: formState.timezone,
-    productsUsed: parseListInput(formState.productsUsedText),
+    productsUsed: normalizeProductsUsed(formState.productsUsed),
     observations: parseListInput(formState.observationsText),
     symptoms: [...formState.symptoms],
     ...(sleepHours !== undefined ? { sleepHours } : {}),
@@ -189,7 +193,7 @@ function getFieldKey(issue: ZodIssue): SkinJournalFormField {
   const field = issue.path[0];
 
   if (field === "productsUsed") {
-    return "productsUsedText";
+    return "productsUsed";
   }
 
   if (field === "observations") {

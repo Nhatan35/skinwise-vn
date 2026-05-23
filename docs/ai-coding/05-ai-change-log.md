@@ -4,6 +4,76 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-23 - TASK SJ-003 SkinJournal Product Linking / Product Name Resolution
+
+### Task
+
+Add UI-only product selection and product name resolution to SkinJournal while preserving the SJ-001 backend API contract.
+
+### Files Added
+
+```txt
+src/modules/products/product.client.ts
+src/modules/journals/skin-journal-product-display.ts
+tests/unit/product-client.test.ts
+tests/unit/skin-journal-product-display.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/journals/components/skin-journal-timeline.tsx
+src/modules/journals/components/skin-journal-entry-card.tsx
+src/modules/journals/components/skin-journal-entry-form.tsx
+src/modules/journals/skin-journal-form.validation.ts
+tests/unit/skin-journal-ui.test.ts
+tests/unit/skin-journal-form-validation.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+SkinJournal entries stored product IDs but the UI showed raw IDs and required manual product ID entry. SJ-003 connects the existing visible Product catalogue to the journal UI without changing journal persistence or API responses.
+
+### Implementation Notes
+
+- Added a client-safe Product API helper for `GET /api/products?limit=50`.
+- Product list responses are parsed from `data.items`.
+- Added pure helpers for product display labels and journal product ID resolution.
+- Journal cards now show readable product badges and display `Unknown product` for missing/deleted/unresolved products.
+- Journal forms now let users select multiple catalogue products with checkboxes and submit only `productsUsed` product ID strings.
+- Product catalogue loading and failure states are handled separately from journal loading so entries still render if product loading fails.
+- Edit forms preserve existing product IDs if the product catalogue cannot load.
+- SkinJournal backend contract was not changed.
+- No product names, brand names, product objects, snapshots, `userId`, `_id`, image fields, or photo URLs are sent to the SkinJournal API.
+
+### Tests
+
+```txt
+tests/unit/product-client.test.ts
+tests/unit/skin-journal-product-display.test.ts
+tests/unit/skin-journal-ui.test.ts
+tests/unit/skin-journal-form-validation.test.ts
+```
+
+### Validation
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 58 files, 571 tests
+```
+
+### Notes
+
+- Product catalogue UI pages, Product CRUD, saved product library, backend product ownership, image upload, SkinJournal calendar/analytics views, and AI journal analysis remain unimplemented.
+- Recommended next task should be selected from product priorities, such as TASK SJ-004 - Implement SkinJournal Calendar/Insight View, TASK SJ-004 - Implement Private Journal Image Upload, TASK SJ-004 - Add SkinJournal Trends and Basic Analytics, or TASK PRODUCT-UI-001 - Implement Product Catalogue UI.
+
 ## 2026-05-23 - TASK SJ-002 SkinJournal Timeline UI
 
 ### Task

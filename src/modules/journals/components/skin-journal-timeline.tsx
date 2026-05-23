@@ -9,8 +9,11 @@ import {
   SkinJournalClientError,
 } from "@/modules/journals/skin-journal.client";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
+import { buildProductLookup } from "@/modules/journals/skin-journal-product-display";
 import { SkinJournalEntryCard } from "@/modules/journals/components/skin-journal-entry-card";
 import { SkinJournalEntryForm } from "@/modules/journals/components/skin-journal-entry-form";
+import { listProducts } from "@/modules/products/product.client";
+import type { ProductDto } from "@/modules/products/product.dto";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -65,6 +68,9 @@ export function SkinJournalTimeline() {
   const [entries, setEntries] = useState<SkinJournalDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [productLoadError, setProductLoadError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [formMode, setFormMode] = useState<FormMode>("none");
   const [editingEntry, setEditingEntry] = useState<SkinJournalDto | null>(null);
@@ -105,7 +111,42 @@ export function SkinJournalTimeline() {
     };
   }, [reloadKey]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProductCatalogue() {
+      setIsProductLoading(true);
+      setProductLoadError(null);
+
+      try {
+        const visibleProducts = await listProducts();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setProducts(visibleProducts);
+      } catch {
+        if (isMounted) {
+          setProducts([]);
+          setProductLoadError("Could not load the product catalogue.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsProductLoading(false);
+        }
+      }
+    }
+
+    void loadProductCatalogue();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const sortedEntries = useMemo(() => sortSkinJournals(entries), [entries]);
+  const productLookup = useMemo(() => buildProductLookup(products), [products]);
 
   function startCreate() {
     setFormMode("create");
@@ -230,10 +271,20 @@ export function SkinJournalTimeline() {
 
       {formMode === "create" ? (
         <SkinJournalEntryForm
+          isProductLoading={isProductLoading}
           mode="create"
           onCancel={cancelForm}
           onSaved={handleSaved}
+          productLoadError={productLoadError}
+          products={products}
         />
+      ) : null}
+
+      {productLoadError ? (
+        <Alert>
+          <AlertTitle>Product catalogue unavailable</AlertTitle>
+          <AlertDescription>{productLoadError}</AlertDescription>
+        </Alert>
       ) : null}
 
       {sortedEntries.length === 0 && formMode !== "create" ? (
@@ -254,10 +305,13 @@ export function SkinJournalTimeline() {
           formMode === "edit" && editingEntry?.id === entry.id ? (
             <SkinJournalEntryForm
               entry={entry}
+              isProductLoading={isProductLoading}
               key={entry.id}
               mode="edit"
               onCancel={cancelForm}
               onSaved={handleSaved}
+              productLoadError={productLoadError}
+              products={products}
             />
           ) : (
             <SkinJournalEntryCard
@@ -266,6 +320,7 @@ export function SkinJournalTimeline() {
               key={entry.id}
               onDelete={handleDelete}
               onEdit={startEdit}
+              productLookup={productLookup}
             />
           ),
         )}

@@ -36,6 +36,14 @@ const validationPath = join(
   projectRoot,
   "src/modules/journals/skin-journal-form.validation.ts",
 );
+const productDisplayPath = join(
+  projectRoot,
+  "src/modules/journals/skin-journal-product-display.ts",
+);
+const productClientPath = join(
+  projectRoot,
+  "src/modules/products/product.client.ts",
+);
 const proxyPath = join(projectRoot, "src/proxy.ts");
 
 const journalPageSource = readFileSync(journalPagePath, "utf8");
@@ -44,8 +52,10 @@ const cardSource = readFileSync(cardPath, "utf8");
 const formSource = readFileSync(formPath, "utf8");
 const clientSource = readFileSync(clientPath, "utf8");
 const validationSource = readFileSync(validationPath, "utf8");
+const productDisplaySource = readFileSync(productDisplayPath, "utf8");
+const productClientSource = readFileSync(productClientPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
-const combinedUiSource = `${journalPageSource}\n${timelineSource}\n${cardSource}\n${formSource}\n${clientSource}\n${validationSource}`;
+const combinedUiSource = `${journalPageSource}\n${timelineSource}\n${cardSource}\n${formSource}\n${clientSource}\n${validationSource}\n${productDisplaySource}\n${productClientSource}`;
 
 describe("SkinJournal Timeline UI", () => {
   it("adds the protected /journal page and renders SkinJournalTimeline", () => {
@@ -103,6 +113,8 @@ describe("SkinJournal Timeline UI", () => {
       "server-only",
       "getCurrentUser",
       "@/modules/auth",
+      "product.repository",
+      "product.use-case",
     ]) {
       expect(combinedUiSource).not.toContain(forbiddenImport);
     }
@@ -120,6 +132,52 @@ describe("SkinJournal Timeline UI", () => {
     expect(clientSource).toContain(
       "You already have a journal entry for this date.",
     );
+  });
+
+  it("loads the visible product catalogue through the Product API client", () => {
+    expect(productClientSource).toContain(
+      'const PRODUCTS_API_PATH = "/api/products?limit=50"',
+    );
+    expect(productClientSource).toContain('method: "GET"');
+    expect(productClientSource).toContain("body.data.items");
+    expect(productClientSource).not.toContain("data.products");
+    expect(timelineSource).toContain("@/modules/products/product.client");
+    expect(timelineSource).toContain("listProducts");
+    expect(timelineSource).toContain("isProductLoading");
+    expect(timelineSource).toContain(
+      "Could not load the product catalogue.",
+    );
+    expect(timelineSource).toContain("setProductLoadError");
+    expect(timelineSource).not.toContain(
+      'setLoadError("Could not load the product catalogue.',
+    );
+  });
+
+  it("resolves journal product ids to readable card labels", () => {
+    expect(cardSource).toContain("resolveJournalProductLabels");
+    expect(cardSource).toContain("productLookup");
+    expect(cardSource).toContain("productLabel.label");
+    expect(cardSource).toContain("No products recorded.");
+    expect(productDisplaySource).toContain(" - ");
+    expect(productDisplaySource).toContain("Unknown product");
+  });
+
+  it("renders product selection without sending product names or objects", () => {
+    expect(formSource).toContain("ProductSelectionField");
+    expect(formSource).toContain("type=\"checkbox\"");
+    expect(formSource).toContain("selectedProductIds");
+    expect(formSource).toContain("toggleProduct");
+    expect(formSource).toContain("getProductDisplayName(product)");
+    expect(formSource).toContain("UNKNOWN_PRODUCT_LABEL");
+    expect(formSource).toContain("unresolvedProductIds.map");
+    expect(formSource).toContain("onToggle(productId, event.target.checked)");
+    expect(formSource).toContain("Existing product selections will be preserved");
+    expect(validationSource).toContain("productsUsed: string[]");
+    expect(validationSource).toContain(
+      "productsUsed: normalizeProductsUsed(formState.productsUsed)",
+    );
+    expect(validationSource).not.toContain("productName");
+    expect(validationSource).not.toContain("productBrand");
   });
 
   it("renders loading, error, empty, success, create, edit, and delete flows", () => {
@@ -175,10 +233,10 @@ describe("SkinJournal Timeline UI", () => {
       "AI journal analysis",
       "analytics view",
       "insight view",
-      "Product Picker",
-      "product lookup",
       "image upload",
       "image preview",
+      "Product CRUD",
+      "saved products",
     ]) {
       expect(combinedUiSource).not.toContain(forbiddenScope);
     }

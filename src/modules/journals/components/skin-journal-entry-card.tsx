@@ -1,6 +1,10 @@
 import { Pencil, Trash2 } from "lucide-react";
 
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
+import {
+  resolveJournalProductLabels,
+  type ProductLookup,
+} from "@/modules/journals/skin-journal-product-display";
 import type {
   SkinJournalStressLevel,
   SkinJournalSymptom,
@@ -35,6 +39,7 @@ type SkinJournalEntryCardProps = {
   isDeleting: boolean;
   onDelete: (entry: SkinJournalDto) => void;
   onEdit: (entry: SkinJournalDto) => void;
+  productLookup: ProductLookup;
 };
 
 function formatLocalDate(localDate: string) {
@@ -61,7 +66,13 @@ export function SkinJournalEntryCard({
   isDeleting,
   onDelete,
   onEdit,
+  productLookup,
 }: SkinJournalEntryCardProps) {
+  const productLabels = resolveJournalProductLabels(
+    entry.productsUsed,
+    productLookup,
+  );
+
   return (
     <Card className="border-stone-200 bg-white">
       <CardHeader>
@@ -109,7 +120,7 @@ export function SkinJournalEntryCard({
         </div>
 
         <JournalList label="Observations" values={entry.observations} />
-        <JournalList label="Products used" values={entry.productsUsed} />
+        <JournalProductList productLabels={productLabels} />
 
         <div className="grid gap-3 sm:grid-cols-2">
           <JournalDetail
@@ -138,6 +149,32 @@ export function SkinJournalEntryCard({
         ) : null}
       </CardContent>
     </Card>
+  );
+}
+
+type JournalProductListProps = {
+  productLabels: {
+    id: string;
+    label: string;
+  }[];
+};
+
+function JournalProductList({ productLabels }: JournalProductListProps) {
+  return (
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium text-stone-900">Products used</h3>
+      {productLabels.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {productLabels.map((productLabel, index) => (
+            <Badge key={`${productLabel.id}-${index}`} variant="outline">
+              {productLabel.label}
+            </Badge>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-stone-600">No products recorded.</p>
+      )}
+    </div>
   );
 }
 

@@ -10,6 +10,10 @@ import {
 } from "@/modules/journals/skin-journal.client";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
 import {
+  getProductDisplayName,
+  UNKNOWN_PRODUCT_LABEL,
+} from "@/modules/journals/skin-journal-product-display";
+import {
   createBlankSkinJournalFormState,
   type SkinJournalFieldErrors,
   type SkinJournalFormField,
@@ -25,6 +29,7 @@ import {
   SKIN_JOURNAL_STRESS_LEVELS,
   SKIN_JOURNAL_SYMPTOMS,
 } from "@/modules/journals/skin-journal.types";
+import type { ProductDto } from "@/modules/products/product.dto";
 import {
   Alert,
   AlertDescription,
@@ -51,9 +56,12 @@ import { cn } from "@/shared/utils";
 
 type SkinJournalEntryFormProps = {
   entry?: SkinJournalDto;
+  isProductLoading: boolean;
   mode: "create" | "edit";
   onCancel: () => void;
   onSaved: (entry: SkinJournalDto) => void;
+  productLoadError: string | null;
+  products: ProductDto[];
 };
 
 const symptomLabels: Record<SkinJournalSymptom, string> = {
@@ -80,7 +88,7 @@ function entryToFormState(entry?: SkinJournalDto): SkinJournalFormState {
   return {
     localDate: entry.localDate,
     timezone: entry.timezone,
-    productsUsedText: entry.productsUsed.join("\n"),
+    productsUsed: [...entry.productsUsed],
     observationsText: entry.observations.join("\n"),
     symptoms: [...entry.symptoms],
     sleepHours:
@@ -100,9 +108,12 @@ function getFormErrorMessage(error: unknown) {
 
 export function SkinJournalEntryForm({
   entry,
+  isProductLoading,
   mode,
   onCancel,
   onSaved,
+  productLoadError,
+  products,
 }: SkinJournalEntryFormProps) {
   const [formState, setFormState] = useState<SkinJournalFormState>(() =>
     entryToFormState(entry),
@@ -138,6 +149,16 @@ export function SkinJournalEntryForm({
         : current.symptoms.filter((item) => item !== symptom),
     }));
     clearFieldError("symptoms");
+  }
+
+  function toggleProduct(productId: string, checked: boolean) {
+    setFormState((current) => ({
+      ...current,
+      productsUsed: checked
+        ? Array.from(new Set([...current.productsUsed, productId]))
+        : current.productsUsed.filter((item) => item !== productId),
+    }));
+    clearFieldError("productsUsed");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -242,14 +263,13 @@ export function SkinJournalEntryForm({
             />
           </div>
 
-          <TextareaField
-            description="Use one product per line or separate items with commas."
-            error={fieldErrors.productsUsedText}
-            id="skin-journal-products-used"
-            label="Products used"
-            onChange={(value) => updateField("productsUsedText", value)}
-            rows={3}
-            value={formState.productsUsedText}
+          <ProductSelectionField
+            error={fieldErrors.productsUsed}
+            isLoading={isProductLoading}
+            loadError={productLoadError}
+            onToggle={toggleProduct}
+            products={products}
+            selectedProductIds={formState.productsUsed}
           />
 
           <TextareaField
@@ -404,6 +424,128 @@ export function SkinJournalEntryForm({
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+type ProductSelectionFieldProps = {
+  error?: string;
+  isLoading: boolean;
+  loadError: string | null;
+  onToggle: (productId: string, checked: boolean) => void;
+  products: ProductDto[];
+  selectedProductIds: string[];
+};
+
+function ProductSelectionField({
+  error,
+  isLoading,
+  loadError,
+  onToggle,
+  products,
+  selectedProductIds,
+}: ProductSelectionFieldProps) {
+  const knownProductIds = new Set(products.map((product) => product.id));
+  const unresolvedProductIds = Array.from(
+    new Set(
+      selectedProductIds.filter((productId) => !knownProductIds.has(productId)),
+    ),
+  );
+  const hasUnresolvedSelection = unresolvedProductIds.length > 0;
+
+  return (
+    <fieldset
+      aria-describedby={error ? "skin-journal-products-used-error" : undefined}
+      className="space-y-3"
+    >
+      <legend className="text-sm font-medium text-stone-900">
+        Products used
+      </legend>
+
+      {isLoading ? (
+        <p className="text-sm text-stone-600">Loading product catalogue...</p>
+      ) : null}
+
+      {loadError ? (
+        <p className="text-sm text-amber-700">
+          Could not load the product catalogue.
+        </p>
+      ) : null}
+
+      {!isLoading && !loadError && products.length === 0 ? (
+        <p className="text-sm text-stone-600">
+          No catalogue products are available yet.
+        </p>
+      ) : null}
+
+      {!isLoading &&
+      !loadError &&
+      (products.length > 0 || unresolvedProductIds.length > 0) ? (
+        <div className="grid max-h-64 gap-3 overflow-y-auto border border-stone-200 bg-stone-50 p-3 sm:grid-cols-2">
+          {products.map((product) => {
+            const inputId = `skin-journal-product-${product.id}`;
+            const checked = selectedProductIds.includes(product.id);
+
+            return (
+              <div className="flex items-start gap-3" key={product.id}>
+                <input
+                  checked={checked}
+                  className="mt-1 size-4 accent-emerald-700"
+                  id={inputId}
+                  onChange={(event) =>
+                    onToggle(product.id, event.target.checked)
+                  }
+                  type="checkbox"
+                />
+                <Label className="leading-5" htmlFor={inputId}>
+                  {getProductDisplayName(product)}
+                </Label>
+              </div>
+            );
+          })}
+          {unresolvedProductIds.map((productId) => {
+            const inputId = `skin-journal-product-${productId}`;
+
+            return (
+              <div className="flex items-start gap-3" key={productId}>
+                <input
+                  checked
+                  className="mt-1 size-4 accent-emerald-700"
+                  id={inputId}
+                  onChange={(event) =>
+                    onToggle(productId, event.target.checked)
+                  }
+                  type="checkbox"
+                />
+                <Label className="leading-5" htmlFor={inputId}>
+                  {UNKNOWN_PRODUCT_LABEL}
+                </Label>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+
+      {loadError && selectedProductIds.length > 0 ? (
+        <p className="text-sm text-stone-600">
+          Existing product selections will be preserved when you save.
+        </p>
+      ) : null}
+
+      {!loadError && hasUnresolvedSelection ? (
+        <p className="text-sm text-stone-600">
+          Unknown product selections will be preserved when you save.
+        </p>
+      ) : null}
+
+      {error ? (
+        <p
+          className="text-sm text-red-700"
+          id="skin-journal-products-used-error"
+        >
+          {error}
+        </p>
+      ) : null}
+    </fieldset>
   );
 }
 
