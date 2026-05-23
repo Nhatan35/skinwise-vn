@@ -4,6 +4,8 @@ import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  getProduct,
+  getProductApiPath,
   getProductsApiPath,
   listProducts,
   ProductClientError,
@@ -89,6 +91,17 @@ describe("Product client helper", () => {
     );
   });
 
+  it("exports getProductApiPath and builds product detail API paths", () => {
+    expect(getProductApiPath).toBeTypeOf("function");
+    expect(getProductApiPath("product_123")).toBe("/api/products/product_123");
+  });
+
+  it("uses encodeURIComponent when building product detail API paths", () => {
+    expect(getProductApiPath("product id/with spaces")).toBe(
+      "/api/products/product%20id%2Fwith%20spaces",
+    );
+  });
+
   it("passes search and filter params to the Product API without expecting a new route", async () => {
     mockedFetch.mockResolvedValue(
       jsonResponse({
@@ -117,6 +130,53 @@ describe("Product client helper", () => {
     expect(productClientSource).not.toContain("data.products");
   });
 
+  it("exports getProduct and reads product detail responses from data.product", async () => {
+    const product = createProduct();
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { product },
+        error: null,
+      }),
+    );
+
+    expect(getProduct).toBeTypeOf("function");
+    await expect(getProduct(product.id)).resolves.toEqual(product);
+    expect(mockedFetch).toHaveBeenCalledWith(
+      "/api/products/product_123",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+        }),
+        method: "GET",
+      }),
+    );
+    expect(productClientSource).toContain("body.data.product");
+  });
+
+  it("does not read product detail responses from data.item or data.products", async () => {
+    mockedFetch.mockResolvedValueOnce(
+      jsonResponse({
+        data: { item: createProduct() },
+        error: null,
+      }),
+    );
+    mockedFetch.mockResolvedValueOnce(
+      jsonResponse({
+        data: { products: [createProduct()] },
+        error: null,
+      }),
+    );
+
+    await expect(getProduct("product_123")).rejects.toThrow(
+      "Could not load the product details.",
+    );
+    await expect(getProduct("product_123")).rejects.toThrow(
+      "Could not load the product details.",
+    );
+    expect(productClientSource).not.toMatch(/\bbody\.data\.item\b/);
+    expect(productClientSource).not.toContain("body.data.products");
+  });
+
   it("rejects envelopes that omit data.items", async () => {
     mockedFetch.mockResolvedValue(
       jsonResponse({
@@ -136,6 +196,71 @@ describe("Product client helper", () => {
     await expect(listProducts()).rejects.toMatchObject({
       code: "INTERNAL_ERROR",
       message: "Could not load the product catalogue.",
+    });
+  });
+
+  it("throws ProductClientError when product detail fetch fails", async () => {
+    mockedFetch.mockRejectedValue(new Error("network failure"));
+
+    await expect(getProduct("product_123")).rejects.toMatchObject({
+      code: "INTERNAL_ERROR",
+      message: "Could not load the product details.",
+      status: 500,
+    });
+  });
+
+  it("throws ProductClientError and preserves status when product detail response is not ok", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse(
+        {
+          data: null,
+          error: {
+            code: "NOT_FOUND",
+            message: "Product was not found.",
+          },
+        },
+        404,
+      ),
+    );
+
+    await expect(getProduct("missing-product")).rejects.toMatchObject({
+      code: "NOT_FOUND",
+      message: "Could not load the product details.",
+      status: 404,
+    });
+  });
+
+  it("throws ProductClientError when product detail body.error is not null", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: null,
+        error: {
+          code: "INTERNAL_ERROR",
+          message: "raw backend error",
+        },
+      }),
+    );
+
+    await expect(getProduct("product_123")).rejects.toBeInstanceOf(
+      ProductClientError,
+    );
+    await expect(getProduct("product_123")).rejects.toThrow(
+      "Could not load the product details.",
+    );
+  });
+
+  it("throws ProductClientError when product detail data.product is missing", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: {},
+        error: null,
+      }),
+    );
+
+    await expect(getProduct("product_123")).rejects.toMatchObject({
+      code: "INTERNAL_ERROR",
+      message: "Could not load the product details.",
+      status: 200,
     });
   });
 

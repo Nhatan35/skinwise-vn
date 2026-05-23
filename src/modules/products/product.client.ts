@@ -10,6 +10,7 @@ const PRODUCTS_API_BASE_PATH = "/api/products";
 const DEFAULT_PRODUCT_LIMIT = 50;
 const PRODUCT_CATALOGUE_ERROR_MESSAGE =
   "Could not load the product catalogue.";
+const PRODUCT_DETAIL_ERROR_MESSAGE = "Could not load the product details.";
 
 export type ProductListClientInput = {
   category?: ProductCategory;
@@ -78,6 +79,10 @@ export function getProductsApiPath(input: ProductListClientInput = {}) {
   return `${PRODUCTS_API_BASE_PATH}?${params.toString()}`;
 }
 
+export function getProductApiPath(productId: string) {
+  return `${PRODUCTS_API_BASE_PATH}/${encodeURIComponent(productId)}`;
+}
+
 async function readApiResponse<TData>(
   response: Response,
 ): Promise<ApiResponse<TData>> {
@@ -123,4 +128,39 @@ export async function listProducts(input: ProductListClientInput = {}) {
   }
 
   return body.data.items;
+}
+
+export async function getProduct(productId: string) {
+  let response: Response;
+
+  try {
+    response = await fetch(getProductApiPath(productId), {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+  } catch {
+    throw new ProductClientError(PRODUCT_DETAIL_ERROR_MESSAGE);
+  }
+
+  const body = await readApiResponse<{ product: ProductDto }>(response);
+
+  if (!response.ok || body.error !== null || body.data === null) {
+    throw new ProductClientError(
+      PRODUCT_DETAIL_ERROR_MESSAGE,
+      body.error?.code,
+      response.status,
+    );
+  }
+
+  if (!body.data.product) {
+    throw new ProductClientError(
+      PRODUCT_DETAIL_ERROR_MESSAGE,
+      "INTERNAL_ERROR",
+      response.status,
+    );
+  }
+
+  return body.data.product;
 }

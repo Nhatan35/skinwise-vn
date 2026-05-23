@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { ProductDto } from "@/modules/products/product.dto";
 import type {
   ProductCategory,
@@ -7,6 +9,7 @@ import type {
   ProductVerificationStatus,
 } from "@/modules/products/product.types";
 import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
@@ -124,7 +127,7 @@ export function ProductCard({ product }: ProductCardProps) {
         ) : null}
 
         {product.warnings.length > 0 ? (
-          <ProductTextList label="Notes and cautions" values={product.warnings} />
+          <ProductTextList label="Warnings" values={product.warnings} />
         ) : null}
 
         <div className="space-y-2">
@@ -139,6 +142,12 @@ export function ProductCard({ product }: ProductCardProps) {
         <p className="border-t border-stone-200 pt-4 text-xs text-stone-500">
           Updated {formatUpdatedAt(product.updatedAt)}
         </p>
+
+        <div className="border-t border-stone-200 pt-4">
+          <Button asChild variant="outline">
+            <Link href={`/products/${product.id}`}>View details</Link>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

@@ -278,8 +278,10 @@ src/modules/products/product.use-case.ts
 src/modules/products/product.client.ts
 src/modules/products/components/product-catalogue.tsx
 src/modules/products/components/product-card.tsx
+src/modules/products/components/product-detail.tsx
 src/modules/products/index.ts
 src/app/(dashboard)/products/page.tsx
+src/app/(dashboard)/products/[id]/page.tsx
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product.test.ts
@@ -287,6 +289,7 @@ tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
 tests/unit/product-client.test.ts
 tests/unit/product-catalogue-ui.test.ts
+tests/unit/product-detail-ui.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
@@ -300,9 +303,11 @@ Rules:
 - `GET /api/products` and `GET /api/products/[id]` return only `reviewed` or `verified` products in this foundation.
 - `src/modules/products/product.client.ts` is client-safe, uses `GET /api/products` with supported search/filter params and default `limit=50`, parses products from `data.items`, and must not import repositories, use cases, database helpers, auth helpers, MongoDB, or `server-only`.
 - `src/app/(dashboard)/products/page.tsx` owns the protected `/products` dashboard page and renders only the Product Catalogue UI.
+- `src/app/(dashboard)/products/[id]/page.tsx` owns the protected `/products/[id]` dashboard page and passes the route id to the Product Detail UI.
 - `src/modules/products/components/product-catalogue.tsx` owns Product API list browsing, search/filter controls, loading/error/empty states, and must not implement Product CRUD, product submission, saved product library, AI recommendation, skin score, or image upload.
-- `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields and must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
-- `POST /api/products`, `includeMine` UI, Product detail UI routes, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, AI recommendation, skin score, and medical diagnosis are out of scope for this ownership status.
+- `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields and the read-only `View details` navigation to `/products/[id]`; it must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
+- `src/modules/products/components/product-detail.tsx` owns Product API detail loading through `getProduct(productId)`, loading/error/not-found/success states, educational copy, and public Product DTO field display only.
+- `POST /api/products`, `includeMine` UI, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, AI recommendation, routine integration, skin score, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 
@@ -316,11 +321,14 @@ src/modules/products/product.use-case.ts
 src/modules/products/product.client.ts
 src/modules/products/components/product-catalogue.tsx
 src/modules/products/components/product-card.tsx
+src/modules/products/components/product-detail.tsx
 src/modules/products/index.ts
 src/app/(dashboard)/products/page.tsx
+src/app/(dashboard)/products/[id]/page.tsx
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product-catalogue-ui.test.ts
+tests/unit/product-detail-ui.test.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts

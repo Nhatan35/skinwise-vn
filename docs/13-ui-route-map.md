@@ -35,9 +35,9 @@ AI coding assistants must use this file before creating new pages or route group
 | `/onboarding/skin-profile` | First-time Skin Profile onboarding | Implemented | `/api/skin-profile` | Protected route; remains available for onboarding empty-state CTA |
 | `/skin-profile` | View/edit Skin Profile | Implemented | `/api/skin-profile` | Loads profile through GET and updates through PATCH |
 | `/routines` | Routine list/create/edit/delete, Product Picker, Routine Analysis panel, and today's RoutineLog controls | Implemented | `/api/routines`, `/api/products`, `/api/routines/:id/analyze`, `/api/routines/:id/analyses`, `/api/routine-logs` | Existing single protected routines page only |
-| `/products` | Product UI search/list page | Not implemented | `GET /api/products` exists | Do not create unless Product UI task is scheduled |
+| `/products` | Product catalogue search/list page | Implemented | `GET /api/products` | Protected dashboard route; renders the Product Catalogue UI |
 | `/products/new` | Product submission page | Not implemented | `POST /api/products` not implemented | Do not mark as implemented |
-| `/products/[id]` | Product detail UI page | Not implemented | `GET /api/products/:id` exists | Do not create unless Product UI task is scheduled |
+| `/products/[id]` | Product detail information page | Implemented | `GET /api/products/[id]` | Protected dashboard route; displays public Product DTO detail information |
 | `/ingredients` | Ingredient UI search/list page | Not implemented | `GET /api/ingredients` exists | Do not create unless Ingredient UI task is scheduled |
 | `/ingredients/[id]` | Ingredient detail UI page | Not implemented | `GET /api/ingredients/:id` exists | Educational content only when implemented |
 | `/routines/new` | Separate routine creation page | Not implemented | `POST /api/routines` exists | Existing `/routines` page owns create/edit UI |
@@ -97,9 +97,11 @@ Current implemented user-facing routes are:
 /onboarding/skin-profile
 /skin-profile
 /routines
+/products
+/products/[id]
 ```
 
-The `/dashboard` page is now data-driven through `DashboardOverview`. Product UI pages, Ingredient UI pages, Journal routes, skin score, image upload, diagnosis, marketplace, and admin routes are not implemented.
+The `/dashboard` page is now data-driven through `DashboardOverview`. Product catalogue and Product detail UI routes are implemented. Ingredient UI pages, skin score, image upload, diagnosis, marketplace, and admin routes are not implemented.
 
 ## 7. Navigation groups
 
@@ -109,6 +111,7 @@ Current dashboard navigation enables:
 Dashboard
 Skin Profile
 Routines
+Products
 ```
 
 Disabled or future navigation metadata may exist for unimplemented feature areas, but unimplemented items must use `href: null` and `disabled: true`.

@@ -4,6 +4,80 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-24 - TASK PRODUCT-UI-002 Product Detail UI
+
+### Task
+
+Implement a protected Product Detail UI at `/products/[id]` using the existing authenticated Product detail API.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/products/[id]/page.tsx
+src/modules/products/components/product-detail.tsx
+tests/unit/product-detail-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/products/product.client.ts
+src/modules/products/components/product-card.tsx
+tests/unit/product-client.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/13-ui-route-map.md
+```
+
+### Reason
+
+The product catalogue needed a protected detail flow so authenticated users can open a reviewed product and inspect its public Product DTO information without adding Product CRUD, saved products, images, recommendations, routine integration, or AI behavior.
+
+### Implementation Notes
+
+- Added `getProductApiPath(productId)` and `getProduct(productId)` to the client-safe Product API helper.
+- Product detail responses are parsed from `data.product`; `data.item` and `data.products` are not accepted for detail reads.
+- Added `ProductDetail` with loading, error, not-found, retry, educational disclaimer, and success states.
+- Added the protected `/products/[id]` dashboard route and passed the route param into `ProductDetail`.
+- Added a `View details` link from each ProductCard to `/products/${product.id}`.
+- The detail UI renders only public Product DTO fields and does not import repositories, use cases, database helpers, MongoDB, auth helpers, or server-only modules.
+
+### Validation
+
+```txt
+npm run test -- tests/unit/product-client.test.ts tests/unit/product-detail-ui.test.ts tests/unit/product-catalogue-ui.test.ts
+# Pass - 3 files, 30 tests
+
+npm run lint
+# Pass
+
+npm run typecheck
+# Pass
+
+npm run test
+# Pass - 60 files, 602 tests
+```
+
+### Manual Verification
+
+```txt
+Manual browser/OAuth verification: Pass
+
+Verified:
+- Google OAuth login works.
+- `/products` opens successfully.
+- Product cards show View details navigation.
+- Clicking View details opens `/products/[id]`.
+- Product detail information is displayed.
+- Back to products works.
+- Invalid product id shows Product not found state.
+- No browser console errors were observed.
+- No server/client runtime errors were observed.
+```
+
 ## 2026-05-23 - TASK DASHBOARD-ENHANCE-001 Dashboard Latest Journal Summary
 
 ### Task
