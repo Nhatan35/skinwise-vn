@@ -597,25 +597,39 @@ Rules:
 
 ## 11. SkinJournal ownership
 
-Planned owned files:
+Owned files implemented by TASK SJ-001:
 
 ```txt
+src/modules/journals/skin-journal.types.ts
 src/modules/journals/skin-journal.schema.ts
 src/modules/journals/skin-journal.dto.ts
 src/modules/journals/skin-journal.mapper.ts
 src/modules/journals/skin-journal.repository.ts
 src/modules/journals/create-skin-journal.use-case.ts
-src/modules/journals/update-skin-journal.use-case.ts
 src/modules/journals/list-skin-journal.use-case.ts
+src/modules/journals/update-skin-journal.use-case.ts
+src/modules/journals/delete-skin-journal.use-case.ts
+src/modules/journals/index.ts
 src/app/api/skin-journal/route.ts
 src/app/api/skin-journal/[id]/route.ts
+tests/unit/skin-journal.test.ts
+tests/unit/skin-journal-use-case.test.ts
+tests/unit/skin-journal-api-contract.test.ts
 ```
 
 Rules:
 
-- same `userId + localDate` returns conflict on create;
+- same `userId + localDate` returns `CONFLICT` on create;
+- all reads, updates, and deletes must include authenticated `userId`;
+- invalid, missing, or not-owned `id` values return `NOT_FOUND`;
+- `localDate` is stored as `YYYY-MM-DD` string and cannot be changed through PATCH;
+- `timezone` is stored as an IANA timezone string;
+- `productsUsed` remains a string array in SJ-001 and is not product-validated yet;
+- public DTOs must not expose `userId`, `_id`, raw ObjectId values, `imageUrl`, `imageStorageKey`, `imageVisibility`, or `photoUrls`;
+- request schemas must reject unknown fields and future image/photo fields;
 - no appearance scoring;
-- journal entries are private.
+- journal entries are private;
+- no UI, image upload, image storage, AI journal analysis, dashboard integration, or medical diagnosis in SJ-001.
 
 ## 12. Dashboard ownership
 

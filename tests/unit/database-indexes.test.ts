@@ -100,6 +100,10 @@ describe("database index definitions", () => {
       userId: 1,
       localDate: 1,
     });
+    expectIndex(COLLECTION_NAMES.SKIN_JOURNALS, {
+      userId: 1,
+      createdAt: -1,
+    });
   });
 
   it("defines routine analysis query indexes", () => {

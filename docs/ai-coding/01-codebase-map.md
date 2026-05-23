@@ -10,13 +10,13 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **TASK AI-007 Ingredient Explanation API with Validated AI Provider Fallback**.
+Current package state: **TASK SJ-001 SkinJournal Backend API Foundation**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard route group, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API foundation, protected `/routines` UI foundation, deterministic Routine Safety Engine, Routine Analysis API foundation, Routine Analysis UI panel, and MongoDB-backed per-user rate limiting for routine analysis. TASK PI-001 added authenticated read-only Product and Ingredient API foundations with strict query validation, DTO mappers, repositories, use cases, and API contract tests. TASK PP-001 integrated the Product Picker into the existing Routine Builder and added server-side Routine Product Snapshot population for selected visible products. TASK RL-001 implemented the RoutineLog backend foundation, and TASK RL-002 integrated RoutineLog UI controls into the existing `/routines` page. TASK DB-001 replaced the placeholder dashboard with a real authenticated dashboard that renders `DashboardOverview` and fetches `GET /api/dashboard?localDate=YYYY-MM-DD` to summarize Skin Profile setup, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next suggested actions. TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, provider factory, and AI provider error classes. OpenAI and Gemini providers are intentionally not implemented yet.
 
-TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. TASK AI-005 wired `getAIProvider().analyzeRoutine()` into the Routine Analysis use case with deterministic safety guarding and fallback persistence. TASK AI-006 added safe internal provider failure classification and optional internal `providerFailureReason` persistence for provider fallback. TASK AI-007 added authenticated, rate-limited `POST /api/ingredients/explain` using `getAIProvider().explainIngredient()` through `ValidatedAIProvider`, provider-to-public mapping, and deterministic fallback. OpenAI and Gemini remain unsupported, so current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
+TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. TASK AI-005 wired `getAIProvider().analyzeRoutine()` into the Routine Analysis use case with deterministic safety guarding and fallback persistence. TASK AI-006 added safe internal provider failure classification and optional internal `providerFailureReason` persistence for provider fallback. TASK AI-007 added authenticated, rate-limited `POST /api/ingredients/explain` using `getAIProvider().explainIngredient()` through `ValidatedAIProvider`, provider-to-public mapping, and deterministic fallback. TASK SJ-001 added the authenticated SkinJournal backend API foundation with create/list/update/delete endpoints, strict validation, user-owned repository operations, duplicate `localDate` conflict handling, DTO mapping, and tests. OpenAI and Gemini remain unsupported, so current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
-Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
+Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal UI, SkinJournal AI analysis, skin score, image upload, and medical diagnosis.
 
 ## 3. Root structure
 
@@ -110,6 +110,8 @@ src/app/api/routines/[id]/route.ts
 src/app/api/routines/[id]/analyze/route.ts
 src/app/api/routines/[id]/analyses/route.ts
 src/app/api/routine-logs/route.ts
+src/app/api/skin-journal/route.ts
+src/app/api/skin-journal/[id]/route.ts
 src/app/api/dashboard/route.ts
 src/app/api/skin-profile/route.ts
 src/app/globals.css
@@ -131,6 +133,8 @@ Auth.js owns `src/app/api/auth/[...nextauth]/route.ts`. It re-exports Auth.js ha
 `src/app/api/ingredients/route.ts` and `src/app/api/ingredients/[id]/route.ts` are SkinWise-owned protected Ingredient API read routes. They require `getCurrentUser()`, validate list query params with Zod, call Ingredient use cases, and return Ingredient DTOs without `_id` or raw ObjectId values. `src/app/api/ingredients/explain/route.ts` is a SkinWise-owned protected Ingredient Explanation API route. It requires authentication, validates strict JSON input, checks `ingredient_explanation:${userId}` after validation, calls the Ingredient explanation use case, and returns `{ data: { explanation }, error: null }`. Ingredient APIs do not use Product visibility, `includeMine`, or `createdByUserId` logic.
 
 `src/app/api/routine-logs/route.ts` is a SkinWise-owned protected RoutineLog API route. It derives `userId` from `getCurrentUser()`, validates strict `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs` inputs, canonicalizes daily logs by `userId + routineId + localDate`, and never accepts client-owned `userId`, `id`, `_id`, or timestamps.
+
+`src/app/api/skin-journal/route.ts` and `src/app/api/skin-journal/[id]/route.ts` are SkinWise-owned protected SkinJournal API routes. They derive `userId` from `getCurrentUser()`, validate strict create/list/update inputs with Zod, call SkinJournal use cases, return public SkinJournal DTOs, and never accept client-owned `userId`, `id`, `_id`, timestamps, `localDate` changes through PATCH, or future image/photo fields. `POST /api/skin-journal` creates one entry per authenticated `userId + localDate` and returns `CONFLICT` on duplicates. `GET /api/skin-journal` lists only the authenticated user's entries with optional local-date range filters. `PATCH` and `DELETE` operate only on `_id + userId` and return `NOT_FOUND` for missing, invalid, or not-owned entries.
 
 `src/app/api/dashboard/route.ts` is a SkinWise-owned protected Dashboard API route. It exports `runtime = "nodejs"`, supports `GET` only, validates the strict `localDate` query through `dashboardQuerySchema`, rejects unknown query fields, derives `userId` from the authenticated session, and returns `{ data: { dashboard }, error: null }` without exposing `userId`, `_id`, raw ObjectId values, or MongoDB internals.
 
@@ -287,6 +291,23 @@ src/modules/routine-logs/routine-log.client.ts
 
 `routine-log.schema.ts` owns strict query/body validation for `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs`. `routine-log.repository.ts` imports `server-only`, uses `getRoutineLogsCollection()`, and upserts logs by authenticated `userId + routineId + localDate`. `routine-log.use-case.ts` verifies routine ownership and validates completed step IDs against the target routine. `routine-log.mapper.ts` returns public RoutineLog DTOs without `userId`, `_id`, or MongoDB internals. `routine-log.client.ts` is client-safe and owns browser local date/timezone helpers plus RoutineLog API calls for the existing `/routines` page.
 
+Current implemented SkinJournal files:
+
+```txt
+src/modules/journals/skin-journal.types.ts
+src/modules/journals/skin-journal.schema.ts
+src/modules/journals/skin-journal.dto.ts
+src/modules/journals/skin-journal.mapper.ts
+src/modules/journals/skin-journal.repository.ts
+src/modules/journals/create-skin-journal.use-case.ts
+src/modules/journals/list-skin-journal.use-case.ts
+src/modules/journals/update-skin-journal.use-case.ts
+src/modules/journals/delete-skin-journal.use-case.ts
+src/modules/journals/index.ts
+```
+
+`skin-journal.schema.ts` owns strict create, list, and update validation for the SkinJournal API. It validates `localDate` as `YYYY-MM-DD`, validates IANA timezone strings, defaults create arrays to empty arrays, limits list queries to max 50 records, rejects unknown fields, and rejects future image/photo fields through strict schemas. `skin-journal.repository.ts` imports `server-only`, uses `getSkinJournalsCollection()`, creates entries with a safe duplicate-key conflict error for unique `userId + localDate`, lists entries by `userId` with optional local-date filters newest first, and always filters read/update/delete operations by `_id + userId`. `skin-journal.mapper.ts` converts MongoDB `_id` and Date fields into public strings and omits `userId`, `_id`, raw ObjectId values, future image fields, and photo fields. The SkinJournal use cases return DTO-safe results for the API routes. SJ-001 does not implement UI, image upload, product lookup for `productsUsed`, or AI journal analysis.
+
 Week 1 Task 1 created these additional placeholder module folders only:
 
 ```txt
@@ -301,9 +322,9 @@ src/modules/ai-analysis/
 src/modules/journals/
 ```
 
-Routine API CRUD, the `/routines` UI foundation, the Routine Safety Engine, the Routine Analysis API foundation, Routine Analysis API rate limiting, the `/routines` Routine Analysis UI panel, read-only Product/Ingredient API foundations, Product Picker, server-side Routine Product Snapshot population, RoutineLog backend/UI integration, and Dashboard Data Integration are implemented.
+Routine API CRUD, the `/routines` UI foundation, the Routine Safety Engine, the Routine Analysis API foundation, Routine Analysis API rate limiting, the `/routines` Routine Analysis UI panel, read-only Product/Ingredient API foundations, Product Picker, server-side Routine Product Snapshot population, RoutineLog backend/UI integration, Dashboard Data Integration, and SkinJournal backend API foundation are implemented.
 
-Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, Journal, skin score, image upload, and medical diagnosis.
+Current unimplemented areas are Product UI pages, Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal UI, SkinJournal AI analysis, skin score, image upload, and medical diagnosis.
 
 Current implemented dashboard files:
 
@@ -513,6 +534,9 @@ tests/unit/routine-log-api-contract.test.ts
 tests/unit/routine-log-client.test.ts
 tests/unit/routine-log-ui.test.ts
 tests/unit/routine-log-use-case.test.ts
+tests/unit/skin-journal.test.ts
+tests/unit/skin-journal-api-contract.test.ts
+tests/unit/skin-journal-use-case.test.ts
 tests/unit/routine.test.ts
 tests/unit/routine-api-contract.test.ts
 tests/unit/routine-builder-ui.test.ts

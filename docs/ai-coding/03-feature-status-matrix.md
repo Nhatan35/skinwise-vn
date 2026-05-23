@@ -2,7 +2,7 @@
 
 # Feature Status Matrix — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-22
+Last updated: 2026-05-23
 
 | Feature | Status | API | UI | DB | Tests | Notes |
 |---|---|---|---|---|---|---|
@@ -26,7 +26,7 @@ Last updated: 2026-05-22
 | Routine Product Picker + Snapshot Population | Done | Routine create/update calls Product use-case for selected visible `productId`; invalid product returns `VALIDATION_ERROR` | Product Picker inside existing Routine Builder; manual fallback preserved | Routine steps persist `productId` plus server-owned Product snapshots | Unit/API/source checks | Client never submits snapshot fields or client-owned fields; Product API response shape remains `data.items` |
 | RoutineLog | Done | `GET /api/routine-logs?localDate=YYYY-MM-DD`; `PUT /api/routine-logs` | `/routines` status badge + completed/skipped/partial controls with step checklist | `routine_logs` collection helper + unique/query indexes | Unit/API/repository/use-case/source/helper checks | Backend foundation plus RL-002 UI integration implemented; canonical PUT upsert by `userId + routineId + localDate`; UI uses browser localDate + timezone; dashboard now consumes today's RoutineLog summary through DB-001 |
 | Dashboard Data Integration | Done | `GET /api/dashboard?localDate=YYYY-MM-DD` | `/dashboard` cards for Skin Profile, today's routine progress, routine counts, latest analysis, and next actions | Reuses existing user-scoped collections | Unit/API/source checks | Uses browser localDate from client; no weekly/monthly charts, advanced streaks, AI insights, or SkinJournal |
-| SkinJournal | Not Started | No | No | No | No | One entry per localDate |
+| SkinJournal | Done | `POST /api/skin-journal`; `GET /api/skin-journal`; `PATCH /api/skin-journal/[id]`; `DELETE /api/skin-journal/[id]` | No UI yet | `skin_journals` collection helper and canonical indexes | Unit/API/index checks | Backend foundation only; authenticated, user-scoped, one entry per localDate, duplicate creates return `CONFLICT`; future image fields remain excluded |
 | Routine Safety Engine | Done | Used by Routine Analysis API | No | No | Unit | Deterministic engine under `src/domain/routine-safety`; still independent from AI/provider code |
 | Routine Analysis API | Done | `POST /api/routines/:id/analyze`; `GET /api/routines/:id/analyses`; per-user 429 rate limit on analyze | No | `routine_analyses` repository stores optional internal provider failure reason; `rate_limits` collection with unique key + TTL indexes | Unit/API/source checks | Runs Routine Safety Engine first, then attempts `getAIProvider().analyzeRoutine()` through `ValidatedAIProvider`; provider success is mapped, safety-guarded, and saved as `provider_used`; provider failures save deterministic `fallback_used` with safe internal fallback observability; real OpenAI/Gemini not implemented and external AI calls inactive |
 | Routine Analysis UI foundation | Done | Uses `POST /api/routines/:id/analyze` and `GET /api/routines/:id/analyses` | Per-routine panel inside existing `/routines` page | No new DB | Unit/source checks | Displays API-provided DTO data only; no new routes, client rules, real AI, or dashboard integration |

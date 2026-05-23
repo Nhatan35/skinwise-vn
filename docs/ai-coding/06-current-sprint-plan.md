@@ -1,105 +1,81 @@
 # Current Sprint Plan - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-22
+Last updated: 2026-05-23
 
 ## 1. Current sprint
 
 ```txt
-TASK AI-007 - Implement Ingredient Explanation API using Validated AI Provider with Safe Fallback
+TASK SJ-001 - Implement SkinJournal Backend API Foundation
 ```
 
 ## 2. Sprint goal
 
-Add authenticated, rate-limited `POST /api/ingredients/explain` using the existing validated AI provider flow, map provider output into a stable public Ingredient Explanation DTO, and return deterministic safe fallback when provider or mapping behavior fails.
+Add the authenticated SkinJournal backend API foundation without UI, image upload, image storage, or AI journal analysis.
 
 ## 3. Completed before this sprint
 
 ```txt
-TASK AI-001 - AI Provider Abstraction completed
-TASK AI-002 - Structured Output Validation completed
-TASK AI-003 - Provider Flow Validation completed
-TASK AI-004 - Provider-to-product Routine Analysis Contract Mapping completed
-TASK AI-005 - Provider-backed Routine Analysis with safe deterministic fallback completed
-TASK AI-006 - Provider Failure Observability for Routine Analysis completed
+Week 1 Foundation completed
+Week 2 Skin Profile, Product, and Ingredient Foundation completed
+Week 3 Routine Builder and Routine Logs completed
+Week 4 Routine Safety Engine and Routine Analysis completed
+Week 5 AI Explanation and Ingredient Explainer completed
+TASK AI-007 - Ingredient Explanation API with Validated AI Provider Fallback completed
 ```
-
-TASK AI-006 already classifies Routine Analysis provider-path failures into safe internal reason codes and persists optional internal `providerFailureReason` only when provider fallback is used.
 
 ## 4. Completed this sprint
 
 ```txt
-[x] TASK AI-007 - Implement Ingredient Explanation API using Validated AI Provider with Safe Fallback completed.
-[x] `POST /api/ingredients/explain` added.
-[x] Endpoint requires authentication.
-[x] Endpoint validates strict JSON request input.
-[x] Endpoint rate-limits with `ingredient_explanation:${userId}`.
-[x] Ingredient Explanation use case calls `getAIProvider().explainIngredient()`.
-[x] Provider output validation remains inside `ValidatedAIProvider`.
-[x] Provider output maps to a stable public `IngredientExplanationDto`.
-[x] Provider success returns `source = "ai"`.
-[x] Provider construction/call/validation/mapping failure returns deterministic fallback with `source = "fallback"`.
-[x] Invalid client input returns `VALIDATION_ERROR` and does not use fallback.
-[x] Public response does not expose raw provider errors, stack traces, provider metadata, educational notes, provider failure reason, or internal provider details.
-[x] Routine Analysis behavior is unchanged.
-[x] No external AI provider was called.
-[x] No OpenAI implementation was added.
-[x] No Gemini implementation was added.
+[x] TASK SJ-001 - Implement SkinJournal Backend API Foundation completed.
+[x] `POST /api/skin-journal` added.
+[x] `GET /api/skin-journal` added.
+[x] `PATCH /api/skin-journal/[id]` added.
+[x] `DELETE /api/skin-journal/[id]` added.
+[x] Endpoints require authentication.
+[x] Repository operations are scoped by authenticated `userId`.
+[x] Duplicate `userId + localDate` creates return `CONFLICT`.
+[x] `localDate` is stored and queried as `YYYY-MM-DD`.
+[x] PATCH cannot change `localDate`.
+[x] Request schemas reject unknown fields and future image/photo fields.
+[x] Public DTOs omit `userId`, `_id`, raw ObjectId values, image fields, and photo fields.
+[x] Unit and API contract tests were added.
+[x] Existing database collection helper and index definitions were reused.
 [x] No dependency was added.
 [x] UI was not changed.
-[x] Database schema was not changed.
-[x] No migration was created.
-[x] Routine Safety Engine remains active.
-[x] Deterministic fallback remains active.
-[x] npm run typecheck passed.
-[x] npm run lint passed.
-[x] npm run test passed - 50 files, 489 tests.
+[x] Image upload was not implemented.
+[x] AI journal analysis was not implemented.
 ```
 
 ## 5. Not allowed this sprint
 
 ```txt
-External AI API calls
-OpenAI calls
-Gemini calls
-Real OpenAI provider implementation
-Real Gemini provider implementation
-AI key requirements
-New dependencies
-Public RoutineAnalysisDto shape changes
-UI or client component changes
-Database schema changes
-Migrations
-Prisma schema changes
-Routine Safety Engine changes
-MockAIProvider output shape changes
-ValidatedAIProvider removal or weakening
-Raw provider error exposure
-Stack trace exposure
-providerMetadata exposure
-educationalNotes exposure
-providerFailureReason exposure in public APIs
-Product UI pages
-Product submission
-Admin product management
-SkinJournal
+SkinJournal UI
+Journal timeline page
+Journal form page
 Image upload
+Image storage
+Image analysis
+AI journal analysis
+Product lookup or validation for productsUsed
+OpenAI changes
+Gemini changes
+Routine Analysis changes
+Ingredient Explanation changes
 Skin score
 Medical diagnosis or medical recommendation features
-Advanced dashboard analytics or charts
 ```
 
 ## 6. Known follow-up
 
 ```txt
-OpenAI and Gemini providers remain intentionally unsupported and throw configuration errors.
-Current provider-backed Routine Analysis uses the validated mock provider unless configuration selects an unsupported provider.
-Ingredient Explanation currently uses the validated mock provider unless configuration selects an unsupported provider.
-Ingredient Explanation does not persist explanations.
-Safety-classifier use-case integration remains future work for broader/free-form high-risk ingredient explanation inputs.
+SkinJournal UI is not implemented yet.
+SkinJournal dashboard integration is not implemented yet.
+productsUsed is stored as string IDs and is not product-validated in SJ-001.
+Future private image fields remain reserved and are not exposed by the MVP API.
 ```
 
 ## 7. Recommended next task
 
 ```txt
-Continue only with the next explicitly scoped task after TASK AI-007 review.
+TASK SJ-002 - Implement SkinJournal Timeline UI
 ```

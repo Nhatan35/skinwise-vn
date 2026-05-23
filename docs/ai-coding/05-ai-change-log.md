@@ -4,6 +4,89 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-23 - TASK SJ-001 SkinJournal Backend API Foundation
+
+### Task
+
+Add authenticated backend/API foundation for SkinJournal entries.
+
+### Files Added
+
+```txt
+src/app/api/skin-journal/route.ts
+src/app/api/skin-journal/[id]/route.ts
+src/modules/journals/skin-journal.types.ts
+src/modules/journals/skin-journal.dto.ts
+src/modules/journals/skin-journal.schema.ts
+src/modules/journals/skin-journal.mapper.ts
+src/modules/journals/skin-journal.repository.ts
+src/modules/journals/create-skin-journal.use-case.ts
+src/modules/journals/list-skin-journal.use-case.ts
+src/modules/journals/update-skin-journal.use-case.ts
+src/modules/journals/delete-skin-journal.use-case.ts
+src/modules/journals/index.ts
+tests/unit/skin-journal.test.ts
+tests/unit/skin-journal-use-case.test.ts
+tests/unit/skin-journal-api-contract.test.ts
+```
+
+### Files Updated
+
+```txt
+tests/unit/database-indexes.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+SkinWise VN needed the SkinJournal backend foundation before the timeline UI can be built. The implementation adds the documented CRUD API while preserving the MVP boundaries around privacy, ownership, one entry per local date, and future-only image fields.
+
+### Implementation Notes
+
+- Added `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`.
+- All endpoints require `getCurrentUser()` authentication.
+- Route handlers validate strict request bodies and query params with Zod.
+- `localDate` is validated as `YYYY-MM-DD`; `timezone` is validated as an IANA timezone string.
+- Create/list/update/delete flows are implemented through focused use-case functions.
+- The repository imports `server-only`, uses `getSkinJournalsCollection()`, and scopes owned operations by authenticated `userId`.
+- Duplicate `userId + localDate` MongoDB key errors are mapped to a safe `SkinJournalConflictError` and HTTP `409 CONFLICT`.
+- Public DTOs map `_id` to `id`, serialize Dates to ISO strings, copy arrays, and omit `userId`, `_id`, raw ObjectId values, `imageUrl`, `imageStorageKey`, `imageVisibility`, and `photoUrls`.
+- PATCH cannot update `localDate`.
+- Invalid, missing, or not-owned journal IDs return `NOT_FOUND`.
+- Existing `skin_journals` collection helper and canonical index definitions were reused.
+- No UI, image upload, image storage, product lookup for `productsUsed`, AI journal analysis, OpenAI/Gemini change, Routine Analysis change, Ingredient Explanation change, dependency, or migration was added.
+
+### Tests
+
+```txt
+tests/unit/skin-journal.test.ts
+tests/unit/skin-journal-use-case.test.ts
+tests/unit/skin-journal-api-contract.test.ts
+tests/unit/database-indexes.test.ts
+```
+
+Coverage added for strict schema validation, timezone validation, duplicate conflict mapping, repository user scoping, ObjectId guard behavior, DTO safety, create/list/update/delete API contracts, auth requirements, invalid request behavior, not-found behavior, future image/photo field rejection, raw error isolation, and the `skin_journals_userId_createdAt` index assertion.
+
+### Validation
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 53 files, 525 tests
+```
+
+### Notes
+
+- SkinJournal UI is not implemented yet.
+- SkinJournal dashboard integration is not implemented yet.
+- `productsUsed` remains a string array and is not product-validated in SJ-001.
+- Recommended next task is TASK SJ-002 - Implement SkinJournal Timeline UI.
+
 ## 2026-05-22 - TASK AI-007 Ingredient Explanation API with Validated AI Provider Fallback
 
 ### Task
