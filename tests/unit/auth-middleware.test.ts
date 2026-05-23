@@ -9,12 +9,13 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches protected dashboard, onboarding, Skin Profile, Routines, and Journal routes", () => {
+  it("matches protected dashboard, onboarding, Skin Profile, Routines, Journal, and Products routes", () => {
     expect(proxySource).toContain('"/dashboard/:path*"');
     expect(proxySource).toContain('"/onboarding/:path*"');
     expect(proxySource).toContain('"/skin-profile/:path*"');
     expect(proxySource).toContain('"/routines/:path*"');
     expect(proxySource).toContain('"/journal/:path*"');
+    expect(proxySource).toContain('"/products/:path*"');
   });
 
   it("does not protect Auth.js routes or the public home page", () => {

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  getProductsApiPath,
   listProducts,
   ProductClientError,
 } from "@/modules/products/product.client";
@@ -73,6 +74,44 @@ describe("Product client helper", () => {
     );
   });
 
+  it("builds supported product catalogue query params safely", () => {
+    expect(
+      getProductsApiPath({
+        category: "cleanser",
+        concern: "barrier_support",
+        limit: 12,
+        priceRange: "budget",
+        q: "  gentle cleanser  ",
+        skinType: "sensitive",
+      }),
+    ).toBe(
+      "/api/products?q=gentle+cleanser&category=cleanser&priceRange=budget&skinType=sensitive&concern=barrier_support&limit=12",
+    );
+  });
+
+  it("passes search and filter params to the Product API without expecting a new route", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { items: [] },
+        error: null,
+      }),
+    );
+
+    await expect(
+      listProducts({
+        category: "sunscreen",
+        limit: 50,
+        q: "spf",
+      }),
+    ).resolves.toEqual([]);
+    expect(mockedFetch).toHaveBeenCalledWith(
+      "/api/products?q=spf&category=sunscreen&limit=50",
+      expect.objectContaining({
+        method: "GET",
+      }),
+    );
+  });
+
   it("does not expect data.products from the product API envelope", () => {
     expect(productClientSource).toContain("body.data.items");
     expect(productClientSource).not.toContain("data.products");
@@ -128,6 +167,8 @@ describe("Product client helper", () => {
       "@/infrastructure/database",
       "product.repository",
       "product.use-case",
+      "Product CRUD",
+      "saved products",
     ]) {
       expect(productClientSource).not.toContain(forbiddenImport);
     }

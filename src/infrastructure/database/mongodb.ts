@@ -1,5 +1,6 @@
 import "server-only";
 
+import * as dns from "node:dns";
 import { MongoClient, type Db } from "mongodb";
 
 import { env } from "@/config/env";
@@ -9,11 +10,17 @@ const MISSING_MONGODB_URI_MESSAGE =
 const INVALID_MONGODB_URI_MESSAGE =
   "MONGODB_URI must start with mongodb:// or mongodb+srv://.";
 
+const MONGODB_DNS_SERVERS = ["8.8.8.8", "1.1.1.1"];
+
 type GlobalWithMongoClient = typeof globalThis & {
   __skinwiseMongoClientPromise?: Promise<MongoClient>;
 };
 
 let productionClientPromise: Promise<MongoClient> | undefined;
+
+function configureMongoDnsServers(): void {
+  dns.setServers(MONGODB_DNS_SERVERS);
+}
 
 export function requireMongoUri(uri: string | undefined): string {
   if (!uri) {
@@ -28,10 +35,12 @@ export function requireMongoUri(uri: string | undefined): string {
 }
 
 export function createMongoClient(uri: string): MongoClient {
+  configureMongoDnsServers();
+
   return new MongoClient(uri);
 }
 
-function createMongoClientPromise() {
+function createMongoClientPromise(): Promise<MongoClient> {
   const uri = requireMongoUri(env.MONGODB_URI);
   const client = createMongoClient(uri);
 

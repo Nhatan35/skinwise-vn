@@ -18,17 +18,22 @@ Primary risks:
 
 ## 2. Authentication
 
-Use Auth.js / NextAuth with MongoDB Adapter for MVP.
+Use Auth.js / NextAuth with MongoDB Adapter for MVP identity persistence and JWT session strategy for App Router/proxy compatibility.
 
 Requirements:
 
-- Auth.js owns authentication identity collections: users, accounts, sessions, verification_tokens.
+- Auth.js owns authentication identity collections: `users`, `accounts`, and `verification_tokens`.
+- The `sessions` collection name remains reserved in adapter configuration, but the current runtime uses `session.strategy = "jwt"`; do not rely on database sessions unless an ADR updates this decision.
 - SkinWise owns app-specific role/profile data separately.
-- Server-side session validation.
+- Server-side session validation must use the shared auth helpers.
+- `src/proxy.ts` must remain edge-safe and must use `authConfig`, not the MongoDB Adapter setup.
+- `AUTH_SECRET` must be stable per environment because changing it invalidates existing encrypted auth cookies.
+- Clear local browser site data after changing `AUTH_SECRET` or session strategy.
 - No secrets in client code.
+- Never commit `.env.local`, database passwords, OAuth client secrets, or Auth.js secrets.
 - Secure cookies in production.
 - Environment variables validated at startup.
-- Optional OAuth support later.
+- Optional OAuth providers may be added only through documented provider configuration.
 
 ## 3. Authorization
 

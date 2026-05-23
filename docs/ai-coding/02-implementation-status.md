@@ -7,10 +7,10 @@ Last updated: 2026-05-23
 ## 1. Current phase
 
 ```txt
-TASK SJ-003 SkinJournal Product Linking / Product Name Resolution completed
+TASK LOCAL-AUTH-DB-001 Local MongoDB/Auth runtime stabilization completed
 ```
 
-The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current usable provider remains the validated mock provider. Product UI pages, Product submission POST API, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, and medical diagnosis were not implemented.
+The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current usable provider remains the validated mock provider. Product submission POST API, Product CRUD, Product detail UI, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, and medical diagnosis were not implemented.
 
 ## 2. Completed documentation
 
@@ -93,6 +93,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] SkinJournal backend API foundation implemented
 [x] SkinJournal Timeline UI implemented
 [x] SkinJournal product selection and name resolution implemented
+[x] Product Catalogue UI implemented
 ```
 
 ## 4. In progress
@@ -117,7 +118,7 @@ Routine API CRUD exists for authenticated users, and `/routines` provides the UI
 Routine Safety Engine exists as a deterministic foundation under `src/domain/routine-safety`; Week 3 Task 4 wires it into Routine Analysis API persistence and public DTO mapping only.
 Routine Analysis API exists, rate-limits authenticated analyze requests per user, runs the deterministic Routine Safety Engine first, then attempts provider-backed routine analysis through `getAIProvider().analyzeRoutine()`. Provider output is validated by `ValidatedAIProvider`, mapped through the provider-to-product mapper, merged with deterministic rule guidance, and safety-guarded so final risk is `max(safetyResult.riskLevel, mappedProviderResult.riskLevel)`. Provider success persists `aiStatus = "provider_used"` and `promptVersion = "routine-analysis-provider-v1"`; provider construction/call/validation/mapping/guard errors fall back to deterministic analysis with `aiStatus = "fallback_used"` and now persist an optional internal `providerFailureReason` safe reason code. Public RoutineAnalysis DTOs do not expose `providerFailureReason`, raw provider errors, stack traces, `providerMetadata`, or `educationalNotes`. Repository persistence errors are not swallowed as provider fallback. The use case does not call OpenAI, Gemini, external APIs, Product/Ingredient explanation modules, dashboard, Journal, or RoutineLog UI features.
 AI Provider Abstraction exists under `src/infrastructure/ai` with `MockAIProvider`, `ValidatedAIProvider`, `getAIProvider()`, provider error classes, strict Zod output schemas, and validator functions for the current `AIProvider` output types. `ai-output.schema.ts` exports `aiProviderMetadataSchema`, `aiProviderRoutineAnalysisResultSchema`, `aiProviderIngredientExplanationResultSchema`, and `aiProviderSafetyClassifierResultSchema`. `ai-output.validator.ts` exports `validateRoutineAnalysisOutput`, `validateIngredientExplanationOutput`, and `validateSafetyClassifierOutput`; invalid output throws `AIProviderResponseError`. `validated-ai-provider.ts` wraps an inner `AIProvider`, validates each provider method output, returns validated output, and lets `AIProviderResponseError` propagate. `getAIProvider()` returns `ValidatedAIProvider` wrapping `MockAIProvider` when `AI_PROVIDER` is missing, empty, or `mock`; it still throws configuration errors for `openai` and `gemini`, does not initialize external clients, does not call external AI APIs, and does not require `AI_API_KEY`.
-Product API foundation exists for authenticated read-only `GET /api/products` and `GET /api/products/:id`. It returns only `reviewed` or `verified` products and is now consumed by the Routine Builder Product Picker. It intentionally does not include Product UI pages, `POST /api/products`, `includeMine`, admin product management, seed scripts, external product APIs, image upload, or medical diagnosis.
+Product API foundation exists for authenticated read-only `GET /api/products` and `GET /api/products/:id`. It returns only `reviewed` or `verified` products and is now consumed by the Routine Builder Product Picker, SkinJournal product selection/name resolution, and the protected `/products` Product Catalogue UI. PRODUCT-UI-001 uses existing Product API filters (`q`, `category`, `priceRange`, `skinType`, `concern`, `limit`) and parses list responses from `data.items`. It intentionally does not include `POST /api/products`, includeMine UI, admin product management, Product CRUD, Product submission, saved product library, seed scripts, external product APIs, image upload, AI recommendations, skin score, or medical diagnosis.
 Ingredient API foundation exists for authenticated read-only `GET /api/ingredients` and `GET /api/ingredients/:id`. TASK AI-007 adds authenticated, rate-limited `POST /api/ingredients/explain` with strict request validation, `getAIProvider().explainIngredient()` through `ValidatedAIProvider`, provider-to-public DTO mapping, and deterministic fallback. The public response does not expose raw provider errors, stack traces, `providerMetadata`, `educationalNotes`, `providerFailureReason`, OpenAI/Gemini metadata, or internal diagnostics. It intentionally does not include safety-classifier integration, admin ingredient management, seed scripts, persistence, real external AI calls, or medical diagnosis.
 SkinJournal backend API foundation exists through authenticated `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. It validates local dates and IANA timezones, stores `localDate` as a `YYYY-MM-DD` string, scopes repository operations by authenticated `userId`, returns `CONFLICT` for duplicate `userId + localDate` creates, maps MongoDB documents to public DTOs, and rejects/omits future image and photo fields. The protected `/journal` route now renders the SkinJournal Timeline UI, enables Journal in dashboard navigation, protects `/journal/:path*`, and lets users view, create, edit, delete, select catalogue products, and see readable product labels through the existing SJ-001 API contract plus the existing Product API. Product resolution is UI-only: `productsUsed` remains product ID strings, Product API responses are parsed from `data.items`, and missing/deleted products display as `Unknown product`. It intentionally does not include image upload, image storage, saved product library, Product CRUD UI, product snapshots in journal entries, calendar/analytics views, AI journal analysis, or medical diagnosis.
 Routine Analysis UI exists only inside `/routines`; no `/routines/[id]`, `/routines/[id]/analysis`, or `/routines/[id]/analyses` UI routes were created.
@@ -152,7 +153,7 @@ Continue only with the next explicitly scoped task after review.
 Recommended next coding task:
 
 ```txt
-Choose the next SkinJournal task from product priorities, such as TASK SJ-004 - Implement SkinJournal Calendar/Insight View, TASK SJ-004 - Implement Private Journal Image Upload, TASK SJ-004 - Add SkinJournal Trends and Basic Analytics, or TASK PRODUCT-UI-001 - Implement Product Catalogue UI.
+Choose the next explicitly scoped task from product priorities, such as TASK PRODUCT-UI-002 - Implement Product Detail UI, TASK SJ-004 - Implement SkinJournal Calendar/Insight View, TASK SJ-004 - Implement Private Journal Image Upload, or TASK SJ-004 - Add SkinJournal Trends and Basic Analytics.
 ```
 
 ## 9. Update rule
@@ -169,3 +170,36 @@ docs/ai-coding/05-ai-change-log.md
 ## Final Freeze Cleanup
 
 Final documentation cleanup completed for v1.2.6. Seed data spec now aligns with the canonical data model, README/release-plan version wording is corrected, and MongoDB Adapter client-sharing wording is clarified. Current implementation phase is tracked in section 1 above.
+
+
+## Local MongoDB/Auth runtime stabilization — 2026-05-23
+
+```txt
+TASK LOCAL-AUTH-DB-001 completed
+```
+
+### What changed
+
+- `npm run db:indexes` now loads `.env.local` so the MongoDB index script can read `MONGODB_URI` during local execution.
+- `scripts/configure-node-dns.cjs` is preloaded by `npm run dev` so Node.js resolves MongoDB Atlas `mongodb+srv://` SRV records through `8.8.8.8` and `1.1.1.1` before Next.js/Auth.js starts.
+- `src/infrastructure/database/mongodb.ts` configures the same DNS servers before creating `MongoClient`.
+- `src/auth.ts` configures DNS before loading the shared MongoDB client and uses `session.strategy = "jwt"` while keeping the MongoDB Adapter.
+- Browser cookie cleanup is documented for `JWTSessionError` / `Invalid Compact JWE` after auth secret or session-strategy changes.
+
+### Verified evidence
+
+```txt
+npm run db:indexes
+=> db:indexes created: 30 indexes ensured
+
+npm run dev
+=> [node-dns] DNS servers: [ '8.8.8.8', '1.1.1.1' ]
+```
+
+### Follow-up verification
+
+```txt
+[ ] Google OAuth sign-in redirects successfully to /dashboard.
+[ ] No Auth.js AdapterError with `querySrv ECONNREFUSED` appears during Google callback.
+[ ] No JWTSessionError remains after clearing localhost site data.
+```

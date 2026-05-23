@@ -4,6 +4,143 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-23 - TASK LOCAL-AUTH-DB-001 Local MongoDB/Auth Runtime Stabilization
+
+### Task
+
+Stabilize local MongoDB Atlas and Auth.js Google OAuth runtime after database index verification succeeded but Auth.js callback still failed on Node.js SRV DNS lookup and encrypted session cookie mismatch.
+
+### Files Added
+
+```txt
+scripts/configure-node-dns.cjs
+docs/21-local-auth-db-troubleshooting.md
+docs/adr/0007-use-authjs-jwt-sessions-with-mongodb-adapter.md
+docs/adr/0008-use-node-dns-preload-for-local-mongodb-srv.md
+```
+
+### Files Updated
+
+```txt
+package.json
+.env.example
+src/infrastructure/database/mongodb.ts
+src/auth.ts
+README.md
+docs/00-source-of-truth.md
+docs/07-security-privacy.md
+docs/10-project-structure.md
+docs/18-deployment-checklist.md
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Local Windows/Node.js resolved MongoDB Atlas SRV records only after explicitly setting DNS servers, while `nslookup` and TCP port checks already succeeded. Auth.js also needed a consistent JWT session strategy to avoid database-session/proxy mismatch and stale encrypted cookie failures during local OAuth testing.
+
+### Implementation Notes
+
+- `npm run db:indexes` uses `node --env-file=.env.local` and was verified with `db:indexes created: 30 indexes ensured`.
+- `npm run dev` preloads `scripts/configure-node-dns.cjs` so DNS servers are configured before Next.js/Auth.js starts.
+- `src/infrastructure/database/mongodb.ts` sets DNS servers before creating `MongoClient`.
+- `src/auth.ts` keeps MongoDB Adapter for identity/account persistence but forces `session.strategy = "jwt"`.
+- Local cookie cleanup is documented for `JWTSessionError` / `Invalid Compact JWE` after `AUTH_SECRET` or session strategy changes.
+- No product scope, API contract, AI behavior, marketplace behavior, image upload, skin score, or medical behavior was added.
+
+### Verification
+
+```txt
+npm run db:indexes
+# db:indexes created: 30 indexes ensured
+
+npm run dev
+# [node-dns] DNS servers: [ '8.8.8.8', '1.1.1.1' ]
+```
+
+### Remaining Manual Check
+
+```txt
+[ ] Confirm Google OAuth redirects to /dashboard after clearing localhost site data.
+```
+
+
+## 2026-05-23 - TASK PRODUCT-UI-001 Product Catalogue UI
+
+### Task
+
+Implement a protected Product Catalogue UI at `/products` using the existing authenticated Product API.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/products/page.tsx
+src/modules/products/components/product-catalogue.tsx
+src/modules/products/components/product-card.tsx
+tests/unit/product-catalogue-ui.test.ts
+```
+
+### Files Updated
+
+```txt
+src/modules/products/product.client.ts
+src/modules/dashboard/dashboard-shell.config.ts
+src/proxy.ts
+tests/unit/product-client.test.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/routine-builder-ui.test.ts
+tests/unit/skin-journal-ui.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+Authenticated users needed a dashboard-consistent way to browse the existing reviewed Product catalogue without adding Product CRUD, submission, admin review, saved products, images, AI recommendation, or diagnosis behavior.
+
+### Implementation Notes
+
+- Added the protected `/products` page under the existing dashboard route group.
+- Enabled Products in the dashboard navigation and protected `/products/:path*` through the auth proxy.
+- Added `ProductCatalogue` with search plus category, price range, skin type, and concern filters.
+- Added `ProductCard` for public Product DTO display.
+- Extended the client-safe Product API helper to support existing list query params while defaulting to `limit=50`.
+- Product list responses are still parsed from `data.items`.
+- No Product backend contract, SkinJournal `productsUsed` contract, Routine Builder product loading, or SkinJournal product resolution behavior was changed.
+
+### Tests
+
+```txt
+tests/unit/product-catalogue-ui.test.ts
+tests/unit/product-client.test.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/auth-middleware.test.ts
+tests/unit/routine-builder-ui.test.ts
+tests/unit/skin-journal-ui.test.ts
+```
+
+### Validation
+
+```txt
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test: Pass - 59 files, 580 tests
+```
+
+### Notes
+
+- Product CRUD, product submission, admin review, saved product library, Product detail UI, image upload, AI recommendation, skin score, and medical diagnosis remain unimplemented.
+- Recommended next task should be selected from product priorities, such as TASK PRODUCT-UI-002 - Implement Product Detail UI or the next explicitly scoped SkinJournal task.
+
 ## 2026-05-23 - TASK SJ-003 SkinJournal Product Linking / Product Name Resolution
 
 ### Task

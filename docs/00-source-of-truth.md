@@ -66,6 +66,8 @@ docs/19-engineering-execution-checklist.md
 docs/adr/*.md
 ```
 
+Runtime-stabilization ADRs currently include Auth.js JWT session strategy with MongoDB Adapter and the local Node DNS preload for MongoDB Atlas SRV lookup.
+
 ## 6. Canonical data and API contracts
 
 The canonical data and API behavior is defined by:
@@ -90,6 +92,7 @@ docs/ai-coding/04-file-ownership-map.md
 docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
 docs/20-week-1-task-1-prompt.md
+docs/21-local-auth-db-troubleshooting.md
 ```
 
 These files must be updated as implementation progresses.

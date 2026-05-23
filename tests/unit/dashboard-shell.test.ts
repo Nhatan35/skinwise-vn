@@ -7,6 +7,7 @@ import {
   dashboardNavItems,
   dashboardRoute,
   journalRoute,
+  productsRoute,
   routinesRoute,
   skinProfileRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
@@ -18,16 +19,18 @@ const dashboardConfigSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, and Journal as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Journal, and Products as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
     expect(skinProfileRoute).toBe(routes.SKIN_PROFILE);
     expect(routinesRoute).toBe(routes.ROUTINES);
     expect(journalRoute).toBe(routes.JOURNAL);
+    expect(productsRoute).toBe(routes.PRODUCTS);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(routes.ROUTINES).toBe("/routines");
     expect(routes.JOURNAL).toBe("/journal");
+    expect(routes.PRODUCTS).toBe("/products");
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -53,6 +56,12 @@ describe("dashboard shell config", () => {
         label: "Journal",
         status: "Active",
       },
+      {
+        disabled: false,
+        href: "/products",
+        label: "Products",
+        status: "Active",
+      },
     ]);
   });
 
@@ -61,7 +70,6 @@ describe("dashboard shell config", () => {
 
     expect(disabledItems.map((item) => item.label)).toEqual([
       "Today Log",
-      "Products",
       "Ingredients",
     ]);
     expect(

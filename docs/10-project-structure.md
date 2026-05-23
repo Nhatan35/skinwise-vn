@@ -19,6 +19,8 @@ skinwise-vn/
 ├── docs/
 │   └── adr/
 ├── public/
+├── scripts/
+│   └── configure-node-dns.cjs
 ├── src/
 ├── tests/
 ├── AGENTS.md
@@ -30,6 +32,19 @@ skinwise-vn/
 ├── vitest.config.ts
 └── .env.example
 ```
+
+## 3.1 Scripts structure
+
+```txt
+scripts/
+└── configure-node-dns.cjs
+```
+
+Rules:
+
+- `scripts/configure-node-dns.cjs` is a local Node.js preload used by `npm run dev` to set DNS servers before Next.js/Auth.js performs MongoDB Atlas SRV lookups.
+- Do not add business logic, database queries, or application state to preload scripts.
+- If the DNS workaround is removed, first verify that `node -e "require('dns').resolveSrv('_mongodb._tcp.<cluster-host>', console.log)"` succeeds without `dns.setServers(...)` on the target development machines.
 
 ## 3. Source structure
 
@@ -228,3 +243,13 @@ database naming -> API naming
 ```
 
 API route handlers should not manually shape complex response objects when a module mapper exists.
+
+## 9. Runtime support scripts
+
+`package.json` currently starts local development through:
+
+```txt
+node --require ./scripts/configure-node-dns.cjs ./node_modules/next/dist/bin/next dev
+```
+
+This is intentionally documented because local Windows/Node.js DNS resolution may fail for MongoDB Atlas `mongodb+srv://` even when `nslookup` succeeds. The preload sets DNS servers at process startup so Auth.js and MongoDB driver SRV lookups use the same known-good resolvers.

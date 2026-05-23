@@ -1,5 +1,6 @@
 import "server-only";
 
+import * as dns from "node:dns";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import type { MongoClient } from "mongodb";
@@ -9,6 +10,8 @@ import {
   readAuthEnvironment,
 } from "@/modules/auth/auth.config";
 import type { AuthEnvironment } from "@/modules/auth/types";
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 type MongoAdapterInput = Pick<AuthEnvironment, "APP_ENV" | "MONGODB_URI">;
 type MongoClientProvider = () => Promise<MongoClient>;
@@ -35,6 +38,8 @@ export function shouldUseMongoAdapter(input: MongoAdapterInput) {
 }
 
 async function getSharedMongoClientPromise() {
+  dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
   const { getMongoClientPromise } = await import(
     "@/infrastructure/database/mongodb"
   );
@@ -62,7 +67,7 @@ export function createAuthOptions(input: AuthEnvironment): NextAuthConfig {
     ...createAuthConfig(input),
     adapter,
     session: {
-      strategy: adapter ? "database" : "jwt",
+      strategy: "jwt",
     },
   };
 }

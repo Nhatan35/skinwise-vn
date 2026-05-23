@@ -13,5 +13,6 @@ export const config = {
     "/skin-profile/:path*",
     "/routines/:path*",
     "/journal/:path*",
+    "/products/:path*",
   ],
 };

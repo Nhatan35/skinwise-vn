@@ -20,6 +20,7 @@ src/modules/auth/next-auth.d.ts
 src/modules/auth/types.ts
 src/proxy.ts
 src/app/api/auth/[...nextauth]/route.ts
+scripts/configure-node-dns.cjs
 ```
 
 Rules:
@@ -30,6 +31,8 @@ Rules:
 - admin checks must be centralized;
 - `auth.config.ts` must remain edge-safe and must not import the MongoDB adapter, MongoDB helper, `src/auth.ts`, `server-only`, or `src/config/env.ts`;
 - `src/auth.ts` owns full server-side Auth.js setup and adapter wiring;
+- `src/auth.ts` must use `session.strategy = "jwt"` unless a future ADR explicitly changes the session storage model;
+- `src/auth.ts` may configure Node DNS before loading the shared MongoDB client because the Auth.js MongoDB Adapter performs SRV lookups at runtime;
 - `src/app/api/auth/[...nextauth]/route.ts` is owned by Auth.js and must not use the SkinWise response wrapper.
 
 Current status:
@@ -54,6 +57,8 @@ Owned files:
 src/config/app.ts
 src/config/features.ts
 src/config/env.ts
+package.json
+scripts/configure-node-dns.cjs
 ```
 
 Rules:
@@ -133,7 +138,9 @@ Rules:
 - required indexes must be created through `ensure-indexes.ts`, not route handlers;
 - route handlers must not query MongoDB directly;
 - rate limit code must use `getRateLimitsCollection()` and must not create a MongoDB client;
-- Auth.js adapter later must reuse the shared MongoClient or provider from `mongodb.ts`.
+- Auth.js adapter must reuse the shared MongoClient provider from `mongodb.ts`.
+- local development may preload `scripts/configure-node-dns.cjs` before `next dev` so Node.js can resolve MongoDB Atlas SRV records consistently.
+- do not add ad-hoc MongoDB DNS workarounds inside route handlers or repositories.
 
 Current status:
 
@@ -144,7 +151,7 @@ src/infrastructure/database/mongodb.ts
 src/infrastructure/rate-limiting/rate-limit.ts
 ```
 
-`mongodb.ts` owns the shared MongoDB client helper and lazy client promise. `collections.ts` owns collection names/helpers, including `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including the rate limit unique key and TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
+`mongodb.ts` owns the shared MongoDB client helper, lazy client promise, and local DNS server configuration before `MongoClient` creation. `collections.ts` owns collection names/helpers, including `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including the rate limit unique key and TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
 
 ## 3.1 AI Provider ownership
 
@@ -269,13 +276,17 @@ src/modules/products/product.mapper.ts
 src/modules/products/product.repository.ts
 src/modules/products/product.use-case.ts
 src/modules/products/product.client.ts
+src/modules/products/components/product-catalogue.tsx
+src/modules/products/components/product-card.tsx
 src/modules/products/index.ts
+src/app/(dashboard)/products/page.tsx
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
 tests/unit/product-client.test.ts
+tests/unit/product-catalogue-ui.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
@@ -287,8 +298,11 @@ Rules:
 - TASK PI-001 implements read-only list/detail only.
 - public Product DTOs must not expose `_id`, raw ObjectId values, `createdByUserId`, or `source`.
 - `GET /api/products` and `GET /api/products/[id]` return only `reviewed` or `verified` products in this foundation.
-- `src/modules/products/product.client.ts` is client-safe, uses `GET /api/products?limit=50`, parses products from `data.items`, and must not import repositories, use cases, database helpers, auth helpers, MongoDB, or `server-only`.
-- `POST /api/products`, `includeMine`, Product UI pages, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, and medical diagnosis are out of scope for this ownership status.
+- `src/modules/products/product.client.ts` is client-safe, uses `GET /api/products` with supported search/filter params and default `limit=50`, parses products from `data.items`, and must not import repositories, use cases, database helpers, auth helpers, MongoDB, or `server-only`.
+- `src/app/(dashboard)/products/page.tsx` owns the protected `/products` dashboard page and renders only the Product Catalogue UI.
+- `src/modules/products/components/product-catalogue.tsx` owns Product API list browsing, search/filter controls, loading/error/empty states, and must not implement Product CRUD, product submission, saved product library, AI recommendation, skin score, or image upload.
+- `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields and must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
+- `POST /api/products`, `includeMine` UI, Product detail UI routes, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, AI recommendation, skin score, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 
@@ -300,9 +314,13 @@ src/modules/products/product.mapper.ts
 src/modules/products/product.repository.ts
 src/modules/products/product.use-case.ts
 src/modules/products/product.client.ts
+src/modules/products/components/product-catalogue.tsx
+src/modules/products/components/product-card.tsx
 src/modules/products/index.ts
+src/app/(dashboard)/products/page.tsx
 src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
+tests/unit/product-catalogue-ui.test.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
@@ -417,7 +435,7 @@ Rules:
 - `/routines` analysis UI must not pass `userId`, `routineId`, `riskLevel`, warnings, suggestions, summary, or analysis content in request bodies;
 - `/routines` analysis UI may format API-provided `riskLevel` and suggestion priority labels for readability, but must not generate new risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, or skin score;
 - `/routines` RoutineLog UI may call only `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs` with `fetch`, must use browser localDate and timezone, and must not import RoutineLog repositories, use cases, database helpers, auth helpers, or `server-only` modules;
-- Routine use cases may call the Product use-case to validate visible selected products and populate server-owned snapshots, but must not import Product repositories directly. No Product UI page, Product submission, real AI provider integration, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside the `/routines` UI foundation.
+- Routine use cases may call the Product use-case to validate visible selected products and populate server-owned snapshots, but must not import Product repositories directly. No Product submission, Product detail route, real AI provider integration, Journal, image upload, skin score, medical diagnosis, or dashboard data integration inside the `/routines` UI foundation.
 
 Current status:
 
@@ -443,7 +461,7 @@ tests/unit/routine-builder-ui.test.ts
 tests/unit/routine-log-ui.test.ts
 ```
 
-Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are owned by the Routine Builder/use-case boundary for TASK PP-001. TASK RL-002 added RoutineLog status badges and completed/skipped/partial controls inside the existing `/routines` UI. Product UI pages, Product submission, Ingredient explanation modules, real AI provider integration, Journal, image upload, skin score, medical diagnosis, and new analysis UI routes remain outside Routine ownership. Dashboard data integration is owned by the Dashboard module/task.
+Week 3 Task 1 implemented Routine API foundation. Week 3 Task 2 implemented the protected `/routines` UI foundation for listing, creating, editing, and deleting routines. Week 3 Task 5 added per-routine analysis controls and a focused analysis panel inside the existing `/routines` UI. Product Picker integration and server-side Product snapshot population are owned by the Routine Builder/use-case boundary for TASK PP-001. TASK RL-002 added RoutineLog status badges and completed/skipped/partial controls inside the existing `/routines` UI. Product Catalogue UI is owned by the Product module, while Product submission, Ingredient explanation modules, real AI provider integration, Journal, image upload, skin score, medical diagnosis, and new analysis UI routes remain outside Routine ownership. Dashboard data integration is owned by the Dashboard module/task.
 
 ## 8. Routine Safety Engine ownership
 
@@ -660,6 +678,7 @@ Owned files:
 ```txt
 src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
+src/app/(dashboard)/products/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
 src/modules/dashboard/dashboard.types.ts
 src/modules/dashboard/dashboard.dto.ts
@@ -685,10 +704,11 @@ tests/unit/dashboard-ui.test.ts
 Rules:
 
 - `src/app/(dashboard)/dashboard/page.tsx` owns the real `/dashboard` route.
+- `src/app/(dashboard)/products/page.tsx` owns the protected `/products` route and renders the Product Catalogue UI.
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
-- `/dashboard`, `/skin-profile`, `/routines`, and `/journal` are enabled routes in the dashboard nav;
+- `/dashboard`, `/skin-profile`, `/routines`, `/journal`, and `/products` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - dashboard cards must render API-provided dashboard summary data only and must not contain fake skincare, routine, product, journal, ingredient, or AI results.
@@ -698,6 +718,7 @@ Current status:
 ```txt
 src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
+src/app/(dashboard)/products/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
 src/modules/dashboard/dashboard.types.ts
 src/modules/dashboard/dashboard.dto.ts
@@ -720,7 +741,7 @@ tests/unit/dashboard-api-contract.test.ts
 tests/unit/dashboard-ui.test.ts
 ```
 
-Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI insights, SkinJournal, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. TASK PRODUCT-UI-001 points the Products nav link to `/products`. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI insights, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 13. UI shared ownership
 

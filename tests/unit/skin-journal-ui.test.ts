@@ -80,8 +80,16 @@ describe("SkinJournal Timeline UI", () => {
       label: "Journal",
       status: "Active",
     });
+    expect(
+      dashboardNavItems.find((item) => item.label === "Products"),
+    ).toEqual({
+      disabled: false,
+      href: routes.PRODUCTS,
+      label: "Products",
+      status: "Active",
+    });
 
-    for (const disabledLabel of ["Today Log", "Products", "Ingredients"]) {
+    for (const disabledLabel of ["Today Log", "Ingredients"]) {
       expect(
         dashboardNavItems.find((item) => item.label === disabledLabel),
       ).toMatchObject({
@@ -136,8 +144,9 @@ describe("SkinJournal Timeline UI", () => {
 
   it("loads the visible product catalogue through the Product API client", () => {
     expect(productClientSource).toContain(
-      'const PRODUCTS_API_PATH = "/api/products?limit=50"',
+      'const PRODUCTS_API_BASE_PATH = "/api/products"',
     );
+    expect(productClientSource).toContain('params.set("limit", String(limit))');
     expect(productClientSource).toContain('method: "GET"');
     expect(productClientSource).toContain("body.data.items");
     expect(productClientSource).not.toContain("data.products");

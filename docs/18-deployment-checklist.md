@@ -43,6 +43,7 @@ This checklist ensures SkinWise VN can move from local development to a safe por
 [ ] Connection string is not committed.
 [ ] Required indexes are documented.
 [ ] `npm run db:indexes` exists and has been run for target environment.
+[ ] Local/dev `db:indexes` loads `.env.local` through the package script.
 [ ] Unique constraint behavior is planned for SkinJournal userId + localDate.
 [ ] Upsert behavior is planned for RoutineLog userId + routineId + localDate.
 ```
@@ -50,8 +51,10 @@ This checklist ensures SkinWise VN can move from local development to a safe por
 ## 5. Auth checks
 
 ```txt
-[ ] Auth.js secret is configured.
+[ ] Auth.js secret is configured and stable for the target environment.
 [ ] Login callback URL matches deployment domain.
+[ ] Auth.js uses JWT session strategy unless a new ADR explicitly approves database sessions.
+[ ] Auth.js MongoDB Adapter persists identity/account data but does not require route handlers to create MongoDB clients.
 [ ] Protected routes are protected.
 [ ] API routes requiring auth reject unauthenticated requests.
 [ ] User-owned resources enforce ownership checks.
@@ -114,4 +117,14 @@ Every deployable milestone must update:
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/05-ai-change-log.md
+```
+
+## 10. Local development troubleshooting checks
+
+```txt
+[ ] `npm run db:indexes` returns an index success message, for example `db:indexes created: 30 indexes ensured`.
+[ ] `npm run dev` prints `[node-dns] DNS servers: [ '8.8.8.8', '1.1.1.1' ]` before Next.js is ready when using the local DNS preload workaround.
+[ ] Google OAuth callback no longer logs `querySrv ECONNREFUSED`.
+[ ] Browser site data for localhost is cleared after changing `AUTH_SECRET` or session strategy.
+[ ] Secrets exposed during local debugging are rotated before pushing code or sharing a demo.
 ```

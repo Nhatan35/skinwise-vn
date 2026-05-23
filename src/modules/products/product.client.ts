@@ -1,8 +1,24 @@
 import type { ProductDto } from "@/modules/products/product.dto";
+import type {
+  ProductCategory,
+  ProductConcern,
+  ProductPriceRange,
+  ProductSkinType,
+} from "@/modules/products/product.types";
 
-const PRODUCTS_API_PATH = "/api/products?limit=50";
+const PRODUCTS_API_BASE_PATH = "/api/products";
+const DEFAULT_PRODUCT_LIMIT = 50;
 const PRODUCT_CATALOGUE_ERROR_MESSAGE =
   "Could not load the product catalogue.";
+
+export type ProductListClientInput = {
+  category?: ProductCategory;
+  concern?: ProductConcern;
+  limit?: number;
+  priceRange?: ProductPriceRange;
+  q?: string;
+  skinType?: ProductSkinType;
+};
 
 type ApiError = {
   code: string;
@@ -32,6 +48,36 @@ export class ProductClientError extends Error {
   }
 }
 
+export function getProductsApiPath(input: ProductListClientInput = {}) {
+  const params = new URLSearchParams();
+  const limit = input.limit ?? DEFAULT_PRODUCT_LIMIT;
+  const q = input.q?.trim();
+
+  if (q) {
+    params.set("q", q);
+  }
+
+  if (input.category) {
+    params.set("category", input.category);
+  }
+
+  if (input.priceRange) {
+    params.set("priceRange", input.priceRange);
+  }
+
+  if (input.skinType) {
+    params.set("skinType", input.skinType);
+  }
+
+  if (input.concern) {
+    params.set("concern", input.concern);
+  }
+
+  params.set("limit", String(limit));
+
+  return `${PRODUCTS_API_BASE_PATH}?${params.toString()}`;
+}
+
 async function readApiResponse<TData>(
   response: Response,
 ): Promise<ApiResponse<TData>> {
@@ -48,11 +94,11 @@ async function readApiResponse<TData>(
   }
 }
 
-export async function listProducts() {
+export async function listProducts(input: ProductListClientInput = {}) {
   let response: Response;
 
   try {
-    response = await fetch(PRODUCTS_API_PATH, {
+    response = await fetch(getProductsApiPath(input), {
       headers: {
         Accept: "application/json",
       },

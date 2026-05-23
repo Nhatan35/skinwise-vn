@@ -4,12 +4,14 @@ export const dashboardRoute = routes.DASHBOARD;
 export const skinProfileRoute = routes.SKIN_PROFILE;
 export const routinesRoute = routes.ROUTINES;
 export const journalRoute = routes.JOURNAL;
+export const productsRoute = routes.PRODUCTS;
 
 type DashboardNavHref =
   | typeof dashboardRoute
   | typeof skinProfileRoute
   | typeof routinesRoute
-  | typeof journalRoute;
+  | typeof journalRoute
+  | typeof productsRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
@@ -50,10 +52,10 @@ export const dashboardNavItems = [
     status: "Active",
   },
   {
-    disabled: true,
-    href: null,
+    disabled: false,
+    href: productsRoute,
     label: "Products",
-    status: "Chưa implement",
+    status: "Active",
   },
   {
     disabled: true,
