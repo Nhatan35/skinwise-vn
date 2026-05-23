@@ -1,14 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { getCurrentUser } from "@/modules/auth/get-current-user";
-import {
-  dashboardNavItems,
-  dashboardRoute,
-} from "@/modules/dashboard/dashboard-shell.config";
-import { Badge } from "@/shared/components/ui/badge";
-import { cn } from "@/shared/utils";
+import { DashboardNavigation } from "@/modules/dashboard/components/dashboard-navigation";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -47,37 +41,7 @@ export default async function DashboardLayout({
 
       <div className="mx-auto grid max-w-7xl gap-6 px-6 py-6 lg:grid-cols-[16rem_1fr]">
         <aside className="h-fit border border-stone-200 bg-white p-3">
-          <nav aria-label="Dashboard navigation" className="space-y-1">
-            {dashboardNavItems.map((item) => {
-              const itemClassName = cn(
-                "flex min-h-10 items-center justify-between gap-3 px-3 py-2 text-sm font-medium",
-                item.href === dashboardRoute
-                  ? "bg-emerald-50 text-emerald-900"
-                  : "text-stone-500",
-                item.disabled ? "cursor-not-allowed opacity-70" : "",
-              );
-
-              if (item.href === null) {
-                return (
-                  <span
-                    aria-disabled="true"
-                    className={itemClassName}
-                    key={item.label}
-                  >
-                    <span>{item.label}</span>
-                    <Badge variant="outline">{item.status}</Badge>
-                  </span>
-                );
-              }
-
-              return (
-                <Link className={itemClassName} href={item.href} key={item.href}>
-                  <span>{item.label}</span>
-                  <Badge variant="secondary">{item.status}</Badge>
-                </Link>
-              );
-            })}
-          </nav>
+          <DashboardNavigation />
         </aside>
 
         <main>{children}</main>

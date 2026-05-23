@@ -17,6 +17,17 @@ const dashboardConfigSource = readFileSync(
   resolve(process.cwd(), "src/modules/dashboard/dashboard-shell.config.ts"),
   "utf8",
 );
+const dashboardLayoutSource = readFileSync(
+  resolve(process.cwd(), "src/app/(dashboard)/layout.tsx"),
+  "utf8",
+);
+const dashboardNavigationSource = readFileSync(
+  resolve(
+    process.cwd(),
+    "src/modules/dashboard/components/dashboard-navigation.tsx",
+  ),
+  "utf8",
+);
 
 describe("dashboard shell config", () => {
   it("exposes dashboard, Skin Profile, Routines, Journal, and Products as enabled protected routes", () => {
@@ -99,6 +110,22 @@ describe("dashboard shell config", () => {
     expect(metadata).not.toContain("admin");
     expect(metadata).not.toContain("subscription");
     expect(metadata).not.toContain("notifications");
+  });
+
+  it("derives active navigation state from the current dashboard path", () => {
+    expect(dashboardLayoutSource).toContain("<DashboardNavigation />");
+    expect(dashboardNavigationSource.startsWith('"use client";')).toBe(true);
+    expect(dashboardNavigationSource).toContain("usePathname");
+    expect(dashboardNavigationSource).toContain(
+      "isActiveDashboardPath(pathname, item.href)",
+    );
+    expect(dashboardNavigationSource).toContain(
+      'pathname.startsWith(`${href}/`)',
+    );
+    expect(dashboardNavigationSource).toContain(
+      'aria-current={isActive ? "page" : undefined}',
+    );
+    expect(dashboardLayoutSource).not.toContain("item.href === dashboardRoute");
   });
 
   it("does not import auth, database, server-only, or API code", () => {

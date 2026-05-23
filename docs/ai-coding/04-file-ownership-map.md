@@ -680,6 +680,7 @@ src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/app/(dashboard)/products/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
+src/modules/dashboard/components/dashboard-navigation.tsx
 src/modules/dashboard/dashboard.types.ts
 src/modules/dashboard/dashboard.dto.ts
 src/modules/dashboard/dashboard.schema.ts
@@ -691,6 +692,7 @@ src/modules/dashboard/components/dashboard-card.tsx
 src/modules/dashboard/components/skin-profile-summary-card.tsx
 src/modules/dashboard/components/today-routine-progress-card.tsx
 src/modules/dashboard/components/routine-summary-card.tsx
+src/modules/dashboard/components/latest-journal-card.tsx
 src/modules/dashboard/components/latest-analysis-card.tsx
 src/modules/dashboard/components/next-actions-card.tsx
 src/app/api/dashboard/route.ts
@@ -708,10 +710,13 @@ Rules:
 - do not create `src/app/(dashboard)/page.tsx`;
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
+- dashboard navigation must derive active link state from the current pathname instead of hard-coding `/dashboard`;
 - `/dashboard`, `/skin-profile`, `/routines`, `/journal`, and `/products` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - dashboard cards must render API-provided dashboard summary data only and must not contain fake skincare, routine, product, journal, ingredient, or AI results.
+- latest journal dashboard display belongs to `latest-journal-card.tsx` and may render only `DashboardDto.latestJournal`; it must not query SkinJournal directly from the client.
+- dashboard next-action logic belongs to `dashboard.mapper.ts` and must stay deterministic/rule-based.
 
 Current status:
 
@@ -720,6 +725,7 @@ src/app/(dashboard)/layout.tsx
 src/app/(dashboard)/dashboard/page.tsx
 src/app/(dashboard)/products/page.tsx
 src/modules/dashboard/dashboard-shell.config.ts
+src/modules/dashboard/components/dashboard-navigation.tsx
 src/modules/dashboard/dashboard.types.ts
 src/modules/dashboard/dashboard.dto.ts
 src/modules/dashboard/dashboard.schema.ts
@@ -731,6 +737,7 @@ src/modules/dashboard/components/dashboard-card.tsx
 src/modules/dashboard/components/skin-profile-summary-card.tsx
 src/modules/dashboard/components/today-routine-progress-card.tsx
 src/modules/dashboard/components/routine-summary-card.tsx
+src/modules/dashboard/components/latest-journal-card.tsx
 src/modules/dashboard/components/latest-analysis-card.tsx
 src/modules/dashboard/components/next-actions-card.tsx
 src/app/api/dashboard/route.ts
@@ -741,7 +748,7 @@ tests/unit/dashboard-api-contract.test.ts
 tests/unit/dashboard-ui.test.ts
 ```
 
-Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. TASK PRODUCT-UI-001 points the Products nav link to `/products`. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI insights, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
+Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. TASK PRODUCT-UI-001 points the Products nav link to `/products`, and the review fix makes the Products nav item active on `/products`. TASK DASHBOARD-ENHANCE-001 adds latest SkinJournal summary data, the Latest Journal Entry card, and journal-aware primary next action priority. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI-generated insights, journal analytics, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
 
 ## 13. UI shared ownership
 

@@ -24,12 +24,17 @@ const productClientPath = join(
   projectRoot,
   "src/modules/products/product.client.ts",
 );
+const dashboardNavigationPath = join(
+  projectRoot,
+  "src/modules/dashboard/components/dashboard-navigation.tsx",
+);
 const proxyPath = join(projectRoot, "src/proxy.ts");
 
 const productsPageSource = readFileSync(productsPagePath, "utf8");
 const productCatalogueSource = readFileSync(productCataloguePath, "utf8");
 const productCardSource = readFileSync(productCardPath, "utf8");
 const productClientSource = readFileSync(productClientPath, "utf8");
+const dashboardNavigationSource = readFileSync(dashboardNavigationPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
 const combinedProductUiSource = `${productsPageSource}\n${productCatalogueSource}\n${productCardSource}\n${productClientSource}`;
 
@@ -56,6 +61,13 @@ describe("Product Catalogue UI", () => {
       status: "Active",
     });
     expect(proxySource).toContain('"/products/:path*"');
+    expect(dashboardNavigationSource).toContain("usePathname");
+    expect(dashboardNavigationSource).toContain(
+      "isActiveDashboardPath(pathname, item.href)",
+    );
+    expect(dashboardNavigationSource).toContain(
+      'aria-current={isActive ? "page" : undefined}',
+    );
 
     for (const disabledLabel of ["Today Log", "Ingredients"]) {
       expect(
