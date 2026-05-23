@@ -1,10 +1,16 @@
 import type { RoutineAnalysis } from "@/modules/ai-analysis/routine-analysis.types";
 import type { DashboardDto } from "@/modules/dashboard/dashboard.dto";
-import type { DashboardNextAction } from "@/modules/dashboard/dashboard.types";
+import type {
+  DashboardLatestJournalSummary,
+  DashboardNextAction,
+} from "@/modules/dashboard/dashboard.types";
+import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import type { Routine } from "@/modules/routines/routine.types";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
 import { routes } from "@/shared/constants/routes";
+
+const NOTES_PREVIEW_MAX_LENGTH = 120;
 
 export function mapSkinProfileSummary(profile: SkinProfile | null) {
   if (!profile) {
@@ -106,55 +112,109 @@ export function mapLatestRoutineAnalysisSummary(
   };
 }
 
+function toNotesPreview(notes: string | undefined) {
+  const normalizedNotes = notes?.trim().replace(/\s+/g, " ");
+
+  if (!normalizedNotes) {
+    return undefined;
+  }
+
+  if (normalizedNotes.length <= NOTES_PREVIEW_MAX_LENGTH) {
+    return normalizedNotes;
+  }
+
+  return `${normalizedNotes.slice(0, NOTES_PREVIEW_MAX_LENGTH).trimEnd()}...`;
+}
+
+export function mapLatestJournalSummary(
+  journal: SkinJournalDto | null,
+): DashboardLatestJournalSummary {
+  if (!journal) {
+    return {
+      exists: false,
+    } as const;
+  }
+
+  const notesPreview = toNotesPreview(journal.notes);
+
+  return {
+    exists: true,
+    id: journal.id,
+    localDate: journal.localDate,
+    observations: [...(journal.observations ?? [])],
+    symptoms: [...(journal.symptoms ?? [])],
+    ...(journal.stressLevel ? { stressLevel: journal.stressLevel } : {}),
+    ...(notesPreview ? { notesPreview } : {}),
+    productsUsedCount: journal.productsUsed?.length ?? 0,
+    createdAt: journal.createdAt,
+    updatedAt: journal.updatedAt,
+  };
+}
+
 export function buildDashboardNextActions(input: {
   hasSkinProfile: boolean;
   hasAnyRoutine: boolean;
   hasAnyRoutineLogToday: boolean;
+  hasJournalToday: boolean;
   hasLatestRoutineAnalysis: boolean;
 }): DashboardNextAction[] {
-  const actions: DashboardNextAction[] = [];
-
   if (!input.hasSkinProfile) {
-    actions.push({
-      label: "Hoàn thiện hồ sơ da",
-      href: routes.SKIN_PROFILE,
-      priority: "high",
-    });
+    return [
+      {
+        label: "Hoàn thiện hồ sơ da",
+        href: routes.SKIN_PROFILE,
+        priority: "high",
+      },
+    ];
   }
 
   if (!input.hasAnyRoutine) {
-    actions.push({
-      label: "Tạo routine đầu tiên",
-      href: routes.ROUTINES,
-      priority: "high",
-    });
+    return [
+      {
+        label: "Tạo routine đầu tiên",
+        href: routes.ROUTINES,
+        priority: "high",
+      },
+    ];
   }
 
   if (input.hasAnyRoutine && !input.hasAnyRoutineLogToday) {
-    actions.push({
-      label: "Ghi nhận routine hôm nay",
-      href: routes.ROUTINES,
-      priority: "medium",
-    });
+    return [
+      {
+        label: "Ghi nhận routine hôm nay",
+        href: routes.ROUTINES,
+        priority: "medium",
+      },
+    ];
+  }
+
+  if (!input.hasJournalToday) {
+    return [
+      {
+        label: "Thêm nhật ký da hôm nay",
+        href: routes.JOURNAL,
+        priority: "medium",
+      },
+    ];
   }
 
   if (input.hasAnyRoutine && !input.hasLatestRoutineAnalysis) {
-    actions.push({
-      label: "Phân tích an toàn routine",
-      href: routes.ROUTINES,
-      priority: "medium",
-    });
+    return [
+      {
+        label: "Xem phân tích an toàn routine",
+        href: routes.ROUTINES,
+        priority: "medium",
+      },
+    ];
   }
 
-  if (actions.length === 0) {
-    actions.push({
-      label: "Xem lại tiến độ routine hôm nay",
-      href: routes.ROUTINES,
+  return [
+    {
+      label: "Hôm nay bạn đã cập nhật đủ theo dõi skincare",
+      href: routes.DASHBOARD,
       priority: "low",
-    });
-  }
-
-  return actions;
+    },
+  ];
 }
 
 export function toDashboardDto(input: {
@@ -162,6 +222,8 @@ export function toDashboardDto(input: {
   routines: Routine[];
   routineLogs: RoutineLogDto[];
   latestRoutineAnalysis: RoutineAnalysis | null;
+  latestJournal: SkinJournalDto | null;
+  hasJournalToday: boolean;
   localDate: string;
 }): DashboardDto {
   const skinProfile = mapSkinProfileSummary(input.skinProfile);
@@ -174,18 +236,21 @@ export function toDashboardDto(input: {
   const latestRoutineAnalysis = mapLatestRoutineAnalysisSummary(
     input.latestRoutineAnalysis,
   );
+  const latestJournal = mapLatestJournalSummary(input.latestJournal);
 
   return {
     skinProfile,
     routines,
     todayRoutineLogs,
     latestRoutineAnalysis,
+    latestJournal,
     nextActions: buildDashboardNextActions({
       hasSkinProfile: skinProfile.exists,
       hasAnyRoutine: routines.hasAnyRoutine,
       hasAnyRoutineLogToday:
         todayRoutineLogs.completed + todayRoutineLogs.partial + todayRoutineLogs.skipped >
         0,
+      hasJournalToday: input.hasJournalToday,
       hasLatestRoutineAnalysis: latestRoutineAnalysis.exists,
     }),
   };

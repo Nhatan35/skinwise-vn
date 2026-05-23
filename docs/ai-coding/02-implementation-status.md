@@ -7,7 +7,7 @@ Last updated: 2026-05-23
 ## 1. Current phase
 
 ```txt
-TASK LOCAL-AUTH-DB-001 Local MongoDB/Auth runtime stabilization completed
+TASK DASHBOARD-ENHANCE-001 Dashboard latest journal summary and next-action priority completed
 ```
 
 The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current usable provider remains the validated mock provider. Product submission POST API, Product CRUD, Product detail UI, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, and medical diagnosis were not implemented.
@@ -83,6 +83,7 @@ The SDD v1.2.6 final freeze is complete. Week 1 Tasks 1-7 initialized the Next.j
 [x] RoutineLog backend foundation implemented
 [x] RoutineLog UI integration implemented
 [x] Dashboard data integration implemented
+[x] Dashboard latest journal summary and journal-aware next action implemented
 [x] AI Provider Abstraction implemented
 [x] AI Structured Output Validation implemented
 [x] AI Provider Flow Validation implemented
@@ -112,7 +113,7 @@ Deployment setup
 
 ```txt
 MongoDB helper and index definitions exist, but `npm run db:indexes` was not run against a real database in TASK PI-001 because `MONGODB_URI` and `APP_ENV` were missing from the shell, so the intended database target could not be verified. Product and Ingredient index definitions remain covered by unit tests, and real environments must run `npm run db:indexes` to ensure canonical indexes exist.
-Protected `/dashboard` now renders real user-scoped dashboard data through `GET /api/dashboard?localDate=YYYY-MM-DD`, summarizing Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. It still does not implement weekly/monthly charts, advanced streak logic, AI insights, SkinJournal dashboard integration, image upload, or skin score.
+Protected `/dashboard` now renders real user-scoped dashboard data through `GET /api/dashboard?localDate=YYYY-MM-DD`, summarizing Skin Profile, Routine counts, today's RoutineLog progress, latest SkinJournal summary, latest Routine Analysis, and deterministic next actions. It still does not implement weekly/monthly charts, advanced streak logic, AI-generated dashboard insights, image upload, calendar analytics, streaks, or skin score.
 Skin Profile onboarding UI remains available at `/onboarding/skin-profile` for first-time onboarding, while `/skin-profile` is the main protected view/edit route.
 Routine API CRUD exists for authenticated users, and `/routines` provides the UI foundation for listing, creating, editing, deleting, analyzing, viewing analysis history, and logging today's routine completion. TASK PP-001 adds Product Picker selection and server-owned Product snapshot population for selected visible products while preserving manual custom product fallback. RoutineLog backend foundation exists through authenticated `GET /api/routine-logs?localDate=YYYY-MM-DD` and `PUT /api/routine-logs`; TASK RL-002 adds `/routines` UI controls for completed, partial, and skipped daily logs using browser localDate and timezone. Dashboard data integration is implemented by TASK DB-001 using existing RoutineLog data for today only; advanced analytics remain intentionally not implemented.
 Routine Safety Engine exists as a deterministic foundation under `src/domain/routine-safety`; Week 3 Task 4 wires it into Routine Analysis API persistence and public DTO mapping only.
@@ -202,4 +203,63 @@ npm run dev
 [ ] Google OAuth sign-in redirects successfully to /dashboard.
 [ ] No Auth.js AdapterError with `querySrv ECONNREFUSED` appears during Google callback.
 [ ] No JWTSessionError remains after clearing localhost site data.
+```
+
+
+## PRODUCT-UI-001 review fix — 2026-05-23
+
+```txt
+TASK PRODUCT-UI-001 review fix completed
+```
+
+### What changed
+
+- Dashboard sidebar navigation now derives active state from the current pathname instead of hard-coding `/dashboard` as active.
+- The Products nav item is active on `/products` and remains linked to `routes.PRODUCTS`.
+- Today Log and Ingredients remain disabled with `href: null`.
+
+### Verified evidence
+
+```txt
+npm run test -- tests/unit/dashboard-shell.test.ts tests/unit/product-catalogue-ui.test.ts
+=> 2 files passed, 13 tests passed
+
+npm run typecheck
+=> passed
+
+npm run lint
+=> passed
+
+npm run test
+=> 59 files passed, 581 tests passed
+```
+
+
+## DASHBOARD-ENHANCE-001 dashboard journal summary - 2026-05-23
+
+```txt
+TASK DASHBOARD-ENHANCE-001 completed
+```
+
+### What changed
+
+- `GET /api/dashboard?localDate=YYYY-MM-DD` now includes a DTO-safe `latestJournal` summary.
+- The dashboard use case reuses the existing SkinJournal list use case to fetch the latest entry and check whether an entry exists for the requested dashboard localDate.
+- `/dashboard` renders a Latest Journal Entry card with localDate, observations, symptoms, optional stress level, notes preview, product count, and Journal CTA.
+- Recommended next action is now a deterministic single primary action ordered by skin profile, routine, today's routine log, today's journal, routine analysis, then up-to-date state.
+
+### Verified evidence
+
+```txt
+npm run typecheck
+=> passed
+
+npm run test
+=> 59 files passed, 587 tests passed
+```
+
+### Out of scope
+
+```txt
+No dashboard charts, streaks, SkinJournal analytics, image upload, AI-generated journal insight, skin score, Product/Ingredient changes, or medical diagnosis were added.
 ```

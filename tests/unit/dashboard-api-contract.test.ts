@@ -40,6 +40,17 @@ const dashboardDto: DashboardDto = {
   latestRoutineAnalysis: {
     exists: false,
   },
+  latestJournal: {
+    exists: true,
+    id: "journal-1",
+    localDate: "2026-05-17",
+    observations: ["Skin felt comfortable."],
+    symptoms: [],
+    productsUsedCount: 2,
+    notesPreview: "Short private note.",
+    createdAt: "2026-05-17T00:00:00.000Z",
+    updatedAt: "2026-05-17T00:00:00.000Z",
+  },
   nextActions: [
     {
       label: "Hoàn thiện hồ sơ da",
@@ -152,6 +163,7 @@ describe("/api/dashboard contract", () => {
     expect(mockedGetDashboardForUser).toHaveBeenCalledWith(authUserId, {
       localDate: "2026-05-17",
     });
+    expect(serializedBody).toContain("latestJournal");
     expect(serializedBody).not.toContain("userId");
     expect(serializedBody).not.toContain("_id");
     expect(serializedBody).not.toContain("ObjectId");

@@ -17,7 +17,10 @@ const dashboardClientHelperPath = join(
   projectRoot,
   "src/modules/routine-logs/routine-log.client.ts",
 );
-const dashboardComponentsDir = join(projectRoot, "src/modules/dashboard/components");
+const dashboardComponentsDir = join(
+  projectRoot,
+  "src/modules/dashboard/components",
+);
 
 const dashboardPageSource = readFileSync(dashboardPagePath, "utf8");
 const dashboardOverviewSource = readFileSync(dashboardOverviewPath, "utf8");
@@ -25,6 +28,7 @@ const componentSources = [
   "skin-profile-summary-card.tsx",
   "today-routine-progress-card.tsx",
   "routine-summary-card.tsx",
+  "latest-journal-card.tsx",
   "latest-analysis-card.tsx",
   "next-actions-card.tsx",
 ].map((fileName) => readFileSync(join(dashboardComponentsDir, fileName), "utf8"));
@@ -50,6 +54,8 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(dashboardOverviewSource).toContain("?localDate=");
     expect(dashboardOverviewSource).toContain("body.data.dashboard");
     expect(dashboardOverviewSource).toContain("getBrowserLocalDate");
+    expect(dashboardOverviewSource).toContain("LatestJournalCard");
+    expect(dashboardOverviewSource).toContain("dashboard.latestJournal");
     expect(dashboardOverviewSource).toContain("Đang tải dashboard");
     expect(dashboardOverviewSource).toContain("Không thể tải dashboard");
 
@@ -96,6 +102,15 @@ describe("Dashboard DB-001 UI integration", () => {
       "Phân tích an toàn gần nhất",
       "Mức rủi ro",
       "Cảnh báo",
+      "Latest Journal Entry",
+      "Entry date",
+      "Observations",
+      "Symptoms",
+      "Stress level",
+      "Notes",
+      "Products used",
+      "Add today&apos;s journal",
+      "View journal",
       "Gợi ý tiếp theo",
     ]) {
       expect(combinedComponentSource).toContain(label);
@@ -104,5 +119,10 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(combinedComponentSource).not.toContain("Sẽ được kết nối");
     expect(combinedComponentSource).not.toContain("Chưa implement trong Task 6");
     expect(combinedComponentSource).not.toContain("both");
+    expect(combinedComponentSource).not.toContain("imageUrl");
+    expect(combinedComponentSource).not.toContain("skinScore");
+    expect(combinedComponentSource).not.toContain("diagnosis");
+    expect(combinedComponentSource).not.toContain("skinFeeling");
+    expect(combinedComponentSource).not.toContain("severityScore");
   });
 });

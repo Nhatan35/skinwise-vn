@@ -4,6 +4,113 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-23 - TASK DASHBOARD-ENHANCE-001 Dashboard Latest Journal Summary
+
+### Task
+
+Extend the existing dashboard with a latest SkinJournal summary card and deterministic journal-aware next-action priority.
+
+### Files Added
+
+```txt
+src/modules/dashboard/components/latest-journal-card.tsx
+```
+
+### Files Updated
+
+```txt
+src/modules/dashboard/dashboard.types.ts
+src/modules/dashboard/dashboard.dto.ts
+src/modules/dashboard/dashboard.mapper.ts
+src/modules/dashboard/dashboard.use-case.ts
+src/modules/dashboard/components/dashboard-overview.tsx
+tests/unit/dashboard-use-case.test.ts
+tests/unit/dashboard-ui.test.ts
+tests/unit/dashboard-api-contract.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+docs/08-test-plan.md
+```
+
+### Reason
+
+The dashboard already summarized profile, routines, today's RoutineLog progress, latest Routine Analysis, and next actions. It needed to include real SkinJournal context and make the next action prioritize today's journal after routine logging is handled.
+
+### Implementation Notes
+
+- `dashboard.use-case.ts` reuses `listSkinJournalsForUser()` to fetch the latest entry and to check for an entry on the requested dashboard `localDate`.
+- `dashboard.mapper.ts` maps only safe journal fields, counts `productsUsed`, trims/collapses notes, and truncates `notesPreview` to 120 characters before adding an ellipsis.
+- `DashboardDto` now includes `latestJournal` without exposing `userId`, `_id`, raw ObjectId values, or full long notes.
+- `LatestJournalCard` renders empty and populated states using the existing DashboardCard/Button/Badge patterns.
+- `nextActions` remains `DashboardNextAction[]` but now returns one deterministic primary action in the required priority order.
+- No dashboard charts, streaks, SkinJournal analytics, AI-generated journal insight, image upload, skin score, Product/Ingredient behavior, auth behavior, or medical diagnosis was added.
+
+### Validation
+
+```txt
+npm run typecheck
+# Pass
+
+npm run test
+# Pass - 59 files, 587 tests
+```
+
+## 2026-05-23 - TASK PRODUCT-UI-001 Review Fix
+
+### Task
+
+Review the completed Product Catalogue UI implementation and fix issues related only to PRODUCT-UI-001.
+
+### Files Added
+
+```txt
+src/modules/dashboard/components/dashboard-navigation.tsx
+```
+
+### Files Updated
+
+```txt
+src/app/(dashboard)/layout.tsx
+tests/unit/dashboard-shell.test.ts
+tests/unit/product-catalogue-ui.test.ts
+docs/ai-coding/01-codebase-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/04-file-ownership-map.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+The `/products` route, Product API parsing, filters, proxy protection, and Products link were present, but the dashboard sidebar active styling was hard-coded to `/dashboard`, so Products did not become active on `/products`.
+
+### Implementation Notes
+
+- Moved dashboard sidebar nav rendering into a client component that reads the current pathname.
+- Products now receives active styling and `aria-current="page"` on `/products`.
+- Dashboard active state is limited to the exact `/dashboard` path.
+- Disabled Today Log and Ingredients items remain disabled with no links.
+- No Product detail UI, Product CRUD, Product submission, saved products, image upload, AI recommendation, skin score, or medical behavior was added.
+
+### Validation
+
+```txt
+npm run test -- tests/unit/dashboard-shell.test.ts tests/unit/product-catalogue-ui.test.ts
+# Pass - 2 files, 13 tests
+
+npm run typecheck
+# Pass
+
+npm run lint
+# Pass
+
+npm run test
+# Pass - 59 files, 581 tests
+```
+
 ## 2026-05-23 - TASK LOCAL-AUTH-DB-001 Local MongoDB/Auth Runtime Stabilization
 
 ### Task

@@ -74,6 +74,8 @@ Test that:
 - Reject RoutineLog for another user's routine.
 - Create journal entry using localDate/timezone.
 - Reject invalid journal data.
+- `GET /api/dashboard` returns latestJournal without `userId`, `_id`, ObjectId, or long notes.
+- Dashboard next action prioritizes skin profile, routine, today's RoutineLog, today's SkinJournal, routine analysis, then up-to-date state.
 
 ### Database tests
 
@@ -119,6 +121,7 @@ Use Playwright.
 2. User marks steps as completed/skipped.
 3. User saves log.
 4. Dashboard updates completion rate.
+5. Dashboard recommends today's SkinJournal only after routine logging is handled.
 
 ### Flow 4: Journal
 

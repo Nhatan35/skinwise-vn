@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analysis-card";
+import { LatestJournalCard } from "@/modules/dashboard/components/latest-journal-card";
 import { NextActionsCard } from "@/modules/dashboard/components/next-actions-card";
 import { RoutineSummaryCard } from "@/modules/dashboard/components/routine-summary-card";
 import { SkinProfileSummaryCard } from "@/modules/dashboard/components/skin-profile-summary-card";
@@ -182,9 +183,12 @@ export function DashboardOverview() {
       </div>
       <div className="grid gap-4 xl:grid-cols-2">
         <RoutineSummaryCard routines={dashboard.routines} />
-        <LatestAnalysisCard latestAnalysis={dashboard.latestRoutineAnalysis} />
+        <LatestJournalCard latestJournal={dashboard.latestJournal} />
       </div>
-      <NextActionsCard nextActions={dashboard.nextActions} />
+      <div className="grid gap-4 xl:grid-cols-2">
+        <LatestAnalysisCard latestAnalysis={dashboard.latestRoutineAnalysis} />
+        <NextActionsCard nextActions={dashboard.nextActions} />
+      </div>
     </div>
   );
 }

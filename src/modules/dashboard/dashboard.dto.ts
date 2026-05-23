@@ -1,4 +1,5 @@
 import type {
+  DashboardLatestJournalSummary,
   DashboardLatestRoutineAnalysisSummary,
   DashboardNextAction,
   DashboardRoutineSummary,
@@ -11,5 +12,6 @@ export type DashboardDto = {
   routines: DashboardRoutineSummary;
   todayRoutineLogs: DashboardTodayRoutineLogsSummary;
   latestRoutineAnalysis: DashboardLatestRoutineAnalysisSummary;
+  latestJournal: DashboardLatestJournalSummary;
   nextActions: DashboardNextAction[];
 };

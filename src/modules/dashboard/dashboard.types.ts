@@ -1,5 +1,9 @@
 import type { RoutineSafetyRiskLevel } from "@/domain/routine-safety";
 import type {
+  SkinJournalStressLevel,
+  SkinJournalSymptom,
+} from "@/modules/journals/skin-journal.types";
+import type {
   SensitivityLevel,
   SkinConcern,
   SkinType,
@@ -42,6 +46,23 @@ export type DashboardLatestRoutineAnalysisSummary =
       riskLevel: RoutineSafetyRiskLevel;
       warningCount: number;
       createdAt: string;
+    }
+  | {
+      exists: false;
+    };
+
+export type DashboardLatestJournalSummary =
+  | {
+      exists: true;
+      id: string;
+      localDate: string;
+      observations: string[];
+      symptoms: SkinJournalSymptom[];
+      stressLevel?: SkinJournalStressLevel;
+      notesPreview?: string;
+      productsUsedCount: number;
+      createdAt: string;
+      updatedAt: string;
     }
   | {
       exists: false;
