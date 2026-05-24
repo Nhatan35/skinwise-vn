@@ -7,16 +7,22 @@ This checklist tracks whether SkinWise VN is ready to move from local developmen
 Current task:
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
 ```
 
 Current status:
 
 ```txt
-Deployment prepared.
-Actual Vercel deployment: NOT RUN.
-Production URL: NOT PROVIDED.
-Production smoke test: NOT TESTED.
+Deployment status: Deployed for MVP demo.
+Actual Vercel deployment: COMPLETED.
+Deployment target: Vercel.
+Production branch: main.
+Production commit: db72e07.
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASSED.
+Google OAuth production login: PASSED.
+MongoDB production/demo read/write through authenticated flows: PASSED.
+TASK DEPLOY-002: COMPLETED.
 ```
 
 Detailed runbook:
@@ -28,29 +34,29 @@ docs/deployment/vercel-deployment.md
 ## 2. Pre-Deployment Checks
 
 ```txt
-[ ] Project builds successfully.
-[ ] TypeScript has no blocking errors.
-[ ] Lint passes.
-[ ] Unit tests pass.
-[ ] Integration tests pass where implemented.
+[x] Project builds successfully.
+[x] TypeScript has no blocking errors.
+[x] Lint passes.
+[x] Unit tests pass.
+[x] Integration tests pass where implemented.
 [ ] E2E happy path passes where implemented.
-[ ] No out-of-scope feature has been added.
-[ ] README setup instructions are accurate.
-[ ] Deployment runbook is current.
+[x] No out-of-scope feature has been added.
+[x] README setup instructions are accurate.
+[x] Deployment runbook is current.
 [ ] ADRs still match implementation decisions.
 [ ] PR checklist and CI workflow are present if using GitHub.
-[ ] .env.example is current and placeholder-only.
+[x] .env.example is current and placeholder-only.
 ```
 
 ## 3. Vercel Project Settings
 
 ```txt
-[ ] Framework Preset: Next.js.
-[ ] Root Directory: project root.
-[ ] Install Command: npm ci when package-lock.json is present; otherwise npm install.
-[ ] Build Command: npm run build.
-[ ] Output Directory: leave default for Next.js.
-[ ] Node.js Version: Node 20.x recommended.
+[x] Framework Preset: Next.js.
+[x] Root Directory: project root.
+[x] Install Command: npm ci when package-lock.json is present; otherwise npm install.
+[x] Build Command: npm run build.
+[x] Output Directory: leave default for Next.js.
+[x] Node.js Version: Node 20.x recommended.
 ```
 
 ## 4. Environment Variables
@@ -60,18 +66,18 @@ Use only variables supported by `src/config/env.ts` and Auth.js runtime inferenc
 Required for production app boot:
 
 ```txt
-[ ] APP_ENV="production"
-[ ] APP_BASE_URL="https://<your-vercel-domain>"
-[ ] MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
-[ ] AUTH_SECRET="<secure-production-random-secret>"
-[ ] AUTH_URL="https://<your-vercel-domain>"
+[x] APP_ENV="production"
+[x] APP_BASE_URL="https://skinwise-vn.vercel.app"
+[x] MONGODB_URI configured in Vercel Project Settings
+[x] AUTH_SECRET configured in Vercel Project Settings
+[x] AUTH_URL="https://skinwise-vn.vercel.app"
 ```
 
 Required for Google OAuth login:
 
 ```txt
-[ ] AUTH_GOOGLE_ID="<google-oauth-client-id>"
-[ ] AUTH_GOOGLE_SECRET="<google-oauth-client-secret>"
+[x] AUTH_GOOGLE_ID configured in Vercel Project Settings
+[x] AUTH_GOOGLE_SECRET configured in Vercel Project Settings
 ```
 
 Google OAuth variables are not required for app boot, but production Google login will not work without them.
@@ -79,7 +85,7 @@ Google OAuth variables are not required for app boot, but production Google logi
 Demo AI provider:
 
 ```txt
-[ ] AI_PROVIDER="mock"
+[x] AI_PROVIDER="mock"
 ```
 
 Optional/future AI variables:
@@ -113,13 +119,13 @@ Current AI status: provider abstraction, validated wrapper, and mock provider ar
 ## 5. Security And Package Checks
 
 ```txt
-[ ] .env.local exists only locally and is not tracked.
-[ ] .env.local is not included in clean zip/source packages.
-[ ] .env.example contains placeholders only.
-[ ] Production secrets are configured in Vercel Project Settings only.
+[x] .env.local exists only locally and is not tracked.
+[x] .env.local is not included in clean zip/source packages.
+[x] .env.example contains placeholders only.
+[x] Production secrets are configured in Vercel Project Settings only.
 [ ] Secrets are rotated if they were pushed publicly, uploaded, pasted into chat, screenshotted, or shared externally.
-[ ] Clean package excludes .git, .env*, .env*.local, .next, node_modules, .vercel, coverage, dist, out, test-results, playwright-report, tsbuildinfo, nested zip files, logs, and private key/certificate files.
-[ ] npm audit --omit=dev --audit-level=moderate passes before DEPLOY-002.
+[x] Clean package excludes .git, .env*, .env*.local, .next, node_modules, .vercel, coverage, dist, out, test-results, playwright-report, tsbuildinfo, nested zip files, logs, and private key/certificate files.
+[x] npm audit --omit=dev --audit-level=moderate passes before DEPLOY-002.
 ```
 
 Current production dependency audit note:
@@ -135,12 +141,12 @@ Keep the same-major npm overrides for `postcss` and `qs` until a future safe ups
 ## 6. Database Checks
 
 ```txt
-[ ] MongoDB Atlas production/demo cluster exists.
-[ ] Separate demo database is used for portfolio deployment.
+[x] MongoDB Atlas production/demo cluster exists.
+[x] Separate demo database is used for portfolio deployment.
 [ ] Database user has least-privilege access where possible.
-[ ] Connection string is not committed or printed.
-[ ] Atlas network access allows Vercel.
-[ ] Database name is verified.
+[x] Connection string is not committed or printed.
+[x] Atlas network access allows Vercel.
+[x] Database name is verified.
 [ ] Required indexes are documented.
 [ ] npm run db:indexes exists and has been run for the confirmed demo database if needed.
 [ ] npm run db:seed is run only against the intended demo database.
@@ -153,29 +159,29 @@ Keep the same-major npm overrides for `postcss` and `qs` until a future safe ups
 ## 7. Auth Checks
 
 ```txt
-[ ] Auth.js secret is configured and stable for the target environment.
-[ ] AUTH_URL matches the deployment domain.
-[ ] APP_BASE_URL matches the deployment domain.
-[ ] Google OAuth authorized JavaScript origin is https://<your-vercel-domain>.
-[ ] Google OAuth authorized redirect URI is https://<your-vercel-domain>/api/auth/callback/google.
-[ ] Local redirect URI http://localhost:3000/api/auth/callback/google remains available for development.
-[ ] Auth.js uses JWT session strategy unless a new ADR explicitly approves database sessions.
-[ ] Protected routes are protected.
-[ ] API routes requiring auth reject unauthenticated requests.
-[ ] User-owned resources enforce ownership checks.
+[x] Auth.js secret is configured and stable for the target environment.
+[x] AUTH_URL matches the deployment domain.
+[x] APP_BASE_URL matches the deployment domain.
+[x] Google OAuth authorized JavaScript origin is https://skinwise-vn.vercel.app.
+[x] Google OAuth authorized redirect URI is https://skinwise-vn.vercel.app/api/auth/callback/google.
+[x] Local redirect URI http://localhost:3000/api/auth/callback/google remains available for development.
+[x] Auth.js uses JWT session strategy unless a new ADR explicitly approves database sessions.
+[x] Protected routes are protected.
+[x] API routes requiring auth reject unauthenticated requests.
+[x] User-owned resources enforce ownership checks.
 [ ] Admin-only routes are not exposed unless implemented.
 ```
 
 ## 8. AI Safety Checks
 
 ```txt
-[ ] AI endpoints are server-only.
-[ ] Rule engine runs before AI.
-[ ] AI output is schema validated.
-[ ] AI fallback policy is implemented before public demo of analysis.
-[ ] Rate limits exist for AI endpoints.
-[ ] AI_PROVIDER is mock unless a real provider is implemented and verified.
-[ ] Unsafe or medical claims are not presented as diagnosis or treatment.
+[x] AI endpoints are server-only.
+[x] Rule engine runs before AI.
+[x] AI output is schema validated.
+[x] AI fallback policy is implemented before public demo of analysis.
+[x] Rate limits exist for AI endpoints.
+[x] AI_PROVIDER is mock unless a real provider is implemented and verified.
+[x] Unsafe or medical claims are not presented as diagnosis or treatment.
 ```
 
 ## 9. Privacy Checks
@@ -194,16 +200,16 @@ Keep the same-major npm overrides for `postcss` and `qs` until a future safe ups
 ## 10. UI And Demo Readiness
 
 ```txt
-[ ] Loading states exist.
-[ ] Error states exist.
-[ ] Empty states exist.
-[ ] No medical diagnosis claims appear in UI.
-[ ] No appearance scoring or pressure appears in UI.
-[ ] Dashboard shell works after login.
-[ ] Seed data is safe and minimal.
-[ ] Core MVP flow is testable.
-[ ] Known limitations are documented.
-[ ] Post-MVP features are not advertised as completed.
+[x] Loading states exist.
+[x] Error states exist.
+[x] Empty states exist.
+[x] No medical diagnosis claims appear in UI.
+[x] No appearance scoring or pressure appears in UI.
+[x] Dashboard shell works after login.
+[x] Seed data is safe and minimal.
+[x] Core MVP flow is testable.
+[x] Known limitations are documented.
+[x] Post-MVP features are not advertised as completed.
 ```
 
 ## 11. Production Smoke Test
@@ -211,39 +217,43 @@ Keep the same-major npm overrides for `postcss` and `qs` until a future safe ups
 Run after a real Vercel deployment exists.
 
 ```txt
-[ ] / loads successfully.
-[ ] Landing page shows current MVP/post Week 6 messaging.
-[ ] No false deployment claim appears.
-[ ] Google sign-in works.
-[ ] User lands on dashboard or intended callback URL.
-[ ] Protected routes redirect unauthenticated users.
-[ ] /dashboard loads after login.
-[ ] /skin-profile loads and can create/update profile.
-[ ] /products loads and search/filter works.
-[ ] /products/[id] loads.
-[ ] /routines loads and can create routine.
-[ ] Routine analysis result appears.
-[ ] Routine log status can be updated.
-[ ] /journal loads and can create/edit/delete entry.
-[ ] /api/me returns authenticated user data after login.
-[ ] Safety wording avoids diagnosis, treatment promises, skin scoring, and dermatologist replacement claims.
+[x] / loads successfully.
+[x] Landing page shows current MVP/post Week 6 messaging.
+[x] No false deployment claim appears.
+[x] Google sign-in works.
+[x] User lands on dashboard or intended callback URL.
+[x] Protected routes redirect unauthenticated users.
+[x] /dashboard loads after login.
+[x] /skin-profile loads and can create/update profile.
+[x] /products loads and search/filter works.
+[x] /products/[id] loads.
+[x] /routines loads and can create routine.
+[x] Routine analysis result appears.
+[x] Routine log status can be updated.
+[x] /journal loads and can create/edit/delete entry.
+[x] /api/me returns authenticated user data after login.
+[x] Safety wording avoids diagnosis, treatment promises, skin scoring, and dermatologist replacement claims.
 ```
 
 ## 12. Known Deployment Limitations
 
 ```txt
-[ ] Actual Vercel deployment has not been executed.
-[ ] Production URL has not been provided.
-[ ] Production smoke test has not been completed.
-[ ] Google OAuth production callback has not been tested.
-[ ] MongoDB Atlas production/demo access has not been tested.
+[x] Actual Vercel deployment has been executed for MVP demo.
+[x] Production URL has been provided: https://skinwise-vn.vercel.app.
+[x] Production smoke test has been completed and passed for MVP demo scope.
+[x] Google OAuth production callback has been tested.
+[x] MongoDB Atlas production/demo read/write access has been tested through authenticated flows.
 [ ] E2E tests are config-only while tests/e2e has no real specs.
-[ ] Real OpenAI/Gemini provider is not implemented.
-[ ] Image upload is out of scope.
-[ ] Marketplace is out of scope.
-[ ] Notifications are out of scope.
-[ ] Skin score is out of scope.
-[ ] Medical diagnosis is out of scope.
+[x] Real OpenAI/Gemini provider is not implemented.
+[x] Image upload is out of scope.
+[x] Marketplace is out of scope.
+[x] Notifications are out of scope.
+[x] Skin score is out of scope.
+[x] Medical diagnosis is out of scope.
+[x] MVP demo deployment is not a full commercial production release.
+[x] Product catalogue data is demo/seed-style catalogue data.
+[x] Marketplace/payment/subscription remain out of scope.
+[x] The app provides educational skincare support only, not medical diagnosis or treatment advice.
 ```
 
 ## 13. Release Note Requirement
@@ -259,5 +269,5 @@ docs/ai-coding/05-ai-change-log.md
 ## 14. Next Task
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
 ```

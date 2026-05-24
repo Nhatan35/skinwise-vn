@@ -3,13 +3,21 @@
 ## Current Deployment Status
 
 ```txt
-Deployment prepared.
-Actual Vercel deployment: NOT RUN.
-Production URL: NOT PROVIDED.
-Production smoke test: NOT TESTED.
+Deployment status: Deployed for MVP demo.
+Actual Vercel deployment: COMPLETED.
+Deployment target: Vercel.
+Production branch: main.
+Production commit: db72e07.
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASSED.
+Google OAuth production login: PASSED.
+MongoDB production/demo read/write through authenticated flows: PASSED.
+TASK DEPLOY-002: COMPLETED.
 ```
 
 SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, notifications, or other out-of-scope features during deployment.
+
+This is an MVP demo deployment, not a full commercial production release.
 
 ## Vercel Project Settings
 
@@ -25,6 +33,14 @@ SkinWise VN is a skincare routine tracker and educational MVP. It is not a medic
 ## Environment Variable Checklist
 
 Configure production values only in Vercel Project Settings -> Environment Variables. Do not commit production secrets.
+
+For the deployed MVP demo, `APP_BASE_URL` and `AUTH_URL` must match:
+
+```txt
+https://skinwise-vn.vercel.app
+```
+
+Do not document real secret values. This project uses `AUTH_URL` and `APP_BASE_URL`; do not introduce `NEXTAUTH_URL` unless the source code is deliberately changed.
 
 ### Required For Production App Boot
 
@@ -84,6 +100,34 @@ FEATURE_SKIN_SCORE="false"
 ```
 
 Do not enable unfinished or out-of-scope features for the MVP demo.
+
+## Deployment Result
+
+```txt
+TASK DEPLOY-002: completed.
+Production URL: https://skinwise-vn.vercel.app
+Deployment target: Vercel.
+Production branch: main.
+Production commit: db72e07.
+Deployment status: Ready / deployed for MVP demo.
+Production smoke test: passed.
+Google OAuth production login: passed.
+Authenticated MVP flows: passed.
+MongoDB production/demo read/write through authenticated flows: passed.
+AI provider: AI_PROVIDER="mock".
+Secrets documented: no.
+```
+
+Known MVP demo limitations:
+
+- The deployment is an MVP demo deployment, not a full commercial production release.
+- AI routine analysis uses mock/deterministic provider behavior.
+- Product catalogue data is demo/seed-style catalogue data.
+- Real OpenAI/Gemini providers are not implemented.
+- Image upload and AI face analysis remain out of scope.
+- Skin score remains out of scope.
+- Marketplace, payment, subscription, and notifications remain out of scope.
+- The app provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Security Rules
 

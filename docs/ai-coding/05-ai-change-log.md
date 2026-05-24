@@ -4,6 +4,46 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-24 - TASK DEPLOY-002 Vercel MVP Demo Deployment
+
+### Task
+
+Execute the Vercel MVP demo deployment and record production smoke test results.
+
+### Files Updated
+
+```txt
+README.md
+docs/18-deployment-checklist.md
+docs/deployment/vercel-deployment.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Deployment Evidence
+
+```txt
+Production URL: https://skinwise-vn.vercel.app
+Deployment target: Vercel
+Production branch: main
+Production commit: db72e07
+Deployment status: Ready / deployed for MVP demo
+Production smoke test: Passed
+Google OAuth production login: Passed
+MongoDB production/demo read/write through authenticated flows: Passed
+```
+
+### Notes
+
+- The previous stale production deployment from commit `a8ddf6d` was replaced by the current Post Week 6 MVP build.
+- Protected routes no longer return 404 and redirect unauthenticated users to sign-in.
+- Authenticated MVP flows were manually smoke-tested: dashboard, skin profile, products, product detail, routines, routine analysis/history/logging, journal create/edit/delete, and dashboard summaries.
+- `AI_PROVIDER` remains `mock`; routine analysis uses mock/deterministic provider behavior for the MVP demo.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, and medical diagnosis remain out of scope.
+- No secrets, MongoDB credentials, OAuth secrets, `AUTH_SECRET`, API keys, deployment tokens, or private values were documented.
+
 ## 2026-05-24 - TASK SECURITY-AUDIT-001 Production Dependency Audit Fix
 
 ### Task

@@ -6,7 +6,7 @@ SkinWise VN is not a medical diagnosis app. It does not diagnose diseases, presc
 
 ## Current Status
 
-Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
+Current phase: post Week 6 MVP deployed demo, validation, documentation, and portfolio readiness.
 
 The main Week 1-6 MVP implementation is completed or nearly completed:
 
@@ -17,19 +17,21 @@ The main Week 1-6 MVP implementation is completed or nearly completed:
 - Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API: completed.
 - Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
 
-Latest completed task: `TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP`.
+Latest completed task: `TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test`.
 
-Current cleanup tasks:
+Recently completed readiness tasks:
 
 - `SECURITY-CLEANUP-001`
 - `DOCS-SYNC-001`
 - `LOCAL-VALIDATION-001`
+- `TASK DEPLOY-001`
+- `TASK DEPLOY-002`
 
-Current deployment status: deployment prepared, not deployed yet.
+Current deployment status: MVP demo deployed to Vercel.
 
-Next task if deployment is not executed yet: `TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test`.
+Production URL: https://skinwise-vn.vercel.app
 
-Deployment is not complete unless a real deployed URL exists and has been smoke-tested.
+Production smoke test status: passed for the MVP demo scope on Vercel production branch `main`, commit `db72e07`.
 
 ## Implemented MVP Surface
 
@@ -99,7 +101,9 @@ Fill real values in `.env.local` only. Do not commit or share `.env.local`, and 
 
 ## Deployment Preparation
 
-`TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP` prepares the repository for Vercel deployment, but does not execute the deployment.
+`TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP` prepared the repository for Vercel deployment.
+
+`TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test` completed the MVP demo deployment and manual production smoke test.
 
 Deployment runbook:
 
@@ -107,14 +111,27 @@ Deployment runbook:
 
 Current deployment status:
 
-- Deployment prepared.
-- Actual Vercel deployment: not run.
-- Production URL: not provided.
-- Production smoke test: not tested.
+- Deployment target: Vercel.
+- Deployment status: deployed for MVP demo.
+- Production branch: `main`.
+- Production commit: `db72e07`.
+- Production URL: https://skinwise-vn.vercel.app
+- Production smoke test: passed.
+- Google OAuth production login: passed.
+- MongoDB production/demo read/write through authenticated flows: passed.
 
 Production secrets must be configured in Vercel Project Settings, not in repository files. `.env.local` must never be committed, uploaded, shared, or included in a zip/source package.
 
 For MVP demo deployment, use `AI_PROVIDER="mock"`. Real OpenAI and Gemini providers are not implemented in this task.
+
+Known MVP demo limitations:
+
+- This is an MVP demo deployment, not a full commercial production release.
+- AI routine analysis uses mock/deterministic provider behavior.
+- Product catalogue data is demo/seed-style catalogue data.
+- Real OpenAI/Gemini providers are not implemented.
+- Image upload, AI face analysis, skin score, marketplace, payment, subscription, and notifications are not implemented.
+- SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Environment Variables
 

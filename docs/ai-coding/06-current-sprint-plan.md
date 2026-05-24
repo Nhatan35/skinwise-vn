@@ -8,29 +8,35 @@ Last updated: 2026-05-24
 Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
 ```
 
-The main Week 1-6 MVP implementation is completed or nearly completed. Current work is deployment preparation and readiness verification, not new feature work.
+The main Week 1-6 MVP implementation is completed or nearly completed. Current work is post-deployment portfolio/demo polish and readiness documentation, not new feature work.
 
 ## 2. Current deployment task
 
 Current task:
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
 ```
 
 Status:
 
 ```txt
-Deployment prepared.
-Actual Vercel deployment: NOT RUN.
-Production URL: NOT PROVIDED.
-Production smoke test: NOT TESTED.
+Deployment status: Deployed for MVP demo.
+Actual Vercel deployment: COMPLETED.
+Deployment target: Vercel.
+Production branch: main.
+Production commit: db72e07.
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASSED.
+Google OAuth production login: PASSED.
+MongoDB production/demo read/write through authenticated flows: PASSED.
+TASK DEPLOY-002: COMPLETED.
 ```
 
 ## 3. Latest completed task
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
 ```
 
 ## 4. Completed MVP implementation status
@@ -55,11 +61,11 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 [x] Add Node 20 marker for Vercel/local version alignment.
 [x] Create clean deployment package excluding secrets and generated artifacts.
 [x] Run local validation commands.
-[ ] Execute real Vercel deployment.
-[ ] Configure production environment variables in Vercel.
-[ ] Configure/test Google OAuth production callback.
-[ ] Verify MongoDB Atlas production/demo access from Vercel.
-[ ] Run production smoke test.
+[x] Execute real Vercel deployment.
+[x] Configure production environment variables in Vercel.
+[x] Configure/test Google OAuth production callback.
+[x] Verify MongoDB Atlas production/demo access from Vercel.
+[x] Run production smoke test.
 ```
 
 ## 6. Not allowed in this phase
@@ -100,7 +106,7 @@ Database commands must only run against a known local/development database. Do n
 ## 8. Recommended next task
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
 ```
 
-Reason: deployment preparation is complete locally, but the Vercel project, production environment variables, MongoDB Atlas access, Google OAuth production callback, deployed URL, and production smoke test still require external setup and verification.
+Reason: MVP demo deployment is complete and smoke-tested. The next useful step is portfolio polish, demo scripting, final README polish, or post-deployment cleanup without adding new product scope.
