@@ -17,7 +17,7 @@ The main Week 1-6 MVP implementation is completed or nearly completed:
 - Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API: completed.
 - Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
 
-Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
+Latest completed task: `TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP`.
 
 Current cleanup tasks:
 
@@ -25,7 +25,9 @@ Current cleanup tasks:
 - `DOCS-SYNC-001`
 - `LOCAL-VALIDATION-001`
 
-Recommended next task after cleanup and validation: `DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP`.
+Current deployment status: deployment prepared, not deployed yet.
+
+Next task if deployment is not executed yet: `TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test`.
 
 Deployment is not complete unless a real deployed URL exists and has been smoke-tested.
 
@@ -95,6 +97,25 @@ npm run dev
 
 Fill real values in `.env.local` only. Do not commit or share `.env.local`, and do not include it in shared zip/source packages.
 
+## Deployment Preparation
+
+`TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP` prepares the repository for Vercel deployment, but does not execute the deployment.
+
+Deployment runbook:
+
+- `docs/deployment/vercel-deployment.md`
+
+Current deployment status:
+
+- Deployment prepared.
+- Actual Vercel deployment: not run.
+- Production URL: not provided.
+- Production smoke test: not tested.
+
+Production secrets must be configured in Vercel Project Settings, not in repository files. `.env.local` must never be committed, uploaded, shared, or included in a zip/source package.
+
+For MVP demo deployment, use `AI_PROVIDER="mock"`. Real OpenAI and Gemini providers are not implemented in this task.
+
 ## Environment Variables
 
 Environment validation is defined in `src/config/env.ts`. Use `.env.example` as the placeholder template.
@@ -158,6 +179,7 @@ Database commands use `.env.local` and must only be run against a known local/de
 
 Current implementation and planning docs:
 
+- `docs/deployment/vercel-deployment.md`
 - `docs/13-ui-route-map.md`
 - `docs/18-deployment-checklist.md`
 - `docs/21-local-auth-db-troubleshooting.md`

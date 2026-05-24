@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -24,6 +26,10 @@
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.pfx
+*.zip
 
 # debug
 npm-debug.log*
@@ -43,5 +49,6 @@ pnpm-debug.log*
 .vercel
 
 # typescript
+tsconfig.tsbuildinfo
 *.tsbuildinfo
 next-env.d.ts

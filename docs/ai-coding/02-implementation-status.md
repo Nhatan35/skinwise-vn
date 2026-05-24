@@ -10,9 +10,11 @@ Last updated: 2026-05-24
 Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
 ```
 
-Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
+Latest completed task: `TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP`.
 
 The SDD v1.2.6 final freeze is now historical planning context. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. TASK PRODUCT-UI-002 added the protected `/products/[id]` Product Detail UI, ProductCard detail navigation, and a client-safe `getProduct()` helper that parses detail responses from `data.product`.
+
+TASK DEPLOY-001 added deployment preparation only: a Vercel runbook, exact environment variable checklist, Node 20 marker, clean package ignore rules, deployment readiness documentation, and a clean deployment-ready zip. Actual Vercel deployment was not executed, no production URL was provided, and production smoke testing was not performed.
 
 OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current usable provider remains the validated mock provider. Product submission POST API, Product CRUD, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, and medical diagnosis were not implemented.
 
@@ -48,6 +50,8 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] PR checklist template
 [x] CI template
 [x] Week 1 Task 1 prompt
+[x] Vercel deployment runbook
+[x] Deployment-ready package checklist
 ```
 
 ## 3. Completed code
@@ -100,20 +104,22 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] SkinJournal product selection and name resolution implemented
 [x] Product Catalogue UI implemented
 [x] Product Detail UI implemented
+[x] Vercel deployment preparation documented
+[x] Node 20 marker added
+[x] Clean deployment package created
 ```
 
 ## 4. In progress
 
 ```txt
-SECURITY-CLEANUP-001
-DOCS-SYNC-001
-LOCAL-VALIDATION-001
+DEPLOY-001 prepared; actual Vercel deployment is not executed.
 ```
 
 ## 5. Not started
 
 ```txt
-Deployment setup
+Actual Vercel deployment execution
+Production smoke test
 Real OpenAI/Gemini provider integration
 Product submission/Product CRUD
 Dedicated Ingredient UI
@@ -138,6 +144,8 @@ Routine Analysis rate limiting uses the MongoDB `rate_limits` collection and req
 Optional `npm run test:e2e` reported the smoke test as `ok` during TASK-RA-001, but the command wrapper timed out waiting for the process to exit.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.
+TASK DEPLOY-001 did not execute Vercel deployment. Production URL is not provided, production smoke test is not completed, Google OAuth production callback is not configured/tested, MongoDB Atlas production/demo access is not tested, and E2E tests remain config-only because no real specs exist in tests/e2e.
+Real AI provider integration, image upload, marketplace, notifications, skin score, and medical diagnosis remain out of scope.
 ```
 
 ## 7. Do not work on yet
@@ -159,13 +167,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
 ```
 
 Recommended next coding task:
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
 ```
 
 ## 9. Update rule

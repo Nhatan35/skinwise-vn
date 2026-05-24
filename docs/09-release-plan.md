@@ -174,7 +174,37 @@ Extract:
 | Scope creep | Keep marketplace and diagnosis out of MVP |
 
 
-## 6. SDD freeze note
+## 6. Current deployment preparation status
+
+```txt
+TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+```
+
+Deployment preparation is documented in:
+
+```txt
+docs/deployment/vercel-deployment.md
+docs/18-deployment-checklist.md
+```
+
+Current status:
+
+```txt
+Deployment prepared.
+Actual Vercel deployment: NOT RUN.
+Production URL: NOT PROVIDED.
+Production smoke test: NOT TESTED.
+Google OAuth production callback: NOT TESTED.
+MongoDB Atlas production/demo access: NOT TESTED.
+```
+
+Next deployment task:
+
+```txt
+TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+```
+
+## 7. Historical SDD freeze note
 
 After v1.2.6, the SDD is considered frozen for Week 1 Implementation Plan. v1.2.6 is the final freeze before Week 1 implementation and supersedes v1.2.5 by adding final engineering execution guardrails and documentation cleanup without changing MVP product scope.
 

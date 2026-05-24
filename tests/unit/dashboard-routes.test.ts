@@ -15,12 +15,16 @@ vi.mock("next/navigation", () => ({
   redirect: mocks.redirect,
 }));
 
-import DashboardLayout from "@/app/(dashboard)/layout";
+import DashboardLayout, { dynamic } from "@/app/(dashboard)/layout";
 
 describe("dashboard protected route behavior", () => {
   beforeEach(() => {
     mocks.getCurrentUser.mockReset();
     mocks.redirect.mockClear();
+  });
+
+  it("marks the protected dashboard route group as request-time dynamic", () => {
+    expect(dynamic).toBe("force-dynamic");
   });
 
   it("redirects unauthenticated users to the Auth.js default sign-in route", async () => {

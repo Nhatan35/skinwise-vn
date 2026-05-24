@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { getCurrentUser } from "@/modules/auth/get-current-user";
 import { DashboardNavigation } from "@/modules/dashboard/components/dashboard-navigation";
 
+export const dynamic = "force-dynamic";
+
 type DashboardLayoutProps = {
   children: ReactNode;
 };

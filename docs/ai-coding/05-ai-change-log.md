@@ -4,6 +4,108 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-24 - TASK SECURITY-AUDIT-001 Production Dependency Audit Fix
+
+### Task
+
+Review production dependency audit findings after DEPLOY-001 and apply a safe fix only if it avoids a Next.js downgrade or breaking major dependency change.
+
+### Files Updated
+
+```txt
+package.json
+package-lock.json
+docs/deployment/vercel-deployment.md
+docs/18-deployment-checklist.md
+docs/ai-coding/05-ai-change-log.md
+```
+
+### Reason
+
+`npm audit --omit=dev --audit-level=moderate` reported 3 moderate production dependency advisories after DEPLOY-001: PostCSS through Next.js and `qs` through the CLI dependency chain. The npm automatic force fix path was unsafe because it would have installed a breaking Next.js downgrade.
+
+### Implementation Notes
+
+- `npm audit fix --force` was not run.
+- `next` remains pinned at `16.2.6`.
+- Added same-major npm overrides for `postcss@8.5.15` and `qs@6.15.2`.
+- `npm ls qs postcss next --omit=dev` confirms Next resolves to overridden `postcss@8.5.15` and the `qs` chain resolves to `qs@6.15.2`.
+- No application business logic, authentication behavior, route protection, TypeScript strictness, lint configuration, tests, or environment files were changed.
+- `skinwise-vn-deployment-ready.zip` was recreated after the package and documentation updates.
+
+### Validation
+
+```txt
+npm install: Pass.
+npm run lint: Pass.
+npm run typecheck: Pass.
+npm run test: Pass - 60 files, 603 tests.
+npm run build: Pass.
+npm audit --omit=dev --audit-level=moderate: Pass - found 0 vulnerabilities.
+```
+
+## 2026-05-24 - TASK DEPLOY-001 Vercel Deployment Preparation
+
+### Task
+
+Prepare SkinWise VN MVP for Vercel deployment without executing the actual deployment.
+
+### Files Added
+
+```txt
+.nvmrc
+docs/deployment/vercel-deployment.md
+```
+
+### Files Updated
+
+```txt
+.gitignore
+README.md
+docs/09-release-plan.md
+docs/18-deployment-checklist.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Reason
+
+The MVP implementation is ready for deployment preparation, but actual Vercel deployment, production environment configuration, MongoDB Atlas production/demo access, Google OAuth production callback setup, and production smoke testing require external setup and have not been executed.
+
+### Notes
+
+- `.env.local` exists locally, remains ignored, and is not tracked.
+- `.env.example` remains the placeholder-only environment template.
+- `.gitignore` now also excludes Playwright artifacts, zip artifacts, and private key/certificate formats.
+- `.nvmrc` recommends Node 20 for local/Vercel alignment.
+- `docs/deployment/vercel-deployment.md` documents Vercel settings, supported environment variables, MongoDB Atlas readiness, Google OAuth production setup, deployment steps, and production smoke tests.
+- Production environment docs use `AUTH_URL` and `APP_BASE_URL`; `NEXTAUTH_URL` was not introduced.
+- MVP demo deployment should use `AI_PROVIDER="mock"`.
+- Real OpenAI/Gemini providers, image upload, marketplace, notifications, skin score, and medical diagnosis remain out of scope.
+- Actual Vercel deployment was not executed.
+- Production URL was not provided.
+- Production smoke test was not performed.
+- `skinwise-vn-deployment-ready.zip` was created and verified to exclude `.env.local`, generated build/dependency folders, nested zip files, TypeScript build info, logs, and private key/certificate formats.
+
+### Validation
+
+```txt
+npm ci: Pass, with 3 moderate npm audit vulnerabilities reported.
+npm run lint: Pass.
+npm run typecheck: Pass.
+npm run test: Pass - 60 files, 603 tests.
+npm run build: Pass.
+Clean deployment zip: Pass - 312 files; `.env.example`, `.nvmrc`, README, package files, source, docs, tests, scripts, public assets, and deployment runbook included.
+npm run start: Not run because it starts a long-running production server and actual Vercel deployment was not executed.
+npm run dev: Not run because development server startup is not required for DEPLOY-001 after build validation.
+db:indexes: Not run because the target database was not confirmed as a safe demo database.
+db:seed: Not run because the target database was not confirmed as a safe demo database.
+Production smoke test: Not tested because no production URL was provided.
+E2E tests: Not implemented; Playwright config exists but tests/e2e has no specs.
+```
+
 ## 2026-05-24 - SECURITY-CLEANUP-001 / DOCS-SYNC-001 / LOCAL-VALIDATION-001
 
 ### Task
@@ -25,6 +127,7 @@ docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
 src/app/page.tsx
 src/app/(dashboard)/layout.tsx
+tests/unit/dashboard-routes.test.ts
 ```
 
 ### Reason
@@ -39,6 +142,7 @@ The source code had moved past Week 6, but some docs and visible UI copy still d
 - The feature matrix uses `Completed`, `Partially completed`, `Not started`, and `Out of scope`.
 - Real OpenAI/Gemini providers remain unimplemented and production AI integration is not verified.
 - Deployment is not complete.
+- The protected dashboard route group is explicitly marked `dynamic = "force-dynamic"` because its layout calls Auth.js request-time session logic through `getCurrentUser()` and redirects unauthenticated users.
 - No new product feature, API behavior, database behavior, or architecture change was added.
 
 ### Validation
@@ -48,12 +152,13 @@ npm install: Pass, with 3 moderate npm audit vulnerabilities reported.
 env check: Pass for local key presence; database target was not clearly local/development without exposing the URI.
 npm run lint: Pass.
 npm run typecheck: Pass.
-npm run test: Pass - 60 files, 602 tests.
+npm run test: Pass - 60 files, 603 tests.
 npm run build: Pass.
 npm run db:indexes: Not run because the database target was not clearly local/development.
 npm run db:seed: Not run because the database target was not clearly local/development.
 npm run dev: Existing dev server responded HTTP 200 on localhost:3000; a second dev process was not started.
-Manual smoke test: Not tested.
+Unauthenticated smoke test: `/` returned 200 and protected routes returned 307 sign-in redirects.
+Manual authenticated smoke test: Not tested; requires interactive Google OAuth session.
 E2E tests: Not implemented; Playwright config exists but tests/e2e has no specs.
 ```
 
