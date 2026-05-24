@@ -89,6 +89,13 @@ Some older documentation may still describe the project as:
 
 These statements are historical and may be outdated.
 
+
+Any older statement that describes `SDD v1.2.6` as `final` or `frozen` for Week 1 readiness is historical. For the current post-Week-6 phase, `SDD v1.2.6` is a reference document only and is not immutable.
+
+If the current user task explicitly asks to update documentation, specs, SDD notes, or implementation scope, follow the current task while still respecting higher-level safety, security, and platform rules.
+
+For the current post-Week-6 phase, old SDD notes are historical planning artifacts. They may provide context, but they must not override the actual implemented code, current task scope, security rules, or product safety rules.
+
 When working on cleanup, documentation synchronization, validation, deployment preparation, or portfolio readiness:
 
 1. Inspect the actual source code first.
@@ -121,35 +128,89 @@ Do not assume a dependency, service, or external provider exists unless it is pr
 
 ---
 
-## 5. Source of truth priority
+## 5. Decision priority and evidence priority
 
-When there is conflict, follow this order:
+This section resolves conflicts between instructions, evidence, documentation, and implementation status.
+
+The priority order below controls decision-making. It does not define the order in which files must be read.
+
+### 5.1 Non-overridable rules
+
+Always follow these first:
 
 1. Higher-level safety, security, and platform rules.
-2. Current user task.
-3. `AGENTS.md`.
-4. Actual source code implementation.
-5. Actual package scripts and test setup.
-6. Current environment validation logic, especially `src/config/env.ts`.
-7. Current route handlers under `src/app/api`.
-8. Current UI routes under `src/app`.
-9. Current tests.
-10. Current documentation files.
-11. Historical planning documents and old SDD notes.
+2. Project safety and security rules in this file, including:
+   - secret handling;
+   - medical-safety boundaries;
+   - ownership checks;
+   - no overclaiming;
+   - no fake deployment evidence;
+   - no unsafe AI behavior.
+
+The current user task, source code, documentation, SDD notes, or implementation convenience must not override these rules.
+
+### 5.2 Current user task scope
+
+The current user task has priority only for the explicit scope requested by the user.
+
+Use the current task to decide:
+
+- which task is being performed;
+- which files are relevant;
+- whether documentation, SDD notes, or implementation should be updated;
+- whether the requested work changes the previous plan.
+
+The current user task may update documentation, specs, SDD notes, or implementation only when it explicitly asks for that type of change.
+
+The current user task must not be interpreted as permission to:
+
+- bypass safety or security rules;
+- expose secrets;
+- weaken validation;
+- redesign unrelated architecture;
+- add unrelated features;
+- claim unverified deployment or AI readiness.
+
+### 5.3 Factual implementation evidence
+
+When deciding what currently exists in the application, use this evidence order:
+
+1. Actual source code implementation.
+2. Actual package scripts and test setup in `package.json`.
+3. Current environment validation logic, especially `src/config/env.ts`.
+4. Current route handlers under `src/app/api`.
+5. Current UI routes under `src/app`.
+6. Current tests.
+7. Current documentation files.
+8. Historical planning documents and old SDD notes.
 
 Important interpretation rules:
 
-- For documentation sync, actual source code is more reliable than old documentation.
-- For environment setup, actual env validation logic is more reliable than old README examples.
-- For route/API documentation, inspect real `src/app` routes before updating docs.
+- `AGENTS.md` defines how to work on the repository. It does not prove that a feature is implemented.
+- Actual source code is the factual source for current implementation status.
+- For documentation sync, inspect the actual source code first and update outdated docs.
+- For environment setup, inspect the actual environment validation schema before editing examples.
+- For route/API documentation, inspect real `src/app` and `src/app/api` routes before updating docs.
 - For package commands, inspect `package.json`; do not invent scripts.
 - For validation, run available scripts only if they exist.
-- If code and docs conflict, update docs unless the user explicitly asks to change implementation.
-- Do not silently redesign the application to match outdated docs.
+- If code and docs conflict, update docs unless the current user task explicitly asks to change implementation.
+- Do not redesign working implementation to match outdated planning documents.
+
+### 5.4 Historical SDD interpretation
+
+Old SDD notes, including `SDD v1.2.6`, are historical planning/specification artifacts unless the current user task explicitly reactivates or updates them.
+
+Do not treat old SDD wording such as `final`, `frozen`, or `source of truth` as blocking current task-driven documentation updates, implementation corrections, cleanup, validation, deployment preparation, or portfolio-readiness work.
+
+If old SDD notes conflict with current source code, current docs-sync requirements, or the current task, prefer the current source code and current task scope while preserving useful historical context where appropriate.
 
 ---
 
 ## 6. Mandatory Codex workflow
+
+This workflow defines the minimum inspection and editing process before changing files.
+
+It is an operational checklist, not a source-of-truth priority list. Reading or inspecting `AGENTS.md` early does not make it higher priority than higher-level safety, security, platform rules, or explicit current task scope.
 
 Before editing files:
 
