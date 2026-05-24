@@ -26,7 +26,7 @@ export default async function DashboardLayout({
           <div>
             <p className="text-sm font-medium text-emerald-700">SkinWise VN</p>
             <h1 className="mt-1 text-2xl font-semibold">
-              Dashboard foundation
+              SkinWise dashboard
             </h1>
           </div>
 

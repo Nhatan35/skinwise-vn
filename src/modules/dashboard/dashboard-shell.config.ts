@@ -17,7 +17,7 @@ export type DashboardNavItem = {
   disabled: boolean;
   href: DashboardNavHref | null;
   label: string;
-  status: "Active" | "Chưa implement";
+  status: "Active" | "Future";
 };
 
 export const dashboardNavItems = [
@@ -43,7 +43,7 @@ export const dashboardNavItems = [
     disabled: true,
     href: null,
     label: "Today Log",
-    status: "Chưa implement",
+    status: "Future",
   },
   {
     disabled: false,
@@ -61,6 +61,6 @@ export const dashboardNavItems = [
     disabled: true,
     href: null,
     label: "Ingredients",
-    status: "Chưa implement",
+    status: "Future",
   },
 ] satisfies DashboardNavItem[];

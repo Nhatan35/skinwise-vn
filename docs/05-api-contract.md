@@ -224,6 +224,8 @@ Errors:
 
 ### POST /api/products
 
+Implementation status: not implemented in the current source tree. Keep this contract as future scope until a product submission task is explicitly scheduled.
+
 Create user-submitted product. Normal users cannot set `source`, `verificationStatus`, or `createdByUserId`. The server must set them automatically.
 
 Request:
@@ -602,7 +604,7 @@ Errors:
 
 ## 8. Routine Logs
 
-RoutineLog API is implemented as the TASK RL-001 backend foundation. It has no UI in RL-001.
+RoutineLog API is implemented and the current UI exposes daily routine log controls inside the existing `/routines` page. There is no separate `/routine-logs/today` UI route.
 
 ### PUT /api/routine-logs
 

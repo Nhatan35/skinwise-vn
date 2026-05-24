@@ -31,9 +31,16 @@ This checklist ensures SkinWise VN can move from local development to a safe por
 [ ] AUTH_SECRET is generated securely.
 [ ] AUTH_URL matches deployment URL.
 [ ] OAuth credentials are configured if login provider is enabled.
-[ ] AI_API_KEY is stored server-side only if AI endpoints are enabled.
-[ ] AI_MODEL is documented if AI endpoints are enabled.
+[ ] .env.local is not committed or included in shared zip/source packages.
+[ ] .env.example contains placeholders only.
+[ ] Production secrets are configured in the deployment provider dashboard.
+[ ] Secrets are rotated if they were pushed publicly, uploaded, or shared externally.
+[ ] AI_PROVIDER is set deliberately; use `mock` unless a real provider is implemented and verified.
+[ ] AI_API_KEY is stored server-side only if a real implemented provider requires it.
+[ ] AI_MODEL is documented only if a real implemented provider requires it.
 ```
+
+Current AI status: provider abstraction, validated wrapper, and mock provider are implemented. OpenAI and Gemini providers are not implemented yet, and production AI integration is not verified.
 
 ## 4. Database checks
 
@@ -119,7 +126,7 @@ docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/05-ai-change-log.md
 ```
 
-## 10. Local development troubleshooting checks
+## 11. Local development troubleshooting checks
 
 ```txt
 [ ] `npm run db:indexes` returns an index success message, for example `db:indexes created: 30 indexes ensured`.

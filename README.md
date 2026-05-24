@@ -1,142 +1,91 @@
 # SkinWise VN
 
-**SDD version:** MVP v1.2.6
+SkinWise VN is a skincare routine tracker and educational MVP for Vietnamese users. It helps users build routines, maintain a skin profile, browse products, understand ingredients, analyze routine safety with deterministic rules, track daily routine completion, write private journal entries, and review dashboard summaries.
 
-Current SDD version: **v1.2.6 — Final Freeze and Engineering Execution Guardrails**
+SkinWise VN is not a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
 
-SkinWise VN is an AI skincare education and routine safety tracker for Vietnamese users.
+## Current Status
 
-It helps users build minimalist routines, understand cosmetic ingredients, detect common routine safety issues, track routine consistency, and log skin observations over time.
+Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-## Important positioning
+The main Week 1-6 MVP implementation is completed or nearly completed:
 
-SkinWise VN is not a medical diagnosis application.
+- Week 1 Foundation: completed.
+- Week 2 Skin Profile, Product, and Ingredient backend foundation: completed.
+- Week 3 Routine Builder and RoutineLog: completed.
+- Week 4 Routine Safety Engine and Routine Analysis: completed.
+- Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API: completed.
+- Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
 
-It does not:
+Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
 
-- diagnose skin diseases;
-- prescribe medication;
-- guarantee treatment outcomes;
-- replace dermatologists or medical professionals;
-- score attractiveness;
-- create appearance pressure.
+Current cleanup tasks:
 
-## What changed in v1.2.6
+- `SECURITY-CLEANUP-001`
+- `DOCS-SYNC-001`
+- `LOCAL-VALIDATION-001`
 
-v1.2.6 is the final SDD freeze before Week 1 implementation.
+Recommended next task after cleanup and validation: `DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP`.
 
-It does not add product features. It adds engineering execution guardrails so AI-assisted coding can be controlled through:
+Deployment is not complete unless a real deployed URL exists and has been smoke-tested.
 
-- Engineering Execution Checklist;
-- ADR records for major architecture decisions;
-- PR checklist;
-- CI template;
-- DTO/API boundary rules;
-- `/api/me` lazy AppUserProfile creation decision;
-- repeatable database index script rule;
-- feature flag guidance;
-- structured logging guidance;
-- Week 1 Task 1 prompt.
+## Implemented MVP Surface
 
-## What changed in v1.2.5
+Implemented UI routes include:
 
-v1.2.5 does not add new MVP product features.
+- `/`
+- `/dashboard`
+- `/onboarding/skin-profile`
+- `/skin-profile`
+- `/routines`
+- `/journal`
+- `/products`
+- `/products/[id]`
 
-It is a consistency hotfix before Week 1 implementation. It keeps the v1.2.4 implementation-readiness and AI coding governance layer, and fixes:
+Implemented SkinWise API routes include:
 
-- Auth.js `/api/auth/*` ownership and adds app-specific `GET /api/me`;
-- canonical `UNAUTHORIZED` error-code naming;
-- MVP role enum as `USER | ADMIN`;
-- SkinJournal future image fields so they are not exposed in MVP APIs;
-- Auth.js / NextAuth v5-compatible install guidance;
-- PATCH `/api/skin-journal/:id` request contract;
-- test-plan coverage for the consistency rules.
+- `/api/me`
+- `/api/dashboard`
+- `/api/skin-profile`
+- `/api/products`
+- `/api/products/[id]`
+- `/api/ingredients`
+- `/api/ingredients/[id]`
+- `/api/ingredients/explain`
+- `/api/routines`
+- `/api/routines/[id]`
+- `/api/routines/[id]/analyze`
+- `/api/routines/[id]/analyses`
+- `/api/routine-logs`
+- `/api/skin-journal`
+- `/api/skin-journal/[id]`
 
-The v1.2.4 governance layer includes:
+Auth.js owns `/api/auth/*` and its response format.
 
-- source-of-truth hierarchy;
-- codebase map;
-- implementation status tracker;
-- feature status matrix;
-- file ownership map;
-- AI change log;
-- current sprint plan;
-- Week 1 implementation plan;
-- UI route map;
-- seed data spec;
-- repository/use case contract;
-- AI fallback policy;
-- Vietnamese copy guidelines;
-- deployment checklist;
-- engineering execution checklist;
-- ADR records;
-- PR checklist;
-- CI template;
-- Week 1 Task 1 prompt;
-- `.env.example`.
-
-## Tech stack
+## Tech Stack
 
 - Next.js App Router
 - TypeScript
 - Tailwind CSS
-- shadcn/ui
-- MongoDB Atlas
+- MongoDB
+- Auth.js / NextAuth
 - Zod
-- Auth.js / NextAuth with MongoDB Adapter
-- AIProvider abstraction
-- Rule Engine before AI
-- Structured Output JSON Schema
+- AI provider abstraction
+- Mock AI provider for local/demo use
+- Validated AI provider wrapper
+- Deterministic routine safety rule engine
 - Vitest
-- Playwright
-- Cloudinary or S3-compatible storage later only
+- Playwright configuration
 
-## Core features
+## AI Integration Status
 
-- Authentication.
-- Skin profile onboarding.
-- Product mini database.
-- Ingredient knowledge base.
-- Morning/evening routine builder.
-- RoutineLog for daily completion tracking.
-- Rule-based routine safety analysis.
-- AI explanation in Vietnamese.
-- Skin journal with local-date tracking.
-- Dashboard.
-- Ingredient search and explanation.
-- Product visibility rules for reviewed/verified products and user-owned unverified submissions.
+AI provider abstraction is implemented.
 
-## Architecture summary
+The current usable provider is the validated mock provider. `AI_PROVIDER="mock"` is suitable for local and portfolio demo work without external AI keys.
 
-SkinWise VN uses a modular monolith architecture.
+OpenAI and Gemini provider names are recognized by configuration but real providers are not implemented. Production AI integration is deployment/configuration dependent and not verified unless a later task adds and tests a real provider.
 
-```txt
-UI Layer
-  -> API Layer
-    -> Application / Use Case Layer
-      -> Domain Layer
-        -> Infrastructure Layer
-```
-
-AI flow:
-
-```txt
-Routine data
-  -> Rule Engine
-    -> AI Explanation
-      -> Structured JSON Output
-```
-
-Canonical routine analysis endpoint:
-
-```txt
-POST /api/routines/:id/analyze
-GET  /api/routines/:id/analyses
-```
-
-## Local setup
-
-Planned setup:
+## Local Setup
 
 ```bash
 npm install
@@ -144,154 +93,91 @@ cp .env.example .env.local
 npm run dev
 ```
 
-## Environment variables
+Fill real values in `.env.local` only. Do not commit or share `.env.local`, and do not include it in shared zip/source packages.
 
-Use `AUTH_*` variables consistently for Auth.js / NextAuth v5-style setup.
+## Environment Variables
 
-See `.env.example` for the full list.
+Environment validation is defined in `src/config/env.ts`. Use `.env.example` as the placeholder template.
 
 Core variables:
 
 ```txt
-APP_ENV=
-APP_BASE_URL=
-MONGODB_URI=
-AUTH_SECRET=
-AUTH_URL=
-AUTH_GOOGLE_ID=
-AUTH_GOOGLE_SECRET=
-AI_PROVIDER=
-AI_API_KEY=
-AI_MODEL=
+APP_ENV
+APP_BASE_URL
+MONGODB_URI
+AUTH_SECRET
+AUTH_URL
+AUTH_GOOGLE_ID
+AUTH_GOOGLE_SECRET
+AI_PROVIDER
+AI_API_KEY
+AI_MODEL
 ```
 
-Optional future image upload variables:
+Optional variables currently present in validation:
 
 ```txt
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+FEATURE_AI_ROUTINE_ANALYSIS
+FEATURE_INGREDIENT_EXPLANATION
+FEATURE_IMAGE_UPLOAD
+FEATURE_NOTIFICATIONS
+FEATURE_MARKETPLACE
+FEATURE_SKIN_SCORE
 ```
 
-Do not implement image upload in Week 1 unless the SDD scope is explicitly changed.
+Use `AUTH_URL` and `APP_BASE_URL` for the current Auth.js/NextAuth v5-style setup. Do not introduce `NEXTAUTH_URL` unless the source code is deliberately changed to require it.
 
-Do not mix `AUTH_*` and `NEXTAUTH_*` conventions without documenting why.
+Production secrets must be configured in the deployment provider dashboard, not in committed files. If real secrets were ever pushed publicly, uploaded, or shared externally, rotate them.
 
-## Development commands
+AI keys are optional for local/demo use when `AI_PROVIDER="mock"` and AI feature flags remain disabled. Real provider credentials are only meaningful after a real provider integration is implemented and verified.
 
-Planned commands:
+## Development Commands
+
+Available scripts from `package.json`:
 
 ```bash
 npm run dev
 npm run build
+npm run start
 npm run lint
+npm run typecheck
 npm run test
+npm run test:watch
+npm run test:ui
 npm run test:e2e
+npm run db:indexes
+npm run db:seed
 ```
 
-## Development workflow using SDD
+Database commands use `.env.local` and must only be run against a known local/development database. Do not seed a production database.
 
-Before coding:
+## Documentation Map
 
-1. Read `AGENTS.md`.
-2. Read `docs/00-source-of-truth.md`.
-3. Read `docs/ai-coding/01-codebase-map.md`.
-4. Read `docs/ai-coding/02-implementation-status.md`.
-5. Read `docs/ai-coding/03-feature-status-matrix.md`.
-6. Read `docs/ai-coding/06-current-sprint-plan.md`.
-7. Confirm feature scope.
-8. Write a small implementation plan.
+Current implementation and planning docs:
 
-During coding:
+- `docs/13-ui-route-map.md`
+- `docs/18-deployment-checklist.md`
+- `docs/21-local-auth-db-troubleshooting.md`
+- `docs/ai-coding/01-codebase-map.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/04-file-ownership-map.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
 
-1. Create/update validation schema.
-2. Create/update repository.
-3. Create/update use case.
-4. Create/update API route.
-5. Create/update UI.
-6. Add tests.
-7. Validate against acceptance criteria.
+Historical SDD and planning docs remain in `docs/` for traceability. Older references to "before Week 1 implementation", "Week 1 foundation only", or planned dashboard/journal/product UI should be treated as historical unless they are confirmed by current source code.
 
-After coding:
-
-1. Update `docs/ai-coding/02-implementation-status.md`.
-2. Update `docs/ai-coding/03-feature-status-matrix.md`.
-3. Update `docs/ai-coding/05-ai-change-log.md`.
-
-## Documentation map
-
-```txt
-AGENTS.md
-README.md
-.env.example
-
-docs/00-source-of-truth.md
-docs/00-product-vision.md
-docs/01-prd.md
-docs/02-user-stories.md
-docs/03-system-architecture.md
-docs/04-data-model.md
-docs/05-api-contract.md
-docs/06-ai-contract.md
-docs/07-security-privacy.md
-docs/08-test-plan.md
-docs/09-release-plan.md
-docs/10-project-structure.md
-docs/11-routine-safety-rules.md
-docs/12-week-1-implementation-plan.md
-docs/13-ui-route-map.md
-docs/14-seed-data-spec.md
-docs/15-use-case-and-repository-contract.md
-docs/16-ai-fallback-policy.md
-docs/17-vietnamese-copy-and-ui-guidelines.md
-docs/18-deployment-checklist.md
-docs/19-engineering-execution-checklist.md
-docs/20-week-1-task-1-prompt.md
-docs/source-notes.md
-
-docs/ai-coding/01-codebase-map.md
-docs/ai-coding/02-implementation-status.md
-docs/ai-coding/03-feature-status-matrix.md
-docs/ai-coding/04-file-ownership-map.md
-docs/ai-coding/05-ai-change-log.md
-docs/ai-coding/06-current-sprint-plan.md
-
-docs/prompts/routine-analysis.prompt.md
-docs/prompts/ingredient-explainer.prompt.md
-docs/prompts/safety-classifier.prompt.md
-
-docs/CHANGELOG-v1.2.md
-docs/CHANGELOG-v1.2.1.md
-docs/CHANGELOG-v1.2.2.md
-docs/CHANGELOG-v1.2.3.md
-docs/CHANGELOG-v1.2.4.md
-docs/CHANGELOG-v1.2.5.md
-docs/CHANGELOG-v1.2.6.md
-```
-
-## MVP principle
+## MVP Principle
 
 Build the safest useful version first:
 
 - simple routine builder;
-- deterministic safety rules;
-- AI explanation;
+- deterministic safety rules before AI;
+- AI explanations through a provider abstraction;
 - privacy-first journal;
 - routine consistency tracking;
 - no diagnosis;
 - no product-selling pressure.
-
-## Current next step
-
-After this v1.2.6 final freeze, start:
-
-```txt
-Week 1 — Foundation Setup
-```
-
-Use:
-
-```txt
-docs/12-week-1-implementation-plan.md
-docs/ai-coding/06-current-sprint-plan.md
-```

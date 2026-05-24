@@ -35,6 +35,21 @@ Requirements:
 - Environment variables validated at startup.
 - Optional OAuth providers may be added only through documented provider configuration.
 
+## 2.1 Environment file handling
+
+Local and production secrets must not be committed or shared.
+
+Rules:
+
+- Copy `.env.example` to `.env.local` for local development.
+- Fill real values in `.env.local` only.
+- Keep `.env.local` ignored by Git and out of shared zip/source packages.
+- Keep `.env.example` placeholder-only and aligned with `src/config/env.ts`.
+- Configure production secrets in the deployment provider dashboard.
+- Rotate any secret that was pushed publicly, uploaded, or shared externally.
+- AI keys are optional for local/demo use when `AI_PROVIDER="mock"` and feature flags do not require a real provider.
+- OpenAI and Gemini providers are not implemented until a later task, so production AI integration is not verified.
+
 ## 3. Authorization
 
 Every user-owned route must check current user.

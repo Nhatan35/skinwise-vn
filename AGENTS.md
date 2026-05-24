@@ -1,174 +1,470 @@
 # AGENTS.md — SkinWise VN
 
-## Project identity
+## 1. Project identity
 
-SkinWise VN is an AI skincare education and routine safety tracker for Vietnamese users.
+SkinWise VN is a skincare routine tracker and educational MVP for Vietnamese users.
 
-It helps users build safer minimalist routines, understand cosmetic ingredients, track routine completion, and write privacy-first skin observations over time.
+The app helps users:
+
+- build and manage skincare routines;
+- create and update a personal skin profile;
+- browse skincare products and product details;
+- understand cosmetic ingredients;
+- receive AI-assisted ingredient explanations through a provider abstraction;
+- analyze routine safety using deterministic skincare rules;
+- track routine completion through routine logs;
+- write privacy-first skin journal entries;
+- view dashboard summaries.
 
 SkinWise VN is **not** a medical diagnosis app.
 
-## Current SDD version
+The product must not:
 
-Current version: **MVP v1.2.6**
+- diagnose skin diseases or medical conditions;
+- prescribe medication;
+- guarantee treatment outcomes;
+- replace advice from a licensed dermatologist or healthcare professional;
+- create appearance pressure;
+- rate attractiveness, skin quality, face quality, or before/after appearance.
 
-v1.2.6 is the **final SDD freeze and engineering execution guardrail update** before Week 1 implementation.
+---
 
-It does not add new MVP product features. It keeps the v1.2.5 consistency hotfix and adds execution controls: Engineering Execution Checklist, ADR records, PR checklist, CI template, DTO/API boundary rules, repeatable database index strategy, feature flag guidance, structured logging guidance, and the Week 1 Task 1 prompt.
+## 2. Current project phase
 
-## Tech stack
+Current phase:
+
+```txt
+Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
+```
+
+The main MVP implementation is considered completed or nearly completed through Week 6.
+
+Known implementation status:
+
+- Week 1 — Foundation: completed.
+- Week 2 — Skin Profile, Product, and Ingredient backend foundation: completed.
+- Week 3 — Routine Builder and RoutineLog: completed.
+- Week 4 — Routine Safety Engine and Routine Analysis: completed.
+- Week 5 — AI provider abstraction, mock AI provider, validated AI provider, and Ingredient Explanation API: completed.
+- Week 6 — Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
+
+Latest completed task:
+
+```txt
+PRODUCT-UI-002 - Implement Product Detail UI
+```
+
+Current active cleanup tasks:
+
+```txt
+SECURITY-CLEANUP-001
+DOCS-SYNC-001
+LOCAL-VALIDATION-001
+```
+
+Recommended next task after cleanup and validation:
+
+```txt
+DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+```
+
+---
+
+## 3. Important status correction
+
+Some older documentation may still describe the project as:
+
+- before Week 1 implementation;
+- Week 1/Foundation only;
+- dashboard not implemented;
+- journal not implemented;
+- product catalogue UI not implemented;
+- product detail UI not implemented;
+- current sprint is `LOCAL-AUTH-DB-001`;
+- SDD v1.2.6 final freeze before Week 1 implementation;
+- `/journal` not implemented;
+- `/api/skin-journal` not implemented;
+- dashboard route planned only;
+- no dashboard behavior implemented.
+
+These statements are historical and may be outdated.
+
+When working on cleanup, documentation synchronization, validation, deployment preparation, or portfolio readiness:
+
+1. Inspect the actual source code first.
+2. Treat current implementation as the factual source for docs synchronization.
+3. Update outdated documentation instead of redesigning working implementation to match old planning documents.
+4. Clearly mark old planning or SDD notes as historical if they are still useful.
+5. Do not delete useful historical records unless explicitly requested.
+
+---
+
+## 4. Tech stack
+
+SkinWise VN uses:
 
 - Next.js App Router
 - TypeScript
+- MongoDB
+- Auth.js / NextAuth
 - Tailwind CSS
-- shadcn/ui
-- MongoDB Atlas
 - Zod
-- Auth.js / NextAuth with MongoDB Adapter
-- AIProvider abstraction
-- Rule Engine before AI
-- Structured Output JSON Schema
-- Vitest
-- Playwright
-- Cloudinary or S3-compatible storage later only; do not implement image upload in Week 1
+- AI provider abstraction
+- Mock AI provider for local/demo use
+- Validated AI provider wrapper where implemented
+- Deterministic routine safety rule engine
+- Vitest or the existing project test setup
+- Playwright only if real E2E setup exists in the repository
+- Vercel as the likely deployment target, if deployment is prepared later
 
-## Source of Truth priority
+Do not assume a dependency, service, or external provider exists unless it is present in `package.json`, source code, or deployment configuration.
+
+---
+
+## 5. Source of truth priority
 
 When there is conflict, follow this order:
 
-1. Higher-level safety/platform rules
-2. Current user task, only when it explicitly changes scope or asks to update the SDD
-3. `AGENTS.md`
-4. `docs/00-source-of-truth.md`
-5. Core SDD documents:
-   - `docs/00-product-vision.md`
-   - `docs/01-prd.md`
-   - `docs/02-user-stories.md`
-   - `docs/03-system-architecture.md`
-   - `docs/04-data-model.md`
-   - `docs/05-api-contract.md`
-   - `docs/06-ai-contract.md`
-   - `docs/07-security-privacy.md`
-   - `docs/08-test-plan.md`
-   - `docs/09-release-plan.md`
-   - `docs/10-project-structure.md`
-   - `docs/11-routine-safety-rules.md`
-6. Implementation readiness documents:
-   - `docs/12-week-1-implementation-plan.md`
-   - `docs/13-ui-route-map.md`
-   - `docs/14-seed-data-spec.md`
-   - `docs/15-use-case-and-repository-contract.md`
-   - `docs/16-ai-fallback-policy.md`
-   - `docs/17-vietnamese-copy-and-ui-guidelines.md`
-   - `docs/18-deployment-checklist.md`
-   - `docs/19-engineering-execution-checklist.md`
-   - `docs/20-week-1-task-1-prompt.md`
-7. AI coding context pack:
-   - `docs/ai-coding/01-codebase-map.md`
-   - `docs/ai-coding/02-implementation-status.md`
-   - `docs/ai-coding/03-feature-status-matrix.md`
-   - `docs/ai-coding/04-file-ownership-map.md`
-   - `docs/ai-coding/05-ai-change-log.md`
-   - `docs/ai-coding/06-current-sprint-plan.md`
-8. Existing code implementation
-9. Normal implementation task
+1. Higher-level safety, security, and platform rules.
+2. Current user task.
+3. `AGENTS.md`.
+4. Actual source code implementation.
+5. Actual package scripts and test setup.
+6. Current environment validation logic, especially `src/config/env.ts`.
+7. Current route handlers under `src/app/api`.
+8. Current UI routes under `src/app`.
+9. Current tests.
+10. Current documentation files.
+11. Historical planning documents and old SDD notes.
 
-If code conflicts with the SDD, do not silently redesign. Report the conflict first or update the SDD only when the user explicitly requests it.
+Important interpretation rules:
 
-## Mandatory AI coding workflow
+- For documentation sync, actual source code is more reliable than old documentation.
+- For environment setup, actual env validation logic is more reliable than old README examples.
+- For route/API documentation, inspect real `src/app` routes before updating docs.
+- For package commands, inspect `package.json`; do not invent scripts.
+- For validation, run available scripts only if they exist.
+- If code and docs conflict, update docs unless the user explicitly asks to change implementation.
+- Do not silently redesign the application to match outdated docs.
 
-Before coding:
+---
 
-1. Read `AGENTS.md`.
-2. Read `docs/00-source-of-truth.md`.
-3. Read `docs/10-project-structure.md`.
-4. Read `docs/12-week-1-implementation-plan.md` when working on Week 1.
-5. Read `docs/19-engineering-execution-checklist.md`.
-6. Read `docs/ai-coding/01-codebase-map.md`.
-7. Read `docs/ai-coding/02-implementation-status.md`.
-8. Read `docs/ai-coding/03-feature-status-matrix.md`.
-9. Read `docs/ai-coding/06-current-sprint-plan.md`.
-10. Identify affected files.
-11. Propose a small implementation plan.
-12. Edit only the files needed for the task.
+## 6. Mandatory Codex workflow
 
-After coding:
+Before editing files:
 
-1. Update `docs/ai-coding/02-implementation-status.md`.
-2. Update `docs/ai-coding/03-feature-status-matrix.md` if feature status changed.
-3. Update `docs/ai-coding/05-ai-change-log.md`.
-4. Add or update tests when behavior, validation, security, rules, or AI logic changed.
-5. Run relevant checks when available.
+1. Inspect repository structure.
+2. Check current Git state:
 
+```bash
+git status --short
+```
 
-## Engineering execution rules
+3. Inspect `package.json`.
+4. Inspect actual app routes under `src/app`.
+5. Inspect actual API routes under `src/app/api`.
+6. Inspect environment validation logic, especially:
 
-- Use DTO mappers at API boundaries.
-- Do not return raw MongoDB `ObjectId` values to client code.
-- `GET /api/me` must lazily create `AppUserProfile` when missing.
-- Required database indexes must be created through a repeatable `npm run db:indexes` script.
-- Record important architecture decisions in `docs/adr/`.
-- Use `.github/pull_request_template.md` as the review checklist.
-- Use `.github/workflows/ci.yml` as the baseline CI template.
-- Use simple server-side feature flags for incomplete capabilities; feature flags must not expand MVP scope.
-- Use structured logs without secrets, tokens, raw AI prompts, or sensitive journal content.
+```txt
+src/config/env.ts
+```
 
-## Product rules
+7. Inspect relevant modules, repositories, use cases, schemas, DTOs, and tests.
+8. Identify the minimum affected files.
+9. Create a small implementation plan.
+10. Edit only files required for the current task.
+
+After editing files:
+
+1. Re-check changed files:
+
+```bash
+git status --short
+git diff --stat
+```
+
+2. Review the actual diff.
+3. Update documentation only when behavior/status changed or when the task is documentation sync.
+4. Run the smallest relevant validation command when possible.
+5. If a command cannot be run, mark it as `NOT RUN` and explain why.
+6. If a command fails, identify the root cause before applying fixes.
+7. Do not suppress, bypass, or hide failures.
+8. Do not leave local-only secrets, generated artifacts, or temporary files in the final diff.
+
+---
+
+## 7. Global engineering rules
+
+- Do not add new product features unless explicitly requested.
+- Do not modify unrelated application logic.
+- Do not refactor architecture unless strictly required to fix a validation issue.
+- Do not remove tests just to make checks pass.
+- Do not weaken TypeScript strictness.
+- Do not bypass lint, typecheck, test, or build errors.
+- Do not suppress errors without understanding the root cause.
+- Keep changes minimal, safe, focused, and production-minded.
+- Prefer factual updates over marketing language.
+- Keep documentation professional and portfolio-friendly.
+- Do not create fake deployment evidence.
+- Do not claim deployment is complete unless there is real deployment evidence.
+- Do not claim real OpenAI, Gemini, or production AI integration is complete unless it is actually implemented, configured, and verified.
+- Do not change public API behavior unless the current task requires it.
+- Do not rename files or move modules unless strictly necessary.
+- Do not introduce large dependencies without explicit approval.
+- Do not make broad formatting-only changes across unrelated files.
+
+---
+
+## 8. Security and secret-handling rules
+
+Never print, expose, copy, commit, or document real secrets.
+
+Sensitive values include:
+
+- MongoDB connection strings;
+- `MONGODB_URI`;
+- `AUTH_SECRET`;
+- `AUTH_GOOGLE_ID`;
+- `AUTH_GOOGLE_SECRET`;
+- Google OAuth Client ID;
+- Google OAuth Client Secret;
+- AI provider API keys;
+- OpenAI keys;
+- Gemini keys;
+- deployment tokens;
+- access tokens;
+- private credentials;
+- real database names, usernames, or passwords;
+- production URLs that reveal private infrastructure when not intended for public docs.
+
+Environment file rules:
+
+- `.env.local` may exist locally.
+- Never print `.env.local` values.
+- Never copy `.env.local` values into docs, reports, tests, examples, screenshots, or final answers.
+- Check whether `.env.local` is tracked with a safe command such as:
+
+```bash
+git ls-files .env.local
+```
+
+- If `.env.local` is tracked, remove it from Git tracking without deleting the local developer file when possible:
+
+```bash
+git rm --cached .env.local
+```
+
+- `.env.local` must not be included in Git commits.
+- `.env.local` must not be included in shared zip/source packages.
+- `.env.example` must contain placeholders only.
+- Production secrets must be configured in the deployment provider dashboard.
+- If secrets were pushed publicly, committed, uploaded, or shared externally, recommend rotating them.
+
+Required `.gitignore` protection should include:
+
+```txt
+.env
+.env.*
+.env.local
+.env*.local
+.vercel
+node_modules
+.next
+out
+dist
+build
+coverage
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+```
+
+Do not add real secrets to:
+
+- README;
+- documentation;
+- `.env.example`;
+- tests;
+- seed files;
+- screenshots;
+- final reports;
+- issue descriptions;
+- pull request descriptions;
+- commit messages.
+
+---
+
+## 9. Environment configuration rules
+
+Environment variables must follow the actual source code validation schema.
+
+Before editing `.env.example`, inspect the real schema first, especially:
+
+```txt
+src/config/env.ts
+```
+
+Likely variables may include:
+
+```txt
+APP_ENV
+APP_BASE_URL
+MONGODB_URI
+AUTH_SECRET
+AUTH_URL
+AUTH_GOOGLE_ID
+AUTH_GOOGLE_SECRET
+AI_PROVIDER
+AI_API_KEY
+AI_MODEL
+```
+
+Important rules:
+
+- Do not introduce `NEXTAUTH_URL` unless the source code actually supports or requires it.
+- This project appears to use `AUTH_URL` and `APP_BASE_URL`; verify this in code before editing docs.
+- Keep `.env.example` synchronized with actual validation logic.
+- Use placeholders only in `.env.example`.
+- Do not remove environment validation logic.
+- Do not weaken environment validation to make commands pass.
+- Do not print actual env values during validation.
+
+Recommended local setup documentation:
+
+```bash
+cp .env.example .env.local
+```
+
+Then developers must fill real values locally.
+
+For local/demo use, AI keys may be optional when:
+
+```txt
+AI_PROVIDER="mock"
+```
+
+If `AI_PROVIDER` is set to a real provider, require only the variables that the actual source code requires for that provider.
+
+---
+
+## 10. Product safety rules
 
 - Do not build medical diagnosis features.
+- Do not prescribe medication.
 - Do not promise treatment outcomes.
 - Do not create appearance pressure.
 - Do not encourage overly complex routines.
 - Prefer simple, beginner-safe skincare education.
-- Recommend professional help for severe, painful, spreading, infected-looking, or persistent symptoms.
-- Do not build skin scoring, face rating, attractiveness scoring, or before/after judgment features.
-- Do not add marketplace, affiliate, barcode scanner, community feed, subscription, dermatologist booking, or AI face analysis in MVP.
+- Recommend professional help for severe, painful, spreading, infected-looking, infected, or persistent symptoms.
+- Do not add skin scoring, face rating, attractiveness scoring, or before/after judgment features.
+- Do not add AI face analysis.
+- Do not add marketplace, affiliate, barcode scanner, community feed, subscription, dermatologist booking, push notifications, or image upload unless explicitly approved as future scope.
+- Use careful educational wording, not medical certainty.
+- Avoid fear-based skincare language.
+- Keep the tone supportive, factual, and beginner-friendly.
 
-## Architecture rules
+---
 
-- Use modular monolith.
-- Follow `docs/10-project-structure.md` for folder structure.
-- Keep business logic out of UI.
+## 11. Architecture rules
+
+- Use modular monolith architecture.
+- Keep business logic out of UI components.
 - Keep business logic out of route handlers.
-- Route handlers must validate input and call use cases.
+- Route handlers validate input and call use cases/services.
 - Use cases orchestrate business flows.
-- Domain layer contains deterministic rules.
+- Domain layer contains deterministic business and safety rules.
 - Infrastructure layer contains database, AI provider, storage, and external services.
-- Do not call AI provider directly from client code.
+- Do not call AI providers directly from client code.
 - Do not expose secrets in client code.
 - Do not create duplicate MongoDB clients.
-- Validate environment variables through `src/config/env.ts`.
+- Validate environment variables through the project environment config.
+- Use DTO mappers at API boundaries where applicable.
+- Do not return raw MongoDB `ObjectId` values to client code.
+- Do not query user-owned documents by object ID alone.
+- Keep ownership checks close to repository/use-case boundaries.
+- Do not move business rules into React components.
+- Do not duplicate validation schemas unnecessarily.
+- Keep route handlers thin and predictable.
 
-## API rules
+---
 
-- Product list endpoints must hide unverified submissions from other users by default.
-- `GET /api/products?includeMine=true` may return the current user's own unverified submissions.
+## 12. API rules
+
+Auth and user identity:
+
+- Auth.js owns `/api/auth/*` routes and their internal response format.
+- Do not wrap Auth.js built-in auth endpoints with the SkinWise `{ data, error }` response shape.
+- Use `/api/me` for app-specific current-user data.
+- Use `UNAUTHORIZED` as the canonical missing-auth error code in SkinWise APIs when applicable.
+- Never trust `userId` from request body.
+- Always derive current user from the authenticated session.
+
+General API rules:
+
+- Validate every API input with Zod or the project’s existing validation approach.
+- Check authentication where required.
+- Check ownership for every user-owned resource.
+- Return consistent app-level error responses where implemented.
+- Do not leak internal stack traces to users.
+- Do not expose raw database documents if DTOs are expected.
+- Do not expose secrets, tokens, or private provider errors.
+
+Product and ingredient APIs:
+
+- Product visibility rules must be enforced by product APIs.
+- Product list endpoints should hide unverified submissions from other users by default when that behavior exists.
+- `GET /api/products?includeMine=true` may return the current user’s own unverified submissions if implemented.
 - Product detail endpoint must enforce product visibility rules.
-- Admin product verification must use future `/api/admin/products` routes and require `ADMIN` role.
-- The canonical routine analysis endpoint is `POST /api/routines/:id/analyze`.
-- The canonical routine analysis history endpoint is `GET /api/routines/:id/analyses`.
+- Normal users must not set privileged product fields such as `source` or `verificationStatus`.
+- Ingredient APIs must not use product-only logic such as `verificationStatus`, `includeMine`, or `createdByUserId` unless the implementation explicitly supports it.
+
+Routine APIs:
+
+- The canonical routine analysis endpoint is:
+
+```txt
+POST /api/routines/[id]/analyze
+```
+
+- The canonical routine analysis history endpoint is:
+
+```txt
+GET /api/routines/[id]/analyses
+```
+
 - Do not create `/api/ai/routine-analysis` unless the API contract is deliberately updated.
 - RoutineLog APIs are separate from SkinJournal APIs.
-- `GET /api/products` requires authentication in MVP.
-- `GET /api/ingredients` and `GET /api/ingredients/:id` require authentication in MVP.
-- Ingredient APIs must not use product `verificationStatus`, `includeMine`, or `createdByUserId` logic.
-- `POST /api/ingredients/explain` requires authentication, rate limit, and safety-classifier checks when needed.
-- Auth.js owns `/api/auth/*` routes and their internal response format.
-- Do not wrap Auth.js built-in auth endpoints with SkinWise `{ data, error }` response shape.
-- Use `GET /api/me` for app-specific current-user data using the SkinWise response shape.
-- Use `UNAUTHORIZED` as the canonical missing-auth error code in SkinWise APIs.
+- Routine logs should not create duplicate records for the same user/routine/local date if upsert behavior is intended.
 
-## Module rules
+Skin journal APIs:
 
-Each module should include:
+- SkinJournal is separate from RoutineLog.
+- SkinJournal should enforce the MVP rule of one journal entry per user per local date if that rule exists in implementation.
+- Journal content is sensitive and must not be logged raw.
+
+AI APIs:
+
+- AI-related endpoints must be authenticated if the implementation requires it.
+- AI-related endpoints should be rate-limited when required by implementation.
+- AI output must be schema-validated where applicable.
+- AI must not replace deterministic safety rules.
+
+---
+
+## 13. Module rules
+
+Each major module should preferably include:
 
 - validation schema;
-- repository;
-- use case;
-- DTOs;
-- tests.
+- repository or data-access layer;
+- use case/service;
+- DTOs or response mappers;
+- tests where applicable.
 
-Recommended MVP modules:
+Likely MVP modules:
 
 ```txt
 auth
@@ -178,37 +474,70 @@ products
 ingredients
 routines
 routine-logs
+routine-analysis
 ai-analysis
-journals
+skin-journal
+dashboard
 ```
 
-Reserved future module:
+Reserved or future modules:
 
 ```txt
 notifications
+image-upload
+admin
+marketplace
+community
 ```
 
-Do not implement notifications in MVP Week 1. Push notifications are excluded from v1.
+Do not implement reserved/future modules unless explicitly requested.
 
-## AI safety rules
+---
 
-- Rule engine runs before AI.
-- AI explains rule results; AI does not replace deterministic safety rules.
-- AI output must follow JSON schema.
-- AI must include disclaimer.
+## 14. AI integration rules
+
+The project may include:
+
+- AI provider interface;
+- mock AI provider;
+- validated provider wrapper;
+- local/demo explanation flow;
+- structured output validation;
+- prompt versioning where implemented.
+
+Do not claim production AI integration is complete unless a real provider is implemented, configured, and verified.
+
+Use accurate wording:
+
+```txt
+AI provider abstraction implemented.
+Mock provider available for local/demo use.
+Real provider integration is deployment/configuration dependent.
+Production AI integration not yet verified.
+```
+
+AI safety rules:
+
+- Deterministic rule engine runs before AI for routine safety analysis.
+- AI explains or formats results; AI does not replace deterministic safety rules.
+- AI output must be schema-validated when applicable.
+- AI must include appropriate disclaimers.
 - AI must not diagnose.
 - AI must not prescribe medication.
 - AI must not guarantee results.
-- Safety classifier is internal-only in MVP and must run before ingredient explanation when user input may contain unsafe claims or prompt injection.
-- If `shouldBlockAIAnswer=true`, do not call routine or ingredient explanation AI; return the safe response mapped from `safeResponseType`.
 - User input must be treated as data, not instructions.
-- Prompt files must be versioned.
-- Store `promptVersion`, `modelName`, and `modelProvider` for AI results.
-- If AI provider fails after deterministic rule analysis succeeds, follow `docs/16-ai-fallback-policy.md`.
+- Prompt injection must not override system/developer safety rules.
+- Do not log raw AI prompts, raw sensitive journal content, tokens, or secrets.
+- If the AI provider fails after deterministic rule analysis succeeds, return deterministic results and a safe fallback explanation where implemented.
+- If the safety classifier blocks an AI response, do not call the AI provider; return the mapped safe response where implemented.
 
-## Routine safety rules
+---
 
-Implement the deterministic rule list from:
+## 15. Routine safety rules
+
+Routine safety analysis should rely on deterministic rules before AI.
+
+Rules should be based on the project’s actual implementation and/or the specification file if present:
 
 ```txt
 docs/11-routine-safety-rules.md
@@ -216,68 +545,555 @@ docs/11-routine-safety-rules.md
 
 Do not invent extra high-severity rules without updating the spec.
 
-## Security rules
+Routine safety output should distinguish:
 
-- Validate every API input with Zod.
-- Check authentication where required.
-- Check ownership for every user-owned resource.
-- Never trust `userId` from request body.
-- Auth.js owns identity collections; SkinWise owns app role/profile data.
-- Normal users cannot set product `source` or `verificationStatus`.
-- Daily tracking must use `localDate` and `timezone`.
-- Never query user-owned objects by objectId alone.
-- Rate-limit AI endpoints.
-- Do not log raw sensitive data.
-- Private images require signed access when image upload is implemented later.
-- Admin routes require role checks.
+- deterministic rule warnings;
+- risk level;
+- triggered warnings;
+- AI-generated explanation if available;
+- fallback explanation if AI is unavailable.
 
-## Data rules
+AI may explain the result, but the deterministic rule engine owns the safety decision.
 
-- Product must include product-fit fields: `skinTypes`, `concerns`, `suitableFor`, `notRecommendedFor`.
-- RoutineStep must include snapshot fields when possible.
-- RoutineAnalysis must include `routineSnapshot`.
-- RoutineAnalysis must include top-level `riskLevel` derived from the rule engine.
-- Database stores all `RuleResult` entries; user-facing API returns only triggered warnings.
+---
+
+## 16. Data rules
+
+Product data:
+
+- Product data should include product-fit fields where implemented, such as:
+  - `skinTypes`;
+  - `concerns`;
+  - `suitableFor`;
+  - `notRecommendedFor`.
+- Product detail UI should display only fields that actually exist and are safe to show.
+
+Routine data:
+
+- Routine steps should preserve product snapshot data where implemented.
+- RoutineAnalysis should preserve enough routine snapshot data to make past analysis understandable where implemented.
+- RoutineAnalysis should include top-level risk level derived from the rule engine where implemented.
+- Database may store all rule results while user-facing API returns only triggered warnings if that is the implemented behavior.
+
+RoutineLog and SkinJournal:
+
 - RoutineLog is separate from SkinJournal.
-- SkinJournal allows one entry per user per `localDate` in MVP.
-- `POST /api/skin-journal` must return `CONFLICT` when a journal already exists for the same `currentUser.id + localDate`.
-- `POST /api/routine-logs` uses upsert behavior for `userId + routineId + localDate`; do not create duplicates.
+- Daily tracking should use `localDate` and timezone-aware logic where implemented.
+- `POST /api/routine-logs` may use upsert behavior for `userId + routineId + localDate`; do not create duplicates if this is the intended behavior.
+- SkinJournal may allow one entry per user per `localDate` in MVP.
+- `POST /api/skin-journal` should return a conflict response if a journal already exists for the same user/date where this rule exists.
 
-## Testing rules
+Ownership:
 
-For every feature:
+- User-owned data must always be scoped by authenticated user ownership.
+- Never query, update, or delete user-owned resources by object ID alone.
 
-- Add unit tests for domain rules.
-- Add integration tests for API behavior.
-- Add E2E tests for critical user flows.
-- Add AI eval tests for AI output behavior when relevant.
-- Add security tests for ownership checks.
+---
 
-Minimum Week 1 tests:
+## 17. Documentation rules
 
-- environment validation;
-- MongoDB client singleton behavior;
-- auth helper behavior where possible;
-- protected dashboard access where possible.
+When updating docs, keep them factual and synchronized with actual source code.
 
-## Definition of done
+Important documentation targets may include:
+
+```txt
+README.md
+docs/13-ui-route-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+docs/18-deployment-checklist.md
+```
+
+README should accurately state:
+
+- Week 1-6 MVP implementation is completed or nearly completed.
+- Current phase is security cleanup, documentation sync, local validation, deployment preparation, and portfolio readiness.
+- Latest completed task is `PRODUCT-UI-002 - Implement Product Detail UI`.
+- Deployment is not complete unless there is real deployment evidence.
+- Real production AI provider integration is not verified unless actually verified.
+- `.env.local` must not be committed or shared.
+
+Route documentation should be generated from actual routes, not assumptions.
+
+API documentation should be generated from actual route handlers, not assumptions.
+
+Feature matrix categories should be:
+
+```txt
+Completed
+Partially completed
+Not started
+Out of scope
+```
+
+Do not delete useful historical notes unnecessarily. Mark them as historical if they are no longer current.
+
+---
+
+## 18. Route documentation rules
+
+When updating route documentation, inspect actual routes under:
+
+```txt
+src/app
+```
+
+Document UI routes that actually exist, such as:
+
+```txt
+/
+ /dashboard
+/onboarding/skin-profile
+/skin-profile
+/routines
+/journal
+/products
+/products/[id]
+```
+
+Also document auth-related pages if present.
+
+For each UI route, document:
+
+- route path;
+- purpose;
+- implementation status;
+- public/authenticated/onboarding classification;
+- important data/API dependencies if obvious from code.
+
+Do not document a route as implemented unless it exists in the source code.
+
+Do not document a route as missing if it exists in the source code.
+
+---
+
+## 19. API documentation rules
+
+When updating API documentation, inspect actual route handlers under:
+
+```txt
+src/app/api
+```
+
+Document API routes that actually exist, such as:
+
+```txt
+/api/auth/[...nextauth]
+/api/dashboard
+/api/me
+/api/skin-profile
+/api/products
+/api/products/[id]
+/api/ingredients
+/api/ingredients/[id]
+/api/ingredients/explain
+/api/routines
+/api/routines/[id]
+/api/routines/[id]/analyze
+/api/routines/[id]/analyses
+/api/routine-logs
+/api/skin-journal
+/api/skin-journal/[id]
+```
+
+For each API route, document:
+
+- route path;
+- supported methods if clear from source;
+- purpose;
+- authentication requirement if clear from source;
+- implementation status.
+
+Do not guess methods. Inspect `route.ts` files.
+
+---
+
+## 20. UI copy rules
+
+Visible UI copy must not imply outdated status.
+
+Do not say or imply:
+
+- the project is only Week 1/Foundation;
+- dashboard is not implemented if it exists;
+- journal is not implemented if it exists;
+- products UI is only planned if it exists;
+- product detail UI is only planned if it exists;
+- implemented features are still only planned;
+- deployment is complete without evidence;
+- production AI integration is complete without verification.
+
+Keep UI copy:
+
+- concise;
+- accurate;
+- portfolio-friendly;
+- non-medical;
+- non-overclaiming;
+- beginner-friendly.
+
+Obvious files to inspect during UI copy cleanup:
+
+```txt
+src/app/page.tsx
+src/app/(dashboard)/layout.tsx
+```
+
+Also inspect other route shell files if they contain outdated project status copy.
+
+---
+
+## 21. Testing and validation rules
+
+Inspect `package.json` before running commands.
+
+Important scripts may include:
+
+```txt
+dev
+start
+build
+lint
+typecheck
+test
+test:watch
+test:ui
+test:e2e
+db:indexes
+db:seed
+```
+
+Do not invent missing scripts.
+
+Preferred validation order:
+
+```bash
+npm install
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run db:indexes
+npm run db:seed
+npm run dev
+```
+
+Environment check must happen before database commands.
+
+Environment validation rules:
+
+- Confirm `.env.local` exists locally if local validation requires it.
+- Confirm required variables are present.
+- Do not print actual values.
+- Follow actual source code schema.
+- Do not require `NEXTAUTH_URL` unless source code requires it.
+
+Database command safety:
+
+- Only run `db:indexes` if environment is configured safely.
+- Only run `db:seed` against a local/development database.
+- Do not seed production databases.
+- Do not print database URI.
+- If database target looks unsafe or unclear, mark the command as `NOT RUN`.
+
+`npm run dev` handling:
+
+- Run only long enough to confirm local startup if possible.
+- Do not leave an uncontrolled long-running process.
+- If the environment does not support a long-running dev server, mark as `NOT RUN` or partially verified with reason.
+
+E2E handling:
+
+- If `test:e2e` exists, inspect whether real E2E test files and browser/runtime setup exist.
+- Do not require E2E to pass unless E2E is actually implemented and configured.
+- If E2E is not implemented or not configured, document it as a remaining risk or future task.
+
+---
+
+## 22. Manual smoke test checklist
+
+When completing local validation, include manual smoke test checklist for:
+
+```txt
+/
+ /dashboard
+/onboarding/skin-profile
+/skin-profile
+/routines
+/journal
+/products
+/products/[id]
+```
+
+Manual route checks should confirm:
+
+- page loads;
+- authenticated redirects work where required;
+- loading states are acceptable;
+- empty states are acceptable;
+- error states are understandable;
+- no outdated Week 1/Foundation copy appears;
+- no medical overclaim appears.
+
+Manual flow checklist should include:
+
+- sign in with Google;
+- view dashboard;
+- create or update skin profile;
+- complete onboarding skin profile if applicable;
+- view product catalogue;
+- search/filter products;
+- open product detail page;
+- create routine;
+- add product to routine;
+- analyze routine;
+- view routine analysis result;
+- log routine status;
+- create journal entry;
+- edit journal entry;
+- delete journal entry.
+
+If manual smoke test is not performed, mark it as:
+
+```txt
+NOT TESTED
+```
+
+and explain why.
+
+---
+
+## 23. Failure handling
+
+If a command fails:
+
+1. Read the error carefully.
+2. Classify the failure:
+   - dependency issue;
+   - environment issue;
+   - TypeScript issue;
+   - lint issue;
+   - test issue;
+   - build issue;
+   - database issue;
+   - auth issue;
+   - route/runtime issue.
+3. Identify the root cause.
+4. Apply or recommend the smallest safe fix.
+5. Do not change unrelated files.
+6. Do not suppress the error without understanding it.
+7. Do not remove tests.
+8. Do not weaken TypeScript or lint rules.
+9. Re-run the smallest relevant command after a fix when possible.
+
+Never turn off failing tests or checks just to produce a green report.
+
+---
+
+## 24. Deployment rules
+
+Deployment is not complete unless there is real deployment evidence.
+
+Do not claim deployment readiness unless:
+
+- security cleanup is complete;
+- `.env.example` is safe and current;
+- `.env.local` is not tracked;
+- docs are synchronized;
+- lint passes;
+- typecheck passes;
+- tests pass or failures are understood and accepted;
+- production build passes;
+- deployment provider configuration is prepared;
+- production environment variables are configured in the provider dashboard;
+- the deployed app has been opened and smoke-tested.
+
+For Vercel deployment preparation:
+
+- Do not commit production secrets.
+- Configure secrets in Vercel dashboard.
+- Confirm required build command from `package.json`.
+- Confirm output/build behavior from Next.js.
+- Confirm MongoDB network access and connection safety.
+- Confirm Auth.js callback URLs.
+- Confirm Google OAuth authorized redirect URI.
+- Confirm `APP_BASE_URL` and `AUTH_URL` match the deployed URL.
+- Confirm `AI_PROVIDER` configuration.
+- Use mock AI provider if real provider is not configured.
+- Do not claim real provider integration is verified until tested.
+
+---
+
+## 25. Definition of done
+
+A task is complete only when:
+
+- It matches the requested scope.
+- Changes are minimal and focused.
+- No real secrets are exposed.
+- No unrelated application logic is changed.
+- Relevant docs are updated when status or behavior changed.
+- Relevant tests/checks are run when possible.
+- Commands that cannot be run are marked `NOT RUN` with reasons.
+- Failures are clearly explained.
+- Final report is factual and does not overclaim readiness.
 
 A feature is complete only when:
 
-- It matches the relevant spec.
+- It matches the relevant spec or current implementation requirement.
 - Inputs are validated.
-- Ownership is checked.
-- Loading, error, and empty states exist.
-- Unit tests pass.
-- Integration tests pass.
-- E2E happy path passes when applicable.
-- AI output is schema-validated when applicable.
+- Ownership is checked where required.
+- Loading, error, and empty states exist where relevant.
+- Unit tests pass where applicable.
+- Integration tests pass where applicable.
+- E2E happy path passes when implemented and configured.
+- AI output is schema-validated where applicable.
 - README or docs are updated if behavior changed.
-- `docs/ai-coding/02-implementation-status.md` and `docs/ai-coding/05-ai-change-log.md` are updated.
+- Implementation status docs and change log are updated when the task requires them.
 
-## v1.2.6 final freeze implementation rules
+---
 
-- Treat SDD v1.2.6 as the final source of truth for Week 1 implementation readiness.
-- Do not add new MVP features while implementing Week 1 foundation.
-- Do not implement image upload, notifications, marketplace, barcode scanner, community feed, skin score, or AI face analysis.
-- Build in small tasks and update the AI coding context pack after each task.
+## 26. Final reporting rules
+
+For cleanup, validation, deployment preparation, or portfolio-readiness tasks, final reports should include:
+
+1. Executive Summary
+2. Files Changed
+3. Security Cleanup Summary
+4. Documentation Sync Summary
+5. Validation Report
+6. Issues Found
+7. Remaining Risks
+8. Recommended Next Task
+9. Final Readiness Decision
+
+Validation report format:
+
+```txt
+- npm install: PASS / FAIL / NOT RUN
+- env check: PASS / FAIL / NOT RUN
+- npm run lint: PASS / FAIL / NOT RUN
+- npm run typecheck: PASS / FAIL / NOT RUN
+- npm run test: PASS / FAIL / NOT RUN
+- npm run build: PASS / FAIL / NOT RUN
+- npm run db:indexes: PASS / FAIL / NOT RUN
+- npm run db:seed: PASS / FAIL / NOT RUN
+- npm run dev: PASS / FAIL / NOT RUN
+- Manual smoke test: PASS / FAIL / NOT TESTED
+- E2E tests if present: PASS / FAIL / NOT RUN / NOT IMPLEMENTED
+```
+
+Issue table format:
+
+```md
+| Issue | Severity | Cause | Fix Applied / Recommended |
+|---|---|---|---|
+```
+
+Severity must be one of:
+
+```txt
+Critical
+High
+Medium
+Low
+```
+
+Final readiness decision must be exactly one of:
+
+```txt
+Ready for deployment
+Almost ready for deployment
+Not ready for deployment
+```
+
+Decision rules:
+
+- Use `Ready for deployment` only when security cleanup is done, docs are synced, validation passes, and deployment configuration is ready.
+- Use `Almost ready for deployment` when cleanup/docs are done and local validation mostly passes, but real deployment is not completed.
+- Use `Not ready for deployment` when there are unresolved critical/high issues, exposed secrets, failing build/typecheck, or missing required environment setup.
+
+---
+
+## 27. Current recommended next task
+
+After `SECURITY-CLEANUP-001`, `DOCS-SYNC-001`, and `LOCAL-VALIDATION-001` are completed, the recommended next task is:
+
+```txt
+TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+```
+
+Reason:
+
+- The MVP implementation is already past the main Week 1-6 build phase.
+- Cleanup and validation should happen before deployment.
+- Deployment preparation is the next logical step for portfolio review.
+- Vercel deployment will verify production build behavior, environment variables, Auth.js callback URLs, MongoDB connectivity, and public demo readiness.
+
+---
+
+## 28. Non-goals unless explicitly requested
+
+Do not implement these unless the user explicitly asks and the scope is approved:
+
+- new skincare recommendation engine;
+- medical diagnosis;
+- prescription guidance;
+- image upload;
+- AI face analysis;
+- before/after image scoring;
+- attractiveness scoring;
+- skin scoring;
+- marketplace;
+- affiliate links;
+- product purchasing;
+- barcode scanner;
+- dermatologist booking;
+- community feed;
+- push notifications;
+- subscriptions;
+- admin dashboard expansion;
+- production monitoring platform;
+- real AI provider integration beyond existing abstraction/configuration work;
+- full E2E suite if not already configured.
+
+---
+
+## 29. Safe wording examples
+
+Use this style in docs and final reports:
+
+```txt
+MVP Week 1-6 core implementation is completed or nearly completed.
+Current phase focuses on security cleanup, documentation synchronization, local validation, deployment preparation, and portfolio readiness.
+Latest completed task: PRODUCT-UI-002 - Implement Product Detail UI.
+AI provider abstraction is implemented, with a mock provider available for local/demo use.
+Production AI provider integration is deployment/configuration dependent and not verified unless explicitly tested.
+Deployment is not complete unless a real deployed URL and smoke-test evidence are available.
+```
+
+Avoid this style:
+
+```txt
+The app is fully production-ready.
+The AI integration is complete.
+The project is deployed.
+The dashboard is planned only.
+The journal is not implemented.
+The project is still in Week 1 Foundation.
+```
+
+---
+
+## 30. Short operating principle
+
+When unsure:
+
+1. Inspect the real code.
+2. Protect secrets.
+3. Avoid overclaiming.
+4. Make the smallest safe change.
+5. Validate what changed.
+6. Report facts clearly.

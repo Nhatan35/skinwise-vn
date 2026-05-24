@@ -41,7 +41,7 @@ describe("Dashboard DB-001 UI integration", () => {
       "@/modules/dashboard/components/dashboard-overview",
     );
     expect(dashboardPageSource).toContain("<DashboardOverview />");
-    expect(dashboardPageSource).toContain("Tổng quan SkinWise");
+    expect(dashboardPageSource).toContain("SkinWise overview");
     expect(dashboardPageSource).not.toContain("dashboardPlaceholderCards");
     expect(dashboardPageSource).not.toContain("Protected dashboard shell");
   });

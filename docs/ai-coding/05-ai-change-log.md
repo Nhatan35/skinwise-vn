@@ -4,6 +4,59 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-24 - SECURITY-CLEANUP-001 / DOCS-SYNC-001 / LOCAL-VALIDATION-001
+
+### Task
+
+Clean up environment-file sharing risk, synchronize docs and visible copy with the actual post Week 6 implementation, and run local validation before deployment preparation.
+
+### Files Updated
+
+```txt
+.gitignore
+.env.example
+README.md
+docs/07-security-privacy.md
+docs/13-ui-route-map.md
+docs/18-deployment-checklist.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+src/app/page.tsx
+src/app/(dashboard)/layout.tsx
+```
+
+### Reason
+
+The source code had moved past Week 6, but some docs and visible UI copy still described the project as Week 1/foundation-only or listed implemented Journal/Product Detail routes as not implemented. Environment sharing guidance also needed to be explicit before portfolio sharing and deployment preparation.
+
+### Notes
+
+- `.env.local` exists locally, is ignored, and is not tracked.
+- `.env.example` contains placeholders only and follows `src/config/env.ts`.
+- The README and route/API map now describe the current implemented routes and current cleanup phase.
+- The feature matrix uses `Completed`, `Partially completed`, `Not started`, and `Out of scope`.
+- Real OpenAI/Gemini providers remain unimplemented and production AI integration is not verified.
+- Deployment is not complete.
+- No new product feature, API behavior, database behavior, or architecture change was added.
+
+### Validation
+
+```txt
+npm install: Pass, with 3 moderate npm audit vulnerabilities reported.
+env check: Pass for local key presence; database target was not clearly local/development without exposing the URI.
+npm run lint: Pass.
+npm run typecheck: Pass.
+npm run test: Pass - 60 files, 602 tests.
+npm run build: Pass.
+npm run db:indexes: Not run because the database target was not clearly local/development.
+npm run db:seed: Not run because the database target was not clearly local/development.
+npm run dev: Existing dev server responded HTTP 200 on localhost:3000; a second dev process was not started.
+Manual smoke test: Not tested.
+E2E tests: Not implemented; Playwright config exists but tests/e2e has no specs.
+```
+
 ## 2026-05-24 - TASK PRODUCT-UI-002 Product Detail UI
 
 ### Task

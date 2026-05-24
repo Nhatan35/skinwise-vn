@@ -1,75 +1,105 @@
-# 13-ui-route-map.md
+# UI and API Route Map - MVP v1.2.6
 
-# UI Route Map — MVP v1.2.6
+Last updated: 2026-05-24
 
-## 1. Purpose
+## Purpose
 
-This document maps user-facing routes to MVP features, API dependencies, and implementation status.
+This document maps the routes that exist in the current source tree. Use `src/app` and `src/app/api` as the source of truth when this document and implementation drift.
 
-AI coding assistants must use this file before creating new pages or route groups.
+Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-## 2. Route principles
+Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
+
+## Route Principles
 
 - Keep pages thin.
-- Put reusable UI in `src/shared/components` or module-specific component folders.
-- Put business logic in use cases, not `page.tsx`.
+- Put reusable UI in module-specific component folders or shared components.
+- Keep business logic in use cases and domain modules, not `page.tsx`.
 - Protected app routes belong under `src/app/(dashboard)/`.
-- Auth-related pages belong under `src/app/(auth)/`.
-- API route handlers must follow `docs/05-api-contract.md`.
-- Do not mark routes as implemented unless matching source files exist.
+- Auth.js owns `/api/auth/*`; do not wrap those responses in the SkinWise API envelope.
+- Do not mark a route implemented unless the matching source file exists.
 
-## 3. Public routes
+## UI Routes
 
-| Route | Purpose | Current source status | Notes |
-|---|---|---|---|
-| `/` | Landing page explaining SkinWise VN | Implemented basic route | Must not claim medical diagnosis |
-| `/login` | Login page | Not implemented as a dedicated page | Auth.js provider entry exists through `/api/auth/*` |
-| `/privacy` | Privacy explanation | Not implemented | Static page may be added only when scheduled |
-| `/terms` | Terms/disclaimer | Not implemented | Static page may be added only when scheduled |
-
-## 4. Protected dashboard routes
-
-| Route | Purpose | Current source status | API dependency | Notes |
+| Route | Purpose | Status | Access | Important dependencies |
 |---|---|---|---|---|
-| `/dashboard` | Authenticated dashboard overview for Skin Profile, routines, today's routine log status, latest routine analysis, and next actions | Implemented | `GET /api/dashboard?localDate=YYYY-MM-DD` | Renders `DashboardOverview`; data-driven dashboard route |
-| `/onboarding/skin-profile` | First-time Skin Profile onboarding | Implemented | `/api/skin-profile` | Protected route; remains available for onboarding empty-state CTA |
-| `/skin-profile` | View/edit Skin Profile | Implemented | `/api/skin-profile` | Loads profile through GET and updates through PATCH |
-| `/routines` | Routine list/create/edit/delete, Product Picker, Routine Analysis panel, and today's RoutineLog controls | Implemented | `/api/routines`, `/api/products`, `/api/routines/:id/analyze`, `/api/routines/:id/analyses`, `/api/routine-logs` | Existing single protected routines page only |
-| `/products` | Product catalogue search/list page | Implemented | `GET /api/products` | Protected dashboard route; renders the Product Catalogue UI |
-| `/products/new` | Product submission page | Not implemented | `POST /api/products` not implemented | Do not mark as implemented |
-| `/products/[id]` | Product detail information page | Implemented | `GET /api/products/[id]` | Protected dashboard route; displays public Product DTO detail information |
-| `/ingredients` | Ingredient UI search/list page | Not implemented | `GET /api/ingredients` exists | Do not create unless Ingredient UI task is scheduled |
-| `/ingredients/[id]` | Ingredient detail UI page | Not implemented | `GET /api/ingredients/:id` exists | Educational content only when implemented |
-| `/routines/new` | Separate routine creation page | Not implemented | `POST /api/routines` exists | Existing `/routines` page owns create/edit UI |
-| `/routines/[id]` | Separate routine detail page | Not implemented | `/api/routines/:id` exists | Existing `/routines` page owns routine UI |
-| `/routines/[id]/analysis` | Separate routine analysis page | Not implemented | `/api/routines/:id/analyze`, `/api/routines/:id/analyses` exist | Existing `/routines` page owns analysis panel |
-| `/routine-logs/today` | Separate routine log checklist page | Not implemented | `/api/routine-logs` exists | Existing `/routines` page owns RoutineLog UI controls |
-| `/journal` | Skin journal timeline | Not implemented | `/api/skin-journal` not implemented | Do not create until SkinJournal task is scheduled |
-| `/journal/new` | Create journal entry | Not implemented | `POST /api/skin-journal` not implemented | Do not create until SkinJournal task is scheduled |
-| `/journal/[id]` | View/edit journal entry | Not implemented | `/api/skin-journal/:id` not implemented | Do not create until SkinJournal task is scheduled |
-| `/settings` | App/account settings | Not implemented | Auth/profile later | Optional; do not overbuild |
+| `/` | Public product/project entry page | Implemented | Public | Static app config and route constants |
+| `/dashboard` | User dashboard summary for profile, routines, today logs, latest journal, latest analysis, and next action | Implemented | Authenticated | `GET /api/dashboard?localDate=YYYY-MM-DD` |
+| `/onboarding/skin-profile` | First-time skin profile onboarding | Implemented | Authenticated onboarding | `/api/skin-profile` |
+| `/skin-profile` | View and edit the user's skin profile | Implemented | Authenticated | `/api/skin-profile` |
+| `/routines` | Routine list/create/edit/delete, product picker, routine analysis panel, and routine log controls | Implemented | Authenticated | `/api/routines`, `/api/products`, `/api/routines/[id]/analyze`, `/api/routines/[id]/analyses`, `/api/routine-logs` |
+| `/journal` | Private skin journal timeline with create/edit/delete and product selection | Implemented | Authenticated | `/api/skin-journal`, `/api/skin-journal/[id]`, `/api/products?limit=50` |
+| `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
+| `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
+| `/login` | Dedicated login page | Not started | Public if added later | Auth.js default sign-in route currently handles login |
+| `/privacy` | Static privacy page | Not started | Public if added later | N/A |
+| `/terms` | Static terms/disclaimer page | Not started | Public if added later | N/A |
+| `/ingredients` | Ingredient list/search UI | Not started | Authenticated if added later | `GET /api/ingredients` exists |
+| `/ingredients/[id]` | Ingredient detail UI | Not started | Authenticated if added later | `GET /api/ingredients/[id]` exists |
+| `/products/new` | Product submission UI | Not started | Authenticated if added later | `POST /api/products` is not implemented |
+| `/routines/[id]` | Dedicated routine detail page | Not started | Authenticated if added later | Existing `/routines` page owns routine UI |
+| `/routines/[id]/analysis` | Dedicated routine analysis page | Not started | Authenticated if added later | Existing `/routines` page owns analysis UI |
+| `/routine-logs/today` | Dedicated daily routine log page | Not started | Authenticated if added later | Existing `/routines` page owns daily log controls |
+| `/journal/new` | Dedicated create journal page | Not started | Authenticated if added later | Existing `/journal` page owns create UI |
+| `/journal/[id]` | Dedicated journal detail/edit page | Not started | Authenticated if added later | Existing `/journal` page owns edit UI |
+| `/settings` | App/account settings | Not started | Authenticated if added later | Future scope |
 
-### `/dashboard` implementation note
+## API Routes
 
-`/dashboard` renders `DashboardOverview` from `src/modules/dashboard/components/dashboard-overview.tsx`.
+| Route | Methods | Purpose | Auth | Status |
+|---|---|---|---|---|
+| `/api/auth/[...nextauth]` | Auth.js-managed | Built-in Auth.js auth routes | Auth.js-managed | Implemented |
+| `/api/me` | `GET` | Current user plus SkinWise app profile fields | Required | Implemented |
+| `/api/dashboard` | `GET` | Authenticated dashboard summary for a local date | Required | Implemented |
+| `/api/skin-profile` | `GET`, `POST`, `PATCH`, `DELETE` | Current user's skin profile | Required | Implemented |
+| `/api/products` | `GET` | Visible product catalogue list/search/filter | Required | Implemented |
+| `/api/products/[id]` | `GET` | Visible product detail | Required | Implemented |
+| `/api/ingredients` | `GET` | Ingredient list/search | Required | Implemented |
+| `/api/ingredients/[id]` | `GET` | Ingredient detail | Required | Implemented |
+| `/api/ingredients/explain` | `POST` | Rate-limited ingredient explanation through AI provider abstraction with fallback | Required | Implemented |
+| `/api/routines` | `GET`, `POST` | Current user's routines | Required | Implemented |
+| `/api/routines/[id]` | `GET`, `PATCH`, `DELETE` | Current user's routine detail/update/delete | Required | Implemented |
+| `/api/routines/[id]/analyze` | `POST` | Routine safety analysis with deterministic rules before provider explanation | Required | Implemented |
+| `/api/routines/[id]/analyses` | `GET` | Routine analysis history | Required | Implemented |
+| `/api/routine-logs` | `GET`, `PUT` | Routine log list for a local date and upsert for one routine/date | Required | Implemented |
+| `/api/skin-journal` | `GET`, `POST` | Current user's journal list and create endpoint | Required | Implemented |
+| `/api/skin-journal/[id]` | `PATCH`, `DELETE` | Current user's journal update/delete endpoint | Required | Implemented |
 
-`DashboardOverview` fetches:
+## Protected Route Matcher
+
+`src/proxy.ts` protects:
 
 ```txt
-GET /api/dashboard?localDate=YYYY-MM-DD
+/dashboard/:path*
+/onboarding/:path*
+/skin-profile/:path*
+/routines/:path*
+/journal/:path*
+/products/:path*
 ```
 
-The page displays:
+## Current Dashboard Navigation
 
-- skin profile summary;
-- routine completion summary;
-- today's routine log status;
-- latest routine analysis summary;
-- next suggested actions.
+Enabled:
 
-It must not display fake Product UI, Journal, skin score, image upload, diagnosis, marketplace, or medical recommendation features.
+```txt
+Dashboard
+Skin Profile
+Routines
+Journal
+Products
+```
 
-## 5. Post-MVP routes not allowed during current implementation
+Disabled/future:
+
+```txt
+Today Log
+Ingredients
+```
+
+Today routine log controls exist inside `/routines`; there is no separate `/routine-logs/today` page.
+
+## Post-MVP Routes Not Allowed Without Explicit Approval
 
 Do not create:
 
@@ -85,56 +115,8 @@ Do not create:
 /admin/users
 ```
 
-Admin routes may be added later only when the admin review workflow is explicitly scheduled.
+## Copy and Safety Requirements
 
-## 6. Current implemented UI target
+Every route must avoid medical diagnosis claims, treatment guarantees, appearance scoring, skin scoring, and appearance pressure.
 
-Current implemented user-facing routes are:
-
-```txt
-/
-/dashboard
-/onboarding/skin-profile
-/skin-profile
-/routines
-/products
-/products/[id]
-```
-
-The `/dashboard` page is now data-driven through `DashboardOverview`. Product catalogue and Product detail UI routes are implemented. Ingredient UI pages, skin score, image upload, diagnosis, marketplace, and admin routes are not implemented.
-
-## 7. Navigation groups
-
-Current dashboard navigation enables:
-
-```txt
-Dashboard
-Skin Profile
-Routines
-Products
-```
-
-Disabled or future navigation metadata may exist for unimplemented feature areas, but unimplemented items must use `href: null` and `disabled: true`.
-
-Do not include marketplace, community, image analysis, skin scoring, medical diagnosis, or Product submission links.
-
-## 8. UX copy requirements
-
-Every page must avoid medical claims and appearance pressure.
-
-Preferred wording:
-
-```txt
-Routine của bạn có một vài điểm cần chú ý.
-Thông tin này chỉ mang tính giáo dục.
-Bạn có thể cân nhắc đơn giản hóa routine.
-```
-
-Avoid:
-
-```txt
-Da bạn bị...
-Sản phẩm này sẽ trị khỏi...
-Da bạn xấu vì...
-Bạn bắt buộc phải dùng...
-```
+Use factual educational wording. For severe, painful, spreading, infected-looking, infected, or persistent symptoms, guide users to a qualified professional.
