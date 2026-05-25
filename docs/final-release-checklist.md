@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
 ## 1. Release Scope
 
@@ -43,6 +43,7 @@ This release is an MVP portfolio/demo release, not a full commercial production 
 | `npm run typecheck` | Pass | `tsc --noEmit` completed successfully. |
 | `npm run test` | Pass | Vitest passed 60 test files and 603 tests. |
 | `npm run build` | Pass | Production build passed with temporary non-secret placeholder environment values required by env validation. |
+| `npm run test:e2e` | Pass | Unauthenticated Playwright smoke tests passed for the public landing page and protected-route redirects. |
 | `npm audit --omit=dev --audit-level=moderate` | Pass | Reported 0 vulnerabilities. |
 
 ## 5. Demo Readiness
@@ -78,12 +79,12 @@ Allowed decisions:
 - Ready with minor notes.
 - Not ready.
 
-Reason: documentation is complete, validation passed, production audit passed, and clean package hygiene checks are safe. Screenshots remain optional manual portfolio polish.
+Reason: documentation is complete, lint/typecheck/unit tests/build/E2E smoke tests passed, production audit passed, and clean package hygiene checks are safe. Screenshots remain optional manual portfolio polish. Authenticated E2E coverage remains future work.
 
 ## 8. Optional Next Tasks
 
 These are optional and not required for MVP completion:
 
 - `OPTIONAL-SCREENSHOTS-001 - Capture and add final screenshots`.
-- `OPTIONAL-E2E-001 - Add minimal Playwright smoke test`.
 - `OPTIONAL-PORTFOLIO-WEBSITE-001 - Publish case study on personal portfolio site`.
+- Authenticated E2E coverage when a safe test-login mechanism exists.

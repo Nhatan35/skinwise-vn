@@ -2,7 +2,7 @@
 
 # Implementation Status — SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
 ## 1. Current phase
 
@@ -10,7 +10,7 @@ Last updated: 2026-05-24
 Post Week 6 MVP stabilization, clean package validation, deployment readiness, and portfolio/demo preparation
 ```
 
-Latest completed task: `TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup`.
+Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
 
 The SDD v1.2.6 final freeze is now historical planning context. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. TASK PRODUCT-UI-002 added the protected `/products/[id]` Product Detail UI, ProductCard detail navigation, and a client-safe `getProduct()` helper that parses detail responses from `data.product`.
 
@@ -25,6 +25,8 @@ TASK DEMO-DATA-001 prepared professional demo data and demo documentation for th
 TASK PORTFOLIO-001 prepared professional portfolio documentation for BA internship and full-stack review. The portfolio case study, demo script, screenshots checklist, and README links now explain the problem, target users, MVP scope, requirements, user journey, acceptance criteria, functional/non-functional requirements, traceability, features, architecture, data model, API overview, testing evidence, deployment summary, limitations, and roadmap. No new product feature scope was added.
 
 TASK FINAL-RELEASE-001 prepared the final portfolio-ready release documentation package. README was rewritten as a portfolio entry point, `docs/final-release-checklist.md` and `docs/release-notes-v1.0.md` were added, portfolio docs were checked for consistency, and optional next tasks were separated from MVP completion. No new product feature scope was added.
+
+E2E-001 added unauthenticated Playwright smoke tests for the public landing page and protected-route redirects. The suite runs against a local/CI dev server with safe placeholder environment values, `AI_PROVIDER="mock"`, and Chromium-only Playwright coverage. It does not use real Google OAuth, real MongoDB Atlas credentials, Cloudinary, or external AI providers.
 
 OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current deployed provider remains `AI_PROVIDER="mock"`. Product submission POST API, Product CRUD, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, marketplace, payment, subscription, notifications, and medical diagnosis were not implemented.
 
@@ -69,6 +71,7 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Screenshots checklist
 [x] Final release checklist
 [x] Release notes v1.0
+[x] E2E smoke test status
 ```
 
 ## 3. Completed code
@@ -130,12 +133,14 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Professional demo data and manual demo setup documented
 [x] Portfolio documentation package prepared
 [x] Final release documentation package prepared
+[x] Unauthenticated Playwright smoke tests implemented
+[x] CI runs E2E smoke tests
 ```
 
 ## 4. In progress
 
 ```txt
-Optional screenshot capture, optional E2E smoke coverage, and optional portfolio website publishing.
+Optional screenshot capture, authenticated E2E coverage planning, and optional portfolio website publishing.
 ```
 
 ## 5. Not started
@@ -163,7 +168,7 @@ Ingredient API foundation exists for authenticated read-only `GET /api/ingredien
 SkinJournal backend API foundation exists through authenticated `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. It validates local dates and IANA timezones, stores `localDate` as a `YYYY-MM-DD` string, scopes repository operations by authenticated `userId`, returns `CONFLICT` for duplicate `userId + localDate` creates, maps MongoDB documents to public DTOs, and rejects/omits future image and photo fields. The protected `/journal` route now renders the SkinJournal Timeline UI, enables Journal in dashboard navigation, protects `/journal/:path*`, and lets users view, create, edit, delete, select catalogue products, and see readable product labels through the existing SJ-001 API contract plus the existing Product API. Product resolution is UI-only: `productsUsed` remains product ID strings, Product API responses are parsed from `data.items`, and missing/deleted products display as `Unknown product`. It intentionally does not include image upload, image storage, saved product library, Product CRUD UI, product snapshots in journal entries, calendar/analytics views, AI journal analysis, or medical diagnosis.
 Routine Analysis UI exists only inside `/routines`; no `/routines/[id]`, `/routines/[id]/analysis`, or `/routines/[id]/analyses` UI routes were created.
 Routine Analysis rate limiting uses the MongoDB `rate_limits` collection and requires `npm run db:indexes` to ensure the unique key and TTL indexes in real environments.
-Optional `npm run test:e2e` reported the smoke test as `ok` during TASK-RA-001, but the command wrapper timed out waiting for the process to exit.
+Unauthenticated Playwright smoke tests now exist under `tests/e2e/smoke.spec.ts` and cover the public landing page plus unauthenticated redirects for protected routes. Authenticated E2E flows and real Google OAuth login are not implemented in CI because there is no safe test-login mechanism yet.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.
 TASK DEPLOY-002 deployed the MVP demo to Vercel at https://skinwise-vn.vercel.app and passed manual production smoke testing for public pages, protected route redirects, Google OAuth login, authenticated MVP flows, MongoDB production/demo read/write through authenticated flows, and product safety boundaries. This is an MVP demo deployment, not a full commercial production release.
@@ -194,13 +199,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001
+DEPLOY-001 - Verify Vercel deployment configuration and production smoke check
 ```
 
 Recommended next coding task:
 
 ```txt
-Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001
+DEPLOY-001 - Verify Vercel deployment configuration and production smoke check
 ```
 
 ## 9. Update rule

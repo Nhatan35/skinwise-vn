@@ -4,6 +4,60 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-25 - E2E-001 Playwright Smoke Tests and Cleanup
+
+### Task
+
+Finalize unauthenticated Playwright smoke coverage for critical user-facing routes and synchronize documentation with the implemented E2E status.
+
+### Files Added
+
+```txt
+tests/e2e/smoke.spec.ts
+```
+
+### Files Updated
+
+```txt
+.github/workflows/ci.yml
+playwright.config.ts
+README.md
+docs/18-deployment-checklist.md
+docs/final-release-checklist.md
+docs/release-notes-v1.0.md
+docs/portfolio-case-study.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Files Removed
+
+```txt
+tests/e2e/.gitkeep
+```
+
+### Notes
+
+- Added Chromium-only Playwright smoke tests for the public landing page and unauthenticated redirects for `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile`.
+- Playwright web server runs `npm run dev` with safe placeholder environment values, `AI_PROVIDER="mock"`, and disabled unsupported feature flags.
+- CI installs Chromium dependencies and runs `npm run test:e2e` after lint, typecheck, unit tests, build, and production dependency audit.
+- No real Google OAuth login, real MongoDB Atlas credentials, Cloudinary credentials, external AI calls, screenshots, or product feature changes were added.
+- Authenticated E2E flows remain future work until a safe test-login mechanism exists.
+
+### Validation
+
+```txt
+node -v: v20.20.2
+npm ci: Pass
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 60 files, 603 tests
+npm run build: Pass
+npm run test:e2e: Pass
+npm audit --omit=dev --audit-level=moderate: Pass - 0 vulnerabilities
+```
+
 ## 2026-05-24 - TASK FINAL-RELEASE-001 Final Release Package and Portfolio-Ready Cleanup
 
 ### Task
@@ -275,7 +329,7 @@ npm run dev: Not run because development server startup is not required for DEPL
 db:indexes: Not run because the target database was not confirmed as a safe demo database.
 db:seed: Not run because the target database was not confirmed as a safe demo database.
 Production smoke test: Not tested because no production URL was provided.
-E2E tests: Not implemented; Playwright config exists but tests/e2e has no specs.
+Historical DEPLOY-001 note: Playwright config existed, but real E2E specs were added later in E2E-001.
 ```
 
 ## 2026-05-24 - SECURITY-CLEANUP-001 / DOCS-SYNC-001 / LOCAL-VALIDATION-001
@@ -331,7 +385,7 @@ npm run db:seed: Not run because the database target was not clearly local/devel
 npm run dev: Existing dev server responded HTTP 200 on localhost:3000; a second dev process was not started.
 Unauthenticated smoke test: `/` returned 200 and protected routes returned 307 sign-in redirects.
 Manual authenticated smoke test: Not tested; requires interactive Google OAuth session.
-E2E tests: Not implemented; Playwright config exists but tests/e2e has no specs.
+Historical LOCAL-VALIDATION note: Playwright config existed, but real E2E specs were added later in E2E-001.
 ```
 
 ## 2026-05-24 - TASK PRODUCT-UI-002 Product Detail UI

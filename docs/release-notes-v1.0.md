@@ -2,6 +2,8 @@
 
 Release date: 2026-05-24
 
+Latest QA cleanup update: 2026-05-25
+
 ## 1. Release Scope
 
 SkinWise VN MVP Portfolio Release v1.0 is the final portfolio-ready MVP package for GitHub, portfolio review, CV/project explanation, mentor review, and BA internship interview preparation.
@@ -34,6 +36,7 @@ This is an MVP demo/portfolio release, not a full commercial production release.
 - QA regression fix for LF/CRLF-safe clean package validation.
 - Root `.gitattributes` line-ending normalization.
 - Production dependency audit cleanup.
+- Unauthenticated Playwright smoke test coverage.
 - Demo data preparation.
 - Portfolio case study.
 - Presentation-ready demo script.
@@ -57,7 +60,7 @@ Production secrets are configured outside the repository in Vercel Project Setti
 
 ## 5. Validation Summary
 
-Final validation for `TASK FINAL-RELEASE-001`:
+Current validation after `E2E-001` cleanup:
 
 | Command | Result | Notes |
 |---|---|---|
@@ -65,6 +68,7 @@ Final validation for `TASK FINAL-RELEASE-001`:
 | `npm run typecheck` | Pass | `tsc --noEmit` completed successfully. |
 | `npm run test` | Pass | Vitest passed 60 test files and 603 tests. |
 | `npm run build` | Pass | Production build passed with temporary non-secret placeholder environment values required by env validation. |
+| `npm run test:e2e` | Pass | Playwright smoke tests cover the public landing page and unauthenticated protected-route redirects. |
 | `npm audit --omit=dev --audit-level=moderate` | Pass | Reported 0 vulnerabilities. |
 
 ## 6. Known Limitations
@@ -80,7 +84,7 @@ Final validation for `TASK FINAL-RELEASE-001`:
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
 - Product catalogue data is demo/seed-style data.
-- E2E tests are config-only unless real specs are added later.
+- E2E coverage is smoke-level only; authenticated E2E flows and real Google OAuth login are not tested in CI.
 - Screenshots are not included unless captured separately through an optional screenshot task.
 
 ## 7. Next Possible Improvements
@@ -88,7 +92,7 @@ Final validation for `TASK FINAL-RELEASE-001`:
 Future work, not implemented in this release:
 
 - `OPTIONAL-SCREENSHOTS-001 - Capture and add final screenshots`.
-- `OPTIONAL-E2E-001 - Add minimal Playwright smoke test`.
+- Add authenticated E2E coverage when a safe test-login mechanism exists.
 - `OPTIONAL-PORTFOLIO-WEBSITE-001 - Publish case study on personal portfolio site`.
 - Saved products.
 - Admin product management.

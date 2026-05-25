@@ -23,9 +23,9 @@ Previously documented production evidence:
 
 ## Current Status
 
-Current phase: post Week 6 MVP final release readiness and portfolio packaging.
+Current phase: post Week 6 E2E smoke cleanup and deployment re-verification preparation.
 
-Latest completed task: `TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup`.
+Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
 
 Completed scope:
 
@@ -37,6 +37,7 @@ Completed scope:
 - Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI.
 - Vercel MVP demo deployment and production smoke test.
 - Clean package validation stabilization.
+- Unauthenticated Playwright smoke tests for landing page and protected route redirects.
 - Professional demo data preparation.
 - Portfolio case study, demo script, screenshots checklist, release checklist, and release notes.
 
@@ -96,7 +97,7 @@ Auth.js owns `/api/auth/*` and its response format.
 - Auth.js / NextAuth.
 - Zod.
 - Vitest.
-- Playwright configuration.
+- Playwright smoke tests.
 - Vercel.
 
 ## Demo Flow
@@ -148,10 +149,13 @@ npm run lint
 npm run typecheck
 npm run test
 npm run build
+npm run test:e2e
 npm audit --omit=dev --audit-level=moderate
 ```
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
+
+`npm run test:e2e` runs unauthenticated Playwright smoke tests against a local/CI dev server with safe placeholder environment values. It does not use real Google OAuth, real MongoDB Atlas credentials, Cloudinary, or external AI providers.
 
 ## Environment Variables
 
@@ -207,7 +211,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
-- E2E tests are config-only unless real specs are added later.
+- E2E coverage is smoke-level only: public landing page coverage and unauthenticated protected-route redirect checks exist, but authenticated E2E flows and real Google OAuth login are not tested in CI.
 - SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Future Roadmap
@@ -215,7 +219,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 Future ideas, not implemented in the current MVP:
 
 - Capture final screenshots for the portfolio.
-- Add minimal Playwright smoke tests.
+- Add authenticated E2E coverage when a safe test-login mechanism exists.
 - Improve dashboard analytics.
 - Add saved products.
 - Add admin product management.

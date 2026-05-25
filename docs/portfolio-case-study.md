@@ -459,7 +459,7 @@ The current MVP has honest portfolio/demo limitations:
 - Image upload and AI face analysis are not implemented.
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
-- E2E tests are config-only unless real specs are added later.
+- E2E coverage is smoke-level only: public landing page and unauthenticated protected-route redirects are covered, while authenticated E2E flows are not implemented yet.
 - The app provides educational support only and must not be used as medical diagnosis or treatment advice.
 
 ## 22. Future Roadmap
@@ -468,7 +468,7 @@ Short-term:
 
 - final screenshots;
 - final release package;
-- optional E2E smoke test coverage;
+- authenticated E2E coverage when a safe test-login mechanism exists;
 - better dashboard analytics.
 
 Medium-term:
@@ -499,8 +499,8 @@ These roadmap items are future ideas and are not implemented in the current MVP 
 | What requirements did you define? | I defined user stories, acceptance criteria, functional requirements, non-functional requirements, API contracts, data model, and safety boundaries. |
 | What are the main functional requirements? | Authentication, skin profile, product catalogue/detail, routine builder/logs/analysis, journal, dashboard, and ingredient explanation. |
 | What are the non-functional requirements? | Security, privacy, validation, maintainability, safe educational copy, environment discipline, testability, and deployment readiness. |
-| How did you validate the project? | Through lint, typecheck, unit tests, build, production dependency audit, deployment preparation, and production smoke testing. |
-| What would you improve next? | I would prepare final screenshots, add E2E smoke tests, improve dashboard analytics, and later add safe saved-product/admin workflows. |
+| How did you validate the project? | Through lint, typecheck, unit tests, build, production dependency audit, unauthenticated Playwright smoke tests, deployment preparation, and production smoke testing. |
+| What would you improve next? | I would prepare final screenshots, add authenticated E2E coverage with a safe test-login path, improve dashboard analytics, and later add safe saved-product/admin workflows. |
 | What did you learn as a BA? | I learned to control scope, write clearer acceptance criteria, trace requirements to implementation, and prepare a reviewer-friendly demo. |
 | What did you learn technically? | I learned full-stack structure with Next.js, TypeScript, MongoDB, Auth.js, Zod, API DTO boundaries, tests, and deployment preparation. |
 

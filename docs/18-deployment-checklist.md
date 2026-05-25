@@ -39,7 +39,7 @@ docs/deployment/vercel-deployment.md
 [x] Lint passes.
 [x] Unit tests pass.
 [x] Integration tests pass where implemented.
-[ ] E2E happy path passes where implemented.
+[x] Unauthenticated Playwright smoke tests pass where implemented.
 [x] No out-of-scope feature has been added.
 [x] README setup instructions are accurate.
 [x] Deployment runbook is current.
@@ -243,7 +243,8 @@ Run after a real Vercel deployment exists.
 [x] Production smoke test has been completed and passed for MVP demo scope.
 [x] Google OAuth production callback has been tested.
 [x] MongoDB Atlas production/demo read/write access has been tested through authenticated flows.
-[ ] E2E tests are config-only while tests/e2e has no real specs.
+[x] Unauthenticated Playwright smoke tests exist for landing page and protected-route redirects.
+[ ] Authenticated E2E flows and real Google OAuth login are not covered by CI.
 [x] Real OpenAI/Gemini provider is not implemented.
 [x] Image upload is out of scope.
 [x] Marketplace is out of scope.

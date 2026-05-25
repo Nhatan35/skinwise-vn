@@ -1,11 +1,11 @@
 # Current Sprint Plan - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
 ## 1. Current phase
 
 ```txt
-Post Week 6 MVP portfolio-ready release complete
+Post Week 6 E2E smoke cleanup and deployment re-verification preparation
 ```
 
 The main Week 1-6 MVP implementation is completed. Current required release work is complete; remaining tasks are optional portfolio polish only.
@@ -15,7 +15,7 @@ The main Week 1-6 MVP implementation is completed. Current required release work
 Current task:
 
 ```txt
-TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup
+E2E-001 - Add Playwright smoke tests for critical user flows
 ```
 
 Status:
@@ -35,16 +35,18 @@ TASK QA-REGRESSION-001: COMPLETED.
 TASK DEMO-DATA-001: COMPLETED.
 TASK PORTFOLIO-001: COMPLETED.
 TASK FINAL-RELEASE-001: COMPLETED.
+E2E-001: COMPLETED.
 Clean package validation is robust across LF and CRLF line endings.
 Professional public/shared demo seed data and authenticated manual demo setup are documented.
 Portfolio case study, demo script, and screenshots checklist are prepared.
 Final release checklist and release notes are prepared.
+Unauthenticated Playwright smoke tests are implemented for the public landing page and protected-route redirects.
 ```
 
 ## 3. Latest completed task
 
 ```txt
-TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup
+E2E-001 - Add Playwright smoke tests for critical user flows
 ```
 
 ## 4. Completed MVP implementation status
@@ -85,6 +87,8 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 [x] Prepare final release checklist.
 [x] Prepare release notes v1.0.
 [x] Polish README as portfolio entry point.
+[x] Add unauthenticated Playwright smoke tests.
+[x] Run `npm run test:e2e` in CI with safe placeholder environment values.
 ```
 
 ## 6. Not allowed in this phase
@@ -125,7 +129,7 @@ Database commands must only run against a known local/development database. Do n
 ## 8. Recommended next task
 
 ```txt
-No required next task. Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001.
+DEPLOY-001 - Verify Vercel deployment configuration and production smoke check.
 ```
 
-Reason: MVP demo deployment is complete and smoke-tested, clean package validation has been stabilized across operating systems, demo data/setup documentation is ready, portfolio materials are prepared, and final release documentation is complete. Remaining work is optional portfolio polish without adding new product scope.
+Reason: build validation and unauthenticated E2E smoke tests pass locally/CI-style. The next step is deployment configuration review and production smoke re-verification, not new product scope.
