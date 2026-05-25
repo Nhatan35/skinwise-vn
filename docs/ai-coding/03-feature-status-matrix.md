@@ -1,6 +1,6 @@
 # Feature Status Matrix - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
 Status categories used in this file:
 
@@ -26,12 +26,12 @@ Out of scope
 | Dashboard | Completed | `GET /api/dashboard?localDate=YYYY-MM-DD` | `/dashboard` | Reuses user-scoped collections | Unit/API/source checks; production smoke | Authenticated dashboard and user data summaries passed MVP demo smoke test |
 | AI Provider Abstraction | Completed | Used by routine analysis and ingredient explanation use cases | N/A | N/A | Unit | `MockAIProvider`, `ValidatedAIProvider`, provider factory, output validation, and fallback behavior exist |
 | Real AI provider integration | Not started | OpenAI/Gemini providers throw configuration errors | N/A | N/A | Unit coverage for unsupported state | Real OpenAI/Gemini providers are not implemented; MVP demo uses `AI_PROVIDER="mock"` |
-| Deployment | Completed | N/A | Vercel production URL | MongoDB production/demo read/write through authenticated flows | Local validation; production smoke | `TASK DEPLOY-002` completed MVP demo deployment at https://skinwise-vn.vercel.app; production smoke test passed |
+| Deployment | Partially completed | N/A | Vercel target configuration and deployment docs | Environment-dependent MongoDB configuration | Build/audit/local validation; production re-verification pending | Previous DEPLOY-002 notes document an MVP demo deployment, but this E2E cleanup did not re-verify Vercel production; run `DEPLOY-VERIFY-001` before claiming current deployment readiness |
 | Clean Package Validation | Completed | N/A | N/A | N/A | Unit/source checks | `TASK QA-REGRESSION-001` fixed LF/CRLF line-ending sensitivity in the Routine Builder unit test and added `.gitattributes`; no feature scope changed |
 | Demo Data and Demo Script | Completed | Public seed data through `scripts/seed.ts`; user-owned setup through existing APIs/UI | Authenticated manual walkthrough | Public `products` and `ingredients`; user-owned collections stay scoped by real authenticated user | Seed validation through script schemas; full validation commands | `TASK DEMO-DATA-001` prepared portfolio-ready public demo data and documented manual setup for skin profile, routines, logs, journal, and dashboard without fake users or new feature scope |
 | Portfolio Documentation | Completed | Verified API methods documented from source | Case study, demo script, screenshot checklist | N/A | Current-task validation; documentation review | `TASK PORTFOLIO-001` prepared BA/full-stack portfolio materials without adding feature scope |
 | Final Release Package | Completed | N/A | README, final checklist, release notes | N/A | Final validation; package hygiene check | `TASK FINAL-RELEASE-001` prepared the portfolio-ready release documentation package without adding feature scope |
-| E2E Tests | Partially completed | N/A | Playwright config exists | N/A | Config only | `test:e2e` script exists, but no real E2E spec files are present in `tests/e2e` |
+| E2E Tests | Partially completed | N/A | Playwright smoke specs exist | N/A | Playwright smoke tests | Public landing page and unauthenticated protected-route redirects are covered; authenticated E2E flows and real Google OAuth login are not tested in CI |
 | Production monitoring | Not started | N/A | N/A | N/A | N/A | Not configured |
 | Product submission / Product CRUD | Not started | `POST /api/products` not implemented | No UI | Existing product collection only | N/A | Future/admin workflow only |
 | Ingredient UI | Not started | Ingredient API exists | No `/ingredients` UI route | Existing ingredient collection | N/A | Future UI task |

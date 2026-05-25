@@ -10,7 +10,7 @@ It must be updated whenever the implementation structure changes.
 
 ## 2. Current repository state
 
-Current package state: **TASK PRODUCT-UI-002 Product Detail UI**.
+Current package state: **Post E2E-001 smoke test cleanup and deployment re-verification preparation**.
 
 The repository now contains the SDD package plus a Next.js App Router foundation copied into the real repo and normalized for SkinWise VN. Week 1 Tasks 1-7 added project foundation, UI tooling, environment validation, MongoDB infrastructure foundation, Auth.js foundation, a protected dashboard route group, and `GET /api/me` with lazy `AppUserProfile` creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API foundation, protected `/routines` UI foundation, deterministic Routine Safety Engine, Routine Analysis API foundation, Routine Analysis UI panel, and MongoDB-backed per-user rate limiting for routine analysis. TASK PI-001 added authenticated read-only Product and Ingredient API foundations with strict query validation, DTO mappers, repositories, use cases, and API contract tests. TASK PP-001 integrated the Product Picker into the existing Routine Builder and added server-side Routine Product Snapshot population for selected visible products. TASK RL-001 implemented the RoutineLog backend foundation, and TASK RL-002 integrated RoutineLog UI controls into the existing `/routines` page. TASK DB-001 replaced the placeholder dashboard with a real authenticated dashboard that renders `DashboardOverview` and fetches `GET /api/dashboard?localDate=YYYY-MM-DD` to summarize Skin Profile setup, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next suggested actions. TASK AI-001 implemented the server-only AI Provider Abstraction with `MockAIProvider`, provider factory, and AI provider error classes. OpenAI and Gemini providers are intentionally not implemented yet.
 
@@ -573,9 +573,10 @@ tests/unit/skin-profile-onboarding.test.ts
 tests/unit/skin-profile-use-case.test.ts
 tests/unit/skin-profile-view-edit.test.ts
 tests/unit/ui-foundation.test.ts
+tests/e2e/smoke.spec.ts
 ```
 
-Playwright config exists, but E2E tests and browsers are not installed/run yet.
+Playwright smoke specs exist under `tests/e2e/smoke.spec.ts`. Current E2E coverage is smoke-level only: the public landing page and unauthenticated protected-route redirects are covered, while authenticated E2E flows and real Google OAuth login are not tested in CI.
 
 ## 7. Update requirement
 
