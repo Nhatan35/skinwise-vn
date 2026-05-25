@@ -4,6 +4,50 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-25 - DEPLOY-VERIFY-001 Partial Deployment Re-Verification
+
+### Task
+
+Re-verify the current Vercel deployment status without adding feature scope, exposing secrets, or claiming external platform checks that were not directly verified.
+
+### Files Updated
+
+```txt
+README.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+docs/18-deployment-checklist.md
+docs/deployment/vercel-deployment.md
+```
+
+### Notes
+
+- Local validation passed under Node 20: `npm ci`, lint, typecheck, unit tests, production build, production audit, and Playwright E2E smoke tests.
+- Public production URL `https://skinwise-vn.vercel.app` returned the expected landing page content.
+- Unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` returned Auth.js sign-in redirects with callback URLs.
+- The production Auth.js sign-in page was reachable.
+- Vercel dashboard/build logs/environment variables, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write flow, sign-out, and Vercel runtime logs were not externally verified in this task.
+- No redeploy was run because current Vercel project access and latest-deployment evidence were not available.
+- No real secrets, OAuth credentials, MongoDB credentials, AI keys, Cloudinary credentials, screenshots, product features, or authenticated E2E automation were added.
+
+### Validation
+
+```txt
+node -v: v20.20.2
+npm ci: Pass
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 60 files, 603 tests
+npm run build: Pass
+npm audit --omit=dev --audit-level=moderate: Pass - 0 vulnerabilities
+npm run test:e2e: Pass - 7 tests
+Public production URL: Pass for landing page HTTP 200 and expected public content
+Unauthenticated protected-route redirects: Pass for /dashboard, /products, /routines, /journal, and /skin-profile
+External Vercel/OAuth/MongoDB/log verification: Not verified in this task
+```
+
 ## 2026-05-25 - E2E-001 Playwright Smoke Tests and Cleanup
 
 ### Task

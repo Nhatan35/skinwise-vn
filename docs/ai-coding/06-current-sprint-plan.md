@@ -5,17 +5,17 @@ Last updated: 2026-05-25
 ## 1. Current phase
 
 ```txt
-Post Week 6 E2E smoke cleanup and deployment re-verification preparation
+Post Week 6 deployment re-verification
 ```
 
-The main Week 1-6 MVP implementation is completed. Current required release work is complete; remaining tasks are optional portfolio polish only.
+The main Week 1-6 MVP implementation is completed. DEPLOY-VERIFY-001 is partial: local validation and public unauthenticated production smoke checks passed, but external platform verification remains pending.
 
 ## 2. Current deployment task
 
 Current task:
 
 ```txt
-E2E-001 - Add Playwright smoke tests for critical user flows
+DEPLOY-VERIFY-001 - Verify Vercel deployment configuration and production smoke check
 ```
 
 Status:
@@ -27,15 +27,19 @@ Deployment target: Vercel.
 Production branch: main.
 Production commit: db72e07.
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASSED.
-Google OAuth production login: PASSED.
-MongoDB production/demo read/write through authenticated flows: PASSED.
+Previously documented DEPLOY-002 production smoke test: PASSED.
+Previously documented Google OAuth production login: PASSED.
+Previously documented MongoDB production/demo read/write through authenticated flows: PASSED.
+Current DEPLOY-VERIFY-001 local validation: PASSED.
+Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED.
+Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, and sign-out: NOT VERIFIED without external access.
 TASK DEPLOY-002: COMPLETED.
 TASK QA-REGRESSION-001: COMPLETED.
 TASK DEMO-DATA-001: COMPLETED.
 TASK PORTFOLIO-001: COMPLETED.
 TASK FINAL-RELEASE-001: COMPLETED.
 E2E-001: COMPLETED.
+DEPLOY-VERIFY-001: PARTIAL.
 Clean package validation is robust across LF and CRLF line endings.
 Professional public/shared demo seed data and authenticated manual demo setup are documented.
 Portfolio case study, demo script, and screenshots checklist are prepared.
@@ -89,6 +93,13 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 [x] Polish README as portfolio entry point.
 [x] Add unauthenticated Playwright smoke tests.
 [x] Run `npm run test:e2e` in CI with safe placeholder environment values.
+[x] Run current DEPLOY-VERIFY-001 local validation with Node 20.
+[x] Verify public production URL and unauthenticated protected-route redirects.
+[ ] Verify current Vercel build/logs/environment variables with direct platform evidence.
+[ ] Verify current Google OAuth production login with direct manual evidence.
+[ ] Verify current MongoDB Atlas read/write through authenticated production flow.
+[ ] Verify sign-out and post-sign-out protected-route redirect.
+[ ] Review Vercel runtime logs after current smoke testing.
 ```
 
 ## 6. Not allowed in this phase
@@ -129,7 +140,7 @@ Database commands must only run against a known local/development database. Do n
 ## 8. Recommended next task
 
 ```txt
-DEPLOY-001 - Verify Vercel deployment configuration and production smoke check.
+DEPLOY-VERIFY-001A - Complete manual external platform verification with Vercel, Google Cloud Console, and MongoDB Atlas evidence.
 ```
 
-Reason: build validation and unauthenticated E2E smoke tests pass locally/CI-style. The next step is deployment configuration review and production smoke re-verification, not new product scope.
+Reason: local validation plus public unauthenticated production checks passed, but current Vercel environment/log evidence, Google OAuth login, authenticated dashboard, MongoDB-backed read/write, sign-out, and runtime-log review still require external platform access or user-provided evidence.

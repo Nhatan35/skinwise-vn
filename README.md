@@ -21,11 +21,19 @@ Previously documented production evidence:
 - Google OAuth production login: passed.
 - MongoDB production/demo read/write through authenticated flows: passed.
 
+Current `DEPLOY-VERIFY-001` re-verification status on 2026-05-25:
+
+- Local Node 20 validation passed.
+- Public production URL and unauthenticated protected-route redirects were verified.
+- Vercel dashboard/build logs/environment variables, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write, sign-out, and Vercel runtime logs were not externally verified in this task.
+
 ## Current Status
 
-Current phase: post Week 6 E2E smoke cleanup and deployment re-verification preparation.
+Current phase: post Week 6 deployment re-verification.
 
 Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
+
+Current verification task: `DEPLOY-VERIFY-001` is partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
 
 Completed scope:
 

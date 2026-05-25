@@ -7,7 +7,7 @@ Last updated: 2026-05-25
 ## 1. Current phase
 
 ```txt
-Post Week 6 MVP stabilization, clean package validation, deployment readiness, and portfolio/demo preparation
+Post Week 6 deployment re-verification
 ```
 
 Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
@@ -27,6 +27,8 @@ TASK PORTFOLIO-001 prepared professional portfolio documentation for BA internsh
 TASK FINAL-RELEASE-001 prepared the final portfolio-ready release documentation package. README was rewritten as a portfolio entry point, `docs/final-release-checklist.md` and `docs/release-notes-v1.0.md` were added, portfolio docs were checked for consistency, and optional next tasks were separated from MVP completion. No new product feature scope was added.
 
 E2E-001 added unauthenticated Playwright smoke tests for the public landing page and protected-route redirects. The suite runs against a local/CI dev server with safe placeholder environment values, `AI_PROVIDER="mock"`, and Chromium-only Playwright coverage. It does not use real Google OAuth, real MongoDB Atlas credentials, Cloudinary, or external AI providers.
+
+DEPLOY-VERIFY-001 is partial as of 2026-05-25. Local Node 20 validation passed (`npm ci`, lint, typecheck, unit tests, build, production audit, and E2E smoke tests). The public production URL `https://skinwise-vn.vercel.app` returned the expected landing page content, and unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` returned Auth.js sign-in redirects with callback URLs. Current Vercel dashboard/build logs/environment variables, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write flow, sign-out, and Vercel runtime logs were not externally verified in this task.
 
 OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current deployed provider remains `AI_PROVIDER="mock"`. Product submission POST API, Product CRUD, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, marketplace, payment, subscription, notifications, and medical diagnosis were not implemented.
 
@@ -140,7 +142,7 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 ## 4. In progress
 
 ```txt
-Optional screenshot capture, authenticated E2E coverage planning, and optional portfolio website publishing.
+DEPLOY-VERIFY-001A external platform verification, optional screenshot capture, authenticated E2E coverage planning, and optional portfolio website publishing.
 ```
 
 ## 5. Not started
@@ -199,13 +201,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-DEPLOY-001 - Verify Vercel deployment configuration and production smoke check
+DEPLOY-VERIFY-001A - Complete manual external platform verification with Vercel, Google Cloud Console, and MongoDB Atlas evidence
 ```
 
 Recommended next coding task:
 
 ```txt
-DEPLOY-001 - Verify Vercel deployment configuration and production smoke check
+DEPLOY-VERIFY-001A - Complete manual external platform verification with Vercel, Google Cloud Console, and MongoDB Atlas evidence
 ```
 
 ## 9. Update rule

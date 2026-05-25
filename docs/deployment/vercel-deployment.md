@@ -13,7 +13,10 @@ Production smoke test: PASSED.
 Google OAuth production login: PASSED.
 MongoDB production/demo read/write through authenticated flows: PASSED.
 TASK DEPLOY-002: COMPLETED.
+DEPLOY-VERIFY-001: PARTIAL as of 2026-05-25.
 ```
+
+DEPLOY-VERIFY-001 current evidence: local Node 20 validation passed; the public production URL loaded; unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` redirected to Auth.js sign-in. Current Vercel project settings, build/runtime logs, environment variable presence, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth login, authenticated dashboard, MongoDB-backed read/write, and sign-out were not externally verified in this task.
 
 SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, notifications, or other out-of-scope features during deployment.
 
@@ -116,6 +119,19 @@ Authenticated MVP flows: passed.
 MongoDB production/demo read/write through authenticated flows: passed.
 AI provider: AI_PROVIDER="mock".
 Secrets documented: no.
+```
+
+Current DEPLOY-VERIFY-001 re-verification result:
+
+```txt
+Status: Partial.
+Local validation: passed under Node 20.
+Public URL: passed.
+Unauthenticated protected-route redirects: passed.
+Google OAuth production login: not verified in this task.
+Authenticated dashboard: not verified in this task.
+MongoDB-backed read/write: not verified in this task.
+Vercel build/runtime logs and env var presence: not verified in this task.
 ```
 
 Known MVP demo limitations:

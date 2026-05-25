@@ -7,7 +7,7 @@ This checklist tracks whether SkinWise VN is ready to move from local developmen
 Current task:
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+DEPLOY-VERIFY-001 - Verify Vercel deployment configuration and production smoke check
 ```
 
 Current status:
@@ -23,7 +23,13 @@ Production smoke test: PASSED.
 Google OAuth production login: PASSED.
 MongoDB production/demo read/write through authenticated flows: PASSED.
 TASK DEPLOY-002: COMPLETED.
+DEPLOY-VERIFY-001: PARTIAL.
+Current DEPLOY-VERIFY-001 local validation: PASSED.
+Current DEPLOY-VERIFY-001 public URL and unauthenticated protected-route redirects: PASSED.
+Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, sign-out, and runtime logs: NOT VERIFIED without external access.
 ```
+
+The checked DEPLOY-002 items below preserve previously documented MVP demo evidence. They are not a substitute for current DEPLOY-VERIFY-001 external platform evidence.
 
 Detailed runbook:
 
@@ -216,6 +222,19 @@ Keep the same-major npm overrides for `postcss` and `qs` until a future safe ups
 
 Run after a real Vercel deployment exists.
 
+Current DEPLOY-VERIFY-001 smoke status:
+
+```txt
+[x] / loads successfully at https://skinwise-vn.vercel.app.
+[x] Landing page shows SkinWise VN branding, main CTAs, and educational safety copy.
+[x] Protected routes redirect unauthenticated users for /dashboard, /products, /routines, /journal, and /skin-profile.
+[ ] Google sign-in works in current re-verification - not externally verified.
+[ ] /dashboard loads after login in current re-verification - not externally verified.
+[ ] MongoDB-backed authenticated read/write flow works in current re-verification - not externally verified.
+[ ] Sign out works in current re-verification - not externally verified.
+[ ] Vercel runtime logs show no normal-use runtime errors in current re-verification - not externally verified.
+```
+
 ```txt
 [x] / loads successfully.
 [x] Landing page shows current MVP/post Week 6 messaging.
@@ -270,5 +289,5 @@ docs/ai-coding/05-ai-change-log.md
 ## 14. Next Task
 
 ```txt
-TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
+DEPLOY-VERIFY-001A - Complete manual external platform verification with Vercel, Google Cloud Console, and MongoDB Atlas evidence
 ```
