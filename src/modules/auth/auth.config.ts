@@ -1,16 +1,33 @@
 import type { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
 import type { AuthEnvironment } from "@/modules/auth/types";
+
+const DEFAULT_E2E_TEST_USER_EMAIL = "e2e-user@skinwise.test";
+const DEFAULT_E2E_TEST_USER_NAME = "SkinWise E2E User";
+
+function normalizeValue(value: string | undefined) {
+  return value?.trim() ? value : undefined;
+}
+
+function resolveAppEnv(source: NodeJS.ProcessEnv) {
+  return normalizeValue(source.APP_ENV) ?? normalizeValue(source.NODE_ENV);
+}
 
 export function readAuthEnvironment(
   source: NodeJS.ProcessEnv = process.env,
 ): AuthEnvironment {
   return {
-    APP_ENV: source.APP_ENV ?? source.NODE_ENV,
-    AUTH_GOOGLE_ID: source.AUTH_GOOGLE_ID,
-    AUTH_GOOGLE_SECRET: source.AUTH_GOOGLE_SECRET,
-    MONGODB_URI: source.MONGODB_URI,
+    APP_ENV: resolveAppEnv(source),
+    AUTH_GOOGLE_ID: normalizeValue(source.AUTH_GOOGLE_ID),
+    AUTH_GOOGLE_SECRET: normalizeValue(source.AUTH_GOOGLE_SECRET),
+    E2E_TEST_AUTH: source.E2E_TEST_AUTH === "true",
+    E2E_TEST_USER_EMAIL:
+      normalizeValue(source.E2E_TEST_USER_EMAIL) ?? DEFAULT_E2E_TEST_USER_EMAIL,
+    E2E_TEST_USER_NAME:
+      normalizeValue(source.E2E_TEST_USER_NAME) ?? DEFAULT_E2E_TEST_USER_NAME,
+    MONGODB_URI: normalizeValue(source.MONGODB_URI),
   };
 }
 
@@ -22,17 +39,46 @@ export function hasGoogleCredentials(input: AuthEnvironment) {
   return hasValue(input.AUTH_GOOGLE_ID) && hasValue(input.AUTH_GOOGLE_SECRET);
 }
 
+export function hasE2ETestCredentialsProvider(input: AuthEnvironment) {
+  return input.APP_ENV === "test" && input.E2E_TEST_AUTH;
+}
+
 export function getAuthProviders(input: AuthEnvironment) {
-  if (!hasGoogleCredentials(input)) {
-    return [];
+  const providers: NextAuthConfig["providers"] = [];
+
+  if (hasGoogleCredentials(input)) {
+    providers.push(
+      Google({
+        clientId: input.AUTH_GOOGLE_ID,
+        clientSecret: input.AUTH_GOOGLE_SECRET,
+      }),
+    );
   }
 
-  return [
-    Google({
-      clientId: input.AUTH_GOOGLE_ID,
-      clientSecret: input.AUTH_GOOGLE_SECRET,
-    }),
-  ];
+  if (hasE2ETestCredentialsProvider(input)) {
+    const authorizeE2ETestUser = () => {
+      return {
+        id: "e2e-user",
+        email: input.E2E_TEST_USER_EMAIL,
+        name: input.E2E_TEST_USER_NAME,
+      };
+    };
+    const e2eTestProvider = Credentials({
+      name: "E2E Test",
+      credentials: {},
+      authorize: authorizeE2ETestUser,
+    });
+
+    providers.push(
+      {
+        ...e2eTestProvider,
+        authorize: authorizeE2ETestUser,
+        id: "e2e-test",
+      } as (typeof providers)[number],
+    );
+  }
+
+  return providers;
 }
 
 export function createAuthConfig(input: AuthEnvironment): NextAuthConfig {

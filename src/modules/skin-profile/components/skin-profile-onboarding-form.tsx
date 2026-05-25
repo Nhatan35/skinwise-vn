@@ -406,16 +406,20 @@ export function SkinProfileOnboardingForm() {
   }
 
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-stone-200 bg-white" data-testid="skin-profile-form">
       <CardHeader>
         <CardTitle>
           {hasExistingProfile ? "Cập nhật hồ sơ da" : "Tạo hồ sơ da"}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="space-y-6"
+          data-testid="skin-profile-onboarding-form"
+          onSubmit={handleSubmit}
+        >
           {!hasExistingProfile ? (
-            <Alert>
+            <Alert data-testid="skin-profile-empty-create-notice">
               <AlertTitle>Chưa có hồ sơ da</AlertTitle>
               <AlertDescription>
                 Bạn có thể bắt đầu bằng các thông tin cơ bản và chỉnh sửa lại
@@ -425,14 +429,14 @@ export function SkinProfileOnboardingForm() {
           ) : null}
 
           {apiError ? (
-            <Alert variant="destructive">
+            <Alert data-testid="skin-profile-save-error" variant="destructive">
               <AlertTitle>Chưa lưu được hồ sơ da</AlertTitle>
               <AlertDescription>{apiError}</AlertDescription>
             </Alert>
           ) : null}
 
           {successMessage ? (
-            <Alert>
+            <Alert data-testid="skin-profile-save-success">
               <AlertTitle>Đã lưu</AlertTitle>
               <AlertDescription>{successMessage}</AlertDescription>
             </Alert>
@@ -520,6 +524,7 @@ export function SkinProfileOnboardingForm() {
                     <input
                       checked={checked}
                       className="mt-1 size-4 accent-emerald-700"
+                      data-testid={`concern-${concern}`}
                       id={inputId}
                       onChange={(event) =>
                         toggleConcern(concern, event.target.checked)
@@ -548,6 +553,7 @@ export function SkinProfileOnboardingForm() {
               }
               aria-invalid={fieldErrors.avoidIngredients ? true : undefined}
               id="avoid-ingredients"
+              data-testid="avoid-ingredients-input"
               onChange={(event) => updateAvoidIngredients(event.target.value)}
               placeholder="Ví dụ: fragrance, alcohol denat"
               rows={4}
@@ -570,6 +576,7 @@ export function SkinProfileOnboardingForm() {
             </p>
             <Button
               className="w-full sm:w-auto"
+              data-testid="skin-profile-save-button"
               disabled={isSaving || successMessage !== null}
               type="submit"
             >
@@ -614,13 +621,18 @@ function SelectField({
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? true : undefined}
           className={cn("w-full", error ? "border-red-400" : "")}
+          data-testid={`${id}-select`}
           id={id}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              data-testid={`${id}-option-${option.value}`}
+              key={option.value}
+              value={option.value}
+            >
               {option.label}
             </SelectItem>
           ))}

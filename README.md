@@ -23,17 +23,20 @@ Previously documented production evidence:
 
 Current `DEPLOY-VERIFY-001` re-verification status on 2026-05-25:
 
-- Local Node 20 validation passed.
+- Project runtime baseline is now Node.js 24.x with npm 11.x.
+- Node 24 local validation passed for dependency install, lint, typecheck, unit tests, production build, and production audit; E2E execution requires a local MongoDB instance at the safe test URI.
 - Public production URL and unauthenticated protected-route redirects were verified.
 - Vercel dashboard/build logs/environment variables, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write, sign-out, and Vercel runtime logs were not externally verified in this task.
 
 ## Current Status
 
-Current phase: post Week 6 deployment re-verification.
+Current phase: post Week 6 quality hardening and deployment re-verification follow-up.
 
-Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
+Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 24 and npm 11` pending full local/CI validation.
 
-Current verification task: `DEPLOY-VERIFY-001` is partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
+Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
+
+Deployment verification note: `DEPLOY-VERIFY-001` remains partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
 
 Completed scope:
 
@@ -46,6 +49,7 @@ Completed scope:
 - Vercel MVP demo deployment and production smoke test.
 - Clean package validation stabilization.
 - Unauthenticated Playwright smoke tests for landing page and protected route redirects.
+- Test-only authenticated Playwright smoke foundation for dashboard, Skin Profile, Product Catalogue, and Product Detail access.
 - Professional demo data preparation.
 - Portfolio case study, demo script, screenshots checklist, release checklist, and release notes.
 
@@ -138,6 +142,31 @@ Landing page
 
 ## Local Setup
 
+### Runtime baseline
+
+Use the project runtime baseline below for local development, CI, and deployment alignment:
+
+```txt
+Node.js: 24.x
+npm: 11.x
+```
+
+Recommended local check:
+
+```bash
+node -v
+npm -v
+```
+
+Expected baseline for this update:
+
+```txt
+node: v24.14.0
+npm: 11.14.1
+```
+
+### Setup commands
+
 ```bash
 npm install
 cp .env.example .env.local
@@ -150,9 +179,11 @@ Database commands use `.env.local` and must only be run against a known local/de
 
 ## Validation Commands
 
-Run before release packaging:
+Run after applying the Node 24 runtime update and before release packaging:
 
 ```bash
+node -v
+npm -v
 npm run lint
 npm run typecheck
 npm run test
@@ -163,7 +194,9 @@ npm audit --omit=dev --audit-level=moderate
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
-`npm run test:e2e` runs unauthenticated Playwright smoke tests against a local/CI dev server with safe placeholder environment values. It does not use real Google OAuth, real MongoDB Atlas credentials, Cloudinary, or external AI providers.
+`npm run test:e2e` runs Playwright smoke tests against a local/CI dev server with safe placeholder environment values. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, and Product Detail navigation through a test-only Auth.js Credentials provider.
+
+Authenticated Playwright smoke tests use a test-only Auth.js Credentials provider. It is enabled only when `APP_ENV="test"` and `E2E_TEST_AUTH="true"`, and must never be enabled in production or normal development. The authenticated smoke suite uses the safe local/test MongoDB URI configured in `playwright.config.ts` and seeds deterministic product data through `npm run db:seed:e2e`; a local MongoDB instance must be available at `mongodb://127.0.0.1:27017/skinwise-e2e-check`.
 
 ## Environment Variables
 
@@ -182,6 +215,9 @@ AUTH_GOOGLE_SECRET
 AI_PROVIDER
 AI_API_KEY
 AI_MODEL
+E2E_TEST_AUTH
+E2E_TEST_USER_EMAIL
+E2E_TEST_USER_NAME
 ```
 
 Optional/future variables:
@@ -219,7 +255,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
-- E2E coverage is smoke-level only: public landing page coverage and unauthenticated protected-route redirect checks exist, but authenticated E2E flows and real Google OAuth login are not tested in CI.
+- E2E coverage is smoke-level only: public landing page loading, unauthenticated protected-route redirect checks, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, and Product Detail navigation through a test-only Auth.js Credentials provider are covered. Real Google OAuth login is not tested in CI.
 - SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Future Roadmap
@@ -227,7 +263,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 Future ideas, not implemented in the current MVP:
 
 - Capture final screenshots for the portfolio.
-- Add authenticated E2E coverage when a safe test-login mechanism exists.
+- Expand authenticated E2E coverage to routines, routine analysis/logs, journal flows, and deeper dashboard summaries.
 - Improve dashboard analytics.
 - Add saved products.
 - Add admin product management.

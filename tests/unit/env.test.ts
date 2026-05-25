@@ -46,6 +46,46 @@ describe("parseEnv", () => {
     expect(parsed.FEATURE_SKIN_SCORE).toBe(false);
   });
 
+  it("defaults E2E test auth to disabled with a stable test user", () => {
+    const parsed = parseEnv(envSource({}));
+
+    expect(parsed.E2E_TEST_AUTH).toBe(false);
+    expect(parsed.E2E_TEST_USER_EMAIL).toBe("e2e-user@skinwise.test");
+    expect(parsed.E2E_TEST_USER_NAME).toBe("SkinWise E2E User");
+  });
+
+  it("allows E2E test auth only in test app environment", () => {
+    const parsed = parseEnv(
+      envSource({
+        APP_ENV: "test",
+        E2E_TEST_AUTH: "true",
+      }),
+    );
+
+    expect(parsed.APP_ENV).toBe("test");
+    expect(parsed.E2E_TEST_AUTH).toBe(true);
+  });
+
+  it.each(["production", "development"])(
+    "rejects E2E test auth in %s app environment",
+    (APP_ENV) => {
+      const input =
+        APP_ENV === "production"
+          ? {
+              ...productionBase,
+              E2E_TEST_AUTH: "true",
+            }
+          : {
+              APP_ENV,
+              E2E_TEST_AUTH: "true",
+            };
+
+      expect(() => parseEnv(envSource(input))).toThrow(
+        "E2E_TEST_AUTH can only be enabled when APP_ENV is test.",
+      );
+    },
+  );
+
   it("parses true and false feature flag strings into booleans", () => {
     const parsed = parseEnv(
       envSource({

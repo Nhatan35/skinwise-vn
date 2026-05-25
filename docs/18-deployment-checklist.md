@@ -24,7 +24,7 @@ Google OAuth production login: PASSED.
 MongoDB production/demo read/write through authenticated flows: PASSED.
 TASK DEPLOY-002: COMPLETED.
 DEPLOY-VERIFY-001: PARTIAL.
-Current DEPLOY-VERIFY-001 local validation: PASSED.
+Current DEPLOY-VERIFY-001 local validation: PASSED historically under Node 20; Node 24 revalidation is pending after RUNTIME-001.
 Current DEPLOY-VERIFY-001 public URL and unauthenticated protected-route redirects: PASSED.
 Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, sign-out, and runtime logs: NOT VERIFIED without external access.
 ```
@@ -48,6 +48,8 @@ docs/deployment/vercel-deployment.md
 [x] Unauthenticated Playwright smoke tests pass where implemented.
 [x] No out-of-scope feature has been added.
 [x] README setup instructions are accurate.
+[x] Runtime baseline is documented as Node.js 24.x / npm 11.x.
+[ ] Full local/CI validation has been rerun under Node.js 24.x / npm 11.x after RUNTIME-001.
 [x] Deployment runbook is current.
 [ ] ADRs still match implementation decisions.
 [ ] PR checklist and CI workflow are present if using GitHub.
@@ -62,7 +64,7 @@ docs/deployment/vercel-deployment.md
 [x] Install Command: npm ci when package-lock.json is present; otherwise npm install.
 [x] Build Command: npm run build.
 [x] Output Directory: leave default for Next.js.
-[x] Node.js Version: Node 20.x recommended.
+[x] Node.js Version: Node 24.x recommended.
 ```
 
 ## 4. Environment Variables

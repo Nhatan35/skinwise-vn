@@ -443,30 +443,42 @@ export function SkinProfileViewEdit() {
 
   if (!profile) {
     return (
-      <EmptyState
-        action={
-          <Button asChild>
-            <Link href={routes.ONBOARDING_SKIN_PROFILE}>
-              Thiết lập hồ sơ da
-            </Link>
-          </Button>
-        }
-        description="Bạn chưa có hồ sơ da. Hãy hoàn tất bước thiết lập đầu tiên để SkinWise có ngữ cảnh cơ bản trước khi bạn chỉnh sửa về sau."
-        title="Chưa có hồ sơ da"
-      />
+      <div data-testid="skin-profile-empty-state">
+        <EmptyState
+          action={
+            <Button asChild>
+              <Link
+                data-testid="skin-profile-setup-link"
+                href={routes.ONBOARDING_SKIN_PROFILE}
+              >
+                Thiết lập hồ sơ da
+              </Link>
+            </Button>
+          }
+          description="Bạn chưa có hồ sơ da. Hãy hoàn tất bước thiết lập đầu tiên để SkinWise có ngữ cảnh cơ bản trước khi bạn chỉnh sửa về sau."
+          title="Chưa có hồ sơ da"
+        />
+      </div>
     );
   }
 
   if (isEditing) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card
+        className="border-stone-200 bg-white"
+        data-testid="skin-profile-edit-card"
+      >
         <CardHeader>
           <CardTitle>Chỉnh sửa hồ sơ da</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6"
+            data-testid="skin-profile-edit-form"
+            onSubmit={handleSubmit}
+          >
             {saveError ? (
-              <Alert variant="destructive">
+              <Alert data-testid="skin-profile-save-error" variant="destructive">
                 <AlertTitle>Chưa lưu được hồ sơ da</AlertTitle>
                 <AlertDescription>{saveError}</AlertDescription>
               </Alert>
@@ -559,6 +571,7 @@ export function SkinProfileViewEdit() {
                       <input
                         checked={checked}
                         className="mt-1 size-4 accent-emerald-700"
+                        data-testid={`edit-concern-${concern}`}
                         id={inputId}
                         onChange={(event) =>
                           toggleConcern(concern, event.target.checked)
@@ -591,6 +604,7 @@ export function SkinProfileViewEdit() {
                 }
                 aria-invalid={fieldErrors.avoidIngredients ? true : undefined}
                 id="edit-avoid-ingredients"
+                data-testid="edit-avoid-ingredients-input"
                 onChange={(event) => updateAvoidIngredients(event.target.value)}
                 placeholder="Ví dụ: fragrance, alcohol denat"
                 rows={4}
@@ -616,6 +630,7 @@ export function SkinProfileViewEdit() {
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button
+                  data-testid="skin-profile-cancel-button"
                   disabled={isSaving}
                   onClick={cancelEditing}
                   type="button"
@@ -624,7 +639,11 @@ export function SkinProfileViewEdit() {
                   <X aria-hidden="true" />
                   Hủy
                 </Button>
-                <Button disabled={isSaving} type="submit">
+                <Button
+                  data-testid="skin-profile-save-button"
+                  disabled={isSaving}
+                  type="submit"
+                >
                   <Save aria-hidden="true" />
                   {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
                 </Button>
@@ -637,7 +656,10 @@ export function SkinProfileViewEdit() {
   }
 
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card
+      className="border-stone-200 bg-white"
+      data-testid="skin-profile-current-card"
+    >
       <CardHeader>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -646,7 +668,11 @@ export function SkinProfileViewEdit() {
               Cập nhật lần cuối: {formatUpdatedAt(profile.updatedAt)}
             </p>
           </div>
-          <Button onClick={startEditing} type="button">
+          <Button
+            data-testid="skin-profile-edit-button"
+            onClick={startEditing}
+            type="button"
+          >
             <Pencil aria-hidden="true" />
             Chỉnh sửa
           </Button>
@@ -654,7 +680,7 @@ export function SkinProfileViewEdit() {
       </CardHeader>
       <CardContent className="space-y-6">
         {successMessage ? (
-          <Alert>
+          <Alert data-testid="skin-profile-save-success">
             <Check aria-hidden="true" />
             <AlertTitle>Đã lưu</AlertTitle>
             <AlertDescription>{successMessage}</AlertDescription>
@@ -662,17 +688,24 @@ export function SkinProfileViewEdit() {
         ) : null}
 
         <div className="grid gap-4 md:grid-cols-2">
-          <ProfileDetail label="Loại da" value={skinTypeLabels[profile.skinType]} />
+          <ProfileDetail
+            label="Loại da"
+            testId="skin-profile-detail-skin-type"
+            value={skinTypeLabels[profile.skinType]}
+          />
           <ProfileDetail
             label="Mức độ nhạy cảm"
+            testId="skin-profile-detail-sensitivity"
             value={sensitivityLabels[profile.sensitivityLevel]}
           />
           <ProfileDetail
             label="Ngân sách mỗi sản phẩm"
+            testId="skin-profile-detail-budget"
             value={budgetLabels[profile.budgetRange]}
           />
           <ProfileDetail
             label="Kinh nghiệm chăm sóc da"
+            testId="skin-profile-detail-experience"
             value={experienceLabels[profile.experienceLevel]}
           />
         </div>
@@ -713,12 +746,16 @@ export function SkinProfileViewEdit() {
 
 type ProfileDetailProps = {
   label: string;
+  testId?: string;
   value: string;
 };
 
-function ProfileDetail({ label, value }: ProfileDetailProps) {
+function ProfileDetail({ label, testId, value }: ProfileDetailProps) {
   return (
-    <div className="border border-stone-200 bg-stone-50 p-4">
+    <div
+      className="border border-stone-200 bg-stone-50 p-4"
+      data-testid={testId}
+    >
       <dt className="text-sm font-medium text-stone-700">{label}</dt>
       <dd className="mt-2 text-base font-semibold text-stone-950">{value}</dd>
     </div>
@@ -757,13 +794,18 @@ function SelectField({
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? true : undefined}
           className={cn("w-full", error ? "border-red-400" : "")}
+          data-testid={`${id}-select`}
           id={id}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              data-testid={`${id}-option-${option.value}`}
+              key={option.value}
+              value={option.value}
+            >
               {option.label}
             </SelectItem>
           ))}

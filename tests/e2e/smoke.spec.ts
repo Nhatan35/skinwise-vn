@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 async function expectSignInRedirect(page: Page, protectedPath: string) {
   await expect(page).toHaveURL((url) => {

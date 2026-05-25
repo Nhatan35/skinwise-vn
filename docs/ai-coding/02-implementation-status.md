@@ -7,14 +7,16 @@ Last updated: 2026-05-25
 ## 1. Current phase
 
 ```txt
-Post Week 6 deployment re-verification
+Post Week 6 quality hardening and deployment re-verification follow-up
 ```
 
-Latest completed task: `E2E-001 - Add Playwright smoke tests for critical user flows`.
+Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 24 and npm 11` partially validated locally; full E2E validation still requires local MongoDB.
+
+Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
 
 The SDD v1.2.6 final freeze is now historical planning context. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. TASK PRODUCT-UI-002 added the protected `/products/[id]` Product Detail UI, ProductCard detail navigation, and a client-safe `getProduct()` helper that parses detail responses from `data.product`.
 
-TASK DEPLOY-001 added deployment preparation: a Vercel runbook, exact environment variable checklist, Node 20 marker, clean package ignore rules, deployment readiness documentation, and a clean deployment-ready zip.
+TASK DEPLOY-001 added deployment preparation: a Vercel runbook, exact environment variable checklist, the historical Node 20 marker, clean package ignore rules, deployment readiness documentation, and a clean deployment-ready zip. RUNTIME-001 updates the current runtime baseline to Node 24.x / npm 11.x.
 
 TASK DEPLOY-002 completed the MVP demo deployment to Vercel. Production URL is https://skinwise-vn.vercel.app. Production branch is `main`, production commit is `db72e07`, production smoke test passed, Google OAuth production login passed, authenticated MVP flows passed, and MongoDB production/demo read/write through authenticated flows passed.
 
@@ -28,7 +30,13 @@ TASK FINAL-RELEASE-001 prepared the final portfolio-ready release documentation 
 
 E2E-001 added unauthenticated Playwright smoke tests for the public landing page and protected-route redirects. The suite runs against a local/CI dev server with safe placeholder environment values, `AI_PROVIDER="mock"`, and Chromium-only Playwright coverage. It does not use real Google OAuth, real MongoDB Atlas credentials, Cloudinary, or external AI providers.
 
-DEPLOY-VERIFY-001 is partial as of 2026-05-25. Local Node 20 validation passed (`npm ci`, lint, typecheck, unit tests, build, production audit, and E2E smoke tests). The public production URL `https://skinwise-vn.vercel.app` returned the expected landing page content, and unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` returned Auth.js sign-in redirects with callback URLs. Current Vercel dashboard/build logs/environment variables, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write flow, sign-out, and Vercel runtime logs were not externally verified in this task.
+DEPLOY-VERIFY-001 is partial as of 2026-05-25. Local Node 20 validation previously passed (`npm ci`, lint, typecheck, unit tests, build, production audit, and E2E smoke tests) and remains historical evidence only. RUNTIME-001 updates the current runtime baseline to Node 24.x / npm 11.x; local Node 24 validation has passed for `npm ci`, lint, typecheck, unit tests, build, and production audit, while E2E remains blocked in this environment because local MongoDB is not running. The public production URL `https://skinwise-vn.vercel.app` returned the expected landing page content, and unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` returned Auth.js sign-in redirects with callback URLs. Current Vercel dashboard/build logs/environment variables, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth production login, authenticated dashboard, MongoDB-backed read/write flow, sign-out, and Vercel runtime logs were not externally verified in this task.
+
+QUALITY-001 added safe test-only authentication for authenticated Playwright E2E tests. `E2E_TEST_AUTH` is valid only when `APP_ENV="test"`, and Playwright enables an Auth.js Credentials provider with id `e2e-test` for the stable `e2e-user` account. The provider is not available in production or normal development, Google OAuth behavior is unchanged, and authenticated E2E tests now include a dashboard access smoke test.
+
+QUALITY-002A added deterministic local/test product data seeding for Playwright through `npm run db:seed:e2e`, using only `mongodb://127.0.0.1:27017/skinwise-e2e-check`. Authenticated Playwright coverage now includes Skin Profile create/update, Product Catalogue browsing, and Product Detail navigation through the safe `e2e-test` Auth.js provider. No real Google OAuth, production MongoDB, auth bypass, product CRUD, admin workflow, Ingredient UI, or real AI provider was added. Local execution requires a MongoDB instance at the safe E2E URI.
+
+RUNTIME-001 standardizes the project runtime on Node.js 24.x and npm 11.x. `.nvmrc`, `package.json` engines, CI, README, deployment docs, and AI coding status docs now point to Node 24. Local validation under Node v24.14.0 / npm 11.14.1 has passed for dependency install, lint, typecheck, unit tests, production build, and production audit; Playwright E2E remains pending until local MongoDB is available at the safe E2E URI.
 
 OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current deployed provider remains `AI_PROVIDER="mock"`. Product submission POST API, Product CRUD, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, marketplace, payment, subscription, notifications, and medical diagnosis were not implemented.
 
@@ -94,6 +102,7 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Database index script implemented
 [x] CI exists in implementation repo
 [x] Basic package scripts configured
+[x] Runtime engines configured for Node 24.x / npm 11.x
 [x] Shared UI foundation components implemented
 [x] Skin Profile API foundation implemented
 [x] Foundation stabilization patch implemented
@@ -127,7 +136,9 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Product Catalogue UI implemented
 [x] Product Detail UI implemented
 [x] Vercel deployment preparation documented
-[x] Node 20 marker added
+[x] Historical Node 20 marker added
+[x] Runtime baseline updated to Node 24.x / npm 11.x
+[ ] Full local/CI validation rerun under Node 24.x / npm 11.x, including E2E with local MongoDB available
 [x] Clean deployment package created
 [x] Vercel MVP demo deployment completed
 [x] Production smoke test passed
@@ -136,6 +147,9 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Portfolio documentation package prepared
 [x] Final release documentation package prepared
 [x] Unauthenticated Playwright smoke tests implemented
+[x] Test-only authenticated Playwright smoke foundation implemented
+[x] Deterministic local/test E2E product data seed command implemented
+[x] Authenticated Skin Profile/Product Catalogue/Product Detail Playwright specs implemented
 [x] CI runs E2E smoke tests
 ```
 
@@ -170,7 +184,7 @@ Ingredient API foundation exists for authenticated read-only `GET /api/ingredien
 SkinJournal backend API foundation exists through authenticated `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. It validates local dates and IANA timezones, stores `localDate` as a `YYYY-MM-DD` string, scopes repository operations by authenticated `userId`, returns `CONFLICT` for duplicate `userId + localDate` creates, maps MongoDB documents to public DTOs, and rejects/omits future image and photo fields. The protected `/journal` route now renders the SkinJournal Timeline UI, enables Journal in dashboard navigation, protects `/journal/:path*`, and lets users view, create, edit, delete, select catalogue products, and see readable product labels through the existing SJ-001 API contract plus the existing Product API. Product resolution is UI-only: `productsUsed` remains product ID strings, Product API responses are parsed from `data.items`, and missing/deleted products display as `Unknown product`. It intentionally does not include image upload, image storage, saved product library, Product CRUD UI, product snapshots in journal entries, calendar/analytics views, AI journal analysis, or medical diagnosis.
 Routine Analysis UI exists only inside `/routines`; no `/routines/[id]`, `/routines/[id]/analysis`, or `/routines/[id]/analyses` UI routes were created.
 Routine Analysis rate limiting uses the MongoDB `rate_limits` collection and requires `npm run db:indexes` to ensure the unique key and TTL indexes in real environments.
-Unauthenticated Playwright smoke tests now exist under `tests/e2e/smoke.spec.ts` and cover the public landing page plus unauthenticated redirects for protected routes. Authenticated E2E flows and real Google OAuth login are not implemented in CI because there is no safe test-login mechanism yet.
+Playwright smoke tests now exist under `tests/e2e/` and cover the public landing page, unauthenticated redirects for protected routes, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, and Product Detail navigation. Authenticated tests use the safe test-only Auth.js Credentials provider from QUALITY-001 and deterministic local/test product data from `npm run db:seed:e2e`. Real Google OAuth login is not tested in CI, and Routine, Routine Analysis, Routine Log, Journal, and full Dashboard summary E2E coverage remain future work.
 npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was not run by task constraint.
 `DELETE /api/skin-profile` does not reset `AppUserProfile.onboardingCompleted`; no reset behavior is specified for the current task.
 TASK DEPLOY-002 deployed the MVP demo to Vercel at https://skinwise-vn.vercel.app and passed manual production smoke testing for public pages, protected route redirects, Google OAuth login, authenticated MVP flows, MongoDB production/demo read/write through authenticated flows, and product safety boundaries. This is an MVP demo deployment, not a full commercial production release.

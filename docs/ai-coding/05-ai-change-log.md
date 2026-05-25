@@ -4,6 +4,159 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-25 - QUALITY-002A Authenticated Playwright Profile and Product E2E Foundation
+
+### Task
+
+Add authenticated Playwright E2E coverage for Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, and deterministic local/test product data setup.
+
+### Files Added
+
+```txt
+scripts/seed-e2e.ts
+tests/e2e/global-setup.ts
+tests/e2e/helpers/test-data.ts
+tests/e2e/skin-profile.authenticated.spec.ts
+tests/e2e/products.authenticated.spec.ts
+```
+
+### Files Updated
+
+```txt
+.nvmrc
+README.md
+package.json
+playwright.config.ts
+src/modules/skin-profile/components/skin-profile-onboarding-form.tsx
+src/modules/skin-profile/components/skin-profile-view-edit.tsx
+tests/e2e/helpers/auth.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- `.nvmrc` now matches the Node 24 runtime baseline declared by `package.json`.
+- Added `npm run db:seed:e2e`, which wraps the existing idempotent seed script and refuses non-test/non-local MongoDB settings.
+- Playwright global setup seeds deterministic product data into `mongodb://127.0.0.1:27017/skinwise-e2e-check`.
+- Authenticated specs reuse `loginAsE2EUser(page)` and the safe `e2e-test` Auth.js provider from QUALITY-001.
+- Skin Profile E2E handles both first-profile creation and existing-profile update states.
+- Product E2E reads the first seeded product through the authenticated app API, then verifies catalogue and detail navigation.
+- No real Google OAuth, production MongoDB, middleware bypass, fake login route, product CRUD, admin feature, Ingredient UI, real AI provider, or production auth weakening was added.
+- Local E2E execution requires MongoDB running at the safe E2E URI.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm ci: Pass - 0 vulnerabilities
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 60 files, 613 tests
+npm run build: Pass
+npx playwright install chromium: Pass
+npm run test:e2e: Blocked in this environment - local MongoDB is not running at 127.0.0.1:27017
+npm audit --omit=dev --audit-level=moderate: Pass - 0 vulnerabilities
+```
+
+## 2026-05-25 - RUNTIME-001 Standardize Project Runtime on Node 24 and npm 11
+
+### Task
+
+Update the project runtime baseline from the historical Node 20 marker to Node.js 24.x and npm 11.x for local development, CI, and deployment documentation alignment.
+
+### Files Updated
+
+```txt
+.nvmrc
+package.json
+.github/workflows/ci.yml
+README.md
+docs/deployment/vercel-deployment.md
+docs/18-deployment-checklist.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- `.nvmrc` now targets Node 24.
+- `package.json` now declares `engines.node = "24.x"` and `engines.npm = "11.x"`.
+- GitHub Actions now uses Node 24.x.
+- README, Vercel deployment docs, deployment checklist, feature matrix, implementation status, and sprint plan now identify Node 24.x / npm 11.x as the current runtime baseline.
+- Previous Node 20 validation notes remain historical evidence only and should not be treated as the current runtime baseline.
+- No application feature, Auth.js behavior, database behavior, API contract, Playwright test logic, AI provider behavior, or product scope was changed.
+- `package-lock.json` was not changed because no dependency version was changed in this task.
+
+### Validation
+
+```txt
+node -v: expected v24.14.0
+npm -v: expected 11.14.1
+npm ci: Pending local/CI rerun
+npm run lint: Pending local/CI rerun
+npm run typecheck: Pending local/CI rerun
+npm run test: Pending local/CI rerun
+npm run build: Pending local/CI rerun
+npm run test:e2e: Pending local/CI rerun
+npm audit --omit=dev --audit-level=moderate: Pending local/CI rerun
+```
+
+## 2026-05-25 - QUALITY-001 Safe Authenticated Playwright E2E Foundation
+
+### Task
+
+Add safe test-only authentication for authenticated Playwright E2E tests without using real Google OAuth or weakening production auth.
+
+### Files Added
+
+```txt
+tests/e2e/helpers/auth.ts
+tests/e2e/authenticated-smoke.spec.ts
+```
+
+### Files Updated
+
+```txt
+.env.example
+README.md
+playwright.config.ts
+src/config/env.ts
+src/modules/auth/auth.config.ts
+src/modules/auth/types.ts
+tests/unit/auth-config.test.ts
+tests/unit/env.test.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- Added `E2E_TEST_AUTH`, `E2E_TEST_USER_EMAIL`, and `E2E_TEST_USER_NAME` to environment validation.
+- `E2E_TEST_AUTH="true"` is rejected unless `APP_ENV="test"`.
+- Added an Auth.js Credentials provider with id `e2e-test` only for `APP_ENV="test"` and `E2E_TEST_AUTH=true`.
+- Google OAuth provider behavior remains unchanged and independent from the E2E provider.
+- Playwright now runs with `APP_ENV="test"`, `E2E_TEST_AUTH="true"`, safe placeholder secrets, `AI_PROVIDER="mock"`, and base URL `http://127.0.0.1:3000`.
+- Added `loginAsE2EUser(page)` using Auth.js CSRF and callback endpoints so session cookies are set by Auth.js, not manually created by tests.
+- Added the first authenticated Playwright smoke test for dashboard access.
+- Existing unauthenticated redirect smoke tests remain in place and are not globally authenticated.
+- No product features, fake login route, fake login UI, middleware bypass, production OAuth change, real AI provider, or production credential was added.
+
+### Validation
+
+```txt
+npm run test -- tests/unit/env.test.ts tests/unit/auth-config.test.ts: Pass - 2 files, 39 tests
+npm run typecheck: Pass
+npm run test:e2e: Pass - 8 tests
+```
+
 ## 2026-05-25 - DEPLOY-VERIFY-001 Partial Deployment Re-Verification
 
 ### Task

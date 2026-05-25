@@ -13,7 +13,8 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "db:indexes": "node --env-file=.env.local --conditions=react-server --import tsx src/infrastructure/database/ensure-indexes.ts",
-    "db:seed": "node --env-file=.env.local --conditions=react-server --import tsx scripts/seed.ts"
+    "db:seed": "node --env-file=.env.local --conditions=react-server --import tsx scripts/seed.ts",
+    "db:seed:e2e": "node --conditions=react-server --import tsx scripts/seed-e2e.ts"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.2",
@@ -33,6 +34,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -40,7 +42,6 @@
     "@vitest/ui": "^4.1.6",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "playwright": "^1.60.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
@@ -49,5 +50,9 @@
   "overrides": {
     "postcss": "8.5.15",
     "qs": "6.15.2"
+  },
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
   }
 }

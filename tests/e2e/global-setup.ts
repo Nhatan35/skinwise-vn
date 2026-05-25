@@ -1,18 +1,17 @@
-import { defineConfig, devices } from "@playwright/test";
+import { spawnSync } from "node:child_process";
 
 import {
   E2E_BASE_URL,
   E2E_MONGODB_URI,
   E2E_USER_EMAIL,
   E2E_USER_NAME,
-} from "./tests/e2e/helpers/test-data";
+} from "./helpers/test-data";
 
-const baseURL = E2E_BASE_URL;
-
-const safeE2EEnv: Record<string, string> = {
+const safeE2EEnv = {
+  NODE_ENV: "test",
   APP_ENV: "test",
-  APP_BASE_URL: baseURL,
-  AUTH_URL: baseURL,
+  APP_BASE_URL: E2E_BASE_URL,
+  AUTH_URL: E2E_BASE_URL,
   AUTH_SECRET: "test-auth-secret-for-playwright-only-minimum-32-characters",
   AUTH_GOOGLE_ID: "test-google-id",
   AUTH_GOOGLE_SECRET: "test-google-secret",
@@ -33,7 +32,7 @@ const safeE2EEnv: Record<string, string> = {
   FEATURE_MARKETPLACE: "false",
   FEATURE_SKIN_SCORE: "false",
   NEXT_TELEMETRY_DISABLED: "1",
-};
+} satisfies Record<string, string>;
 
 function currentProcessEnv(): Record<string, string> {
   return Object.fromEntries(
@@ -43,29 +42,36 @@ function currentProcessEnv(): Record<string, string> {
   );
 }
 
-export default defineConfig({
-  testDir: "./tests/e2e",
-  globalSetup: "./tests/e2e/global-setup.ts",
-  timeout: 30_000,
-  reporter: process.env.CI ? "github" : "list",
-  use: {
-    baseURL,
-    trace: "on-first-retry",
-  },
-  projects: [
+export default function globalSetup() {
+  const env: NodeJS.ProcessEnv = {
+    ...currentProcessEnv(),
+    ...safeE2EEnv,
+    NODE_ENV: "test",
+  };
+
+  const result = spawnSync(
+    process.execPath,
+    ["--conditions=react-server", "--import", "tsx", "scripts/seed-e2e.ts"],
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      cwd: process.cwd(),
+      env,
+      stdio: "inherit",
+      windowsHide: true,
     },
-  ],
-  webServer: {
-    command: "npm run dev",
-    env: {
-      ...currentProcessEnv(),
-      ...safeE2EEnv,
-    },
-    reuseExistingServer: false,
-    timeout: 120_000,
-    url: baseURL,
-  },
-});
+  );
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  if (result.status !== 0) {
+    throw new Error(
+      [
+        `E2E data seed failed for ${E2E_MONGODB_URI}.`,
+        "Start a local MongoDB instance before running npm run test:e2e.",
+        "Windows service check: Get-Service *Mongo*",
+        "Port check: netstat -ano | findstr :27017",
+      ].join("\n"),
+    );
+  }
+}
