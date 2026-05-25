@@ -39,8 +39,10 @@ Minimum ingredient records:
 | Fragrance / Parfum | fragrance | scent | potential irritant for sensitive skin |
 | Essential Oil | fragrance/volatile | scent | potential irritant |
 | Ceramide | barrier support | skin barrier support | generally supportive |
+| Glycerin | humectant | hydration support | generally supportive |
 | Hyaluronic Acid | humectant | hydration support | generally supportive |
 | Panthenol | soothing/support | calming support | generally supportive |
+| Green Tea Extract | antioxidant/support | comfort and oiliness-prone routine support | botanical extracts can still bother some users |
 | Centella Asiatica | soothing/support | calming support | generally supportive |
 | Sunscreen Filters | UV protection | sun protection | daily use is important; do not overclaim |
 
@@ -223,3 +225,31 @@ When a seed script is created, it must:
 - avoid creating fields not present in the target collection model;
 - be idempotent where practical;
 - avoid overwriting user-created data.
+
+## 10. Demo data strategy - TASK DEMO-DATA-001
+
+TASK DEMO-DATA-001 prepares the MVP for a professional portfolio/demo walkthrough without expanding product scope.
+
+Public/shared demo data:
+
+- Products and ingredients are seeded through `scripts/seed.ts`.
+- Product seed data uses only the existing Product model fields.
+- Ingredient seed data uses only the existing Ingredient model fields.
+- The curated demo set supports oily or combination-oily skin, acne-prone concerns, clogged-pore texture, post-acne dark spots, mild sensitivity, morning sunscreen, simple barrier support, and active-combination caution examples.
+
+User-owned demo data:
+
+- Skin profile, routines, routine logs, journal entries, and routine analysis records remain user-owned.
+- User-owned demo data must be created through the authenticated UI unless a future explicit `DEMO_USER_ID` seed script is added.
+- Do not hardcode fake user ids.
+- Do not create fake Auth.js users.
+- Do not bypass authenticated ownership checks.
+- Do not fake dashboard output.
+
+Recommended demo setup and presentation flow are documented in:
+
+```txt
+docs/ai-coding/07-demo-data-and-demo-script.md
+```
+
+TASK DEMO-DATA-001 did not add new product features, Product CRUD, admin UI, real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, or medical diagnosis.

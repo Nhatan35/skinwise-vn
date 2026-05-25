@@ -7,16 +7,24 @@ Last updated: 2026-05-24
 ## 1. Current phase
 
 ```txt
-Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
+Post Week 6 MVP stabilization, clean package validation, deployment readiness, and portfolio/demo preparation
 ```
 
-Latest completed task: `TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test`.
+Latest completed task: `TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup`.
 
 The SDD v1.2.6 final freeze is now historical planning context. Week 1 Tasks 1-7 initialized the Next.js App Router foundation, shadcn/ui tooling, shared UI foundation, package scripts, base folder structure, feature flag config, Zod environment validation, MongoDB infrastructure, Auth.js foundation, protected dashboard shell, and `GET /api/me` with lazy AppUserProfile creation. Week 2 delivered the Skin Profile API, onboarding UI, onboarding flow integration, and protected `/skin-profile` view/edit route. Week 3 delivered the Routine API, Routine Builder UI, Routine Safety Engine, Routine Analysis API/UI, and Routine Analysis rate limiting foundations. TASK PI-001, TASK PP-001, TASK RL-001, TASK RL-002, and TASK DB-001 delivered the read-only Product/Ingredient APIs, Product Picker, RoutineLog backend/UI, and data-driven dashboard. TASK AI-001 through TASK AI-007 delivered the server-only validated AI provider foundation, provider-backed Routine Analysis fallback behavior, and Ingredient Explanation API. TASK SJ-001 added the authenticated SkinJournal backend API foundation with `POST /api/skin-journal`, `GET /api/skin-journal`, `PATCH /api/skin-journal/[id]`, and `DELETE /api/skin-journal/[id]`. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI for listing, creating, editing, and deleting entries through the existing SJ-001 API contract. TASK SJ-003 added UI-only product selection and product name resolution for SkinJournal by fetching visible products from `GET /api/products?limit=50` and parsing `data.items`; SkinJournal `productsUsed` still stores product ID strings and the backend contract remains unchanged. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and supports Product API search/filter params while parsing list responses from `data.items`. TASK PRODUCT-UI-002 added the protected `/products/[id]` Product Detail UI, ProductCard detail navigation, and a client-safe `getProduct()` helper that parses detail responses from `data.product`.
 
 TASK DEPLOY-001 added deployment preparation: a Vercel runbook, exact environment variable checklist, Node 20 marker, clean package ignore rules, deployment readiness documentation, and a clean deployment-ready zip.
 
 TASK DEPLOY-002 completed the MVP demo deployment to Vercel. Production URL is https://skinwise-vn.vercel.app. Production branch is `main`, production commit is `db72e07`, production smoke test passed, Google OAuth production login passed, authenticated MVP flows passed, and MongoDB production/demo read/write through authenticated flows passed.
+
+TASK QA-REGRESSION-001 stabilized clean package validation across operating systems by making the Routine Builder unit test source extraction robust to both LF and CRLF line endings and adding root `.gitattributes` line-ending normalization rules. No Routine Builder business logic or product feature scope changed.
+
+TASK DEMO-DATA-001 prepared professional demo data and demo documentation for the post-Week 6 MVP portfolio walkthrough. Public/shared seed data now better supports an oily or combination-oily demo user with acne, oiliness, post-acne dark spots, texture/clogged-pore concerns, mild sensitivity, simple morning/evening routines, and active-combination caution examples. User-owned demo data remains created through the authenticated UI instead of hardcoded fake users or fake dashboard output.
+
+TASK PORTFOLIO-001 prepared professional portfolio documentation for BA internship and full-stack review. The portfolio case study, demo script, screenshots checklist, and README links now explain the problem, target users, MVP scope, requirements, user journey, acceptance criteria, functional/non-functional requirements, traceability, features, architecture, data model, API overview, testing evidence, deployment summary, limitations, and roadmap. No new product feature scope was added.
+
+TASK FINAL-RELEASE-001 prepared the final portfolio-ready release documentation package. README was rewritten as a portfolio entry point, `docs/final-release-checklist.md` and `docs/release-notes-v1.0.md` were added, portfolio docs were checked for consistency, and optional next tasks were separated from MVP completion. No new product feature scope was added.
 
 OpenAI and Gemini providers are not implemented yet, no external LLM/API calls were added, and the current deployed provider remains `AI_PROVIDER="mock"`. Product submission POST API, Product CRUD, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved product library, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, marketplace, payment, subscription, notifications, and medical diagnosis were not implemented.
 
@@ -55,6 +63,12 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Vercel deployment runbook
 [x] Deployment-ready package checklist
 [x] DEPLOY-002 production deployment and smoke test status
+[x] Demo data and demo script
+[x] Portfolio case study
+[x] Presentation-ready demo script
+[x] Screenshots checklist
+[x] Final release checklist
+[x] Release notes v1.0
 ```
 
 ## 3. Completed code
@@ -112,12 +126,16 @@ OpenAI and Gemini providers are not implemented yet, no external LLM/API calls w
 [x] Clean deployment package created
 [x] Vercel MVP demo deployment completed
 [x] Production smoke test passed
+[x] Clean package validation line-ending stability fixed
+[x] Professional demo data and manual demo setup documented
+[x] Portfolio documentation package prepared
+[x] Final release documentation package prepared
 ```
 
 ## 4. In progress
 
 ```txt
-Portfolio/demo documentation and presentation polish.
+Optional screenshot capture, optional E2E smoke coverage, and optional portfolio website publishing.
 ```
 
 ## 5. Not started
@@ -151,6 +169,10 @@ npm install reported 2 moderate audit vulnerabilities; npm audit fix --force was
 TASK DEPLOY-002 deployed the MVP demo to Vercel at https://skinwise-vn.vercel.app and passed manual production smoke testing for public pages, protected route redirects, Google OAuth login, authenticated MVP flows, MongoDB production/demo read/write through authenticated flows, and product safety boundaries. This is an MVP demo deployment, not a full commercial production release.
 Real AI provider integration, image upload, AI face analysis, marketplace, payment, subscription, notifications, skin score, and medical diagnosis remain out of scope.
 Product catalogue data is demo/seed-style catalogue data.
+TASK DEMO-DATA-001 improved public/shared seed data for the portfolio walkthrough and documents the manual setup for user-owned Skin Profile, Morning Routine, Evening Routine, caution routine, routine logs, SkinJournal entries, and dashboard summary. User-owned demo data is not seeded by default because it depends on the authenticated Auth.js user id; no fake user id, fake Auth.js user, static dashboard output, or auth bypass was added.
+TASK PORTFOLIO-001 created `docs/portfolio-case-study.md`, `docs/demo-script.md`, and `docs/screenshots-checklist.md`. The API method table in the portfolio case study was verified against `src/app/api/**/route.ts`. Validation evidence is clearly labeled as current-task or previously documented evidence.
+TASK FINAL-RELEASE-001 added `docs/final-release-checklist.md` and `docs/release-notes-v1.0.md`, polished README as the portfolio entry point, and kept screenshots as manual optional work. Final validation evidence is recorded in the release checklist and release notes.
+Clean package validation is more robust across Windows CRLF and Unix LF environments after TASK QA-REGRESSION-001. The fix only changed test/source-package normalization behavior and did not alter Routine Builder UI or business logic.
 ```
 
 ## 7. Do not work on yet
@@ -172,13 +194,13 @@ Large-scale product crawling
 ## 8. Next recommended task
 
 ```txt
-TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
+Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001
 ```
 
 Recommended next coding task:
 
 ```txt
-TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
+Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001
 ```
 
 ## 9. Update rule

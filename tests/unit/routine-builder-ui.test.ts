@@ -22,7 +22,12 @@ const routineBuilderSource = readFileSync(routineBuilderPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
 
 function getPayloadSource() {
-  const match = routineBuilderSource.match(
+  const normalizedRoutineBuilderSource = routineBuilderSource.replace(
+    /\r\n?/g,
+    "\n",
+  );
+
+  const match = normalizedRoutineBuilderSource.match(
     /function buildRoutinePayload\([\s\S]*?\n}\n\nasync function readApiResponse/,
   );
 

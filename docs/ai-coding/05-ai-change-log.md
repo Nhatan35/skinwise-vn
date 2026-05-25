@@ -4,6 +4,138 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-24 - TASK FINAL-RELEASE-001 Final Release Package and Portfolio-Ready Cleanup
+
+### Task
+
+Prepare the final portfolio-ready MVP release package documentation for GitHub, portfolio review, CV/project explanation, mentor review, and BA internship interview preparation.
+
+### Files Added
+
+```txt
+docs/final-release-checklist.md
+docs/release-notes-v1.0.md
+```
+
+### Files Updated
+
+```txt
+README.md
+docs/portfolio-case-study.md
+docs/screenshots-checklist.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- README was rewritten as a concise portfolio entry point with live demo, feature list, tech stack, demo flow, portfolio links, local setup, validation commands, limitations, and roadmap.
+- Added final release checklist covering source hygiene, documentation readiness, validation readiness, demo readiness, portfolio readiness, release decision, and optional next tasks.
+- Added release notes for SkinWise VN MVP Portfolio Release v1.0.
+- Portfolio case study was reviewed and updated with a clear limitations section.
+- Screenshots remain optional manual work; no fake screenshots or placeholder image files were added.
+- No UI, API, authentication, database, Routine Builder, business logic, package dependency, lockfile, or MVP feature scope was changed.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+
+## 2026-05-24 - TASK PORTFOLIO-001 Portfolio Case Study and Demo Script
+
+### Task
+
+Prepare professional portfolio documentation for BA internship interviews, personal portfolio review, GitHub README review, and full-stack project explanation.
+
+### Files Added
+
+```txt
+docs/portfolio-case-study.md
+docs/demo-script.md
+docs/screenshots-checklist.md
+```
+
+### Files Updated
+
+```txt
+README.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- The portfolio case study covers project overview, problem statement, target users, pain points, business goals, MVP scope, user journey, user stories, acceptance criteria, functional requirements, non-functional requirements, traceability, features, architecture, data model, API overview, testing evidence, deployment summary, challenges, learnings, roadmap, and interview talking points.
+- API methods in the case study were verified from `src/app/api/**/route.ts`.
+- The demo script supports a 3-5 minute walkthrough from landing page to dashboard summary.
+- The screenshots checklist documents the recommended portfolio screenshots and safety checks.
+- README now links to the portfolio case study, demo script, screenshots checklist, and demo data guide.
+- No UI, API, authentication, database, Routine Builder, business logic, package dependency, or MVP feature scope was changed.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+
+## 2026-05-24 - TASK DEMO-DATA-001 Professional Demo Data
+
+### Task
+
+Prepare clean, realistic, portfolio-ready demo data and a demo walkthrough without adding product features.
+
+### Files Added
+
+```txt
+docs/ai-coding/07-demo-data-and-demo-script.md
+```
+
+### Files Updated
+
+```txt
+scripts/seed.ts
+README.md
+docs/14-seed-data-spec.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- Public/shared seed data now better supports the target demo persona: oily or combination-oily skin, acne-prone concerns, clogged-pore texture, post-acne dark spots, mild sensitivity, and simple routine goals.
+- Added public ingredient seed coverage for Glycerin and Green Tea Extract using the existing Ingredient model fields.
+- Tuned existing public product seed metadata for the demo story without adding unsupported Product fields.
+- User-owned demo data remains created through the authenticated UI with a real demo account; no fake Auth.js user, fake `userId`, static dashboard output, or auth bypass was added.
+- The new demo script documents Skin Profile setup, Morning Routine, Evening Routine, optional caution routine, routine logs, SkinJournal entries, dashboard summary, BA presentation angle, and technical presentation angle.
+- No Product CRUD, admin UI, real OpenAI/Gemini provider, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, or medical diagnosis was added.
+
+## 2026-05-24 - TASK QA-REGRESSION-001 Clean Package Validation Stabilization
+
+### Task
+
+Fix clean package validation instability caused by LF/CRLF line-ending differences in the Routine Builder unit test.
+
+### Files Added
+
+```txt
+.gitattributes
+```
+
+### Files Updated
+
+```txt
+tests/unit/routine-builder-ui.test.ts
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+```
+
+### Notes
+
+- `getPayloadSource()` now normalizes `routineBuilderSource` line endings before applying the existing source extraction regex.
+- The fix makes clean package validation robust across Windows CRLF and Unix LF environments.
+- `.gitattributes` was added to prefer LF endings for source, documentation, config, and style files going forward.
+- No Routine Builder source/business logic, UI behavior, API logic, database logic, authentication behavior, or product feature scope was changed.
+- Real OpenAI/Gemini integration, image upload, skin score, marketplace, payment, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+
 ## 2026-05-24 - TASK DEPLOY-002 Vercel MVP Demo Deployment
 
 ### Task

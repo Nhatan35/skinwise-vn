@@ -1,41 +1,61 @@
 # SkinWise VN
 
-SkinWise VN is a skincare routine tracker and educational MVP for Vietnamese users. It helps users build routines, maintain a skin profile, browse products, understand ingredients, analyze routine safety with deterministic rules, track daily routine completion, write private journal entries, and review dashboard summaries.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products, build routines, track routine completion, write skin journal entries, and review dashboard summaries.
+
+The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, full-stack implementation, validation, deployment preparation, and portfolio storytelling.
 
 SkinWise VN is not a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
 
+## Live Demo
+
+Production demo:
+
+- https://skinwise-vn.vercel.app
+
+Previously documented production evidence:
+
+- Deployment target: Vercel.
+- Production branch: `main`.
+- Production commit: `db72e07`.
+- Production smoke test: passed for MVP demo scope.
+- Google OAuth production login: passed.
+- MongoDB production/demo read/write through authenticated flows: passed.
+
 ## Current Status
 
-Current phase: post Week 6 MVP deployed demo, validation, documentation, and portfolio readiness.
+Current phase: post Week 6 MVP final release readiness and portfolio packaging.
 
-The main Week 1-6 MVP implementation is completed or nearly completed:
+Latest completed task: `TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup`.
 
-- Week 1 Foundation: completed.
-- Week 2 Skin Profile, Product, and Ingredient backend foundation: completed.
-- Week 3 Routine Builder and RoutineLog: completed.
-- Week 4 Routine Safety Engine and Routine Analysis: completed.
-- Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API: completed.
-- Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
+Completed scope:
 
-Latest completed task: `TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test`.
+- Week 1 Foundation.
+- Week 2 Skin Profile, Product, and Ingredient backend foundation.
+- Week 3 Routine Builder and RoutineLog.
+- Week 4 Routine Safety Engine and Routine Analysis.
+- Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API.
+- Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI.
+- Vercel MVP demo deployment and production smoke test.
+- Clean package validation stabilization.
+- Professional demo data preparation.
+- Portfolio case study, demo script, screenshots checklist, release checklist, and release notes.
 
-Recently completed readiness tasks:
+## Key Features
 
-- `SECURITY-CLEANUP-001`
-- `DOCS-SYNC-001`
-- `LOCAL-VALIDATION-001`
-- `TASK DEPLOY-001`
-- `TASK DEPLOY-002`
+- Skin Profile.
+- Product Catalogue.
+- Product Detail.
+- Routine Builder.
+- Routine Logs.
+- Routine Safety Analysis.
+- Skin Journal.
+- Dashboard summary.
+- Ingredient Explanation API.
+- Demo seed data and demo walkthrough documentation.
 
-Current deployment status: MVP demo deployed to Vercel.
+## Implemented Routes
 
-Production URL: https://skinwise-vn.vercel.app
-
-Production smoke test status: passed for the MVP demo scope on Vercel production branch `main`, commit `db72e07`.
-
-## Implemented MVP Surface
-
-Implemented UI routes include:
+Implemented UI routes:
 
 - `/`
 - `/dashboard`
@@ -46,7 +66,7 @@ Implemented UI routes include:
 - `/products`
 - `/products/[id]`
 
-Implemented SkinWise API routes include:
+Implemented SkinWise API routes:
 
 - `/api/me`
 - `/api/dashboard`
@@ -68,26 +88,44 @@ Auth.js owns `/api/auth/*` and its response format.
 
 ## Tech Stack
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- MongoDB
-- Auth.js / NextAuth
-- Zod
-- AI provider abstraction
-- Mock AI provider for local/demo use
-- Validated AI provider wrapper
-- Deterministic routine safety rule engine
-- Vitest
-- Playwright configuration
+- Next.js App Router.
+- TypeScript.
+- Tailwind CSS.
+- shadcn/ui-style component foundation.
+- MongoDB.
+- Auth.js / NextAuth.
+- Zod.
+- Vitest.
+- Playwright configuration.
+- Vercel.
 
-## AI Integration Status
+## Demo Flow
 
-AI provider abstraction is implemented.
+Recommended 3-5 minute walkthrough:
 
-The current usable provider is the validated mock provider. `AI_PROVIDER="mock"` is suitable for local and portfolio demo work without external AI keys.
+```txt
+Landing page
+-> Login
+-> Dashboard
+-> Skin Profile
+-> Product Catalogue
+-> Product Detail
+-> Routine Builder
+-> Routine Safety Analysis
+-> Routine Logs
+-> Skin Journal
+-> Dashboard summary
+```
 
-OpenAI and Gemini provider names are recognized by configuration but real providers are not implemented. Production AI integration is deployment/configuration dependent and not verified unless a later task adds and tests a real provider.
+## Portfolio Documents
+
+- Portfolio case study: `docs/portfolio-case-study.md`
+- Demo script: `docs/demo-script.md`
+- Screenshots checklist: `docs/screenshots-checklist.md`
+- Demo data and setup guide: `docs/ai-coding/07-demo-data-and-demo-script.md`
+- Final release checklist: `docs/final-release-checklist.md`
+- Release notes: `docs/release-notes-v1.0.md`
+- Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
 
 ## Local Setup
 
@@ -97,41 +135,23 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Fill real values in `.env.local` only. Do not commit or share `.env.local`, and do not include it in shared zip/source packages.
+Fill real values in `.env.local` only. Do not commit, upload, share, screenshot, or package `.env.local`.
 
-## Deployment Preparation
+Database commands use `.env.local` and must only be run against a known local/development or explicitly safe demo database.
 
-`TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP` prepared the repository for Vercel deployment.
+## Validation Commands
 
-`TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test` completed the MVP demo deployment and manual production smoke test.
+Run before release packaging:
 
-Deployment runbook:
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm audit --omit=dev --audit-level=moderate
+```
 
-- `docs/deployment/vercel-deployment.md`
-
-Current deployment status:
-
-- Deployment target: Vercel.
-- Deployment status: deployed for MVP demo.
-- Production branch: `main`.
-- Production commit: `db72e07`.
-- Production URL: https://skinwise-vn.vercel.app
-- Production smoke test: passed.
-- Google OAuth production login: passed.
-- MongoDB production/demo read/write through authenticated flows: passed.
-
-Production secrets must be configured in Vercel Project Settings, not in repository files. `.env.local` must never be committed, uploaded, shared, or included in a zip/source package.
-
-For MVP demo deployment, use `AI_PROVIDER="mock"`. Real OpenAI and Gemini providers are not implemented in this task.
-
-Known MVP demo limitations:
-
-- This is an MVP demo deployment, not a full commercial production release.
-- AI routine analysis uses mock/deterministic provider behavior.
-- Product catalogue data is demo/seed-style catalogue data.
-- Real OpenAI/Gemini providers are not implemented.
-- Image upload, AI face analysis, skin score, marketplace, payment, subscription, and notifications are not implemented.
-- SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
+`npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
 ## Environment Variables
 
@@ -152,7 +172,7 @@ AI_API_KEY
 AI_MODEL
 ```
 
-Optional variables currently present in validation:
+Optional/future variables:
 
 ```txt
 CLOUDINARY_CLOUD_NAME
@@ -168,46 +188,61 @@ FEATURE_SKIN_SCORE
 
 Use `AUTH_URL` and `APP_BASE_URL` for the current Auth.js/NextAuth v5-style setup. Do not introduce `NEXTAUTH_URL` unless the source code is deliberately changed to require it.
 
-Production secrets must be configured in the deployment provider dashboard, not in committed files. If real secrets were ever pushed publicly, uploaded, or shared externally, rotate them.
+## AI Integration Status
 
-AI keys are optional for local/demo use when `AI_PROVIDER="mock"` and AI feature flags remain disabled. Real provider credentials are only meaningful after a real provider integration is implemented and verified.
+AI provider abstraction is implemented.
 
-## Development Commands
+The current usable provider is the validated mock provider. `AI_PROVIDER="mock"` is suitable for local and portfolio demo work without external AI keys.
 
-Available scripts from `package.json`:
+OpenAI and Gemini provider names are recognized by configuration, but real providers are not implemented in the current MVP.
 
-```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
-npm run typecheck
-npm run test
-npm run test:watch
-npm run test:ui
-npm run test:e2e
-npm run db:indexes
-npm run db:seed
-```
+## Known Limitations
 
-Database commands use `.env.local` and must only be run against a known local/development database. Do not seed a production database.
+- This is an MVP demo deployment, not a full commercial production release.
+- AI routine analysis uses mock/deterministic provider behavior.
+- Real OpenAI/Gemini providers are not implemented.
+- Product catalogue data is demo/seed-style catalogue data.
+- Product CRUD and admin dashboard are not implemented.
+- Image upload and AI face analysis are not implemented.
+- Skin score and attractiveness scoring are not implemented.
+- Marketplace, payment, subscription, and notifications are not implemented.
+- Barcode scanner is not implemented.
+- E2E tests are config-only unless real specs are added later.
+- SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
+
+## Future Roadmap
+
+Future ideas, not implemented in the current MVP:
+
+- Capture final screenshots for the portfolio.
+- Add minimal Playwright smoke tests.
+- Improve dashboard analytics.
+- Add saved products.
+- Add admin product management.
+- Improve product filtering.
+- Expand deterministic routine safety rules.
+- Add real AI provider integration with strict safety boundaries.
+- Add optional image upload only with privacy safeguards.
+- Add notification reminders.
 
 ## Documentation Map
 
-Current implementation and planning docs:
-
+- `docs/portfolio-case-study.md`
+- `docs/demo-script.md`
+- `docs/screenshots-checklist.md`
+- `docs/final-release-checklist.md`
+- `docs/release-notes-v1.0.md`
 - `docs/deployment/vercel-deployment.md`
 - `docs/13-ui-route-map.md`
 - `docs/18-deployment-checklist.md`
 - `docs/21-local-auth-db-troubleshooting.md`
-- `docs/ai-coding/01-codebase-map.md`
 - `docs/ai-coding/02-implementation-status.md`
 - `docs/ai-coding/03-feature-status-matrix.md`
-- `docs/ai-coding/04-file-ownership-map.md`
 - `docs/ai-coding/05-ai-change-log.md`
 - `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
 
-Historical SDD and planning docs remain in `docs/` for traceability. Older references to "before Week 1 implementation", "Week 1 foundation only", or planned dashboard/journal/product UI should be treated as historical unless they are confirmed by current source code.
+Historical SDD and planning docs remain in `docs/` for traceability. Older references to "before Week 1 implementation", "Week 1 foundation only", or planned dashboard/journal/product UI should be treated as historical unless confirmed by current source code.
 
 ## MVP Principle
 

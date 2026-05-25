@@ -5,17 +5,17 @@ Last updated: 2026-05-24
 ## 1. Current phase
 
 ```txt
-Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
+Post Week 6 MVP portfolio-ready release complete
 ```
 
-The main Week 1-6 MVP implementation is completed or nearly completed. Current work is post-deployment portfolio/demo polish and readiness documentation, not new feature work.
+The main Week 1-6 MVP implementation is completed. Current required release work is complete; remaining tasks are optional portfolio polish only.
 
 ## 2. Current deployment task
 
 Current task:
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup
 ```
 
 Status:
@@ -31,12 +31,20 @@ Production smoke test: PASSED.
 Google OAuth production login: PASSED.
 MongoDB production/demo read/write through authenticated flows: PASSED.
 TASK DEPLOY-002: COMPLETED.
+TASK QA-REGRESSION-001: COMPLETED.
+TASK DEMO-DATA-001: COMPLETED.
+TASK PORTFOLIO-001: COMPLETED.
+TASK FINAL-RELEASE-001: COMPLETED.
+Clean package validation is robust across LF and CRLF line endings.
+Professional public/shared demo seed data and authenticated manual demo setup are documented.
+Portfolio case study, demo script, and screenshots checklist are prepared.
+Final release checklist and release notes are prepared.
 ```
 
 ## 3. Latest completed task
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+TASK FINAL-RELEASE-001 - Final Release Package and Portfolio-Ready Cleanup
 ```
 
 ## 4. Completed MVP implementation status
@@ -66,6 +74,17 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 [x] Configure/test Google OAuth production callback.
 [x] Verify MongoDB Atlas production/demo access from Vercel.
 [x] Run production smoke test.
+[x] Fix LF/CRLF-sensitive clean package validation in Routine Builder unit test.
+[x] Add root .gitattributes for line-ending normalization.
+[x] Prepare portfolio-ready public/shared product and ingredient demo seed data.
+[x] Document safe authenticated manual setup for user-owned demo data.
+[x] Document BA and technical demo walkthrough.
+[x] Prepare portfolio case study.
+[x] Prepare presentation-ready demo script.
+[x] Prepare screenshots checklist.
+[x] Prepare final release checklist.
+[x] Prepare release notes v1.0.
+[x] Polish README as portfolio entry point.
 ```
 
 ## 6. Not allowed in this phase
@@ -106,7 +125,7 @@ Database commands must only run against a known local/development database. Do n
 ## 8. Recommended next task
 
 ```txt
-TASK PORTFOLIO-001 - Prepare portfolio case study and demo script
+No required next task. Optional only: OPTIONAL-SCREENSHOTS-001, OPTIONAL-E2E-001, or OPTIONAL-PORTFOLIO-WEBSITE-001.
 ```
 
-Reason: MVP demo deployment is complete and smoke-tested. The next useful step is portfolio polish, demo scripting, final README polish, or post-deployment cleanup without adding new product scope.
+Reason: MVP demo deployment is complete and smoke-tested, clean package validation has been stabilized across operating systems, demo data/setup documentation is ready, portfolio materials are prepared, and final release documentation is complete. Remaining work is optional portfolio polish without adding new product scope.
