@@ -3,7 +3,7 @@ import "server-only";
 import * as dns from "node:dns";
 import { MongoClient, type Db } from "mongodb";
 
-import { env } from "@/config/env";
+import { getEnv, type Env } from "@/config/env";
 
 const MISSING_MONGODB_URI_MESSAGE =
   "MONGODB_URI is required before using MongoDB infrastructure.";
@@ -40,23 +40,26 @@ export function createMongoClient(uri: string): MongoClient {
   return new MongoClient(uri);
 }
 
-function createMongoClientPromise(): Promise<MongoClient> {
-  const uri = requireMongoUri(env.MONGODB_URI);
+function createMongoClientPromise(currentEnv: Env): Promise<MongoClient> {
+  const uri = requireMongoUri(currentEnv.MONGODB_URI);
   const client = createMongoClient(uri);
 
   return client.connect();
 }
 
 export function getMongoClientPromise(): Promise<MongoClient> {
-  if (env.APP_ENV === "development") {
+  const currentEnv = getEnv();
+
+  if (currentEnv.APP_ENV === "development") {
     const globalForMongo = globalThis as GlobalWithMongoClient;
 
-    globalForMongo.__skinwiseMongoClientPromise ??= createMongoClientPromise();
+    globalForMongo.__skinwiseMongoClientPromise ??=
+      createMongoClientPromise(currentEnv);
 
     return globalForMongo.__skinwiseMongoClientPromise;
   }
 
-  productionClientPromise ??= createMongoClientPromise();
+  productionClientPromise ??= createMongoClientPromise(currentEnv);
 
   return productionClientPromise;
 }

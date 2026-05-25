@@ -10,6 +10,27 @@ jobs:
   quality:
     name: Quality checks
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: production
+      APP_BASE_URL: http://localhost:3000
+      AUTH_URL: http://localhost:3000
+      AUTH_SECRET: ci-placeholder-secret-minimum-32-characters-only
+      AUTH_GOOGLE_ID: placeholder-google-client-id
+      AUTH_GOOGLE_SECRET: placeholder-google-client-secret
+      MONGODB_URI: mongodb://127.0.0.1:27017/skinwise-build-check
+      AI_PROVIDER: mock
+      AI_API_KEY: ""
+      AI_MODEL: ""
+      CLOUDINARY_CLOUD_NAME: ""
+      CLOUDINARY_API_KEY: ""
+      CLOUDINARY_API_SECRET: ""
+      FEATURE_AI_ROUTINE_ANALYSIS: "false"
+      FEATURE_INGREDIENT_EXPLANATION: "false"
+      FEATURE_IMAGE_UPLOAD: "false"
+      FEATURE_NOTIFICATIONS: "false"
+      FEATURE_MARKETPLACE: "false"
+      FEATURE_SKIN_SCORE: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
 
     steps:
       - name: Checkout
@@ -18,7 +39,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20.x"
           cache: "npm"
 
       - name: Install dependencies
@@ -35,3 +56,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=moderate
