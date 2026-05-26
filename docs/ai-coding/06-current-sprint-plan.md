@@ -1,26 +1,32 @@
 # Current Sprint Plan - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-25
+Last updated: 2026-05-26
 
 ## 1. Current phase
 
 ```txt
-Post Week 6 quality hardening and deployment re-verification follow-up
+Post Week 6 feature roadmap v1.1 implementation and validation
 ```
 
-The main Week 1-6 MVP implementation is completed. QUALITY-001 added safe test-only authenticated Playwright coverage, and QUALITY-002A extends that foundation to Skin Profile, Product Catalogue, and Product Detail smoke flows with deterministic local/test product data. RUNTIME-001 updates the project runtime baseline to Node 24.x / npm 11.x. DEPLOY-VERIFY-001 remains partial: historical local validation and public unauthenticated production smoke checks passed, Node 24 local validation has passed except E2E is blocked by missing local MongoDB, and external platform verification remains pending.
+The main Week 1-6 MVP implementation is completed. Feature Roadmap v1.1 adds the authenticated Ingredient Library UI on top of the existing ingredient backend and explanation API. QUALITY-001 added safe test-only authenticated Playwright coverage, and QUALITY-002A extends that foundation to Skin Profile, Product Catalogue, and Product Detail smoke flows with deterministic local/test product data. RUNTIME-001 updates the project runtime baseline to Node 24.x / npm 11.x. INGREDIENT-UI-001 local validation passed including authenticated Playwright E2E against the safe local test database. DEPLOY-VERIFY-001 remains partial: historical local validation and public unauthenticated production smoke checks passed, while external platform verification remains pending.
 
-## 2. Current runtime/config task
+## 2. Current feature task
 
 Current task:
 
 ```txt
-RUNTIME-001 - Standardize project runtime on Node 24 and npm 11
+INGREDIENT-UI-001 - Implement Ingredient Library UI
 ```
 
 Status:
 
 ```txt
+INGREDIENT-UI-001: IMPLEMENTED AND LOCAL VALIDATION PASSED.
+Ingredient Library routes: /ingredients and /ingredients/[id].
+Ingredient Library UI: authenticated browse, search, detail, and explanation panel.
+Ingredient Explanation API UI entry point: implemented through the ingredient detail page.
+Explanation persistence: not implemented by design.
+Real OpenAI/Gemini provider verification: not completed; mock/fallback-safe behavior remains the demo-safe baseline.
 Deployment status: Deployed for MVP demo.
 Actual Vercel deployment: COMPLETED.
 Deployment target: Vercel.
@@ -30,7 +36,7 @@ Production URL: https://skinwise-vn.vercel.app
 Previously documented DEPLOY-002 production smoke test: PASSED.
 Previously documented Google OAuth production login: PASSED.
 Previously documented MongoDB production/demo read/write through authenticated flows: PASSED.
-Current DEPLOY-VERIFY-001 local validation: PASSED historically under Node 20; Node 24 local validation passed for install, lint, typecheck, unit tests, build, and production audit, with E2E blocked until local MongoDB is available.
+Current DEPLOY-VERIFY-001 local validation: PASSED historically under Node 20; earlier Node 24 runtime validation did not include E2E until local MongoDB was available. For INGREDIENT-UI-001, `npm run db:seed:e2e` passed against `skinwise-e2e-check` and `npm run test:e2e` passed with 12 tests.
 Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED.
 Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, and sign-out: NOT VERIFIED without external access.
 TASK DEPLOY-002: COMPLETED.
@@ -42,12 +48,12 @@ E2E-001: COMPLETED.
 DEPLOY-VERIFY-001: PARTIAL.
 QUALITY-001: COMPLETED.
 QUALITY-002A: IMPLEMENTED; FULL E2E VERIFICATION REQUIRES LOCAL MONGODB.
-RUNTIME-001: CONFIG/DOCS UPDATED; NODE 24 LOCAL VALIDATION PARTIAL; E2E REQUIRES LOCAL MONGODB.
+RUNTIME-001: CONFIG/DOCS UPDATED; HISTORICAL NODE 24 RUNTIME VALIDATION WAS PARTIAL UNTIL LOCAL MONGODB WAS AVAILABLE. INGREDIENT-UI-001 LOCAL E2E VALIDATION PASSED.
 Clean package validation is robust across LF and CRLF line endings.
 Professional public/shared demo seed data and authenticated manual demo setup are documented.
 Portfolio case study, demo script, and screenshots checklist are prepared.
 Final release checklist and release notes are prepared.
-Unauthenticated Playwright smoke tests are implemented for the public landing page and protected-route redirects. Authenticated Playwright specs now cover dashboard, Skin Profile create/update, Product Catalogue, and Product Detail using safe test auth and local/test product seed data.
+Unauthenticated Playwright smoke tests are implemented for the public landing page and protected-route redirects. Authenticated Playwright specs now cover dashboard, Skin Profile create/update, Product Catalogue, Product Detail, and Ingredient Library flows using safe test auth and local/test seed data.
 ```
 
 ## 3. Current runtime task
@@ -59,13 +65,13 @@ RUNTIME-001 - Standardize project runtime on Node 24 and npm 11
 Status:
 
 ```txt
-Config/docs updated. Local validation under Node v24.14.0 / npm 11.14.1 passed for `npm ci`, lint, typecheck, unit tests, build, and production audit; E2E is pending until local MongoDB is available at the safe test URI.
+Config/docs updated. Historical runtime validation under Node v24.14.0 / npm 11.14.1 passed for `npm ci`, lint, typecheck, unit tests, build, and production audit. Current Ingredient Library UI validation also passed `npm run db:seed:e2e` against `skinwise-e2e-check` and `npm run test:e2e` with 12 tests.
 ```
 
 ## 4. Latest quality task
 
 ```txt
-QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows
+INGREDIENT-UI-001 - Implement authenticated Ingredient Library UI
 ```
 
 ## 5. Completed MVP implementation status
@@ -77,6 +83,7 @@ Week 3 Routine Builder and RoutineLog completed
 Week 4 Routine Safety Engine and Routine Analysis completed
 Week 5 AI provider abstraction, mock AI provider, validated AI provider, and Ingredient Explanation API completed
 Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI completed
+Feature Roadmap v1.1 Ingredient Library UI completed in source
 ```
 
 ## 6. Deployment preparation goals
@@ -114,6 +121,10 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 [x] Add deterministic local/test E2E product data seed command.
 [x] Add authenticated Skin Profile create/update Playwright spec.
 [x] Add authenticated Product Catalogue and Product Detail Playwright spec.
+[x] Add authenticated Ingredient Library browse/search/detail/explanation UI.
+[x] Enable authenticated `/ingredients` and `/ingredients/[id]` routes.
+[x] Enable Ingredients in dashboard navigation.
+[x] Add Ingredient Library unit/source checks and authenticated Playwright spec.
 [x] Run historical DEPLOY-VERIFY-001 local validation with Node 20.
 [ ] Run full local validation with Node v24.14.0 / npm 11.14.1 including E2E with local MongoDB available.
 [ ] Run CI validation with Node 24.x.
@@ -128,7 +139,7 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 ## 7. Not allowed in this phase
 
 ```txt
-No new product feature.
+No unrelated product feature.
 No Product CRUD.
 No admin review workflow.
 No saved products.
@@ -144,21 +155,18 @@ No real AI provider completion claim without implementation and verification.
 
 ## 8. Validation scope
 
-Run available scripts from `package.json` where safe. For RUNTIME-001, run them under Node v24.14.0 / npm 11.14.1:
+Run available scripts from `package.json` where safe. For INGREDIENT-UI-001, run:
 
 ```txt
-npm install
-npm ci
 npm run lint
 npm run typecheck
 npm run test
 npm run build
-npm run db:indexes
-npm run db:seed
-npm run dev
+npm run db:seed:e2e, only against the safe local/test MongoDB target
+npm run test:e2e, only when local MongoDB is available
 ```
 
-Database commands must only run against a known local/development database. Do not seed production data.
+Database commands must only run against a known local/test database. Do not seed production data.
 
 ## 8. Recommended next task
 

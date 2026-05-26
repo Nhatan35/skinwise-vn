@@ -1,10 +1,10 @@
 # SkinWise VN Portfolio Case Study
 
-Last updated: 2026-05-24
+Last updated: 2026-05-26
 
 ## 1. Project Overview
 
-SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users structure their skincare information, build simple routines, track routine consistency, write skin journal entries, and review dashboard summaries.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users structure their skincare information, browse products and ingredients, build simple routines, track routine consistency, write skin journal entries, and review dashboard summaries.
 
 The project was built as a portfolio and BA internship preparation project. It demonstrates how a product idea can move from problem definition and requirements into a working full-stack MVP.
 
@@ -15,12 +15,13 @@ The MVP includes:
 - authentication foundation;
 - skin profile;
 - product catalogue and product detail;
+- ingredient library and ingredient detail;
 - routine builder;
 - routine logs;
 - deterministic routine safety analysis;
 - skin journal;
 - dashboard summary;
-- ingredient explanation API;
+- ingredient explanation API and UI entry point;
 - mock/validated AI provider abstraction;
 - seed/demo data documentation;
 - Vercel MVP demo deployment documentation.
@@ -83,6 +84,7 @@ Included scope:
 - routine safety analysis;
 - skin journal;
 - dashboard;
+- ingredient library;
 - ingredient explanation;
 - demo data and demo script.
 
@@ -108,11 +110,13 @@ Excluded scope:
 | 3 | User creates skin profile | App saves profile under the authenticated user | Personal context for routines and dashboard | User profile is the onboarding foundation |
 | 4 | User browses products | Catalogue lists visible reviewed/verified demo products | Finds suitable skincare examples | Public/shared product data supports the demo |
 | 5 | User views product detail | App shows product fields, ingredients, warnings, and fit metadata | Understands product role before using it | Detail page supports informed routine building |
-| 6 | User builds morning/evening routine | App saves ordered routine steps | User gets a manageable routine structure | Routine steps support product or custom names |
-| 7 | User runs routine safety analysis | Deterministic rules and mock provider output create analysis | User sees educational safety guidance | Rule engine runs before AI explanation |
-| 8 | User logs routine completion | App creates or updates daily routine log | User tracks consistency | RoutineLog is separate from SkinJournal |
-| 9 | User writes journal entries | App stores daily observations and symptoms | User records skin progress context | Journal is private and user-owned |
-| 10 | User views dashboard summary | Dashboard summarizes profile, routines, logs, latest journal, and analysis | User sees progress context in one place | Dashboard reuses real user-scoped data |
+| 6 | User browses ingredient library | App lists searchable ingredient knowledge base records | Learns ingredient basics safely | Ingredient content is educational, not medical advice |
+| 7 | User views ingredient detail | App shows functions, uses, suitability, cautions, references, and an explanation panel | Understands when to use extra caution | Explanation may use safe fallback behavior |
+| 8 | User builds morning/evening routine | App saves ordered routine steps | User gets a manageable routine structure | Routine steps support product or custom names |
+| 9 | User runs routine safety analysis | Deterministic rules and mock provider output create analysis | User sees educational safety guidance | Rule engine runs before AI explanation |
+| 10 | User logs routine completion | App creates or updates daily routine log | User tracks consistency | RoutineLog is separate from SkinJournal |
+| 11 | User writes journal entries | App stores daily observations and symptoms | User records skin progress context | Journal is private and user-owned |
+| 12 | User views dashboard summary | Dashboard summarizes profile, routines, logs, latest journal, and analysis | User sees progress context in one place | Dashboard reuses real user-scoped data |
 
 ## 8. Key User Stories
 
@@ -124,7 +128,8 @@ Excluded scope:
 6. As a skincare user, I want to log routine completion, so that I can track consistency over time.
 7. As a skincare user, I want to write skin journal entries, so that I can track observations, symptoms, sleep, stress, and products used.
 8. As a skincare user, I want a dashboard, so that I can quickly review my profile, routines, logs, latest journal, and latest analysis.
-9. As a skincare user, I want ingredient explanations, so that I can understand ingredients in beginner-friendly educational language.
+9. As a skincare user, I want to browse and search ingredients, so that I can understand common skincare ingredient roles.
+10. As a skincare user, I want ingredient explanations, so that I can understand ingredients in beginner-friendly educational language.
 
 ## 9. Acceptance Criteria
 
@@ -169,6 +174,8 @@ Dashboard:
 
 Ingredient Explanation:
 
+- Given I am authenticated, when I open `/ingredients`, then the system displays searchable ingredient records.
+- Given I am authenticated, when I open `/ingredients/[id]`, then the system displays ingredient detail data and an educational explanation entry point.
 - Given I am authenticated, when I submit a valid ingredient explanation request, then the system returns a safe educational explanation or deterministic fallback.
 
 ## 10. Functional Requirements
@@ -184,7 +191,8 @@ Ingredient Explanation:
 | FR-007 | The system shall analyze routines with deterministic safety rules before AI provider explanation. | Routine Safety Analysis | Must | Completed | `src/app/api/routines/[id]/analyze/route.ts`, `src/domain/routine-safety`, `src/modules/ai-analysis` |
 | FR-008 | The system shall let authenticated users create, list, update, and delete skin journal entries. | Skin Journal | Must | Completed | `src/app/api/skin-journal/route.ts`, `src/app/api/skin-journal/[id]/route.ts`, `src/modules/journals`, `/journal` |
 | FR-009 | The system shall summarize user-owned profile, routines, logs, journal, and analysis data on the dashboard. | Dashboard | Must | Completed | `src/app/api/dashboard/route.ts`, `src/modules/dashboard`, `/dashboard` |
-| FR-010 | The system shall provide authenticated ingredient explanations through the validated provider flow. | Ingredient Explanation | Should | Completed | `src/app/api/ingredients/explain/route.ts`, `src/modules/ingredients`, `src/infrastructure/ai` |
+| FR-010 | The system shall let authenticated users browse/search ingredients and view ingredient detail. | Ingredient Library | Should | Completed | `src/app/api/ingredients/route.ts`, `src/app/api/ingredients/[id]/route.ts`, `src/app/(dashboard)/ingredients`, `src/modules/ingredients/components` |
+| FR-011 | The system shall provide authenticated ingredient explanations through the validated provider flow. | Ingredient Explanation | Should | Completed | `src/app/api/ingredients/explain/route.ts`, `src/modules/ingredients/components/ingredient-explanation-panel.tsx`, `src/infrastructure/ai` |
 
 ## 11. Non-Functional Requirements
 
@@ -196,7 +204,7 @@ Ingredient Explanation:
 | NFR-004 | Reliability | Routine analysis must fall back safely when provider behavior fails. | Keeps deterministic safety guidance available. | `src/modules/ai-analysis`, `docs/06-ai-contract.md` |
 | NFR-005 | Maintainability | Business logic should stay outside UI and route handlers where practical. | Keeps modules testable and easier to review. | Repository/use-case/module structure under `src/modules` |
 | NFR-006 | Performance | MVP should use normal Next.js App Router behavior and avoid unnecessary service complexity. | Keeps deployment simple for portfolio use. | `docs/03-system-architecture.md`, Vercel deployment docs |
-| NFR-007 | Usability | The app should provide clear workflows for profile, products, routines, journal, and dashboard. | Supports a smooth demo and user journey. | Implemented UI routes under `src/app/(dashboard)` |
+| NFR-007 | Usability | The app should provide clear workflows for profile, products, ingredients, routines, journal, and dashboard. | Supports a smooth demo and user journey. | Implemented UI routes under `src/app/(dashboard)` |
 | NFR-008 | Safe educational copy | The app must avoid diagnosis, treatment guarantees, skin scores, and dermatologist replacement claims. | Keeps the product safe and realistic. | `docs/00-product-vision.md`, `docs/07-security-privacy.md`, `docs/11-routine-safety-rules.md` |
 | NFR-009 | Environment configuration | Secrets must stay outside source and be configured through environment variables. | Prevents credential exposure. | `.env.example`, `src/config/env.ts`, `docs/deployment/vercel-deployment.md` |
 | NFR-010 | Testability | Core logic and contracts should be covered by repeatable validation commands. | Supports release confidence. | `tests/unit`, `vitest.config.ts`, `package.json` scripts |
@@ -214,7 +222,8 @@ Ingredient Explanation:
 | Users need safe routine guidance | Run routine analysis | FR-007 | `/api/routines/[id]/analyze`, routine safety engine | Unit tests and current-task validation |
 | Users need progress observations | Create journal entries | FR-008 | `/api/skin-journal`, `/journal` | Unit/API/client tests; current-task validation |
 | Users need a quick summary | View dashboard | FR-009 | `/api/dashboard`, `/dashboard` | Unit/API tests; previously documented production smoke test |
-| Users need beginner-friendly ingredient education | Explain ingredient | FR-010 | `/api/ingredients/explain`, AI provider abstraction | Unit/API tests; current-task validation |
+| Users need searchable ingredient education | Browse ingredient library | FR-010 | `/api/ingredients`, `/api/ingredients/[id]`, `/ingredients`, `/ingredients/[id]` | Unit/client/source checks; authenticated E2E spec |
+| Users need beginner-friendly ingredient education | Explain ingredient | FR-011 | `/api/ingredients/explain`, ingredient explanation panel, AI provider abstraction | Unit/API/client tests; authenticated E2E spec |
 
 ## 13. Main Features
 
@@ -247,6 +256,16 @@ User value: helps users understand product category, ingredients, warnings, fit 
 Main flow: user selects a product from the catalogue and opens `/products/[id]`.
 
 Scope boundary: no product purchase, product submission, image gallery, or recommendation engine.
+
+### Ingredient Library
+
+Purpose: provide an authenticated, searchable ingredient knowledge base.
+
+User value: helps users understand common ingredient functions, uses, suitability notes, cautions, and references.
+
+Main flow: authenticated user opens `/ingredients`, searches the library, and opens `/ingredients/[id]`.
+
+Scope boundary: no Ingredient CRUD, admin management, diagnosis, treatment plan, or product recommendation algorithm.
 
 ### Routine Builder
 
@@ -304,9 +323,9 @@ Purpose: explain ingredient names in beginner-friendly educational language thro
 
 User value: helps users understand ingredients without needing external research.
 
-Main flow: authenticated API request calls `POST /api/ingredients/explain`.
+Main flow: authenticated user opens `/ingredients/[id]` and clicks the explanation action, which calls `POST /api/ingredients/explain`.
 
-Scope boundary: real OpenAI/Gemini providers are not implemented; current demo behavior uses the validated mock provider/fallback path.
+Scope boundary: explanations are educational, not diagnostic; real OpenAI/Gemini providers are not implemented; current demo behavior uses the validated mock provider/fallback path.
 
 ## 14. System Architecture Summary
 
@@ -456,10 +475,11 @@ The current MVP has honest portfolio/demo limitations:
 - The current demo provider is mock/validated.
 - Product data is demo/seed-style catalogue data.
 - Product CRUD and admin dashboard are not implemented.
+- Ingredient CRUD and admin management are not implemented.
 - Image upload and AI face analysis are not implemented.
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
-- E2E coverage is smoke-level only: public landing page and unauthenticated protected-route redirects are covered, while authenticated E2E flows are not implemented yet.
+- E2E coverage includes smoke and authenticated specs for selected flows, including Ingredient Library. Full local E2E execution still requires a safe local MongoDB test database.
 - The app provides educational support only and must not be used as medical diagnosis or treatment advice.
 
 ## 22. Future Roadmap
@@ -468,7 +488,7 @@ Short-term:
 
 - final screenshots;
 - final release package;
-- authenticated E2E coverage when a safe test-login mechanism exists;
+- broader authenticated E2E coverage;
 - better dashboard analytics.
 
 Medium-term:
@@ -494,13 +514,13 @@ These roadmap items are future ideas and are not implemented in the current MVP 
 | What is this project about? | SkinWise VN is an educational skincare tracking MVP that helps users manage skin profile, products, routines, logs, journal entries, and dashboard summaries. |
 | What problem does it solve? | It helps skincare beginners organize routine information and avoid confusion around product use and active combinations. |
 | Who are the users? | The primary user is a beginner or intermediate skincare user. Secondary users are reviewers evaluating product thinking and technical implementation. |
-| What was your MVP scope? | The MVP focused on profile, product browsing, routines, logs, routine safety analysis, journal, dashboard, and safe ingredient explanation. |
+| What was your MVP scope? | The MVP focused on profile, product browsing, ingredient education, routines, logs, routine safety analysis, journal, dashboard, and safe ingredient explanation. |
 | How did you prioritize features? | I prioritized features that support the core user journey from profile setup to routine tracking and dashboard review. |
 | What requirements did you define? | I defined user stories, acceptance criteria, functional requirements, non-functional requirements, API contracts, data model, and safety boundaries. |
-| What are the main functional requirements? | Authentication, skin profile, product catalogue/detail, routine builder/logs/analysis, journal, dashboard, and ingredient explanation. |
+| What are the main functional requirements? | Authentication, skin profile, product catalogue/detail, ingredient library/detail/explanation, routine builder/logs/analysis, journal, and dashboard. |
 | What are the non-functional requirements? | Security, privacy, validation, maintainability, safe educational copy, environment discipline, testability, and deployment readiness. |
-| How did you validate the project? | Through lint, typecheck, unit tests, build, production dependency audit, unauthenticated Playwright smoke tests, deployment preparation, and production smoke testing. |
-| What would you improve next? | I would prepare final screenshots, add authenticated E2E coverage with a safe test-login path, improve dashboard analytics, and later add safe saved-product/admin workflows. |
+| How did you validate the project? | Through lint, typecheck, unit tests, build, production dependency audit, Playwright smoke/authenticated specs where local test dependencies are available, deployment preparation, and production smoke testing. |
+| What would you improve next? | I would prepare final screenshots, broaden authenticated E2E coverage, improve dashboard analytics, and later add safe saved-product/admin workflows. |
 | What did you learn as a BA? | I learned to control scope, write clearer acceptance criteria, trace requirements to implementation, and prepare a reviewer-friendly demo. |
 | What did you learn technically? | I learned full-stack structure with Next.js, TypeScript, MongoDB, Auth.js, Zod, API DTO boundaries, tests, and deployment preparation. |
 

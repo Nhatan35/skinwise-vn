@@ -165,6 +165,9 @@ describe("Routine Builder UI foundation", () => {
     const productsItem = dashboardNavItems.find(
       (item) => item.label === "Products",
     );
+    const ingredientsItem = dashboardNavItems.find(
+      (item) => item.label === "Ingredients",
+    );
 
     expect(routinesItem).toEqual({
       disabled: false,
@@ -184,8 +187,14 @@ describe("Routine Builder UI foundation", () => {
       label: "Products",
       status: "Active",
     });
+    expect(ingredientsItem).toEqual({
+      disabled: false,
+      href: routes.INGREDIENTS,
+      label: "Ingredients",
+      status: "Active",
+    });
 
-    for (const disabledLabel of ["Today Log", "Ingredients"]) {
+    for (const disabledLabel of ["Today Log"]) {
       expect(
         dashboardNavItems.find((item) => item.label === disabledLabel),
       ).toMatchObject({
@@ -202,6 +211,7 @@ describe("Routine Builder UI foundation", () => {
     expect(proxySource).toContain('"/routines/:path*"');
     expect(proxySource).toContain('"/journal/:path*"');
     expect(proxySource).toContain('"/products/:path*"');
+    expect(proxySource).toContain('"/ingredients/:path*"');
   });
 
   it("does not add out-of-scope routine UI routes", () => {

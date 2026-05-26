@@ -14,5 +14,6 @@ export const config = {
     "/routines/:path*",
     "/journal/:path*",
     "/products/:path*",
+    "/ingredients/:path*",
   ],
 };

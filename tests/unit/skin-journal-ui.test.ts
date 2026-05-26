@@ -88,8 +88,16 @@ describe("SkinJournal Timeline UI", () => {
       label: "Products",
       status: "Active",
     });
+    expect(
+      dashboardNavItems.find((item) => item.label === "Ingredients"),
+    ).toEqual({
+      disabled: false,
+      href: routes.INGREDIENTS,
+      label: "Ingredients",
+      status: "Active",
+    });
 
-    for (const disabledLabel of ["Today Log", "Ingredients"]) {
+    for (const disabledLabel of ["Today Log"]) {
       expect(
         dashboardNavItems.find((item) => item.label === disabledLabel),
       ).toMatchObject({

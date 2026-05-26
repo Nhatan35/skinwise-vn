@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   dashboardNavItems,
   dashboardRoute,
+  ingredientsRoute,
   journalRoute,
   productsRoute,
   routinesRoute,
@@ -30,7 +31,7 @@ const dashboardNavigationSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, Journal, and Products as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Journal, Products, and Ingredients as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
@@ -38,10 +39,12 @@ describe("dashboard shell config", () => {
     expect(routinesRoute).toBe(routes.ROUTINES);
     expect(journalRoute).toBe(routes.JOURNAL);
     expect(productsRoute).toBe(routes.PRODUCTS);
+    expect(ingredientsRoute).toBe(routes.INGREDIENTS);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(routes.ROUTINES).toBe("/routines");
     expect(routes.JOURNAL).toBe("/journal");
     expect(routes.PRODUCTS).toBe("/products");
+    expect(routes.INGREDIENTS).toBe("/ingredients");
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -73,16 +76,19 @@ describe("dashboard shell config", () => {
         label: "Products",
         status: "Active",
       },
+      {
+        disabled: false,
+        href: "/ingredients",
+        label: "Ingredients",
+        status: "Active",
+      },
     ]);
   });
 
   it("keeps unrelated unimplemented navigation items disabled without hrefs", () => {
     const disabledItems = dashboardNavItems.filter((item) => item.disabled);
 
-    expect(disabledItems.map((item) => item.label)).toEqual([
-      "Today Log",
-      "Ingredients",
-    ]);
+    expect(disabledItems.map((item) => item.label)).toEqual(["Today Log"]);
     expect(
       disabledItems.every(
         (item) => item.href === null && item.disabled === true,

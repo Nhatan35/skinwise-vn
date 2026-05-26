@@ -4,6 +4,70 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-26 - INGREDIENT-UI-001 Ingredient Library UI
+
+### Task
+
+Implement Feature Roadmap v1.1: authenticated Ingredient Library UI.
+
+### Files Added
+
+```txt
+src/app/(dashboard)/ingredients/page.tsx
+src/app/(dashboard)/ingredients/[id]/page.tsx
+src/modules/ingredients/ingredient.client.ts
+src/modules/ingredients/components/ingredient-library.tsx
+src/modules/ingredients/components/ingredient-card.tsx
+src/modules/ingredients/components/ingredient-detail.tsx
+src/modules/ingredients/components/ingredient-explanation-panel.tsx
+tests/unit/ingredient-client.test.ts
+tests/unit/ingredient-library-ui.test.ts
+tests/unit/ingredient-detail-ui.test.ts
+tests/e2e/ingredients.authenticated.spec.ts
+```
+
+### Files Updated
+
+```txt
+README.md
+docs/13-ui-route-map.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
+docs/demo-script.md
+docs/portfolio-case-study.md
+src/proxy.ts
+src/modules/dashboard/dashboard-shell.config.ts
+tests/e2e/smoke.spec.ts
+tests/unit/dashboard-shell.test.ts
+tests/unit/product-catalogue-ui.test.ts
+tests/unit/routine-builder-ui.test.ts
+tests/unit/skin-journal-ui.test.ts
+```
+
+### Notes
+
+- Added protected `/ingredients` and `/ingredients/[id]` dashboard routes.
+- Enabled Ingredients navigation and kept Today Log disabled.
+- Added a client-only ingredient API layer that reads the SkinWise `{ data, error }` envelope and validates list, detail, and explanation response shapes.
+- Added browse/search UI with q-only form search and limit 50.
+- Added ingredient detail UI with educational disclaimer, cautious suitability/caution sections, and source references.
+- Added an explanation panel that calls `POST /api/ingredients/explain`, handles rate limits, and labels fallback explanations.
+- Added authenticated Playwright coverage using deterministic Niacinamide seed data and the existing test-only Auth.js provider.
+- No Ingredient CRUD, admin management, database persistence for explanations, real OpenAI/Gemini integration, image analysis, skin score, diagnosis, or treatment claims were added.
+
+### Validation
+
+```txt
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 63 files, 637 tests
+npm run build: Pass
+npm run db:seed:e2e: Pass - safe local/test database skinwise-e2e-check
+npm run test:e2e: Pass - 12 tests
+```
+
 ## 2026-05-25 - QUALITY-002A Authenticated Playwright Profile and Product E2E Foundation
 
 ### Task

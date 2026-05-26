@@ -61,6 +61,14 @@ describe("Product Catalogue UI", () => {
       status: "Active",
     });
     expect(proxySource).toContain('"/products/:path*"');
+    expect(
+      dashboardNavItems.find((item) => item.label === "Ingredients"),
+    ).toEqual({
+      disabled: false,
+      href: routes.INGREDIENTS,
+      label: "Ingredients",
+      status: "Active",
+    });
     expect(dashboardNavigationSource).toContain("usePathname");
     expect(dashboardNavigationSource).toContain(
       "isActiveDashboardPath(pathname, item.href)",
@@ -69,7 +77,7 @@ describe("Product Catalogue UI", () => {
       'aria-current={isActive ? "page" : undefined}',
     );
 
-    for (const disabledLabel of ["Today Log", "Ingredients"]) {
+    for (const disabledLabel of ["Today Log"]) {
       expect(
         dashboardNavItems.find((item) => item.label === disabledLabel),
       ).toMatchObject({

@@ -1,6 +1,6 @@
 # UI and API Route Map - MVP v1.2.6
 
-Last updated: 2026-05-24
+Last updated: 2026-05-26
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
+Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
 
 ## Route Principles
 
@@ -31,11 +31,11 @@ Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
 | `/journal` | Private skin journal timeline with create/edit/delete and product selection | Implemented | Authenticated | `/api/skin-journal`, `/api/skin-journal/[id]`, `/api/products?limit=50` |
 | `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
 | `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
+| `/ingredients` | Ingredient library list/search UI | Implemented | Authenticated | `GET /api/ingredients` |
+| `/ingredients/[id]` | Ingredient detail UI with explanation panel | Implemented | Authenticated | `GET /api/ingredients/[id]`, `POST /api/ingredients/explain` |
 | `/login` | Dedicated login page | Not started | Public if added later | Auth.js default sign-in route currently handles login |
 | `/privacy` | Static privacy page | Not started | Public if added later | N/A |
 | `/terms` | Static terms/disclaimer page | Not started | Public if added later | N/A |
-| `/ingredients` | Ingredient list/search UI | Not started | Authenticated if added later | `GET /api/ingredients` exists |
-| `/ingredients/[id]` | Ingredient detail UI | Not started | Authenticated if added later | `GET /api/ingredients/[id]` exists |
 | `/products/new` | Product submission UI | Not started | Authenticated if added later | `POST /api/products` is not implemented |
 | `/routines/[id]` | Dedicated routine detail page | Not started | Authenticated if added later | Existing `/routines` page owns routine UI |
 | `/routines/[id]/analysis` | Dedicated routine analysis page | Not started | Authenticated if added later | Existing `/routines` page owns analysis UI |
@@ -76,6 +76,7 @@ Latest completed task: `PRODUCT-UI-002 - Implement Product Detail UI`.
 /routines/:path*
 /journal/:path*
 /products/:path*
+/ingredients/:path*
 ```
 
 ## Current Dashboard Navigation
@@ -88,13 +89,13 @@ Skin Profile
 Routines
 Journal
 Products
+Ingredients
 ```
 
 Disabled/future:
 
 ```txt
 Today Log
-Ingredients
 ```
 
 Today routine log controls exist inside `/routines`; there is no separate `/routine-logs/today` page.

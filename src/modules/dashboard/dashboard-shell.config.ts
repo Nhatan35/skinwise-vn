@@ -5,13 +5,15 @@ export const skinProfileRoute = routes.SKIN_PROFILE;
 export const routinesRoute = routes.ROUTINES;
 export const journalRoute = routes.JOURNAL;
 export const productsRoute = routes.PRODUCTS;
+export const ingredientsRoute = routes.INGREDIENTS;
 
 type DashboardNavHref =
   | typeof dashboardRoute
   | typeof skinProfileRoute
   | typeof routinesRoute
   | typeof journalRoute
-  | typeof productsRoute;
+  | typeof productsRoute
+  | typeof ingredientsRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
@@ -58,9 +60,9 @@ export const dashboardNavItems = [
     status: "Active",
   },
   {
-    disabled: true,
-    href: null,
+    disabled: false,
+    href: ingredientsRoute,
     label: "Ingredients",
-    status: "Future",
+    status: "Active",
   },
 ] satisfies DashboardNavItem[];
