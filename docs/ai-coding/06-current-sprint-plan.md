@@ -5,35 +5,39 @@ Last updated: 2026-05-27
 ## 1. Current phase
 
 ```txt
-Post Week 6 feature roadmap v1.2 implementation and validation
+Post Week 6 MVP closeout, validation, and deployment re-verification follow-up
 ```
 
-The main Week 1-6 MVP implementation is completed. Feature Roadmap v1.1 added the authenticated Ingredient Library UI. Feature Roadmap v1.2 adds authenticated Saved Products on top of the existing product catalogue/detail flow. MVP-TODAY-LOG-001 completes the daily routine tracking flow with a dedicated `/routine-logs/today` checklist page. QUALITY-001 added safe test-only authenticated Playwright coverage, and QUALITY-002A extends that foundation to Skin Profile, Product Catalogue, and Product Detail smoke flows with deterministic local/test product data. RUNTIME-001 updates the project runtime baseline to Node 24.x / npm 11.x. INGREDIENT-UI-001 local validation passed including authenticated Playwright E2E against the safe local test database. SAVED-PRODUCTS-001 local validation passed, including `npm run db:indexes`, `npm run db:seed:e2e`, and authenticated Playwright E2E against `skinwise-e2e-check`. DEPLOY-VERIFY-001 remains partial: historical local validation and public unauthenticated production smoke checks passed, while external platform verification remains pending.
+The main Week 1-6 MVP implementation is completed. Feature Roadmap v1.1 added the authenticated Ingredient Library UI. Feature Roadmap v1.2 adds authenticated Saved Products on top of the existing product catalogue/detail flow. MVP-TODAY-LOG-001 completed the daily routine tracking flow with a dedicated `/routine-logs/today` checklist page. MVP-DATA-CONTROL-001 added `/settings`, account deletion request marking, and RoutineLog deletion. MVP-DATA-CONTROL-CLOSEOUT-001 closes the task with direct DELETE API contract coverage and stale documentation cleanup. QUALITY-001 added safe test-only authenticated Playwright coverage, and QUALITY-002A extends that foundation to Skin Profile, Product Catalogue, and Product Detail smoke flows with deterministic local/test product data. RUNTIME-001 updates the project runtime baseline to Node 24.x / npm 11.x. INGREDIENT-UI-001 local validation passed including authenticated Playwright E2E against the safe local test database. SAVED-PRODUCTS-001 local validation passed, including `npm run db:indexes`, `npm run db:seed:e2e`, and authenticated Playwright E2E against `skinwise-e2e-check`. DEPLOY-VERIFY-001 remains partial: historical local validation and public unauthenticated production smoke checks passed, while external platform verification remains pending.
 
 ## 2. Current feature task
 
 Current task:
 
 ```txt
-MVP-TODAY-LOG-001 - Dedicated Today Routine Checklist Page
+MVP-DATA-CONTROL-CLOSEOUT-001 - Settings/Data Control closeout
 ```
 
 Status:
 
 ```txt
-MVP-TODAY-LOG-001: COMPLETED IN SOURCE; LOCAL VALIDATION RECORDED BY THIS TASK.
+MVP-DATA-CONTROL-CLOSEOUT-001: COMPLETED IN SOURCE/DOCS; LOCAL VALIDATION RECORDED BY THIS TASK.
+MVP-DATA-CONTROL-001: COMPLETED IN SOURCE.
+Settings route: /settings.
+Settings UI: account overview, data management navigation, and MVP-safe account deletion request.
+RoutineLog delete API: DELETE /api/routine-logs/:id, scoped to the authenticated user.
 Today Log route: /routine-logs/today.
-Today Log UI: authenticated checklist for morning/evening routines using existing RoutineLog controls.
-Dashboard navigation and dashboard routine logging CTAs now point to /routine-logs/today.
-SAVED-PRODUCTS-001: IMPLEMENTED IN SOURCE; LOCAL VALIDATION RECORDED HISTORICALLY.
-Saved Products route: /saved-products.
-Saved Products API: GET/POST /api/saved-products and DELETE /api/saved-products/[productId].
-Saved Products UI: authenticated save, saved-state display, saved list, and remove flow.
-Product schema changes: not required.
-Marketplace, cart, recommendation, sharing, likes, ratings, and reviews: not implemented by design.
+Today Log UI: authenticated checklist for morning/evening routines using existing RoutineLog controls, including delete support for existing routine logs.
+Documentation closeout: RoutineLog API docs, UI route map, feature matrix, implementation status, changelog, sprint plan, and README updated.
+Product scope changes: none.
+Settings page rewrite: not performed.
+Today Routine Checklist rewrite: not performed.
+RoutineLog API rewrite: not performed.
+Hard-delete Auth.js account flow: not implemented by design.
+Bulk data deletion/export/legal compliance claims: not implemented by design.
 Real OpenAI/Gemini provider verification: not completed; mock/fallback-safe behavior remains the demo-safe baseline.
 Deployment status: Deployed for MVP demo.
-Actual Vercel deployment: COMPLETED.
+Actual Vercel deployment: COMPLETED historically.
 Deployment target: Vercel.
 Production branch: main.
 Production commit: db72e07.
@@ -41,24 +45,12 @@ Production URL: https://skinwise-vn.vercel.app
 Previously documented DEPLOY-002 production smoke test: PASSED.
 Previously documented Google OAuth production login: PASSED.
 Previously documented MongoDB production/demo read/write through authenticated flows: PASSED.
-Current DEPLOY-VERIFY-001 local validation: PASSED historically under Node 20; earlier Node 24 runtime validation did not include E2E until local MongoDB was available. For INGREDIENT-UI-001, `npm run db:seed:e2e` passed against `skinwise-e2e-check` and `npm run test:e2e` passed with 12 tests. For SAVED-PRODUCTS-001, local validation passed with `npm run lint`, `npm run typecheck`, `npm run test` (69 files, 680 tests), `npm run build`, `npm run db:indexes`, `npm run db:seed:e2e`, and `npm run test:e2e` (14 tests).
-Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED.
+Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED historically.
 Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, and sign-out: NOT VERIFIED without external access.
-TASK DEPLOY-002: COMPLETED.
-TASK QA-REGRESSION-001: COMPLETED.
-TASK DEMO-DATA-001: COMPLETED.
-TASK PORTFOLIO-001: COMPLETED.
-TASK FINAL-RELEASE-001: COMPLETED.
-E2E-001: COMPLETED.
-DEPLOY-VERIFY-001: PARTIAL.
 QUALITY-001: COMPLETED.
 QUALITY-002A: IMPLEMENTED; FULL E2E VERIFICATION REQUIRES LOCAL MONGODB.
-RUNTIME-001: CONFIG/DOCS UPDATED; HISTORICAL NODE 24 RUNTIME VALIDATION WAS PARTIAL UNTIL LOCAL MONGODB WAS AVAILABLE. INGREDIENT-UI-001 LOCAL E2E VALIDATION PASSED.
-Clean package validation is robust across LF and CRLF line endings.
-Professional public/shared demo seed data and authenticated manual demo setup are documented.
-Portfolio case study, demo script, and screenshots checklist are prepared.
-Final release checklist and release notes are prepared.
-Unauthenticated Playwright smoke tests are implemented for the public landing page and protected-route redirects. Authenticated Playwright specs now cover dashboard, Skin Profile create/update, Product Catalogue, Product Detail, Ingredient Library, and Saved Products flows using safe test auth and local/test seed data.
+RUNTIME-001: CONFIG/DOCS UPDATED; project target runtime remains Node 24.x / npm 11.x.
+This sandbox validation used Node v22.16.0 / npm 10.9.2 because Node 24/npm 11 was not available in the container.
 ```
 
 ## 3. Current runtime task
@@ -91,6 +83,8 @@ Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product De
 Feature Roadmap v1.1 Ingredient Library UI completed in source
 Feature Roadmap v1.2 Saved Products completed in source
 MVP-TODAY-LOG-001 dedicated Today Routine Checklist completed in source
+MVP-DATA-CONTROL-001 Settings and Privacy Data Control Center completed in source
+MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout completed in source/docs
 ```
 
 ## 6. Deployment preparation goals
@@ -139,6 +133,11 @@ MVP-TODAY-LOG-001 dedicated Today Routine Checklist completed in source
 [x] Add dedicated `/routine-logs/today` Today Checklist page.
 [x] Enable Today Log dashboard navigation.
 [x] Link dashboard routine logging CTAs to `/routine-logs/today`.
+[x] Add protected `/settings` Settings & Data Control page.
+[x] Add MVP-safe account deletion request marker.
+[x] Add user-scoped `DELETE /api/routine-logs/:id`.
+[x] Add direct RoutineLog DELETE API contract coverage.
+[x] Clean stale Settings/Data Control and RoutineLog docs.
 [x] Run historical DEPLOY-VERIFY-001 local validation with Node 20.
 [ ] Run full local validation with Node v24.14.0 / npm 11.14.1 including E2E with local MongoDB available.
 [ ] Run CI validation with Node 24.x.
@@ -170,28 +169,29 @@ No real AI provider completion claim without implementation and verification.
 
 ## 8. Validation scope
 
-Run available scripts from `package.json` where safe. For MVP-TODAY-LOG-001, run:
+Run available scripts from `package.json` where safe. For MVP-DATA-CONTROL-CLOSEOUT-001, run:
 
 ```txt
 npm run lint
 npm run typecheck
 npm run test
 npm run build
-npm run db:indexes, only against a safe local/development database
-npm run db:seed:e2e, only against the safe local/test MongoDB target
+npm run db:seed:e2e, only when the safe local/test MongoDB target is available
 npm run test:e2e, only when local MongoDB is available
 ```
 
 Database commands must only run against a known local/test database. Do not seed production data.
 
-Latest MVP-TODAY-LOG-001 local validation:
+Latest MVP-DATA-CONTROL-CLOSEOUT-001 local validation:
 
 ```txt
+Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
+Project target runtime remains Node 24.x / npm 11.x per package.json.
+
 npm run lint: Pass
 npm run typecheck: Pass
-npm run test: Pass - 69 files, 683 tests
-npm run build: Timed out in this sandbox while collecting page data after successful compilation and TypeScript phase
-npm run db:indexes: not required for this UI/API reuse task
+npm run test: Pass - 72 files, 717 tests
+npm run build: Pass with safe local placeholder env values
 npm run db:seed:e2e: not run because local MongoDB was not available on 127.0.0.1:27017
 npm run test:e2e: not run because local MongoDB was not available on 127.0.0.1:27017
 ```
@@ -211,3 +211,12 @@ Reason: local validation plus public unauthenticated production checks passed, b
 [x] Add MVP-safe account deletion request marker.
 [x] Add user-scoped single RoutineLog deletion API and Today Log UI action.
 [x] Update tests and documentation without adding out-of-scope export, notifications, admin, or hard-delete flows.
+
+## MVP-DATA-CONTROL-CLOSEOUT-001
+
+[x] Add direct `DELETE /api/routine-logs/[id]` API contract coverage.
+[x] Clean stale RoutineLog API docs.
+[x] Update route map latest task and `/routine-logs/today` dependencies.
+[x] Move Settings/Data Control into the main feature matrix table.
+[x] Update implementation status, changelog, sprint plan, and README.
+[x] Run local validation commands and report skipped E2E checks honestly.

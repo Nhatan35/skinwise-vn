@@ -8,7 +8,7 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Checklist Page`.
+Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
 
 ## Route Principles
 
@@ -40,10 +40,10 @@ Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Check
 | `/products/new` | Product submission UI | Not started | Authenticated if added later | `POST /api/products` is not implemented |
 | `/routines/[id]` | Dedicated routine detail page | Not started | Authenticated if added later | Existing `/routines` page owns routine UI |
 | `/routines/[id]/analysis` | Dedicated routine analysis page | Not started | Authenticated if added later | Existing `/routines` page owns analysis UI |
-| `/routine-logs/today` | Dedicated daily routine checklist page for today's routine logs | Implemented | Authenticated | `GET /api/routines`, `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs` |
+| `/routine-logs/today` | Dedicated daily routine checklist page for today's routine logs | Implemented | Authenticated | `GET /api/routines`, `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs`, `DELETE /api/routine-logs/:id` |
 | `/journal/new` | Dedicated create journal page | Not started | Authenticated if added later | Existing `/journal` page owns create UI |
 | `/journal/[id]` | Dedicated journal detail/edit page | Not started | Authenticated if added later | Existing `/journal` page owns edit UI |
-| `/settings` | Settings & Data Control page for account overview, data management navigation, account deletion request, and links to user-owned data areas | Implemented | Authenticated | `GET /api/me`, `POST /api/account/deletion-request`, links to `/routine-logs/today` for routine log management |
+| `/settings` | Settings & Data Control page for account overview, data management navigation, and MVP-safe account deletion request | Implemented | Authenticated | `GET /api/me`, `POST /api/account/deletion-request`, links to user-owned data areas including `/routine-logs/today` |
 
 ## API Routes
 
@@ -65,6 +65,7 @@ Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Check
 | `/api/routines/[id]/analyze` | `POST` | Routine safety analysis with deterministic rules before provider explanation | Required | Implemented |
 | `/api/routines/[id]/analyses` | `GET` | Routine analysis history | Required | Implemented |
 | `/api/routine-logs` | `GET`, `PUT` | Routine log list for a local date and upsert for one routine/date | Required | Implemented |
+| `/api/routine-logs/[id]` | `DELETE` | Delete one RoutineLog owned by the current user | Required | Implemented |
 | `/api/skin-journal` | `GET`, `POST` | Current user's journal list and create endpoint | Required | Implemented |
 | `/api/skin-journal/[id]` | `PATCH`, `DELETE` | Current user's journal update/delete endpoint | Required | Implemented |
 
@@ -82,6 +83,7 @@ Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Check
 /products/:path*
 /saved-products/:path*
 /ingredients/:path*
+/settings/:path*
 ```
 
 ## Current Dashboard Navigation
@@ -97,6 +99,7 @@ Journal
 Products
 Saved Products
 Ingredients
+Settings
 ```
 
 Disabled/future:
@@ -105,7 +108,7 @@ Disabled/future:
 None currently listed in dashboard navigation.
 ```
 
-Today routine log controls still exist inside `/routines`, and `/routine-logs/today` now provides the dedicated daily checklist route for the same RoutineLog API flow.
+Today routine log controls still exist inside `/routines`, and `/routine-logs/today` now provides the dedicated daily checklist route for the same RoutineLog API flow, including deletion through `DELETE /api/routine-logs/:id`.
 
 ## Post-MVP Routes Not Allowed Without Explicit Approval
 

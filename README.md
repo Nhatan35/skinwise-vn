@@ -36,7 +36,9 @@ Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 2
 
 Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
 
-Latest MVP task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
+Latest MVP source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
+
+Latest closeout task: `MVP-DATA-CONTROL-CLOSEOUT-001 - Settings/Data Control closeout`.
 
 Deployment verification note: `DEPLOY-VERIFY-001` remains partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
 

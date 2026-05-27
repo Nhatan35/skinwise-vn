@@ -4,6 +4,41 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-27 - MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout
+
+### Task
+
+Close out the Settings and Privacy Data Control MVP task without adding new product scope.
+
+### Changes
+
+- Added direct `DELETE /api/routine-logs/[id]` API contract coverage.
+- Covered unauthenticated delete rejection, successful current-user deletion, client `userId` ignoring, missing/not-owned log `NOT_FOUND`, invalid id safety, and generic internal error handling.
+- Fixed RoutineLog API documentation so it documents `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs`, and `DELETE /api/routine-logs/:id`.
+- Removed stale RoutineLog notes that said DELETE was not implemented or that there was no dedicated `/routine-logs/today` route.
+- Fixed the route map latest task and added `DELETE /api/routine-logs/:id` as a `/routine-logs/today` dependency.
+- Moved Settings/Data Control into the main feature status table and updated the Routine Logs row/API notes to include delete support.
+- Updated implementation status, sprint plan, README status, and validation notes honestly.
+
+### Notes
+
+- No Settings page rewrite, Today Routine Checklist rewrite, RoutineLog API rewrite, new product feature, export flow, notification flow, admin workflow, marketplace/payment scope, real OpenAI/Gemini integration, hard-delete account flow, or legal compliance claim was added.
+- Existing `tests/unit/routine-log-api-contract.test.ts` was left unchanged because it currently contains useful `/api/routines` contract coverage despite the confusing file name.
+
+### Validation
+
+```txt
+Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
+Project target runtime remains Node 24.x / npm 11.x per package.json.
+
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 72 files, 717 tests
+npm run build: Pass with safe local placeholder env values
+npm run db:seed:e2e: Not run because no local MongoDB was listening on 127.0.0.1:27017
+npm run test:e2e: Not run because no local MongoDB was listening on 127.0.0.1:27017
+```
+
 ## 2026-05-26 - SAVED-PRODUCTS-001 Saved Products
 
 ### Task

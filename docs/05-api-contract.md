@@ -727,83 +727,26 @@ Errors:
 
 ## 9. Routine Logs
 
-RoutineLog API is used by both the `/routines` page and the dedicated `/routine-logs/today` checklist page.
+RoutineLog API currently supports authenticated, user-scoped daily routine tracking for both the `/routines` page and the dedicated `/routine-logs/today` checklist page.
 
-### PUT /api/routine-logs
+Supported endpoints:
 
-Canonical upsert endpoint for one routine log.
+1. `GET /api/routine-logs?localDate=YYYY-MM-DD`
+2. `PUT /api/routine-logs`
+3. `DELETE /api/routine-logs/:id`
 
-Authentication:
+`POST /api/routine-logs` is intentionally not used in the MVP because `PUT /api/routine-logs` is the canonical idempotent create/update endpoint for `userId + routineId + localDate`.
+
+### GET /api/routine-logs?localDate=YYYY-MM-DD
+
+Fetch RoutineLog DTOs for the authenticated user on a specific local calendar date.
+
+Authentication and ownership:
 
 - Requires authenticated user.
 - Server derives `userId` from the session.
 - Client must not submit `userId`.
-
-Upsert behavior:
-
-- If no RoutineLog exists for `userId + routineId + localDate`, create one.
-- If a RoutineLog already exists for `userId + routineId + localDate`, update it.
-- Do not create duplicate RoutineLog records for the same `userId + routineId + localDate`.
-
-Request:
-
-```json
-{
-  "routineId": "665000000000000000000460",
-  "localDate": "2026-05-17",
-  "timezone": "Asia/Ho_Chi_Minh",
-  "status": "partial",
-  "completedStepIds": ["step_1"],
-  "note": "Bỏ qua kem chống nắng hôm nay."
-}
-```
-
-Validation:
-
-- `routineId` is required.
-- target routine must belong to the authenticated user.
-- `localDate` is required and must use `YYYY-MM-DD`.
-- `localDate` is stored as a string, not a JavaScript Date.
-- `timezone` is required as a non-empty string.
-- `status` must be one of `completed`, `partial`, or `skipped`.
-- `completedStepIds` is optional and must contain RoutineStep `stepId` values from the target routine when provided.
-- unknown completed step IDs return `VALIDATION_ERROR`.
-- `partial` logs require at least one completed step and fewer than all routine steps.
-- `skipped` logs must omit `completedStepIds` or keep it empty.
-- `note` is optional, trimmed, and max 500 characters.
-- client-submitted `userId`, `id`, `_id`, `createdAt`, `updatedAt`, and unknown fields are rejected.
-
-Response:
-
-```json
-{
-  "data": {
-    "routineLog": {
-      "id": "665000000000000000000471",
-      "routineId": "665000000000000000000460",
-      "localDate": "2026-05-17",
-      "timezone": "Asia/Ho_Chi_Minh",
-      "status": "partial",
-      "completedStepIds": ["step_1"],
-      "note": "Bỏ qua kem chống nắng hôm nay.",
-      "createdAt": "2026-05-17T00:00:00.000Z",
-      "updatedAt": "2026-05-17T00:00:00.000Z"
-    }
-  },
-  "error": null
-}
-```
-
-Errors:
-
-- UNAUTHORIZED
-- NOT_FOUND
-- VALIDATION_ERROR
-- INTERNAL_ERROR
-
-### GET /api/routine-logs?localDate=YYYY-MM-DD
-
-Returns RoutineLog DTOs for the authenticated user on a required local calendar date.
+- Only logs owned by the authenticated user are returned.
 
 Query params:
 
@@ -839,12 +782,112 @@ Errors:
 - VALIDATION_ERROR
 - INTERNAL_ERROR
 
-Notes:
+### PUT /api/routine-logs
 
-- `POST /api/routine-logs` is not implemented for RL-001.
-- `DELETE /api/routine-logs/:id` is not implemented for RL-001.
-- RoutineLog UI is implemented on the existing /routines page by TASK RL-002.
+Idempotently create or update one RoutineLog for the authenticated user by `userId + routineId + localDate`.
 
+Authentication and ownership:
+
+- Requires authenticated user.
+- Server derives `userId` from the session.
+- Client must not submit `userId`.
+- Target routine must belong to the authenticated user.
+
+Upsert behavior:
+
+- If no RoutineLog exists for `userId + routineId + localDate`, create one.
+- If a RoutineLog already exists for `userId + routineId + localDate`, update it.
+- Do not create duplicate RoutineLog records for the same `userId + routineId + localDate`.
+
+Request:
+
+```json
+{
+  "routineId": "665000000000000000000460",
+  "localDate": "2026-05-17",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "status": "partial",
+  "completedStepIds": ["step_1"],
+  "note": "Bỏ qua kem chống nắng hôm nay."
+}
+```
+
+Validation:
+
+- `routineId` is required.
+- `localDate` is required and must use `YYYY-MM-DD`.
+- `localDate` is stored as a string, not a JavaScript Date.
+- `timezone` is required as a non-empty string.
+- `status` must be one of `completed`, `partial`, or `skipped`.
+- `completedStepIds` is optional and must contain RoutineStep `stepId` values from the target routine when provided.
+- Unknown completed step IDs return `VALIDATION_ERROR`.
+- `partial` logs require at least one completed step and fewer than all routine steps.
+- `skipped` logs must omit `completedStepIds` or keep it empty.
+- `note` is optional, trimmed, and max 500 characters.
+- Client-submitted `userId`, `id`, `_id`, `createdAt`, `updatedAt`, and unknown fields are rejected.
+
+Response:
+
+```json
+{
+  "data": {
+    "routineLog": {
+      "id": "665000000000000000000471",
+      "routineId": "665000000000000000000460",
+      "localDate": "2026-05-17",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "status": "partial",
+      "completedStepIds": ["step_1"],
+      "note": "Bỏ qua kem chống nắng hôm nay.",
+      "createdAt": "2026-05-17T00:00:00.000Z",
+      "updatedAt": "2026-05-17T00:00:00.000Z"
+    }
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- NOT_FOUND
+- VALIDATION_ERROR
+- INTERNAL_ERROR
+
+### DELETE /api/routine-logs/:id
+
+Delete a RoutineLog owned by the authenticated user.
+
+Authentication and ownership:
+
+- Requires authenticated user.
+- Server derives `userId` from the session.
+- Client must not submit `userId`.
+- The API must not delete another user's RoutineLog.
+- The API returns `NOT_FOUND` when the log is missing, invalid, or not owned by the current user. This keeps ownership details private.
+
+Response:
+
+```json
+{
+  "data": {
+    "deleted": true
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- NOT_FOUND
+- INTERNAL_ERROR
+
+Usage notes:
+
+- `/routines` uses RoutineLog GET/PUT controls for daily routine status updates.
+- `/routine-logs/today` uses RoutineLog GET/PUT for the dedicated daily checklist and DELETE `/api/routine-logs/:id` to remove an existing routine log.
+- DELETE removes only the matching RoutineLog record; it does not delete routines, routine analyses, skin profile records, journal entries, saved products, Auth.js identity records, or other user data.
 
 ## 10. Dashboard
 
