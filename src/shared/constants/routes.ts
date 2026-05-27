@@ -8,5 +8,6 @@ export const routes = {
   PRODUCTS: "/products",
   SAVED_PRODUCTS: "/saved-products",
   INGREDIENTS: "/ingredients",
+  SETTINGS: "/settings",
   SKIN_PROFILE: "/skin-profile",
 } as const;

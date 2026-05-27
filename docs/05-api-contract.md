@@ -727,7 +727,7 @@ Errors:
 
 ## 9. Routine Logs
 
-RoutineLog API is implemented and the current UI exposes daily routine log controls inside the existing `/routines` page. There is no separate `/routine-logs/today` UI route.
+RoutineLog API is used by both the `/routines` page and the dedicated `/routine-logs/today` checklist page.
 
 ### PUT /api/routine-logs
 
@@ -1007,3 +1007,23 @@ Errors:
 
 - UNAUTHORIZED
 - NOT_FOUND
+
+
+## Account deletion request API
+
+### `POST /api/account/deletion-request`
+
+- Requires authentication.
+- The server derives the current user id from the authenticated session; the endpoint does not accept a client-submitted `userId`.
+- Stores `accountDeletionRequestedAt` on the existing `AppUserProfile` document as an MVP-safe, non-destructive request marker.
+- Does not hard-delete the Auth.js identity and does not delete Auth.js adapter documents.
+- Returns the standard SkinWise API envelope with `data.requested` and `data.accountDeletionRequestedAt`.
+- Repeated requests are idempotent and return the existing request timestamp.
+
+### `DELETE /api/routine-logs/:id`
+
+- Requires authentication.
+- Deletes only the routine log matching both the route id and the current authenticated `userId`.
+- Returns `NOT_FOUND` for invalid ids, missing logs, or logs owned by another user.
+- Does not accept client-submitted `userId`.
+- Does not delete routines, routine analyses, skin profile records, journal entries, saved products, or other user data.

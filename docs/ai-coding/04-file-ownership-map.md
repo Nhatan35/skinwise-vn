@@ -895,3 +895,21 @@ Rules:
 - these folders are structure placeholders only;
 - no product feature logic is implemented in these folders yet;
 - `src/modules/notifications/` must not be created during MVP Week 1.
+
+
+## MVP-DATA-CONTROL-001 Settings & Data Control ownership
+
+src/app/(dashboard)/settings/page.tsx
+src/modules/settings/components/settings-data-control-center.tsx
+src/modules/settings/settings.client.ts
+src/app/api/account/deletion-request/route.ts
+src/app/api/routine-logs/[id]/route.ts
+src/modules/users/app-user-profile.types.ts
+src/modules/users/app-user-profile.mapper.ts
+src/modules/users/app-user-profile.repository.ts
+src/modules/users/app-user-profile.use-case.ts
+src/modules/routine-logs/routine-log.repository.ts
+src/modules/routine-logs/routine-log.use-case.ts
+
+- Owns the authenticated Settings & Data Control center, MVP-safe account deletion request marker, and user-scoped single RoutineLog deletion.
+- Does not own Auth.js adapter hard-delete, bulk export/delete, notifications, admin review queues, or new user roles.

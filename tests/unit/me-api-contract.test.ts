@@ -24,6 +24,7 @@ const profile = {
   role: "USER" as const,
   onboardingCompleted: false,
   createdAt: new Date("2026-05-14T00:00:00.000Z"),
+  accountDeletionRequestedAt: null,
   updatedAt: new Date("2026-05-14T00:00:00.000Z"),
 };
 const completedProfile = {
@@ -85,6 +86,7 @@ describe("GET /api/me contract", () => {
           name: "An",
           role: "USER",
           onboardingCompleted: false,
+          accountDeletionRequestStatus: "not_requested",
         },
       },
       error: null,
@@ -111,11 +113,43 @@ describe("GET /api/me contract", () => {
           name: "An",
           role: "USER",
           onboardingCompleted: true,
+          accountDeletionRequestStatus: "not_requested",
         },
       },
       error: null,
     });
     expect(response.status).toBe(200);
+  });
+
+
+
+  it("returns safe account deletion request status without exposing raw profile fields", async () => {
+    const requestedAt = new Date("2026-05-20T00:00:00.000Z");
+    mockedGetCurrentUser.mockResolvedValue({
+      id: authUserId,
+      email: "an@example.com",
+      name: "An",
+    });
+    mockedEnsureAppUserProfile.mockResolvedValue({
+      ...profile,
+      accountDeletionRequestedAt: requestedAt,
+    });
+
+    const response = await meRoute.GET();
+    const body = await readJson(response);
+
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({
+      data: {
+        user: {
+          accountDeletionRequestedAt: requestedAt.toISOString(),
+          accountDeletionRequestStatus: "requested",
+        },
+      },
+      error: null,
+    });
+    expect(JSON.stringify(body)).not.toContain('"userId"');
+    expect(JSON.stringify(body)).not.toContain('"_id"');
   });
 
   it("does not expose AppUserProfile userId in the API response", async () => {

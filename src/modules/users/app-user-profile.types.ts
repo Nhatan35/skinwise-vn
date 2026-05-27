@@ -8,6 +8,7 @@ export type AppUserProfileDocument = {
   userId: string;
   role: AppUserRole;
   onboardingCompleted: boolean;
+  accountDeletionRequestedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -20,6 +21,8 @@ export type MeUserDto = {
   name?: string;
   role: AppUserRole;
   onboardingCompleted: boolean;
+  accountDeletionRequestedAt?: string;
+  accountDeletionRequestStatus: "not_requested" | "requested";
 };
 
 export const DEFAULT_APP_USER_PROFILE = {

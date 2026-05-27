@@ -43,7 +43,7 @@ Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Check
 | `/routine-logs/today` | Dedicated daily routine checklist page for today's routine logs | Implemented | Authenticated | `GET /api/routines`, `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs` |
 | `/journal/new` | Dedicated create journal page | Not started | Authenticated if added later | Existing `/journal` page owns create UI |
 | `/journal/[id]` | Dedicated journal detail/edit page | Not started | Authenticated if added later | Existing `/journal` page owns edit UI |
-| `/settings` | App/account settings | Not started | Authenticated if added later | Future scope |
+| `/settings` | Settings & Data Control page for account overview, data management navigation, account deletion request, and links to user-owned data areas | Implemented | Authenticated | `GET /api/me`, `POST /api/account/deletion-request`, links to `/routine-logs/today` for routine log management |
 
 ## API Routes
 
@@ -128,3 +128,6 @@ Do not create:
 Every route must avoid medical diagnosis claims, treatment guarantees, appearance scoring, skin scoring, and appearance pressure.
 
 Use factual educational wording. For severe, painful, spreading, infected-looking, infected, or persistent symptoms, guide users to a qualified professional.
+
+
+Protected route matcher now includes `"/settings/:path*"` for the authenticated Settings & Data Control page. Routine logs remain managed through `/routine-logs/today`.

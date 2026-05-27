@@ -247,3 +247,11 @@ For MVP simplicity and safety:
 ```
 
 Public landing-page routes can be added later, but should not reuse private app API routes without a deliberate API contract update.
+
+
+## Settings and privacy data control center
+
+- The authenticated Settings page centralizes user data control and links to the user-owned data areas for Skin Profile, Routines, Today Log, Skin Journal, and Saved Products.
+- Account deletion is implemented as an MVP-safe manual request marker stored as `accountDeletionRequestedAt`; the MVP does not automatically hard-delete Auth.js identity or adapter documents.
+- RoutineLog deletion is user-scoped and requires matching the current authenticated user id with the target routine log id.
+- The Settings page explains that shared product and ingredient catalogue records are app data, not private user-owned records deleted from Settings.

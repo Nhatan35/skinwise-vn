@@ -8,6 +8,7 @@ export const journalRoute = routes.JOURNAL;
 export const productsRoute = routes.PRODUCTS;
 export const savedProductsRoute = routes.SAVED_PRODUCTS;
 export const ingredientsRoute = routes.INGREDIENTS;
+export const settingsRoute = routes.SETTINGS;
 
 type DashboardNavHref =
   | typeof dashboardRoute
@@ -17,7 +18,8 @@ type DashboardNavHref =
   | typeof journalRoute
   | typeof productsRoute
   | typeof savedProductsRoute
-  | typeof ingredientsRoute;
+  | typeof ingredientsRoute
+  | typeof settingsRoute;
 
 export type DashboardNavItem = {
   disabled: boolean;
@@ -73,6 +75,12 @@ export const dashboardNavItems: DashboardNavItem[] = [
     disabled: false,
     href: ingredientsRoute,
     label: "Ingredients",
+    status: "Active",
+  },
+  {
+    disabled: false,
+    href: settingsRoute,
+    label: "Settings",
     status: "Active",
   },
 ];

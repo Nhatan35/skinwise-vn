@@ -47,3 +47,5 @@ Out of scope
 ## Update Rule
 
 Update this file whenever a feature starts, becomes partially completed, is completed, is deliberately moved out of scope, or when API/UI/DB/test status changes.
+
+| Settings / Data Control | Completed | `GET /api/me`; `POST /api/account/deletion-request`; `DELETE /api/routine-logs/:id` | Protected `/settings` Settings & Data Control page with data management navigation and MVP-safe account deletion request | `app_user_profiles.accountDeletionRequestedAt`; user-owned routine_logs | Unit/API/source checks | No hard-delete Auth.js identity, no bulk delete, no export, no GDPR compliance claims |

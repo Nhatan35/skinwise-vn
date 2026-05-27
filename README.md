@@ -36,7 +36,7 @@ Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 2
 
 Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
 
-Latest feature task: `SAVED-PRODUCTS-001 - Implement Saved Products`.
+Latest MVP task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
 
 Deployment verification note: `DEPLOY-VERIFY-001` remains partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
 
@@ -69,6 +69,7 @@ Completed scope:
 - Routine Safety Analysis.
 - Skin Journal.
 - Dashboard summary.
+- Settings & Data Control.
 - Ingredient Explanation API.
 - Demo seed data and demo walkthrough documentation.
 
@@ -81,16 +82,19 @@ Implemented UI routes:
 - `/onboarding/skin-profile`
 - `/skin-profile`
 - `/routines`
+- `/routine-logs/today`
 - `/journal`
 - `/products`
 - `/products/[id]`
 - `/saved-products`
 - `/ingredients`
 - `/ingredients/[id]`
+- `/settings`
 
 Implemented SkinWise API routes:
 
 - `/api/me`
+- `/api/account/deletion-request`
 - `/api/dashboard`
 - `/api/skin-profile`
 - `/api/products`
@@ -105,6 +109,7 @@ Implemented SkinWise API routes:
 - `/api/routines/[id]/analyze`
 - `/api/routines/[id]/analyses`
 - `/api/routine-logs`
+- `/api/routine-logs/[id]`
 - `/api/skin-journal`
 - `/api/skin-journal/[id]`
 
@@ -317,3 +322,4 @@ Build the safest useful version first:
 - routine consistency tracking;
 - no diagnosis;
 - no product-selling pressure.
+

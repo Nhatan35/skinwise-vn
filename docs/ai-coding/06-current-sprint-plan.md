@@ -203,3 +203,11 @@ DEPLOY-VERIFY-001A - Complete manual external platform verification with Vercel,
 ```
 
 Reason: local validation plus public unauthenticated production checks passed, but current Vercel environment/log evidence, Google OAuth login, authenticated dashboard, MongoDB-backed read/write, sign-out, and runtime-log review still require external platform access or user-provided evidence.
+
+
+## MVP-DATA-CONTROL-001
+
+[x] Add protected `/settings` Settings & Data Control page.
+[x] Add MVP-safe account deletion request marker.
+[x] Add user-scoped single RoutineLog deletion API and Today Log UI action.
+[x] Update tests and documentation without adding out-of-scope export, notifications, admin, or hard-delete flows.

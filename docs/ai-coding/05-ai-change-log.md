@@ -3495,3 +3495,14 @@ npm run build: Timed out in this sandbox while collecting page data after succes
 npm run db:seed:e2e: Not run because local MongoDB was not available on 127.0.0.1:27017
 npm run test:e2e: Not run because local MongoDB was not available on 127.0.0.1:27017
 ```
+
+
+## 2026-05-27 - MVP-DATA-CONTROL-001 Settings and Privacy Data Control Center
+
+- Added `routes.SETTINGS`, active Settings dashboard navigation, and protected `/settings/:path*`.
+- Added the authenticated `/settings` page and `SettingsDataControlCenter` client component.
+- Added safe account/app profile display using `GET /api/me`.
+- Added MVP-safe account deletion request via `POST /api/account/deletion-request`, storing `accountDeletionRequestedAt` on AppUserProfile without hard-deleting Auth.js identity or adapter documents.
+- Added user-scoped `DELETE /api/routine-logs/:id` and a Today Log `Xóa ghi nhận` action for existing daily routine logs.
+- Updated tests and docs for Settings, account deletion request, and routine log deletion.
+- Did not add export, notifications, admin CRUD, marketplace/payment, skin scoring, medical diagnosis, real AI provider integration, or bulk data deletion.

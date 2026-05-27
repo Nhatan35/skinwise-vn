@@ -1,10 +1,14 @@
 import "server-only";
 
+import { ObjectId } from "mongodb";
+
 import type {
   RoutineLog,
   RoutineLogDocument,
   RoutineLogPersistenceInput,
 } from "@/modules/routine-logs/routine-log.types";
+
+const mongoObjectIdPattern = /^[a-f\d]{24}$/i;
 
 async function getRoutineLogCollection() {
   const { getRoutineLogsCollection } = await import(
@@ -12,6 +16,14 @@ async function getRoutineLogCollection() {
   );
 
   return getRoutineLogsCollection<RoutineLogDocument>();
+}
+
+function toRoutineLogObjectId(routineLogId: string) {
+  if (!mongoObjectIdPattern.test(routineLogId)) {
+    return null;
+  }
+
+  return new ObjectId(routineLogId);
 }
 
 export async function findRoutineLogsByDate(
@@ -95,4 +107,23 @@ export async function upsertRoutineLog(
   }
 
   return routineLog;
+}
+
+export async function deleteRoutineLogByIdAndUserId(
+  userId: string,
+  routineLogId: string,
+): Promise<boolean> {
+  const routineLogObjectId = toRoutineLogObjectId(routineLogId);
+
+  if (!routineLogObjectId) {
+    return false;
+  }
+
+  const collection = await getRoutineLogCollection();
+  const result = await collection.deleteOne({
+    _id: routineLogObjectId,
+    userId,
+  });
+
+  return result.deletedCount > 0;
 }

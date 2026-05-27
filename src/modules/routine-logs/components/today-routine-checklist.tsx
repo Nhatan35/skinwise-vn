@@ -20,6 +20,7 @@ import type {
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
+import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -100,6 +101,10 @@ function getRoutineLogsEndpoint(localDate: string) {
   return `${ROUTINE_LOGS_API_PATH}?localDate=${encodeURIComponent(localDate)}`;
 }
 
+function getRoutineLogDeleteEndpoint(routineLogId: string) {
+  return `${ROUTINE_LOGS_API_PATH}/${encodeURIComponent(routineLogId)}`;
+}
+
 function getLoadErrorMessage(error?: ApiError | null) {
   if (error?.code === "UNAUTHORIZED") {
     return "Bạn cần đăng nhập để xem checklist routine hôm nay.";
@@ -166,6 +171,13 @@ export function TodayRoutineChecklist() {
   >({});
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [deletingLogIds, setDeletingLogIds] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deleteSuccessMessage, setDeleteSuccessMessage] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -255,6 +267,49 @@ export function TodayRoutineChecklist() {
       ...current,
       [updatedLog.routineId]: updatedLog,
     }));
+    setDeleteError(null);
+    setDeleteSuccessMessage(null);
+  }
+
+  async function deleteRoutineLog(routineId: string, routineLogId: string) {
+    const confirmed = window.confirm(
+      "Bạn có chắc muốn xóa ghi nhận routine này cho hôm nay?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingLogIds((current) => ({ ...current, [routineLogId]: true }));
+    setDeleteError(null);
+    setDeleteSuccessMessage(null);
+
+    try {
+      const response = await fetch(getRoutineLogDeleteEndpoint(routineLogId), {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "DELETE",
+      });
+      const body = await readApiResponse<{ deleted: true }>(response);
+
+      if (!response.ok || body.error) {
+        setDeleteError("Không thể xóa ghi nhận lúc này. Vui lòng thử lại.");
+        return;
+      }
+
+      setLogsByRoutineId((current) => {
+        const nextLogsByRoutineId = { ...current };
+        delete nextLogsByRoutineId[routineId];
+
+        return nextLogsByRoutineId;
+      });
+      setDeleteSuccessMessage("Đã xóa ghi nhận routine.");
+    } catch {
+      setDeleteError("Không thể xóa ghi nhận lúc này. Vui lòng thử lại.");
+    } finally {
+      setDeletingLogIds((current) => ({ ...current, [routineLogId]: false }));
+    }
   }
 
   function renderRoutineSection(title: string, sectionRoutines: RoutineDto[]) {
@@ -334,6 +389,22 @@ export function TodayRoutineChecklist() {
                     routine={routine}
                     timezone={timezone}
                   />
+
+                  {log ? (
+                    <div className="mt-3 flex justify-end">
+                      <Button
+                        disabled={Boolean(deletingLogIds[log.id])}
+                        onClick={() => deleteRoutineLog(routine.id, log.id)}
+                        size="sm"
+                        type="button"
+                        variant="destructive"
+                      >
+                        {deletingLogIds[log.id]
+                          ? "Đang xóa..."
+                          : "Xóa ghi nhận"}
+                      </Button>
+                    </div>
+                  ) : null}
                 </article>
               );
             })
@@ -411,6 +482,18 @@ export function TodayRoutineChecklist() {
           description="Có thể quay lại Dashboard để xem tiến độ."
           title="Bạn đã ghi nhận tất cả routine hôm nay."
         />
+      ) : null}
+
+      {deleteSuccessMessage ? (
+        <Alert>
+          <AlertDescription>{deleteSuccessMessage}</AlertDescription>
+        </Alert>
+      ) : null}
+
+      {deleteError ? (
+        <Alert variant="destructive">
+          <AlertDescription>{deleteError}</AlertDescription>
+        </Alert>
       ) : null}
 
       {renderRoutineSection("Routine buổi sáng", morningRoutines)}

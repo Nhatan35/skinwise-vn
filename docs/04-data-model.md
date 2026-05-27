@@ -460,3 +460,8 @@ Range queries can compare `localDate` lexicographically because `YYYY-MM-DD` sor
   }
 }
 ```
+
+
+## AppUserProfile account deletion request marker
+
+`AppUserProfile` includes `accountDeletionRequestedAt?: Date | null` as an MVP-safe account deletion request marker. This records that the authenticated user requested account deletion without automatically deleting Auth.js `users`, `accounts`, or `sessions` adapter documents. It allows the app to track the request while avoiding unsafe automatic hard-delete behavior in the portfolio MVP.

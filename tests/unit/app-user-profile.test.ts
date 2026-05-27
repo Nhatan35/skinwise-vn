@@ -16,6 +16,7 @@ import {
   ensureAppUserProfile,
   findAppUserProfileByUserId,
   markAppUserProfileOnboardingCompleted,
+  requestAccountDeletionForUser,
 } from "@/modules/users/app-user-profile.repository";
 import { toMeUserDto } from "@/modules/users/app-user-profile.mapper";
 import {
@@ -43,6 +44,7 @@ function createProfile(overrides: Partial<AppUserProfile> = {}): AppUserProfile 
     userId: authUserId,
     role: "USER",
     onboardingCompleted: false,
+    accountDeletionRequestedAt: null,
     createdAt: fixedNow,
     updatedAt: fixedNow,
     ...overrides,
@@ -57,6 +59,21 @@ describe("AppUserProfile mapper and types", () => {
       name: "An",
       role: "USER",
       onboardingCompleted: false,
+      accountDeletionRequestStatus: "not_requested",
+    });
+  });
+
+  it("maps account deletion request status safely when a request exists", () => {
+    const requestedAt = new Date("2026-05-15T00:00:00.000Z");
+
+    expect(
+      toMeUserDto(
+        createCurrentUser(),
+        createProfile({ accountDeletionRequestedAt: requestedAt }),
+      ),
+    ).toMatchObject({
+      accountDeletionRequestedAt: requestedAt.toISOString(),
+      accountDeletionRequestStatus: "requested",
     });
   });
 
@@ -218,5 +235,74 @@ describe("AppUserProfile repository", () => {
     expect(update.$setOnInsert).toMatchObject({
       role: "USER",
     });
+  });
+
+  it("requests account deletion with an idempotent profile upsert", async () => {
+    const requestedProfile = createProfile({
+      accountDeletionRequestedAt: fixedNow,
+      updatedAt: fixedNow,
+    });
+    collectionMock.findOne.mockResolvedValue(null);
+    collectionMock.findOneAndUpdate.mockResolvedValue(requestedProfile);
+
+    await expect(requestAccountDeletionForUser(authUserId)).resolves.toBe(
+      requestedProfile,
+    );
+
+    expect(collectionMock.findOne).toHaveBeenCalledWith({ userId: authUserId });
+    expect(collectionMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { userId: authUserId },
+      {
+        $set: {
+          accountDeletionRequestedAt: fixedNow,
+          updatedAt: fixedNow,
+        },
+        $setOnInsert: {
+          userId: authUserId,
+          role: "USER",
+          onboardingCompleted: false,
+          createdAt: fixedNow,
+        },
+      },
+      {
+        upsert: true,
+        returnDocument: "after",
+      },
+    );
+  });
+
+  it("does not overwrite an existing account deletion request timestamp", async () => {
+    const originalRequestedAt = new Date("2026-05-01T00:00:00.000Z");
+    const requestedProfile = createProfile({
+      accountDeletionRequestedAt: originalRequestedAt,
+      updatedAt: fixedNow,
+    });
+    collectionMock.findOne.mockResolvedValue(
+      createProfile({ accountDeletionRequestedAt: originalRequestedAt }),
+    );
+    collectionMock.findOneAndUpdate.mockResolvedValue(requestedProfile);
+
+    await expect(requestAccountDeletionForUser(authUserId)).resolves.toBe(
+      requestedProfile,
+    );
+
+    expect(collectionMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { userId: authUserId },
+      {
+        $set: {
+          updatedAt: fixedNow,
+        },
+      },
+      {
+        upsert: false,
+        returnDocument: "after",
+      },
+    );
+
+    const update = collectionMock.findOneAndUpdate.mock.calls[0]?.[1] as Record<
+      string,
+      Record<string, unknown>
+    >;
+    expect(update.$set).not.toHaveProperty("accountDeletionRequestedAt");
   });
 });

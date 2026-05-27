@@ -7,6 +7,7 @@ vi.mock("server-only", () => ({}));
 const toArrayMock = vi.fn();
 const sortMock = vi.fn(() => ({ toArray: toArrayMock }));
 const collectionMock = {
+  deleteOne: vi.fn(),
   find: vi.fn((filter?: unknown) => {
     void filter;
 
@@ -30,6 +31,7 @@ import {
   upsertRoutineLogSchema,
 } from "@/modules/routine-logs/routine-log.schema";
 import {
+  deleteRoutineLogByIdAndUserId,
   findRoutineLogByRoutineAndDate,
   findRoutineLogsByDate,
   upsertRoutineLog,
@@ -215,6 +217,7 @@ describe("RoutineLog repository", () => {
     collectionMock.find.mockReset();
     collectionMock.findOne.mockReset();
     collectionMock.findOneAndUpdate.mockReset();
+    collectionMock.deleteOne.mockReset();
     sortMock.mockReset();
     toArrayMock.mockReset();
     collectionMock.find.mockReturnValue({ sort: sortMock });
@@ -348,5 +351,34 @@ describe("RoutineLog repository", () => {
       completedStepIds: "",
       note: "",
     });
+  });
+
+  it("deletes routine logs only when both _id and userId match", async () => {
+    collectionMock.deleteOne.mockResolvedValue({ deletedCount: 1 });
+
+    await expect(
+      deleteRoutineLogByIdAndUserId(userId, routineLogId),
+    ).resolves.toBe(true);
+
+    expect(collectionMock.deleteOne).toHaveBeenCalledWith({
+      _id: new ObjectId(routineLogId),
+      userId,
+    });
+  });
+
+  it("does not delete routine logs by id alone or with invalid ObjectId", async () => {
+    await expect(
+      deleteRoutineLogByIdAndUserId(userId, "invalid-id"),
+    ).resolves.toBe(false);
+
+    expect(collectionMock.deleteOne).not.toHaveBeenCalled();
+  });
+
+  it("returns false when the routine log is missing or belongs to another user", async () => {
+    collectionMock.deleteOne.mockResolvedValue({ deletedCount: 0 });
+
+    await expect(
+      deleteRoutineLogByIdAndUserId(userId, routineLogId),
+    ).resolves.toBe(false);
   });
 });

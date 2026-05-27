@@ -17,5 +17,6 @@ export const config = {
     "/products/:path*",
     "/saved-products/:path*",
     "/ingredients/:path*",
+    "/settings/:path*",
   ],
 };

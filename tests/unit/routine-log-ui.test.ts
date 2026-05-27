@@ -186,6 +186,21 @@ describe("RoutineLog UI integration", () => {
     expect(todayRoutineChecklistSource).not.toContain("server-only");
   });
 
+  it("lets users delete an existing Today RoutineLog without breaking save controls", () => {
+    expect(todayRoutineChecklistSource).toContain("getRoutineLogDeleteEndpoint");
+    expect(todayRoutineChecklistSource).toContain('method: "DELETE"');
+    expect(todayRoutineChecklistSource).toContain("Xóa ghi nhận");
+    expect(todayRoutineChecklistSource).toContain(
+      "Bạn có chắc muốn xóa ghi nhận routine này cho hôm nay?",
+    );
+    expect(todayRoutineChecklistSource).toContain("Đã xóa ghi nhận routine.");
+    expect(todayRoutineChecklistSource).toContain(
+      "Không thể xóa ghi nhận lúc này. Vui lòng thử lại.",
+    );
+    expect(todayRoutineChecklistSource).toContain("delete nextLogsByRoutineId");
+    expect(todayRoutineChecklistSource).toContain("<RoutineLogControls");
+  });
+
   it("keeps RoutineLog client UI free from server-only imports", () => {
     for (const forbiddenImport of [
       "routine-log.repository",

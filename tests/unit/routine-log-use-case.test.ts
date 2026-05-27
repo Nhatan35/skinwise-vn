@@ -6,16 +6,19 @@ vi.mock("@/modules/routines/routine.repository", () => ({
 }));
 
 vi.mock("@/modules/routine-logs/routine-log.repository", () => ({
+  deleteRoutineLogByIdAndUserId: vi.fn(),
   findRoutineLogsByDate: vi.fn(),
   upsertRoutineLog: vi.fn(),
 }));
 
 import {
+  deleteRoutineLogForUser,
   getRoutineLogsForDate,
   RoutineLogValidationError,
   upsertRoutineLogForUser,
 } from "@/modules/routine-logs/routine-log.use-case";
 import {
+  deleteRoutineLogByIdAndUserId,
   findRoutineLogsByDate,
   upsertRoutineLog,
 } from "@/modules/routine-logs/routine-log.repository";
@@ -24,6 +27,9 @@ import { findRoutineByIdAndUserId } from "@/modules/routines/routine.repository"
 import type { Routine } from "@/modules/routines/routine.types";
 
 const mockedFindRoutineByIdAndUserId = vi.mocked(findRoutineByIdAndUserId);
+const mockedDeleteRoutineLogByIdAndUserId = vi.mocked(
+  deleteRoutineLogByIdAndUserId,
+);
 const mockedFindRoutineLogsByDate = vi.mocked(findRoutineLogsByDate);
 const mockedUpsertRoutineLog = vi.mocked(upsertRoutineLog);
 
@@ -79,6 +85,7 @@ function createRoutineLog(overrides: Partial<RoutineLog> = {}): RoutineLog {
 describe("RoutineLog use case", () => {
   beforeEach(() => {
     mockedFindRoutineByIdAndUserId.mockReset();
+    mockedDeleteRoutineLogByIdAndUserId.mockReset();
     mockedFindRoutineLogsByDate.mockReset();
     mockedUpsertRoutineLog.mockReset();
   });
@@ -264,5 +271,31 @@ describe("RoutineLog use case", () => {
     ).rejects.toBeInstanceOf(RoutineLogValidationError);
 
     expect(mockedUpsertRoutineLog).not.toHaveBeenCalled();
+  });
+
+  it("deletes a routine log using the authenticated user id", async () => {
+    mockedDeleteRoutineLogByIdAndUserId.mockResolvedValue(true);
+
+    await expect(
+      deleteRoutineLogForUser(userId, routineLogId),
+    ).resolves.toBe(true);
+
+    expect(mockedDeleteRoutineLogByIdAndUserId).toHaveBeenCalledWith(
+      userId,
+      routineLogId,
+    );
+  });
+
+  it("returns false when deleting a missing or not-owned routine log", async () => {
+    mockedDeleteRoutineLogByIdAndUserId.mockResolvedValue(false);
+
+    await expect(
+      deleteRoutineLogForUser(otherUserId, routineLogId),
+    ).resolves.toBe(false);
+
+    expect(mockedDeleteRoutineLogByIdAndUserId).toHaveBeenCalledWith(
+      otherUserId,
+      routineLogId,
+    );
   });
 });

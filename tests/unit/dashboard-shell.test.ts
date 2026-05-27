@@ -11,6 +11,7 @@ import {
   productsRoute,
   routinesRoute,
   savedProductsRoute,
+  settingsRoute,
   skinProfileRoute,
   todayLogRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
@@ -33,7 +34,7 @@ const dashboardNavigationSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, and Ingredients as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, Ingredients, and Settings as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
@@ -44,6 +45,7 @@ describe("dashboard shell config", () => {
     expect(productsRoute).toBe(routes.PRODUCTS);
     expect(savedProductsRoute).toBe(routes.SAVED_PRODUCTS);
     expect(ingredientsRoute).toBe(routes.INGREDIENTS);
+    expect(settingsRoute).toBe(routes.SETTINGS);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(routes.ROUTINES).toBe("/routines");
     expect(routes.TODAY_LOG).toBe("/routine-logs/today");
@@ -51,6 +53,7 @@ describe("dashboard shell config", () => {
     expect(routes.PRODUCTS).toBe("/products");
     expect(routes.SAVED_PRODUCTS).toBe("/saved-products");
     expect(routes.INGREDIENTS).toBe("/ingredients");
+    expect(routes.SETTINGS).toBe("/settings");
     expect(enabledItems).toEqual([
       {
         disabled: false,
@@ -100,6 +103,12 @@ describe("dashboard shell config", () => {
         label: "Ingredients",
         status: "Active",
       },
+      {
+        disabled: false,
+        href: "/settings",
+        label: "Settings",
+        status: "Active",
+      },
     ]);
   });
 
@@ -111,6 +120,15 @@ describe("dashboard shell config", () => {
       disabled: false,
       href: routes.TODAY_LOG,
       label: "Today Log",
+      status: "Active",
+    });
+  });
+
+  it("does not keep implemented Settings navigation disabled", () => {
+    expect(dashboardNavItems.find((item) => item.label === "Settings")).toEqual({
+      disabled: false,
+      href: routes.SETTINGS,
+      label: "Settings",
       status: "Active",
     });
   });

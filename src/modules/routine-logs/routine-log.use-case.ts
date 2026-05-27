@@ -1,5 +1,6 @@
 import { toRoutineLogDto } from "@/modules/routine-logs/routine-log.mapper";
 import {
+  deleteRoutineLogByIdAndUserId,
   findRoutineLogsByDate,
   upsertRoutineLog,
 } from "@/modules/routine-logs/routine-log.repository";
@@ -123,4 +124,11 @@ export async function upsertRoutineLogForUser(
   });
 
   return toRoutineLogDto(routineLog);
+}
+
+export async function deleteRoutineLogForUser(
+  userId: string,
+  routineLogId: string,
+): Promise<boolean> {
+  return deleteRoutineLogByIdAndUserId(userId, routineLogId);
 }
