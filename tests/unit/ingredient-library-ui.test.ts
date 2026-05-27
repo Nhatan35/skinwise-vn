@@ -60,9 +60,11 @@ describe("Ingredient Library UI", () => {
     });
     expect(
       dashboardNavItems.find((item) => item.label === "Today Log"),
-    ).toMatchObject({
-      disabled: true,
-      href: null,
+    ).toEqual({
+      disabled: false,
+      href: routes.TODAY_LOG,
+      label: "Today Log",
+      status: "Active",
     });
     expect(proxySource).toContain('"/ingredients/:path*"');
   });

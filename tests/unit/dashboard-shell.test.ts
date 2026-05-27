@@ -10,7 +10,9 @@ import {
   journalRoute,
   productsRoute,
   routinesRoute,
+  savedProductsRoute,
   skinProfileRoute,
+  todayLogRoute,
 } from "@/modules/dashboard/dashboard-shell.config";
 import { routes } from "@/shared/constants/routes";
 
@@ -31,19 +33,23 @@ const dashboardNavigationSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, Journal, Products, and Ingredients as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, and Ingredients as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
     expect(skinProfileRoute).toBe(routes.SKIN_PROFILE);
     expect(routinesRoute).toBe(routes.ROUTINES);
+    expect(todayLogRoute).toBe(routes.TODAY_LOG);
     expect(journalRoute).toBe(routes.JOURNAL);
     expect(productsRoute).toBe(routes.PRODUCTS);
+    expect(savedProductsRoute).toBe(routes.SAVED_PRODUCTS);
     expect(ingredientsRoute).toBe(routes.INGREDIENTS);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
     expect(routes.ROUTINES).toBe("/routines");
+    expect(routes.TODAY_LOG).toBe("/routine-logs/today");
     expect(routes.JOURNAL).toBe("/journal");
     expect(routes.PRODUCTS).toBe("/products");
+    expect(routes.SAVED_PRODUCTS).toBe("/saved-products");
     expect(routes.INGREDIENTS).toBe("/ingredients");
     expect(enabledItems).toEqual([
       {
@@ -66,6 +72,12 @@ describe("dashboard shell config", () => {
       },
       {
         disabled: false,
+        href: "/routine-logs/today",
+        label: "Today Log",
+        status: "Active",
+      },
+      {
+        disabled: false,
         href: "/journal",
         label: "Journal",
         status: "Active",
@@ -78,6 +90,12 @@ describe("dashboard shell config", () => {
       },
       {
         disabled: false,
+        href: "/saved-products",
+        label: "Saved Products",
+        status: "Active",
+      },
+      {
+        disabled: false,
         href: "/ingredients",
         label: "Ingredients",
         status: "Active",
@@ -85,15 +103,16 @@ describe("dashboard shell config", () => {
     ]);
   });
 
-  it("keeps unrelated unimplemented navigation items disabled without hrefs", () => {
+  it("does not keep implemented Today Log navigation disabled", () => {
     const disabledItems = dashboardNavItems.filter((item) => item.disabled);
 
-    expect(disabledItems.map((item) => item.label)).toEqual(["Today Log"]);
-    expect(
-      disabledItems.every(
-        (item) => item.href === null && item.disabled === true,
-      ),
-    ).toBe(true);
+    expect(disabledItems).toEqual([]);
+    expect(dashboardNavItems.find((item) => item.label === "Today Log")).toEqual({
+      disabled: false,
+      href: routes.TODAY_LOG,
+      label: "Today Log",
+      status: "Active",
+    });
   });
 
   it("does not include placeholder dashboard card metadata after DB-001", () => {

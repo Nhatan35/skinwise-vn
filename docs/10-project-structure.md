@@ -131,6 +131,33 @@ src/
 
 ## 4. Module file convention
 
+### Current v1.2 Saved Products module
+
+The implemented Saved Products feature follows the same modular-monolith pattern:
+
+```txt
+src/modules/saved-products/
+â”œâ”€â”€ saved-product.types.ts
+â”œâ”€â”€ saved-product.schema.ts
+â”œâ”€â”€ saved-product.dto.ts
+â”œâ”€â”€ saved-product.mapper.ts
+â”œâ”€â”€ saved-product.repository.ts
+â”œâ”€â”€ saved-product.use-case.ts
+â”œâ”€â”€ saved-product.client.ts
+â””â”€â”€ components/
+    â”œâ”€â”€ saved-products-page.tsx
+    â”œâ”€â”€ saved-product-card.tsx
+    â””â”€â”€ saved-product-toggle-button.tsx
+```
+
+Implemented routes:
+
+```txt
+src/app/(dashboard)/saved-products/page.tsx
+src/app/api/saved-products/route.ts
+src/app/api/saved-products/[productId]/route.ts
+```
+
 Each module should follow this pattern when relevant:
 
 ```txt

@@ -303,7 +303,130 @@ Errors:
 - FORBIDDEN
 - NOT_FOUND
 
-## 5. Ingredients
+## 5. Saved Products
+
+Saved Products lets authenticated users bookmark visible products for later routine planning.
+
+### GET /api/saved-products
+
+Returns saved products for the current authenticated user.
+
+Authentication:
+
+- Required.
+- The server derives `userId` from the authenticated session.
+- The client must not send `userId`.
+
+Response:
+
+```json
+{
+  "data": {
+    "items": [
+      {
+        "id": "saved_product_123",
+        "productId": "product_123",
+        "product": {
+          "id": "product_123",
+          "name": "Niacinamide 5% Serum",
+          "brand": "SkinWise Demo"
+        },
+        "createdAt": "2026-05-26T00:00:00.000Z",
+        "updatedAt": "2026-05-26T00:00:00.000Z"
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+DTO safety:
+
+- `SavedProductDto` must not expose `userId`.
+- Product data is returned through the existing public `ProductDto`.
+
+Errors:
+
+- UNAUTHORIZED
+- INTERNAL_ERROR
+
+### POST /api/saved-products
+
+Save a visible product for the current authenticated user.
+
+Request:
+
+```json
+{
+  "productId": "665000000000000000000320"
+}
+```
+
+Validation and behavior:
+
+- `productId` must be a valid MongoDB ObjectId string.
+- Unknown request fields are rejected.
+- The server confirms the product exists and is visible before saving.
+- Duplicate saves are idempotent and return the existing saved product DTO.
+- Duplicate records are also prevented by the unique `userId + productId` index.
+
+Response:
+
+```json
+{
+  "data": {
+    "item": {
+      "id": "saved_product_123",
+      "productId": "product_123",
+      "product": {
+        "id": "product_123",
+        "name": "Niacinamide 5% Serum"
+      },
+      "createdAt": "2026-05-26T00:00:00.000Z",
+      "updatedAt": "2026-05-26T00:00:00.000Z"
+    }
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- VALIDATION_ERROR
+- NOT_FOUND
+- INTERNAL_ERROR
+
+### DELETE /api/saved-products/:productId
+
+Remove the saved-product record for the current authenticated user.
+
+Behavior:
+
+- Authentication is required.
+- `productId` route param must be a valid MongoDB ObjectId string.
+- Delete is scoped by `currentUser.id + productId`.
+- Missing saved records are handled idempotently.
+- The actual product record is never deleted.
+
+Response:
+
+```json
+{
+  "data": {
+    "removed": true
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- VALIDATION_ERROR
+- INTERNAL_ERROR
+
+## 6. Ingredients
 
 ### GET /api/ingredients
 
@@ -433,7 +556,7 @@ Errors:
 - VALIDATION_ERROR
 - INTERNAL_ERROR
 
-## 6. Routines
+## 7. Routines
 
 ### POST /api/routines
 
@@ -506,7 +629,7 @@ Errors:
 - UNAUTHORIZED
 - NOT_FOUND
 
-## 7. Routine Analysis
+## 8. Routine Analysis
 
 ### POST /api/routines/:id/analyze
 
@@ -602,7 +725,7 @@ Errors:
 - UNAUTHORIZED
 - NOT_FOUND
 
-## 8. Routine Logs
+## 9. Routine Logs
 
 RoutineLog API is implemented and the current UI exposes daily routine log controls inside the existing `/routines` page. There is no separate `/routine-logs/today` UI route.
 
@@ -723,7 +846,7 @@ Notes:
 - RoutineLog UI is implemented on the existing /routines page by TASK RL-002.
 
 
-## 9. Dashboard
+## 10. Dashboard
 
 ### GET /api/dashboard?localDate=YYYY-MM-DD
 
@@ -775,7 +898,7 @@ Expected errors:
 | 400 | `VALIDATION_ERROR` | `localDate` is missing, invalid, or unknown query fields are passed |
 | 500 | `INTERNAL_ERROR` | Unexpected server error |
 
-## 10. Skin Journal
+## 11. Skin Journal
 
 ### POST /api/skin-journal
 

@@ -69,6 +69,14 @@ describe("Product Catalogue UI", () => {
       label: "Ingredients",
       status: "Active",
     });
+    expect(
+      dashboardNavItems.find((item) => item.label === "Saved Products"),
+    ).toEqual({
+      disabled: false,
+      href: routes.SAVED_PRODUCTS,
+      label: "Saved Products",
+      status: "Active",
+    });
     expect(dashboardNavigationSource).toContain("usePathname");
     expect(dashboardNavigationSource).toContain(
       "isActiveDashboardPath(pathname, item.href)",
@@ -77,14 +85,14 @@ describe("Product Catalogue UI", () => {
       'aria-current={isActive ? "page" : undefined}',
     );
 
-    for (const disabledLabel of ["Today Log"]) {
-      expect(
-        dashboardNavItems.find((item) => item.label === disabledLabel),
-      ).toMatchObject({
-        disabled: true,
-        href: null,
-      });
-    }
+    expect(
+      dashboardNavItems.find((item) => item.label === "Today Log"),
+    ).toEqual({
+      disabled: false,
+      href: routes.TODAY_LOG,
+      label: "Today Log",
+      status: "Active",
+    });
   });
 
   it("keeps ProductCatalogue as a client component using the Product API client", () => {

@@ -20,6 +20,14 @@ const routineLogClientPath = join(
   projectRoot,
   "src/modules/routine-logs/routine-log.client.ts",
 );
+const todayRoutineChecklistPath = join(
+  projectRoot,
+  "src/modules/routine-logs/components/today-routine-checklist.tsx",
+);
+const todayRoutineLogPagePath = join(
+  projectRoot,
+  "src/app/(dashboard)/routine-logs/today/page.tsx",
+);
 
 const routineBuilderSource = readFileSync(routineBuilderPath, "utf8");
 const routineLogControlsSource = readFileSync(routineLogControlsPath, "utf8");
@@ -28,7 +36,12 @@ const routineLogStatusBadgeSource = readFileSync(
   "utf8",
 );
 const routineLogClientSource = readFileSync(routineLogClientPath, "utf8");
-const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}`;
+const todayRoutineChecklistSource = readFileSync(
+  todayRoutineChecklistPath,
+  "utf8",
+);
+const todayRoutineLogPageSource = readFileSync(todayRoutineLogPagePath, "utf8");
+const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}\n${todayRoutineChecklistSource}`;
 
 describe("RoutineLog UI integration", () => {
   it("adds focused RoutineLog UI components and client helpers", () => {
@@ -115,6 +128,62 @@ describe("RoutineLog UI integration", () => {
     );
     expect(routineLogControlsSource).toContain('type="checkbox"');
     expect(routineLogControlsSource).toContain("selectedStepIds");
+  });
+
+
+  it("adds the dedicated Today Routine Checklist route and reuses existing RoutineLog UI flow", () => {
+    expect(existsSync(todayRoutineLogPagePath)).toBe(true);
+    expect(existsSync(todayRoutineChecklistPath)).toBe(true);
+    expect(todayRoutineLogPageSource).toContain(
+      "@/modules/routine-logs/components/today-routine-checklist",
+    );
+    expect(todayRoutineLogPageSource).toContain("<TodayRoutineChecklist />");
+    expect(todayRoutineLogPageSource).toContain("routes.TODAY_LOG");
+    expect(todayRoutineLogPageSource).toContain("data-route={routes.TODAY_LOG}");
+    expect(todayRoutineChecklistSource.startsWith('"use client";')).toBe(true);
+    expect(todayRoutineChecklistSource).toContain(
+      'const ROUTINES_API_PATH = "/api/routines"',
+    );
+    expect(todayRoutineChecklistSource).toContain(
+      'const ROUTINE_LOGS_API_PATH = "/api/routine-logs"',
+    );
+    expect(todayRoutineChecklistSource).toContain("fetch(ROUTINES_API_PATH");
+    expect(todayRoutineChecklistSource).toContain("fetch(getRoutineLogsEndpoint");
+    expect(todayRoutineChecklistSource).toContain("getBrowserLocalDate");
+    expect(todayRoutineChecklistSource).toContain("getBrowserTimezone");
+    expect(todayRoutineChecklistSource).toContain("groupRoutineLogsByRoutineId");
+    expect(todayRoutineChecklistSource).toContain("<RoutineLogControls");
+    expect(todayRoutineChecklistSource).toContain("<RoutineLogStatusBadge");
+    expect(todayRoutineChecklistSource).toContain("handleLogSaved");
+    expect(todayRoutineChecklistSource).toContain("Routine buổi sáng");
+    expect(todayRoutineChecklistSource).toContain("Routine buổi tối");
+  });
+
+  it("renders Today Checklist metadata, progress summary, empty state, and CTAs", () => {
+    for (const requiredCopy of [
+      "Bạn chưa có routine nào để ghi nhận hôm nay.",
+      "Hãy tạo morning/evening routine trước khi theo dõi tiến độ hằng ngày.",
+      "Đi tới Routine Builder",
+      "Bạn đã ghi nhận tất cả routine hôm nay.",
+      "Có thể quay lại Dashboard để xem tiến độ.",
+      "Xem Dashboard",
+      "Local date",
+      "Timezone",
+      "Tổng routine",
+      "Hoàn thành",
+      "Một phần",
+      "Bỏ qua",
+      "Chưa ghi nhận",
+    ]) {
+      expect(todayRoutineChecklistSource).toContain(requiredCopy);
+    }
+
+    expect(todayRoutineChecklistSource).toContain("routes.ROUTINES");
+    expect(todayRoutineChecklistSource).toContain("routes.DASHBOARD");
+    expect(todayRoutineChecklistSource).not.toContain("routine-log.repository");
+    expect(todayRoutineChecklistSource).not.toContain("routine-log.use-case");
+    expect(todayRoutineChecklistSource).not.toContain("mongodb");
+    expect(todayRoutineChecklistSource).not.toContain("server-only");
   });
 
   it("keeps RoutineLog client UI free from server-only imports", () => {

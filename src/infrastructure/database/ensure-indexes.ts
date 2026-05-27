@@ -9,6 +9,7 @@ import {
   getCollection,
   type CollectionName,
 } from "@/infrastructure/database/collections";
+import { closeMongoClient } from "@/infrastructure/database/mongodb";
 
 type IndexKeyDirection = 1 | -1 | "text";
 type IndexKeys = Record<string, IndexKeyDirection>;
@@ -73,6 +74,22 @@ export const DATABASE_INDEX_DEFINITIONS = [
       {
         keys: { inciName: "text", aliases: "text", functions: "text" },
         options: { name: "ingredients_text_search" },
+      },
+    ],
+  },
+  {
+    collectionName: COLLECTION_NAMES.SAVED_PRODUCTS,
+    indexes: [
+      {
+        keys: { userId: 1, productId: 1 },
+        options: {
+          name: "saved_products_userId_productId_unique",
+          unique: true,
+        },
+      },
+      {
+        keys: { userId: 1, createdAt: -1 },
+        options: { name: "saved_products_userId_createdAt" },
       },
     ],
   },
@@ -197,9 +214,13 @@ function isDirectInvocation() {
 }
 
 if (isDirectInvocation()) {
-  main().catch((error: unknown) => {
-    console.error("db:indexes failed");
-    console.error(error instanceof Error ? error.message : "Unknown error");
-    process.exitCode = 1;
-  });
+  main()
+    .catch((error: unknown) => {
+      console.error("db:indexes failed");
+      console.error(error instanceof Error ? error.message : "Unknown error");
+      process.exitCode = 1;
+    })
+    .finally(async () => {
+      await closeMongoClient();
+    });
 }

@@ -71,7 +71,7 @@ describe("SkinJournal Timeline UI", () => {
     expect(journalPageSource).toContain("data-route={routes.JOURNAL}");
   });
 
-  it("enables Journal navigation while keeping future routes disabled", () => {
+  it("enables Journal and Today Log navigation", () => {
     expect(
       dashboardNavItems.find((item) => item.label === "Journal"),
     ).toEqual({
@@ -96,15 +96,23 @@ describe("SkinJournal Timeline UI", () => {
       label: "Ingredients",
       status: "Active",
     });
+    expect(
+      dashboardNavItems.find((item) => item.label === "Saved Products"),
+    ).toEqual({
+      disabled: false,
+      href: routes.SAVED_PRODUCTS,
+      label: "Saved Products",
+      status: "Active",
+    });
 
-    for (const disabledLabel of ["Today Log"]) {
-      expect(
-        dashboardNavItems.find((item) => item.label === disabledLabel),
-      ).toMatchObject({
-        disabled: true,
-        href: null,
-      });
-    }
+    expect(
+      dashboardNavItems.find((item) => item.label === "Today Log"),
+    ).toEqual({
+      disabled: false,
+      href: routes.TODAY_LOG,
+      label: "Today Log",
+      status: "Active",
+    });
   });
 
   it("protects /journal through the existing auth proxy matcher", () => {

@@ -1,6 +1,6 @@
 # UI and API Route Map - MVP v1.2.6
 
-Last updated: 2026-05-26
+Last updated: 2026-05-27
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
+Latest completed source task: `MVP-TODAY-LOG-001 - Dedicated Today Routine Checklist Page`.
 
 ## Route Principles
 
@@ -31,6 +31,7 @@ Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
 | `/journal` | Private skin journal timeline with create/edit/delete and product selection | Implemented | Authenticated | `/api/skin-journal`, `/api/skin-journal/[id]`, `/api/products?limit=50` |
 | `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
 | `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
+| `/saved-products` | Current user's saved product list with remove action | Implemented | Authenticated | `GET /api/saved-products`, `DELETE /api/saved-products/[productId]` |
 | `/ingredients` | Ingredient library list/search UI | Implemented | Authenticated | `GET /api/ingredients` |
 | `/ingredients/[id]` | Ingredient detail UI with explanation panel | Implemented | Authenticated | `GET /api/ingredients/[id]`, `POST /api/ingredients/explain` |
 | `/login` | Dedicated login page | Not started | Public if added later | Auth.js default sign-in route currently handles login |
@@ -39,7 +40,7 @@ Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
 | `/products/new` | Product submission UI | Not started | Authenticated if added later | `POST /api/products` is not implemented |
 | `/routines/[id]` | Dedicated routine detail page | Not started | Authenticated if added later | Existing `/routines` page owns routine UI |
 | `/routines/[id]/analysis` | Dedicated routine analysis page | Not started | Authenticated if added later | Existing `/routines` page owns analysis UI |
-| `/routine-logs/today` | Dedicated daily routine log page | Not started | Authenticated if added later | Existing `/routines` page owns daily log controls |
+| `/routine-logs/today` | Dedicated daily routine checklist page for today's routine logs | Implemented | Authenticated | `GET /api/routines`, `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs` |
 | `/journal/new` | Dedicated create journal page | Not started | Authenticated if added later | Existing `/journal` page owns create UI |
 | `/journal/[id]` | Dedicated journal detail/edit page | Not started | Authenticated if added later | Existing `/journal` page owns edit UI |
 | `/settings` | App/account settings | Not started | Authenticated if added later | Future scope |
@@ -54,6 +55,8 @@ Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
 | `/api/skin-profile` | `GET`, `POST`, `PATCH`, `DELETE` | Current user's skin profile | Required | Implemented |
 | `/api/products` | `GET` | Visible product catalogue list/search/filter | Required | Implemented |
 | `/api/products/[id]` | `GET` | Visible product detail | Required | Implemented |
+| `/api/saved-products` | `GET`, `POST` | Current user's saved products list and save endpoint | Required | Implemented |
+| `/api/saved-products/[productId]` | `DELETE` | Remove current user's saved-product record for one product | Required | Implemented |
 | `/api/ingredients` | `GET` | Ingredient list/search | Required | Implemented |
 | `/api/ingredients/[id]` | `GET` | Ingredient detail | Required | Implemented |
 | `/api/ingredients/explain` | `POST` | Rate-limited ingredient explanation through AI provider abstraction with fallback | Required | Implemented |
@@ -74,8 +77,10 @@ Latest completed task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
 /onboarding/:path*
 /skin-profile/:path*
 /routines/:path*
+/routine-logs/:path*
 /journal/:path*
 /products/:path*
+/saved-products/:path*
 /ingredients/:path*
 ```
 
@@ -87,18 +92,20 @@ Enabled:
 Dashboard
 Skin Profile
 Routines
+Today Log
 Journal
 Products
+Saved Products
 Ingredients
 ```
 
 Disabled/future:
 
 ```txt
-Today Log
+None currently listed in dashboard navigation.
 ```
 
-Today routine log controls exist inside `/routines`; there is no separate `/routine-logs/today` page.
+Today routine log controls still exist inside `/routines`, and `/routine-logs/today` now provides the dedicated daily checklist route for the same RoutineLog API flow.
 
 ## Post-MVP Routes Not Allowed Without Explicit Approval
 

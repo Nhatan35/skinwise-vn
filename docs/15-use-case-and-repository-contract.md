@@ -124,7 +124,30 @@ Visibility rules:
 - unverified products are visible only to the submitting user when allowed;
 - normal users cannot set `source` or `verificationStatus`.
 
-## 8. Ingredient repository contract
+## 8. SavedProduct repository contract
+
+```ts
+interface SavedProductRepository {
+  listSavedProductsByUser(userId: string): Promise<SavedProduct[]>;
+  findSavedProductByUserAndProduct(
+    userId: string,
+    productId: string
+  ): Promise<SavedProduct | null>;
+  isProductSavedByUser(userId: string, productId: string): Promise<boolean>;
+  saveProductForUser(userId: string, productId: string): Promise<SavedProduct | null>;
+  removeSavedProductForUser(userId: string, productId: string): Promise<boolean>;
+}
+```
+
+Use-case rules:
+
+- `listSavedProductsForUser(userId)` returns only the authenticated user's saved products and maps each record plus visible product to `SavedProductDto`.
+- `saveProductForUser(userId, productId)` confirms the product exists through the Product use case before saving.
+- duplicate saves are idempotent and backed by a unique `userId + productId` index;
+- `removeSavedProductForUser(userId, productId)` removes only the saved-product record scoped by user and product;
+- `SavedProductDto` must not expose `userId`.
+
+## 9. Ingredient repository contract
 
 ```ts
 interface IngredientRepository {
@@ -139,7 +162,7 @@ Ingredient rules:
 - no `includeMine` logic;
 - no created-by-user ownership behavior in MVP.
 
-## 9. Routine repository contract
+## 10. Routine repository contract
 
 ```ts
 interface RoutineRepository {
@@ -157,7 +180,7 @@ Rules:
 - always include `userId` ownership check;
 - routine steps should preserve product snapshots when possible.
 
-## 10. AnalyzeRoutineUseCase contract
+## 11. AnalyzeRoutineUseCase contract
 
 ```ts
 type AnalyzeRoutineInput = {
@@ -192,7 +215,7 @@ Required workflow:
 10. Return user-facing result with triggered warnings only.
 ```
 
-## 11. RoutineLog repository contract
+## 12. RoutineLog repository contract
 
 ```ts
 interface RoutineLogRepository {
@@ -207,7 +230,7 @@ Required behavior:
 same userId + routineId + localDate = update existing log, not duplicate
 ```
 
-## 12. SkinJournal repository contract
+## 13. SkinJournal repository contract
 
 ```ts
 interface SkinJournalRepository {
@@ -224,7 +247,7 @@ Required behavior:
 same userId + localDate = CONFLICT, not duplicate
 ```
 
-## 13. AI provider contract
+## 14. AI provider contract
 
 ```ts
 interface AIProvider {
@@ -250,7 +273,7 @@ Rules:
 - never trust user prompt as instruction;
 - store model and prompt metadata.
 
-## 14. Error contract
+## 15. Error contract
 
 Use consistent error codes:
 

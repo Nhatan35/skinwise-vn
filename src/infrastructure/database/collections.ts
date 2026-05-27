@@ -9,6 +9,7 @@ export const COLLECTION_NAMES = {
   SKIN_PROFILES: "skin_profiles",
   PRODUCTS: "products",
   INGREDIENTS: "ingredients",
+  SAVED_PRODUCTS: "saved_products",
   ROUTINES: "routines",
   ROUTINE_LOGS: "routine_logs",
   ROUTINE_ANALYSES: "routine_analyses",
@@ -50,6 +51,12 @@ export function getProductsCollection<TSchema extends Document = Document>() {
 
 export function getIngredientsCollection<TSchema extends Document = Document>() {
   return getCollection<TSchema>(COLLECTION_NAMES.INGREDIENTS);
+}
+
+export function getSavedProductsCollection<
+  TSchema extends Document = Document,
+>() {
+  return getCollection<TSchema>(COLLECTION_NAMES.SAVED_PRODUCTS);
 }
 
 export function getRoutinesCollection<TSchema extends Document = Document>() {

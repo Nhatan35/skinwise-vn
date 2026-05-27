@@ -3,16 +3,20 @@ import { routes } from "@/shared/constants/routes";
 export const dashboardRoute = routes.DASHBOARD;
 export const skinProfileRoute = routes.SKIN_PROFILE;
 export const routinesRoute = routes.ROUTINES;
+export const todayLogRoute = routes.TODAY_LOG;
 export const journalRoute = routes.JOURNAL;
 export const productsRoute = routes.PRODUCTS;
+export const savedProductsRoute = routes.SAVED_PRODUCTS;
 export const ingredientsRoute = routes.INGREDIENTS;
 
 type DashboardNavHref =
   | typeof dashboardRoute
   | typeof skinProfileRoute
   | typeof routinesRoute
+  | typeof todayLogRoute
   | typeof journalRoute
   | typeof productsRoute
+  | typeof savedProductsRoute
   | typeof ingredientsRoute;
 
 export type DashboardNavItem = {
@@ -22,7 +26,7 @@ export type DashboardNavItem = {
   status: "Active" | "Future";
 };
 
-export const dashboardNavItems = [
+export const dashboardNavItems: DashboardNavItem[] = [
   {
     disabled: false,
     href: dashboardRoute,
@@ -42,10 +46,10 @@ export const dashboardNavItems = [
     status: "Active",
   },
   {
-    disabled: true,
-    href: null,
+    disabled: false,
+    href: todayLogRoute,
     label: "Today Log",
-    status: "Future",
+    status: "Active",
   },
   {
     disabled: false,
@@ -61,8 +65,14 @@ export const dashboardNavItems = [
   },
   {
     disabled: false,
+    href: savedProductsRoute,
+    label: "Saved Products",
+    status: "Active",
+  },
+  {
+    disabled: false,
     href: ingredientsRoute,
     label: "Ingredients",
     status: "Active",
   },
-] satisfies DashboardNavItem[];
+];

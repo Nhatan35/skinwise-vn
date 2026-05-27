@@ -16,6 +16,11 @@ import type {
   ProductSkinType,
   ProductVerificationStatus,
 } from "@/modules/products/product.types";
+import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
+import {
+  listSavedProducts,
+  SavedProductClientError,
+} from "@/modules/saved-products/saved-product.client";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -101,13 +106,23 @@ function getLoadError(error: unknown) {
   };
 }
 
+function getSavedStateError(error: unknown) {
+  if (error instanceof SavedProductClientError) {
+    return error.message;
+  }
+
+  return "Could not load saved product state.";
+}
+
 export function ProductDetail({ productId }: ProductDetailProps) {
   const [product, setProduct] = useState<ProductDto | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<{
     message: string;
     status: number;
   } | null>(null);
+  const [savedStateError, setSavedStateError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -117,6 +132,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       setIsLoading(true);
       setLoadError(null);
       setProduct(null);
+      setIsSaved(false);
+      setSavedStateError(null);
 
       try {
         const loadedProduct = await getProduct(productId);
@@ -126,6 +143,23 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         }
 
         setProduct(loadedProduct);
+        setIsLoading(false);
+
+        try {
+          const savedProducts = await listSavedProducts();
+
+          if (!isMounted) {
+            return;
+          }
+
+          setIsSaved(
+            savedProducts.some((savedProduct) => savedProduct.productId === productId),
+          );
+        } catch (error) {
+          if (isMounted) {
+            setSavedStateError(getSavedStateError(error));
+          }
+        }
       } catch (error) {
         if (isMounted) {
           setLoadError(getLoadError(error));
@@ -223,7 +257,16 @@ export function ProductDetail({ productId }: ProductDetailProps) {
                 </Badge>
               </div>
             </div>
-            <BackToProductsButton />
+            <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
+              <BackToProductsButton />
+              <SavedProductToggleButton
+                initialSaved={isSaved}
+                key={`${product.id}-${isSaved ? "saved" : "unsaved"}`}
+                mode="full"
+                onChange={setIsSaved}
+                productId={product.id}
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -241,6 +284,15 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           They are not medical diagnosis or treatment advice.
         </AlertDescription>
       </Alert>
+
+      {savedStateError ? (
+        <Alert variant="destructive">
+          <AlertTitle>Saved state unavailable</AlertTitle>
+          <AlertDescription>
+            {savedStateError} Product details still work.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       <Card className="border-stone-200 bg-white">
         <CardHeader>

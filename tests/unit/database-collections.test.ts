@@ -15,6 +15,7 @@ describe("database collection names", () => {
         "skin_profiles",
         "products",
         "ingredients",
+        "saved_products",
         "routines",
         "routine_logs",
         "routine_analyses",

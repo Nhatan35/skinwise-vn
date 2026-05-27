@@ -8,6 +8,7 @@ import type {
   ProductSkinType,
   ProductVerificationStatus,
 } from "@/modules/products/product.types";
+import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -62,6 +63,8 @@ const verificationLabels: Record<ProductVerificationStatus, string> = {
 };
 
 type ProductCardProps = {
+  initialSaved?: boolean;
+  onSavedChange?: (isSaved: boolean) => void;
   product: ProductDto;
 };
 
@@ -75,9 +78,13 @@ function formatUpdatedAt(value: string) {
   }).format(new Date(value));
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({
+  initialSaved = false,
+  onSavedChange,
+  product,
+}: ProductCardProps) {
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-stone-200 bg-white" data-testid="product-card">
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -143,10 +150,16 @@ export function ProductCard({ product }: ProductCardProps) {
           Updated {formatUpdatedAt(product.updatedAt)}
         </p>
 
-        <div className="border-t border-stone-200 pt-4">
+        <div className="flex flex-col gap-2 border-t border-stone-200 pt-4 sm:flex-row">
           <Button asChild variant="outline">
             <Link href={`/products/${product.id}`}>View details</Link>
           </Button>
+          <SavedProductToggleButton
+            initialSaved={initialSaved}
+            key={`${product.id}-${initialSaved ? "saved" : "unsaved"}`}
+            onChange={onSavedChange}
+            productId={product.id}
+          />
         </div>
       </CardContent>
     </Card>

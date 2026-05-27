@@ -73,3 +73,30 @@ export async function getMongoDb(): Promise<Db> {
 
   return client.db();
 }
+
+export async function closeMongoClient(): Promise<void> {
+  const currentEnv = getEnv();
+
+  if (currentEnv.APP_ENV === "development") {
+    const globalForMongo = globalThis as GlobalWithMongoClient;
+    const clientPromise = globalForMongo.__skinwiseMongoClientPromise;
+
+    globalForMongo.__skinwiseMongoClientPromise = undefined;
+
+    if (clientPromise) {
+      const client = await clientPromise;
+      await client.close();
+    }
+
+    return;
+  }
+
+  const clientPromise = productionClientPromise;
+
+  productionClientPromise = undefined;
+
+  if (clientPromise) {
+    const client = await clientPromise;
+    await client.close();
+  }
+}

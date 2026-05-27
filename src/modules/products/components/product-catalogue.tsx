@@ -20,6 +20,10 @@ import {
   type ProductPriceRange,
   type ProductSkinType,
 } from "@/modules/products/product.types";
+import {
+  listSavedProducts,
+  SavedProductClientError,
+} from "@/modules/saved-products/saved-product.client";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -117,14 +121,26 @@ function getLoadErrorMessage(error: unknown) {
   return "Could not load the product catalogue.";
 }
 
+function getSavedStateErrorMessage(error: unknown) {
+  if (error instanceof SavedProductClientError) {
+    return error.message;
+  }
+
+  return "Could not load saved product state.";
+}
+
 export function ProductCatalogue() {
   const [draftFilters, setDraftFilters] =
     useState<ProductFilterState>(initialFilters);
   const [activeFilters, setActiveFilters] =
     useState<ProductFilterState>(initialFilters);
   const [products, setProducts] = useState<ProductDto[]>([]);
+  const [savedProductIds, setSavedProductIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [savedStateError, setSavedStateError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -133,6 +149,7 @@ export function ProductCatalogue() {
     async function loadProductCatalogue() {
       setIsLoading(true);
       setLoadError(null);
+      setSavedStateError(null);
 
       try {
         const items = await listProducts(toClientInput(activeFilters));
@@ -142,6 +159,24 @@ export function ProductCatalogue() {
         }
 
         setProducts(items);
+        setIsLoading(false);
+
+        try {
+          const savedProducts = await listSavedProducts();
+
+          if (!isMounted) {
+            return;
+          }
+
+          setSavedProductIds(
+            new Set(savedProducts.map((savedProduct) => savedProduct.productId)),
+          );
+        } catch (error) {
+          if (isMounted) {
+            setSavedProductIds(new Set());
+            setSavedStateError(getSavedStateErrorMessage(error));
+          }
+        }
       } catch (error) {
         if (isMounted) {
           setProducts([]);
@@ -179,6 +214,20 @@ export function ProductCatalogue() {
   function handleClearFilters() {
     setDraftFilters(initialFilters);
     setActiveFilters(initialFilters);
+  }
+
+  function handleSavedChange(productId: string, isSaved: boolean) {
+    setSavedProductIds((current) => {
+      const next = new Set(current);
+
+      if (isSaved) {
+        next.add(productId);
+      } else {
+        next.delete(productId);
+      }
+
+      return next;
+    });
   }
 
   return (
@@ -308,6 +357,15 @@ export function ProductCatalogue() {
         </Alert>
       ) : null}
 
+      {savedStateError && !loadError ? (
+        <Alert variant="destructive">
+          <AlertTitle>Saved state unavailable</AlertTitle>
+          <AlertDescription>
+            {savedStateError} Product browsing still works.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
       {isLoading ? (
         <Card className="border-stone-200 bg-white">
           <CardContent>
@@ -326,7 +384,14 @@ export function ProductCatalogue() {
       {!isLoading && !loadError && products.length > 0 ? (
         <div className="grid gap-4 xl:grid-cols-2">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              initialSaved={savedProductIds.has(product.id)}
+              key={product.id}
+              onSavedChange={(isSaved) =>
+                handleSavedChange(product.id, isSaved)
+              }
+              product={product}
+            />
           ))}
         </div>
       ) : null}

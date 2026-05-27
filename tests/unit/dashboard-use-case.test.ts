@@ -386,7 +386,7 @@ describe("Dashboard use case", () => {
     expect(dashboard.nextActions).toEqual([
       {
         label: "Ghi nhận routine hôm nay",
-        href: "/routines",
+        href: "/routine-logs/today",
         priority: "medium",
       },
     ]);

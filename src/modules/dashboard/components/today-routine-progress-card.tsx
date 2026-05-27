@@ -50,7 +50,7 @@ export function TodayRoutineProgressCard({
         </div>
 
         <Button asChild size="sm" variant="outline">
-          <Link href={routes.ROUTINES}>Ghi nhận routine</Link>
+          <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
         </Button>
       </div>
     </DashboardCard>

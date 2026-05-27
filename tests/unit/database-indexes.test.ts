@@ -80,6 +80,17 @@ describe("database index definitions", () => {
     });
   });
 
+  it("defines saved product ownership and query indexes", () => {
+    expectUniqueIndex(COLLECTION_NAMES.SAVED_PRODUCTS, {
+      userId: 1,
+      productId: 1,
+    });
+    expectIndex(COLLECTION_NAMES.SAVED_PRODUCTS, {
+      userId: 1,
+      createdAt: -1,
+    });
+  });
+
   it("defines routine ownership query indexes", () => {
     expectIndex(COLLECTION_NAMES.ROUTINES, { userId: 1, timeOfDay: 1 });
     expectIndex(COLLECTION_NAMES.ROUTINES, { userId: 1, updatedAt: -1 });

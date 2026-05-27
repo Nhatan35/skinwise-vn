@@ -29,6 +29,7 @@ User-owned demo data should be created through the authenticated UI:
 - Ingredient Library review;
 - Morning Routine;
 - Evening Routine;
+- saved product example;
 - optional caution routine;
 - routine logs;
 - skin journal entries;
@@ -50,14 +51,15 @@ Supporting setup guide:
 | 4 | Skin Profile `/skin-profile` | Show or update profile | "The profile captures skin type, concerns, sensitivity, budget, and experience level." | Persona and requirements thinking | Zod validation and user-scoped persistence |
 | 5 | Product Catalogue `/products` | Search/filter products | "The catalogue gives curated product examples for the MVP demo. It is not a marketplace." | Product discovery without commercial scope | Product API, query filters, read-only catalogue |
 | 6 | Product Detail `/products/[id]` | Open a product | "The detail page shows ingredients, key actives, warnings, and suitability fields." | Informed decision support | DTO-safe product detail route |
-| 7 | Ingredient Library `/ingredients` | Search for Niacinamide | "The ingredient library explains common skincare ingredients in beginner-friendly language." | Education without diagnosis | Authenticated ingredient API and client UI |
-| 8 | Ingredient Detail `/ingredients/[id]` | Open ingredient detail and request explanation | "The detail page shows uses, suitability, cautions, and an educational explanation that may use a safe fallback." | Safety copy and scope control | Detail route, explanation API, provider abstraction |
-| 9 | Routine Builder `/routines` | Show Morning/Evening routines | "The user can turn product choices into ordered routine steps." | Core workflow design | Routine API and product snapshot behavior |
-| 10 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis uses deterministic safety rules first, then mock/validated provider explanation." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
-| 11 | Routine Logs `/routines` | Mark routine status | "RoutineLog tracks behavior separately from skin observations." | Distinguishes behavior tracking from journaling | Upsert by user/routine/localDate |
-| 12 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
-| 13 | Dashboard summary `/dashboard` | Return to dashboard | "After setup, the dashboard becomes meaningful because it reads real user-owned data." | End-to-end value | Aggregates existing modules |
-| 14 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
+| 7 | Saved Products `/saved-products` | Save a product, open saved products, then remove it | "Saved Products lets users bookmark products they want to revisit without adding marketplace, cart, or recommendation behavior." | Retention and routine planning support | User-owned saved_products module, API, and UI |
+| 8 | Ingredient Library `/ingredients` | Search for Niacinamide | "The ingredient library explains common skincare ingredients in beginner-friendly language." | Education without diagnosis | Authenticated ingredient API and client UI |
+| 9 | Ingredient Detail `/ingredients/[id]` | Open ingredient detail and request explanation | "The detail page shows uses, suitability, cautions, and an educational explanation that may use a safe fallback." | Safety copy and scope control | Detail route, explanation API, provider abstraction |
+| 10 | Routine Builder `/routines` | Show Morning/Evening routines | "The user can turn product choices into ordered routine steps." | Core workflow design | Routine API and product snapshot behavior |
+| 11 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis uses deterministic safety rules first, then mock/validated provider explanation." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
+| 12 | Routine Logs `/routines` | Mark routine status | "RoutineLog tracks behavior separately from skin observations." | Distinguishes behavior tracking from journaling | Upsert by user/routine/localDate |
+| 13 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
+| 14 | Dashboard summary `/dashboard` | Return to dashboard | "After setup, the dashboard becomes meaningful because it reads real user-owned data." | End-to-end value | Aggregates existing modules |
+| 15 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
 
 ## 5. What To Say At Each Screen
 
@@ -90,6 +92,11 @@ Product Detail:
 
 - "The product detail page gives more context before the user builds a routine."
 - "The data shown is public product DTO data, not private user data."
+
+Saved Products:
+
+- "The user can save a product from catalogue or detail, revisit it under Saved Products, and remove it later."
+- "Saved Products is user-owned bookmarking only; it is not a cart, marketplace, recommendation system, or public sharing feature."
 
 Ingredient Library:
 
@@ -138,7 +145,7 @@ Dashboard summary:
 | Why is Product CRUD not implemented? | The MVP focuses on user routine tracking and a curated demo catalogue. Admin/product submission is future scope. |
 | What BA skills does this show? | Problem framing, user journey, scope control, user stories, acceptance criteria, requirements traceability, and demo storytelling. |
 | What technical skills does this show? | Next.js App Router, TypeScript, MongoDB, Auth.js, Zod, modular code organization, API routes, DTO mapping, testing, and Vercel deployment readiness. |
-| What would you improve next? | Final screenshots, broader E2E coverage, dashboard analytics, saved products, admin product management, and later real provider integration with strict safety controls. |
+| What would you improve next? | Final screenshots, broader E2E coverage, dashboard analytics, saved-product organization, admin product management, and later real provider integration with strict safety controls. |
 
 ## 7. Closing Explanation
 

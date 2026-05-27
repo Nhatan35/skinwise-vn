@@ -194,14 +194,14 @@ describe("Routine Builder UI foundation", () => {
       status: "Active",
     });
 
-    for (const disabledLabel of ["Today Log"]) {
-      expect(
-        dashboardNavItems.find((item) => item.label === disabledLabel),
-      ).toMatchObject({
-        disabled: true,
-        href: null,
-      });
-    }
+    expect(
+      dashboardNavItems.find((item) => item.label === "Today Log"),
+    ).toEqual({
+      disabled: false,
+      href: routes.TODAY_LOG,
+      label: "Today Log",
+      status: "Active",
+    });
   });
 
   it("protects /routines while preserving existing protected route matchers", () => {
@@ -211,6 +211,7 @@ describe("Routine Builder UI foundation", () => {
     expect(proxySource).toContain('"/routines/:path*"');
     expect(proxySource).toContain('"/journal/:path*"');
     expect(proxySource).toContain('"/products/:path*"');
+    expect(proxySource).toContain('"/saved-products/:path*"');
     expect(proxySource).toContain('"/ingredients/:path*"');
   });
 

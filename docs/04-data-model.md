@@ -134,7 +134,30 @@ index: concerns
 index: verificationStatus
 ```
 
-## 5. Ingredient
+## 5. SavedProduct
+
+```ts
+type SavedProduct = {
+  _id: ObjectId;
+  userId: string;
+  productId: ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+};
+```
+
+Saved Products are user-owned bookmarks for visible products. The public DTO includes the saved record id, `productId`, product DTO, and timestamps, but never exposes `userId`.
+
+### Indexes
+
+```txt
+compound unique index: userId, productId
+compound index: userId, createdAt
+```
+
+Duplicate saves for the same user and product are prevented at the database layer. Delete operations remove only the saved-product record and never delete the product.
+
+## 6. Ingredient
 
 ```ts
 type Ingredient = {
@@ -161,7 +184,7 @@ index: aliases
 text index: inciName, aliases, functions
 ```
 
-## 6. Routine
+## 7. Routine
 
 ```ts
 type Routine = {
@@ -175,7 +198,7 @@ type Routine = {
 };
 ```
 
-## 7. RoutineStep
+## 8. RoutineStep
 
 ```ts
 type RoutineStep = {
@@ -206,7 +229,7 @@ compound index: userId, timeOfDay
 compound index: userId, updatedAt
 ```
 
-## 8. RoutineLog
+## 9. RoutineLog
 
 ```ts
 type RoutineLog = {
@@ -246,7 +269,7 @@ compound index: userId, localDate
 compound index: userId, routineId
 ```
 
-## 9. RoutineAnalysis
+## 10. RoutineAnalysis
 
 ```ts
 type RoutineAnalysis = {
@@ -296,7 +319,7 @@ index: promptVersion
 index: modelName
 ```
 
-## 10. SkinJournal
+## 11. SkinJournal
 
 ```ts
 type SkinJournal = {
@@ -340,7 +363,7 @@ MVP product decision:
 - Multiple journal entries per day can be considered as a future product change, but is out of MVP scope.
 
 
-## 11. Daily tracking date strategy
+## 12. Daily tracking date strategy
 
 RoutineLog and SkinJournal must use `localDate` plus `timezone` instead of relying only on JavaScript `Date` for daily tracking.
 
@@ -373,7 +396,7 @@ Example:
 }
 ```
 
-## 12. Ownership and privacy fields
+## 13. Ownership and privacy fields
 
 All user-owned objects must include `userId`.
 
@@ -384,6 +407,7 @@ User-owned collections:
 - RoutineLog
 - RoutineAnalysis
 - SkinJournal
+- SavedProduct
 - User-submitted Product data
 
 Ownership check rule:
@@ -399,7 +423,7 @@ Example:
 findOne({ _id: routineId, userId: currentUser.id })
 ```
 
-## 13. MongoDB index strategy
+## 14. MongoDB index strategy
 
 MongoDB indexes should support high-frequency reads:
 
@@ -408,12 +432,13 @@ MongoDB indexes should support high-frequency reads:
 - RoutineLog lookup by userId/localDate.
 - Journal timeline by userId and localDate.
 - Product search by text.
+- Saved products by user and newest saved date.
 - Ingredient search by aliases.
 
 Use MongoDB Atlas Performance Advisor after MVP to identify slow queries and refine indexes.
 
 
-## 14. Daily tracking validation rules
+## 15. Daily tracking validation rules
 
 `RoutineLog` and `SkinJournal` use `localDate` and `timezone` instead of a bare `Date` field for daily tracking.
 

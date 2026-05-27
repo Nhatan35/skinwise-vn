@@ -4,6 +4,41 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-26 - SAVED-PRODUCTS-001 Saved Products
+
+### Task
+
+Implement Feature Roadmap v1.2: authenticated Saved Products.
+
+### Changes
+
+- Added the user-owned `saved_products` collection helper and indexes for duplicate prevention and user list queries.
+- Added the Saved Products module with DTOs, strict schemas, mapper, repository, use cases, client helper, saved list UI, saved card UI, and product save/remove toggle.
+- Added authenticated `GET /api/saved-products`, `POST /api/saved-products`, and `DELETE /api/saved-products/[productId]` routes.
+- Added the protected `/saved-products` dashboard route and enabled Saved Products navigation.
+- Integrated Save/Saved actions into Product Catalogue cards and Product Detail while keeping product browsing usable if saved-state loading fails.
+- Added unit/API/client/repository/source tests and an authenticated Playwright Saved Products spec.
+- Updated route, API, data model, structure, ownership, demo, and portfolio documentation for v1.2.
+
+### Notes
+
+- Saved products are scoped to the authenticated user and `SavedProductDto` does not expose `userId`.
+- Duplicate saves are idempotent and backed by a unique `{ userId, productId }` index.
+- Product schema, Product CRUD, cart, marketplace, payment, comparison, ratings, reviews, social sharing, recommendation behavior, deployment state, and production verification were not changed.
+### Validation
+
+```txt
+npm run lint: Pass
+npm run typecheck: Pass
+npm run test: Pass - 69 files, 680 tests
+npm run build: Pass
+npm run db:indexes: Pass - safe local/test database skinwise-e2e-check
+npm run db:seed:e2e: Pass - safe local/test database skinwise-e2e-check
+npm run test:e2e: Pass - 14 tests
+```
+
+Validation used only local/test configuration. No production deployment or production verification was performed.
+
 ## 2026-05-26 - INGREDIENT-UI-001 Ingredient Library UI
 
 ### Task
@@ -3431,3 +3466,32 @@ Align seed data contracts with the canonical data model, update final-freeze wor
 - No MVP scope change.
 - No architecture change.
 - Week 1 remains ready to start after this cleanup.
+
+
+## MVP-TODAY-LOG-001 - Dedicated Today Routine Checklist Page - 2026-05-27
+
+### What changed
+
+- Added `routes.TODAY_LOG` for `/routine-logs/today`.
+- Enabled the dashboard Today Log navigation item and protected `/routine-logs/:path*` through the existing auth proxy matcher.
+- Added the authenticated `/routine-logs/today` page and `TodayRoutineChecklist` client component.
+- Reused `GET /api/routines`, `GET /api/routine-logs?localDate=YYYY-MM-DD`, `PUT /api/routine-logs`, `RoutineLogControls`, `RoutineLogStatusBadge`, browser local date, timezone, and RoutineLog grouping helpers.
+- Updated dashboard routine logging CTAs to point to `/routine-logs/today`.
+- Updated source-level tests and documentation for the new Today Checklist route.
+
+### Scope boundaries
+
+- No new database collection was added.
+- No RoutineLog API rewrite, Routine Builder rewrite, streak logic, analytics dashboard, notification system, image upload, skin score, marketplace, payment, admin CRUD, or real OpenAI/Gemini integration was added.
+
+### Validation
+
+```txt
+npm ci: Pass, with EBADENGINE warning because sandbox uses Node v22.16.0/npm 10.9.2 while project targets Node 24.x/npm 11.x
+npm run lint: Pass
+npm run typecheck: Pass after keeping dashboardNavItems typed as DashboardNavItem[]
+npm run test: Pass - 69 files, 683 tests
+npm run build: Timed out in this sandbox while collecting page data after successful compilation and TypeScript phase
+npm run db:seed:e2e: Not run because local MongoDB was not available on 127.0.0.1:27017
+npm run test:e2e: Not run because local MongoDB was not available on 127.0.0.1:27017
+```

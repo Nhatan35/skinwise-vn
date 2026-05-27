@@ -1,0 +1,429 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+
+import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
+import {
+  getBrowserLocalDate,
+  getBrowserTimezone,
+  groupRoutineLogsByRoutineId,
+} from "@/modules/routine-logs/routine-log.client";
+import { RoutineLogControls } from "@/modules/routines/components/routine-log-controls";
+import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
+import type { RoutineDto } from "@/modules/routines/routine.dto";
+import type {
+  RoutineStepCategory,
+  RoutineStepFrequency,
+  RoutineTimeOfDay,
+} from "@/modules/routines/routine.types";
+import { EmptyState } from "@/shared/components/empty-state";
+import { ErrorState } from "@/shared/components/error-state";
+import { LoadingState } from "@/shared/components/loading-state";
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
+
+const ROUTINES_API_PATH = "/api/routines";
+const ROUTINE_LOGS_API_PATH = "/api/routine-logs";
+
+const timeOfDayLabels: Record<RoutineTimeOfDay, string> = {
+  morning: "Buổi sáng",
+  evening: "Buổi tối",
+};
+
+const categoryLabels: Record<RoutineStepCategory, string> = {
+  cleanser: "Làm sạch",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
+  treatment: "Treatment",
+  toner: "Toner",
+  serum: "Serum",
+  mask: "Mặt nạ",
+  other: "Khác",
+};
+
+const frequencyLabels: Record<RoutineStepFrequency, string> = {
+  daily: "Mỗi ngày",
+  weekly_1_2: "1-2 lần/tuần",
+  weekly_3_4: "3-4 lần/tuần",
+  as_needed: "Khi cần",
+};
+
+type ApiError = {
+  code: string;
+  details?: unknown;
+  message: string;
+};
+
+type ApiResponse<TData> =
+  | {
+      data: TData;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ApiError;
+    };
+
+type SummaryCounts = {
+  total: number;
+  completed: number;
+  partial: number;
+  skipped: number;
+  notLogged: number;
+};
+
+async function readApiResponse<TData>(
+  response: Response,
+): Promise<ApiResponse<TData>> {
+  try {
+    return (await response.json()) as ApiResponse<TData>;
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "Invalid response body.",
+      },
+    };
+  }
+}
+
+function getRoutineLogsEndpoint(localDate: string) {
+  return `${ROUTINE_LOGS_API_PATH}?localDate=${encodeURIComponent(localDate)}`;
+}
+
+function getLoadErrorMessage(error?: ApiError | null) {
+  if (error?.code === "UNAUTHORIZED") {
+    return "Bạn cần đăng nhập để xem checklist routine hôm nay.";
+  }
+
+  if (error?.code === "VALIDATION_ERROR") {
+    return "Ngày ghi nhận routine chưa hợp lệ. Vui lòng tải lại trang.";
+  }
+
+  return "Không thể tải checklist routine hôm nay. Vui lòng thử lại.";
+}
+
+function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
+  if (step.productNameSnapshot && step.brandSnapshot) {
+    return `${step.brandSnapshot} — ${step.productNameSnapshot}`;
+  }
+
+  if (step.productNameSnapshot) {
+    return step.productNameSnapshot;
+  }
+
+  if (step.customProductName) {
+    return step.customProductName;
+  }
+
+  return "Sản phẩm chưa xác định";
+}
+
+function getSummaryCounts(
+  routines: RoutineDto[],
+  logsByRoutineId: Record<string, RoutineLogDto>,
+): SummaryCounts {
+  let completed = 0;
+  let partial = 0;
+  let skipped = 0;
+
+  for (const routine of routines) {
+    const status = logsByRoutineId[routine.id]?.status;
+
+    if (status === "completed") {
+      completed += 1;
+    } else if (status === "partial") {
+      partial += 1;
+    } else if (status === "skipped") {
+      skipped += 1;
+    }
+  }
+
+  return {
+    total: routines.length,
+    completed,
+    partial,
+    skipped,
+    notLogged: routines.length - completed - partial - skipped,
+  };
+}
+
+export function TodayRoutineChecklist() {
+  const [localDate] = useState(() => getBrowserLocalDate());
+  const [timezone] = useState(() => getBrowserTimezone());
+  const [routines, setRoutines] = useState<RoutineDto[]>([]);
+  const [logsByRoutineId, setLogsByRoutineId] = useState<
+    Record<string, RoutineLogDto>
+  >({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTodayData() {
+      setIsLoading(true);
+      setLoadError(null);
+
+      try {
+        const [routinesResponse, routineLogsResponse] = await Promise.all([
+          fetch(ROUTINES_API_PATH, {
+            headers: {
+              Accept: "application/json",
+            },
+            method: "GET",
+          }),
+          fetch(getRoutineLogsEndpoint(localDate), {
+            headers: {
+              Accept: "application/json",
+            },
+            method: "GET",
+          }),
+        ]);
+        const [routinesBody, routineLogsBody] = await Promise.all([
+          readApiResponse<{ routines: RoutineDto[] }>(routinesResponse),
+          readApiResponse<{ routineLogs: RoutineLogDto[] }>(routineLogsResponse),
+        ]);
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (!routinesResponse.ok || routinesBody.error) {
+          setRoutines([]);
+          setLogsByRoutineId({});
+          setLoadError(getLoadErrorMessage(routinesBody.error));
+          return;
+        }
+
+        if (!routineLogsResponse.ok || routineLogsBody.error) {
+          setRoutines(routinesBody.data.routines);
+          setLogsByRoutineId({});
+          setLoadError(getLoadErrorMessage(routineLogsBody.error));
+          return;
+        }
+
+        setRoutines(routinesBody.data.routines);
+        setLogsByRoutineId(
+          groupRoutineLogsByRoutineId(routineLogsBody.data.routineLogs),
+        );
+      } catch {
+        if (isMounted) {
+          setRoutines([]);
+          setLogsByRoutineId({});
+          setLoadError("Không thể tải checklist routine hôm nay. Vui lòng thử lại.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void loadTodayData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [localDate]);
+
+  const summaryCounts = useMemo(
+    () => getSummaryCounts(routines, logsByRoutineId),
+    [logsByRoutineId, routines],
+  );
+  const morningRoutines = useMemo(
+    () => routines.filter((routine) => routine.timeOfDay === "morning"),
+    [routines],
+  );
+  const eveningRoutines = useMemo(
+    () => routines.filter((routine) => routine.timeOfDay === "evening"),
+    [routines],
+  );
+  const hasLoggedAllRoutines = routines.length > 0 && summaryCounts.notLogged === 0;
+
+  function handleLogSaved(updatedLog: RoutineLogDto) {
+    setLogsByRoutineId((current) => ({
+      ...current,
+      [updatedLog.routineId]: updatedLog,
+    }));
+  }
+
+  function renderRoutineSection(title: string, sectionRoutines: RoutineDto[]) {
+    return (
+      <Card className="border-stone-200 bg-white" key={title}>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {sectionRoutines.length === 0 ? (
+            <p className="text-sm text-stone-600">
+              Chưa có routine trong nhóm này.
+            </p>
+          ) : (
+            sectionRoutines.map((routine) => {
+              const log = logsByRoutineId[routine.id];
+
+              return (
+                <article
+                  className="border border-stone-200 bg-stone-50 p-4"
+                  key={routine.id}
+                >
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-lg font-semibold text-stone-950">
+                          {routine.name}
+                        </h3>
+                        <Badge variant="secondary">
+                          {timeOfDayLabels[routine.timeOfDay]}
+                        </Badge>
+                        <RoutineLogStatusBadge
+                          hasLog={Boolean(log)}
+                          status={log?.status}
+                        />
+                      </div>
+                      <p className="text-sm text-stone-600">
+                        {routine.steps.length} bước trong routine này.
+                      </p>
+                    </div>
+                  </div>
+
+                  <ol className="mt-4 space-y-3">
+                    {routine.steps.map((step, index) => (
+                      <li
+                        className="border border-stone-200 bg-white p-3"
+                        key={step.stepId}
+                      >
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <p className="font-medium text-stone-950">
+                              {index + 1}. {getRoutineStepDisplayName(step)}
+                            </p>
+                            {step.instructions ? (
+                              <p className="mt-1 text-sm text-stone-600">
+                                {step.instructions}
+                              </p>
+                            ) : null}
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge variant="outline">
+                              {categoryLabels[step.category]}
+                            </Badge>
+                            <Badge variant="outline">
+                              {frequencyLabels[step.frequency]}
+                            </Badge>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+
+                  <RoutineLogControls
+                    localDate={localDate}
+                    log={log}
+                    onSaved={handleLogSaved}
+                    routine={routine}
+                    timezone={timezone}
+                  />
+                </article>
+              );
+            })
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isLoading) {
+    return <LoadingState label="Đang tải Today Routine Checklist" />;
+  }
+
+  if (loadError) {
+    return (
+      <ErrorState
+        description={loadError}
+        title="Chưa tải được Today Routine Checklist"
+      />
+    );
+  }
+
+  if (routines.length === 0) {
+    return (
+      <EmptyState
+        action={
+          <Button asChild>
+            <Link href={routes.ROUTINES}>Đi tới Routine Builder</Link>
+          </Button>
+        }
+        description="Hãy tạo morning/evening routine trước khi theo dõi tiến độ hằng ngày."
+        title="Bạn chưa có routine nào để ghi nhận hôm nay."
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <Card className="border-stone-200 bg-white">
+        <CardHeader>
+          <CardTitle>Thông tin hôm nay</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
+          <div className="rounded-lg border border-stone-200 bg-stone-50 p-3">
+            <p className="font-medium text-stone-950">Local date</p>
+            <p className="mt-1 text-stone-600">{localDate}</p>
+          </div>
+          <div className="rounded-lg border border-stone-200 bg-stone-50 p-3">
+            <p className="font-medium text-stone-950">Timezone</p>
+            <p className="mt-1 text-stone-600">{timezone}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-stone-200 bg-white">
+        <CardHeader>
+          <CardTitle>Tiến độ ghi nhận hôm nay</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
+          <SummaryItem label="Tổng routine" value={summaryCounts.total} />
+          <SummaryItem label="Hoàn thành" value={summaryCounts.completed} />
+          <SummaryItem label="Một phần" value={summaryCounts.partial} />
+          <SummaryItem label="Bỏ qua" value={summaryCounts.skipped} />
+          <SummaryItem label="Chưa ghi nhận" value={summaryCounts.notLogged} />
+        </CardContent>
+      </Card>
+
+      {hasLoggedAllRoutines ? (
+        <EmptyState
+          action={
+            <Button asChild variant="outline">
+              <Link href={routes.DASHBOARD}>Xem Dashboard</Link>
+            </Button>
+          }
+          description="Có thể quay lại Dashboard để xem tiến độ."
+          title="Bạn đã ghi nhận tất cả routine hôm nay."
+        />
+      ) : null}
+
+      {renderRoutineSection("Routine buổi sáng", morningRoutines)}
+      {renderRoutineSection("Routine buổi tối", eveningRoutines)}
+    </div>
+  );
+}
+
+function SummaryItem({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-lg bg-stone-50 p-3">
+      <p className="font-medium text-stone-900">{label}</p>
+      <p className="mt-1 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}

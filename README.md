@@ -1,6 +1,6 @@
 # SkinWise VN
 
-SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products and ingredients, build routines, track routine completion, write skin journal entries, and review dashboard summaries.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse and save skincare products, browse ingredients, build routines, track routine completion, write skin journal entries, and review dashboard summaries.
 
 The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, full-stack implementation, validation, deployment preparation, and portfolio storytelling.
 
@@ -30,13 +30,13 @@ Current `DEPLOY-VERIFY-001` re-verification status on 2026-05-25:
 
 ## Current Status
 
-Current phase: post Week 6 Feature Roadmap v1.1 validation and deployment re-verification follow-up.
+Current phase: post Week 6 Feature Roadmap v1.2 implementation and validation.
 
 Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 24 and npm 11` locally validated for the current feature scope.
 
 Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
 
-Latest feature task: `INGREDIENT-UI-001 - Implement Ingredient Library UI`.
+Latest feature task: `SAVED-PRODUCTS-001 - Implement Saved Products`.
 
 Deployment verification note: `DEPLOY-VERIFY-001` remains partial pending external Vercel, Google Cloud Console, MongoDB Atlas, authenticated production smoke, and runtime-log evidence.
 
@@ -49,6 +49,7 @@ Completed scope:
 - Week 5 AI provider abstraction, mock AI provider, validated provider, and Ingredient Explanation API.
 - Week 6 Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI.
 - Feature Roadmap v1.1 Ingredient Library UI.
+- Feature Roadmap v1.2 Saved Products.
 - Vercel MVP demo deployment and production smoke test.
 - Clean package validation stabilization.
 - Unauthenticated Playwright smoke tests for landing page and protected route redirects.
@@ -61,6 +62,7 @@ Completed scope:
 - Skin Profile.
 - Product Catalogue.
 - Product Detail.
+- Saved Products.
 - Ingredient Library.
 - Routine Builder.
 - Routine Logs.
@@ -82,6 +84,7 @@ Implemented UI routes:
 - `/journal`
 - `/products`
 - `/products/[id]`
+- `/saved-products`
 - `/ingredients`
 - `/ingredients/[id]`
 
@@ -92,6 +95,8 @@ Implemented SkinWise API routes:
 - `/api/skin-profile`
 - `/api/products`
 - `/api/products/[id]`
+- `/api/saved-products`
+- `/api/saved-products/[productId]`
 - `/api/ingredients`
 - `/api/ingredients/[id]`
 - `/api/ingredients/explain`
@@ -129,6 +134,7 @@ Landing page
 -> Skin Profile
 -> Product Catalogue
 -> Product Detail
+-> Saved Products
 -> Ingredient Library
 -> Ingredient Detail and Explanation
 -> Routine Builder
@@ -202,7 +208,7 @@ npm audit --omit=dev --audit-level=moderate
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
-`npm run test:e2e` runs Playwright smoke tests against a local/CI dev server with safe placeholder environment values. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider.
+`npm run test:e2e` runs Playwright smoke tests against a local/CI dev server with safe placeholder environment values. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider.
 
 Authenticated Playwright smoke tests use a test-only Auth.js Credentials provider. It is enabled only when `APP_ENV="test"` and `E2E_TEST_AUTH="true"`, and must never be enabled in production or normal development. The authenticated smoke suite uses the safe local/test MongoDB URI configured in `playwright.config.ts` and seeds deterministic product and ingredient data, including Niacinamide, through `npm run db:seed:e2e`; a local MongoDB instance must be available at `mongodb://127.0.0.1:27017/skinwise-e2e-check`.
 
@@ -263,7 +269,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
-- E2E coverage is smoke-level only: public landing page loading, unauthenticated protected-route redirect checks, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider are covered. Real Google OAuth login is not tested in CI.
+- E2E coverage is smoke-level only: public landing page loading, unauthenticated protected-route redirect checks, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider are covered. Real Google OAuth login is not tested in CI.
 - SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Future Roadmap
@@ -273,7 +279,7 @@ Future ideas, not implemented in the current MVP:
 - Capture final screenshots for the portfolio.
 - Expand authenticated E2E coverage to routines, routine analysis/logs, journal flows, and deeper dashboard summaries.
 - Improve dashboard analytics.
-- Add saved products.
+- Improve saved product organization.
 - Add admin product management.
 - Improve product filtering.
 - Expand deterministic routine safety rules.

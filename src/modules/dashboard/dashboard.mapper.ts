@@ -182,7 +182,7 @@ export function buildDashboardNextActions(input: {
     return [
       {
         label: "Ghi nhận routine hôm nay",
-        href: routes.ROUTINES,
+        href: routes.TODAY_LOG,
         priority: "medium",
       },
     ];

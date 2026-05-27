@@ -12,8 +12,10 @@ export const config = {
     "/onboarding/:path*",
     "/skin-profile/:path*",
     "/routines/:path*",
+    "/routine-logs/:path*",
     "/journal/:path*",
     "/products/:path*",
+    "/saved-products/:path*",
     "/ingredients/:path*",
   ],
 };

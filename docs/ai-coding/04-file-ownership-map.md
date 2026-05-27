@@ -151,7 +151,7 @@ src/infrastructure/database/mongodb.ts
 src/infrastructure/rate-limiting/rate-limit.ts
 ```
 
-`mongodb.ts` owns the shared MongoDB client helper, lazy client promise, and local DNS server configuration before `MongoClient` creation. `collections.ts` owns collection names/helpers, including `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including the rate limit unique key and TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
+`mongodb.ts` owns the shared MongoDB client helper, lazy client promise, and local DNS server configuration before `MongoClient` creation. `collections.ts` owns collection names/helpers, including `saved_products` and `rate_limits`. `ensure-indexes.ts` owns repeatable index definitions and the `npm run db:indexes` entrypoint, including Saved Products ownership/query indexes and the rate limit unique key/TTL indexes. `rate-limit.ts` owns the MongoDB-backed server-only rate limit helper. `src/config/env.ts` is implemented and remains the only place that validates `MONGODB_URI`.
 
 ## 3.1 AI Provider ownership
 
@@ -304,10 +304,10 @@ Rules:
 - `src/modules/products/product.client.ts` is client-safe, uses `GET /api/products` with supported search/filter params and default `limit=50`, parses products from `data.items`, and must not import repositories, use cases, database helpers, auth helpers, MongoDB, or `server-only`.
 - `src/app/(dashboard)/products/page.tsx` owns the protected `/products` dashboard page and renders only the Product Catalogue UI.
 - `src/app/(dashboard)/products/[id]/page.tsx` owns the protected `/products/[id]` dashboard page and passes the route id to the Product Detail UI.
-- `src/modules/products/components/product-catalogue.tsx` owns Product API list browsing, search/filter controls, loading/error/empty states, and must not implement Product CRUD, product submission, saved product library, AI recommendation, skin score, or image upload.
-- `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields and the read-only `View details` navigation to `/products/[id]`; it must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
-- `src/modules/products/components/product-detail.tsx` owns Product API detail loading through `getProduct(productId)`, loading/error/not-found/success states, educational copy, and public Product DTO field display only.
-- `POST /api/products`, `includeMine` UI, Product CRUD UI, saved product library, admin product management, seed scripts, external product APIs, image upload, AI recommendation, routine integration, skin score, and medical diagnosis are out of scope for this ownership status.
+- `src/modules/products/components/product-catalogue.tsx` owns Product API list browsing, search/filter controls, loading/error/empty states, and saved-state display by calling the Saved Products client helper. It must not implement Product CRUD, product submission, AI recommendation, skin score, or image upload.
+- `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields, `View details` navigation to `/products/[id]`, and the composed Saved Products toggle. It must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
+- `src/modules/products/components/product-detail.tsx` owns Product API detail loading through `getProduct(productId)`, loading/error/not-found/success states, educational copy, public Product DTO field display, and the composed Saved Products toggle.
+- `POST /api/products`, `includeMine` UI, Product CRUD UI, admin product management, seed scripts, external product APIs, image upload, AI recommendation, routine integration, skin score, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 
@@ -329,6 +329,7 @@ src/app/api/products/route.ts
 src/app/api/products/[id]/route.ts
 tests/unit/product-catalogue-ui.test.ts
 tests/unit/product-detail-ui.test.ts
+tests/unit/product-saved-products-ui.test.ts
 tests/unit/product.test.ts
 tests/unit/product-use-case.test.ts
 tests/unit/product-api-contract.test.ts
@@ -336,7 +337,45 @@ tests/unit/product-client.test.ts
 tests/unit/database-indexes.test.ts
 ```
 
-## 6. Ingredient ownership
+## 6. Saved Products ownership
+
+Owned files implemented by SAVED-PRODUCTS-001:
+
+```txt
+src/app/(dashboard)/saved-products/page.tsx
+src/app/api/saved-products/route.ts
+src/app/api/saved-products/[productId]/route.ts
+src/modules/saved-products/saved-product.types.ts
+src/modules/saved-products/saved-product.schema.ts
+src/modules/saved-products/saved-product.dto.ts
+src/modules/saved-products/saved-product.mapper.ts
+src/modules/saved-products/saved-product.repository.ts
+src/modules/saved-products/saved-product.use-case.ts
+src/modules/saved-products/saved-product.client.ts
+src/modules/saved-products/components/saved-products-page.tsx
+src/modules/saved-products/components/saved-product-card.tsx
+src/modules/saved-products/components/saved-product-toggle-button.tsx
+tests/unit/saved-product-api-contract.test.ts
+tests/unit/saved-product-client.test.ts
+tests/unit/saved-product-repository.test.ts
+tests/unit/saved-product-use-case.test.ts
+tests/unit/saved-products-ui.test.ts
+tests/e2e/saved-products.authenticated.spec.ts
+```
+
+Rules:
+
+- Saved Products records are user-owned and must never trust `userId` from request bodies.
+- Saved Products APIs derive `userId` from `getCurrentUser()`.
+- repositories must scope list/find/save/remove operations by authenticated `userId`;
+- duplicate saves are prevented by the unique `{ userId, productId }` index and handled idempotently by the use case/API;
+- `SavedProductDto` must not expose `userId`, raw ObjectId values, or database internals;
+- saving must confirm a visible product exists before creating or returning a saved record;
+- removing a saved product must delete only the saved-product record, never the product;
+- client components may call only `saved-product.client.ts` and must not import saved-product repositories, use cases, database helpers, auth helpers, API route handlers, or `server-only`;
+- this module must not add cart, marketplace, payment, comparison, ratings, reviews, social sharing, public saved lists, or product recommendation behavior.
+
+## 6.1 Ingredient ownership
 
 Owned files:
 
@@ -594,7 +633,7 @@ Week 3 Task 4 implemented Routine Analysis API Foundation. TASK-RA-001 added Mon
 
 ## 10. RoutineLog ownership
 
-Owned files implemented by TASK RL-001 and TASK RL-002:
+Owned files implemented by TASK RL-001, TASK RL-002, and MVP-TODAY-LOG-001:
 
 ```txt
 src/modules/routine-logs/index.ts
@@ -605,7 +644,9 @@ src/modules/routine-logs/routine-log.mapper.ts
 src/modules/routine-logs/routine-log.repository.ts
 src/modules/routine-logs/routine-log.use-case.ts
 src/modules/routine-logs/routine-log.client.ts
+src/modules/routine-logs/components/today-routine-checklist.tsx
 src/app/api/routine-logs/route.ts
+src/app/(dashboard)/routine-logs/today/page.tsx
 tests/unit/routine-log.test.ts
 tests/unit/routine-log-use-case.test.ts
 tests/unit/routine-log-api-contract.test.ts
@@ -621,7 +662,7 @@ Rules:
 - `localDate` is stored as `YYYY-MM-DD` string and `timezone` is stored as a string;
 - `status` is one of `completed`, `partial`, or `skipped`;
 - completed step IDs must belong to the target routine;
-- RoutineLog UI belongs on the existing `/routines` page only for RL-002; no separate RoutineLog page exists;
+- RoutineLog UI remains available on `/routines`; MVP-TODAY-LOG-001 also owns `/routine-logs/today` as the dedicated daily checklist page that reuses the existing RoutineLog API and controls;
 - RoutineLog client helpers must not include `userId`, `id`, `_id`, `createdAt`, or `updatedAt` in PUT payloads;
 - RoutineLog UI must not add dashboard cards, streak calculation, AI insight, analytics, or note input;
 - keep RoutineLog separate from SkinJournal.
@@ -677,7 +718,7 @@ Rules:
 - create/update client payloads must include only canonical SkinJournal fields and must not send `userId`, `_id`, `id`, timestamps, localDate in PATCH, future image/photo fields, provider fields, or internal fields;
 - no appearance scoring;
 - journal entries are private;
-- no image upload, image storage, saved product library, Product CRUD UI, backend product ownership system, calendar heatmap, analytics/insight view, AI journal analysis, or medical diagnosis in SJ-003.
+- no image upload, image storage, saved-product embedding/public sharing, Product CRUD UI, backend product ownership system, calendar heatmap, analytics/insight view, AI journal analysis, or medical diagnosis in SJ-003.
 
 ## 12. Dashboard ownership
 
@@ -719,7 +760,7 @@ Rules:
 - dashboard config must contain safe metadata only;
 - dashboard config must not import auth, database, `server-only`, or API code;
 - dashboard navigation must derive active link state from the current pathname instead of hard-coding `/dashboard`;
-- `/dashboard`, `/skin-profile`, `/routines`, `/journal`, and `/products` are enabled routes in the dashboard nav;
+- `/dashboard`, `/skin-profile`, `/routines`, `/journal`, `/products`, `/saved-products`, and `/ingredients` are enabled routes in the dashboard nav;
 - `/onboarding/skin-profile` remains available for first-time onboarding and empty-state CTA, but is no longer the main dashboard Skin Profile nav target;
 - unimplemented feature nav items must use `href: null` and `disabled: true`;
 - dashboard cards must render API-provided dashboard summary data only and must not contain fake skincare, routine, product, journal, ingredient, or AI results.
