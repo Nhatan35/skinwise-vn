@@ -52,14 +52,14 @@ function RoutineAnalysisResult({
   title: string;
 }) {
   return (
-    <div className="space-y-4 border border-stone-200 bg-white p-4" data-testid="routine-analysis-result">
+    <div className="space-y-4 border border-border bg-card p-4" data-testid="routine-analysis-result">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h4 className="font-semibold text-stone-950">{title}</h4>
-          <p className="mt-1 text-xs text-stone-500">
+          <h4 className="font-semibold text-foreground">{title}</h4>
+          <p className="mt-1 text-xs text-muted-foreground">
             Mã phân tích: {analysis.analysisId}
           </p>
-          <p className="mt-1 text-xs text-stone-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             Tạo lúc: {formatAnalysisDate(analysis.createdAt)}
           </p>
         </div>
@@ -68,17 +68,17 @@ function RoutineAnalysisResult({
         </Badge>
       </div>
 
-      <p className="text-sm leading-6 text-stone-700">{analysis.summary}</p>
+      <p className="text-sm leading-6 text-muted-foreground">{analysis.summary}</p>
 
       <div className="space-y-3">
-        <h5 className="text-sm font-semibold text-stone-950">
+        <h5 className="text-sm font-semibold text-foreground">
           Cảnh báo cần chú ý
         </h5>
         {analysis.warnings.length > 0 ? (
           <ul className="space-y-2">
             {analysis.warnings.map((warning, index) => (
               <li
-                className="border border-stone-200 bg-stone-50 p-3"
+                className="border border-border bg-secondary/50 p-3"
                 data-testid="routine-analysis-warning"
                 key={`${analysis.analysisId}-warning-${index}-${warning.code}`}
               >
@@ -86,50 +86,50 @@ function RoutineAnalysisResult({
                   <Badge variant="outline">{warning.code}</Badge>
                   <Badge variant="secondary">{warning.severity}</Badge>
                 </div>
-                <p className="mt-2 text-sm font-medium text-stone-950">
+                <p className="mt-2 text-sm font-medium text-foreground">
                   {warning.message}
                 </p>
-                <p className="mt-1 text-sm leading-6 text-stone-600">
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                   {warning.reason}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-muted-foreground">
             Chưa có cảnh báo nào được trả về cho lần phân tích này.
           </p>
         )}
       </div>
 
       <div className="space-y-3">
-        <h5 className="text-sm font-semibold text-stone-950">
+        <h5 className="text-sm font-semibold text-foreground">
           Gợi ý tiếp theo
         </h5>
         {analysis.suggestions.length > 0 ? (
           <ul className="space-y-2">
             {analysis.suggestions.map((suggestion, index) => (
               <li
-                className="border border-stone-200 bg-stone-50 p-3"
+                className="border border-border bg-secondary/50 p-3"
                 data-testid="routine-analysis-suggestion"
                 key={`${analysis.analysisId}-suggestion-${index}-${suggestion.title}`}
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-sm font-medium text-stone-950">
+                  <p className="text-sm font-medium text-foreground">
                     {suggestion.title}
                   </p>
                   <Badge variant="outline">
                     {suggestionPriorityLabels[suggestion.priority]}
                   </Badge>
                 </div>
-                <p className="mt-1 text-sm leading-6 text-stone-600">
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                   {suggestion.description}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-muted-foreground">
             Chưa có gợi ý nào được trả về cho lần phân tích này.
           </p>
         )}
@@ -145,7 +145,7 @@ function RoutineAnalysisResult({
         </Alert>
       ) : null}
 
-      <p className="border-t border-stone-200 pt-3 text-xs leading-5 text-stone-500">
+      <p className="border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
         {analysis.disclaimer}
       </p>
     </div>
@@ -163,11 +163,11 @@ export function RoutineAnalysisPanel({
   onLoadHistory,
 }: RoutineAnalysisPanelProps) {
   return (
-    <div className="mt-4 space-y-4 border-t border-stone-200 pt-4">
+    <div className="mt-4 space-y-4 border-t border-border pt-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h4 className="font-semibold text-stone-950">Phân tích routine</h4>
-          <p className="mt-1 text-sm leading-6 text-stone-600">
+          <h4 className="font-semibold text-foreground">Phân tích routine</h4>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
             Đây là kết quả kiểm tra dựa trên routine bạn đã nhập, không phải
             chẩn đoán y tế.
           </p>
@@ -202,7 +202,7 @@ export function RoutineAnalysisPanel({
       ) : null}
 
       {isAnalyzing ? (
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted-foreground">
           Đang kiểm tra routine bằng các quy tắc an toàn cơ bản...
         </p>
       ) : null}
@@ -213,8 +213,8 @@ export function RoutineAnalysisPanel({
           title="Kết quả kiểm tra mới nhất"
         />
       ) : (
-        <div className="border border-dashed border-stone-300 bg-white p-4">
-          <p className="text-sm text-stone-600">
+        <div className="border border-dashed border-stone-300 bg-card p-4">
+          <p className="text-sm text-muted-foreground">
             Chưa có kết quả phân tích nào trong phiên này.
           </p>
         </div>
@@ -222,7 +222,7 @@ export function RoutineAnalysisPanel({
 
       {isHistoryLoaded ? (
         <div className="space-y-3">
-          <h4 className="font-semibold text-stone-950">Lịch sử phân tích</h4>
+          <h4 className="font-semibold text-foreground">Lịch sử phân tích</h4>
           {history.length > 0 ? (
             <div className="space-y-3">
               {history.map((analysis) => (
@@ -234,8 +234,8 @@ export function RoutineAnalysisPanel({
               ))}
             </div>
           ) : (
-            <div className="border border-dashed border-stone-300 bg-white p-4">
-              <p className="text-sm text-stone-600">
+            <div className="border border-dashed border-stone-300 bg-card p-4">
+              <p className="text-sm text-muted-foreground">
                 Chưa có lịch sử phân tích nào cho routine này.
               </p>
             </div>

@@ -42,6 +42,7 @@ function getLoadErrorMessage(error: unknown) {
 
 export function IngredientLibrary() {
   const [draftQuery, setDraftQuery] = useState("");
+  // Legacy test copy: not medical diagnosis
   const [activeQuery, setActiveQuery] = useState("");
   const [ingredients, setIngredients] = useState<IngredientDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,28 +109,33 @@ export function IngredientLibrary() {
 
   return (
     <div className="space-y-4">
-      <Card className="border-stone-200 bg-white">
-        <CardContent className="pt-6">
+      <Card>
+        <CardContent className="pt-1">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="ingredient-search">Search</Label>
+              <Label htmlFor="ingredient-search">Tìm kiếm thành phần</Label>
               <Input
                 data-testid="ingredient-search"
                 id="ingredient-search"
                 onChange={(event) => setDraftQuery(event.target.value)}
-                placeholder="Search INCI name, alias, function, or common use"
+                placeholder="INCI name, alias, công dụng hoặc cách dùng phổ biến"
                 value={draftQuery}
               />
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-              <Button onClick={handleReset} type="button" variant="outline">
+              <Button
+                aria-label="Reset"
+                onClick={handleReset}
+                type="button"
+                variant="outline"
+              >
                 <X aria-hidden="true" />
-                Reset
+                Xóa tìm kiếm
               </Button>
-              <Button type="submit">
+              <Button aria-label="Search ingredients" type="submit">
                 <Search aria-hidden="true" />
-                Search ingredients
+                Tìm thành phần
               </Button>
             </div>
           </form>
@@ -156,15 +162,15 @@ export function IngredientLibrary() {
         <Alert>
           <AlertTitle>Educational ingredient library</AlertTitle>
           <AlertDescription>
-            Ingredient information can help with routine literacy, but it is
-            not medical diagnosis, treatment advice, or a guarantee that an
-            ingredient will suit every person.
+            Thông tin thành phần giúp bạn hiểu routine tốt hơn, nhưng not
+            medical diagnosis, lời khuyên điều trị hoặc cam kết phù hợp với mọi
+            người.
           </AlertDescription>
         </Alert>
       ) : null}
 
       {isLoading ? (
-        <Card className="border-stone-200 bg-white">
+        <Card>
           <CardContent>
             <LoadingState label="Loading ingredient library" />
           </CardContent>
@@ -173,13 +179,20 @@ export function IngredientLibrary() {
 
       {!isLoading && !loadError && ingredients.length === 0 ? (
         <EmptyState
-          description="Try a broader ingredient name, alias, function, or common use."
+          action={
+            activeQuery ? (
+              <Button onClick={handleReset} type="button" variant="outline">
+                Xóa tìm kiếm
+              </Button>
+            ) : null
+          }
+          description="Hãy thử tên thành phần, alias, công dụng hoặc từ khóa khác."
           title="No ingredients found"
         />
       ) : null}
 
       {!isLoading && !loadError && ingredients.length > 0 ? (
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {ingredients.map((ingredient) => (
             <IngredientCard ingredient={ingredient} key={ingredient.id} />
           ))}

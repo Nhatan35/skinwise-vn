@@ -204,15 +204,15 @@ export function RoutineLogControls({
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-stone-200 pt-4" data-testid="routine-log-controls">
+    <div className="mt-4 space-y-3 border-t border-border pt-4" data-testid="routine-log-controls">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-stone-950">Nhật ký hôm nay</p>
-          <p className="text-xs text-stone-600">
+          <p className="text-sm font-medium text-foreground">Nhật ký hôm nay</p>
+          <p className="text-xs text-muted-foreground">
             Ngày {localDate} · Múi giờ {timezone}
           </p>
           {log?.status === "partial" ? (
-            <p className="text-xs text-stone-600">
+            <p className="text-xs text-muted-foreground">
               Đã hoàn thành {completedStepCount}/{routine.steps.length} bước
             </p>
           ) : null}
@@ -259,18 +259,18 @@ export function RoutineLogControls({
       </div>
 
       {!canPartiallyComplete ? (
-        <p className="text-xs text-stone-600">
+        <p className="text-xs text-muted-foreground">
           Routine cần ít nhất 2 bước để ghi nhận một phần.
         </p>
       ) : null}
 
       {isPartialOpen ? (
-        <div className="space-y-3 rounded-lg border border-stone-200 bg-white p-3">
+        <div className="space-y-3 rounded-lg border border-border bg-card p-3">
           <div>
-            <p className="text-sm font-medium text-stone-950">
+            <p className="text-sm font-medium text-foreground">
               Chọn các bước đã hoàn thành
             </p>
-            <p className="mt-1 text-xs text-stone-600">
+            <p className="mt-1 text-xs text-muted-foreground">
               Nếu đã hoàn thành tất cả các bước, hãy chọn Hoàn thành.
             </p>
           </div>
@@ -278,7 +278,7 @@ export function RoutineLogControls({
           <div className="space-y-2">
             {routine.steps.map((step, index) => (
               <Label
-                className="flex cursor-pointer items-start gap-2 rounded-md border border-stone-200 bg-stone-50 p-2 text-sm font-normal text-stone-700"
+                className="flex cursor-pointer items-start gap-2 rounded-md border border-border bg-secondary/50 p-2 text-sm font-normal text-muted-foreground"
                 htmlFor={`routine-log-${routine.id}-${step.stepId}`}
                 key={step.stepId}
               >

@@ -415,7 +415,7 @@ export function SkinProfileViewEdit() {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardContent>
           <LoadingState label="Đang tải hồ sơ da" />
         </CardContent>
@@ -465,7 +465,7 @@ export function SkinProfileViewEdit() {
   if (isEditing) {
     return (
       <Card
-        className="border-stone-200 bg-white"
+        className="border-border bg-card"
         data-testid="skin-profile-edit-card"
       >
         <CardHeader>
@@ -555,7 +555,7 @@ export function SkinProfileViewEdit() {
               }
               className="space-y-3"
             >
-              <legend className="text-sm font-medium text-stone-900">
+              <legend className="text-sm font-medium text-foreground">
                 Mối quan tâm chính
               </legend>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -565,7 +565,7 @@ export function SkinProfileViewEdit() {
 
                   return (
                     <div
-                      className="flex items-start gap-3 border border-stone-200 bg-stone-50 px-3 py-3"
+                      className="flex items-start gap-3 border border-border bg-secondary/50 px-3 py-3"
                       key={concern}
                     >
                       <input
@@ -610,7 +610,7 @@ export function SkinProfileViewEdit() {
                 rows={4}
                 value={formState.avoidIngredientsText}
               />
-              <p className="text-sm text-stone-600">
+              <p className="text-sm text-muted-foreground">
                 Nhập mỗi dòng một thành phần, tối đa 30 mục.
               </p>
               {fieldErrors.avoidIngredients ? (
@@ -623,8 +623,8 @@ export function SkinProfileViewEdit() {
               ) : null}
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-stone-600">
+            <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm leading-6 text-muted-foreground">
                 Thông tin này chỉ mang tính giáo dục và không thay thế tư vấn từ
                 bác sĩ da liễu.
               </p>
@@ -657,14 +657,14 @@ export function SkinProfileViewEdit() {
 
   return (
     <Card
-      className="border-stone-200 bg-white"
+      className="border-border bg-card"
       data-testid="skin-profile-current-card"
     >
       <CardHeader>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle>Hồ sơ da hiện tại</CardTitle>
-            <p className="mt-2 text-sm text-stone-600">
+            <p className="mt-2 text-sm text-muted-foreground">
               Cập nhật lần cuối: {formatUpdatedAt(profile.updatedAt)}
             </p>
           </div>
@@ -711,7 +711,7 @@ export function SkinProfileViewEdit() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-stone-900">
+          <h3 className="text-sm font-medium text-foreground">
             Mối quan tâm chính
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -724,7 +724,7 @@ export function SkinProfileViewEdit() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-stone-900">
+          <h3 className="text-sm font-medium text-foreground">
             Thành phần muốn tránh
           </h3>
           {profile.avoidIngredients.length > 0 ? (
@@ -736,7 +736,7 @@ export function SkinProfileViewEdit() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-stone-600">Chưa có mục nào.</p>
+            <p className="text-sm text-muted-foreground">Chưa có mục nào.</p>
           )}
         </div>
       </CardContent>
@@ -753,11 +753,11 @@ type ProfileDetailProps = {
 function ProfileDetail({ label, testId, value }: ProfileDetailProps) {
   return (
     <div
-      className="border border-stone-200 bg-stone-50 p-4"
+      className="border border-border bg-secondary/50 p-4"
       data-testid={testId}
     >
-      <dt className="text-sm font-medium text-stone-700">{label}</dt>
-      <dd className="mt-2 text-base font-semibold text-stone-950">{value}</dd>
+      <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
+      <dd className="mt-2 text-base font-semibold text-foreground">{value}</dd>
     </div>
   );
 }

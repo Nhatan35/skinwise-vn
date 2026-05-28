@@ -383,7 +383,7 @@ export function SkinProfileOnboardingForm() {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardContent>
           <LoadingState label="Đang tải hồ sơ da" />
         </CardContent>
@@ -406,7 +406,7 @@ export function SkinProfileOnboardingForm() {
   }
 
   return (
-    <Card className="border-stone-200 bg-white" data-testid="skin-profile-form">
+    <Card className="border-border bg-card" data-testid="skin-profile-form">
       <CardHeader>
         <CardTitle>
           {hasExistingProfile ? "Cập nhật hồ sơ da" : "Tạo hồ sơ da"}
@@ -508,7 +508,7 @@ export function SkinProfileOnboardingForm() {
             aria-describedby={fieldErrors.concerns ? "concerns-error" : undefined}
             className="space-y-3"
           >
-            <legend className="text-sm font-medium text-stone-900">
+            <legend className="text-sm font-medium text-foreground">
               Mối quan tâm chính
             </legend>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -518,7 +518,7 @@ export function SkinProfileOnboardingForm() {
 
                 return (
                   <div
-                    className="flex items-start gap-3 border border-stone-200 bg-stone-50 px-3 py-3"
+                    className="flex items-start gap-3 border border-border bg-secondary/50 px-3 py-3"
                     key={concern}
                   >
                     <input
@@ -559,7 +559,7 @@ export function SkinProfileOnboardingForm() {
               rows={4}
               value={formState.avoidIngredientsText}
             />
-            <p className="text-sm text-stone-600">
+            <p className="text-sm text-muted-foreground">
               Nhập mỗi dòng một thành phần, tối đa 30 mục.
             </p>
             {fieldErrors.avoidIngredients ? (
@@ -569,8 +569,8 @@ export function SkinProfileOnboardingForm() {
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-6 text-stone-600">
+          <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-muted-foreground">
               Thông tin này chỉ mang tính giáo dục và không thay thế tư vấn từ
               bác sĩ da liễu.
             </p>

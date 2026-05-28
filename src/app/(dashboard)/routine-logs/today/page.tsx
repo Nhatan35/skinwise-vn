@@ -4,14 +4,14 @@ import { routes } from "@/shared/constants/routes";
 export default function TodayRoutineLogPage() {
   return (
     <section className="space-y-6" data-route={routes.TODAY_LOG}>
-      <div className="border border-stone-200 bg-white p-6">
-        <p className="text-sm font-medium text-emerald-700">Today Log</p>
-        <h2 className="mt-2 text-3xl font-semibold">
-          Today Routine Checklist
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-stone-950/5">
+        <p className="text-sm font-semibold text-primary">Today Log</p>
+        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+          Checklist routine hôm nay
         </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-          Ghi nhận routine hôm nay để theo dõi sự nhất quán và cập nhật
-          dashboard.
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
+          Ghi nhận routine hôm nay như một checklist nhanh để dashboard phản ánh
+          tiến độ thật của bạn.
         </p>
       </div>
 

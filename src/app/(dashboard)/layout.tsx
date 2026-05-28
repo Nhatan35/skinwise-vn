@@ -22,31 +22,31 @@ export default async function DashboardLayout({
   const displayName = currentUser.name ?? currentUser.email ?? "SkinWise user";
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-950">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border/80 bg-card/85 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
-            <p className="text-sm font-medium text-emerald-700">SkinWise VN</p>
-            <h1 className="mt-1 text-2xl font-semibold">
-              SkinWise dashboard
+            <p className="text-sm font-semibold text-primary">SkinWise VN</p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+              Không gian theo dõi skincare
             </h1>
           </div>
 
-          <div className="flex flex-col gap-1 text-sm lg:items-end">
-            <span className="font-medium text-stone-900">{displayName}</span>
+          <div className="rounded-2xl border border-border bg-secondary/60 px-4 py-3 text-sm lg:text-right">
+            <span className="block font-semibold text-foreground">{displayName}</span>
             {currentUser.email ? (
-              <span className="text-stone-600">{currentUser.email}</span>
+              <span className="mt-1 block text-muted-foreground">{currentUser.email}</span>
             ) : null}
           </div>
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-6 lg:grid-cols-[16rem_1fr]">
-        <aside className="h-fit border border-stone-200 bg-white p-3">
+      <div className="mx-auto grid max-w-7xl gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[17rem_1fr] lg:px-8">
+        <aside className="h-fit rounded-3xl border border-border bg-card p-3 shadow-sm shadow-stone-950/5">
           <DashboardNavigation />
         </aside>
 
-        <main>{children}</main>
+        <main className="min-w-0">{children}</main>
       </div>
     </div>
   );

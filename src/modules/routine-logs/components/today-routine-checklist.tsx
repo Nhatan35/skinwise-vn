@@ -314,13 +314,13 @@ export function TodayRoutineChecklist() {
 
   function renderRoutineSection(title: string, sectionRoutines: RoutineDto[]) {
     return (
-      <Card className="border-stone-200 bg-white" key={title}>
+      <Card className="border-border bg-card" key={title}>
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {sectionRoutines.length === 0 ? (
-            <p className="text-sm text-stone-600">
+            <p className="text-sm text-muted-foreground">
               Chưa có routine trong nhóm này.
             </p>
           ) : (
@@ -329,14 +329,14 @@ export function TodayRoutineChecklist() {
 
               return (
                 <article
-                  className="border border-stone-200 bg-stone-50 p-4"
+                  className="border border-border bg-secondary/50 p-4"
                   data-testid="today-routine-card"
                   key={routine.id}
                 >
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-semibold text-stone-950">
+                        <h3 className="text-lg font-semibold text-foreground">
                           {routine.name}
                         </h3>
                         <Badge variant="secondary">
@@ -348,7 +348,7 @@ export function TodayRoutineChecklist() {
                           testId="today-routine-status-badge"
                         />
                       </div>
-                      <p className="text-sm text-stone-600">
+                      <p className="text-sm text-muted-foreground">
                         {routine.steps.length} bước trong routine này.
                       </p>
                     </div>
@@ -357,16 +357,16 @@ export function TodayRoutineChecklist() {
                   <ol className="mt-4 space-y-3">
                     {routine.steps.map((step, index) => (
                       <li
-                        className="border border-stone-200 bg-white p-3"
+                        className="border border-border bg-card p-3"
                         key={step.stepId}
                       >
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                           <div>
-                            <p className="font-medium text-stone-950">
+                            <p className="font-medium text-foreground">
                               {index + 1}. {getRoutineStepDisplayName(step)}
                             </p>
                             {step.instructions ? (
-                              <p className="mt-1 text-sm text-stone-600">
+                              <p className="mt-1 text-sm text-muted-foreground">
                                 {step.instructions}
                               </p>
                             ) : null}
@@ -446,23 +446,23 @@ export function TodayRoutineChecklist() {
 
   return (
     <div className="space-y-6" data-testid="today-routine-checklist">
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Thông tin hôm nay</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
-          <div className="rounded-lg border border-stone-200 bg-stone-50 p-3">
-            <p className="font-medium text-stone-950">Local date</p>
-            <p className="mt-1 text-stone-600">{localDate}</p>
+          <div className="rounded-lg border border-border bg-secondary/50 p-3">
+            <p className="font-medium text-foreground">Local date</p>
+            <p className="mt-1 text-muted-foreground">{localDate}</p>
           </div>
-          <div className="rounded-lg border border-stone-200 bg-stone-50 p-3">
-            <p className="font-medium text-stone-950">Timezone</p>
-            <p className="mt-1 text-stone-600">{timezone}</p>
+          <div className="rounded-lg border border-border bg-secondary/50 p-3">
+            <p className="font-medium text-foreground">Timezone</p>
+            <p className="mt-1 text-muted-foreground">{timezone}</p>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white" data-testid="today-progress-summary">
+      <Card className="border-border bg-card" data-testid="today-progress-summary">
         <CardHeader>
           <CardTitle>Tiến độ ghi nhận hôm nay</CardTitle>
         </CardHeader>
@@ -507,8 +507,8 @@ export function TodayRoutineChecklist() {
 
 function SummaryItem({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg bg-stone-50 p-3">
-      <p className="font-medium text-stone-900">{label}</p>
+    <div className="rounded-lg bg-secondary/50 p-3">
+      <p className="font-medium text-foreground">{label}</p>
       <p className="mt-1 text-2xl font-semibold">{value}</p>
     </div>
   );

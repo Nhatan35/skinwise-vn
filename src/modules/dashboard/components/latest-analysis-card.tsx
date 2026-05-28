@@ -26,7 +26,7 @@ export function LatestAnalysisCard({
         title="Phân tích an toàn gần nhất"
       >
         <div className="space-y-4">
-          <p className="text-sm leading-6 text-stone-600">
+          <p className="text-sm leading-6 text-muted-foreground">
             Bạn chưa phân tích routine nào. Hãy mở trang routine để chạy phân
             tích an toàn cơ bản.
           </p>
@@ -46,24 +46,24 @@ export function LatestAnalysisCard({
     >
       <dl className="space-y-3 text-sm">
         <div>
-          <dt className="font-medium text-stone-900">Routine</dt>
-          <dd className="mt-1 text-stone-600">{latestAnalysis.routineName}</dd>
+          <dt className="font-semibold text-foreground">Routine</dt>
+          <dd className="mt-1 text-muted-foreground">{latestAnalysis.routineName}</dd>
         </div>
         <div>
-          <dt className="font-medium text-stone-900">Mức rủi ro</dt>
-          <dd className="mt-1 text-stone-600">
+          <dt className="font-semibold text-foreground">Mức rủi ro</dt>
+          <dd className="mt-1 text-muted-foreground">
             {riskLabels[latestAnalysis.riskLevel]}
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-stone-900">Cảnh báo</dt>
-          <dd className="mt-1 text-stone-600">
+          <dt className="font-semibold text-foreground">Cảnh báo</dt>
+          <dd className="mt-1 text-muted-foreground">
             {latestAnalysis.warningCount} cảnh báo
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-stone-900">Thời điểm</dt>
-          <dd className="mt-1 text-stone-600">{latestAnalysis.createdAt}</dd>
+          <dt className="font-semibold text-foreground">Thời điểm</dt>
+          <dd className="mt-1 text-muted-foreground">{latestAnalysis.createdAt}</dd>
         </div>
       </dl>
       <Button asChild className="mt-4" size="sm" variant="outline">

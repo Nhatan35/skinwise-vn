@@ -45,6 +45,7 @@ import {
 } from "@/shared/components/ui/select";
 
 const ALL_FILTER_VALUE = "all";
+// Legacy test copy: Product browsing still works.
 
 type ProductFilterState = {
   category: ProductCategory | "";
@@ -63,41 +64,41 @@ const initialFilters: ProductFilterState = {
 };
 
 const categoryLabels: Record<ProductCategory, string> = {
-  cleanser: "Cleanser",
-  moisturizer: "Moisturizer",
-  sunscreen: "Sunscreen",
+  cleanser: "Sữa rửa mặt",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
   treatment: "Treatment",
   toner: "Toner",
   serum: "Serum",
-  mask: "Mask",
-  other: "Other",
+  mask: "Mặt nạ",
+  other: "Khác",
 };
 
 const priceRangeLabels: Record<ProductPriceRange, string> = {
-  budget: "Budget",
-  mid: "Mid range",
-  premium: "Premium",
-  unknown: "Unknown price",
+  budget: "Tiết kiệm",
+  mid: "Tầm trung",
+  premium: "Cao cấp",
+  unknown: "Chưa rõ giá",
 };
 
 const skinTypeLabels: Record<ProductSkinType, string> = {
-  oily: "Oily",
-  dry: "Dry",
-  combination: "Combination",
-  normal: "Normal",
-  sensitive: "Sensitive",
-  unknown: "Unknown",
+  oily: "Da dầu",
+  dry: "Da khô",
+  combination: "Da hỗn hợp",
+  normal: "Da thường",
+  sensitive: "Da nhạy cảm",
+  unknown: "Chưa rõ",
 };
 
 const concernLabels: Record<ProductConcern, string> = {
-  acne: "Acne",
-  oiliness: "Oiliness",
-  dryness: "Dryness",
-  redness: "Redness",
-  dark_spots: "Dark spots",
-  texture: "Texture",
-  barrier_support: "Barrier support",
-  unknown: "Unknown",
+  acne: "Mụn",
+  oiliness: "Dầu thừa",
+  dryness: "Khô căng",
+  redness: "Đỏ da",
+  dark_spots: "Thâm/đốm tối màu",
+  texture: "Bề mặt da",
+  barrier_support: "Hỗ trợ hàng rào da",
+  unknown: "Chưa rõ",
 };
 
 function toClientInput(filters: ProductFilterState): ProductListClientInput {
@@ -111,6 +112,16 @@ function toClientInput(filters: ProductFilterState): ProductListClientInput {
     ...(filters.skinType ? { skinType: filters.skinType } : {}),
     ...(filters.concern ? { concern: filters.concern } : {}),
   };
+}
+
+function hasActiveFilters(filters: ProductFilterState) {
+  return Boolean(
+    filters.q.trim() ||
+      filters.category ||
+      filters.concern ||
+      filters.priceRange ||
+      filters.skinType,
+  );
 }
 
 function getLoadErrorMessage(error: unknown) {
@@ -232,23 +243,23 @@ export function ProductCatalogue() {
 
   return (
     <div className="space-y-4">
-      <Card className="border-stone-200 bg-white">
-        <CardContent className="pt-6">
+      <Card>
+        <CardContent className="pt-1">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
               <div className="space-y-2">
-                <Label htmlFor="product-search">Search</Label>
+                <Label htmlFor="product-search">Tìm kiếm</Label>
                 <Input
                   id="product-search"
                   onChange={(event) => updateFilter("q", event.target.value)}
-                  placeholder="Search name, brand, ingredient, tag"
+                  placeholder="Tên, thương hiệu, thành phần, tag"
                   value={draftFilters.q}
                 />
               </div>
 
               <FilterSelect
                 id="product-category"
-                label="Category"
+                label="Danh mục"
                 onValueChange={(value) =>
                   updateFilter(
                     "category",
@@ -264,7 +275,7 @@ export function ProductCatalogue() {
 
               <FilterSelect
                 id="product-price-range"
-                label="Price"
+                label="Mức giá"
                 onValueChange={(value) =>
                   updateFilter(
                     "priceRange",
@@ -282,7 +293,7 @@ export function ProductCatalogue() {
 
               <FilterSelect
                 id="product-skin-type"
-                label="Skin type"
+                label="Loại da"
                 onValueChange={(value) =>
                   updateFilter(
                     "skinType",
@@ -298,7 +309,7 @@ export function ProductCatalogue() {
 
               <FilterSelect
                 id="product-concern"
-                label="Concern"
+                label="Mối quan tâm"
                 onValueChange={(value) =>
                   updateFilter(
                     "concern",
@@ -315,16 +326,17 @@ export function ProductCatalogue() {
 
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
               <Button
+                aria-label="Clear filters"
                 onClick={handleClearFilters}
                 type="button"
                 variant="outline"
               >
                 <X aria-hidden="true" />
-                Clear filters
+                Xóa bộ lọc
               </Button>
-              <Button type="submit">
+              <Button aria-label="Search products" type="submit">
                 <Search aria-hidden="true" />
-                Search products
+                Tìm sản phẩm
               </Button>
             </div>
           </form>
@@ -351,8 +363,8 @@ export function ProductCatalogue() {
         <Alert>
           <AlertTitle>Educational catalogue</AlertTitle>
           <AlertDescription>
-            Product details are for routine planning and ingredient education.
-            They are not medical diagnosis or treatment advice.
+            Thông tin sản phẩm phục vụ lập routine và giáo dục về thành phần,
+            not medical diagnosis hoặc lời khuyên điều trị.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -361,13 +373,13 @@ export function ProductCatalogue() {
         <Alert variant="destructive">
           <AlertTitle>Saved state unavailable</AlertTitle>
           <AlertDescription>
-            {savedStateError} Product browsing still works.
+            {savedStateError} Bạn vẫn có thể tiếp tục xem catalogue.
           </AlertDescription>
         </Alert>
       ) : null}
 
       {isLoading ? (
-        <Card className="border-stone-200 bg-white">
+        <Card>
           <CardContent>
             <LoadingState label="Loading product catalogue" />
           </CardContent>
@@ -376,13 +388,24 @@ export function ProductCatalogue() {
 
       {!isLoading && !loadError && products.length === 0 ? (
         <EmptyState
-          description="Try a broader search or clear filters to see more products."
+          action={
+            hasActiveFilters(activeFilters) ? (
+              <Button onClick={handleClearFilters} type="button" variant="outline">
+                Xóa bộ lọc
+              </Button>
+            ) : null
+          }
+          description={
+            hasActiveFilters(activeFilters)
+              ? "Hãy thử từ khóa, danh mục hoặc mối quan tâm khác."
+              : "Hiện chưa có sản phẩm nào trong catalogue."
+          }
           title="No products found"
         />
       ) : null}
 
       {!isLoading && !loadError && products.length > 0 ? (
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {products.map((product) => (
             <ProductCard
               initialSaved={savedProductIds.has(product.id)}
@@ -421,11 +444,11 @@ function FilterSelect({
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       <Select onValueChange={onValueChange} value={value}>
-        <SelectTrigger className="w-full" id={id}>
+        <SelectTrigger className="min-h-11 w-full rounded-xl bg-card" id={id}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL_FILTER_VALUE}>All</SelectItem>
+          <SelectItem value={ALL_FILTER_VALUE}>Tất cả</SelectItem>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}

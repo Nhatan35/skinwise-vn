@@ -8,18 +8,27 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 
+import { cn } from "@/shared/utils";
+
 type EmptyStateProps = {
   action?: ReactNode;
+  className?: string;
   description: string;
   title: string;
 };
 
-export function EmptyState({ action, description, title }: EmptyStateProps) {
+export function EmptyState({
+  action,
+  className,
+  description,
+  title,
+}: EmptyStateProps) {
   return (
-    <Card className="border-dashed bg-muted/30 text-center">
-      <CardHeader>
+    <Card className={cn("border-dashed bg-card/80 text-center", className)}>
+      <CardHeader className="items-center">
+        <div aria-hidden="true" className="mb-2 size-12 rounded-2xl bg-secondary" />
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="max-w-xl">{description}</CardDescription>
       </CardHeader>
       {action ? <CardContent>{action}</CardContent> : null}
     </Card>

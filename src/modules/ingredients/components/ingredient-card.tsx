@@ -12,10 +12,10 @@ import {
 } from "@/shared/components/ui/card";
 
 const evidenceLevelLabels: Record<IngredientEvidenceLevel, string> = {
-  basic: "Basic evidence",
-  moderate: "Moderate evidence",
-  strong: "Strong evidence",
-  uncertain: "Uncertain evidence",
+  basic: "Thông tin cơ bản",
+  moderate: "Mức tham khảo vừa",
+  strong: "Mức tham khảo tốt",
+  uncertain: "Chưa chắc chắn",
 };
 
 type IngredientCardProps = {
@@ -23,7 +23,7 @@ type IngredientCardProps = {
 };
 
 function formatUpdatedAt(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(value));
 }
@@ -37,14 +37,14 @@ function getPreviewValues(values: string[], limit = 4) {
 
 export function IngredientCard({ ingredient }: IngredientCardProps) {
   return (
-    <Card className="border-stone-200 bg-white" data-testid="ingredient-card">
+    <Card className="h-full" data-testid="ingredient-card">
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle className="text-xl">{ingredient.inciName}</CardTitle>
             {ingredient.aliases.length > 0 ? (
-              <p className="mt-2 text-sm text-stone-600">
-                Also known as {ingredient.aliases.slice(0, 2).join(", ")}
+              <p className="mt-2 text-sm text-muted-foreground">
+                Còn được biết đến như {ingredient.aliases.slice(0, 2).join(", ")}
                 {ingredient.aliases.length > 2
                   ? `, +${ingredient.aliases.length - 2} more`
                   : ""}
@@ -65,13 +65,13 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
         <TextList label="Common uses" values={ingredient.commonUses} />
         <BadgeGroup label="May suit" values={ingredient.suitableFor} />
 
-        <p className="border-t border-stone-200 pt-4 text-xs text-stone-500">
+        <p className="border-t border-border pt-4 text-xs text-muted-foreground">
           Updated {formatUpdatedAt(ingredient.updatedAt)}
         </p>
 
-        <div className="border-t border-stone-200 pt-4">
-          <Button asChild variant="outline">
-            <Link href={`/ingredients/${ingredient.id}`}>View details</Link>
+        <div className="border-t border-border pt-4">
+          <Button asChild aria-label="View details" variant="outline">
+            <Link href={`/ingredients/${ingredient.id}`}>Xem chi tiết</Link>
           </Button>
         </div>
       </CardContent>
@@ -98,7 +98,7 @@ function BadgeGroup({
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
+      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
       <div className="flex flex-wrap gap-2">
         {visibleValues.map((value) => (
           <Badge key={value} variant={variant}>
@@ -125,14 +125,14 @@ function TextList({ label, values }: TextListProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-stone-700">
+      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
+      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
         {visibleValues.map((value) => (
           <li key={value}>{value}</li>
         ))}
       </ul>
       {hiddenCount > 0 ? (
-        <p className="text-xs text-stone-500">+{hiddenCount} more</p>
+        <p className="text-xs text-muted-foreground">+{hiddenCount} more</p>
       ) : null}
     </div>
   );

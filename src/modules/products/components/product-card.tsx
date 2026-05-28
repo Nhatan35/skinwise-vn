@@ -19,47 +19,47 @@ import {
 } from "@/shared/components/ui/card";
 
 const categoryLabels: Record<ProductCategory, string> = {
-  cleanser: "Cleanser",
-  moisturizer: "Moisturizer",
-  sunscreen: "Sunscreen",
+  cleanser: "Sữa rửa mặt",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
   treatment: "Treatment",
   toner: "Toner",
   serum: "Serum",
-  mask: "Mask",
-  other: "Other",
+  mask: "Mặt nạ",
+  other: "Khác",
 };
 
 const priceRangeLabels: Record<ProductPriceRange, string> = {
-  budget: "Budget",
-  mid: "Mid range",
-  premium: "Premium",
-  unknown: "Unknown price",
+  budget: "Tiết kiệm",
+  mid: "Tầm trung",
+  premium: "Cao cấp",
+  unknown: "Chưa rõ giá",
 };
 
 const skinTypeLabels: Record<ProductSkinType, string> = {
-  oily: "Oily",
-  dry: "Dry",
-  combination: "Combination",
-  normal: "Normal",
-  sensitive: "Sensitive",
-  unknown: "Unknown",
+  oily: "Da dầu",
+  dry: "Da khô",
+  combination: "Da hỗn hợp",
+  normal: "Da thường",
+  sensitive: "Da nhạy cảm",
+  unknown: "Chưa rõ",
 };
 
 const concernLabels: Record<ProductConcern, string> = {
-  acne: "Acne",
-  oiliness: "Oiliness",
-  dryness: "Dryness",
-  redness: "Redness",
-  dark_spots: "Dark spots",
-  texture: "Texture",
-  barrier_support: "Barrier support",
-  unknown: "Unknown",
+  acne: "Mụn",
+  oiliness: "Dầu thừa",
+  dryness: "Khô căng",
+  redness: "Đỏ da",
+  dark_spots: "Thâm/đốm tối màu",
+  texture: "Bề mặt da",
+  barrier_support: "Hỗ trợ hàng rào da",
+  unknown: "Chưa rõ",
 };
 
 const verificationLabels: Record<ProductVerificationStatus, string> = {
-  reviewed: "Reviewed",
-  unverified: "Unverified",
-  verified: "Verified",
+  reviewed: "Đã xem xét",
+  unverified: "Chưa xác minh",
+  verified: "Đã xác minh",
 };
 
 type ProductCardProps = {
@@ -68,12 +68,8 @@ type ProductCardProps = {
   product: ProductDto;
 };
 
-function formatProductName(product: ProductDto) {
-  return product.brand ? `${product.brand} - ${product.name}` : product.name;
-}
-
 function formatUpdatedAt(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(value));
 }
@@ -84,75 +80,81 @@ export function ProductCard({
   product,
 }: ProductCardProps) {
   return (
-    <Card className="border-stone-200 bg-white" data-testid="product-card">
+    <Card className="h-full" data-testid="product-card">
+      <div className="mx-5 mt-5 rounded-3xl bg-[linear-gradient(135deg,#F6EFE8,#E7F3EA)] p-5">
+        <div className="mb-8 flex items-center justify-between gap-3">
+          <Badge variant="secondary">{categoryLabels[product.category]}</Badge>
+          <Badge variant="outline">{verificationLabels[product.verificationStatus]}</Badge>
+        </div>
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+          {product.brand || "SkinWise"}
+        </p>
+        <h3 className="mt-3 text-xl font-semibold tracking-tight text-foreground">
+          {product.name}
+        </h3>
+      </div>
+
       <CardHeader>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <CardTitle className="text-xl">{formatProductName(product)}</CardTitle>
-            <p className="mt-2 text-sm text-stone-600">
-              {categoryLabels[product.category]} -{" "}
-              {priceRangeLabels[product.priceRange]}
-            </p>
-          </div>
-          <Badge variant="secondary">
-            {verificationLabels[product.verificationStatus]}
-          </Badge>
+        <div>
+          <CardTitle className="text-lg">{product.name}</CardTitle>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {product.brand ? `${product.brand} · ` : ""}
+            {priceRangeLabels[product.priceRange]}
+          </p>
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
         {product.keyActives.length > 0 ? (
           <ProductBadgeGroup
-            label="Key actives"
+            label="Hoạt chất chính"
             values={product.keyActives}
             variant="secondary"
           />
         ) : null}
 
         <ProductBadgeGroup
-          label="Skin types"
+          label="Loại da có thể phù hợp"
           values={product.skinTypes.map((skinType) => skinTypeLabels[skinType])}
         />
 
         <ProductBadgeGroup
-          label="Concerns"
+          label="Mối quan tâm"
           values={product.concerns.map((concern) => concernLabels[concern])}
         />
+
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold text-foreground">Thành phần</h4>
+          <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">
+            {product.ingredientsText}
+          </p>
+        </div>
 
         {product.tags.length > 0 ? (
           <ProductBadgeGroup label="Tags" values={product.tags} />
         ) : null}
 
         {product.suitableFor.length > 0 ? (
-          <ProductTextList label="Suitable for" values={product.suitableFor} />
+          <ProductTextList label="Có thể phù hợp" values={product.suitableFor} />
         ) : null}
 
         {product.notRecommendedFor.length > 0 ? (
           <ProductTextList
-            label="Not recommended for"
+            label="Không khuyến nghị cho"
             values={product.notRecommendedFor}
           />
         ) : null}
 
         {product.warnings.length > 0 ? (
-          <ProductTextList label="Warnings" values={product.warnings} />
+          <ProductTextList label="Cần xem lại" values={product.warnings} />
         ) : null}
 
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-stone-900">
-            Ingredient text
-          </h3>
-          <p className="text-sm leading-6 text-stone-700">
-            {product.ingredientsText}
-          </p>
-        </div>
-
-        <p className="border-t border-stone-200 pt-4 text-xs text-stone-500">
+        <p className="border-t border-border pt-4 text-xs text-muted-foreground">
           Updated {formatUpdatedAt(product.updatedAt)}
         </p>
 
-        <div className="flex flex-col gap-2 border-t border-stone-200 pt-4 sm:flex-row">
-          <Button asChild variant="outline">
-            <Link href={`/products/${product.id}`}>View details</Link>
+        <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
+          <Button asChild aria-label="View details" variant="outline">
+            <Link href={`/products/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
             initialSaved={initialSaved}
@@ -183,7 +185,7 @@ function ProductBadgeGroup({
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
+      <h4 className="text-sm font-semibold text-foreground">{label}</h4>
       <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <Badge key={value} variant={variant}>
@@ -206,9 +208,9 @@ function ProductTextList({ label, values }: ProductTextListProps) {
   }
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-stone-700">
+    <div className="space-y-2 rounded-2xl bg-[#FFF1D6] p-3">
+      <h4 className="text-sm font-semibold text-amber-950">{label}</h4>
+      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-amber-950/80">
         {values.map((value) => (
           <li key={value}>{value}</li>
         ))}

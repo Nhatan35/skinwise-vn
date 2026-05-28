@@ -20,10 +20,10 @@ export function NextActionsCard({ nextActions }: NextActionsCardProps) {
       <ul className="space-y-3">
         {nextActions.map((action) => (
           <li
-            className="flex items-center justify-between gap-3 rounded-lg border border-stone-200 p-3 text-sm"
+            className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-secondary/40 p-3 text-sm"
             key={`${action.href}-${action.label}`}
           >
-            <Link className="font-medium text-emerald-800" href={action.href}>
+            <Link className="font-semibold text-primary" href={action.href}>
               {action.label}
             </Link>
             <Badge variant="outline">{priorityLabels[action.priority]}</Badge>

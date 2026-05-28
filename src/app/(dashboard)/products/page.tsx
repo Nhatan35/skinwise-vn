@@ -4,15 +4,18 @@ import { routes } from "@/shared/constants/routes";
 export default function ProductsPage() {
   return (
     <section className="space-y-6" data-route={routes.PRODUCTS}>
-      <div className="border border-stone-200 bg-white p-6">
-        <p className="text-sm font-medium text-emerald-700">
-          Product Catalogue
-        </p>
-        <h2 className="mt-2 text-3xl font-semibold">Skincare products</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-          Browse reviewed skincare products and filter by category, price range,
-          skin type, or concern. Product information is educational and does not
-          replace professional advice.
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-stone-950/5">
+        <p className="text-sm font-semibold text-primary">Product Catalogue</p>
+        <h2
+          aria-label="Skincare products"
+          className="mt-2 text-3xl font-semibold tracking-tight text-foreground"
+        >
+          Sản phẩm skincare
+        </h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
+          Tìm kiếm và lọc sản phẩm theo danh mục, mức giá, loại da hoặc mối quan
+          tâm. Thông tin sản phẩm chỉ mang tính giáo dục và không thay thế tư
+          vấn chuyên môn.
         </p>
       </div>
 

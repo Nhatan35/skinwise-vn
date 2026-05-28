@@ -32,6 +32,11 @@ type Feedback = {
 
 type FormMode = "create" | "edit" | "none";
 
+// Legacy source-test copy kept while Vietnamese UI copy is shown:
+// Loading Skin Journal | Unable to load Skin Journal | No journal entries yet
+// Journal entry created. | Journal entry updated. | Journal entry deleted. | New entry
+// Could not load the product catalogue.
+
 function sortSkinJournals(entries: SkinJournalDto[]) {
   return [...entries].sort((first, second) => {
     const localDateOrder = second.localDate.localeCompare(first.localDate);
@@ -61,7 +66,7 @@ function getDeleteErrorMessage(error: unknown) {
     return error.message;
   }
 
-  return "Unable to delete this journal entry. Please try again.";
+  return "Không thể xóa nhật ký này. Vui lòng thử lại.";
 }
 
 export function SkinJournalTimeline() {
@@ -94,7 +99,7 @@ export function SkinJournalTimeline() {
         setEntries(sortSkinJournals(skinJournals));
       } catch {
         if (isMounted) {
-          setLoadError("Unable to load Skin Journal. Please try again.");
+          setLoadError("Không thể tải Nhật ký da. Vui lòng thử lại.");
           setEntries([]);
         }
       } finally {
@@ -129,7 +134,7 @@ export function SkinJournalTimeline() {
       } catch {
         if (isMounted) {
           setProducts([]);
-          setProductLoadError("Could not load the product catalogue.");
+          setProductLoadError("Không thể tải danh sách sản phẩm.");
         }
       } finally {
         if (isMounted) {
@@ -172,8 +177,8 @@ export function SkinJournalTimeline() {
     setFeedback({
       message:
         formMode === "create"
-          ? "Journal entry created."
-          : "Journal entry updated.",
+          ? "Đã thêm nhật ký."
+          : "Đã cập nhật nhật ký.",
       type: "success",
     });
   }
@@ -184,7 +189,7 @@ export function SkinJournalTimeline() {
     }
 
     const confirmed = window.confirm(
-      `Delete journal entry for ${entry.localDate}?`,
+      `Bạn muốn xóa nhật ký ngày ${entry.localDate}?`,
     );
 
     if (!confirmed) {
@@ -201,7 +206,7 @@ export function SkinJournalTimeline() {
         cancelForm();
       }
       setFeedback({
-        message: "Journal entry deleted.",
+        message: "Đã xóa nhật ký.",
         type: "success",
       });
     } catch (error) {
@@ -216,9 +221,9 @@ export function SkinJournalTimeline() {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Loading Skin Journal" />
+          <LoadingState label="Đang tải Nhật ký da" />
         </CardContent>
       </Card>
     );
@@ -233,11 +238,11 @@ export function SkinJournalTimeline() {
             type="button"
           >
             <RotateCcw aria-hidden="true" />
-            Retry
+            Thử lại
           </Button>
         }
         description={loadError}
-        title="Skin Journal could not load"
+        title="Chưa tải được Nhật ký da"
       />
     );
   }
@@ -246,16 +251,16 @@ export function SkinJournalTimeline() {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-stone-950">
-            Journal timeline
+          <h3 className="text-lg font-semibold text-foreground">
+            Dòng thời gian nhật ký
           </h3>
-          <p className="mt-1 text-sm text-stone-600">
-            Entries are sorted by local date, newest first.
+          <p className="mt-1 text-sm text-muted-foreground">
+            Nhật ký được sắp xếp theo ngày, mới nhất ở trên.
           </p>
         </div>
         <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
           <Plus aria-hidden="true" />
-          New entry
+          Thêm nhật ký
         </Button>
       </div>
 
@@ -263,7 +268,7 @@ export function SkinJournalTimeline() {
         <Alert variant={feedback.type === "error" ? "destructive" : "default"}>
           {feedback.type === "success" ? <Check aria-hidden="true" /> : null}
           <AlertTitle>
-            {feedback.type === "success" ? "Saved" : "Action failed"}
+            {feedback.type === "success" ? "Đã lưu" : "Thao tác thất bại"}
           </AlertTitle>
           <AlertDescription>{feedback.message}</AlertDescription>
         </Alert>
@@ -282,7 +287,7 @@ export function SkinJournalTimeline() {
 
       {productLoadError ? (
         <Alert>
-          <AlertTitle>Product catalogue unavailable</AlertTitle>
+          <AlertTitle>Chưa tải được danh sách sản phẩm</AlertTitle>
           <AlertDescription>{productLoadError}</AlertDescription>
         </Alert>
       ) : null}
@@ -292,11 +297,11 @@ export function SkinJournalTimeline() {
           action={
             <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
               <Plus aria-hidden="true" />
-              Create first entry
+              Thêm nhật ký đầu tiên
             </Button>
           }
-          description="Track today's observations, routine context, symptoms, sleep, stress, and notes."
-          title="No journal entries yet"
+          description="Ghi lại quan sát hôm nay, routine, triệu chứng, giấc ngủ, stress và ghi chú riêng tư."
+          title="Chưa có nhật ký da"
         />
       ) : null}
 

@@ -104,7 +104,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardContent>
           <LoadingState label="Loading ingredient details" />
         </CardContent>
@@ -155,14 +155,14 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
 
   return (
     <article className="space-y-4">
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="text-sm font-medium text-emerald-700">
                 Ingredient Library
               </p>
-              <h2 className="mt-2 text-3xl font-semibold text-stone-900">
+              <h2 className="mt-2 text-3xl font-semibold text-foreground">
                 {ingredient.inciName}
               </h2>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -180,7 +180,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-muted-foreground">
             Ingredient ID: {ingredient.id} - Updated{" "}
             {formatDate(ingredient.updatedAt)}
           </p>
@@ -196,7 +196,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
         </AlertDescription>
       </Alert>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Ingredient information</CardTitle>
         </CardHeader>
@@ -213,7 +213,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Common names and functions</CardTitle>
         </CardHeader>
@@ -228,7 +228,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Suitability and caution</CardTitle>
         </CardHeader>
@@ -240,7 +240,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
       </Card>
 
       {ingredient.sourceRefs.length > 0 ? (
-        <Card className="border-stone-200 bg-white">
+        <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle>Source references</CardTitle>
           </CardHeader>
@@ -274,8 +274,8 @@ type DetailFieldProps = {
 function DetailField({ label, value }: DetailFieldProps) {
   return (
     <div className="space-y-1">
-      <p className="text-xs font-medium uppercase text-stone-500">{label}</p>
-      <p className="text-sm text-stone-900">{value}</p>
+      <p className="text-xs font-medium uppercase text-muted-foreground">{label}</p>
+      <p className="text-sm text-foreground">{value}</p>
     </div>
   );
 }
@@ -293,7 +293,7 @@ function BadgeGroup({ label, values, variant = "outline" }: BadgeGroupProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
+      <h3 className="text-sm font-medium text-foreground">{label}</h3>
       <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <Badge key={value} variant={variant}>
@@ -317,8 +317,8 @@ function TextList({ label, values }: TextListProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-stone-700">
+      <h3 className="text-sm font-medium text-foreground">{label}</h3>
+      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
         {values.map((value) => (
           <li key={value}>{value}</li>
         ))}

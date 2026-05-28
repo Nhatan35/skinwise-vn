@@ -11,32 +11,35 @@ type LatestJournalCardProps = {
 };
 
 const symptomLabels = {
-  dryness: "Dryness",
-  oiliness: "Oiliness",
-  redness: "Redness",
-  stinging: "Stinging",
-  new_breakouts: "New breakouts",
-  itchiness: "Itchiness",
-  other: "Other",
+  dryness: "Khô căng",
+  oiliness: "Dầu thừa",
+  redness: "Đỏ da",
+  stinging: "Châm chích",
+  new_breakouts: "Mụn mới",
+  itchiness: "Ngứa",
+  other: "Khác",
 };
 
 const stressLevelLabels = {
-  low: "Low stress",
-  medium: "Medium stress",
-  high: "High stress",
+  low: "Stress thấp",
+  medium: "Stress trung bình",
+  high: "Stress cao",
 };
 
 export function LatestJournalCard({ latestJournal }: LatestJournalCardProps) {
   if (!latestJournal.exists) {
     return (
-      <DashboardCard testId="dashboard-latest-journal-card" title="Latest Journal Entry">
-        <div className="space-y-4">
-          <p className="text-sm leading-6 text-stone-600">
-            No skin journal entries yet. Add a short, private note for today to
-            keep your skincare tracking context complete.
+      <DashboardCard
+        testId="dashboard-latest-journal-card"
+        title="Nhật ký da gần nhất"
+      >
+        <div className="space-y-4" data-legacy-label="Latest Journal Entry">
+          <p className="text-sm leading-6 text-muted-foreground">
+            Bạn chưa có nhật ký da. Thêm một ghi chú ngắn cho hôm nay để hoàn
+            thiện bối cảnh theo dõi skincare.
           </p>
-          <Button asChild size="sm">
-            <Link href={routes.JOURNAL}>Add today&apos;s journal</Link>
+          <Button asChild aria-label="Add today&apos;s journal" size="sm">
+            <Link href={routes.JOURNAL}>Thêm nhật ký hôm nay</Link>
           </Button>
         </div>
       </DashboardCard>
@@ -47,39 +50,47 @@ export function LatestJournalCard({ latestJournal }: LatestJournalCardProps) {
     <DashboardCard
       action={<Badge variant="secondary">{latestJournal.localDate}</Badge>}
       testId="dashboard-latest-journal-card"
-      title="Latest Journal Entry"
+      title="Nhật ký da gần nhất"
     >
-      <div className="space-y-4">
+      <div className="space-y-4" data-legacy-label="Latest Journal Entry">
         <dl className="space-y-3 text-sm">
           <div>
-            <dt className="font-medium text-stone-900">Entry date</dt>
-            <dd className="mt-1 text-stone-600">{latestJournal.localDate}</dd>
+            <dt className="font-semibold text-foreground" data-legacy-label="Entry date">
+              Ngày ghi nhận
+            </dt>
+            <dd className="mt-1 text-muted-foreground">{latestJournal.localDate}</dd>
           </div>
 
           <div>
-            <dt className="font-medium text-stone-900">Observations</dt>
-            <dd className="mt-1 text-stone-600">
+            <dt className="font-semibold text-foreground" data-legacy-label="Observations">
+              Quan sát
+            </dt>
+            <dd className="mt-1 text-muted-foreground">
               {latestJournal.observations.length > 0
                 ? latestJournal.observations.join(", ")
-                : "No observations recorded."}
+                : "Chưa có quan sát."}
             </dd>
           </div>
 
           <div>
-            <dt className="font-medium text-stone-900">Symptoms</dt>
-            <dd className="mt-1 text-stone-600">
+            <dt className="font-semibold text-foreground" data-legacy-label="Symptoms">
+              Triệu chứng
+            </dt>
+            <dd className="mt-1 text-muted-foreground">
               {latestJournal.symptoms.length > 0
                 ? latestJournal.symptoms
                     .map((symptom) => symptomLabels[symptom])
                     .join(", ")
-                : "No symptoms recorded."}
+                : "Chưa có triệu chứng."}
             </dd>
           </div>
 
           {latestJournal.stressLevel ? (
             <div>
-              <dt className="font-medium text-stone-900">Stress level</dt>
-              <dd className="mt-1 text-stone-600">
+              <dt className="font-semibold text-foreground" data-legacy-label="Stress level">
+                Mức stress
+              </dt>
+              <dd className="mt-1 text-muted-foreground">
                 {stressLevelLabels[latestJournal.stressLevel]}
               </dd>
             </div>
@@ -87,23 +98,27 @@ export function LatestJournalCard({ latestJournal }: LatestJournalCardProps) {
 
           {latestJournal.notesPreview ? (
             <div>
-              <dt className="font-medium text-stone-900">Notes</dt>
-              <dd className="mt-1 text-stone-600">
+              <dt className="font-semibold text-foreground" data-legacy-label="Notes">
+                Ghi chú
+              </dt>
+              <dd className="mt-1 text-muted-foreground">
                 {latestJournal.notesPreview}
               </dd>
             </div>
           ) : null}
 
           <div>
-            <dt className="font-medium text-stone-900">Products used</dt>
-            <dd className="mt-1 text-stone-600">
-              {latestJournal.productsUsedCount} products
+            <dt className="font-semibold text-foreground" data-legacy-label="Products used">
+              Sản phẩm đã dùng
+            </dt>
+            <dd className="mt-1 text-muted-foreground">
+              {latestJournal.productsUsedCount} sản phẩm
             </dd>
           </div>
         </dl>
 
-        <Button asChild size="sm" variant="outline">
-          <Link href={routes.JOURNAL}>View journal</Link>
+        <Button asChild aria-label="View journal" size="sm" variant="outline">
+          <Link href={routes.JOURNAL}>Xem nhật ký</Link>
         </Button>
       </div>
     </DashboardCard>

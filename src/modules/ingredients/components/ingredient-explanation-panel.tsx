@@ -93,14 +93,14 @@ export function IngredientExplanationPanel({
 
   return (
     <Card
-      className="border-stone-200 bg-white"
+      className="border-border bg-card"
       data-testid="ingredient-explanation-panel"
     >
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle>Ingredient explanation</CardTitle>
-            <p className="mt-2 text-sm leading-6 text-stone-600">
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Request a beginner-friendly explanation through the existing
               provider flow. Explanations are educational and may use a safe
               fallback when the AI service is unavailable or disabled.
@@ -114,7 +114,7 @@ export function IngredientExplanationPanel({
       </CardHeader>
       <CardContent className="space-y-4">
         {isLoading ? (
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-muted-foreground">
             Loading ingredient explanation...
           </p>
         ) : null}
@@ -140,7 +140,7 @@ function ExplanationResult({ explanation }: ExplanationResultProps) {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary">{sourceLabel}</Badge>
-        <span className="text-sm font-medium text-stone-900">
+        <span className="text-sm font-medium text-foreground">
           {explanation.ingredientName}
         </span>
       </div>
@@ -156,10 +156,10 @@ function ExplanationResult({ explanation }: ExplanationResultProps) {
       ) : null}
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-stone-900">
+        <h3 className="text-sm font-medium text-foreground">
           Simple explanation
         </h3>
-        <p className="text-sm leading-6 text-stone-700">
+        <p className="text-sm leading-6 text-muted-foreground">
           {explanation.simpleExplanation}
         </p>
       </div>
@@ -170,13 +170,13 @@ function ExplanationResult({ explanation }: ExplanationResultProps) {
       <TextList label="Avoid with" values={explanation.avoidWith} />
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-stone-900">Beginner advice</h3>
-        <p className="text-sm leading-6 text-stone-700">
+        <h3 className="text-sm font-medium text-foreground">Beginner advice</h3>
+        <p className="text-sm leading-6 text-muted-foreground">
           {explanation.beginnerAdvice}
         </p>
       </div>
 
-      <p className="border-t border-stone-200 pt-4 text-sm leading-6 text-stone-600">
+      <p className="border-t border-border pt-4 text-sm leading-6 text-muted-foreground">
         {explanation.disclaimer}
       </p>
     </div>
@@ -195,8 +195,8 @@ function TextList({ label, values }: TextListProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-stone-700">
+      <h3 className="text-sm font-medium text-foreground">{label}</h3>
+      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
         {values.map((value) => (
           <li key={value}>{value}</li>
         ))}

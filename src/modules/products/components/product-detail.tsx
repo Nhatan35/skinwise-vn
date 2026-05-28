@@ -43,51 +43,51 @@ type ProductDetailProps = {
 };
 
 const categoryLabels: Record<ProductCategory, string> = {
-  cleanser: "Cleanser",
-  moisturizer: "Moisturizer",
-  sunscreen: "Sunscreen",
+  cleanser: "Sữa rửa mặt",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
   treatment: "Treatment",
   toner: "Toner",
   serum: "Serum",
-  mask: "Mask",
-  other: "Other",
+  mask: "Mặt nạ",
+  other: "Khác",
 };
 
 const priceRangeLabels: Record<ProductPriceRange, string> = {
-  budget: "Budget",
-  mid: "Mid range",
-  premium: "Premium",
-  unknown: "Unknown price",
+  budget: "Tiết kiệm",
+  mid: "Tầm trung",
+  premium: "Cao cấp",
+  unknown: "Chưa rõ giá",
 };
 
 const skinTypeLabels: Record<ProductSkinType, string> = {
-  oily: "Oily",
-  dry: "Dry",
-  combination: "Combination",
-  normal: "Normal",
-  sensitive: "Sensitive",
-  unknown: "Unknown",
+  oily: "Da dầu",
+  dry: "Da khô",
+  combination: "Da hỗn hợp",
+  normal: "Da thường",
+  sensitive: "Da nhạy cảm",
+  unknown: "Chưa rõ",
 };
 
 const concernLabels: Record<ProductConcern, string> = {
-  acne: "Acne",
-  oiliness: "Oiliness",
-  dryness: "Dryness",
-  redness: "Redness",
-  dark_spots: "Dark spots",
-  texture: "Texture",
-  barrier_support: "Barrier support",
-  unknown: "Unknown",
+  acne: "Mụn",
+  oiliness: "Dầu thừa",
+  dryness: "Khô căng",
+  redness: "Đỏ da",
+  dark_spots: "Thâm/đốm tối màu",
+  texture: "Bề mặt da",
+  barrier_support: "Hỗ trợ hàng rào da",
+  unknown: "Chưa rõ",
 };
 
 const verificationLabels: Record<ProductVerificationStatus, string> = {
-  reviewed: "Reviewed",
-  unverified: "Unverified",
-  verified: "Verified",
+  reviewed: "Đã xem xét",
+  unverified: "Chưa xác minh",
+  verified: "Đã xác minh",
 };
 
 function formatUpdatedAt(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(value));
 }
@@ -180,7 +180,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card>
         <CardContent>
           <LoadingState label="Loading product details" />
         </CardContent>
@@ -192,7 +192,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
     return (
       <EmptyState
         action={<BackToProductsButton />}
-        description="This product may be unavailable or not visible in the catalogue."
+        description="Sản phẩm này có thể không còn khả dụng trong catalogue."
         title="Product not found"
       />
     );
@@ -223,7 +223,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
     return (
       <EmptyState
         action={<BackToProductsButton />}
-        description="Try returning to the product catalogue and opening the product again."
+        description="Hãy quay lại catalogue và mở lại sản phẩm."
         title="Product not found"
       />
     );
@@ -237,21 +237,17 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
   return (
     <article className="space-y-4">
-      <Card className="border-stone-200 bg-white">
+      <Card>
         <CardHeader>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
             <div>
-              <p className="text-sm font-medium text-emerald-700">
-                {product.brand}
+              <p className="text-sm font-semibold text-primary">
+                {product.brand || "SkinWise product"}
               </p>
               <CardTitle className="mt-2 text-3xl">{product.name}</CardTitle>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Badge variant="outline">
-                  {categoryLabels[product.category]}
-                </Badge>
-                <Badge variant="outline">
-                  {priceRangeLabels[product.priceRange]}
-                </Badge>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Badge variant="outline">{categoryLabels[product.category]}</Badge>
+                <Badge variant="outline">{priceRangeLabels[product.priceRange]}</Badge>
                 <Badge variant="secondary">
                   {verificationLabels[product.verificationStatus]}
                 </Badge>
@@ -270,9 +266,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-stone-500">
-            Product ID: {product.id} - Updated{" "}
-            {formatUpdatedAt(product.updatedAt)}
+          <p className="text-xs text-muted-foreground">
+            Product ID: {product.id} · Updated {formatUpdatedAt(product.updatedAt)}
           </p>
         </CardContent>
       </Card>
@@ -280,8 +275,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       <Alert>
         <AlertTitle>Educational product details</AlertTitle>
         <AlertDescription>
-          Product details are for routine planning and ingredient education.
-          They are not medical diagnosis or treatment advice.
+          Thông tin sản phẩm phục vụ lập routine và giáo dục về thành phần. Nội
+          dung này không phải chẩn đoán, điều trị hoặc lời khuyên y tế.
         </AlertDescription>
       </Alert>
 
@@ -289,46 +284,40 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         <Alert variant="destructive">
           <AlertTitle>Saved state unavailable</AlertTitle>
           <AlertDescription>
-            {savedStateError} Product details still work.
+            {savedStateError} Bạn vẫn có thể xem chi tiết sản phẩm.
           </AlertDescription>
         </Alert>
       ) : null}
 
-      <Card className="border-stone-200 bg-white">
+      <Card>
         <CardHeader>
           <CardTitle>Product information</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
+          <DetailField label="Danh mục" value={categoryLabels[product.category]} />
+          <DetailField label="Mức giá" value={priceRangeLabels[product.priceRange]} />
           <DetailField
-            label="Category"
-            value={categoryLabels[product.category]}
-          />
-          <DetailField
-            label="Price range"
-            value={priceRangeLabels[product.priceRange]}
-          />
-          <DetailField
-            label="Verification status"
+            label="Trạng thái xem xét"
             value={verificationLabels[product.verificationStatus]}
           />
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card>
         <CardHeader>
           <CardTitle>Ingredients</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-stone-900">
-              Ingredients text
+            <h3 className="text-sm font-semibold text-foreground">
+              Bảng thành phần
             </h3>
-            <p className="text-sm leading-6 text-stone-700">
+            <p className="text-sm leading-6 text-muted-foreground">
               {product.ingredientsText}
             </p>
           </div>
           <BadgeGroup
-            label="Key actives"
+            label="Hoạt chất chính"
             values={product.keyActives}
             variant="secondary"
           />
@@ -336,22 +325,22 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       </Card>
 
       {suitabilityVisible ? (
-        <Card className="border-stone-200 bg-white">
+        <Card>
           <CardHeader>
-            <CardTitle>Suitability</CardTitle>
+            <CardTitle>Có thể phù hợp / cần xem lại</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
             <BadgeGroup
-              label="Skin types"
+              label="Loại da"
               values={product.skinTypes.map((skinType) => skinTypeLabels[skinType])}
             />
             <BadgeGroup
-              label="Concerns"
+              label="Mối quan tâm"
               values={product.concerns.map((concern) => concernLabels[concern])}
             />
-            <TextList label="Suitable for" values={product.suitableFor} />
+            <TextList label="Có thể phù hợp" values={product.suitableFor} />
             <TextList
-              label="Not recommended for"
+              label="Không khuyến nghị cho"
               values={product.notRecommendedFor}
             />
           </CardContent>
@@ -359,18 +348,18 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       ) : null}
 
       {product.warnings.length > 0 ? (
-        <Card className="border-stone-200 bg-white">
+        <Card>
           <CardHeader>
-            <CardTitle>Safety</CardTitle>
+            <CardTitle>Cần xem lại</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextList label="Warnings" values={product.warnings} />
+            <TextList label="Ghi chú thận trọng" values={product.warnings} />
           </CardContent>
         </Card>
       ) : null}
 
       {product.tags.length > 0 ? (
-        <Card className="border-stone-200 bg-white">
+        <Card>
           <CardHeader>
             <CardTitle>Tags</CardTitle>
           </CardHeader>
@@ -385,10 +374,10 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
 function BackToProductsButton() {
   return (
-    <Button asChild variant="outline">
+    <Button asChild aria-label="Back to products" variant="outline">
       <Link href="/products">
         <ArrowLeft aria-hidden="true" />
-        Back to products
+        Quay lại sản phẩm
       </Link>
     </Button>
   );
@@ -401,9 +390,11 @@ type DetailFieldProps = {
 
 function DetailField({ label, value }: DetailFieldProps) {
   return (
-    <div className="space-y-1">
-      <p className="text-xs font-medium uppercase text-stone-500">{label}</p>
-      <p className="text-sm text-stone-900">{value}</p>
+    <div className="rounded-2xl bg-secondary p-4">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-2 text-sm font-semibold text-foreground">{value}</p>
     </div>
   );
 }
@@ -421,7 +412,7 @@ function BadgeGroup({ label, values, variant = "outline" }: BadgeGroupProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
+      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
       <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <Badge key={value} variant={variant}>
@@ -445,8 +436,8 @@ function TextList({ label, values }: TextListProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-stone-700">
+      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
+      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
         {values.map((value) => (
           <li key={value}>{value}</li>
         ))}

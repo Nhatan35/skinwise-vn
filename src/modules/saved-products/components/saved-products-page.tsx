@@ -91,7 +91,7 @@ export function SavedProductsPage() {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card>
         <CardContent>
           <LoadingState label="Loading saved products" />
         </CardContent>
@@ -103,18 +103,18 @@ export function SavedProductsPage() {
     return (
       <EmptyState
         action={
-          <Button asChild>
-            <Link href={routes.PRODUCTS}>Browse products</Link>
+          <Button asChild aria-label="Browse products">
+            <Link href={routes.PRODUCTS}>Khám phá sản phẩm</Link>
           </Button>
         }
-        description="Save products from the catalogue or detail pages, then return here to revisit them."
+        description="Lưu sản phẩm bạn muốn xem lại trước khi thêm vào routine. Đây không phải giỏ hàng mua sắm."
         title="No saved products yet"
       />
     );
   }
 
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {items.map((item) => (
         <SavedProductCard
           item={item}

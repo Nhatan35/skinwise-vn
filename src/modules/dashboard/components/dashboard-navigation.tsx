@@ -18,6 +18,18 @@ function isActiveDashboardPath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+const navLabelMap: Record<string, string> = {
+  Dashboard: "Tổng quan",
+  "Skin Profile": "Hồ sơ da",
+  Routines: "Routine",
+  "Today Log": "Hôm nay",
+  Journal: "Nhật ký",
+  Products: "Sản phẩm",
+  "Saved Products": "Đã lưu",
+  Ingredients: "Thành phần",
+  Settings: "Cài đặt",
+};
+
 export function DashboardNavigation() {
   const pathname = usePathname();
 
@@ -27,19 +39,23 @@ export function DashboardNavigation() {
         const isActive =
           item.href !== null && isActiveDashboardPath(pathname, item.href);
         const itemClassName = cn(
-          "flex min-h-10 items-center justify-between gap-3 px-3 py-2 text-sm font-medium",
-          isActive ? "bg-emerald-50 text-emerald-900" : "text-stone-500",
+          "flex min-h-11 items-center justify-between gap-3 rounded-2xl px-3 py-2 text-sm font-semibold transition-colors",
+          isActive
+            ? "bg-secondary text-primary"
+            : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground",
           item.disabled ? "cursor-not-allowed opacity-70" : "",
         );
+        const visibleLabel = navLabelMap[item.label] ?? item.label;
 
         if (item.href === null) {
           return (
             <span
               aria-disabled="true"
               className={itemClassName}
+              data-nav-label={item.label}
               key={item.label}
             >
-              <span>{item.label}</span>
+              <span>{visibleLabel}</span>
               <Badge variant="outline">{item.status}</Badge>
             </span>
           );
@@ -49,11 +65,12 @@ export function DashboardNavigation() {
           <Link
             aria-current={isActive ? "page" : undefined}
             className={itemClassName}
+            data-nav-label={item.label}
             href={item.href}
             key={item.href}
           >
-            <span>{item.label}</span>
-            <Badge variant="secondary">{item.status}</Badge>
+            <span>{visibleLabel}</span>
+            <Badge variant={isActive ? "default" : "secondary"}>{item.status}</Badge>
           </Link>
         );
       })}

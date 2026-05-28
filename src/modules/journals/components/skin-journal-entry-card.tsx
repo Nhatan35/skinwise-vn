@@ -19,19 +19,19 @@ import {
 } from "@/shared/components/ui/card";
 
 const symptomLabels: Record<SkinJournalSymptom, string> = {
-  dryness: "Dryness",
-  oiliness: "Oiliness",
-  redness: "Redness",
-  stinging: "Stinging",
-  new_breakouts: "New breakouts",
-  itchiness: "Itchiness",
-  other: "Other",
+  dryness: "Khô căng",
+  oiliness: "Dầu thừa",
+  redness: "Đỏ da",
+  stinging: "Châm chích",
+  new_breakouts: "Mụn mới",
+  itchiness: "Ngứa",
+  other: "Khác",
 };
 
 const stressLabels: Record<SkinJournalStressLevel, string> = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
+  low: "Thấp",
+  medium: "Trung bình",
+  high: "Cao",
 };
 
 type SkinJournalEntryCardProps = {
@@ -49,13 +49,13 @@ function formatLocalDate(localDate: string) {
     return localDate;
   }
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(year, month - 1, day));
 }
 
 function formatUpdatedAt(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
@@ -74,15 +74,15 @@ export function SkinJournalEntryCard({
   );
 
   return (
-    <Card className="border-stone-200 bg-white" data-testid="skin-journal-entry-card">
+    <Card data-testid="skin-journal-entry-card">
       <CardHeader>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <CardTitle>{formatLocalDate(entry.localDate)}</CardTitle>
-            <p className="mt-2 text-sm text-stone-600">
-              {entry.localDate} - {entry.timezone}
+            <p className="mt-2 text-sm text-muted-foreground">
+              {entry.localDate} · {entry.timezone}
             </p>
-            <p className="mt-1 text-sm text-stone-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Updated {formatUpdatedAt(entry.updatedAt)}
             </p>
           </div>
@@ -111,7 +111,7 @@ export function SkinJournalEntryCard({
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-stone-900">Symptoms</h3>
+          <h3 className="text-sm font-semibold text-foreground">Symptoms</h3>
           {entry.symptoms.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {entry.symptoms.map((symptom) => (
@@ -121,7 +121,7 @@ export function SkinJournalEntryCard({
               ))}
             </div>
           ) : (
-            <p className="text-sm text-stone-600">No symptoms selected.</p>
+            <p className="text-sm text-muted-foreground">No symptoms selected.</p>
           )}
         </div>
 
@@ -133,22 +133,22 @@ export function SkinJournalEntryCard({
             label="Sleep"
             value={
               entry.sleepHours !== undefined
-                ? `${entry.sleepHours} hours`
-                : "Not tracked"
+                ? `${entry.sleepHours} giờ`
+                : "Chưa theo dõi"
             }
           />
           <JournalDetail
             label="Stress"
             value={
-              entry.stressLevel ? stressLabels[entry.stressLevel] : "Not tracked"
+              entry.stressLevel ? stressLabels[entry.stressLevel] : "Chưa theo dõi"
             }
           />
         </div>
 
         {entry.notes ? (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-stone-900">Notes</h3>
-            <p className="whitespace-pre-wrap text-sm leading-6 text-stone-700">
+            <h3 className="text-sm font-semibold text-foreground">Notes</h3>
+            <p className="whitespace-pre-wrap text-sm leading-6 text-muted-foreground">
               {entry.notes}
             </p>
           </div>
@@ -168,7 +168,7 @@ type JournalProductListProps = {
 function JournalProductList({ productLabels }: JournalProductListProps) {
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">Products used</h3>
+      <h3 className="text-sm font-semibold text-foreground">Products used</h3>
       {productLabels.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {productLabels.map((productLabel, index) => (
@@ -178,7 +178,7 @@ function JournalProductList({ productLabels }: JournalProductListProps) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-stone-600">No products recorded.</p>
+        <p className="text-sm text-muted-foreground">No products recorded.</p>
       )}
     </div>
   );
@@ -191,9 +191,9 @@ type JournalDetailProps = {
 
 function JournalDetail({ label, value }: JournalDetailProps) {
   return (
-    <div className="border border-stone-200 bg-stone-50 p-3">
-      <dt className="text-sm font-medium text-stone-700">{label}</dt>
-      <dd className="mt-1 text-sm font-semibold text-stone-950">{value}</dd>
+    <div className="rounded-2xl border border-border bg-secondary/50 p-3">
+      <dt className="text-sm font-semibold text-muted-foreground">{label}</dt>
+      <dd className="mt-1 text-sm font-semibold text-foreground">{value}</dd>
     </div>
   );
 }
@@ -206,15 +206,15 @@ type JournalListProps = {
 function JournalList({ label, values }: JournalListProps) {
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-stone-900">{label}</h3>
+      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
       {values.length > 0 ? (
-        <ul className="space-y-1 text-sm text-stone-700">
+        <ul className="space-y-1 text-sm text-muted-foreground">
           {values.map((value) => (
             <li key={value}>{value}</li>
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-stone-600">No items recorded.</p>
+        <p className="text-sm text-muted-foreground">No items recorded.</p>
       )}
     </div>
   );

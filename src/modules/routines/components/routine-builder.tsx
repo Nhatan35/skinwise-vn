@@ -952,7 +952,7 @@ export function RoutineBuilder() {
 
   if (isLoading) {
     return (
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardContent>
           <LoadingState label="Đang tải routines" />
         </CardContent>
@@ -1093,7 +1093,7 @@ function RoutineForm({
   products,
 }: RoutineFormProps) {
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-border bg-card">
       <CardHeader>
         <CardTitle>
           {formMode === "create" ? "Tạo routine" : "Chỉnh sửa routine"}
@@ -1142,10 +1142,10 @@ function RoutineForm({
           <div className="space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-base font-semibold text-stone-950">
+                <h3 className="text-base font-semibold text-foreground">
                   Các bước trong routine
                 </h3>
-                <p className="mt-1 text-sm text-stone-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Product Picker cho phép chọn sản phẩm đã duyệt hoặc nhập thủ
                   công. Thứ tự được tính từ trên xuống dưới. Cần có ít nhất một
                   bước.
@@ -1173,16 +1173,16 @@ function RoutineForm({
             <div className="space-y-4">
               {formState.steps.map((step, index) => (
                 <div
-                  className="border border-stone-200 bg-stone-50 p-4"
+                  className="border border-border bg-secondary/50 p-4"
                   data-testid="routine-step-form"
                   key={`routine-step-${index}`}
                 >
                   <div className="mb-4 flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-stone-950">
+                      <p className="text-sm font-semibold text-foreground">
                         Bước {index + 1}
                       </p>
-                      <p className="text-xs text-stone-600">
+                      <p className="text-xs text-muted-foreground">
                         Chọn sản phẩm đã duyệt hoặc nhập sản phẩm thủ công.
                       </p>
                     </div>
@@ -1248,7 +1248,7 @@ function RoutineForm({
                         </SelectContent>
                       </Select>
                       {isProductLoading ? (
-                        <p className="text-xs text-stone-600">
+                        <p className="text-xs text-muted-foreground">
                           Đang tải danh sách sản phẩm...
                         </p>
                       ) : null}
@@ -1385,8 +1385,8 @@ function RoutineForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-6 text-stone-600">
+          <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-muted-foreground">
               Thông tin này chỉ mang tính giáo dục và không thay thế tư vấn từ
               chuyên gia y tế.
             </p>
@@ -1460,7 +1460,7 @@ function RoutineList({
   }
 
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-border bg-card">
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle>Danh sách routines</CardTitle>
@@ -1472,7 +1472,7 @@ function RoutineList({
       </CardHeader>
       <CardContent className="space-y-4">
         {isRoutineLogLoading ? (
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-muted-foreground">
             Đang tải nhật ký routine hôm nay...
           </p>
         ) : null}
@@ -1486,14 +1486,14 @@ function RoutineList({
 
         {routines.map((routine) => (
           <div
-            className="border border-stone-200 bg-stone-50 p-4"
+            className="border border-border bg-secondary/50 p-4"
             data-testid="routine-card"
             key={routine.id}
           >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-lg font-semibold text-stone-950">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {routine.name}
                   </h3>
                   <Badge variant="secondary">
@@ -1505,7 +1505,7 @@ function RoutineList({
                     testId="routine-log-status-badge"
                   />
                 </div>
-                <p className="mt-2 text-sm text-stone-600">
+                <p className="mt-2 text-sm text-muted-foreground">
                   Cập nhật: {formatUpdatedAt(routine.updatedAt)}
                 </p>
               </div>
@@ -1536,12 +1536,12 @@ function RoutineList({
             <ol className="mt-4 space-y-3">
               {routine.steps.map((step, index) => (
                 <li
-                  className="border border-stone-200 bg-white p-3"
+                  className="border border-border bg-card p-3"
                   key={step.stepId}
                 >
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <p className="font-medium text-stone-950">
+                      <p className="font-medium text-foreground">
                         {index + 1}. {getRoutineStepDisplayName(step)}
                       </p>
                       {step.keyActivesSnapshot?.length ? (
@@ -1554,7 +1554,7 @@ function RoutineList({
                         </div>
                       ) : null}
                       {step.instructions ? (
-                        <p className="mt-1 text-sm text-stone-600">
+                        <p className="mt-1 text-sm text-muted-foreground">
                           {step.instructions}
                         </p>
                       ) : null}

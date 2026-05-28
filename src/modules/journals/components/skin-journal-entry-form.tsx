@@ -206,7 +206,7 @@ export function SkinJournalEntryForm({
   }
 
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-border bg-card">
       <CardHeader>
         <CardTitle>
           {mode === "create" ? "Create journal entry" : "Edit journal entry"}
@@ -241,7 +241,7 @@ export function SkinJournalEntryForm({
                   value={formState.localDate}
                 />
               ) : (
-                <p className="border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-700">
+                <p className="border border-border bg-secondary/50 px-3 py-2 text-sm text-muted-foreground">
                   {formState.localDate}
                 </p>
               )}
@@ -290,7 +290,7 @@ export function SkinJournalEntryForm({
             }
             className="space-y-3"
           >
-            <legend className="text-sm font-medium text-stone-900">
+            <legend className="text-sm font-medium text-foreground">
               Symptoms
             </legend>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -300,7 +300,7 @@ export function SkinJournalEntryForm({
 
                 return (
                   <div
-                    className="flex items-start gap-3 border border-stone-200 bg-stone-50 px-3 py-3"
+                    className="flex items-start gap-3 border border-border bg-secondary/50 px-3 py-3"
                     key={symptom}
                   >
                     <input
@@ -403,8 +403,8 @@ export function SkinJournalEntryForm({
             value={formState.notes}
           />
 
-          <div className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-6 text-stone-600">
+          <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-muted-foreground">
               Skin Journal is for tracking observations, not diagnosis or
               treatment advice.
             </p>
@@ -460,12 +460,12 @@ function ProductSelectionField({
       aria-describedby={error ? "skin-journal-products-used-error" : undefined}
       className="space-y-3"
     >
-      <legend className="text-sm font-medium text-stone-900">
+      <legend className="text-sm font-medium text-foreground">
         Products used
       </legend>
 
       {isLoading ? (
-        <p className="text-sm text-stone-600">Loading product catalogue...</p>
+        <p className="text-sm text-muted-foreground">Loading product catalogue...</p>
       ) : null}
 
       {loadError ? (
@@ -475,7 +475,7 @@ function ProductSelectionField({
       ) : null}
 
       {!isLoading && !loadError && products.length === 0 ? (
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted-foreground">
           No catalogue products are available yet.
         </p>
       ) : null}
@@ -483,7 +483,7 @@ function ProductSelectionField({
       {!isLoading &&
       !loadError &&
       (products.length > 0 || unresolvedProductIds.length > 0) ? (
-        <div className="grid max-h-64 gap-3 overflow-y-auto border border-stone-200 bg-stone-50 p-3 sm:grid-cols-2">
+        <div className="grid max-h-64 gap-3 overflow-y-auto border border-border bg-secondary/50 p-3 sm:grid-cols-2">
           {products.map((product) => {
             const inputId = `skin-journal-product-${product.id}`;
             const checked = selectedProductIds.includes(product.id);
@@ -529,13 +529,13 @@ function ProductSelectionField({
       ) : null}
 
       {loadError && selectedProductIds.length > 0 ? (
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted-foreground">
           Existing product selections will be preserved when you save.
         </p>
       ) : null}
 
       {!loadError && hasUnresolvedSelection ? (
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted-foreground">
           Unknown product selections will be preserved when you save.
         </p>
       ) : null}
@@ -647,7 +647,7 @@ function TextareaField({
         value={value}
       />
       {description ? (
-        <p className="text-sm text-stone-600">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       ) : null}
       {error ? (
         <p className="text-sm text-red-700" id={errorId}>

@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analysis-card";
 import { LatestJournalCard } from "@/modules/dashboard/components/latest-journal-card";
 import { NextActionsCard } from "@/modules/dashboard/components/next-actions-card";
+import { PrimaryNextActionCard } from "@/modules/dashboard/components/primary-next-action-card";
 import { RoutineSummaryCard } from "@/modules/dashboard/components/routine-summary-card";
+import { SavedProductsSummaryCard } from "@/modules/dashboard/components/saved-products-summary-card";
 import { SkinProfileSummaryCard } from "@/modules/dashboard/components/skin-profile-summary-card";
 import { TodayRoutineProgressCard } from "@/modules/dashboard/components/today-routine-progress-card";
 import type { DashboardDto } from "@/modules/dashboard/dashboard.dto";
@@ -175,17 +177,23 @@ export function DashboardOverview() {
     );
   }
 
+  const primaryNextAction = dashboard.nextActions[0];
+
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-2">
+    <div className="space-y-5">
+      {primaryNextAction ? (
+        <PrimaryNextActionCard nextAction={primaryNextAction} />
+      ) : null}
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SkinProfileSummaryCard skinProfile={dashboard.skinProfile} />
         <TodayRoutineProgressCard progress={dashboard.todayRoutineLogs} />
-      </div>
-      <div className="grid gap-4 xl:grid-cols-2">
         <RoutineSummaryCard routines={dashboard.routines} />
-        <LatestJournalCard latestJournal={dashboard.latestJournal} />
+        <SavedProductsSummaryCard />
       </div>
-      <div className="grid gap-4 xl:grid-cols-2">
+
+      <div className="grid gap-4 xl:grid-cols-3">
+        <LatestJournalCard latestJournal={dashboard.latestJournal} />
         <LatestAnalysisCard latestAnalysis={dashboard.latestRoutineAnalysis} />
         <NextActionsCard nextActions={dashboard.nextActions} />
       </div>

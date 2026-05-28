@@ -7,9 +7,12 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 
+import { cn } from "@/shared/utils";
+
 type DashboardCardProps = {
   action?: ReactNode;
   children: ReactNode;
+  className?: string;
   testId?: string;
   title: string;
 };
@@ -17,11 +20,12 @@ type DashboardCardProps = {
 export function DashboardCard({
   action,
   children,
+  className,
   testId,
   title,
 }: DashboardCardProps) {
   return (
-    <Card className="border-stone-200 bg-white" data-testid={testId}>
+    <Card className={cn("h-full bg-card", className)} data-testid={testId}>
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <CardTitle>{title}</CardTitle>

@@ -3,91 +3,185 @@ import Link from "next/link";
 import { appConfig } from "@/config/app";
 import { routes } from "@/shared/constants/routes";
 
+const featureCards = [
+  {
+    title: "Theo dõi routine",
+    description:
+      "Tạo routine sáng hoặc tối, ghi nhận từng ngày và giữ việc skincare đơn giản hơn.",
+  },
+  {
+    title: "Nhật ký da cá nhân",
+    description:
+      "Ghi lại quan sát, triệu chứng, giấc ngủ, stress và sản phẩm đã dùng trong ngày.",
+  },
+  {
+    title: "Xem lại sản phẩm",
+    description:
+      "Lưu sản phẩm bạn muốn cân nhắc và xem thông tin thành phần trước khi thêm vào routine.",
+  },
+  {
+    title: "Giải thích thành phần",
+    description:
+      "Đọc thông tin giáo dục về thành phần mỹ phẩm bằng ngôn ngữ dễ hiểu, không thay thế tư vấn y tế.",
+  },
+];
+
+const previewCards = [
+  ["Routine hôm nay", "2 routine cần ghi nhận", "Ghi nhận routine"],
+  ["Nhật ký da", "Chưa có ghi chú hôm nay", "Thêm nhật ký"],
+  ["Thành phần", "Có thể cần xem lại", "Xem giải thích"],
+  ["Sản phẩm đã lưu", "Dùng để cân nhắc routine", "Xem danh sách"],
+];
+
 export default function Home() {
-  const implementedItems = [
-    "Skin profile and onboarding",
-    "Routine builder and routine logs",
-    "Product catalogue and detail pages",
-    "Private journal timeline",
-    "Dashboard summaries",
-    "Deterministic routine safety analysis",
-  ];
-
   return (
-    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#d7f5e8,transparent_32rem),linear-gradient(135deg,#fffaf0_0%,#f7efe2_45%,#e7f2ec_100%)] px-6 py-10">
-      <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-5xl flex-col justify-between rounded-2xl border border-white/70 bg-white/75 p-8 shadow-2xl shadow-stone-300/40 backdrop-blur md:p-12">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="rounded-full bg-emerald-950 px-4 py-2 text-sm font-semibold tracking-wide text-emerald-50">
-            Post Week 6 MVP cleanup
-          </p>
-          <p className="text-sm font-medium text-stone-600">
-            Route: {routes.HOME}
-          </p>
-        </div>
+    <main className="min-h-screen overflow-hidden px-4 py-5 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl">
+        <nav className="flex flex-col gap-4 rounded-3xl border border-white/70 bg-card/85 px-5 py-4 shadow-sm shadow-stone-950/5 backdrop-blur md:flex-row md:items-center md:justify-between">
+          <Link
+            className="text-lg font-semibold tracking-tight text-foreground"
+            href={routes.HOME}
+          >
+            {appConfig.name}
+          </Link>
+          <div className="flex flex-wrap gap-2 text-sm font-medium text-muted-foreground">
+            <Link className="rounded-full px-3 py-2 hover:bg-secondary" href="#features">
+              Tính năng
+            </Link>
+            <Link className="rounded-full px-3 py-2 hover:bg-secondary" href="#how-it-works">
+              Cách hoạt động
+            </Link>
+            <Link className="rounded-full px-3 py-2 hover:bg-secondary" href={routes.PRODUCTS}>
+              Khám phá sản phẩm
+            </Link>
+          </div>
+          <Link
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/15 hover:bg-primary/90"
+            href={routes.DASHBOARD}
+          >
+            Bắt đầu theo dõi
+          </Link>
+        </nav>
 
-        <div className="grid gap-10 py-16 md:grid-cols-[1.2fr_0.8fr] md:items-end">
-          <div>
-            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.25em] text-emerald-800">
-              {appConfig.locale}
-            </p>
-            <h1 className="max-w-3xl text-5xl font-semibold leading-tight text-stone-950 md:text-7xl">
-              {appConfig.name}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-700">
-              {appConfig.description} The MVP is in cleanup, validation, and
-              deployment preparation after the core Week 1-6 implementation.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+        <div className="grid gap-8 py-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:py-16">
+          <section className="space-y-8">
+            <div className="inline-flex rounded-full border border-border bg-card/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
+              SkinWise Simple Skincare Bento UI
+            </div>
+            <div className="space-y-5">
+              <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-7xl">
+                Xây dựng routine skincare phù hợp hơn với làn da của bạn.
+              </h1>
+              <p className="max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+                Theo dõi routine hằng ngày, ghi lại thay đổi của da và xem lại
+                sản phẩm với thông tin thành phần dễ hiểu.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Link
-                className="inline-flex min-h-11 items-center justify-center bg-emerald-950 px-5 text-sm font-semibold text-white"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/15 hover:bg-primary/90"
                 href={routes.DASHBOARD}
               >
-                Open dashboard
+                Bắt đầu theo dõi
               </Link>
               <Link
-                className="inline-flex min-h-11 items-center justify-center border border-stone-300 bg-white px-5 text-sm font-semibold text-stone-900"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm shadow-stone-950/5 hover:bg-secondary"
                 href={routes.PRODUCTS}
               >
-                Browse products
+                Khám phá sản phẩm
               </Link>
             </div>
-          </div>
+            <p className="max-w-2xl text-xs leading-6 text-muted-foreground">
+              Thông tin trong SkinWise VN chỉ mang tính giáo dục và không thay
+              thế tư vấn từ bác sĩ da liễu.
+            </p>
+          </section>
 
-          <div className="border border-emerald-900/10 bg-emerald-50 p-6">
-            <h2 className="text-lg font-semibold text-emerald-950">
-              Implemented MVP areas
-            </h2>
-            <ul className="mt-5 space-y-3 text-sm leading-6 text-emerald-950/80">
-              {implementedItems.map((item) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-2 size-2 rounded-full bg-emerald-700" />
-                  <span>{item}</span>
-                </li>
+          <section aria-label="SkinWise preview" className="relative">
+            <div className="absolute inset-0 -rotate-3 rounded-[2.5rem] bg-accent/30 blur-2xl" />
+            <div className="relative grid gap-4 rounded-[2rem] border border-white/70 bg-card/85 p-4 shadow-2xl shadow-stone-950/10 backdrop-blur sm:grid-cols-2 sm:p-6">
+              {previewCards.map(([title, status, action], index) => (
+                <div
+                  className={
+                    index === 0
+                      ? "rounded-3xl border border-border bg-secondary p-5 sm:col-span-2"
+                      : "rounded-3xl border border-border bg-card p-5"
+                  }
+                  key={title}
+                >
+                  <div className="mb-6 size-12 rounded-2xl bg-primary/10" />
+                  <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{status}</p>
+                  <p className="mt-5 text-sm font-semibold text-primary">{action}</p>
+                </div>
               ))}
-            </ul>
-          </div>
+            </div>
+          </section>
         </div>
 
-        <div className="grid gap-4 border-t border-stone-200 pt-6 md:grid-cols-2">
-          <div>
-            <p className="text-sm font-semibold text-stone-900">
-              Current phase
-            </p>
-            <p className="mt-2 text-sm leading-6 text-stone-600">
-              Security cleanup, documentation synchronization, local validation,
-              deployment preparation, and portfolio readiness.
-            </p>
+        <section className="grid gap-4 py-8 md:grid-cols-2 xl:grid-cols-4" id="features">
+          {featureCards.map((feature) => (
+            <article
+              className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-stone-950/5"
+              key={feature.title}
+            >
+              <div className="mb-5 size-11 rounded-2xl bg-secondary" />
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">
+                {feature.title}
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                {feature.description}
+              </p>
+            </article>
+          ))}
+        </section>
+
+        <section
+          className="my-10 rounded-[2rem] border border-border bg-card p-6 shadow-sm shadow-stone-950/5 md:p-8"
+          id="how-it-works"
+        >
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold text-primary">Cách SkinWise hoạt động</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+              Bắt đầu nhẹ nhàng, theo dõi đều đặn.
+            </h2>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-stone-900">
-              Safety boundary
-            </p>
-            <p className="mt-2 text-sm leading-6 text-stone-600">
-              Educational skincare guidance only. No diagnosis, prescriptions,
-              treatment guarantees, skin scoring, or appearance rating.
-            </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              ["01", "Hoàn thiện hồ sơ da", "Thêm loại da, mối quan tâm và mục tiêu chăm sóc."],
+              ["02", "Tạo routine", "Xây dựng routine sáng hoặc tối từ sản phẩm có sẵn hoặc sản phẩm tự nhập."],
+              ["03", "Theo dõi mỗi ngày", "Ghi nhận routine và nhật ký để dễ nhìn lại thói quen theo thời gian."],
+            ].map(([step, title, description]) => (
+              <article className="rounded-3xl bg-secondary p-5" key={step}>
+                <p className="text-sm font-semibold text-primary">{step}</p>
+                <h3 className="mt-4 text-lg font-semibold text-foreground">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {description}
+                </p>
+              </article>
+            ))}
           </div>
-        </div>
+        </section>
+
+        <section className="mb-10 rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-xl shadow-primary/20 md:p-8">
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Sẵn sàng theo dõi routine hôm nay?
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-primary-foreground/85">
+                Vào dashboard để hoàn thiện hồ sơ da, tạo routine và bắt đầu ghi
+                nhận skincare một cách đơn giản.
+              </p>
+            </div>
+            <Link
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-semibold text-primary hover:bg-white/90"
+              href={routes.DASHBOARD}
+            >
+              Bắt đầu theo dõi
+            </Link>
+          </div>
+        </section>
       </section>
     </main>
   );

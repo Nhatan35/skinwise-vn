@@ -1,10 +1,10 @@
 import { IngredientDetail } from "@/modules/ingredients/components/ingredient-detail";
 
-type IngredientDetailPageProps = {
+interface IngredientDetailPageProps {
   params: Promise<{
     id: string;
   }>;
-};
+}
 
 export default async function IngredientDetailPage({
   params,

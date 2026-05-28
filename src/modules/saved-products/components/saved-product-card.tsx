@@ -18,18 +18,18 @@ type SavedProductCardProps = {
 };
 
 const categoryLabels: Record<ProductCategory, string> = {
-  cleanser: "Cleanser",
-  moisturizer: "Moisturizer",
-  sunscreen: "Sunscreen",
+  cleanser: "Sữa rửa mặt",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
   treatment: "Treatment",
   toner: "Toner",
   serum: "Serum",
-  mask: "Mask",
-  other: "Other",
+  mask: "Mặt nạ",
+  other: "Khác",
 };
 
 function formatSavedAt(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(value));
 }
@@ -40,10 +40,10 @@ export function SavedProductCard({ item, onRemoved }: SavedProductCardProps) {
   const hiddenKeyActiveCount = product.keyActives.length - keyActives.length;
 
   return (
-    <Card className="border-stone-200 bg-white" data-testid="saved-product-card">
+    <Card className="h-full" data-testid="saved-product-card">
       <CardHeader>
         <div className="space-y-2">
-          <p className="text-sm font-medium text-emerald-700">
+          <p className="text-sm font-semibold text-primary">
             {product.brand}
           </p>
           <CardTitle className="text-xl">{product.name}</CardTitle>
@@ -58,7 +58,7 @@ export function SavedProductCard({ item, onRemoved }: SavedProductCardProps) {
       <CardContent className="space-y-5">
         {keyActives.length > 0 ? (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-stone-900">
+            <h3 className="text-sm font-semibold text-foreground">
               Key ingredients
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -74,9 +74,18 @@ export function SavedProductCard({ item, onRemoved }: SavedProductCardProps) {
           </div>
         ) : null}
 
-        <div className="flex flex-col gap-2 border-t border-stone-200 pt-4 sm:flex-row">
-          <Button asChild variant="outline">
-            <Link href={`/products/${product.id}`}>View details</Link>
+        {product.warnings.length > 0 ? (
+          <div className="rounded-2xl bg-[#FFF1D6] p-3">
+            <h3 className="text-sm font-semibold text-amber-950">Cần xem lại</h3>
+            <p className="mt-1 text-sm leading-6 text-amber-950/80">
+              {product.warnings[0]}
+            </p>
+          </div>
+        ) : null}
+
+        <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
+          <Button asChild aria-label="View details" variant="outline">
+            <Link href={`/products/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
             initialSaved

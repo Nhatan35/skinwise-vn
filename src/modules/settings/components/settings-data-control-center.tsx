@@ -223,7 +223,7 @@ export function SettingsDataControlCenter() {
 
   return (
     <div className="space-y-6" data-testid="settings-data-control-center">
-      <Card className="border-stone-200 bg-white" data-testid="settings-account-overview">
+      <Card className="border-border bg-card" data-testid="settings-account-overview">
         <CardHeader>
           <CardTitle>Thông tin tài khoản</CardTitle>
           <CardDescription>
@@ -251,7 +251,7 @@ export function SettingsDataControlCenter() {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Quản lý dữ liệu của bạn</CardTitle>
           <CardDescription>
@@ -262,13 +262,13 @@ export function SettingsDataControlCenter() {
         <CardContent className="grid gap-4 md:grid-cols-2">
           {managementCards.map((card) => (
             <article
-              className="flex flex-col justify-between gap-4 rounded-lg border border-stone-200 bg-stone-50 p-4"
+              className="flex flex-col justify-between gap-4 rounded-lg border border-border bg-secondary/50 p-4"
               data-testid={card.testId}
               key={card.title}
             >
               <div>
-                <h3 className="font-semibold text-stone-950">{card.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-stone-600">
+                <h3 className="font-semibold text-foreground">{card.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {card.description}
                 </p>
               </div>
@@ -280,7 +280,7 @@ export function SettingsDataControlCenter() {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Dữ liệu SkinWise VN lưu trữ</CardTitle>
           <CardDescription>
@@ -291,16 +291,16 @@ export function SettingsDataControlCenter() {
         <CardContent className="space-y-3">
           {dataCategories.map((category) => (
             <div
-              className="rounded-lg border border-stone-200 bg-stone-50 p-3"
+              className="rounded-lg border border-border bg-secondary/50 p-3"
               key={category.title}
             >
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="font-medium text-stone-950">{category.title}</h3>
+                <h3 className="font-medium text-foreground">{category.title}</h3>
                 {category.title === "Product and ingredient catalogue" ? (
                   <Badge variant="secondary">Shared app data</Badge>
                 ) : null}
               </div>
-              <p className="mt-1 text-sm leading-6 text-stone-600">
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
                 {category.description}
               </p>
             </div>
@@ -308,7 +308,7 @@ export function SettingsDataControlCenter() {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-border bg-card">
         <CardHeader>
           <CardTitle>Yêu cầu xóa tài khoản</CardTitle>
           <CardDescription>
@@ -326,7 +326,7 @@ export function SettingsDataControlCenter() {
               </AlertDescription>
             </Alert>
           ) : (
-            <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-stone-200 bg-stone-50 p-3 text-sm font-normal text-stone-700">
+            <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-secondary/50 p-3 text-sm font-normal text-muted-foreground">
               <input
                 data-testid="account-deletion-confirm-checkbox"
                 checked={isConfirmed}
@@ -382,11 +382,11 @@ function AccountField({
 }) {
   return (
     <div
-      className="rounded-lg border border-stone-200 bg-stone-50 p-3"
+      className="rounded-lg border border-border bg-secondary/50 p-3"
       data-testid={testId}
     >
-      <p className="font-medium text-stone-950">{label}</p>
-      <p className="mt-1 break-words text-stone-600">{value}</p>
+      <p className="font-medium text-foreground">{label}</p>
+      <p className="mt-1 break-words text-muted-foreground">{value}</p>
     </div>
   );
 }

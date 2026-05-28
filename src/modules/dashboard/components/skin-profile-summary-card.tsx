@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { DashboardCard } from "@/modules/dashboard/components/dashboard-card";
 import type { DashboardDto } from "@/modules/dashboard/dashboard.dto";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { routes } from "@/shared/constants/routes";
 
@@ -41,11 +42,15 @@ export function SkinProfileSummaryCard({
 }: SkinProfileSummaryCardProps) {
   if (!skinProfile.exists) {
     return (
-      <DashboardCard testId="dashboard-skin-profile-card" title="Hồ sơ da">
+      <DashboardCard
+        action={<Badge variant="outline">Cần thiết lập</Badge>}
+        testId="dashboard-skin-profile-card"
+        title="Hồ sơ da"
+      >
         <div className="space-y-4">
-          <p className="text-sm leading-6 text-stone-600">
-            Bạn chưa hoàn thiện hồ sơ da. Hãy thêm thông tin nền tảng để các
-            phần routine và phân tích có ngữ cảnh tốt hơn.
+          <p className="text-sm leading-6 text-muted-foreground">
+            Bạn chưa hoàn thiện hồ sơ da. Hãy thêm thông tin nền tảng để routine
+            và phân tích có ngữ cảnh tốt hơn.
           </p>
           <Button asChild size="sm">
             <Link href={routes.SKIN_PROFILE}>Hoàn thiện hồ sơ da</Link>
@@ -56,23 +61,27 @@ export function SkinProfileSummaryCard({
   }
 
   return (
-    <DashboardCard testId="dashboard-skin-profile-card" title="Hồ sơ da">
+    <DashboardCard
+      action={<Badge variant="secondary">Đã thêm</Badge>}
+      testId="dashboard-skin-profile-card"
+      title="Hồ sơ da"
+    >
       <dl className="space-y-3 text-sm">
         <div>
-          <dt className="font-medium text-stone-900">Loại da</dt>
-          <dd className="mt-1 text-stone-600">
+          <dt className="font-semibold text-foreground">Loại da</dt>
+          <dd className="mt-1 text-muted-foreground">
             {skinTypeLabels[skinProfile.skinType]}
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-stone-900">Vấn đề chính</dt>
-          <dd className="mt-1 text-stone-600">
+          <dt className="font-semibold text-foreground">Vấn đề chính</dt>
+          <dd className="mt-1 text-muted-foreground">
             {skinProfile.concerns.map((concern) => concernLabels[concern]).join(", ")}
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-stone-900">Mức độ nhạy cảm</dt>
-          <dd className="mt-1 text-stone-600">
+          <dt className="font-semibold text-foreground">Mức độ nhạy cảm</dt>
+          <dd className="mt-1 text-muted-foreground">
             {sensitivityLabels[skinProfile.sensitivityLevel]}
           </dd>
         </div>
