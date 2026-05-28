@@ -2,6 +2,8 @@
 
 # Test Plan — MVP v1.2.6
 
+Last updated: 2026-05-28
+
 ## 1. Testing strategy
 
 SkinWise VN uses layered tests:
@@ -107,28 +109,55 @@ Use Playwright.
 2. User creates skin profile.
 3. User sees dashboard.
 
-### Flow 2: Routine analysis
+### Flow 2: Routine Builder and Routine Analysis
 
-1. User creates morning routine without sunscreen.
-2. User clicks analyze.
-3. Client calls `POST /api/routines/:id/analyze`.
-4. User sees missing sunscreen warning.
-5. User sees disclaimer.
+1. Authenticated user opens `/routines`.
+2. User creates a deterministic E2E morning routine with one step.
+3. User sees the saved routine and product/custom product in the UI.
+4. User clicks Analyze routine.
+5. Client calls `POST /api/routines/:id/analyze`.
+6. User sees the deterministic/mock analysis result and disclaimer.
+7. The Routine Analysis E2E flow does not emit the duplicate React key warning for repeated `AI recommendation` suggestions.
 
-### Flow 3: RoutineLog
+### Flow 3: Today Routine Checklist and RoutineLog deletion
 
-1. User opens today's routine checklist.
-2. User marks steps as completed/skipped.
-3. User saves log.
-4. Dashboard updates completion rate.
-5. Dashboard recommends today's SkinJournal only after routine logging is handled.
+1. Authenticated user opens `/routine-logs/today`.
+2. User sees today's routine checklist, local date, and timezone context.
+3. User marks a routine completed.
+4. Progress summary and status badge update.
+5. User deletes the routine log through the UI.
+6. Status returns to the not-logged state without affecting other routines.
 
-### Flow 4: Journal
+### Flow 4: Skin Journal
 
-1. User creates journal entry.
-2. User views timeline.
-3. User edits entry.
-4. User deletes entry.
+1. Authenticated user opens `/journal`.
+2. User creates a journal entry.
+3. User views the new entry in the timeline.
+4. User edits observations or notes.
+5. User deletes the entry.
+
+### Flow 5: Settings and Data Control
+
+1. Authenticated user opens `/settings`.
+2. User sees account overview and data management cards.
+3. Data cards link to Skin Profile, Routines, Today Log, Skin Journal, and Saved Products routes.
+4. User confirms and submits an MVP-safe account deletion request marker.
+5. UI shows requested status without hard-deleting the Auth.js account.
+
+### Flow 6: Dashboard summary reflection
+
+1. Authenticated user has or creates a skin profile.
+2. User has a routine and completes today's routine log.
+3. User creates a Skin Journal entry.
+4. User runs routine analysis through the deterministic/mock provider path.
+5. Dashboard shows stable summary cards reflecting user-owned activity.
+
+### Flow 7: Protected route smoke coverage
+
+1. Unauthenticated user requests `/routine-logs/today`.
+2. User is redirected through the existing Auth.js sign-in flow.
+3. Unauthenticated user requests `/settings`.
+4. User is redirected through the existing Auth.js sign-in flow.
 
 ## 5. AI eval tests
 

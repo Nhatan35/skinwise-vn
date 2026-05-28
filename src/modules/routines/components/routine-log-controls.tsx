@@ -204,7 +204,7 @@ export function RoutineLogControls({
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-stone-200 pt-4">
+    <div className="mt-4 space-y-3 border-t border-stone-200 pt-4" data-testid="routine-log-controls">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
           <p className="text-sm font-medium text-stone-950">Nhật ký hôm nay</p>
@@ -220,6 +220,7 @@ export function RoutineLogControls({
 
         <div className="flex flex-wrap gap-2">
           <Button
+            data-testid="routine-log-completed-button"
             disabled={controlsDisabled}
             onClick={saveCompletedLog}
             size="sm"
@@ -229,6 +230,7 @@ export function RoutineLogControls({
             {isSaving ? "Đang lưu..." : "Hoàn thành"}
           </Button>
           <Button
+            data-testid="routine-log-partial-button"
             disabled={controlsDisabled || !canPartiallyComplete}
             onClick={() => {
               setIsPartialOpen((current) => !current);
@@ -243,6 +245,7 @@ export function RoutineLogControls({
             Một phần
           </Button>
           <Button
+            data-testid="routine-log-skipped-button"
             disabled={controlsDisabled}
             onClick={saveSkippedLog}
             size="sm"
@@ -296,6 +299,7 @@ export function RoutineLogControls({
 
           <div className="flex flex-wrap items-center gap-2">
             <Button
+              data-testid="routine-log-save-partial-button"
               disabled={controlsDisabled}
               onClick={savePartialLog}
               size="sm"

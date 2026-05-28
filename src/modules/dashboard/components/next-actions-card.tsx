@@ -16,7 +16,7 @@ type NextActionsCardProps = {
 
 export function NextActionsCard({ nextActions }: NextActionsCardProps) {
   return (
-    <DashboardCard title="Gợi ý tiếp theo">
+    <DashboardCard testId="dashboard-next-actions-card" title="Gợi ý tiếp theo">
       <ul className="space-y-3">
         {nextActions.map((action) => (
           <li

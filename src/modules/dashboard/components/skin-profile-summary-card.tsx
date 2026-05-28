@@ -41,7 +41,7 @@ export function SkinProfileSummaryCard({
 }: SkinProfileSummaryCardProps) {
   if (!skinProfile.exists) {
     return (
-      <DashboardCard title="Hồ sơ da">
+      <DashboardCard testId="dashboard-skin-profile-card" title="Hồ sơ da">
         <div className="space-y-4">
           <p className="text-sm leading-6 text-stone-600">
             Bạn chưa hoàn thiện hồ sơ da. Hãy thêm thông tin nền tảng để các
@@ -56,7 +56,7 @@ export function SkinProfileSummaryCard({
   }
 
   return (
-    <DashboardCard title="Hồ sơ da">
+    <DashboardCard testId="dashboard-skin-profile-card" title="Hồ sơ da">
       <dl className="space-y-3 text-sm">
         <div>
           <dt className="font-medium text-stone-900">Loại da</dt>

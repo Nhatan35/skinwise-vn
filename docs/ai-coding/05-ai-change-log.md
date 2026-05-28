@@ -4,6 +4,53 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-28 - MVP-E2E-CLOSEOUT-001 MVP core journey E2E closeout and Routine Analysis duplicate-key polish
+
+### Task
+
+Close out the completed MVP core journey E2E validation record and fix the remaining Routine Analysis duplicate React key warning without adding product feature scope.
+
+### Changes
+
+- Updated documentation to record `MVP-CORE-JOURNEY-E2E-001` as completed in source/docs.
+- Recorded `MVP-CORE-JOURNEY-E2E-VALIDATION-001` as completed using the latest local validation evidence: typecheck PASS, lint PASS, unit tests PASS with 72 files and 717 tests, build PASS, database indexes PASS with 32 indexes ensured after `.env.local` was available locally, E2E seed PASS, and Playwright E2E PASS with 24 tests.
+- Fixed the Routine Analysis suggestion render key in `routine-analysis-panel.tsx` so repeated AI-provider suggestion titles such as `AI recommendation` no longer produce duplicate React keys.
+- Added a targeted Routine Analysis Playwright console-warning guard for the specific duplicate key warning.
+- Kept the fix in the UI render layer; Routine Analysis API response shape, AI provider mapper output, user-facing suggestion copy, authentication, and E2E coverage were not weakened.
+
+### Validation note
+
+This changelog records the latest local validation evidence provided for the completed MVP core journey E2E suite. This workspace could not rerun full validation because it does not provide the target Node 24/npm 11 runtime, installed dependencies, or local MongoDB. Do not claim this closeout patch is fully completed until the validation commands are rerun in the target local/test environment.
+
+### Boundaries
+
+- No new product feature scope was added.
+- No production data was touched.
+- No real Google OAuth E2E or external AI provider E2E validation is claimed.
+- No `.env.local` values or secret values are documented.
+
+## 2026-05-28 - MVP-CORE-JOURNEY-E2E-001 Core MVP journey E2E coverage
+
+### Task
+
+Add stable authenticated Playwright E2E coverage for the complete SkinWise VN MVP core user journey without adding product features or weakening authentication.
+
+### Changes
+
+- Added authenticated Playwright E2E specs for Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Settings/Data Control, account deletion request, and dashboard summary reflection.
+- Extended protected route smoke coverage for `/routine-logs/today` and `/settings`.
+- Added deterministic E2E-user-owned data reset logic to the existing `db:seed:e2e` path with strict local/test database guards.
+- Added stable `data-testid` selectors only where role/name/text selectors would be fragile for repeated Playwright interactions.
+- Updated implementation status, feature matrix, sprint plan, test plan, and README validation notes.
+
+### Boundaries
+
+- No new product feature scope was added.
+- No real OpenAI/Gemini integration was added.
+- No production MongoDB or real Google OAuth path is used by E2E.
+- No public reset API route, hard-delete account flow, export, bulk delete, or GDPR/legal compliance claim was added.
+- Final pass/fail status must be based only on commands actually run in the target runtime and local MongoDB environment.
+
 ## 2026-05-27 - MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout
 
 ### Task

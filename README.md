@@ -34,7 +34,7 @@ Current phase: post Week 6 Feature Roadmap v1.2 implementation and validation.
 
 Latest runtime/config task: `RUNTIME-001 - Standardize project runtime on Node 24 and npm 11` locally validated for the current feature scope.
 
-Latest quality task: `QUALITY-002A - Add authenticated Playwright E2E foundation for Skin Profile, Product Catalogue, and Product Detail flows`.
+Latest quality task: `MVP-E2E-CLOSEOUT-001 - Close out MVP core journey E2E validation and fix Routine Analysis duplicate React key warning` records the completed local MVP core journey E2E validation evidence and fixes the Routine Analysis duplicate suggestion key in the UI render layer. Authenticated Playwright E2E coverage for the full MVP core journey has passed locally against the safe local E2E MongoDB database; production verification remains separate.
 
 Latest MVP source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
 
@@ -55,7 +55,8 @@ Completed scope:
 - Vercel MVP demo deployment and production smoke test.
 - Clean package validation stabilization.
 - Unauthenticated Playwright smoke tests for landing page and protected route redirects.
-- Test-only authenticated Playwright smoke foundation for dashboard, Skin Profile, Product Catalogue, Product Detail, and Ingredient Library access.
+- Test-only authenticated Playwright coverage for dashboard, Skin Profile, Product Catalogue, Product Detail, Saved Products, Ingredient Library, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion, Skin Journal, Settings/Data Control, account deletion request, and dashboard summary reflection.
+- Routine Analysis duplicate React key warning fixed for repeated AI recommendation suggestion titles.
 - Professional demo data preparation.
 - Portfolio case study, demo script, screenshots checklist, release checklist, and release notes.
 
@@ -215,9 +216,9 @@ npm audit --omit=dev --audit-level=moderate
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
-`npm run test:e2e` runs Playwright smoke tests against a local/CI dev server with safe placeholder environment values. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider.
+`npm run test:e2e` runs Playwright smoke tests against a local/CI dev server with safe placeholder environment values. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Settings/Data Control, account deletion request, and Dashboard summary reflection through a test-only Auth.js Credentials provider. The Routine Analysis flow includes a targeted guard for the duplicate React key warning involving repeated `AI recommendation` suggestions.
 
-Authenticated Playwright smoke tests use a test-only Auth.js Credentials provider. It is enabled only when `APP_ENV="test"` and `E2E_TEST_AUTH="true"`, and must never be enabled in production or normal development. The authenticated smoke suite uses the safe local/test MongoDB URI configured in `playwright.config.ts` and seeds deterministic product and ingredient data, including Niacinamide, through `npm run db:seed:e2e`; a local MongoDB instance must be available at `mongodb://127.0.0.1:27017/skinwise-e2e-check`.
+Authenticated Playwright smoke tests use a test-only Auth.js Credentials provider. It is enabled only when `APP_ENV="test"` and `E2E_TEST_AUTH="true"`, and must never be enabled in production or normal development. The authenticated smoke suite uses the safe local/test MongoDB URI configured in `playwright.config.ts` and seeds deterministic product and ingredient data, including Niacinamide, and resets deterministic E2E-user-owned data through `npm run db:seed:e2e`; a local MongoDB instance must be available at `mongodb://127.0.0.1:27017/skinwise-e2e-check`.
 
 ## Environment Variables
 
@@ -276,7 +277,7 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 - Skin score and attractiveness scoring are not implemented.
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
-- E2E coverage is smoke-level only: public landing page loading, unauthenticated protected-route redirect checks, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, and Ingredient Library search/detail/explanation through a test-only Auth.js Credentials provider are covered. Real Google OAuth login is not tested in CI.
+- Playwright E2E uses a test-only Auth.js Credentials provider for local/CI coverage; real Google OAuth login is not tested by the Playwright suite and production verification remains separate.
 - SkinWise VN provides educational skincare support only, not medical diagnosis or treatment advice.
 
 ## Future Roadmap
@@ -284,7 +285,6 @@ OpenAI and Gemini provider names are recognized by configuration, but real provi
 Future ideas, not implemented in the current MVP:
 
 - Capture final screenshots for the portfolio.
-- Expand authenticated E2E coverage to routines, routine analysis/logs, journal flows, and deeper dashboard summaries.
 - Improve dashboard analytics.
 - Improve saved product organization.
 - Add admin product management.

@@ -29,7 +29,7 @@ const stressLevelLabels = {
 export function LatestJournalCard({ latestJournal }: LatestJournalCardProps) {
   if (!latestJournal.exists) {
     return (
-      <DashboardCard title="Latest Journal Entry">
+      <DashboardCard testId="dashboard-latest-journal-card" title="Latest Journal Entry">
         <div className="space-y-4">
           <p className="text-sm leading-6 text-stone-600">
             No skin journal entries yet. Add a short, private note for today to
@@ -46,6 +46,7 @@ export function LatestJournalCard({ latestJournal }: LatestJournalCardProps) {
   return (
     <DashboardCard
       action={<Badge variant="secondary">{latestJournal.localDate}</Badge>}
+      testId="dashboard-latest-journal-card"
       title="Latest Journal Entry"
     >
       <div className="space-y-4">

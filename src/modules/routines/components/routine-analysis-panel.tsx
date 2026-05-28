@@ -52,7 +52,7 @@ function RoutineAnalysisResult({
   title: string;
 }) {
   return (
-    <div className="space-y-4 border border-stone-200 bg-white p-4">
+    <div className="space-y-4 border border-stone-200 bg-white p-4" data-testid="routine-analysis-result">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h4 className="font-semibold text-stone-950">{title}</h4>
@@ -76,10 +76,11 @@ function RoutineAnalysisResult({
         </h5>
         {analysis.warnings.length > 0 ? (
           <ul className="space-y-2">
-            {analysis.warnings.map((warning) => (
+            {analysis.warnings.map((warning, index) => (
               <li
                 className="border border-stone-200 bg-stone-50 p-3"
-                key={`${analysis.analysisId}-${warning.code}`}
+                data-testid="routine-analysis-warning"
+                key={`${analysis.analysisId}-warning-${index}-${warning.code}`}
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline">{warning.code}</Badge>
@@ -107,10 +108,11 @@ function RoutineAnalysisResult({
         </h5>
         {analysis.suggestions.length > 0 ? (
           <ul className="space-y-2">
-            {analysis.suggestions.map((suggestion) => (
+            {analysis.suggestions.map((suggestion, index) => (
               <li
                 className="border border-stone-200 bg-stone-50 p-3"
-                key={`${analysis.analysisId}-${suggestion.title}`}
+                data-testid="routine-analysis-suggestion"
+                key={`${analysis.analysisId}-suggestion-${index}-${suggestion.title}`}
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="text-sm font-medium text-stone-950">
@@ -171,7 +173,12 @@ export function RoutineAnalysisPanel({
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Button disabled={isAnalyzing} onClick={onAnalyze} type="button">
+          <Button
+            data-testid="routine-analyze-button"
+            disabled={isAnalyzing}
+            onClick={onAnalyze}
+            type="button"
+          >
             {isAnalyzing
               ? "Đang kiểm tra..."
               : "Phân tích routine"}

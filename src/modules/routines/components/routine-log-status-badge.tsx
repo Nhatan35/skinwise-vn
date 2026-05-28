@@ -7,14 +7,20 @@ import { Badge } from "@/shared/components/ui/badge";
 type RoutineLogStatusBadgeProps = {
   hasLog: boolean;
   status?: RoutineLogStatus;
+  testId?: string;
 };
 
 export function RoutineLogStatusBadge({
   hasLog,
   status,
+  testId,
 }: RoutineLogStatusBadgeProps) {
   const label = hasLog ? getRoutineLogStatusLabel(status) : "Chưa ghi nhận";
   const variant = !hasLog || status === "partial" ? "outline" : "secondary";
 
-  return <Badge variant={variant}>{label}</Badge>;
+  return (
+    <Badge data-testid={testId} variant={variant}>
+      {label}
+    </Badge>
+  );
 }

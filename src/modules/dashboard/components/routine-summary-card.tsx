@@ -11,7 +11,7 @@ type RoutineSummaryCardProps = {
 
 export function RoutineSummaryCard({ routines }: RoutineSummaryCardProps) {
   return (
-    <DashboardCard title="Routine của bạn">
+    <DashboardCard testId="dashboard-routine-summary-card" title="Routine của bạn">
       <div className="space-y-4">
         {!routines.hasAnyRoutine ? (
           <p className="text-sm leading-6 text-stone-600">

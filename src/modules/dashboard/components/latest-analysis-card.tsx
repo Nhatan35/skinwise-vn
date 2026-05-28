@@ -21,7 +21,10 @@ export function LatestAnalysisCard({
 }: LatestAnalysisCardProps) {
   if (!latestAnalysis.exists) {
     return (
-      <DashboardCard title="Phân tích an toàn gần nhất">
+      <DashboardCard
+        testId="dashboard-latest-analysis-card"
+        title="Phân tích an toàn gần nhất"
+      >
         <div className="space-y-4">
           <p className="text-sm leading-6 text-stone-600">
             Bạn chưa phân tích routine nào. Hãy mở trang routine để chạy phân
@@ -38,6 +41,7 @@ export function LatestAnalysisCard({
   return (
     <DashboardCard
       action={<Badge variant="outline">{riskLabels[latestAnalysis.riskLevel]}</Badge>}
+      testId="dashboard-latest-analysis-card"
       title="Phân tích an toàn gần nhất"
     >
       <dl className="space-y-3 text-sm">

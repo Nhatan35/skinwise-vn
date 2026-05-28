@@ -94,4 +94,20 @@ test.describe("SkinWise VN smoke", () => {
 
     await expectSignInRedirect(page, "/skin-profile");
   });
+
+  test("protected today routine log route redirects unauthenticated users", async ({
+    page,
+  }) => {
+    await page.goto("/routine-logs/today");
+
+    await expectSignInRedirect(page, "/routine-logs/today");
+  });
+
+  test("protected settings route redirects unauthenticated users", async ({
+    page,
+  }) => {
+    await page.goto("/settings");
+
+    await expectSignInRedirect(page, "/settings");
+  });
 });

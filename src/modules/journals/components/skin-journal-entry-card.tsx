@@ -74,7 +74,7 @@ export function SkinJournalEntryCard({
   );
 
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-stone-200 bg-white" data-testid="skin-journal-entry-card">
       <CardHeader>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -87,11 +87,17 @@ export function SkinJournalEntryCard({
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Button onClick={() => onEdit(entry)} type="button" variant="outline">
+            <Button
+              data-testid="skin-journal-edit-button"
+              onClick={() => onEdit(entry)}
+              type="button"
+              variant="outline"
+            >
               <Pencil aria-hidden="true" />
               Edit
             </Button>
             <Button
+              data-testid="skin-journal-delete-button"
               disabled={isDeleting}
               onClick={() => onDelete(entry)}
               type="button"

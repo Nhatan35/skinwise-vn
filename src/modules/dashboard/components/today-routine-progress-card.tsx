@@ -16,6 +16,7 @@ export function TodayRoutineProgressCard({
   return (
     <DashboardCard
       action={<Badge variant="secondary">{progress.completionRate}%</Badge>}
+      testId="dashboard-routine-progress-card"
       title="Tiến độ hôm nay"
     >
       <div className="space-y-4">

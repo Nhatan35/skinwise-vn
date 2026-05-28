@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-05-25
+Last updated: 2026-05-28
 
 ## 1. Release Scope
 
@@ -41,9 +41,9 @@ This release is an MVP portfolio/demo release, not a full commercial production 
 |---|---|---|
 | `npm run lint` | Pass | ESLint completed successfully. |
 | `npm run typecheck` | Pass | `tsc --noEmit` completed successfully. |
-| `npm run test` | Pass | Vitest passed 60 test files and 603 tests. |
+| `npm run test` | Pass | Latest recorded local validation passed 72 test files and 717 tests. |
 | `npm run build` | Pass | Production build passed with temporary non-secret placeholder environment values required by env validation. |
-| `npm run test:e2e` | Pass | Unauthenticated Playwright smoke tests passed for the public landing page and protected-route redirects. |
+| `npm run test:e2e` | Pass | Latest recorded local validation passed 24 Playwright tests covering public smoke, authenticated dashboard, profile, products, saved products, ingredients, routines, routine analysis, today routine logs, skin journal, settings/data control, account deletion request, and dashboard reflection. |
 | `npm audit --omit=dev --audit-level=moderate` | Pass | Reported 0 vulnerabilities. |
 
 ## 5. Demo Readiness
@@ -79,7 +79,7 @@ Allowed decisions:
 - Ready with minor notes.
 - Not ready.
 
-Reason: documentation is complete, lint/typecheck/unit tests/build/E2E smoke tests passed, production audit passed, and clean package hygiene checks are safe. Screenshots remain optional manual portfolio polish. Authenticated E2E coverage remains future work.
+Reason: documentation is complete, lint/typecheck/unit tests/build/E2E validation evidence has been recorded, production audit passed historically, and clean package hygiene checks are safe. Screenshots remain optional manual portfolio polish. Production re-verification remains separate from local E2E validation.
 
 ## 8. Optional Next Tasks
 
@@ -87,4 +87,3 @@ These are optional and not required for MVP completion:
 
 - `OPTIONAL-SCREENSHOTS-001 - Capture and add final screenshots`.
 - `OPTIONAL-PORTFOLIO-WEBSITE-001 - Publish case study on personal portfolio site`.
-- Authenticated E2E coverage when a safe test-login mechanism exists.

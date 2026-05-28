@@ -1,4 +1,5 @@
 export const E2E_BASE_URL = "http://127.0.0.1:3000";
+export const E2E_USER_ID = "e2e-user";
 export const E2E_MONGODB_URI =
   "mongodb://127.0.0.1:27017/skinwise-e2e-check";
 export const E2E_USER_EMAIL = "e2e-user@skinwise.test";

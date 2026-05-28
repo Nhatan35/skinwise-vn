@@ -1017,7 +1017,7 @@ export function RoutineBuilder() {
       {routines.length === 0 && formMode === "none" ? (
         <EmptyState
           action={
-            <Button onClick={startCreate} type="button">
+            <Button data-testid="routine-create-button" onClick={startCreate} type="button">
               <Plus aria-hidden="true" />
               Tạo routine
             </Button>
@@ -1100,7 +1100,7 @@ function RoutineForm({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6" onSubmit={onSubmit}>
+        <form className="space-y-6" data-testid="routine-form" onSubmit={onSubmit}>
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="routine-name">Tên routine</Label>
@@ -1109,6 +1109,7 @@ function RoutineForm({
                   fieldErrors.name ? "routine-name-error" : undefined
                 }
                 aria-invalid={fieldErrors.name ? true : undefined}
+                data-testid="routine-name-input"
                 id="routine-name"
                 onChange={(event) =>
                   onRoutineFieldChange("name", event.target.value)
@@ -1151,6 +1152,7 @@ function RoutineForm({
                 </p>
               </div>
               <Button
+                data-testid="routine-add-step-button"
                 disabled={formState.steps.length >= 15}
                 onClick={onAddStep}
                 type="button"
@@ -1172,6 +1174,7 @@ function RoutineForm({
               {formState.steps.map((step, index) => (
                 <div
                   className="border border-stone-200 bg-stone-50 p-4"
+                  data-testid="routine-step-form"
                   key={`routine-step-${index}`}
                 >
                   <div className="mb-4 flex items-start justify-between gap-3">
@@ -1220,6 +1223,7 @@ function RoutineForm({
                               ? "border-red-400"
                               : "",
                           )}
+                          data-testid="routine-step-product-select"
                           id={`step-product-${index}`}
                         >
                           <SelectValue />
@@ -1273,6 +1277,7 @@ function RoutineForm({
                             ? true
                             : undefined
                         }
+                        data-testid="routine-step-product-input"
                         disabled={Boolean(step.productId)}
                         id={`step-name-${index}`}
                         onChange={(event) =>
@@ -1353,6 +1358,7 @@ function RoutineForm({
                           ? true
                           : undefined
                       }
+                      data-testid="routine-step-instructions-input"
                       id={`step-instructions-${index}`}
                       onChange={(event) =>
                         onStepFieldChange(
@@ -1394,7 +1400,7 @@ function RoutineForm({
                 <X aria-hidden="true" />
                 Hủy
               </Button>
-              <Button disabled={isSaving} type="submit">
+              <Button data-testid="routine-save-button" disabled={isSaving} type="submit">
                 <Save aria-hidden="true" />
                 {isSaving ? "Đang lưu..." : "Lưu routine"}
               </Button>
@@ -1458,7 +1464,7 @@ function RoutineList({
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle>Danh sách routines</CardTitle>
-          <Button onClick={onCreate} type="button">
+          <Button data-testid="routine-create-button" onClick={onCreate} type="button">
             <Plus aria-hidden="true" />
             Tạo routine
           </Button>
@@ -1481,6 +1487,7 @@ function RoutineList({
         {routines.map((routine) => (
           <div
             className="border border-stone-200 bg-stone-50 p-4"
+            data-testid="routine-card"
             key={routine.id}
           >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -1495,6 +1502,7 @@ function RoutineList({
                   <RoutineLogStatusBadge
                     hasLog={Boolean(routineLogsByRoutineId[routine.id])}
                     status={routineLogsByRoutineId[routine.id]?.status}
+                    testId="routine-log-status-badge"
                   />
                 </div>
                 <p className="mt-2 text-sm text-stone-600">
@@ -1504,6 +1512,7 @@ function RoutineList({
 
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button
+                  data-testid="routine-edit-button"
                   onClick={() => onEdit(routine)}
                   type="button"
                   variant="outline"
@@ -1512,6 +1521,7 @@ function RoutineList({
                   Sửa
                 </Button>
                 <Button
+                  data-testid="routine-delete-button"
                   disabled={deletingRoutineId !== null}
                   onClick={() => onDelete(routine)}
                   type="button"
@@ -1617,6 +1627,7 @@ function SelectField({
       <Label htmlFor={id}>{label}</Label>
       <Select onValueChange={onValueChange} value={value}>
         <SelectTrigger
+          data-testid={`${id}-select`}
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? true : undefined}
           className={cn("w-full", error ? "border-red-400" : "")}
@@ -1626,7 +1637,11 @@ function SelectField({
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              data-testid={`${id}-option-${option.value}`}
+              key={option.value}
+              value={option.value}
+            >
               {option.label}
             </SelectItem>
           ))}

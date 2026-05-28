@@ -1,6 +1,6 @@
 # Current Sprint Plan - SkinWise VN MVP v1.2.6
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ## 1. Current phase
 
@@ -15,13 +15,14 @@ The main Week 1-6 MVP implementation is completed. Feature Roadmap v1.1 added th
 Current task:
 
 ```txt
-MVP-DATA-CONTROL-CLOSEOUT-001 - Settings/Data Control closeout
+MVP-CORE-JOURNEY-E2E-001 - Authenticated Playwright E2E coverage for the complete MVP core user journey
 ```
 
 Status:
 
 ```txt
-MVP-DATA-CONTROL-CLOSEOUT-001: COMPLETED IN SOURCE/DOCS; LOCAL VALIDATION RECORDED BY THIS TASK.
+MVP-CORE-JOURNEY-E2E-001: IMPLEMENTED IN SOURCE/DOCS; FINAL COMPLETION REQUIRES TARGET-RUNTIME VALIDATION WITH DEPENDENCIES AND LOCAL MONGODB.
+MVP-DATA-CONTROL-CLOSEOUT-001: COMPLETED IN SOURCE/DOCS; LOCAL VALIDATION RECORDED BY THAT TASK.
 MVP-DATA-CONTROL-001: COMPLETED IN SOURCE.
 Settings route: /settings.
 Settings UI: account overview, data management navigation, and MVP-safe account deletion request.
@@ -48,7 +49,8 @@ Previously documented MongoDB production/demo read/write through authenticated f
 Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED historically.
 Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, and sign-out: NOT VERIFIED without external access.
 QUALITY-001: COMPLETED.
-QUALITY-002A: IMPLEMENTED; FULL E2E VERIFICATION REQUIRES LOCAL MONGODB.
+QUALITY-002A: IMPLEMENTED.
+MVP-CORE-JOURNEY-E2E-001: adds authenticated Playwright specs for Routine Builder, Routine Analysis, Today Checklist, Routine Log delete, Skin Journal, Settings/Data Control, account deletion request, Dashboard reflection, plus `/routine-logs/today` and `/settings` protected route smoke coverage. FULL E2E VERIFICATION REQUIRES LOCAL MONGODB.
 RUNTIME-001: CONFIG/DOCS UPDATED; project target runtime remains Node 24.x / npm 11.x.
 This sandbox validation used Node v22.16.0 / npm 10.9.2 because Node 24/npm 11 was not available in the container.
 ```
@@ -68,7 +70,7 @@ Config/docs updated. Historical runtime validation under Node v24.14.0 / npm 11.
 ## 4. Latest quality task
 
 ```txt
-SAVED-PRODUCTS-001 - Implement authenticated Saved Products
+MVP-CORE-JOURNEY-E2E-001 - Complete authenticated MVP core journey E2E coverage
 ```
 
 ## 5. Completed MVP implementation status
@@ -85,6 +87,7 @@ Feature Roadmap v1.2 Saved Products completed in source
 MVP-TODAY-LOG-001 dedicated Today Routine Checklist completed in source
 MVP-DATA-CONTROL-001 Settings and Privacy Data Control Center completed in source
 MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout completed in source/docs
+MVP-CORE-JOURNEY-E2E-001 core journey E2E coverage implemented in source/docs; final completion depends on validation commands passing
 ```
 
 ## 6. Deployment preparation goals
@@ -138,6 +141,13 @@ MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout completed in source
 [x] Add user-scoped `DELETE /api/routine-logs/:id`.
 [x] Add direct RoutineLog DELETE API contract coverage.
 [x] Clean stale Settings/Data Control and RoutineLog docs.
+[x] Add deterministic E2E-user-owned data reset in the safe local/test seed path.
+[x] Add authenticated Routine Builder and Routine Analysis Playwright coverage.
+[x] Add authenticated Today Routine Checklist and Routine Log delete Playwright coverage.
+[x] Add authenticated Skin Journal create/edit/delete Playwright coverage.
+[x] Add authenticated Settings/Data Control and account deletion request Playwright coverage.
+[x] Add authenticated Dashboard reflection Playwright coverage.
+[x] Add protected route smoke coverage for `/routine-logs/today` and `/settings`.
 [x] Run historical DEPLOY-VERIFY-001 local validation with Node 20.
 [ ] Run full local validation with Node v24.14.0 / npm 11.14.1 including E2E with local MongoDB available.
 [ ] Run CI validation with Node 24.x.
@@ -169,7 +179,7 @@ No real AI provider completion claim without implementation and verification.
 
 ## 8. Validation scope
 
-Run available scripts from `package.json` where safe. For MVP-DATA-CONTROL-CLOSEOUT-001, run:
+Run available scripts from `package.json` where safe. For MVP-CORE-JOURNEY-E2E-001, run:
 
 ```txt
 npm run lint
@@ -182,18 +192,26 @@ npm run test:e2e, only when local MongoDB is available
 
 Database commands must only run against a known local/test database. Do not seed production data.
 
-Latest MVP-DATA-CONTROL-CLOSEOUT-001 local validation:
+Latest MVP-CORE-JOURNEY-E2E-001 validation status:
 
 ```txt
 Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
 Project target runtime remains Node 24.x / npm 11.x per package.json.
 
-npm run lint: Pass
-npm run typecheck: Pass
-npm run test: Pass - 72 files, 717 tests
-npm run build: Pass with safe local placeholder env values
-npm run db:seed:e2e: not run because local MongoDB was not available on 127.0.0.1:27017
-npm run test:e2e: not run because local MongoDB was not available on 127.0.0.1:27017
+Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
+Project target runtime remains Node 24.x / npm 11.x per package.json.
+
+node -v: Pass, reported v22.16.0
+npm -v: Pass, reported 10.9.2
+npm run lint: Failed because local dependencies are not installed; `eslint` was not found.
+npm run typecheck: Failed because dependencies/types are not installed; TypeScript could not resolve Next.js, Playwright, React JSX runtime, Vitest, MongoDB, Zod, and Node types.
+npm run test: Failed because local dependencies are not installed; `vitest` was not found.
+npm run build: Failed because local dependencies are not installed; `next` was not found.
+npm run db:indexes: Failed because `.env.local` is not present in this sandbox.
+npm run db:seed:e2e: Failed because local dependencies are not installed; package `tsx` was not found.
+npm run test:e2e: Failed because local Playwright dependencies are not installed.
+
+MVP-CORE-JOURNEY-E2E-001 must not be marked complete until these commands are rerun and pass in the target Node 24/npm 11 environment with dependencies installed and local MongoDB available.
 ```
 
 ## 8. Recommended next task

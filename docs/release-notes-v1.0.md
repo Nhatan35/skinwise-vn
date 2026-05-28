@@ -2,7 +2,7 @@
 
 Release date: 2026-05-24
 
-Latest QA cleanup update: 2026-05-25
+Latest QA cleanup update: 2026-05-28
 
 ## 1. Release Scope
 
@@ -36,7 +36,7 @@ This is an MVP demo/portfolio release, not a full commercial production release.
 - QA regression fix for LF/CRLF-safe clean package validation.
 - Root `.gitattributes` line-ending normalization.
 - Production dependency audit cleanup.
-- Unauthenticated Playwright smoke test coverage.
+- Unauthenticated and authenticated Playwright coverage for the MVP core journey.
 - Demo data preparation.
 - Portfolio case study.
 - Presentation-ready demo script.
@@ -60,15 +60,17 @@ Production secrets are configured outside the repository in Vercel Project Setti
 
 ## 5. Validation Summary
 
-Current validation after `E2E-001` cleanup:
+Latest recorded local validation after MVP core journey E2E validation:
 
 | Command | Result | Notes |
 |---|---|---|
 | `npm run lint` | Pass | ESLint completed successfully. |
 | `npm run typecheck` | Pass | `tsc --noEmit` completed successfully. |
-| `npm run test` | Pass | Vitest passed 60 test files and 603 tests. |
-| `npm run build` | Pass | Production build passed with temporary non-secret placeholder environment values required by env validation. |
-| `npm run test:e2e` | Pass | Playwright smoke tests cover the public landing page and unauthenticated protected-route redirects. |
+| `npm run test` | Pass | Vitest passed 72 test files and 717 tests. |
+| `npm run build` | Pass | Production build passed. |
+| `npm run db:indexes` | Pass | 32 indexes ensured after `.env.local` was available locally; no secret values are documented. |
+| `npm run db:seed:e2e` | Pass | Safe local/test E2E seed completed. |
+| `npm run test:e2e` | Pass | 24 Playwright tests passed for public smoke plus authenticated MVP core journey coverage. |
 | `npm audit --omit=dev --audit-level=moderate` | Pass | Reported 0 vulnerabilities. |
 
 ## 6. Known Limitations
@@ -84,7 +86,7 @@ Current validation after `E2E-001` cleanup:
 - Marketplace, payment, subscription, and notifications are not implemented.
 - Barcode scanner is not implemented.
 - Product catalogue data is demo/seed-style data.
-- E2E coverage is smoke-level only; authenticated E2E flows and real Google OAuth login are not tested in CI.
+- Playwright E2E uses the safe test-only Auth.js Credentials provider for local/CI coverage; real Google OAuth login and production verification remain separate.
 - Screenshots are not included unless captured separately through an optional screenshot task.
 
 ## 7. Next Possible Improvements
@@ -92,7 +94,6 @@ Current validation after `E2E-001` cleanup:
 Future work, not implemented in this release:
 
 - `OPTIONAL-SCREENSHOTS-001 - Capture and add final screenshots`.
-- Add authenticated E2E coverage when a safe test-login mechanism exists.
 - `OPTIONAL-PORTFOLIO-WEBSITE-001 - Publish case study on personal portfolio site`.
 - Saved products.
 - Admin product management.

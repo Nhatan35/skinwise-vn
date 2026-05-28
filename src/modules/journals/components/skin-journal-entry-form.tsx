@@ -213,7 +213,7 @@ export function SkinJournalEntryForm({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" data-testid="skin-journal-form" onSubmit={handleSubmit}>
           {formError ? (
             <Alert variant="destructive">
               <AlertTitle>Journal entry was not saved</AlertTitle>
@@ -232,6 +232,7 @@ export function SkinJournalEntryForm({
                       : undefined
                   }
                   aria-invalid={fieldErrors.localDate ? true : undefined}
+                  data-testid="skin-journal-local-date-input"
                   id="skin-journal-local-date"
                   onChange={(event) =>
                     updateField("localDate", event.target.value)
@@ -275,6 +276,7 @@ export function SkinJournalEntryForm({
           <TextareaField
             description="Use one observation per line or separate items with commas."
             error={fieldErrors.observationsText}
+            dataTestId="skin-journal-observations-input"
             id="skin-journal-observations"
             label="Observations"
             onChange={(value) => updateField("observationsText", value)}
@@ -392,6 +394,7 @@ export function SkinJournalEntryForm({
 
           <TextareaField
             error={fieldErrors.notes}
+            dataTestId="skin-journal-notes-input"
             id="skin-journal-notes"
             label="Notes"
             maxLength={3000}
@@ -415,7 +418,7 @@ export function SkinJournalEntryForm({
                 <X aria-hidden="true" />
                 Cancel
               </Button>
-              <Button disabled={isSaving} type="submit">
+              <Button data-testid="skin-journal-save-button" disabled={isSaving} type="submit">
                 <Save aria-hidden="true" />
                 {isSaving ? "Saving..." : "Save entry"}
               </Button>
@@ -605,6 +608,7 @@ function TextField({
 }
 
 type TextareaFieldProps = {
+  dataTestId?: string;
   description?: string;
   error?: string;
   id: string;
@@ -616,6 +620,7 @@ type TextareaFieldProps = {
 };
 
 function TextareaField({
+  dataTestId,
   description,
   error,
   id,
@@ -634,6 +639,7 @@ function TextareaField({
         aria-describedby={error ? errorId : undefined}
         aria-invalid={error ? true : undefined}
         className={cn(error ? "border-red-400" : "")}
+        data-testid={dataTestId}
         id={id}
         maxLength={maxLength}
         onChange={(event) => onChange(event.target.value)}

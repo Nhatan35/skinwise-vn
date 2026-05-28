@@ -27,6 +27,7 @@ import { routes } from "@/shared/constants/routes";
 
 const managementCards = [
   {
+    testId: "settings-data-card-skin-profile",
     title: "Skin Profile",
     description:
       "Quản lý loại da, mối quan tâm về da, mức nhạy cảm và các thành phần muốn tránh.",
@@ -34,6 +35,7 @@ const managementCards = [
     href: routes.SKIN_PROFILE,
   },
   {
+    testId: "settings-data-card-routines",
     title: "Routines",
     description:
       "Quản lý morning/evening routine, sản phẩm và các bước chăm sóc da.",
@@ -41,6 +43,7 @@ const managementCards = [
     href: routes.ROUTINES,
   },
   {
+    testId: "settings-data-card-today-log",
     title: "Today Routine Logs",
     description:
       "Ghi nhận routine hôm nay, kiểm tra trạng thái routine logs và xóa ghi nhận hôm nay nếu cần.",
@@ -48,6 +51,7 @@ const managementCards = [
     href: routes.TODAY_LOG,
   },
   {
+    testId: "settings-data-card-journal",
     title: "Skin Journal",
     description:
       "Quản lý nhật ký da, quan sát hằng ngày, triệu chứng và ghi chú cá nhân.",
@@ -55,6 +59,7 @@ const managementCards = [
     href: routes.JOURNAL,
   },
   {
+    testId: "settings-data-card-saved-products",
     title: "Saved Products",
     description: "Quản lý danh sách sản phẩm đã lưu.",
     cta: "Mở Saved Products",
@@ -217,8 +222,8 @@ export function SettingsDataControlCenter() {
   const deletionRequested = user.accountDeletionRequestStatus === "requested";
 
   return (
-    <div className="space-y-6">
-      <Card className="border-stone-200 bg-white">
+    <div className="space-y-6" data-testid="settings-data-control-center">
+      <Card className="border-stone-200 bg-white" data-testid="settings-account-overview">
         <CardHeader>
           <CardTitle>Thông tin tài khoản</CardTitle>
           <CardDescription>
@@ -236,6 +241,7 @@ export function SettingsDataControlCenter() {
           />
           <AccountField
             label="Trạng thái yêu cầu xóa tài khoản"
+            testId="account-deletion-request-status"
             value={deletionRequested ? "Đã yêu cầu" : "Chưa yêu cầu"}
           />
           <AccountField
@@ -257,6 +263,7 @@ export function SettingsDataControlCenter() {
           {managementCards.map((card) => (
             <article
               className="flex flex-col justify-between gap-4 rounded-lg border border-stone-200 bg-stone-50 p-4"
+              data-testid={card.testId}
               key={card.title}
             >
               <div>
@@ -321,6 +328,7 @@ export function SettingsDataControlCenter() {
           ) : (
             <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-stone-200 bg-stone-50 p-3 text-sm font-normal text-stone-700">
               <input
+                data-testid="account-deletion-confirm-checkbox"
                 checked={isConfirmed}
                 className="mt-1"
                 onChange={(event) => setIsConfirmed(event.target.checked)}
@@ -345,6 +353,7 @@ export function SettingsDataControlCenter() {
           ) : null}
 
           <Button
+            data-testid="account-deletion-request-button"
             disabled={deletionRequested || !isConfirmed || isSubmitting}
             onClick={submitAccountDeletionRequest}
             type="button"
@@ -362,9 +371,20 @@ export function SettingsDataControlCenter() {
   );
 }
 
-function AccountField({ label, value }: { label: string; value: string }) {
+function AccountField({
+  label,
+  testId,
+  value,
+}: {
+  label: string;
+  testId?: string;
+  value: string;
+}) {
   return (
-    <div className="rounded-lg border border-stone-200 bg-stone-50 p-3">
+    <div
+      className="rounded-lg border border-stone-200 bg-stone-50 p-3"
+      data-testid={testId}
+    >
       <p className="font-medium text-stone-950">{label}</p>
       <p className="mt-1 break-words text-stone-600">{value}</p>
     </div>

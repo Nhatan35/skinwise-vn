@@ -330,6 +330,7 @@ export function TodayRoutineChecklist() {
               return (
                 <article
                   className="border border-stone-200 bg-stone-50 p-4"
+                  data-testid="today-routine-card"
                   key={routine.id}
                 >
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
@@ -344,6 +345,7 @@ export function TodayRoutineChecklist() {
                         <RoutineLogStatusBadge
                           hasLog={Boolean(log)}
                           status={log?.status}
+                          testId="today-routine-status-badge"
                         />
                       </div>
                       <p className="text-sm text-stone-600">
@@ -393,6 +395,7 @@ export function TodayRoutineChecklist() {
                   {log ? (
                     <div className="mt-3 flex justify-end">
                       <Button
+                        data-testid="routine-log-delete-button"
                         disabled={Boolean(deletingLogIds[log.id])}
                         onClick={() => deleteRoutineLog(routine.id, log.id)}
                         size="sm"
@@ -442,7 +445,7 @@ export function TodayRoutineChecklist() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="today-routine-checklist">
       <Card className="border-stone-200 bg-white">
         <CardHeader>
           <CardTitle>Thông tin hôm nay</CardTitle>
@@ -459,7 +462,7 @@ export function TodayRoutineChecklist() {
         </CardContent>
       </Card>
 
-      <Card className="border-stone-200 bg-white">
+      <Card className="border-stone-200 bg-white" data-testid="today-progress-summary">
         <CardHeader>
           <CardTitle>Tiến độ ghi nhận hôm nay</CardTitle>
         </CardHeader>

@@ -253,7 +253,7 @@ export function SkinJournalTimeline() {
             Entries are sorted by local date, newest first.
           </p>
         </div>
-        <Button onClick={startCreate} type="button">
+        <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
           <Plus aria-hidden="true" />
           New entry
         </Button>
@@ -290,7 +290,7 @@ export function SkinJournalTimeline() {
       {sortedEntries.length === 0 && formMode !== "create" ? (
         <EmptyState
           action={
-            <Button onClick={startCreate} type="button">
+            <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
               <Plus aria-hidden="true" />
               Create first entry
             </Button>

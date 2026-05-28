@@ -10,12 +10,18 @@ import {
 type DashboardCardProps = {
   action?: ReactNode;
   children: ReactNode;
+  testId?: string;
   title: string;
 };
 
-export function DashboardCard({ action, children, title }: DashboardCardProps) {
+export function DashboardCard({
+  action,
+  children,
+  testId,
+  title,
+}: DashboardCardProps) {
   return (
-    <Card className="border-stone-200 bg-white">
+    <Card className="border-stone-200 bg-white" data-testid={testId}>
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <CardTitle>{title}</CardTitle>
