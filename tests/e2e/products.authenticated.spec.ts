@@ -32,14 +32,14 @@ test.describe("SkinWise VN authenticated products", () => {
 
     await expect(page).not.toHaveURL(/\/api\/auth\/signin/);
     await expect(
-      page.getByRole("heading", { name: "Skincare products" }),
+      page.getByRole("heading", { name: "Sản phẩm skincare" }),
     ).toBeVisible();
     await expect(
-      page.getByText("Educational catalogue", { exact: true }),
+      page.getByText("Catalogue tham khảo", { exact: true }),
     ).toBeVisible();
 
     const firstDetailLink = page
-      .getByRole("link", { name: "View details" })
+      .getByRole("link", { name: "Xem chi tiết" })
       .first();
 
     await expect(firstDetailLink).toBeVisible({ timeout: 15_000 });

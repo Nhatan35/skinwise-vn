@@ -22,13 +22,13 @@ const settingsComponentSource = readFileSync(settingsComponentPath, "utf8");
 const settingsClientSource = readFileSync(settingsClientPath, "utf8");
 const combinedSource = `${settingsComponentSource}\n${settingsClientSource}`;
 
-describe("Settings & Data Control UI", () => {
+describe("Settings data control UI", () => {
   it("adds the protected Settings dashboard page and renders the data control center", () => {
     expect(existsSync(settingsPagePath)).toBe(true);
     expect(settingsPageSource).toContain("SettingsDataControlCenter");
     expect(settingsPageSource).toContain("routes.SETTINGS");
     expect(settingsPageSource).toContain("data-route={routes.SETTINGS}");
-    expect(settingsPageSource).toContain("Settings & Data Control");
+    expect(settingsPageSource).toContain("Cài đặt và quản lý dữ liệu");
     expect(settingsPageSource).toContain(
       "Quản lý thông tin tài khoản, dữ liệu skincare cá nhân",
     );

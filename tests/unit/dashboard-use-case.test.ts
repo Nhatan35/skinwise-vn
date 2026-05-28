@@ -11,6 +11,7 @@ vi.mock("@/modules/routines/routine.use-case", () => ({
 
 vi.mock("@/modules/routine-logs/routine-log.use-case", () => ({
   getRoutineLogsForDate: vi.fn(),
+  getRoutineLogsForDateRange: vi.fn(),
 }));
 
 vi.mock("@/modules/ai-analysis/routine-analysis.repository", () => ({
@@ -21,14 +22,22 @@ vi.mock("@/modules/journals/list-skin-journal.use-case", () => ({
   listSkinJournalsForUser: vi.fn(),
 }));
 
+vi.mock("@/modules/saved-products/saved-product.repository", () => ({
+  countSavedProductsByUser: vi.fn(),
+}));
+
 import { findLatestRoutineAnalysisByUserId } from "@/modules/ai-analysis/routine-analysis.repository";
 import type { RoutineAnalysis } from "@/modules/ai-analysis/routine-analysis.types";
 import { getDashboardForUser } from "@/modules/dashboard/dashboard.use-case";
 import { listSkinJournalsForUser } from "@/modules/journals/list-skin-journal.use-case";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
-import { getRoutineLogsForDate } from "@/modules/routine-logs/routine-log.use-case";
+import {
+  getRoutineLogsForDate,
+  getRoutineLogsForDateRange,
+} from "@/modules/routine-logs/routine-log.use-case";
 import { listRoutinesForUser } from "@/modules/routines/routine.use-case";
+import { countSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
 import type { Routine } from "@/modules/routines/routine.types";
 import { getSkinProfileForUser } from "@/modules/skin-profile/skin-profile.use-case";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
@@ -36,13 +45,16 @@ import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
 const mockedGetSkinProfileForUser = vi.mocked(getSkinProfileForUser);
 const mockedListRoutinesForUser = vi.mocked(listRoutinesForUser);
 const mockedGetRoutineLogsForDate = vi.mocked(getRoutineLogsForDate);
+const mockedGetRoutineLogsForDateRange = vi.mocked(getRoutineLogsForDateRange);
 const mockedFindLatestRoutineAnalysisByUserId = vi.mocked(
   findLatestRoutineAnalysisByUserId,
 );
 const mockedListSkinJournalsForUser = vi.mocked(listSkinJournalsForUser);
+const mockedCountSavedProductsByUser = vi.mocked(countSavedProductsByUser);
 
 const userId = "auth-user-id";
 const localDate = "2026-05-17";
+const sevenDayFromLocalDate = "2026-05-11";
 const fixedDate = new Date("2026-05-17T00:00:00.000Z");
 const morningRoutineId = "665000000000000000000500";
 const eveningRoutineId = "665000000000000000000501";
@@ -161,19 +173,27 @@ function mockDashboardSources(input: {
   skinProfile?: SkinProfile | null;
   routines?: Routine[];
   routineLogs?: RoutineLogDto[];
+  routineLogsLast7Days?: RoutineLogDto[];
   latestRoutineAnalysis?: RoutineAnalysis | null;
   latestJournals?: SkinJournalDto[];
   todayJournals?: SkinJournalDto[];
+  journalsLast7Days?: SkinJournalDto[];
+  savedProductCount?: number;
 }) {
   mockedGetSkinProfileForUser.mockResolvedValue(input.skinProfile ?? null);
   mockedListRoutinesForUser.mockResolvedValue(input.routines ?? []);
   mockedGetRoutineLogsForDate.mockResolvedValue(input.routineLogs ?? []);
+  mockedGetRoutineLogsForDateRange.mockResolvedValue(
+    input.routineLogsLast7Days ?? [],
+  );
   mockedFindLatestRoutineAnalysisByUserId.mockResolvedValue(
     input.latestRoutineAnalysis ?? null,
   );
   mockedListSkinJournalsForUser
     .mockResolvedValueOnce(input.latestJournals ?? [])
-    .mockResolvedValueOnce(input.todayJournals ?? []);
+    .mockResolvedValueOnce(input.todayJournals ?? [])
+    .mockResolvedValueOnce(input.journalsLast7Days ?? []);
+  mockedCountSavedProductsByUser.mockResolvedValue(input.savedProductCount ?? 0);
 }
 
 describe("Dashboard use case", () => {
@@ -181,8 +201,10 @@ describe("Dashboard use case", () => {
     mockedGetSkinProfileForUser.mockReset();
     mockedListRoutinesForUser.mockReset();
     mockedGetRoutineLogsForDate.mockReset();
+    mockedGetRoutineLogsForDateRange.mockReset();
     mockedFindLatestRoutineAnalysisByUserId.mockReset();
     mockedListSkinJournalsForUser.mockReset();
+    mockedCountSavedProductsByUser.mockReset();
   });
 
   it("returns missing optional sections safely", async () => {
@@ -207,6 +229,29 @@ describe("Dashboard use case", () => {
       },
       latestRoutineAnalysis: { exists: false },
       latestJournal: { exists: false },
+      profileCompletion: {
+        percentage: 0,
+        completedFields: 0,
+        totalFields: 5,
+        missingFields: [
+          "skinType",
+          "concerns",
+          "sensitivityLevel",
+          "budgetRange",
+          "experienceLevel",
+        ],
+      },
+      savedProducts: { count: 0 },
+      routineConsistency: {
+        completedDays: 0,
+        totalDays: 7,
+        rate: 0,
+        label: "needs_attention",
+      },
+      journalTrend: {
+        recentEntries: 0,
+        status: "not_enough_data",
+      },
       nextActions: [
         {
           label: "Hoàn thiện hồ sơ da",
@@ -251,9 +296,21 @@ describe("Dashboard use case", () => {
           status: "skipped",
         }),
       ],
+      routineLogsLast7Days: [
+        createRoutineLog({ localDate: "2026-05-11", status: "completed" }),
+        createRoutineLog({ localDate: "2026-05-12", status: "partial" }),
+        createRoutineLog({ localDate: "2026-05-13", status: "skipped" }),
+        createRoutineLog({ localDate: "2026-05-17", status: "completed" }),
+      ],
       latestRoutineAnalysis: createAnalysis(),
       latestJournals: [latestJournal],
       todayJournals: [latestJournal],
+      journalsLast7Days: [
+        latestJournal,
+        createJournal({ id: "journal-2", localDate: "2026-05-15", symptoms: ["redness"] }),
+        createJournal({ id: "journal-3", localDate: "2026-05-12", symptoms: ["dryness"] }),
+      ],
+      savedProductCount: 4,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -280,6 +337,24 @@ describe("Dashboard use case", () => {
       skipped: 0,
       notLogged: 1,
       completionRate: 50,
+    });
+    expect(dashboard.profileCompletion).toEqual({
+      percentage: 100,
+      completedFields: 5,
+      totalFields: 5,
+      missingFields: [],
+    });
+    expect(dashboard.savedProducts).toEqual({ count: 4 });
+    expect(dashboard.routineConsistency).toEqual({
+      completedDays: 3,
+      totalDays: 7,
+      rate: 43,
+      label: "building",
+    });
+    expect(dashboard.journalTrend).toEqual({
+      recentEntries: 3,
+      mostCommonSymptom: "redness",
+      status: "available",
     });
     expect(dashboard.latestRoutineAnalysis).toEqual({
       exists: true,
@@ -475,6 +550,11 @@ describe("Dashboard use case", () => {
     expect(mockedGetSkinProfileForUser).toHaveBeenCalledWith(userId);
     expect(mockedListRoutinesForUser).toHaveBeenCalledWith(userId);
     expect(mockedGetRoutineLogsForDate).toHaveBeenCalledWith(userId, localDate);
+    expect(mockedGetRoutineLogsForDateRange).toHaveBeenCalledWith(
+      userId,
+      sevenDayFromLocalDate,
+      localDate,
+    );
     expect(mockedFindLatestRoutineAnalysisByUserId).toHaveBeenCalledWith(userId);
     expect(mockedListSkinJournalsForUser).toHaveBeenCalledWith(userId, {
       limit: 1,
@@ -484,5 +564,11 @@ describe("Dashboard use case", () => {
       to: localDate,
       limit: 1,
     });
+    expect(mockedListSkinJournalsForUser).toHaveBeenCalledWith(userId, {
+      from: sevenDayFromLocalDate,
+      to: localDate,
+      limit: 7,
+    });
+    expect(mockedCountSavedProductsByUser).toHaveBeenCalledWith(userId);
   });
 });

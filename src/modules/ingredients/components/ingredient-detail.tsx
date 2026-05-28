@@ -132,7 +132,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
               type="button"
             >
               <RotateCcw aria-hidden="true" />
-              Retry
+              Thử lại
             </Button>
             <BackToIngredientsButton />
           </div>

@@ -111,7 +111,7 @@ export function SkinJournalEntryCard({
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-foreground">Symptoms</h3>
+          <h3 className="text-sm font-semibold text-foreground">Dấu hiệu đã ghi nhận</h3>
           {entry.symptoms.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {entry.symptoms.map((symptom) => (
@@ -125,7 +125,7 @@ export function SkinJournalEntryCard({
           )}
         </div>
 
-        <JournalList label="Observations" values={entry.observations} />
+        <JournalList label="Quan sát" values={entry.observations} />
         <JournalProductList productLabels={productLabels} />
 
         <div className="grid gap-3 sm:grid-cols-2">
@@ -168,7 +168,7 @@ type JournalProductListProps = {
 function JournalProductList({ productLabels }: JournalProductListProps) {
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-semibold text-foreground">Products used</h3>
+      <h3 className="text-sm font-semibold text-foreground">Sản phẩm đã dùng</h3>
       {productLabels.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {productLabels.map((productLabel, index) => (

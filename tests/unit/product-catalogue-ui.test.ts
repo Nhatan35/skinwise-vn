@@ -112,8 +112,8 @@ describe("Product Catalogue UI", () => {
   it("supports search and Product API filters without adding CRUD behavior", () => {
     for (const requiredSource of [
       "product-search",
-      "Search products",
-      "Clear filters",
+      "Tìm sản phẩm",
+      "Xóa bộ lọc",
       "category",
       "priceRange",
       "skinType",
@@ -147,12 +147,12 @@ describe("Product Catalogue UI", () => {
 
   it("renders loading, error, empty, and educational states", () => {
     for (const requiredCopy of [
-      "Loading product catalogue",
-      "Product catalogue could not load",
-      "No products found",
+      "Đang tải danh sách sản phẩm",
+      "Không thể tải danh sách sản phẩm",
+      "Không tìm thấy sản phẩm phù hợp",
       "Could not load the product catalogue.",
-      "Educational catalogue",
-      "not medical diagnosis",
+      "Catalogue tham khảo",
+      "không phải chẩn đoán y khoa",
     ]) {
       expect(combinedProductUiSource).toContain(requiredCopy);
     }

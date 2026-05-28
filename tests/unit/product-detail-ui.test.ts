@@ -57,12 +57,12 @@ describe("Product Detail UI", () => {
 
   it("renders loading, error, not-found, retry, and back states", () => {
     for (const requiredCopy of [
-      "Loading product details",
-      "Product details could not load",
-      "Product not found",
+      "Đang tải thông tin sản phẩm",
+      "Không thể tải thông tin sản phẩm",
+      "Không tìm thấy sản phẩm",
       "Could not load the product details.",
-      "Retry",
-      "Back to products",
+      "Thử lại",
+      "Quay lại sản phẩm",
       'href="/products"',
     ]) {
       expect(productDetailSource).toContain(requiredCopy);
@@ -102,7 +102,7 @@ describe("Product Detail UI", () => {
 
   it("adds ProductCard navigation to product detail pages", () => {
     expect(productCardSource).toContain('href={`/products/${product.id}`}');
-    expect(productCardSource).toContain("View details");
+    expect(productCardSource).toContain("Xem chi tiết");
   });
 
   it("keeps client-side product detail files free of server-only imports", () => {

@@ -198,14 +198,14 @@ export function SettingsDataControlCenter() {
   }
 
   if (isLoading) {
-    return <LoadingState label="Đang tải Settings & Data Control" />;
+    return <LoadingState label="Đang tải cài đặt và quản lý dữ liệu" />;
   }
 
   if (loadError) {
     return (
       <ErrorState
         description={loadError}
-        title="Chưa tải được Settings & Data Control"
+        title="Chưa tải được cài đặt và quản lý dữ liệu"
       />
     );
   }

@@ -68,6 +68,38 @@ export type DashboardLatestJournalSummary =
       exists: false;
     };
 
+export type DashboardProfileCompletionSummary = {
+  percentage: number;
+  completedFields: number;
+  totalFields: number;
+  missingFields: string[];
+};
+
+export type DashboardSavedProductsSummary = {
+  count: number;
+};
+
+export type DashboardRoutineConsistencyLabel =
+  | "needs_attention"
+  | "building"
+  | "good"
+  | "excellent";
+
+export type DashboardRoutineConsistencySummary = {
+  completedDays: number;
+  totalDays: 7;
+  rate: number;
+  label: DashboardRoutineConsistencyLabel;
+};
+
+export type DashboardJournalTrendStatus = "not_enough_data" | "available";
+
+export type DashboardJournalTrendSummary = {
+  recentEntries: number;
+  mostCommonSymptom?: SkinJournalSymptom;
+  status: DashboardJournalTrendStatus;
+};
+
 export type DashboardNextActionPriority = "high" | "medium" | "low";
 
 export type DashboardNextAction = {

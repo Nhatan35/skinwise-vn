@@ -64,15 +64,15 @@ export function SavedProductToggleButton({
 
   const label = isPending
     ? isSaved
-      ? "Saving"
-      : "Removing"
+      ? "Đang lưu"
+      : "Đang bỏ lưu"
     : mode === "full"
       ? isSaved
-        ? "Remove from saved"
-        : "Save product"
+        ? "Bỏ lưu sản phẩm"
+        : "Lưu sản phẩm"
       : isSaved
-        ? "Saved"
-        : "Save";
+        ? "Đã lưu"
+        : "Lưu";
   const Icon = isSaved ? BookmarkCheck : Bookmark;
 
   return (

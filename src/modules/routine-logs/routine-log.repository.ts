@@ -35,6 +35,25 @@ export async function findRoutineLogsByDate(
   return collection.find({ userId, localDate }).sort({ updatedAt: -1 }).toArray();
 }
 
+export async function findRoutineLogsByDateRange(
+  userId: string,
+  fromLocalDate: string,
+  toLocalDate: string,
+): Promise<RoutineLog[]> {
+  const collection = await getRoutineLogCollection();
+
+  return collection
+    .find({
+      userId,
+      localDate: {
+        $gte: fromLocalDate,
+        $lte: toLocalDate,
+      },
+    })
+    .sort({ localDate: -1, updatedAt: -1 })
+    .toArray();
+}
+
 export async function findRoutineLogByRoutineAndDate(
   userId: string,
   routineId: string,

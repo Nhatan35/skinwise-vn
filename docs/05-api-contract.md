@@ -893,7 +893,7 @@ Usage notes:
 
 ### GET /api/dashboard?localDate=YYYY-MM-DD
 
-Returns the authenticated user's MVP dashboard summary for the requested browser/user local date.
+Returns the authenticated user's MVP dashboard summary for the requested browser/user local date, including additive closeout summary fields for profile completion, saved products, 7-day routine consistency, and 7-day journal trend.
 
 Authentication and ownership:
 
@@ -920,7 +920,33 @@ Successful response:
 ```json
 {
   "data": {
-    "dashboard": {}
+    "dashboard": {
+      "skinProfile": {},
+      "routines": {},
+      "todayRoutineLogs": {},
+      "latestRoutineAnalysis": {},
+      "latestJournal": {},
+      "profileCompletion": {
+        "percentage": 0,
+        "completedFields": 0,
+        "totalFields": 5,
+        "missingFields": ["skinType", "concerns", "sensitivityLevel", "budgetRange", "experienceLevel"]
+      },
+      "savedProducts": {
+        "count": 0
+      },
+      "routineConsistency": {
+        "completedDays": 0,
+        "totalDays": 7,
+        "rate": 0,
+        "label": "needs_attention"
+      },
+      "journalTrend": {
+        "recentEntries": 0,
+        "status": "not_enough_data"
+      },
+      "nextActions": []
+    }
   },
   "error": null
 }

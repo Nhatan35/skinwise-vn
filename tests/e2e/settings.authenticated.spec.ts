@@ -37,7 +37,7 @@ test.describe("SkinWise VN authenticated settings", () => {
 
     expect((await currentUserResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Settings & Data Control" }),
+      page.getByRole("heading", { name: "Cài đặt và quản lý dữ liệu" }),
     ).toBeVisible();
     await expect(page.getByTestId("settings-data-control-center")).toBeVisible({
       timeout: 15_000,

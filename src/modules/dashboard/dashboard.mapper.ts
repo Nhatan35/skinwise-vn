@@ -1,8 +1,11 @@
 import type { RoutineAnalysis } from "@/modules/ai-analysis/routine-analysis.types";
 import type { DashboardDto } from "@/modules/dashboard/dashboard.dto";
 import type {
+  DashboardJournalTrendSummary,
   DashboardLatestJournalSummary,
   DashboardNextAction,
+  DashboardRoutineConsistencyLabel,
+  DashboardRoutineConsistencySummary,
 } from "@/modules/dashboard/dashboard.types";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
@@ -28,11 +31,71 @@ export function mapSkinProfileSummary(profile: SkinProfile | null) {
   };
 }
 
+const profileCompletionFields = [
+  "skinType",
+  "concerns",
+  "sensitivityLevel",
+  "budgetRange",
+  "experienceLevel",
+] as const;
+
+type ProfileCompletionField = (typeof profileCompletionFields)[number];
+
+export function mapProfileCompletionSummary(profile: SkinProfile | null) {
+  const totalFields = profileCompletionFields.length;
+
+  if (!profile) {
+    return {
+      percentage: 0,
+      completedFields: 0,
+      totalFields,
+      missingFields: [...profileCompletionFields],
+    };
+  }
+
+  const missingFields: ProfileCompletionField[] = [];
+
+  if (!profile.skinType || profile.skinType === "unknown") {
+    missingFields.push("skinType");
+  }
+
+  if (
+    !profile.concerns ||
+    profile.concerns.length === 0 ||
+    profile.concerns.every((concern) => concern === "unknown")
+  ) {
+    missingFields.push("concerns");
+  }
+
+  if (!profile.sensitivityLevel || profile.sensitivityLevel === "unknown") {
+    missingFields.push("sensitivityLevel");
+  }
+
+  if (!profile.budgetRange) {
+    missingFields.push("budgetRange");
+  }
+
+  if (!profile.experienceLevel) {
+    missingFields.push("experienceLevel");
+  }
+
+  const completedFields = totalFields - missingFields.length;
+
+  return {
+    percentage: Math.round((completedFields / totalFields) * 100),
+    completedFields,
+    totalFields,
+    missingFields,
+  };
+}
+
 export function mapRoutineSummary(routines: Routine[]) {
-  const morning = routines.filter((routine) => routine.timeOfDay === "morning")
-    .length;
-  const evening = routines.filter((routine) => routine.timeOfDay === "evening")
-    .length;
+  const morning = routines.filter(
+    (routine) => routine.timeOfDay === "morning",
+  ).length;
+  const evening = routines.filter(
+    (routine) => routine.timeOfDay === "evening",
+  ).length;
 
   return {
     total: routines.length,
@@ -47,9 +110,7 @@ export function mapTodayRoutineLogsSummary(
   routineLogs: RoutineLogDto[],
   localDate: string,
 ) {
-  const routineIds = new Set(
-    routines.map((routine) => routine._id.toString()),
-  );
+  const routineIds = new Set(routines.map((routine) => routine._id.toString()));
   const ownedRoutineLogs = routineLogs.filter((routineLog) =>
     routineIds.has(routineLog.routineId),
   );
@@ -151,6 +212,65 @@ export function mapLatestJournalSummary(
   };
 }
 
+export function mapRoutineConsistencySummary(
+  routineLogs: RoutineLogDto[],
+): DashboardRoutineConsistencySummary {
+  const completedLocalDates = new Set<string>();
+
+  for (const routineLog of routineLogs) {
+    if (routineLog.status === "completed" || routineLog.status === "partial") {
+      completedLocalDates.add(routineLog.localDate);
+    }
+  }
+
+  const completedDays = completedLocalDates.size;
+  const totalDays = 7 as const;
+  const rate = Math.round((completedDays / totalDays) * 100);
+  const label: DashboardRoutineConsistencyLabel =
+    completedDays <= 1
+      ? "needs_attention"
+      : completedDays <= 3
+        ? "building"
+        : completedDays <= 5
+          ? "good"
+          : "excellent";
+
+  return {
+    completedDays,
+    totalDays,
+    rate,
+    label,
+  };
+}
+
+export function mapJournalTrendSummary(
+  journals: SkinJournalDto[],
+): DashboardJournalTrendSummary {
+  const symptomCounts = new Map<SkinJournalDto["symptoms"][number], number>();
+
+  for (const journal of journals) {
+    for (const symptom of journal.symptoms ?? []) {
+      symptomCounts.set(symptom, (symptomCounts.get(symptom) ?? 0) + 1);
+    }
+  }
+
+  let mostCommonSymptom: SkinJournalDto["symptoms"][number] | undefined;
+  let mostCommonSymptomCount = 0;
+
+  for (const [symptom, count] of symptomCounts) {
+    if (count > mostCommonSymptomCount) {
+      mostCommonSymptom = symptom;
+      mostCommonSymptomCount = count;
+    }
+  }
+
+  return {
+    recentEntries: journals.length,
+    ...(mostCommonSymptom ? { mostCommonSymptom } : {}),
+    status: journals.length >= 2 ? "available" : "not_enough_data",
+  };
+}
+
 export function buildDashboardNextActions(input: {
   hasSkinProfile: boolean;
   hasAnyRoutine: boolean;
@@ -221,8 +341,11 @@ export function toDashboardDto(input: {
   skinProfile: SkinProfile | null;
   routines: Routine[];
   routineLogs: RoutineLogDto[];
+  routineLogsLast7Days: RoutineLogDto[];
   latestRoutineAnalysis: RoutineAnalysis | null;
   latestJournal: SkinJournalDto | null;
+  journalsLast7Days: SkinJournalDto[];
+  savedProductCount: number;
   hasJournalToday: boolean;
   localDate: string;
 }): DashboardDto {
@@ -237,6 +360,12 @@ export function toDashboardDto(input: {
     input.latestRoutineAnalysis,
   );
   const latestJournal = mapLatestJournalSummary(input.latestJournal);
+  const profileCompletion = mapProfileCompletionSummary(input.skinProfile);
+  const savedProducts = { count: input.savedProductCount };
+  const routineConsistency = mapRoutineConsistencySummary(
+    input.routineLogsLast7Days,
+  );
+  const journalTrend = mapJournalTrendSummary(input.journalsLast7Days);
 
   return {
     skinProfile,
@@ -244,11 +373,17 @@ export function toDashboardDto(input: {
     todayRoutineLogs,
     latestRoutineAnalysis,
     latestJournal,
+    profileCompletion,
+    savedProducts,
+    routineConsistency,
+    journalTrend,
     nextActions: buildDashboardNextActions({
       hasSkinProfile: skinProfile.exists,
       hasAnyRoutine: routines.hasAnyRoutine,
       hasAnyRoutineLogToday:
-        todayRoutineLogs.completed + todayRoutineLogs.partial + todayRoutineLogs.skipped >
+        todayRoutineLogs.completed +
+          todayRoutineLogs.partial +
+          todayRoutineLogs.skipped >
         0,
       hasJournalToday: input.hasJournalToday,
       hasLatestRoutineAnalysis: latestRoutineAnalysis.exists,

@@ -90,11 +90,11 @@ describe("Saved Products UI", () => {
     expect(savedProductsComponentSource).toContain("listSavedProducts");
 
     for (const requiredCopy of [
-      "Loading saved products",
-      "Saved products could not load",
-      "No saved products yet",
-      "Browse products",
-      "Retry",
+      "Đang tải sản phẩm đã lưu",
+      "Không thể tải sản phẩm đã lưu",
+      "Chưa có sản phẩm đã lưu",
+      "Khám phá sản phẩm",
+      "Thử lại",
       "saved-product-card",
     ]) {
       expect(combinedSavedProductClientSource).toContain(requiredCopy);
@@ -107,8 +107,8 @@ describe("Saved Products UI", () => {
       "product.brand",
       "product.category",
       "product.keyActives",
-      "View details",
-      "Remove from saved",
+      "Xem chi tiết",
+      "Bỏ lưu sản phẩm",
       "data-testid=\"saved-product-card\"",
       "remove-saved-product-button",
     ]) {

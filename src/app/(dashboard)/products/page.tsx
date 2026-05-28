@@ -7,7 +7,7 @@ export default function ProductsPage() {
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-stone-950/5">
         <p className="text-sm font-semibold text-primary">Product Catalogue</p>
         <h2
-          aria-label="Skincare products"
+          aria-label="Sản phẩm skincare"
           className="mt-2 text-3xl font-semibold tracking-tight text-foreground"
         >
           Sản phẩm skincare

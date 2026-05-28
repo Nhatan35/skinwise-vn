@@ -80,11 +80,11 @@ export function SavedProductsPage() {
             type="button"
           >
             <RotateCcw aria-hidden="true" />
-            Retry
+            Thử lại
           </Button>
         }
         description={loadError}
-        title="Saved products could not load"
+        title="Không thể tải sản phẩm đã lưu"
       />
     );
   }
@@ -93,7 +93,7 @@ export function SavedProductsPage() {
     return (
       <Card>
         <CardContent>
-          <LoadingState label="Loading saved products" />
+          <LoadingState label="Đang tải sản phẩm đã lưu" />
         </CardContent>
       </Card>
     );
@@ -103,12 +103,12 @@ export function SavedProductsPage() {
     return (
       <EmptyState
         action={
-          <Button asChild aria-label="Browse products">
+          <Button asChild aria-label="Khám phá sản phẩm">
             <Link href={routes.PRODUCTS}>Khám phá sản phẩm</Link>
           </Button>
         }
         description="Lưu sản phẩm bạn muốn xem lại trước khi thêm vào routine. Đây không phải giỏ hàng mua sắm."
-        title="No saved products yet"
+        title="Chưa có sản phẩm đã lưu"
       />
     );
   }

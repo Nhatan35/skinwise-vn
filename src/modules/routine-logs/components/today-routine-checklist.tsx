@@ -418,14 +418,14 @@ export function TodayRoutineChecklist() {
   }
 
   if (isLoading) {
-    return <LoadingState label="Đang tải Today Routine Checklist" />;
+    return <LoadingState label="Đang tải routine hôm nay" />;
   }
 
   if (loadError) {
     return (
       <ErrorState
         description={loadError}
-        title="Chưa tải được Today Routine Checklist"
+        title="Chưa tải được routine hôm nay"
       />
     );
   }
@@ -452,11 +452,11 @@ export function TodayRoutineChecklist() {
         </CardHeader>
         <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
           <div className="rounded-lg border border-border bg-secondary/50 p-3">
-            <p className="font-medium text-foreground">Local date</p>
+            <p className="font-medium text-foreground">Ngày hôm nay</p>
             <p className="mt-1 text-muted-foreground">{localDate}</p>
           </div>
           <div className="rounded-lg border border-border bg-secondary/50 p-3">
-            <p className="font-medium text-foreground">Timezone</p>
+            <p className="font-medium text-foreground">Múi giờ</p>
             <p className="mt-1 text-muted-foreground">{timezone}</p>
           </div>
         </CardContent>

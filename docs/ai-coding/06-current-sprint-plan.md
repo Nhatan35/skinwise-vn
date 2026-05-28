@@ -15,13 +15,15 @@ The main Week 1-6 MVP implementation is completed. Feature Roadmap v1.1 added th
 Current task:
 
 ```txt
-MVP-CORE-JOURNEY-E2E-001 - Authenticated Playwright E2E coverage for the complete MVP core user journey
+MVP-E2E-CLOSEOUT-001 - Close out MVP core journey E2E validation and fix Routine Analysis duplicate React key warning
 ```
 
 Status:
 
 ```txt
-MVP-CORE-JOURNEY-E2E-001: IMPLEMENTED IN SOURCE/DOCS; FINAL COMPLETION REQUIRES TARGET-RUNTIME VALIDATION WITH DEPENDENCIES AND LOCAL MONGODB.
+MVP-CORE-JOURNEY-E2E-001: COMPLETED IN SOURCE/DOCS.
+MVP-CORE-JOURNEY-E2E-VALIDATION-001: COMPLETED WITH LATEST LOCAL VALIDATION EVIDENCE RECORDED.
+MVP-E2E-CLOSEOUT-001: IMPLEMENTED IN SOURCE/DOCS; FINAL COMPLETION REQUIRES TARGET-RUNTIME VALIDATION AFTER THE DUPLICATE-KEY PATCH.
 MVP-DATA-CONTROL-CLOSEOUT-001: COMPLETED IN SOURCE/DOCS; LOCAL VALIDATION RECORDED BY THAT TASK.
 MVP-DATA-CONTROL-001: COMPLETED IN SOURCE.
 Settings route: /settings.
@@ -50,7 +52,7 @@ Current DEPLOY-VERIFY-001 public URL and unauthenticated redirects: PASSED histo
 Current DEPLOY-VERIFY-001 Vercel env/logs, Google OAuth login, authenticated dashboard, MongoDB read/write, and sign-out: NOT VERIFIED without external access.
 QUALITY-001: COMPLETED.
 QUALITY-002A: IMPLEMENTED.
-MVP-CORE-JOURNEY-E2E-001: adds authenticated Playwright specs for Routine Builder, Routine Analysis, Today Checklist, Routine Log delete, Skin Journal, Settings/Data Control, account deletion request, Dashboard reflection, plus `/routine-logs/today` and `/settings` protected route smoke coverage. FULL E2E VERIFICATION REQUIRES LOCAL MONGODB.
+MVP-CORE-JOURNEY-E2E-001: added authenticated Playwright specs for Routine Builder, Routine Analysis, Today Checklist, Routine Log delete, Skin Journal, Settings/Data Control, account deletion request, Dashboard reflection, plus `/routine-logs/today` and `/settings` protected route smoke coverage. MVP-E2E-CLOSEOUT-001 fixes the Routine Analysis duplicate React key warning in the UI render layer and adds a targeted warning guard to the Routine Analysis E2E flow.
 RUNTIME-001: CONFIG/DOCS UPDATED; project target runtime remains Node 24.x / npm 11.x.
 This sandbox validation used Node v22.16.0 / npm 10.9.2 because Node 24/npm 11 was not available in the container.
 ```
@@ -70,7 +72,7 @@ Config/docs updated. Historical runtime validation under Node v24.14.0 / npm 11.
 ## 4. Latest quality task
 
 ```txt
-MVP-CORE-JOURNEY-E2E-001 - Complete authenticated MVP core journey E2E coverage
+MVP-E2E-CLOSEOUT-001 - MVP core journey E2E closeout and Routine Analysis duplicate-key polish
 ```
 
 ## 5. Completed MVP implementation status
@@ -87,7 +89,10 @@ Feature Roadmap v1.2 Saved Products completed in source
 MVP-TODAY-LOG-001 dedicated Today Routine Checklist completed in source
 MVP-DATA-CONTROL-001 Settings and Privacy Data Control Center completed in source
 MVP-DATA-CONTROL-CLOSEOUT-001 Settings/Data Control closeout completed in source/docs
-MVP-CORE-JOURNEY-E2E-001 core journey E2E coverage implemented in source/docs; final completion depends on validation commands passing
+MVP-CORE-JOURNEY-E2E-001 core journey E2E coverage completed in source/docs
+MVP-UIUX-CLOSEOUT-001 dashboard real-data and Vietnamese UI copy closeout completed in source/docs
+MVP-CORE-JOURNEY-E2E-VALIDATION-001 latest local validation evidence recorded as completed
+MVP-E2E-CLOSEOUT-001 duplicate-key fix and targeted warning guard implemented; final closeout completion depends on target validation commands passing
 ```
 
 ## 6. Deployment preparation goals
@@ -149,7 +154,10 @@ MVP-CORE-JOURNEY-E2E-001 core journey E2E coverage implemented in source/docs; f
 [x] Add authenticated Dashboard reflection Playwright coverage.
 [x] Add protected route smoke coverage for `/routine-logs/today` and `/settings`.
 [x] Run historical DEPLOY-VERIFY-001 local validation with Node 20.
-[ ] Run full local validation with Node v24.14.0 / npm 11.14.1 including E2E with local MongoDB available.
+[x] Record latest local MVP core journey E2E validation evidence.
+[x] Fix Routine Analysis duplicate React key warning in the UI render layer.
+[x] Add targeted Routine Analysis E2E duplicate-key warning guard.
+[ ] Rerun full local validation with Node 24.x / npm 11.x including E2E with local MongoDB available after MVP-E2E-CLOSEOUT-001 changes.
 [ ] Run CI validation with Node 24.x.
 [x] Verify public production URL and unauthenticated protected-route redirects.
 [ ] Verify current Vercel build/logs/environment variables with direct platform evidence.
@@ -192,26 +200,44 @@ npm run test:e2e, only when local MongoDB is available
 
 Database commands must only run against a known local/test database. Do not seed production data.
 
-Latest MVP-CORE-JOURNEY-E2E-001 validation status:
+Latest MVP-CORE-JOURNEY-E2E-VALIDATION-001 local validation evidence:
 
 ```txt
-Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
-Project target runtime remains Node 24.x / npm 11.x per package.json.
+npm run typecheck: PASS
+npm run lint: PASS
+npm run test: PASS - 72 files, 717 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured after .env.local was available locally
+npm run db:seed:e2e: PASS
+npm run test:e2e: PASS - 24 tests passed
+```
 
-Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.
-Project target runtime remains Node 24.x / npm 11.x per package.json.
+Validation notes:
 
-node -v: Pass, reported v22.16.0
-npm -v: Pass, reported 10.9.2
-npm run lint: Failed because local dependencies are not installed; `eslint` was not found.
-npm run typecheck: Failed because dependencies/types are not installed; TypeScript could not resolve Next.js, Playwright, React JSX runtime, Vitest, MongoDB, Zod, and Node types.
-npm run test: Failed because local dependencies are not installed; `vitest` was not found.
-npm run build: Failed because local dependencies are not installed; `next` was not found.
-npm run db:indexes: Failed because `.env.local` is not present in this sandbox.
-npm run db:seed:e2e: Failed because local dependencies are not installed; package `tsx` was not found.
-npm run test:e2e: Failed because local Playwright dependencies are not installed.
+```txt
+The evidence above is local validation only.
+.env.local was available locally for database-backed commands, but no secret values are documented.
+Production verification remains separate.
+Real Google OAuth E2E validation is not claimed.
+Real external AI provider E2E validation is not claimed.
+Full production readiness is not claimed.
+```
 
-MVP-CORE-JOURNEY-E2E-001 must not be marked complete until these commands are rerun and pass in the target Node 24/npm 11 environment with dependencies installed and local MongoDB available.
+Latest MVP-E2E-CLOSEOUT-001 validation requirement:
+
+```txt
+After the duplicate-key fix and targeted warning guard, rerun:
+node -v
+npm -v
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+npm run db:indexes
+npm run db:seed:e2e
+npm run test:e2e
+
+MVP-E2E-CLOSEOUT-001 must not be marked fully completed until those commands pass in the target Node 24/npm 11 local/test environment and E2E output or the targeted guard confirms the duplicate key warning is gone.
 ```
 
 ## 8. Recommended next task

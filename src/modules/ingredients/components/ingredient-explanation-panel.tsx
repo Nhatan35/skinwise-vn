@@ -108,7 +108,7 @@ export function IngredientExplanationPanel({
           </div>
           <Button disabled={isLoading} onClick={handleExplain} type="button">
             <Sparkles aria-hidden="true" />
-            {isLoading ? "Explaining..." : "Explain this ingredient"}
+            {isLoading ? "Đang giải thích..." : "Giải thích thành phần này"}
           </Button>
         </div>
       </CardHeader>

@@ -54,13 +54,13 @@ describe("Product UI saved product integration", () => {
     );
   });
 
-  it("renders Save product / Remove from saved actions on product detail", () => {
+  it("renders Vietnamese save/remove saved actions on product detail", () => {
     expect(productDetailSource).toContain("SavedProductToggleButton");
     expect(productDetailSource).toContain("listSavedProducts");
     expect(productDetailSource).toContain("setIsSaved");
-    expect(savedProductToggleButtonSource).toContain("Save product");
-    expect(savedProductToggleButtonSource).toContain("Remove from saved");
-    expect(productDetailSource).toContain("Saved state unavailable");
+    expect(savedProductToggleButtonSource).toContain("Lưu sản phẩm");
+    expect(savedProductToggleButtonSource).toContain("Bỏ lưu sản phẩm");
+    expect(productDetailSource).toContain("Chưa tải được trạng thái đã lưu");
   });
 
   it("uses the saved product client helper without importing server modules into product UI", () => {

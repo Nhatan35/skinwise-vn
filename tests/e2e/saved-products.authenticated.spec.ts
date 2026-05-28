@@ -124,13 +124,13 @@ test.describe("SkinWise VN authenticated saved products", () => {
 
     expect((await productsResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Skincare products" }),
+      page.getByRole("heading", { name: "Sản phẩm skincare" }),
     ).toBeVisible();
 
     const searchResponsePromise = waitForProductsResponse(page);
 
-    await page.getByLabel("Search").fill(deterministicProductName);
-    await page.getByRole("button", { name: "Search products" }).click();
+    await page.getByLabel("Tìm kiếm").fill(deterministicProductName);
+    await page.getByRole("button", { name: "Tìm sản phẩm" }).click();
 
     expect((await searchResponsePromise).ok()).toBe(true);
 
@@ -166,7 +166,7 @@ test.describe("SkinWise VN authenticated saved products", () => {
     const detailResponsePromise = waitForProductDetailResponse(page, product.id);
     const detailSavedStateResponsePromise = waitForSavedProductsResponse(page);
 
-    await savedCard.getByRole("link", { name: "View details" }).click();
+    await savedCard.getByRole("link", { name: "Xem chi tiết" }).click();
 
     expect((await detailResponsePromise).ok()).toBe(true);
     expect((await detailSavedStateResponsePromise).ok()).toBe(true);
@@ -177,7 +177,7 @@ test.describe("SkinWise VN authenticated saved products", () => {
       page.getByText(deterministicProductName, { exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Remove from saved" }),
+      page.getByRole("button", { name: "Bỏ lưu sản phẩm" }),
     ).toBeVisible();
 
     const removeResponsePromise = waitForRemoveSavedProductResponse(
@@ -185,7 +185,7 @@ test.describe("SkinWise VN authenticated saved products", () => {
       product.id,
     );
 
-    await page.getByRole("button", { name: "Remove from saved" }).click();
+    await page.getByRole("button", { name: "Bỏ lưu sản phẩm" }).click();
 
     expect((await removeResponsePromise).ok()).toBe(true);
 

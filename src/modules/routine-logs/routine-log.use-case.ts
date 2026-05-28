@@ -2,6 +2,7 @@ import { toRoutineLogDto } from "@/modules/routine-logs/routine-log.mapper";
 import {
   deleteRoutineLogByIdAndUserId,
   findRoutineLogsByDate,
+  findRoutineLogsByDateRange,
   upsertRoutineLog,
 } from "@/modules/routine-logs/routine-log.repository";
 import type { UpsertRoutineLogInput } from "@/modules/routine-logs/routine-log.schema";
@@ -98,6 +99,20 @@ export async function getRoutineLogsForDate(
   localDate: string,
 ): Promise<RoutineLogDto[]> {
   const routineLogs = await findRoutineLogsByDate(userId, localDate);
+
+  return routineLogs.map(toRoutineLogDto);
+}
+
+export async function getRoutineLogsForDateRange(
+  userId: string,
+  fromLocalDate: string,
+  toLocalDate: string,
+): Promise<RoutineLogDto[]> {
+  const routineLogs = await findRoutineLogsByDateRange(
+    userId,
+    fromLocalDate,
+    toLocalDate,
+  );
 
   return routineLogs.map(toRoutineLogDto);
 }

@@ -51,6 +51,29 @@ const dashboardDto: DashboardDto = {
     createdAt: "2026-05-17T00:00:00.000Z",
     updatedAt: "2026-05-17T00:00:00.000Z",
   },
+  profileCompletion: {
+    percentage: 0,
+    completedFields: 0,
+    totalFields: 5,
+    missingFields: [
+      "skinType",
+      "concerns",
+      "sensitivityLevel",
+      "budgetRange",
+      "experienceLevel",
+    ],
+  },
+  savedProducts: { count: 0 },
+  routineConsistency: {
+    completedDays: 0,
+    totalDays: 7,
+    rate: 0,
+    label: "needs_attention",
+  },
+  journalTrend: {
+    recentEntries: 1,
+    status: "not_enough_data",
+  },
   nextActions: [
     {
       label: "Hoàn thiện hồ sơ da",
@@ -164,6 +187,10 @@ describe("/api/dashboard contract", () => {
       localDate: "2026-05-17",
     });
     expect(serializedBody).toContain("latestJournal");
+    expect(serializedBody).toContain("profileCompletion");
+    expect(serializedBody).toContain("savedProducts");
+    expect(serializedBody).toContain("routineConsistency");
+    expect(serializedBody).toContain("journalTrend");
     expect(serializedBody).not.toContain("userId");
     expect(serializedBody).not.toContain("_id");
     expect(serializedBody).not.toContain("ObjectId");

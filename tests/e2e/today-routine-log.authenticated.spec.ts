@@ -75,8 +75,8 @@ test.describe("SkinWise VN authenticated today routine log", () => {
     await expect(page.getByTestId("today-routine-checklist")).toBeVisible({
       timeout: 15_000,
     });
-    await expect(page.getByText("Local date")).toBeVisible();
-    await expect(page.getByText("Timezone")).toBeVisible();
+    await expect(page.getByText("Ngày hôm nay")).toBeVisible();
+    await expect(page.getByText("Múi giờ")).toBeVisible();
 
     const routineCard = page
       .getByTestId("today-routine-card")

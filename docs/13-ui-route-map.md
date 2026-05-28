@@ -24,7 +24,7 @@ Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data 
 | Route | Purpose | Status | Access | Important dependencies |
 |---|---|---|---|---|
 | `/` | Public product/project entry page | Implemented | Public | Static app config and route constants |
-| `/dashboard` | User dashboard summary for profile, routines, today logs, latest journal, latest analysis, and next action | Implemented | Authenticated | `GET /api/dashboard?localDate=YYYY-MM-DD` |
+| `/dashboard` | User dashboard summary for profile, profile completion, saved product count, 7-day routine consistency, journal trend, today logs, latest journal, latest analysis, and next action | Implemented | Authenticated | `GET /api/dashboard?localDate=YYYY-MM-DD` |
 | `/onboarding/skin-profile` | First-time skin profile onboarding | Implemented | Authenticated onboarding | `/api/skin-profile` |
 | `/skin-profile` | View and edit the user's skin profile | Implemented | Authenticated | `/api/skin-profile` |
 | `/routines` | Routine list/create/edit/delete, product picker, routine analysis panel, and routine log controls | Implemented | Authenticated | `/api/routines`, `/api/products`, `/api/routines/[id]/analyze`, `/api/routines/[id]/analyses`, `/api/routine-logs` |

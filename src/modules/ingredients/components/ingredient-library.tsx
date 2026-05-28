@@ -150,7 +150,7 @@ export function IngredientLibrary() {
               type="button"
             >
               <RotateCcw aria-hidden="true" />
-              Retry
+              Thử lại
             </Button>
           }
           description={loadError}

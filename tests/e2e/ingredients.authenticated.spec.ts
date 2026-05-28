@@ -60,7 +60,7 @@ test.describe("SkinWise VN authenticated ingredients", () => {
 
     await expect(page).not.toHaveURL(/\/api\/auth\/signin/);
     await expect(
-      page.getByRole("heading", { name: "Skincare ingredients" }),
+      page.getByRole("heading", { name: "Thành phần chăm sóc da" }),
     ).toBeVisible();
     await expect(page.getByTestId("ingredient-card").first()).toBeVisible({
       timeout: 15_000,
@@ -84,7 +84,7 @@ test.describe("SkinWise VN authenticated ingredients", () => {
 
     const detailResponsePromise = waitForIngredientDetailResponse(page);
 
-    await niacinamideCard.getByRole("link", { name: "View details" }).click();
+    await niacinamideCard.getByRole("link", { name: "Xem chi tiết" }).click();
 
     const detailResponse = await detailResponsePromise;
 
@@ -104,7 +104,7 @@ test.describe("SkinWise VN authenticated ingredients", () => {
       waitForIngredientExplanationResponse(page);
 
     await page
-      .getByRole("button", { name: "Explain this ingredient" })
+      .getByRole("button", { name: "Giải thích thành phần này" })
       .click();
 
     const explanationResponse = await explanationResponsePromise;

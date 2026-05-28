@@ -70,7 +70,7 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
         </p>
 
         <div className="border-t border-border pt-4">
-          <Button asChild aria-label="View details" variant="outline">
+          <Button asChild aria-label="Xem chi tiết" variant="outline">
             <Link href={`/ingredients/${ingredient.id}`}>Xem chi tiết</Link>
           </Button>
         </div>

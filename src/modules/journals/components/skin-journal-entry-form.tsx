@@ -258,7 +258,7 @@ export function SkinJournalEntryForm({
             <TextField
               error={fieldErrors.timezone}
               id="skin-journal-timezone"
-              label="Timezone"
+              label="Múi giờ"
               onChange={(value) => updateField("timezone", value)}
               value={formState.timezone}
             />
@@ -278,7 +278,7 @@ export function SkinJournalEntryForm({
             error={fieldErrors.observationsText}
             dataTestId="skin-journal-observations-input"
             id="skin-journal-observations"
-            label="Observations"
+            label="Quan sát"
             onChange={(value) => updateField("observationsText", value)}
             rows={4}
             value={formState.observationsText}
@@ -291,7 +291,7 @@ export function SkinJournalEntryForm({
             className="space-y-3"
           >
             <legend className="text-sm font-medium text-foreground">
-              Symptoms
+              Dấu hiệu đã ghi nhận
             </legend>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {SKIN_JOURNAL_SYMPTOMS.map((symptom) => {
@@ -345,7 +345,7 @@ export function SkinJournalEntryForm({
             />
 
             <div className="space-y-2">
-              <Label htmlFor="skin-journal-stress-level">Stress level</Label>
+              <Label htmlFor="skin-journal-stress-level">Mức stress</Label>
               <Select
                 onValueChange={(value) =>
                   updateField(
@@ -461,11 +461,11 @@ function ProductSelectionField({
       className="space-y-3"
     >
       <legend className="text-sm font-medium text-foreground">
-        Products used
+        Sản phẩm đã dùng
       </legend>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading product catalogue...</p>
+        <p className="text-sm text-muted-foreground">Đang tải danh sách sản phẩm...</p>
       ) : null}
 
       {loadError ? (

@@ -119,7 +119,7 @@ describe("Ingredient Library UI", () => {
       "Educational ingredient library",
       "not medical diagnosis",
       "data-testid=\"ingredient-card\"",
-      "View details",
+      "Xem chi tiết",
     ]) {
       expect(combinedIngredientUiSource).toContain(requiredCopy);
     }

@@ -186,14 +186,23 @@ export function DashboardOverview() {
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <SkinProfileSummaryCard skinProfile={dashboard.skinProfile} />
+        <SkinProfileSummaryCard
+          profileCompletion={dashboard.profileCompletion}
+          skinProfile={dashboard.skinProfile}
+        />
         <TodayRoutineProgressCard progress={dashboard.todayRoutineLogs} />
-        <RoutineSummaryCard routines={dashboard.routines} />
-        <SavedProductsSummaryCard />
+        <RoutineSummaryCard
+          routineConsistency={dashboard.routineConsistency}
+          routines={dashboard.routines}
+        />
+        <SavedProductsSummaryCard savedProducts={dashboard.savedProducts} />
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
-        <LatestJournalCard latestJournal={dashboard.latestJournal} />
+        <LatestJournalCard
+          journalTrend={dashboard.journalTrend}
+          latestJournal={dashboard.latestJournal}
+        />
         <LatestAnalysisCard latestAnalysis={dashboard.latestRoutineAnalysis} />
         <NextActionsCard nextActions={dashboard.nextActions} />
       </div>

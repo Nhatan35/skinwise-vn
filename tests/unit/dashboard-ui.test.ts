@@ -31,6 +31,8 @@ const componentSources = [
   "latest-journal-card.tsx",
   "latest-analysis-card.tsx",
   "next-actions-card.tsx",
+  "primary-next-action-card.tsx",
+  "saved-products-summary-card.tsx",
 ].map((fileName) => readFileSync(join(dashboardComponentsDir, fileName), "utf8"));
 
 describe("Dashboard DB-001 UI integration", () => {
@@ -102,15 +104,19 @@ describe("Dashboard DB-001 UI integration", () => {
       "Phân tích an toàn gần nhất",
       "Mức rủi ro",
       "Cảnh báo",
-      "Latest Journal Entry",
-      "Entry date",
-      "Observations",
-      "Symptoms",
-      "Stress level",
-      "Notes",
-      "Products used",
-      "Add today&apos;s journal",
-      "View journal",
+      "Mức độ hoàn thiện",
+      "Sản phẩm đã lưu",
+      "Routine 7 ngày",
+      "Đang xây dựng thói quen",
+      "Nhật ký gần đây",
+      "Ngày ghi nhận",
+      "Quan sát",
+      "Dấu hiệu đã ghi nhận",
+      "Mức stress",
+      "Ghi chú",
+      "Sản phẩm đã dùng",
+      "Thêm nhật ký hôm nay",
+      "Xem nhật ký",
       "Gợi ý tiếp theo",
     ]) {
       expect(combinedComponentSource).toContain(label);

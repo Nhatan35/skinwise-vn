@@ -182,7 +182,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
     return (
       <Card>
         <CardContent>
-          <LoadingState label="Loading product details" />
+          <LoadingState label="Đang tải thông tin sản phẩm" />
         </CardContent>
       </Card>
     );
@@ -193,7 +193,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       <EmptyState
         action={<BackToProductsButton />}
         description="Sản phẩm này có thể không còn khả dụng trong catalogue."
-        title="Product not found"
+        title="Không tìm thấy sản phẩm"
       />
     );
   }
@@ -208,13 +208,13 @@ export function ProductDetail({ productId }: ProductDetailProps) {
               type="button"
             >
               <RotateCcw aria-hidden="true" />
-              Retry
+              Thử lại
             </Button>
             <BackToProductsButton />
           </div>
         }
         description={loadError.message}
-        title="Product details could not load"
+        title="Không thể tải thông tin sản phẩm"
       />
     );
   }
@@ -224,7 +224,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       <EmptyState
         action={<BackToProductsButton />}
         description="Hãy quay lại catalogue và mở lại sản phẩm."
-        title="Product not found"
+        title="Không tìm thấy sản phẩm"
       />
     );
   }
@@ -282,7 +282,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
       {savedStateError ? (
         <Alert variant="destructive">
-          <AlertTitle>Saved state unavailable</AlertTitle>
+          <AlertTitle>Chưa tải được trạng thái đã lưu</AlertTitle>
           <AlertDescription>
             {savedStateError} Bạn vẫn có thể xem chi tiết sản phẩm.
           </AlertDescription>
@@ -374,7 +374,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
 function BackToProductsButton() {
   return (
-    <Button asChild aria-label="Back to products" variant="outline">
+    <Button asChild aria-label="Quay lại sản phẩm" variant="outline">
       <Link href="/products">
         <ArrowLeft aria-hidden="true" />
         Quay lại sản phẩm

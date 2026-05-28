@@ -326,7 +326,7 @@ export function ProductCatalogue() {
 
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
               <Button
-                aria-label="Clear filters"
+                aria-label="Xóa bộ lọc"
                 onClick={handleClearFilters}
                 type="button"
                 variant="outline"
@@ -334,7 +334,7 @@ export function ProductCatalogue() {
                 <X aria-hidden="true" />
                 Xóa bộ lọc
               </Button>
-              <Button aria-label="Search products" type="submit">
+              <Button aria-label="Tìm sản phẩm" type="submit">
                 <Search aria-hidden="true" />
                 Tìm sản phẩm
               </Button>
@@ -351,27 +351,27 @@ export function ProductCatalogue() {
               type="button"
             >
               <RotateCcw aria-hidden="true" />
-              Retry
+              Thử lại
             </Button>
           }
           description={loadError}
-          title="Product catalogue could not load"
+          title="Không thể tải danh sách sản phẩm"
         />
       ) : null}
 
       {!loadError ? (
         <Alert>
-          <AlertTitle>Educational catalogue</AlertTitle>
+          <AlertTitle>Catalogue tham khảo</AlertTitle>
           <AlertDescription>
             Thông tin sản phẩm phục vụ lập routine và giáo dục về thành phần,
-            not medical diagnosis hoặc lời khuyên điều trị.
+            không phải chẩn đoán y khoa hoặc lời khuyên điều trị.
           </AlertDescription>
         </Alert>
       ) : null}
 
       {savedStateError && !loadError ? (
         <Alert variant="destructive">
-          <AlertTitle>Saved state unavailable</AlertTitle>
+          <AlertTitle>Chưa tải được trạng thái đã lưu</AlertTitle>
           <AlertDescription>
             {savedStateError} Bạn vẫn có thể tiếp tục xem catalogue.
           </AlertDescription>
@@ -381,7 +381,7 @@ export function ProductCatalogue() {
       {isLoading ? (
         <Card>
           <CardContent>
-            <LoadingState label="Loading product catalogue" />
+            <LoadingState label="Đang tải danh sách sản phẩm" />
           </CardContent>
         </Card>
       ) : null}
@@ -400,7 +400,7 @@ export function ProductCatalogue() {
               ? "Hãy thử từ khóa, danh mục hoặc mối quan tâm khác."
               : "Hiện chưa có sản phẩm nào trong catalogue."
           }
-          title="No products found"
+          title="Không tìm thấy sản phẩm phù hợp"
         />
       ) : null}
 

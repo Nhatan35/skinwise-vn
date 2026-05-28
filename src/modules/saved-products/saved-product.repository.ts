@@ -42,6 +42,12 @@ export async function listSavedProductsByUser(
   return collection.find({ userId }).sort({ createdAt: -1 }).toArray();
 }
 
+export async function countSavedProductsByUser(userId: string): Promise<number> {
+  const collection = await getSavedProductCollection();
+
+  return collection.countDocuments({ userId });
+}
+
 export async function findSavedProductByUserAndProduct(
   userId: string,
   productId: string,
