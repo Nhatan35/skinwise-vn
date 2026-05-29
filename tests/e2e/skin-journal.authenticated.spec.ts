@@ -39,7 +39,7 @@ test.describe("SkinWise VN authenticated skin journal", () => {
     await page.goto("/journal");
 
     expect((await loadResponsePromise).ok()).toBe(true);
-    await expect(page.getByRole("heading", { name: "Skin Journal" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Nhật ký da" })).toBeVisible();
 
     await page.getByTestId("skin-journal-new-entry-button").first().click();
     await expect(page.getByTestId("skin-journal-form")).toBeVisible();

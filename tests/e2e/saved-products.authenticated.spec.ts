@@ -153,7 +153,7 @@ test.describe("SkinWise VN authenticated saved products", () => {
 
     expect((await savedListResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Your saved products" }),
+      page.getByRole("heading", { name: "Sản phẩm đã lưu" }),
     ).toBeVisible();
 
     const savedCard = page

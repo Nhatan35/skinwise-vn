@@ -76,7 +76,7 @@ test.describe("SkinWise VN authenticated today routine log", () => {
       timeout: 15_000,
     });
     await expect(page.getByText("Ngày hôm nay")).toBeVisible();
-    await expect(page.getByText("Múi giờ")).toBeVisible();
+    await expect(page.getByText("Múi giờ", { exact: true })).toBeVisible();
 
     const routineCard = page
       .getByTestId("today-routine-card")

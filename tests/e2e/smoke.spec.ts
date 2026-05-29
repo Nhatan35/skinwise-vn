@@ -17,16 +17,18 @@ test.describe("SkinWise VN smoke", () => {
 
     await expect(page).toHaveURL("/");
     await expect(
-      page.getByRole("heading", { name: "SkinWise VN" }),
+      page.getByRole("heading", {
+        name: "Xây dựng routine skincare phù hợp hơn với làn da của bạn.",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Open dashboard" }),
+      page.getByRole("link", { name: "Bắt đầu theo dõi" }).first(),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Browse products" }),
+      page.getByRole("link", { name: "Khám phá sản phẩm" }).nth(1)
     ).toBeVisible();
     await expect(
-      page.getByText("Educational skincare guidance only."),
+      page.getByText("không thay thế tư vấn từ bác sĩ da liễu"),
     ).toBeVisible();
   });
 
@@ -34,7 +36,7 @@ test.describe("SkinWise VN smoke", () => {
     page,
   }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "Open dashboard" }).click();
+    await page.getByRole("link", { name: "Bắt đầu theo dõi" }).first().click();
 
     await expectSignInRedirect(page, "/dashboard");
   });

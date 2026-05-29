@@ -10,7 +10,7 @@ test.describe("SkinWise VN authenticated smoke", () => {
 
     await expect(page).not.toHaveURL(/\/api\/auth\/signin/);
     await expect(
-      page.getByRole("heading", { name: "SkinWise dashboard" }),
+      page.getByRole("heading", { name: "Không gian theo dõi skincare" }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "SkinWise overview" }),
