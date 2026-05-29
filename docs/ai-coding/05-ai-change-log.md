@@ -1,8 +1,69 @@
 # 05-ai-change-log.md
 
-# AI Change Log — SkinWise VN MVP v1.2.6
+# AI Change Log — SkinWise VN MVP Final Closeout
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
+
+## 2026-05-29 - MVP-FINAL-CLOSEOUT-001 Final repository closeout
+
+### Task
+
+Finalize SkinWise VN MVP documentation and release status after release hygiene, CI/E2E stabilization, production verification, and final documentation alignment.
+
+### Changes
+
+- Marked SkinWise VN MVP as final portfolio/submission ready.
+- Recorded release hygiene as completed.
+- Recorded GitHub Actions MongoDB service support for Playwright E2E.
+- Recorded Playwright E2E selector stabilization for the current Vietnamese UI copy.
+- Recorded production verification as completed by the project owner.
+- Marked screenshot capture as intentionally skipped because it is not required for this submission.
+- Aligned final closeout documentation across README, final release checklist, release notes, portfolio case study, implementation status, feature status matrix, sprint plan, deployment docs, and screenshots checklist.
+- Preserved historical changelog entries below for traceability.
+
+### Final validation evidence
+
+```txt
+npm ci: PASS
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 72 files / 719 tests
+npm run build: PASS
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 24/24 tests
+```
+
+### Production verification evidence
+
+```txt
+Vercel production deployment: PASS
+Production URL: https://skinwise-vn.vercel.app
+Google OAuth production login: PASS
+MongoDB Atlas production/demo read/write through authenticated flows: PASS
+Protected route redirect behavior: PASS
+Core authenticated MVP flows: PASS
+Runtime logs reviewed: PASS
+```
+
+### Boundaries
+
+- No new product feature scope was added.
+- No UI redesign was performed.
+- No database schema expansion was added.
+- No real OpenAI/Gemini provider integration was added.
+- No image upload, marketplace, payment, notification, skin score, or medical diagnosis feature was added.
+- No secret values, OAuth credentials, MongoDB credentials, API keys, deployment tokens, or private environment values were documented.
+- AI provider remains `mock` for the MVP demo baseline.
+- Screenshot capture is skipped intentionally, not pending.
+
+### Final status
+
+```txt
+SkinWise VN MVP — FINAL DONE FOR PORTFOLIO / SUBMISSION
+```
+
+
 
 ## 2026-05-28 - MVP-E2E-CLOSEOUT-001 MVP core journey E2E closeout and Routine Analysis duplicate-key polish
 
