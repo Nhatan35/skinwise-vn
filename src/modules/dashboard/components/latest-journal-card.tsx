@@ -27,16 +27,16 @@ const stressLevelLabels = {
   high: "Stress cao",
 };
 
-function getJournalTrendText(journalTrend: DashboardDto["journalTrend"]) {
-  if (journalTrend.status === "not_enough_data") {
-    return "Chưa đủ dữ liệu để nhìn ra xu hướng trong 7 ngày gần đây.";
+function getJournalTrendBadgeLabel(journalTrend: DashboardDto["journalTrend"]) {
+  return journalTrend.status === "available" ? "Có xu hướng" : "Chưa đủ dữ liệu";
+}
+
+function getJournalTrendSymptomText(journalTrend: DashboardDto["journalTrend"]) {
+  if (!journalTrend.mostCommonSymptom) {
+    return "Chưa có dấu hiệu nổi bật.";
   }
 
-  if (journalTrend.mostCommonSymptom) {
-    return `7 ngày gần đây có ${journalTrend.recentEntries} nhật ký. Dấu hiệu thường gặp nhất: ${symptomLabels[journalTrend.mostCommonSymptom]}.`;
-  }
-
-  return `7 ngày gần đây có ${journalTrend.recentEntries} nhật ký. Hãy tiếp tục ghi nhận đều để thấy xu hướng rõ hơn.`;
+  return `${symptomLabels[journalTrend.mostCommonSymptom]} (${journalTrend.mostCommonSymptomCount} lần)`;
 }
 
 export function LatestJournalCard({
@@ -46,7 +46,7 @@ export function LatestJournalCard({
   if (!latestJournal.exists) {
     return (
       <DashboardCard
-        action={<Badge variant="outline">Chưa đủ dữ liệu</Badge>}
+        action={<Badge variant="outline">{getJournalTrendBadgeLabel(journalTrend)}</Badge>}
         testId="dashboard-latest-journal-card"
         title="Nhật ký gần đây"
       >
@@ -55,9 +55,16 @@ export function LatestJournalCard({
             Bạn chưa có nhật ký da. Thêm một ghi chú ngắn cho hôm nay để hoàn
             thiện bối cảnh theo dõi skincare.
           </p>
-          <p className="rounded-2xl bg-secondary p-3 text-xs leading-5 text-muted-foreground">
-            {getJournalTrendText(journalTrend)}
-          </p>
+          <div className="rounded-2xl bg-secondary p-3 text-xs leading-5 text-muted-foreground">
+            <p className="font-semibold text-foreground">
+              {journalTrend.recentEntries} nhật ký trong 14 ngày gần đây
+            </p>
+            <p className="mt-1">{journalTrend.message}</p>
+            <p className="mt-2 font-medium text-primary">
+              {journalTrend.nextAction}
+            </p>
+            <p className="mt-2">{journalTrend.disclaimer}</p>
+          </div>
           <Button asChild aria-label="Thêm nhật ký hôm nay" size="sm">
             <Link href={routes.JOURNAL}>Thêm nhật ký hôm nay</Link>
           </Button>
@@ -73,10 +80,24 @@ export function LatestJournalCard({
       title="Nhật ký gần đây"
     >
       <div className="space-y-4">
-        <p className="rounded-2xl bg-secondary p-3 text-xs leading-5 text-muted-foreground">
-          {getJournalTrendText(journalTrend)}
-        </p>
+        <div className="rounded-2xl bg-secondary p-3 text-xs leading-5 text-muted-foreground">
+          <p className="font-semibold text-foreground">
+            {journalTrend.recentEntries} nhật ký trong 14 ngày gần đây
+          </p>
+          <p className="mt-1">{journalTrend.message}</p>
+          <p className="mt-2 font-medium text-primary">
+            {journalTrend.nextAction}
+          </p>
+          <p className="mt-2">{journalTrend.disclaimer}</p>
+        </div>
         <dl className="space-y-3 text-sm">
+          <div>
+            <dt className="font-semibold text-foreground">Xu hướng dấu hiệu</dt>
+            <dd className="mt-1 text-muted-foreground">
+              {getJournalTrendSymptomText(journalTrend)}
+            </dd>
+          </div>
+
           <div>
             <dt className="font-semibold text-foreground">Ngày ghi nhận</dt>
             <dd className="mt-1 text-muted-foreground">{latestJournal.localDate}</dd>

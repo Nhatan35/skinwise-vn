@@ -108,7 +108,10 @@ describe("Dashboard DB-001 UI integration", () => {
       "Sản phẩm đã lưu",
       "Routine 7 ngày",
       "Đang xây dựng thói quen",
+      "Chuỗi",
       "Nhật ký gần đây",
+      "14 ngày gần đây",
+      "Xu hướng dấu hiệu",
       "Ngày ghi nhận",
       "Quan sát",
       "Dấu hiệu đã ghi nhận",
@@ -128,6 +131,8 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(combinedComponentSource).not.toContain("imageUrl");
     expect(combinedComponentSource).not.toContain("skinScore");
     expect(combinedComponentSource).not.toContain("diagnosis");
+    expect(combinedComponentSource).not.toContain("Chẩn đoán");
+    expect(combinedComponentSource).not.toContain("Điều trị");
     expect(combinedComponentSource).not.toContain("skinFeeling");
     expect(combinedComponentSource).not.toContain("severityScore");
   });

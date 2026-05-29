@@ -55,6 +55,7 @@ const mockedCountSavedProductsByUser = vi.mocked(countSavedProductsByUser);
 const userId = "auth-user-id";
 const localDate = "2026-05-17";
 const sevenDayFromLocalDate = "2026-05-11";
+const fourteenDayFromLocalDate = "2026-05-04";
 const fixedDate = new Date("2026-05-17T00:00:00.000Z");
 const morningRoutineId = "665000000000000000000500";
 const eveningRoutineId = "665000000000000000000501";
@@ -177,7 +178,7 @@ function mockDashboardSources(input: {
   latestRoutineAnalysis?: RoutineAnalysis | null;
   latestJournals?: SkinJournalDto[];
   todayJournals?: SkinJournalDto[];
-  journalsLast7Days?: SkinJournalDto[];
+  journalsLast14Days?: SkinJournalDto[];
   savedProductCount?: number;
 }) {
   mockedGetSkinProfileForUser.mockResolvedValue(input.skinProfile ?? null);
@@ -192,7 +193,7 @@ function mockDashboardSources(input: {
   mockedListSkinJournalsForUser
     .mockResolvedValueOnce(input.latestJournals ?? [])
     .mockResolvedValueOnce(input.todayJournals ?? [])
-    .mockResolvedValueOnce(input.journalsLast7Days ?? []);
+    .mockResolvedValueOnce(input.journalsLast14Days ?? []);
   mockedCountSavedProductsByUser.mockResolvedValue(input.savedProductCount ?? 0);
 }
 
@@ -247,10 +248,25 @@ describe("Dashboard use case", () => {
         totalDays: 7,
         rate: 0,
         label: "needs_attention",
+        windowDays: 7,
+        maintainedDays: 0,
+        currentStreak: 0,
+        hasRecentLogs: false,
+        level: "not_started",
+        message: "Bạn chưa có dữ liệu routine trong 7 ngày gần đây.",
+        nextAction: "Bắt đầu ghi nhận routine hôm nay.",
       },
       journalTrend: {
         recentEntries: 0,
         status: "not_enough_data",
+        windowDays: 14,
+        entriesWithSymptomsCount: 0,
+        mostCommonSymptomCount: 0,
+        hasEnoughData: false,
+        message: "Cần thêm nhật ký để xem xu hướng rõ hơn.",
+        nextAction: "Hãy ghi nhật ký da thêm vài lần trong tuần này.",
+        disclaimer:
+          "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
       },
       nextActions: [
         {
@@ -305,7 +321,7 @@ describe("Dashboard use case", () => {
       latestRoutineAnalysis: createAnalysis(),
       latestJournals: [latestJournal],
       todayJournals: [latestJournal],
-      journalsLast7Days: [
+      journalsLast14Days: [
         latestJournal,
         createJournal({ id: "journal-2", localDate: "2026-05-15", symptoms: ["redness"] }),
         createJournal({ id: "journal-3", localDate: "2026-05-12", symptoms: ["dryness"] }),
@@ -350,11 +366,28 @@ describe("Dashboard use case", () => {
       totalDays: 7,
       rate: 43,
       label: "building",
+      windowDays: 7,
+      maintainedDays: 3,
+      currentStreak: 1,
+      hasRecentLogs: true,
+      level: "building",
+      message:
+        "Bạn đã duy trì routine trong 3/7 ngày gần đây. Hãy tiếp tục ghi nhận đều hơn để xây dựng thói quen.",
+      nextAction:
+        "Cố gắng hoàn thành routine thêm vài ngày nữa trong tuần này.",
     });
     expect(dashboard.journalTrend).toEqual({
       recentEntries: 3,
       mostCommonSymptom: "redness",
       status: "available",
+      windowDays: 14,
+      entriesWithSymptomsCount: 3,
+      mostCommonSymptomCount: 2,
+      hasEnoughData: true,
+      message: "Dữ liệu gần đây cho thấy bạn thường ghi nhận: Đỏ da.",
+      nextAction: "Tiếp tục ghi nhận để theo dõi thay đổi theo thời gian.",
+      disclaimer:
+        "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
     });
     expect(dashboard.latestRoutineAnalysis).toEqual({
       exists: true,
@@ -387,6 +420,74 @@ describe("Dashboard use case", () => {
     expect(JSON.stringify(dashboard)).not.toContain("userId");
     expect(JSON.stringify(dashboard)).not.toContain("_id");
     expect(JSON.stringify(dashboard)).not.toContain("ObjectId");
+  });
+
+
+  it("keeps journal trend low-data when recent journals have no symptoms", async () => {
+    const firstJournal = createJournal({
+      id: "journal-no-symptom-1",
+      localDate: "2026-05-17",
+      symptoms: [],
+    });
+    const secondJournal = createJournal({
+      id: "journal-no-symptom-2",
+      localDate: "2026-05-16",
+      symptoms: [],
+    });
+
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      routines: [createRoutine()],
+      routineLogs: [createRoutineLog()],
+      latestJournals: [firstJournal],
+      todayJournals: [firstJournal],
+      journalsLast14Days: [firstJournal, secondJournal],
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.journalTrend).toMatchObject({
+      recentEntries: 2,
+      status: "not_enough_data",
+      entriesWithSymptomsCount: 0,
+      mostCommonSymptomCount: 0,
+      hasEnoughData: false,
+      message:
+        "Bạn đã ghi nhật ký gần đây, nhưng chưa có đủ triệu chứng được ghi nhận để tóm tắt xu hướng.",
+      nextAction:
+        "Khi ghi nhật ký, bạn có thể chọn triệu chứng nếu có để theo dõi rõ hơn.",
+    });
+    expect(dashboard.journalTrend).not.toHaveProperty("mostCommonSymptom");
+  });
+
+  it("marks strong routine consistency and current streak from maintained days", async () => {
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      routines: [createRoutine()],
+      routineLogs: [createRoutineLog()],
+      routineLogsLast7Days: [
+        createRoutineLog({ localDate: "2026-05-12", status: "completed" }),
+        createRoutineLog({ localDate: "2026-05-13", status: "partial" }),
+        createRoutineLog({ localDate: "2026-05-14", status: "completed" }),
+        createRoutineLog({ localDate: "2026-05-15", status: "completed" }),
+        createRoutineLog({ localDate: "2026-05-16", status: "partial" }),
+        createRoutineLog({ localDate: "2026-05-17", status: "completed" }),
+      ],
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.routineConsistency).toMatchObject({
+      completedDays: 6,
+      maintainedDays: 6,
+      rate: 86,
+      label: "excellent",
+      currentStreak: 6,
+      hasRecentLogs: true,
+      level: "consistent",
+      message: "Bạn đang duy trì routine khá đều trong 7 ngày gần đây.",
+      nextAction: "Tiếp tục duy trì và ghi chú thay đổi của da.",
+    });
   });
 
   it("returns latestJournal exists false when no journal exists", async () => {
@@ -565,9 +666,9 @@ describe("Dashboard use case", () => {
       limit: 1,
     });
     expect(mockedListSkinJournalsForUser).toHaveBeenCalledWith(userId, {
-      from: sevenDayFromLocalDate,
+      from: fourteenDayFromLocalDate,
       to: localDate,
-      limit: 7,
+      limit: 14,
     });
     expect(mockedCountSavedProductsByUser).toHaveBeenCalledWith(userId);
   });

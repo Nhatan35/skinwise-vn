@@ -35,12 +35,32 @@ export function RoutineSummaryCard({
           </p>
         ) : null}
         <div className="rounded-2xl bg-secondary p-3 text-sm">
-          <p className="font-semibold text-foreground">Routine 7 ngày</p>
-          <p className="mt-1 text-2xl font-semibold text-primary">
-            {routineConsistency.completedDays}/{routineConsistency.totalDays} ngày
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-semibold text-foreground">Routine 7 ngày</p>
+              <p className="mt-1 text-2xl font-semibold text-primary">
+                {routineConsistency.maintainedDays}/{routineConsistency.totalDays} ngày
+              </p>
+            </div>
+            <span className="rounded-full bg-background px-2 py-1 text-xs font-semibold text-muted-foreground">
+              Chuỗi {routineConsistency.currentStreak} ngày
+            </span>
+          </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-background">
+            <div
+              aria-hidden="true"
+              className="h-full rounded-full bg-primary"
+              style={{ width: `${routineConsistency.rate}%` }}
+            />
+          </div>
+          <p className="mt-3 text-xs font-semibold leading-5 text-foreground">
+            {consistencyLabels[routineConsistency.label]}
           </p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
-            {consistencyLabels[routineConsistency.label]}
+            {routineConsistency.message}
+          </p>
+          <p className="mt-2 text-xs font-medium leading-5 text-primary">
+            {routineConsistency.nextAction}
           </p>
         </div>
         <dl className="grid grid-cols-3 gap-2 text-center text-sm">

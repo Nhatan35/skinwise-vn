@@ -85,11 +85,23 @@ export type DashboardRoutineConsistencyLabel =
   | "good"
   | "excellent";
 
+export type DashboardRoutineConsistencyLevel =
+  | "not_started"
+  | "building"
+  | "consistent";
+
 export type DashboardRoutineConsistencySummary = {
   completedDays: number;
   totalDays: 7;
   rate: number;
   label: DashboardRoutineConsistencyLabel;
+  windowDays: 7;
+  maintainedDays: number;
+  currentStreak: number;
+  hasRecentLogs: boolean;
+  level: DashboardRoutineConsistencyLevel;
+  message: string;
+  nextAction: string;
 };
 
 export type DashboardJournalTrendStatus = "not_enough_data" | "available";
@@ -98,6 +110,13 @@ export type DashboardJournalTrendSummary = {
   recentEntries: number;
   mostCommonSymptom?: SkinJournalSymptom;
   status: DashboardJournalTrendStatus;
+  windowDays: 14;
+  entriesWithSymptomsCount: number;
+  mostCommonSymptomCount: number;
+  hasEnoughData: boolean;
+  message: string;
+  nextAction: string;
+  disclaimer: string;
 };
 
 export type DashboardNextActionPriority = "high" | "medium" | "low";

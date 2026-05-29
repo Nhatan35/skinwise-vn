@@ -69,10 +69,25 @@ const dashboardDto: DashboardDto = {
     totalDays: 7,
     rate: 0,
     label: "needs_attention",
+    windowDays: 7,
+    maintainedDays: 0,
+    currentStreak: 0,
+    hasRecentLogs: false,
+    level: "not_started",
+    message: "Bạn chưa có dữ liệu routine trong 7 ngày gần đây.",
+    nextAction: "Bắt đầu ghi nhận routine hôm nay.",
   },
   journalTrend: {
     recentEntries: 1,
     status: "not_enough_data",
+    windowDays: 14,
+    entriesWithSymptomsCount: 0,
+    mostCommonSymptomCount: 0,
+    hasEnoughData: false,
+    message: "Cần thêm nhật ký để xem xu hướng rõ hơn.",
+    nextAction: "Hãy ghi nhật ký da thêm vài lần trong tuần này.",
+    disclaimer:
+      "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
   },
   nextActions: [
     {
@@ -191,6 +206,8 @@ describe("/api/dashboard contract", () => {
     expect(serializedBody).toContain("savedProducts");
     expect(serializedBody).toContain("routineConsistency");
     expect(serializedBody).toContain("journalTrend");
+    expect(serializedBody).toContain("maintainedDays");
+    expect(serializedBody).toContain("mostCommonSymptomCount");
     expect(serializedBody).not.toContain("userId");
     expect(serializedBody).not.toContain("_id");
     expect(serializedBody).not.toContain("ObjectId");

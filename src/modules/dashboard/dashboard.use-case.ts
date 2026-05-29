@@ -26,6 +26,7 @@ export async function getDashboardForUser(
   input: DashboardQueryInput,
 ): Promise<DashboardDto> {
   const sevenDayFromLocalDate = addLocalDateDays(input.localDate, -6);
+  const fourteenDayFromLocalDate = addLocalDateDays(input.localDate, -13);
   const [
     skinProfile,
     routines,
@@ -34,7 +35,7 @@ export async function getDashboardForUser(
     latestRoutineAnalysis,
     latestJournals,
     todayJournals,
-    journalsLast7Days,
+    journalsLast14Days,
     savedProductCount,
   ] = await Promise.all([
     getSkinProfileForUser(userId),
@@ -49,9 +50,9 @@ export async function getDashboardForUser(
       limit: 1,
     }),
     listSkinJournalsForUser(userId, {
-      from: sevenDayFromLocalDate,
+      from: fourteenDayFromLocalDate,
       to: input.localDate,
-      limit: 7,
+      limit: 14,
     }),
     countSavedProductsByUser(userId),
   ]);
@@ -63,7 +64,7 @@ export async function getDashboardForUser(
     routineLogsLast7Days,
     latestRoutineAnalysis,
     latestJournal: latestJournals[0] ?? null,
-    journalsLast7Days,
+    journalsLast14Days,
     savedProductCount,
     hasJournalToday: todayJournals.length > 0,
     localDate: input.localDate,

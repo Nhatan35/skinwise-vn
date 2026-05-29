@@ -5,6 +5,7 @@ import type {
   DashboardLatestJournalSummary,
   DashboardNextAction,
   DashboardRoutineConsistencyLabel,
+  DashboardRoutineConsistencyLevel,
   DashboardRoutineConsistencySummary,
 } from "@/modules/dashboard/dashboard.types";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
@@ -14,6 +15,19 @@ import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
 import { routes } from "@/shared/constants/routes";
 
 const NOTES_PREVIEW_MAX_LENGTH = 120;
+const symptomDisplayLabels: Record<
+  SkinJournalDto["symptoms"][number],
+  string
+> = {
+  dryness: "Khô căng",
+  oiliness: "Dầu thừa",
+  redness: "Đỏ da",
+  stinging: "Châm chích",
+  new_breakouts: "Mụn mới",
+  itchiness: "Ngứa",
+  other: "Khác",
+};
+
 
 export function mapSkinProfileSummary(profile: SkinProfile | null) {
   if (!profile) {
@@ -212,45 +226,174 @@ export function mapLatestJournalSummary(
   };
 }
 
+function addLocalDateDays(localDate: string, days: number) {
+  const [year, month, day] = localDate.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day + days));
+  const normalizedYear = date.getUTCFullYear();
+  const normalizedMonth = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const normalizedDay = String(date.getUTCDate()).padStart(2, "0");
+
+  return `${normalizedYear}-${normalizedMonth}-${normalizedDay}`;
+}
+
+function isMaintainedRoutineLog(routineLog: RoutineLogDto) {
+  return routineLog.status === "completed" || routineLog.status === "partial";
+}
+
+function getRoutineConsistencyLevel(
+  maintainedDays: number,
+): DashboardRoutineConsistencyLevel {
+  if (maintainedDays === 0) {
+    return "not_started";
+  }
+
+  if (maintainedDays <= 4) {
+    return "building";
+  }
+
+  return "consistent";
+}
+
+function getRoutineConsistencyMessage(maintainedDays: number) {
+  if (maintainedDays === 0) {
+    return "Bạn chưa có dữ liệu routine trong 7 ngày gần đây.";
+  }
+
+  if (maintainedDays <= 4) {
+    return `Bạn đã duy trì routine trong ${maintainedDays}/7 ngày gần đây. Hãy tiếp tục ghi nhận đều hơn để xây dựng thói quen.`;
+  }
+
+  return "Bạn đang duy trì routine khá đều trong 7 ngày gần đây.";
+}
+
+function getRoutineConsistencyNextAction(maintainedDays: number) {
+  if (maintainedDays === 0) {
+    return "Bắt đầu ghi nhận routine hôm nay.";
+  }
+
+  if (maintainedDays <= 4) {
+    return "Cố gắng hoàn thành routine thêm vài ngày nữa trong tuần này.";
+  }
+
+  return "Tiếp tục duy trì và ghi chú thay đổi của da.";
+}
+
+function getCurrentRoutineStreak(
+  maintainedLocalDates: Set<string>,
+  currentLocalDate: string,
+) {
+  let currentStreak = 0;
+
+  for (let dayOffset = 0; dayOffset > -7; dayOffset -= 1) {
+    if (!maintainedLocalDates.has(addLocalDateDays(currentLocalDate, dayOffset))) {
+      break;
+    }
+
+    currentStreak += 1;
+  }
+
+  return currentStreak;
+}
+
 export function mapRoutineConsistencySummary(
   routineLogs: RoutineLogDto[],
+  currentLocalDate: string,
 ): DashboardRoutineConsistencySummary {
-  const completedLocalDates = new Set<string>();
+  const maintainedLocalDates = new Set<string>();
 
   for (const routineLog of routineLogs) {
-    if (routineLog.status === "completed" || routineLog.status === "partial") {
-      completedLocalDates.add(routineLog.localDate);
+    if (isMaintainedRoutineLog(routineLog)) {
+      maintainedLocalDates.add(routineLog.localDate);
     }
   }
 
-  const completedDays = completedLocalDates.size;
+  const maintainedDays = maintainedLocalDates.size;
   const totalDays = 7 as const;
-  const rate = Math.round((completedDays / totalDays) * 100);
+  const rate = Math.round((maintainedDays / totalDays) * 100);
   const label: DashboardRoutineConsistencyLabel =
-    completedDays <= 1
+    maintainedDays <= 1
       ? "needs_attention"
-      : completedDays <= 3
+      : maintainedDays <= 3
         ? "building"
-        : completedDays <= 5
+        : maintainedDays <= 5
           ? "good"
           : "excellent";
 
   return {
-    completedDays,
+    completedDays: maintainedDays,
     totalDays,
     rate,
     label,
+    windowDays: totalDays,
+    maintainedDays,
+    currentStreak: getCurrentRoutineStreak(
+      maintainedLocalDates,
+      currentLocalDate,
+    ),
+    hasRecentLogs: maintainedDays > 0,
+    level: getRoutineConsistencyLevel(maintainedDays),
+    message: getRoutineConsistencyMessage(maintainedDays),
+    nextAction: getRoutineConsistencyNextAction(maintainedDays),
   };
+}
+
+function getJournalTrendMessage(input: {
+  hasEnoughEntries: boolean;
+  entriesWithSymptomsCount: number;
+  mostCommonSymptom?: SkinJournalDto["symptoms"][number];
+}) {
+  if (!input.hasEnoughEntries) {
+    return "Cần thêm nhật ký để xem xu hướng rõ hơn.";
+  }
+
+  if (!input.mostCommonSymptom || input.entriesWithSymptomsCount === 0) {
+    return "Bạn đã ghi nhật ký gần đây, nhưng chưa có đủ triệu chứng được ghi nhận để tóm tắt xu hướng.";
+  }
+
+  return `Dữ liệu gần đây cho thấy bạn thường ghi nhận: ${symptomDisplayLabels[input.mostCommonSymptom]}.`;
+}
+
+function getJournalTrendNextAction(input: {
+  hasEnoughEntries: boolean;
+  entriesWithSymptomsCount: number;
+  mostCommonSymptom?: SkinJournalDto["symptoms"][number];
+}) {
+  if (!input.hasEnoughEntries) {
+    return "Hãy ghi nhật ký da thêm vài lần trong tuần này.";
+  }
+
+  if (!input.mostCommonSymptom || input.entriesWithSymptomsCount === 0) {
+    return "Khi ghi nhật ký, bạn có thể chọn triệu chứng nếu có để theo dõi rõ hơn.";
+  }
+
+  return "Tiếp tục ghi nhận để theo dõi thay đổi theo thời gian.";
 }
 
 export function mapJournalTrendSummary(
   journals: SkinJournalDto[],
 ): DashboardJournalTrendSummary {
   const symptomCounts = new Map<SkinJournalDto["symptoms"][number], number>();
+  const latestSymptomLocalDates = new Map<
+    SkinJournalDto["symptoms"][number],
+    string
+  >();
+  let entriesWithSymptomsCount = 0;
 
   for (const journal of journals) {
-    for (const symptom of journal.symptoms ?? []) {
+    const symptoms = journal.symptoms ?? [];
+
+    if (symptoms.length > 0) {
+      entriesWithSymptomsCount += 1;
+    }
+
+    for (const symptom of symptoms) {
       symptomCounts.set(symptom, (symptomCounts.get(symptom) ?? 0) + 1);
+
+      const latestLocalDate = latestSymptomLocalDates.get(symptom);
+
+      if (!latestLocalDate || journal.localDate > latestLocalDate) {
+        latestSymptomLocalDates.set(symptom, journal.localDate);
+      }
     }
   }
 
@@ -258,16 +401,45 @@ export function mapJournalTrendSummary(
   let mostCommonSymptomCount = 0;
 
   for (const [symptom, count] of symptomCounts) {
-    if (count > mostCommonSymptomCount) {
+    const mostCommonSymptomLocalDate = mostCommonSymptom
+      ? latestSymptomLocalDates.get(mostCommonSymptom)
+      : undefined;
+    const currentSymptomLocalDate = latestSymptomLocalDates.get(symptom);
+    const isMoreRecentTie =
+      count === mostCommonSymptomCount &&
+      !!currentSymptomLocalDate &&
+      (!mostCommonSymptomLocalDate ||
+        currentSymptomLocalDate > mostCommonSymptomLocalDate);
+
+    if (count > mostCommonSymptomCount || isMoreRecentTie) {
       mostCommonSymptom = symptom;
       mostCommonSymptomCount = count;
     }
   }
 
+  const hasEnoughEntries = journals.length >= 2;
+  const hasEnoughData = hasEnoughEntries && symptomCounts.size > 0;
+  const status: DashboardJournalTrendSummary["status"] = hasEnoughData
+    ? "available"
+    : "not_enough_data";
+  const messageInput = {
+    hasEnoughEntries,
+    entriesWithSymptomsCount,
+    mostCommonSymptom,
+  };
+
   return {
     recentEntries: journals.length,
     ...(mostCommonSymptom ? { mostCommonSymptom } : {}),
-    status: journals.length >= 2 ? "available" : "not_enough_data",
+    status,
+    windowDays: 14,
+    entriesWithSymptomsCount,
+    mostCommonSymptomCount,
+    hasEnoughData,
+    message: getJournalTrendMessage(messageInput),
+    nextAction: getJournalTrendNextAction(messageInput),
+    disclaimer:
+      "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
   };
 }
 
@@ -344,7 +516,7 @@ export function toDashboardDto(input: {
   routineLogsLast7Days: RoutineLogDto[];
   latestRoutineAnalysis: RoutineAnalysis | null;
   latestJournal: SkinJournalDto | null;
-  journalsLast7Days: SkinJournalDto[];
+  journalsLast14Days: SkinJournalDto[];
   savedProductCount: number;
   hasJournalToday: boolean;
   localDate: string;
@@ -364,8 +536,9 @@ export function toDashboardDto(input: {
   const savedProducts = { count: input.savedProductCount };
   const routineConsistency = mapRoutineConsistencySummary(
     input.routineLogsLast7Days,
+    input.localDate,
   );
-  const journalTrend = mapJournalTrendSummary(input.journalsLast7Days);
+  const journalTrend = mapJournalTrendSummary(input.journalsLast14Days);
 
   return {
     skinProfile,
