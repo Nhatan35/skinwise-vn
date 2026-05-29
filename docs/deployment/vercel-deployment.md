@@ -1,26 +1,19 @@
 # Vercel Deployment Runbook - SkinWise VN MVP
 
+Last updated: 2026-05-29
+
 ## Current Deployment Status
 
 ```txt
-Deployment status: Deployed for MVP demo.
-Actual Vercel deployment: COMPLETED.
-Deployment target: Vercel.
-Production branch: main.
-Production commit: db72e07.
+Deployment status: VERIFIED FOR MVP PORTFOLIO RELEASE
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASSED.
-Google OAuth production login: PASSED.
-MongoDB production/demo read/write through authenticated flows: PASSED.
-TASK DEPLOY-002: COMPLETED.
-DEPLOY-VERIFY-001: PARTIAL as of 2026-05-25.
+Production branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
 ```
 
-DEPLOY-VERIFY-001 historical evidence: local Node 20 validation previously passed; current runtime baseline is Node 24.x / npm 11.x and should be revalidated; the public production URL loaded; unauthenticated `/dashboard`, `/products`, `/routines`, `/journal`, and `/skin-profile` redirected to Auth.js sign-in. Current Vercel project settings, build/runtime logs, environment variable presence, Google Cloud Console OAuth settings, MongoDB Atlas settings/connectivity, Google OAuth login, authenticated dashboard, MongoDB-backed read/write, and sign-out were not externally verified in this task.
+This is an MVP demo/portfolio deployment, not a full commercial production release.
 
-SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, notifications, or other out-of-scope features during deployment.
-
-This is an MVP demo deployment, not a full commercial production release.
+SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, payment, or other out-of-scope features during this release.
 
 ## Vercel Project Settings
 
@@ -28,78 +21,31 @@ This is an MVP demo deployment, not a full commercial production release.
 |---|---|
 | Framework Preset | Next.js |
 | Root Directory | Project root |
-| Install Command | `npm ci` when `package-lock.json` is present; otherwise `npm install` |
+| Install Command | `npm ci` |
 | Build Command | `npm run build` |
 | Output Directory | Leave default for Next.js |
-| Node.js Version | Node 24.x recommended |
+| Node.js Version | Node 24.x |
+| Production Branch | `main` |
 
-Runtime baseline for this project:
-
-```txt
-Node.js: 24.x
-npm: 11.x
-Expected local baseline for RUNTIME-001: Node v24.14.0 and npm 11.14.1
-```
-
-## Environment Variable Checklist
+## Environment Variables
 
 Configure production values only in Vercel Project Settings -> Environment Variables. Do not commit production secrets.
 
-For the deployed MVP demo, `APP_BASE_URL` and `AUTH_URL` must match:
-
-```txt
-https://skinwise-vn.vercel.app
-```
-
-Do not document real secret values. This project uses `AUTH_URL` and `APP_BASE_URL`; do not introduce `NEXTAUTH_URL` unless the source code is deliberately changed.
-
-### Required For Production App Boot
+Required production values:
 
 ```txt
 APP_ENV="production"
-APP_BASE_URL="https://<your-vercel-domain>"
-MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
+APP_BASE_URL="https://skinwise-vn.vercel.app"
+AUTH_URL="https://skinwise-vn.vercel.app"
 AUTH_SECRET="<secure-production-random-secret>"
-AUTH_URL="https://<your-vercel-domain>"
-```
-
-### Required For Google OAuth Login
-
-```txt
+MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
 AUTH_GOOGLE_ID="<google-oauth-client-id>"
 AUTH_GOOGLE_SECRET="<google-oauth-client-secret>"
-```
-
-Google OAuth variables are not required for app boot, but production Google login will not work without them.
-
-### Demo AI Provider
-
-```txt
 AI_PROVIDER="mock"
+NEXT_TELEMETRY_DISABLED="1"
 ```
 
-Use the mock provider for this MVP demo deployment. OpenAI and Gemini providers are not implemented in this task.
-
-### Optional/Future AI Variables
-
-```txt
-AI_API_KEY=""
-AI_MODEL=""
-```
-
-Leave these empty unless a real provider is implemented and verified later.
-
-### Optional/Future Cloudinary Variables
-
-```txt
-CLOUDINARY_CLOUD_NAME=""
-CLOUDINARY_API_KEY=""
-CLOUDINARY_API_SECRET=""
-```
-
-Image upload is out of scope for the current MVP.
-
-### Feature Flags
+MVP feature flags:
 
 ```txt
 FEATURE_AI_ROUTINE_ANALYSIS="false"
@@ -110,194 +56,74 @@ FEATURE_MARKETPLACE="false"
 FEATURE_SKIN_SCORE="false"
 ```
 
-Do not enable unfinished or out-of-scope features for the MVP demo.
-
-## Deployment Result
+Optional values may remain empty when their feature flag is disabled:
 
 ```txt
-TASK DEPLOY-002: completed.
-Production URL: https://skinwise-vn.vercel.app
-Deployment target: Vercel.
-Production branch: main.
-Production commit: db72e07.
-Deployment status: Ready / deployed for MVP demo.
-Production smoke test: passed.
-Google OAuth production login: passed.
-Authenticated MVP flows: passed.
-MongoDB production/demo read/write through authenticated flows: passed.
-AI provider: AI_PROVIDER="mock".
-Secrets documented: no.
+AI_API_KEY=""
+AI_MODEL=""
+CLOUDINARY_CLOUD_NAME=""
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
 ```
 
-Current DEPLOY-VERIFY-001 re-verification result:
+## Google OAuth
+
+Authorized redirect URI for production:
 
 ```txt
-Status: Partial.
-Local validation: pending rerun under Node 24.x / npm 11.x after RUNTIME-001.
-Public URL: passed.
-Unauthenticated protected-route redirects: passed.
-Google OAuth production login: not verified in this task.
-Authenticated dashboard: not verified in this task.
-MongoDB-backed read/write: not verified in this task.
-Vercel build/runtime logs and env var presence: not verified in this task.
+https://skinwise-vn.vercel.app/api/auth/callback/google
 ```
 
-Known MVP demo limitations:
-
-- The deployment is an MVP demo deployment, not a full commercial production release.
-- AI routine analysis uses mock/deterministic provider behavior.
-- Product catalogue data is demo/seed-style catalogue data.
-- Real OpenAI/Gemini providers are not implemented.
-- Image upload and AI face analysis remain out of scope.
-- Skin score remains out of scope.
-- Marketplace, payment, subscription, and notifications remain out of scope.
-- The app provides educational skincare support only, not medical diagnosis or treatment advice.
-
-## Security Rules
-
-- Never upload `.env.local`.
-- Never commit `.env.local`.
-- Never paste secrets into docs, README files, screenshots, reports, issue descriptions, or pull request descriptions.
-- Configure production secrets only in Vercel Project Settings -> Environment Variables.
-- Keep `.env.example` placeholder-only.
-- Exclude `.next`, `node_modules`, `.vercel`, generated reports, local test results, and zip artifacts from source packages.
-- Rotate any secret that was pushed publicly, uploaded, screenshotted, pasted into chat, or shared externally.
-
-## Production Dependency Audit
-
-Current DEPLOY-001 follow-up audit status:
+If a custom domain is added later, add the matching callback URL as well:
 
 ```txt
-TASK SECURITY-AUDIT-001: completed.
-Audit command: npm audit --omit=dev --audit-level=moderate
-Current result: Pass - found 0 vulnerabilities.
+https://<custom-domain>/api/auth/callback/google
 ```
 
-`npm audit fix --force` was not used because the original audit recommendation for the PostCSS advisory would have installed an unsafe breaking Next.js downgrade. The production audit was resolved by keeping `next@16.2.6` and applying same-major npm overrides for the affected transitive packages:
+## MongoDB Atlas
 
-```txt
-postcss@8.5.15
-qs@6.15.2
-```
+Production `MONGODB_URI` must use MongoDB Atlas or another reachable production database. It must not use `127.0.0.1` or `localhost` in Vercel.
 
-Do not remove these overrides unless a future Next.js or upstream dependency update resolves the advisories safely and `npm audit --omit=dev --audit-level=moderate` still passes.
+Checklist:
 
-## MongoDB Atlas Production Readiness
-
-- Use a separate demo database for portfolio deployment.
-- Verify the database user has only the permissions needed for the demo app.
-- Verify Atlas network access allows Vercel serverless functions to connect.
-- `0.0.0.0/0` is convenient for an MVP demo but less restrictive; use a tighter access policy if available.
-- Verify the database name in the connection string.
-- Run `npm run db:indexes` only against the intended demo database when the target is confirmed.
-- Run `npm run db:seed` only against the intended demo database.
-- Do not print or paste the MongoDB URI.
-
-## Google OAuth Production Setup
-
-In Google Cloud Console, configure the OAuth client for the deployed domain.
-
-Authorized JavaScript origin:
-
-```txt
-https://<your-vercel-domain>
-```
-
-Authorized redirect URI:
-
-```txt
-https://<your-vercel-domain>/api/auth/callback/google
-```
-
-Preserve the local redirect URI for development:
-
-```txt
-http://localhost:3000/api/auth/callback/google
-```
-
-Vercel variables must match the OAuth client:
-
-```txt
-AUTH_GOOGLE_ID
-AUTH_GOOGLE_SECRET
-```
-
-`AUTH_URL` and `APP_BASE_URL` must match the production domain. Test Google login after deployment.
+- Database user has the required read/write access.
+- Password is URL-encoded when it contains special characters.
+- Atlas Network Access allows the Vercel runtime to connect.
+- Cluster is available and not paused.
 
 ## Deployment Steps
 
-1. Verify the repo and clean package contain no local secrets or generated artifacts.
-2. Ensure `.env.local` is not tracked by Git.
-3. Ensure `.env.local` is not included in the clean zip.
-4. Push the clean repo to GitHub.
-5. Connect the GitHub repo to Vercel.
-6. Select the Next.js framework preset.
-7. Set the root directory to the project root.
-8. Set the install command to `npm ci`.
-9. Set the build command to `npm run build`.
-10. Leave the output directory as the default for Next.js.
-11. Add production environment variables in Vercel.
-12. Trigger deployment.
-13. Verify Vercel build logs.
-14. Open the production URL.
-15. Run production smoke tests.
+1. Push the final commit to `main`.
+2. Confirm GitHub Actions CI passes.
+3. Confirm Vercel creates a Production deployment.
+4. Confirm deployment status is `Ready`.
+5. Open the production URL.
+6. Run the manual MVP smoke test.
+7. Review Vercel runtime logs after smoke testing.
 
-## Production Smoke Test Checklist
+## Manual Production Smoke Test
 
-### Public
+| Flow | Expected Result |
+|---|---|
+| Landing page | Page loads without 500/blank screen. |
+| Protected route while signed out | Redirects to sign-in flow. |
+| Google OAuth login | Login succeeds and returns to app. |
+| Dashboard | Authenticated dashboard loads. |
+| Skin Profile | Create/update/read works. |
+| Product Catalogue | List/search/detail works. |
+| Saved Products | Save/remove works. |
+| Ingredient Library | List/search/detail works. |
+| Routine Builder | Create/update works. |
+| Routine Analysis | Mock/fallback result appears without crash. |
+| Today Routine Log | Complete/delete works. |
+| Skin Journal | Create/edit/delete works. |
+| Settings/Data Control | Page and deletion request flow work. |
+| Sign out | Session ends and protected routes redirect. |
 
-- `/` loads successfully.
-- Landing page shows correct MVP/post Week 6 messaging.
-- No outdated Week 1-only copy appears.
-- No false deployment claim appears.
+## Final Verification Result
 
-### Auth
+Production verification completed by project owner for MVP release.
 
-- Sign-in page works.
-- Google sign-in works.
-- User lands on dashboard or intended callback URL.
-- Sign-out works if implemented.
-
-### Protected Routes Unauthenticated
-
-- `/dashboard` redirects to sign-in.
-- `/products` redirects to sign-in.
-- `/products/[id]` redirects to sign-in if protected.
-- `/skin-profile` redirects to sign-in.
-- `/routines` redirects to sign-in.
-- `/journal` redirects to sign-in.
-
-### Authenticated MVP
-
-- `/dashboard` loads.
-- `/skin-profile` loads.
-- User can create or update skin profile.
-- `/products` loads.
-- Product search and filters work.
-- `/products/[id]` loads.
-- `/routines` loads.
-- User can create a routine.
-- User can add a product to a routine.
-- User can analyze a routine.
-- Routine analysis result appears.
-- User can log routine status.
-- `/journal` loads.
-- User can create a journal entry.
-- User can edit a journal entry.
-- User can delete a journal entry.
-- Dashboard summary reflects relevant data.
-
-### API
-
-- `/api/me` returns authenticated user data after login.
-- Product APIs respond correctly.
-- Routine APIs respond correctly after login.
-- Journal APIs respond correctly after login.
-
-### Safety
-
-- App does not diagnose disease.
-- App does not promise treatment results.
-- App does not create skin score or attractiveness score.
-- App displays educational/safety disclaimers where appropriate.
-- App does not present itself as a replacement for dermatologists.
+```txt
+MVP-PRODUCTION-VERIFY-001 — DONE
+```
