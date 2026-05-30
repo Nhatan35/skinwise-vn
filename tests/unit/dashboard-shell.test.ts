@@ -34,7 +34,7 @@ const dashboardNavigationSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, Ingredients, and Settings as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, Insights, Ingredients, and Settings as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
@@ -52,6 +52,7 @@ describe("dashboard shell config", () => {
     expect(routes.JOURNAL).toBe("/journal");
     expect(routes.PRODUCTS).toBe("/products");
     expect(routes.SAVED_PRODUCTS).toBe("/saved-products");
+    expect(routes.INSIGHTS).toBe("/insights");
     expect(routes.INGREDIENTS).toBe("/ingredients");
     expect(routes.SETTINGS).toBe("/settings");
     expect(enabledItems).toEqual([
@@ -95,6 +96,12 @@ describe("dashboard shell config", () => {
         disabled: false,
         href: "/saved-products",
         label: "Saved Products",
+        status: "Active",
+      },
+      {
+        disabled: false,
+        href: "/insights",
+        label: "Insights",
         status: "Active",
       },
       {

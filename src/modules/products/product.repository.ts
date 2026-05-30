@@ -84,6 +84,31 @@ export async function searchVisibleProducts(
     .toArray();
 }
 
+
+export async function findVisibleProductsByIds(
+  ids: string[],
+): Promise<Product[]> {
+  const objectIds = Array.from(new Set(ids))
+    .map(toObjectId)
+    .filter((objectId): objectId is ObjectId => objectId !== null);
+
+  if (objectIds.length === 0) {
+    return [];
+  }
+
+  const collection = await getProductCollection();
+
+  return collection
+    .find({
+      ...visibleProductFilter(),
+      _id: {
+        $in: objectIds,
+      },
+    })
+    .sort({ brand: 1, name: 1 })
+    .toArray();
+}
+
 export async function findVisibleProductById(
   id: string,
 ): Promise<Product | null> {

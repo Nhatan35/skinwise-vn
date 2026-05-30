@@ -114,6 +114,26 @@ export async function findSkinJournalEntriesByUserId(
     .toArray();
 }
 
+
+export async function findSkinJournalEntriesByDateRangeForInsights(
+  userId: string,
+  fromLocalDate: string,
+  toLocalDate: string,
+): Promise<SkinJournal[]> {
+  const collection = await getSkinJournalCollection();
+
+  return collection
+    .find({
+      userId,
+      localDate: {
+        $gte: fromLocalDate,
+        $lte: toLocalDate,
+      },
+    })
+    .sort({ localDate: 1, createdAt: 1 })
+    .toArray();
+}
+
 export async function findSkinJournalEntryByIdForUser(
   id: string,
   userId: string,

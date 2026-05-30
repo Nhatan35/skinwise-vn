@@ -26,6 +26,7 @@ const navLabelMap: Record<string, string> = {
   Journal: "Nhật ký",
   Products: "Sản phẩm",
   "Saved Products": "Đã lưu",
+  Insights: "Tiến độ",
   Ingredients: "Thành phần",
   Settings: "Cài đặt",
 };

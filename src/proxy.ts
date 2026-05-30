@@ -16,6 +16,7 @@ export const config = {
     "/journal/:path*",
     "/products/:path*",
     "/saved-products/:path*",
+    "/insights/:path*",
     "/ingredients/:path*",
     "/settings/:path*",
   ],

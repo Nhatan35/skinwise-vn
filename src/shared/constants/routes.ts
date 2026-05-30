@@ -7,6 +7,7 @@ export const routes = {
   JOURNAL: "/journal",
   PRODUCTS: "/products",
   SAVED_PRODUCTS: "/saved-products",
+  INSIGHTS: "/insights",
   INGREDIENTS: "/ingredients",
   SETTINGS: "/settings",
   SKIN_PROFILE: "/skin-profile",

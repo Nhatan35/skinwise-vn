@@ -7,6 +7,7 @@ export const todayLogRoute = routes.TODAY_LOG;
 export const journalRoute = routes.JOURNAL;
 export const productsRoute = routes.PRODUCTS;
 export const savedProductsRoute = routes.SAVED_PRODUCTS;
+export const insightsRoute = routes.INSIGHTS;
 export const ingredientsRoute = routes.INGREDIENTS;
 export const settingsRoute = routes.SETTINGS;
 
@@ -18,6 +19,7 @@ type DashboardNavHref =
   | typeof journalRoute
   | typeof productsRoute
   | typeof savedProductsRoute
+  | typeof insightsRoute
   | typeof ingredientsRoute
   | typeof settingsRoute;
 
@@ -69,6 +71,12 @@ export const dashboardNavItems: DashboardNavItem[] = [
     disabled: false,
     href: savedProductsRoute,
     label: "Saved Products",
+    status: "Active",
+  },
+  {
+    disabled: false,
+    href: insightsRoute,
+    label: "Insights",
     status: "Active",
   },
   {
