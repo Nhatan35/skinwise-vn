@@ -33,7 +33,7 @@ export function ProductMatchPage() {
       const message =
         error instanceof ProductMatchClientError
           ? error.message
-          : "Could not load product matches.";
+          : "Không thể tải gợi ý sản phẩm.";
 
       setProductMatch(null);
       setLoadError(message);
@@ -60,7 +60,7 @@ export function ProductMatchPage() {
           const message =
             error instanceof ProductMatchClientError
               ? error.message
-              : "Could not load product matches.";
+              : "Không thể tải gợi ý sản phẩm.";
 
           setProductMatch(null);
           setLoadError(message);
@@ -80,7 +80,7 @@ export function ProductMatchPage() {
   }, []);
 
   if (isLoading) {
-    return <LoadingState label="Loading Product Match" />;
+    return <LoadingState label="Đang tải gợi ý sản phẩm" />;
   }
 
   if (loadError) {
@@ -88,11 +88,11 @@ export function ProductMatchPage() {
       <ErrorState
         action={
           <Button onClick={() => void loadProductMatches()} size="sm" variant="outline">
-            Try again
+            Thử lại
           </Button>
         }
         description={loadError}
-        title="Could not load product matches"
+        title="Không thể tải gợi ý sản phẩm"
       />
     );
   }
@@ -100,8 +100,8 @@ export function ProductMatchPage() {
   if (!productMatch) {
     return (
       <ErrorState
-        description="Could not load product matches."
-        title="Could not load product matches"
+        description="Không thể tải gợi ý sản phẩm."
+        title="Không thể tải gợi ý sản phẩm"
       />
     );
   }
@@ -129,12 +129,13 @@ export function ProductMatchPage() {
     <div className="space-y-5">
       <div className="rounded-3xl border border-border bg-card p-5 shadow-sm shadow-stone-950/5">
         <p className="text-sm font-semibold text-primary">
-          Generated {new Date(productMatch.generatedAt).toLocaleString("vi-VN")}
+          Được tạo lúc{" "}
+          {new Date(productMatch.generatedAt).toLocaleString("vi-VN")}
         </p>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Product matches are deterministic and educational. Review ingredients
-          carefully, patch test before applying widely, and introduce new
-          products slowly.
+          Gợi ý sản phẩm được tạo theo quy tắc cố định và chỉ mang tính tham
+          khảo. Nên xem kỹ bảng thành phần, thử trên một vùng da nhỏ và thêm
+          sản phẩm mới từ từ.
         </p>
       </div>
 

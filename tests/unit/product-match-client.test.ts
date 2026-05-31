@@ -43,8 +43,8 @@ const productMatchResponse: ProductMatchResponseDto = {
       },
       matchScore: 95,
       matchLevel: "strong",
-      reasons: ["Matches your oily skin type."],
-      cautions: ["This is educational guidance, not medical advice."],
+      reasons: ["Phù hợp với da dầu của bạn."],
+      cautions: ["Đây là thông tin tham khảo, không phải tư vấn y tế."],
       matchedSignals: {
         skinType: true,
         concerns: ["acne"],
@@ -135,7 +135,7 @@ describe("Product Match client", () => {
     await expect(getProductMatches({ limit: 25 })).rejects.toMatchObject({
       name: "ProductMatchClientError",
       code: "VALIDATION_ERROR",
-      message: "Could not load product matches.",
+      message: "Không thể tải gợi ý sản phẩm.",
       status: 400,
     });
   });
@@ -168,7 +168,7 @@ describe("Product Match client", () => {
     await expect(getProductMatches()).rejects.toMatchObject({
       name: "ProductMatchClientError",
       code: "INTERNAL_ERROR",
-      message: "Could not load product matches.",
+      message: "Không thể tải gợi ý sản phẩm.",
       status: 500,
     });
 

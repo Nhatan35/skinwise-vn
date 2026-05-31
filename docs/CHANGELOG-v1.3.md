@@ -18,6 +18,19 @@
 - No diagnosis, skin score, appearance score, treatment guarantee, product-causality claim, face analysis, image analysis, marketplace, cart, checkout, payment, or new recommendations collection was added.
 - Product candidates reuse existing visible-product rules and saved status reuses existing saved-products behavior.
 
+### Changed
+
+- Localized Product Match visible UI copy to Vietnamese.
+- Localized Product Match generated reasons and cautions to Vietnamese while keeping raw product names, brand names, ingredient values, IDs, and API enum values unchanged.
+- Corrected README route documentation for `/insights`, `/api/insights`, `/product-match`, and `/api/product-match`.
+- Updated API contract and UI route map documentation for the localized Product Match contract and page states.
+- Updated affected Product Match tests for localized copy.
+
+### Tests
+
+- Product Match scoring, API contract, client, use-case, repository, UI, and Playwright E2E coverage remain in place.
+- Scoring, API/client fixtures, UI source assertions, and Product Match E2E heading assertions were updated for Vietnamese copy.
+
 ### Validation
 
 ```txt

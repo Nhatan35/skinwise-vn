@@ -6,6 +6,10 @@ import type {
   ProductMatchDto,
   ProductMatchLevel,
 } from "@/modules/product-match/product-match.dto";
+import type {
+  ProductCategory,
+  ProductPriceRange,
+} from "@/modules/products/product.types";
 import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -18,10 +22,28 @@ import {
 import { routes } from "@/shared/constants/routes";
 
 const matchLevelLabels: Record<ProductMatchLevel, string> = {
-  strong: "Strong match",
-  good: "Good match",
-  cautious: "Review carefully",
-  low: "Low match",
+  strong: "Phù hợp cao",
+  good: "Phù hợp tốt",
+  cautious: "Cần xem kỹ",
+  low: "Phù hợp thấp",
+};
+
+const categoryLabels: Record<ProductCategory, string> = {
+  cleanser: "Sữa rửa mặt",
+  moisturizer: "Dưỡng ẩm",
+  sunscreen: "Chống nắng",
+  treatment: "Treatment",
+  toner: "Toner",
+  serum: "Serum",
+  mask: "Mặt nạ",
+  other: "Khác",
+};
+
+const priceRangeLabels: Record<ProductPriceRange, string> = {
+  budget: "Tiết kiệm",
+  mid: "Tầm trung",
+  premium: "Cao cấp",
+  unknown: "Chưa rõ giá",
 };
 
 const matchLevelVariants: Record<
@@ -51,11 +73,12 @@ export function ProductMatchCard({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase text-muted-foreground">
-              {product.brand || "SkinWise catalogue"}
+              {product.brand || "Catalogue SkinWise"}
             </p>
             <CardTitle className="mt-2 text-xl">{product.name}</CardTitle>
             <p className="mt-2 text-sm text-muted-foreground">
-              {product.category} - {product.priceRange}
+              {categoryLabels[product.category]} -{" "}
+              {priceRangeLabels[product.priceRange]}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -66,7 +89,7 @@ export function ProductMatchCard({
               {matchLevelLabels[item.matchLevel]}
             </Badge>
             <Badge data-testid="product-match-score" variant="outline">
-              {item.matchScore}/100
+              Điểm phù hợp: {item.matchScore}/100
             </Badge>
           </div>
         </div>
@@ -74,7 +97,7 @@ export function ProductMatchCard({
       <CardContent className="space-y-5">
         <section className="space-y-2" data-testid="product-match-reasons">
           <h3 className="text-sm font-semibold text-foreground">
-            Why it may fit your profile
+            Vì sao có thể phù hợp
           </h3>
           {item.reasons.length > 0 ? (
             <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
@@ -84,15 +107,15 @@ export function ProductMatchCard({
             </ul>
           ) : (
             <p className="text-sm text-muted-foreground">
-              No strong profile signals were found. Review carefully before
-              adding it to your routine.
+              Chưa có đủ tín hiệu rõ ràng từ hồ sơ da. Nên xem kỹ trước khi
+              thêm vào routine.
             </p>
           )}
         </section>
 
         <section className="space-y-2" data-testid="product-match-cautions">
           <h3 className="text-sm font-semibold text-foreground">
-            Review before use
+            Cần xem kỹ trước khi dùng
           </h3>
           <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
             {item.cautions.map((caution) => (
@@ -107,7 +130,7 @@ export function ProductMatchCard({
               data-testid="product-match-view-details-link"
               href={`${routes.PRODUCTS}/${product.id}`}
             >
-              View details
+              Xem chi tiết
             </Link>
           </Button>
           <SavedProductToggleButton

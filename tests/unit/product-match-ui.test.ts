@@ -41,11 +41,11 @@ describe("Product Match UI source", () => {
   it("adds the protected /product-match dashboard page", () => {
     expect(existsSync(productMatchPagePath)).toBe(true);
     expect(routes.PRODUCT_MATCH).toBe("/product-match");
-    expect(productMatchPageSource).toContain("Product Match");
+    expect(productMatchPageSource).toContain("Gợi ý sản phẩm phù hợp");
     expect(productMatchPageSource).toContain(
-      "Educational product matches based on your skin profile.",
+      "Gợi ý sản phẩm dựa trên hồ sơ da của bạn.",
     );
-    expect(productMatchPageSource).toContain("medical advice.");
+    expect(productMatchPageSource).toContain("không phải tư vấn y tế.");
     expect(productMatchPageSource).toContain("productMatchRoute");
     expect(productMatchPageSource).toContain("data-route={productMatchRoute}");
     expect(productMatchPageSource).toContain("<ProductMatchPage />");
@@ -64,13 +64,13 @@ describe("Product Match UI source", () => {
 
   it("renders loading, error, no-profile, and no-product states", () => {
     for (const expectedCopy of [
-      "Loading Product Match",
-      "Could not load product matches",
-      "Try again",
-      "Create your Skin Profile first to see personalized product matches.",
-      "Create Skin Profile",
-      "No product matches are available yet.",
-      "No product matches available yet",
+      "Đang tải gợi ý sản phẩm",
+      "Không thể tải gợi ý sản phẩm",
+      "Thử lại",
+      "Tạo hồ sơ da trước để xem gợi ý sản phẩm phù hợp.",
+      "Tạo hồ sơ da",
+      "Hiện chưa có gợi ý sản phẩm phù hợp để hiển thị.",
+      "Chưa có gợi ý sản phẩm phù hợp",
     ]) {
       expect(combinedProductMatchSource).toContain(expectedCopy);
     }
@@ -87,15 +87,15 @@ describe("Product Match UI source", () => {
       'data-testid="product-match-level"',
       'data-testid="product-match-reasons"',
       'data-testid="product-match-cautions"',
-      "Strong match",
-      "Good match",
-      "Review carefully",
-      "Low match",
+      "Phù hợp cao",
+      "Phù hợp tốt",
+      "Cần xem kỹ",
+      "Phù hợp thấp",
       "SavedProductToggleButton",
       "initialSaved={item.isSaved}",
       "productId={product.id}",
       'data-testid="product-match-view-details-link"',
-      "View details",
+      "Xem chi tiết",
     ]) {
       expect(productMatchCardSource).toContain(expectedSource);
     }

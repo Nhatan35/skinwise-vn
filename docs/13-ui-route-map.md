@@ -31,7 +31,7 @@ Latest completed source task: `MVP-v1.3-001 - Personalized Product Match`.
 | `/journal` | Private skin journal timeline with create/edit/delete and product selection | Implemented | Authenticated | `/api/skin-journal`, `/api/skin-journal/[id]`, `/api/products?limit=50` |
 | `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
 | `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
-| `/product-match` | Personalized educational product matches based on the authenticated user's Skin Profile | Implemented | Authenticated | `GET /api/product-match` |
+| `/product-match` | Rule-based educational product matches based on the authenticated user's Skin Profile | Implemented | Authenticated | `GET /api/product-match` |
 | `/saved-products` | Current user's saved product list with remove action | Implemented | Authenticated | `GET /api/saved-products`, `DELETE /api/saved-products/[productId]` |
 | `/insights` | Skin Progress Insights calendar for routine-slot consistency, journal activity, symptoms, product mentions, and safe next actions | Implemented | Authenticated | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` |
 | `/ingredients` | Ingredient library list/search UI | Implemented | Authenticated | `GET /api/ingredients` |
@@ -146,12 +146,16 @@ Protected route matcher includes `"/product-match/:path*"` for the authenticated
 ## Post-MVP v1.3 Product Match Route Notes
 
 - `/product-match` is a protected dashboard route rendered by `src/app/(dashboard)/product-match/page.tsx`.
-- The page title is `Product Match`.
-- The route is visible in dashboard navigation as `Product Match`.
+- The page title is `Gợi ý sản phẩm phù hợp`.
+- The route is visible in dashboard navigation as `Gợi ý sản phẩm`.
 - The client component calls `GET /api/product-match` and renders deterministic matches from the current user's Skin Profile.
 - The page includes a skin profile summary, educational safety banner, match cards, match score, match level badge, reasons, cautions, Save/Saved action, View details link, loading state, error state, no-profile empty state, and no-product empty state.
-- Safe route copy includes: `Educational product matches based on your skin profile. This is not medical advice.`
+- Main states: loading, error, no Skin Profile, no matched products, and matched product cards.
+- User actions: view product details, save or remove saved product state, and go to Skin Profile onboarding when profile is missing.
+- Safe route copy includes: `Gợi ý sản phẩm dựa trên hồ sơ da của bạn. Đây là thông tin tham khảo, không phải tư vấn y tế.`
 - The route must not include diagnosis, skin scoring, appearance scoring, treatment guarantees, product-causality claims, image analysis, face analysis, marketplace, cart, checkout, or payment behavior.
+- Product matches are based on deterministic scoring rules and cautious educational copy.
+- Product names, brand names, and raw ingredient values are displayed as source data, not translated.
 - The route depends on `/api/product-match`; product detail links continue to use `/products/[id]`, and save/remove actions reuse `/api/saved-products`.
 
 ## Post-MVP v1.3 Insights Route Notes

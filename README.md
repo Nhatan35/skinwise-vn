@@ -55,6 +55,7 @@ Playwright E2E: 28 passed / 28
 - Routine safety analysis with deterministic rule checks and safe AI-provider fallback behavior.
 - Today routine checklist and routine logs.
 - Skin journal.
+- Skin Progress Insights and calendar.
 - Dashboard summary based on user-owned data.
 - Settings and data control center.
 - Demo seed data and demo walkthrough documentation.
@@ -74,6 +75,7 @@ Implemented UI routes:
 - `/products/[id]`
 - `/product-match`
 - `/saved-products`
+- `/insights`
 - `/ingredients`
 - `/ingredients/[id]`
 - `/settings`
@@ -89,6 +91,7 @@ Implemented SkinWise API routes:
 - `/api/product-match`
 - `/api/saved-products`
 - `/api/saved-products/[productId]`
+- `/api/insights`
 - `/api/ingredients`
 - `/api/ingredients/[id]`
 - `/api/ingredients/explain`
@@ -100,6 +103,7 @@ Implemented SkinWise API routes:
 - `/api/routine-logs/[id]`
 - `/api/skin-journal`
 - `/api/skin-journal/[id]`
+- `/api/auth/*`
 
 Auth.js owns `/api/auth/*` and its response format.
 

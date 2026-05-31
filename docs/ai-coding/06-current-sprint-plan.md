@@ -184,25 +184,26 @@ No full commercial production hardening claim.
 Current post-MVP task:
 
 ```txt
-MVP-v1.3-001 - Personalized Product Match
+MVP-v1.3-FIX-001 - Product Match Final Polish
 ```
 
 Scope:
 
 ```txt
-Add a deterministic, rule-based Product Match feature.
-Recommend visible products based on the authenticated user's Skin Profile.
-Reuse existing ProductDto, product visibility, saved-products, auth, response envelope, and dashboard patterns.
-Add /product-match, GET /api/product-match, navigation, dashboard next action, focused unit/API/client/UI tests, authenticated E2E, and docs.
+Polish the already implemented deterministic Product Match feature.
+Localize /product-match visible UI copy to Vietnamese.
+Localize generated reasons and cautions to Vietnamese while preserving raw product and ingredient values.
+Correct README route documentation for /insights, /api/insights, /product-match, and /api/product-match.
+Align API contract, UI route map, feature matrix, sprint plan, changelog, and affected tests.
 Run validation under Node 24.x / npm 11.x.
 ```
 
 Status:
 
 ```txt
-Implementation: Added in current task.
-Tests: Added in current task.
-Documentation: Updated in current task.
+Implementation: Existing feature preserved; final polish applied.
+Tests: Updated for localized Product Match copy.
+Documentation: Updated for route/API contract and final polish status.
 Production-ready decision: PASS for the validated MVP environment.
 Environment baseline: Node 24.x / npm 11.x required.
 ```
@@ -233,9 +234,10 @@ No Mongoose, schema migration, or recommendation collection.
 No cart, checkout, marketplace, payment, likes, ratings, reviews, or product CRUD.
 ```
 
-Recently completed Post-MVP v1.3 task:
+Recently completed Post-MVP v1.3 tasks:
 
 ```txt
+MVP-v1.3-001 - Personalized Product Match: DONE
 POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar hardening: DONE
 ```
 

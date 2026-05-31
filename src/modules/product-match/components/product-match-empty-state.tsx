@@ -9,11 +9,11 @@ export function ProductMatchNoProfileEmptyState() {
     <EmptyState
       action={
         <Button asChild>
-          <Link href={routes.ONBOARDING_SKIN_PROFILE}>Create Skin Profile</Link>
+          <Link href={routes.ONBOARDING_SKIN_PROFILE}>Tạo hồ sơ da</Link>
         </Button>
       }
-      description="Create your Skin Profile first to see personalized product matches."
-      title="Skin Profile needed"
+      description="Tạo hồ sơ da trước để xem gợi ý sản phẩm phù hợp."
+      title="Cần hồ sơ da"
     />
   );
 }
@@ -21,8 +21,8 @@ export function ProductMatchNoProfileEmptyState() {
 export function ProductMatchNoProductsEmptyState() {
   return (
     <EmptyState
-      description="No product matches are available yet. Please check back after more reviewed products are added."
-      title="No product matches available yet"
+      description="Hiện chưa có gợi ý sản phẩm phù hợp để hiển thị. Vui lòng quay lại sau khi có thêm sản phẩm đã được kiểm duyệt."
+      title="Chưa có gợi ý sản phẩm phù hợp"
     />
   );
 }

@@ -92,7 +92,7 @@ test.describe("SkinWise VN Product Match", () => {
 
     expect((await productMatchResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Product Match" }),
+      page.getByRole("heading", { name: "Gợi ý sản phẩm phù hợp" }),
     ).toBeVisible();
 
     const productCard = page

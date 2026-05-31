@@ -53,8 +53,8 @@ const productMatchResponse: ProductMatchResponseDto = {
       },
       matchScore: 95,
       matchLevel: "strong",
-      reasons: ["Matches your oily skin type."],
-      cautions: ["This is educational guidance, not medical advice."],
+      reasons: ["Phù hợp với da dầu của bạn."],
+      cautions: ["Đây là thông tin tham khảo, không phải tư vấn y tế."],
       matchedSignals: {
         skinType: true,
         concerns: ["acne"],

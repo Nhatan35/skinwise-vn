@@ -367,10 +367,10 @@ Success response:
         },
         "matchScore": 85,
         "matchLevel": "strong",
-        "reasons": ["Matches your oily skin type."],
+        "reasons": ["Phù hợp với da dầu của bạn."],
         "cautions": [
-          "Review the ingredient list carefully and patch test before applying widely.",
-          "This is educational guidance, not medical advice."
+          "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ trước khi sử dụng rộng rãi.",
+          "Đây là thông tin tham khảo, không phải tư vấn y tế."
         ],
         "matchedSignals": {
           "skinType": true,
@@ -424,17 +424,21 @@ Expected errors:
 DTO notes:
 
 - `ProductMatchResponseDto` is returned directly inside `data`; it is not returned raw and is not wrapped as `data.productMatch`.
+- `skinProfileSummary` is optional. It is present when the authenticated user has a Skin Profile and omitted in the current no-profile response.
 - `product` uses the existing public `ProductDto`.
 - `isSaved` is a boolean derived from the current user's saved products.
 - `matchScore` is clamped from 0 to 100.
 - `matchLevel` is one of `strong`, `good`, `cautious`, or `low`.
 - Avoided-ingredient matches and high-sensitivity plus strong-warning matches cannot be labeled `strong`.
+- `reasons` and `cautions` are user-facing Vietnamese strings.
+- Raw product names, brand names, ingredient names, user-entered avoided ingredients, IDs, and API enum values are not translated in the DTO.
 
 Safety boundary:
 
 - Product Match is deterministic and rule-based.
 - It does not call external AI providers.
 - It does not diagnose, prescribe, guarantee results, score skin or appearance, or claim a product cures, treats, fixes, heals, removes, or prevents a condition.
+- It reuses existing collections and does not create a new recommendation collection.
 - User-facing reasons and cautions must remain educational and cautious.
 
 ## 5. Saved Products

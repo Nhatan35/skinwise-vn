@@ -19,7 +19,7 @@ import {
 } from "@/modules/skin-profile/skin-profile.types";
 
 const PRODUCT_MATCH_API_PATH = "/api/product-match";
-const PRODUCT_MATCH_ERROR_MESSAGE = "Could not load product matches.";
+const PRODUCT_MATCH_ERROR_MESSAGE = "Không thể tải gợi ý sản phẩm.";
 const matchLevels: ProductMatchLevel[] = [
   "strong",
   "good",

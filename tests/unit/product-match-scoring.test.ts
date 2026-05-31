@@ -65,12 +65,12 @@ describe("Product Match scoring", () => {
     expect(result.matchLevel).toBe("strong");
     expect(result.reasons).toEqual(
       expect.arrayContaining([
-        "Matches your oily skin type.",
-        "Matches your acne concern.",
-        "Matches your oiliness concern.",
-        "Fits your selected budget range.",
-        "Verified product information.",
-        "Beginner-friendly product category.",
+        "Phù hợp với da dầu của bạn.",
+        "Liên quan đến mối quan tâm về mụn của bạn.",
+        "Liên quan đến mối quan tâm về dầu thừa của bạn.",
+        "Phù hợp với ngân sách bạn đã chọn.",
+        "Thông tin sản phẩm đã được xác minh.",
+        "Nhóm sản phẩm phù hợp cho người mới bắt đầu.",
       ]),
     );
     expect(result.matchedSignals).toMatchObject({
@@ -98,7 +98,7 @@ describe("Product Match scoring", () => {
     expect(result.matchedSignals.avoidedIngredients).toEqual(["fragrance"]);
     expect(result.cautions).toEqual(
       expect.arrayContaining([
-        "This product may contain an ingredient you prefer to avoid: fragrance.",
+        "Sản phẩm này có thể chứa thành phần bạn muốn tránh: fragrance.",
       ]),
     );
   });
@@ -136,7 +136,7 @@ describe("Product Match scoring", () => {
     expect(result.matchedSignals.sensitivity).toBe(true);
     expect(result.cautions).toEqual(
       expect.arrayContaining([
-        "Review the ingredient list carefully if your skin is highly sensitive.",
+        "Hãy xem kỹ bảng thành phần nếu da bạn dễ nhạy cảm.",
       ]),
     );
   });
@@ -152,7 +152,7 @@ describe("Product Match scoring", () => {
 
     expect(result.cautions).toEqual(
       expect.arrayContaining([
-        "Introduce treatment products slowly, especially if you are a beginner.",
+        "Nên thêm sản phẩm treatment từ từ, đặc biệt khi bạn mới bắt đầu.",
       ]),
     );
     expect(result.matchScore).toBeLessThan(100);

@@ -8,6 +8,7 @@ import type { ProductMatchLevel } from "@/modules/product-match/product-match.dt
 import type {
   BudgetRange,
   SkinProfile,
+  SkinType,
 } from "@/modules/skin-profile/skin-profile.types";
 
 const beginnerFriendlyCoreCategories = new Set<ProductCategory>([
@@ -45,6 +46,24 @@ const budgetAlignment: Record<BudgetRange, ProductPriceRange[]> = {
   "300k_700k": ["budget", "mid"],
   "700k_1500k": ["mid", "premium"],
   above_1500k: ["premium"],
+};
+const skinTypeLabels: Record<SkinType, string> = {
+  oily: "da dầu",
+  dry: "da khô",
+  combination: "da hỗn hợp",
+  normal: "da thường",
+  sensitive: "da nhạy cảm",
+  unknown: "loại da chưa rõ",
+};
+const concernLabels: Record<ProductConcern, string> = {
+  acne: "mụn",
+  oiliness: "dầu thừa",
+  dryness: "khô căng",
+  redness: "đỏ da",
+  dark_spots: "thâm hoặc đốm tối màu",
+  texture: "bề mặt da chưa đều",
+  barrier_support: "hàng rào da",
+  unknown: "mối quan tâm chưa rõ",
 };
 
 export type ProductMatchScoringResult = {
@@ -210,8 +229,8 @@ export function scoreProductMatch(input: {
   const { product, skinProfile } = input;
   const reasons: string[] = [];
   const cautions = [
-    "Review the ingredient list carefully and patch test before applying widely.",
-    "This is educational guidance, not medical advice.",
+    "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ trước khi sử dụng rộng rãi.",
+    "Đây là thông tin tham khảo, không phải tư vấn y tế.",
   ];
   const matchedConcerns = getMatchedConcerns(skinProfile.concerns, product);
   const avoidedIngredients = detectAvoidedIngredients(
@@ -231,56 +250,58 @@ export function scoreProductMatch(input: {
     (product.skinTypes ?? []).includes(skinProfile.skinType)
   ) {
     score += 25;
-    reasons.push(`Matches your ${skinProfile.skinType} skin type.`);
+    reasons.push(`Phù hợp với ${skinTypeLabels[skinProfile.skinType]} của bạn.`);
   }
 
   if (matchedConcerns.length > 0) {
     score += Math.min(matchedConcerns.length * 10, 30);
     for (const concern of matchedConcerns) {
-      reasons.push(`Matches your ${concern} concern.`);
+      reasons.push(
+        `Liên quan đến mối quan tâm về ${concernLabels[concern]} của bạn.`,
+      );
     }
   }
 
   if (alignsBudget(skinProfile.budgetRange, product.priceRange)) {
     score += 10;
-    reasons.push("Fits your selected budget range.");
+    reasons.push("Phù hợp với ngân sách bạn đã chọn.");
   }
 
   if (product.verificationStatus === "verified") {
     score += 5;
-    reasons.push("Verified product information.");
+    reasons.push("Thông tin sản phẩm đã được xác minh.");
   }
 
   if (isBeginnerFriendlyCoreCategory(product.category)) {
     score += 5;
-    reasons.push("Beginner-friendly product category.");
+    reasons.push("Nhóm sản phẩm phù hợp cho người mới bắt đầu.");
   }
 
   if (notRecommendedForProfile) {
     score -= 20;
     cautions.push(
-      "Review this product carefully because its notes may not fit your skin profile.",
+      "Cần xem kỹ vì ghi chú sản phẩm có thể chưa phù hợp với hồ sơ da của bạn.",
     );
   }
 
   if (skinProfile.sensitivityLevel === "high" && strongWarnings) {
     score -= 25;
     cautions.push(
-      "Review the ingredient list carefully if your skin is highly sensitive.",
+      "Hãy xem kỹ bảng thành phần nếu da bạn dễ nhạy cảm.",
     );
   }
 
   if (avoidedIngredients.length > 0) {
     score -= 40;
     cautions.push(
-      `This product may contain an ingredient you prefer to avoid: ${avoidedIngredients.join(", ")}.`,
+      `Sản phẩm này có thể chứa thành phần bạn muốn tránh: ${avoidedIngredients.join(", ")}.`,
     );
   }
 
   if (skinProfile.experienceLevel === "beginner" && treatmentOrActiveHeavy) {
     score -= 10;
     cautions.push(
-      "Introduce treatment products slowly, especially if you are a beginner.",
+      "Nên thêm sản phẩm treatment từ từ, đặc biệt khi bạn mới bắt đầu.",
     );
   }
 
