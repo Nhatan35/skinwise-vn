@@ -4,6 +4,46 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+## 2026-05-31 - MVP-v1.3-FIX-002 Final Release Documentation Sync
+
+### Task
+
+Synchronize final release, portfolio, demo, deployment, changelog, release notes, and AI coding status documentation for the v1.3 release.
+
+### Changes
+
+- Created `docs/release-notes-v1.3.md`.
+- Updated README release-note discoverability and demo flow.
+- Updated final release checklist and deployment checklist with Product Match, Insights, and latest validation evidence.
+- Updated portfolio case study, demo script, and demo data guide to cover Product Match and Insights walkthroughs.
+- Updated current release/status docs to reflect Product Match completion, Insights completion, and final release documentation sync.
+- Preserved historical v1.0 release notes and older dated validation records for traceability.
+
+### Latest known validation evidence
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 84 files / 777 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 28/28 tests
+```
+
+### Boundaries
+
+- Documentation and release-readiness sync only.
+- No Product Match scoring, API DTO, database schema, authentication, validation, UI behavior, or test behavior was changed.
+- No real AI provider, diagnosis, medical claim, treatment guarantee, skin score, image/face analysis, marketplace, checkout, or payment feature was added.
+
+### Final status
+
+```txt
+SkinWise VN MVP v1.3 - READY FOR GITHUB RELEASE / PORTFOLIO / SUBMISSION
+```
+
 ## 2026-05-29 - MVP-FINAL-CLOSEOUT-001 Final repository closeout
 
 ### Task
@@ -21,7 +61,7 @@ Finalize SkinWise VN MVP documentation and release status after release hygiene,
 - Aligned final closeout documentation across README, final release checklist, release notes, portfolio case study, implementation status, feature status matrix, sprint plan, deployment docs, and screenshots checklist.
 - Preserved historical changelog entries below for traceability.
 
-### Final validation evidence
+### Historical validation evidence recorded on 2026-05-29
 
 ```txt
 npm ci: PASS
@@ -133,7 +173,7 @@ Close out the Settings and Privacy Data Control MVP task without adding new prod
 - No Settings page rewrite, Today Routine Checklist rewrite, RoutineLog API rewrite, new product feature, export flow, notification flow, admin workflow, marketplace/payment scope, real OpenAI/Gemini integration, hard-delete account flow, or legal compliance claim was added.
 - Existing `tests/unit/routine-log-api-contract.test.ts` was left unchanged because it currently contains useful `/api/routines` contract coverage despite the confusing file name.
 
-### Validation
+### Historical validation for the Insights hardening task
 
 ```txt
 Runtime used by this sandbox: Node v22.16.0 / npm 10.9.2.

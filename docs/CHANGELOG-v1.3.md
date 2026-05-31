@@ -1,5 +1,34 @@
 # CHANGELOG v1.3
 
+## 2026-05-31 - Final Release Documentation Sync
+
+### Changed
+
+- Synchronized final release, deployment, portfolio, demo, and AI coding status documentation for the v1.3 release.
+- Created `docs/release-notes-v1.3.md` and made it discoverable from current release documentation.
+- Updated current release evidence to Node v24.14.0, npm 11.14.1, 84 files / 777 tests, 28/28 Playwright E2E tests, and 32 MongoDB indexes ensured.
+- Updated final release checklist and deployment checklist to include Product Match and Insights.
+- Updated portfolio case study, demo script, and demo data guide to cover Product Match, saving a matched product, product detail navigation, and Insights.
+
+### Current validation evidence
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 84 files / 777 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 28/28 tests
+```
+
+### Safety and scope
+
+- Documentation sync only; Product Match scoring, API DTOs, database schema, authentication, validation, and UI behavior were not changed.
+- Product Match remains deterministic educational guidance only.
+- No real AI provider, diagnosis, medical claim, treatment guarantee, skin score, face analysis, image analysis, marketplace, checkout, or payment flow was added.
+
 ## 2026-05-31 - Personalized Product Match
 
 ### Added
@@ -32,6 +61,8 @@
 - Scoring, API/client fixtures, UI source assertions, and Product Match E2E heading assertions were updated for Vietnamese copy.
 
 ### Validation
+
+Historical validation for the Insights hardening task at the time it was completed:
 
 ```txt
 Node: v24.14.0

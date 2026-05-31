@@ -130,9 +130,9 @@ Landing page
 -> Login
 -> Dashboard
 -> Skin Profile
--> Product Catalogue
--> Product Detail
 -> Product Match
+-> Save recommended product
+-> Product Detail
 -> Saved Products
 -> Ingredient Library
 -> Ingredient Detail and Explanation
@@ -140,6 +140,7 @@ Landing page
 -> Routine Safety Analysis
 -> Today Routine Checklist
 -> Skin Journal
+-> Insights
 -> Settings / Data Control
 -> Sign out
 ```
@@ -149,7 +150,8 @@ Landing page
 - Portfolio case study: `docs/portfolio-case-study.md`
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
-- Release notes: `docs/release-notes-v1.0.md`
+- Release notes v1.3: `docs/release-notes-v1.3.md`
+- Historical release notes v1.0: `docs/release-notes-v1.0.md`
 - Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
 - Demo data and setup guide: `docs/ai-coding/07-demo-data-and-demo-script.md`
 - Screenshot checklist: `docs/screenshots-checklist.md` — optional only; screenshots are not required for the current submission.
@@ -213,7 +215,7 @@ npm run test:e2e: PASS - 28/28 tests
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
-`npm run test:e2e` runs Playwright tests against a local/CI dev server with safe placeholder environment values and a test-only Auth.js Credentials provider. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Product Match review/save/detail flow, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Settings/Data Control, account deletion request, and Dashboard summary reflection.
+`npm run test:e2e` runs Playwright tests against a local/CI dev server with safe placeholder environment values and a test-only Auth.js Credentials provider. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Product Match review/save/detail flow, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Insights review, Settings/Data Control, account deletion request, and Dashboard summary reflection.
 
 ## MVP Scope and Known Limitations
 

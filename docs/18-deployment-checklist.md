@@ -1,6 +1,6 @@
-# Deployment and Production Readiness Checklist - SkinWise VN MVP v1.0
+# Deployment and Production Readiness Checklist - SkinWise VN MVP v1.3
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## 1. Current Deployment Status
 
@@ -10,7 +10,9 @@ Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
 Runtime baseline: Node.js 24.x / npm 11.x
+Latest validated runtime: Node v24.14.0 / npm 11.14.1
 Screenshot capture: skipped - not required for this submission
+Release notes: docs/release-notes-v1.3.md
 ```
 
 Production verification was completed by the project owner for the MVP demo scope.
@@ -24,12 +26,14 @@ Verified areas:
 - Protected route redirects.
 - Authenticated dashboard.
 - Skin Profile flow.
+- Product Match flow.
 - Product Catalogue and Product Detail flow.
 - Saved Products flow.
 - Ingredient Library and Ingredient Detail flow.
 - Routine Builder and Routine Analysis flow.
 - Today Routine Log flow.
 - Skin Journal flow.
+- Insights flow.
 - Settings/Data Control flow.
 - Sign out behavior.
 - Runtime readiness for MVP demo use.
@@ -41,8 +45,8 @@ Verified areas:
 | Project builds successfully | PASS | `npm run build` passed. |
 | TypeScript has no blocking errors | PASS | `npm run typecheck` passed. |
 | Lint passes | PASS | `npm run lint` passed. |
-| Unit tests pass | PASS | 72 files / 719 tests passed. |
-| E2E tests pass | PASS | 24/24 Playwright tests passed. |
+| Unit tests pass | PASS | 84 files / 777 tests passed. |
+| E2E tests pass | PASS | 28/28 Playwright tests passed. |
 | Database indexes verified | PASS | 32 indexes ensured. |
 | Production audit passed | PASS | 0 recorded production vulnerabilities in final validation. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
@@ -122,13 +126,16 @@ Optional provider/media variables may remain empty for MVP if the related featur
 | Google OAuth login | PASS |
 | Dashboard after login | PASS |
 | Skin Profile create/update/read | PASS |
-| Product catalogue/detail | PASS |
+| Product Match review/save/detail navigation | PASS |
+| Product Catalogue | PASS |
+| Product Detail | PASS |
 | Saved Products save/remove | PASS |
 | Ingredient library/detail | PASS |
 | Routine Builder create/update | PASS |
 | Routine Analysis mock/fallback | PASS |
 | Today Routine Log complete/delete | PASS |
 | Skin Journal create/edit/delete | PASS |
+| Insights review | PASS |
 | Settings/Data Control | PASS |
 | Sign out and protected route redirect | PASS |
 

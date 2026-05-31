@@ -1,11 +1,11 @@
 # Implementation Status — SkinWise VN MVP Final Closeout
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## 1. Current phase
 
 ```txt
-MVP final closeout completed — portfolio/submission ready
+MVP v1.3 final release documentation sync completed - portfolio/submission ready
 ```
 
 SkinWise VN has completed the MVP closeout track. The project is no longer in active MVP feature development, deployment re-verification, or E2E hardening. The current state is a final portfolio/submission-ready MVP with production verification completed by the project owner and screenshot capture intentionally skipped because it is not required for this submission.
@@ -29,6 +29,9 @@ MVP-RELEASE-HYGIENE-001 — Clean release package and re-run core validation: DO
 MVP-CI-FIX-001 — Add MongoDB service for GitHub Actions E2E and sync E2E selectors: DONE
 MVP-PRODUCTION-VERIFY-001 — Verify Vercel production deployment and OAuth/MongoDB runtime: DONE
 MVP-FINAL-CLOSEOUT-001 — Final repository polish and release handoff: DONE
+MVP-v1.3-001 - Personalized Product Match: DONE
+POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar: DONE
+MVP-v1.3-FIX-002 - Final Release Documentation Sync: DONE
 ```
 
 Production URL:
@@ -52,11 +55,11 @@ Latest validation result:
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS — 72 files / 719 tests
+npm run test: PASS — 84 files / 777 tests
 npm run build: PASS
 npm audit --omit=dev --audit-level=moderate: PASS — 0 vulnerabilities
 npm run db:indexes: PASS — 32 indexes ensured
-npm run test:e2e: PASS — 24/24 tests
+npm run test:e2e: PASS — 28/28 tests
 ```
 
 E2E coverage status:
@@ -67,12 +70,14 @@ Protected-route redirect smoke: PASS
 Authenticated dashboard access: PASS
 Skin Profile create/update: PASS
 Product Catalogue browse/detail: PASS
+Product Match review/save/detail: PASS
 Saved Products save/list/remove: PASS
 Ingredient Library search/detail/explanation: PASS
 Routine Builder: PASS
 Routine Analysis: PASS
 Today Routine Checklist complete/delete: PASS
 Skin Journal create/edit/delete: PASS
+Insights review: PASS
 Settings/Data Control: PASS
 Dashboard summary after user activity: PASS
 ```
@@ -117,6 +122,7 @@ Completed user-facing MVP features:
 [x] Skin Profile view/edit route
 [x] Product Catalogue UI
 [x] Product Detail UI
+[x] Personalized Product Match
 [x] Saved Products save/list/remove flow
 [x] Ingredient Library UI
 [x] Ingredient Detail UI
@@ -129,6 +135,7 @@ Completed user-facing MVP features:
 [x] Today Routine Checklist page
 [x] Today Routine Log complete/delete flow
 [x] Skin Journal create/edit/delete timeline
+[x] Skin Progress Insights and Calendar
 [x] Settings & Data Control page
 [x] MVP-safe account deletion request marker
 [x] User-scoped RoutineLog delete API
@@ -152,6 +159,7 @@ Completed technical foundations:
 [x] Vercel deployment documentation
 [x] Production verification documentation
 [x] Release notes v1.0
+[x] Release notes v1.3
 [x] Final release checklist
 ```
 
@@ -189,6 +197,7 @@ Completed documentation package:
 [x] Portfolio case study
 [x] Final release checklist
 [x] Release notes v1.0
+[x] Release notes v1.3
 [x] Screenshots checklist marked optional/skipped
 ```
 
@@ -246,8 +255,9 @@ Routine Analysis is educational guidance only and not medical advice.
 ## 8. No active MVP sprint
 
 ```txt
-No active MVP sprint remains.
-No required MVP task remains for portfolio/submission readiness.
+No active product-feature sprint remains.
+Final release documentation sync is completed.
+Recommended next task is GitHub Release & Portfolio Submission.
 ```
 
 Optional post-MVP tasks only:
@@ -264,10 +274,10 @@ POST-MVP-006 — Portfolio website publishing
 ## 9. Final status
 
 ```txt
-SkinWise VN MVP — FINAL DONE FOR PORTFOLIO / SUBMISSION
+SkinWise VN MVP v1.3 - FINAL DONE FOR GITHUB RELEASE / PORTFOLIO / SUBMISSION
 ```
 
-This file replaces older planning/status notes that described deployment verification as partial, screenshot capture as pending, local-only validation as incomplete, or outdated test counts such as 717 tests. The current final evidence is 72 files / 719 tests and 24/24 Playwright E2E tests.
+This file replaces older planning/status notes that described deployment verification as partial, screenshot capture as pending, local-only validation as incomplete, Product Match or Insights as missing, or outdated test counts such as 717 tests. The current final evidence is 84 files / 777 tests, 28/28 Playwright E2E tests, and 32 MongoDB indexes ensured.
 
 ## 10. Update rule
 
@@ -279,5 +289,5 @@ docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
 docs/final-release-checklist.md
-docs/release-notes-v1.0.md
+docs/release-notes-v1.3.md
 ```

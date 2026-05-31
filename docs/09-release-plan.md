@@ -174,34 +174,54 @@ Extract:
 | Scope creep | Keep marketplace and diagnosis out of MVP |
 
 
-## 6. Current deployment preparation status
+## 6. Current v1.3 release status
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+MVP-v1.3-FIX-002 - Final Release Documentation Sync
 ```
 
-Deployment preparation is documented in:
+Current v1.3 release documentation is available in:
 
 ```txt
+docs/release-notes-v1.3.md
+docs/final-release-checklist.md
 docs/deployment/vercel-deployment.md
 docs/18-deployment-checklist.md
+docs/portfolio-case-study.md
+docs/demo-script.md
 ```
 
 Current status:
 
 ```txt
-Deployment prepared.
-Actual Vercel deployment: NOT RUN.
-Production URL: NOT PROVIDED.
-Production smoke test: NOT TESTED.
-Google OAuth production callback: NOT TESTED.
-MongoDB Atlas production/demo access: NOT TESTED.
+Release documentation: READY
+GitHub release: READY
+Portfolio review: READY
+Interview demo: READY
+Final submission: READY
+Production deployment: VERIFIED FOR MVP PORTFOLIO RELEASE
+Production URL: https://skinwise-vn.vercel.app
+Google OAuth production login: VERIFIED
+MongoDB-backed authenticated flows: VERIFIED
 ```
 
-Next deployment task:
+Latest known validation evidence:
 
 ```txt
-TASK DEPLOY-002 - Execute Vercel deployment and run production smoke test
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 84 files / 777 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 28/28 tests
+```
+
+Next release task:
+
+```txt
+GitHub Release & Portfolio Submission
 ```
 
 ## 7. Historical SDD freeze note

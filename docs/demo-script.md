@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-05-26
+Last updated: 2026-05-31
 
 ## 1. Demo Objective
 
@@ -16,7 +16,7 @@ Before the demo:
 
 - confirm the production app opens;
 - confirm Google sign-in works;
-- confirm the account has demo Skin Profile, routines, routine logs, and journal entries;
+- confirm the account has a demo Skin Profile, Product Match candidates, saved product example, routines, routine logs, and journal entries;
 - confirm no private secrets or personal data are visible on screen.
 
 ## 3. Demo Data Preparation Note
@@ -26,6 +26,7 @@ Public/shared demo products and ingredients are seeded through `scripts/seed.ts`
 User-owned demo data should be created through the authenticated UI:
 
 - Skin Profile;
+- Product Match review;
 - Ingredient Library review;
 - Morning Routine;
 - Evening Routine;
@@ -33,6 +34,7 @@ User-owned demo data should be created through the authenticated UI:
 - optional caution routine;
 - routine logs;
 - skin journal entries;
+- Insights review;
 - routine analysis records.
 
 Do not create fake Auth.js users or hardcode fake user ids for the demo.
@@ -49,17 +51,19 @@ Supporting setup guide:
 | 2 | Login `/api/auth/signin` | Start Google login if needed | "The app uses authenticated flows because skin profile, routines, and journal entries are personal data." | Privacy and user ownership | Auth.js / NextAuth foundation |
 | 3 | Dashboard `/dashboard` | Show authenticated dashboard | "The dashboard summarizes user-owned profile, routines, today logs, latest journal, and analysis." | Summary of user journey | Server/API-driven dashboard |
 | 4 | Skin Profile `/skin-profile` | Show or update profile | "The profile captures skin type, concerns, sensitivity, budget, and experience level." | Persona and requirements thinking | Zod validation and user-scoped persistence |
-| 5 | Product Catalogue `/products` | Search/filter products | "The catalogue gives curated product examples for the MVP demo. It is not a marketplace." | Product discovery without commercial scope | Product API, query filters, read-only catalogue |
-| 6 | Product Detail `/products/[id]` | Open a product | "The detail page shows ingredients, key actives, warnings, and suitability fields." | Informed decision support | DTO-safe product detail route |
-| 7 | Saved Products `/saved-products` | Save a product, open saved products, then remove it | "Saved Products lets users bookmark products they want to revisit without adding marketplace, cart, or recommendation behavior." | Retention and routine planning support | User-owned saved_products module, API, and UI |
-| 8 | Ingredient Library `/ingredients` | Search for Niacinamide | "The ingredient library explains common skincare ingredients in beginner-friendly language." | Education without diagnosis | Authenticated ingredient API and client UI |
-| 9 | Ingredient Detail `/ingredients/[id]` | Open ingredient detail and request explanation | "The detail page shows uses, suitability, cautions, and an educational explanation that may use a safe fallback." | Safety copy and scope control | Detail route, explanation API, provider abstraction |
-| 10 | Routine Builder `/routines` | Show Morning/Evening routines | "The user can turn product choices into ordered routine steps." | Core workflow design | Routine API and product snapshot behavior |
-| 11 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis uses deterministic safety rules first, then mock/validated provider explanation." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
-| 12 | Routine Logs `/routines` | Mark routine status | "RoutineLog tracks behavior separately from skin observations." | Distinguishes behavior tracking from journaling | Upsert by user/routine/localDate |
-| 13 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
-| 14 | Dashboard summary `/dashboard` | Return to dashboard | "After setup, the dashboard becomes meaningful because it reads real user-owned data." | End-to-end value | Aggregates existing modules |
-| 15 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
+| 5 | Product Match `/product-match` | Review matched products | "Product Match uses deterministic rules from the user's Skin Profile. It shows score, level, reasons, and cautions as educational guidance, not medical advice." | Personalized value without unsafe claims | Rule-based scoring, visible product filtering, saved-product state |
+| 6 | Product Match `/product-match` | Save a matched product and open details | "A recommendation card can be saved and opened in Product Detail for ingredient and suitability review." | Clear next action from a match | Saved-products integration and product detail navigation |
+| 7 | Product Detail `/products/[id]` | Review the saved match | "The detail page shows ingredients, key actives, warnings, and suitability fields." | Informed decision support | DTO-safe product detail route |
+| 8 | Saved Products `/saved-products` | Open saved products | "Saved Products lets users bookmark products they want to revisit without adding marketplace, cart, or public sharing." | Retention and routine planning support | User-owned saved_products module, API, and UI |
+| 9 | Ingredient Library `/ingredients` | Search for Niacinamide | "The ingredient library explains common skincare ingredients in beginner-friendly language." | Education without diagnosis | Authenticated ingredient API and client UI |
+| 10 | Ingredient Detail `/ingredients/[id]` | Open ingredient detail and request explanation | "The detail page shows uses, suitability, cautions, and an educational explanation that may use a safe fallback." | Safety copy and scope control | Detail route, explanation API, provider abstraction |
+| 11 | Routine Builder `/routines` | Show Morning/Evening routines | "The user can turn product choices into ordered routine steps." | Core workflow design | Routine API and product snapshot behavior |
+| 12 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis uses deterministic safety rules first, then mock/validated provider explanation." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
+| 13 | Today Routine Log `/routine-logs/today` | Mark routine status | "RoutineLog tracks behavior separately from skin observations." | Distinguishes behavior tracking from journaling | Upsert by user/routine/localDate |
+| 14 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
+| 15 | Insights `/insights` | Review progress insights | "Insights summarizes routine consistency, journal activity, symptoms, product usage, and calendar days from self-tracked data." | Progress review without diagnosis | Aggregation use case and protected API route |
+| 16 | Settings `/settings` | Show data control | "Settings makes account and data control visible without overpromising full commercial privacy tooling." | Trust and privacy scope | `/api/me` and account deletion request flow |
+| 17 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
 
 ## 5. What To Say At Each Screen
 
@@ -93,10 +97,16 @@ Product Detail:
 - "The product detail page gives more context before the user builds a routine."
 - "The data shown is public product DTO data, not private user data."
 
+Product Match:
+
+- "Product Match answers which visible catalogue products may fit the user's Skin Profile."
+- "It is deterministic and rule-based. It does not use a real AI provider, diagnose skin, or guarantee results."
+- "Each card shows a match score, match level, reasons, cautions, Save/Saved state, and a View Details path."
+
 Saved Products:
 
 - "The user can save a product from catalogue or detail, revisit it under Saved Products, and remove it later."
-- "Saved Products is user-owned bookmarking only; it is not a cart, marketplace, recommendation system, or public sharing feature."
+- "Saved Products is user-owned bookmarking only; it is not a cart, marketplace, or public sharing feature."
 
 Ingredient Library:
 
@@ -128,6 +138,11 @@ Skin Journal:
 - "Journal entries help users record observations safely and privately."
 - "The wording stays observational and educational, not diagnostic."
 
+Insights:
+
+- "Insights summarizes self-tracked routine logs and journal entries."
+- "It helps users review patterns without turning observations into medical interpretation."
+
 Dashboard summary:
 
 - "This is the payoff of the MVP workflow: the dashboard uses profile, routines, logs, journal, and analysis data."
@@ -145,7 +160,7 @@ Dashboard summary:
 | Why is Product CRUD not implemented? | The MVP focuses on user routine tracking and a curated demo catalogue. Admin/product submission is future scope. |
 | What BA skills does this show? | Problem framing, user journey, scope control, user stories, acceptance criteria, requirements traceability, and demo storytelling. |
 | What technical skills does this show? | Next.js App Router, TypeScript, MongoDB, Auth.js, Zod, modular code organization, API routes, DTO mapping, testing, and Vercel deployment readiness. |
-| What would you improve next? | Final screenshots, broader E2E coverage, dashboard analytics, saved-product organization, admin product management, and later real provider integration with strict safety controls. |
+| What would you improve next? | GitHub release and portfolio submission first, then optional post-MVP work such as monitoring, admin product management, data export, and later real provider integration with strict safety controls. |
 
 ## 7. Closing Explanation
 

@@ -1,6 +1,6 @@
 # Current Sprint Plan — SkinWise VN MVP Final Closeout
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## 1. Current phase
 
@@ -20,6 +20,7 @@ Playwright E2E selector stabilization: DONE
 Production verification: DONE
 Screenshot capture: SKIPPED — not required for this submission
 Final documentation closeout: DONE
+MVP v1.3 final release documentation sync: DONE
 ```
 
 Final release status:
@@ -103,6 +104,7 @@ Portfolio case study
 Demo script
 Release checklist
 Release notes
+Release notes v1.3
 Validation evidence
 Production verification evidence
 ```
@@ -151,6 +153,7 @@ Final release documentation: DONE
 [x] Prepare demo script.
 [x] Prepare final release checklist.
 [x] Prepare release notes v1.0.
+[x] Prepare release notes v1.3.
 [x] Polish README as portfolio entry point.
 [x] Add unauthenticated Playwright smoke tests.
 [x] Add authenticated Playwright E2E coverage.
@@ -179,32 +182,31 @@ No real AI provider completion claim without implementation and verification.
 No full commercial production hardening claim.
 ```
 
-## 9. Post-MVP v1.3 active task
+## 9. Post-MVP v1.3 final release task
 
 Current post-MVP task:
 
 ```txt
-MVP-v1.3-FIX-001 - Product Match Final Polish
+MVP-v1.3-FIX-002 - Final Release Documentation Sync
 ```
 
 Scope:
 
 ```txt
-Polish the already implemented deterministic Product Match feature.
-Localize /product-match visible UI copy to Vietnamese.
-Localize generated reasons and cautions to Vietnamese while preserving raw product and ingredient values.
-Correct README route documentation for /insights, /api/insights, /product-match, and /api/product-match.
-Align API contract, UI route map, feature matrix, sprint plan, changelog, and affected tests.
-Run validation under Node 24.x / npm 11.x.
+Synchronize final release, portfolio, demo, deployment, changelog, release notes, and AI coding status documentation.
+Record latest known validation evidence for Node v24.14.0 / npm 11.14.1.
+Confirm Product Match and Insights are documented as completed.
+Keep scope documentation-only; no Product Match logic, API shape, database schema, or UI behavior change.
+Run validation under Node 24.x / npm 11.x when possible.
 ```
 
 Status:
 
 ```txt
-Implementation: Existing feature preserved; final polish applied.
-Tests: Updated for localized Product Match copy.
-Documentation: Updated for route/API contract and final polish status.
-Production-ready decision: PASS for the validated MVP environment.
+Implementation: Existing application behavior preserved.
+Tests: Existing Product Match and Insights coverage preserved.
+Documentation: Final release docs synchronized for v1.3.
+Production-ready decision: PASS for the latest known validated MVP environment.
 Environment baseline: Node 24.x / npm 11.x required.
 ```
 
@@ -241,7 +243,7 @@ MVP-v1.3-001 - Personalized Product Match: DONE
 POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar hardening: DONE
 ```
 
-## 9. Known MVP limitations
+## 10. Known MVP limitations
 
 ```txt
 AI provider remains mock/fallback-safe for MVP.
@@ -255,13 +257,14 @@ Product catalogue data is demo/seed-style catalogue data.
 Medical diagnosis is out of scope.
 ```
 
-## 10. Recommended next task
+## 11. Recommended next task
 
-There is no required next task for MVP submission.
+There is no required product-feature task for MVP submission.
 
 ```txt
 Required MVP tasks: NONE
 Current status: FINAL DONE
+Next recommended task: GitHub Release & Portfolio Submission
 ```
 
 Optional post-MVP tasks, only if continuing development:
@@ -278,10 +281,10 @@ POST-MVP-006 — Portfolio website publishing
 Recommendation:
 
 ```txt
-Do not open post-MVP feature work until the final MVP release is committed, pushed, and tagged.
+Do not open post-MVP feature work until the GitHub release and portfolio submission are completed.
 ```
 
-## 11. Update rule
+## 12. Update rule
 
 After any future post-MVP coding task, update:
 
@@ -291,6 +294,7 @@ docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
 docs/final-release-checklist.md
+docs/release-notes-v1.3.md
 ```
 
 For the current MVP release, this sprint plan is final.

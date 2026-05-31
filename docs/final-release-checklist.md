@@ -1,93 +1,74 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## 1. Release Summary
 
-Release name: **SkinWise VN MVP Portfolio Release v1.0**
+Release name: **SkinWise VN MVP v1.3 Portfolio Release**
 
-Release status: **Ready for portfolio / submission**
+Release status: **Ready for GitHub release, portfolio review, interview demo, and final submission**
 
 Purpose: confirm the project is ready to share through GitHub, portfolio, CV, mentor review, BA internship review, or technical interview discussion.
 
-This release is an MVP portfolio/demo release, not a full commercial production release.
+This is an MVP portfolio/demo release, not a full commercial production hardening claim.
 
 ## 2. Final Closeout Status
 
 | Area | Status | Notes |
 |---|---|---|
-| MVP core feature scope | PASS | Core user journeys are implemented. |
+| MVP core feature scope | PASS | Core authenticated user journeys are implemented. |
+| Product Match | PASS | `/product-match` and `GET /api/product-match` are implemented, tested, documented, and safety-bounded. |
+| Insights | PASS | `/insights` and `GET /api/insights` are implemented, tested, documented, and safety-bounded. |
 | Release hygiene | PASS | Local/generated artifacts are excluded from the release package. |
-| Local validation | PASS | Lint, typecheck, tests, build, indexes, and E2E passed. |
+| Local validation | PASS | Latest known evidence shows lint, typecheck, tests, build, indexes, and E2E passed. |
 | GitHub Actions MongoDB E2E support | PASS | CI workflow includes MongoDB service and E2E execution. |
 | Production verification | PASS | Production deployment, OAuth, MongoDB-backed flows, protected routes, and runtime readiness verified by project owner. |
 | Screenshot capture | SKIPPED | Not required for this submission. |
-| Final documentation | PASS | README, release notes, case study, and final checklist updated. |
+| Final documentation | PASS | README, v1.3 release notes, case study, demo script, deployment checklist, and final checklist are synchronized. |
 
-## 3. Source Hygiene
-
-| Check | Status | Notes |
-|---|---|---|
-| No `.env.local` in release package | PASS | Local secrets must never be committed or packaged. |
-| No `.env.production` in release package | PASS | Production secrets belong in Vercel settings only. |
-| No real secrets documented | PASS | Docs use placeholders and public status values only. |
-| No generated build artifacts | PASS | `.next`, `node_modules`, logs, test-results, Playwright report, and tsbuildinfo are excluded. |
-| `.gitignore` exists | PASS | Env, generated, log, zip, key/certificate, and test artifact patterns are covered. |
-| `.gitattributes` exists | PASS | Source/docs/config files are normalized. |
-| `.env.example` uses placeholders only | PASS | Template contains placeholders and empty optional values. |
-| `package-lock.json` exists | PASS | Supports reproducible `npm ci`. |
-
-## 4. Documentation Readiness
+## 3. Documentation Readiness
 
 | Document | Status | Notes |
 |---|---|---|
 | `README.md` | PASS | Main portfolio entry point. |
-| `docs/portfolio-case-study.md` | PASS | Case study describes problem, scope, solution, validation, and limitations. |
-| `docs/demo-script.md` | PASS | Demo flow available. |
-| `docs/release-notes-v1.0.md` | PASS | MVP release notes updated. |
+| `docs/release-notes-v1.3.md` | PASS | Current v1.3 release notes. |
+| `docs/release-notes-v1.0.md` | HISTORICAL | Preserved as historical v1.0 notes. |
+| `docs/CHANGELOG-v1.3.md` | PASS | v1.3 changelog includes Product Match, Insights, and final release documentation sync. |
+| `docs/portfolio-case-study.md` | PASS | Case study describes problem, scope, Product Match, Insights, validation, and limitations. |
+| `docs/demo-script.md` | PASS | Demo flow includes Product Match and Insights. |
+| `docs/18-deployment-checklist.md` | PASS | Deployment checklist uses current validation evidence and route coverage. |
 | `docs/deployment/vercel-deployment.md` | PASS | Deployment runbook available. |
-| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data and walkthrough notes available. |
+| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data and walkthrough notes include Product Match and Insights. |
 | `docs/screenshots-checklist.md` | OPTIONAL | Screenshots intentionally skipped for this submission. |
 
-## 5. Final Validation Evidence
+## 4. Final Validation Evidence
 
-Date: 2026-05-29
-
-Runtime:
+Latest known validated runtime:
 
 ```txt
-Node.js: v24.14.0
+Node: v24.14.0
 npm: 11.14.1
 ```
 
-Validation results:
+Project requirement:
+
+```txt
+Node: 24.x
+npm: 11.x
+```
+
+Latest known validation results:
 
 | Command | Status | Evidence |
 |---|---|---|
 | `npm run lint` | PASS | ESLint completed successfully. |
 | `npm run typecheck` | PASS | TypeScript completed successfully. |
-| `npm run test` | PASS | 72 test files passed / 719 tests passed. |
-| `npm run build` | PASS | Next.js production build compiled successfully. |
-| `npm run db:indexes` | PASS | 32 indexes ensured. |
-| `npm run test:e2e` | PASS | 24 Playwright E2E tests passed / 24. |
-| `npm audit --omit=dev --audit-level=moderate` | PASS | 0 production vulnerabilities in the recorded validation round. |
+| `npm run test` | PASS | 84 test files passed / 777 tests passed. |
+| `npm run build` | PASS | Next.js production build completed successfully. |
+| `npm run db:indexes` | PASS | 32 MongoDB indexes ensured. |
+| `npm run test:e2e` | PASS | 28 Playwright E2E tests passed / 28. |
 
-## 6. CI Verification
-
-| Check | Status | Notes |
-|---|---|---|
-| GitHub Actions workflow exists | PASS | `.github/workflows/ci.yml`. |
-| Node runtime aligned | PASS | CI uses Node `24.x`. |
-| Dependency install | PASS | Uses `npm ci`. |
-| Playwright browser install | PASS | Installs Chromium with dependencies. |
-| MongoDB service configured | PASS | Uses `mongo:7` with `27017:27017`. |
-| MongoDB health check configured | PASS | Uses `mongosh` ping health check. |
-| Database index step works in CI context | PASS | Runs index script without depending on `.env.local`. |
-| E2E tests run in CI | PASS | `npm run test:e2e`. |
-
-## 7. Production Verification Evidence
-
-Date: 2026-05-29
+## 5. Production Verification Evidence
 
 Production URL:
 
@@ -95,79 +76,85 @@ Production URL:
 https://skinwise-vn.vercel.app
 ```
 
-Production verification results:
+Manual release smoke coverage:
 
 | Area | Status | Notes |
 |---|---|---|
-| Vercel production deployment | PASS | Deployment verified by project owner. |
-| Production environment variables | PASS | Production env configured outside source control. |
-| Google OAuth login | PASS | Production login verified by project owner. |
-| MongoDB Atlas connection | PASS | Authenticated read/write flows verified by project owner. |
-| Protected route redirect | PASS | Unauthenticated protected-route behavior verified. |
-| Dashboard after login | PASS | Authenticated dashboard verified. |
-| Skin Profile flow | PASS | Create/update/read flow verified. |
-| Product catalogue/detail | PASS | Browse/detail flow verified. |
+| Login | PASS | Google OAuth production login verified. |
+| Dashboard | PASS | Authenticated dashboard verified. |
+| Skin Profile | PASS | Create/update/read flow verified. |
+| Product Match | PASS | Educational product matches, save state, and product detail navigation are release-ready. |
+| Product Detail | PASS | Product detail route verified. |
 | Saved Products | PASS | Save/remove flow verified. |
-| Ingredient library/detail | PASS | Browse/detail flow verified. |
+| Ingredients | PASS | Library, detail, and explanation flow verified. |
 | Routine Builder | PASS | Routine creation/update flow verified. |
-| Routine Analysis | PASS | Mock/fallback analysis flow verified. |
+| Routine Analysis | PASS | Deterministic safety analysis and mock/fallback explanation verified. |
 | Today Routine Log | PASS | Complete/delete flow verified. |
-| Skin Journal | PASS | Create/edit/delete flow verified. |
-| Settings/Data Control | PASS | Settings and account deletion request flow verified. |
+| Journal | PASS | Create/edit/delete flow verified. |
+| Insights | PASS | Skin Progress Insights route and calendar summary are release-ready. |
+| Settings | PASS | Settings and account deletion request flow verified. |
+| Protected routes | PASS | Unauthenticated protected-route behavior verified. |
 | Sign out | PASS | Session end and protected route redirect verified. |
-| Runtime logs | PASS | No blocking runtime issue reported for final closeout. |
 
-## 8. Feature Scope
-
-Completed MVP scope:
+## 6. Completed Feature Scope
 
 - Google OAuth authentication.
 - Protected dashboard and private app routes.
 - Skin Profile.
-- Product Catalogue.
-- Product Detail.
+- Product Catalogue and Product Detail.
+- Personalized Product Match.
 - Saved Products.
-- Ingredient Library.
-- Ingredient Detail.
-- Ingredient Explanation API.
+- Ingredient Library and Ingredient Detail.
+- Ingredient Explanation API with mock/fallback-safe provider behavior.
 - Routine Builder.
 - Routine Safety Analysis.
-- Today Routine Checklist.
-- Routine Logs.
+- Today Routine Checklist and Routine Logs.
 - Skin Journal.
+- Skin Progress Insights and calendar.
 - Dashboard summary.
 - Settings and Data Control.
-- Demo seed data.
+- Demo seed data and demo walkthrough documentation.
 - GitHub Actions CI with MongoDB-backed E2E.
 - Vercel production deployment verification.
 
-## 9. Known MVP Limitations
+## 7. Safety Boundaries
+
+- Product Match is deterministic educational guidance only.
+- Insights summarize self-tracked data only.
+- No real AI provider is used for Product Match.
+- No diagnosis.
+- No medical claims.
+- No treatment, cure, or guarantee claims.
+- No skin score or appearance score.
+- No image upload or face analysis.
+- No marketplace, cart, checkout, order, payment, subscription, rating, or review flow.
+- No admin CRUD in the MVP release.
+
+Safe negative disclaimers remain allowed and intentional, for example: this project does not diagnose, prescribe, or replace professional medical advice.
+
+## 8. Known MVP Limitations
 
 These are intentional MVP boundaries, not release blockers:
 
 - AI provider remains mock/fallback-based for MVP.
-- Image upload is out of scope.
-- AI face analysis is out of scope.
-- Skin scoring or appearance scoring is out of scope.
-- Marketplace, cart, checkout, and payment are out of scope.
-- Admin product/ingredient CRUD is out of scope.
-- Notifications are out of scope.
-- Full commercial monitoring/analytics is out of scope.
+- Real OpenAI/Gemini provider integration is not enabled.
+- Product matching is rule-based and uses curated/demo-oriented catalogue data.
+- Full Auth.js hard-delete account automation is not implemented.
+- Data export is not implemented.
+- Full commercial monitoring/error tracking is outside the MVP.
 
-## 10. Final Decision
+## 9. Final Decision
 
-SkinWise VN MVP v1.0 is ready for portfolio/submission use.
+SkinWise VN MVP v1.3 is ready for GitHub release, portfolio review, interview demo, and final submission.
 
 Final decision:
 
 ```txt
-MVP-FINAL-CLOSEOUT-001 — DONE
+MVP-v1.3-FIX-002 - Final Release Documentation Sync: DONE
 ```
 
-Recommended next work only after this release is submitted:
+Recommended next task:
 
-- Real AI provider integration.
-- Admin Product/Ingredient CRUD.
-- Data export and hard-delete account flow.
-- Monitoring/error tracking.
-- Image upload.
+```txt
+GitHub Release & Portfolio Submission
+```

@@ -1,6 +1,6 @@
 # Vercel Deployment Runbook - SkinWise VN MVP
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## Current Deployment Status
 
@@ -110,13 +110,16 @@ Checklist:
 | Google OAuth login | Login succeeds and returns to app. |
 | Dashboard | Authenticated dashboard loads. |
 | Skin Profile | Create/update/read works. |
-| Product Catalogue | List/search/detail works. |
+| Product Catalogue | List/search works. |
+| Product Detail | Detail route opens from catalogue and Product Match flows. |
+| Product Match | Rule-based educational matches, score/level, reasons/cautions, save state, and detail navigation work. |
 | Saved Products | Save/remove works. |
 | Ingredient Library | List/search/detail works. |
 | Routine Builder | Create/update works. |
 | Routine Analysis | Mock/fallback result appears without crash. |
 | Today Routine Log | Complete/delete works. |
 | Skin Journal | Create/edit/delete works. |
+| Insights | Skin Progress Insights and calendar route load with user-owned data. |
 | Settings/Data Control | Page and deletion request flow work. |
 | Sign out | Session ends and protected routes redirect. |
 
