@@ -9,7 +9,7 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches protected dashboard, onboarding, Skin Profile, Routines, Routine Logs, Journal, Products, Saved Products, Ingredients, and Settings routes", () => {
+  it("matches protected dashboard, onboarding, Skin Profile, Routines, Routine Logs, Journal, Products, Saved Products, Insights, Ingredients, and Settings routes", () => {
     expect(proxySource).toContain('"/dashboard/:path*"');
     expect(proxySource).toContain('"/onboarding/:path*"');
     expect(proxySource).toContain('"/skin-profile/:path*"');
@@ -18,6 +18,7 @@ describe("auth proxy foundation", () => {
     expect(proxySource).toContain('"/journal/:path*"');
     expect(proxySource).toContain('"/products/:path*"');
     expect(proxySource).toContain('"/saved-products/:path*"');
+    expect(proxySource).toContain('"/insights/:path*"');
     expect(proxySource).toContain('"/ingredients/:path*"');
     expect(proxySource).toContain('"/settings/:path*"');
   });

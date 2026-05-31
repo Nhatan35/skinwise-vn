@@ -7,6 +7,7 @@ import {
   dashboardNavItems,
   dashboardRoute,
   ingredientsRoute,
+  insightsRoute,
   journalRoute,
   productsRoute,
   routinesRoute,
@@ -44,6 +45,7 @@ describe("dashboard shell config", () => {
     expect(journalRoute).toBe(routes.JOURNAL);
     expect(productsRoute).toBe(routes.PRODUCTS);
     expect(savedProductsRoute).toBe(routes.SAVED_PRODUCTS);
+    expect(insightsRoute).toBe(routes.INSIGHTS);
     expect(ingredientsRoute).toBe(routes.INGREDIENTS);
     expect(settingsRoute).toBe(routes.SETTINGS);
     expect(routes.ONBOARDING_SKIN_PROFILE).toBe("/onboarding/skin-profile");
