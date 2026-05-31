@@ -1,11 +1,13 @@
 "use client";
 
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 import type {
   ProductMatchDto,
   ProductMatchLevel,
 } from "@/modules/product-match/product-match.dto";
+import { buildProductMatchExplanationViewModel } from "@/modules/product-match/product-match-explanation";
 import type {
   ProductCategory,
   ProductPriceRange,
@@ -61,11 +63,64 @@ type ProductMatchCardProps = {
   onSavedChange?: (productId: string, isSaved: boolean) => void;
 };
 
+type ProductMatchSignalItem = {
+  label: string;
+  tone: "positive" | "caution";
+};
+
+function getMatchedSignalItems(item: ProductMatchDto) {
+  const { matchedSignals } = item;
+  const signals: ProductMatchSignalItem[] = [];
+
+  if (matchedSignals.skinType) {
+    signals.push({
+      label: "Loại da có tín hiệu khớp",
+      tone: "positive",
+    });
+  }
+
+  if (matchedSignals.concerns.length > 0) {
+    signals.push({
+      label: `${matchedSignals.concerns.length} mối quan tâm có tín hiệu khớp`,
+      tone: "positive",
+    });
+  }
+
+  if (matchedSignals.budget) {
+    signals.push({
+      label: "Ngân sách có tín hiệu khớp",
+      tone: "positive",
+    });
+  }
+
+  if (matchedSignals.sensitivity) {
+    signals.push({
+      label: "Độ nhạy cảm cần xem kỹ",
+      tone: "caution",
+    });
+  }
+
+  if (matchedSignals.avoidedIngredients.length > 0) {
+    signals.push({
+      label: "Có thành phần bạn muốn tránh",
+      tone: "caution",
+    });
+  }
+
+  return signals;
+}
+
 export function ProductMatchCard({
   item,
   onSavedChange,
 }: ProductMatchCardProps) {
   const product = item.product;
+  const explanation = buildProductMatchExplanationViewModel({
+    reasons: item.reasons,
+    cautions: item.cautions,
+  });
+  const matchedSignalItems = getMatchedSignalItems(item);
+  const explanationHeadingId = `product-match-explanation-${product.id}`;
 
   return (
     <Card data-testid="product-match-card">
@@ -95,33 +150,81 @@ export function ProductMatchCard({
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
-        <section className="space-y-2" data-testid="product-match-reasons">
-          <h3 className="text-sm font-semibold text-foreground">
-            Vì sao có thể phù hợp
+        <section
+          aria-labelledby={explanationHeadingId}
+          className="space-y-4 rounded-2xl border border-border bg-muted/30 p-4"
+        >
+          <h3
+            className="text-base font-semibold text-foreground"
+            id={explanationHeadingId}
+          >
+            Vì sao được gợi ý
           </h3>
-          {item.reasons.length > 0 ? (
-            <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
-              {item.reasons.map((reason) => (
-                <li key={reason}>{reason}</li>
+
+          <div className="space-y-3" data-testid="product-match-reasons">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <CheckCircle2 aria-hidden="true" className="size-4" />
+              Phù hợp với bạn vì:
+            </h4>
+            {matchedSignalItems.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {matchedSignalItems.map((signal) => (
+                  <Badge
+                    key={signal.label}
+                    variant={
+                      signal.tone === "positive" ? "secondary" : "outline"
+                    }
+                  >
+                    {signal.label}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm leading-6 text-muted-foreground">
+                Dựa trên hồ sơ hiện tại, SkinWise chưa thấy nhiều tín hiệu khớp
+                rõ ràng.
+              </p>
+            )}
+            <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
+              {explanation.visibleReasons.map((reason) => (
+                <li className="flex gap-2" key={reason}>
+                  <CheckCircle2
+                    aria-hidden="true"
+                    className="mt-1 size-4 shrink-0 text-emerald-700"
+                  />
+                  <span>{reason}</span>
+                </li>
               ))}
             </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Chưa có đủ tín hiệu rõ ràng từ hồ sơ da. Nên xem kỹ trước khi
-              thêm vào routine.
-            </p>
-          )}
-        </section>
+            {explanation.hiddenReasonsCount > 0 ? (
+              <p className="text-xs font-medium text-muted-foreground">
+                +{explanation.hiddenReasonsCount} lý do khác trong dữ liệu gợi ý
+              </p>
+            ) : null}
+          </div>
 
-        <section className="space-y-2" data-testid="product-match-cautions">
-          <h3 className="text-sm font-semibold text-foreground">
-            Cần xem kỹ trước khi dùng
-          </h3>
-          <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
-            {item.cautions.map((caution) => (
-              <li key={caution}>{caution}</li>
-            ))}
-          </ul>
+          <div className="space-y-3" data-testid="product-match-cautions">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <AlertTriangle aria-hidden="true" className="size-4" />
+              Cần lưu ý:
+            </h4>
+            <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
+              {explanation.visibleCautions.map((caution) => (
+                <li className="flex gap-2" key={caution}>
+                  <AlertTriangle
+                    aria-hidden="true"
+                    className="mt-1 size-4 shrink-0 text-amber-700"
+                  />
+                  <span>{caution}</span>
+                </li>
+              ))}
+            </ul>
+            {explanation.hiddenCautionsCount > 0 ? (
+              <p className="text-xs font-medium text-muted-foreground">
+                +{explanation.hiddenCautionsCount} lưu ý khác trong dữ liệu gợi ý
+              </p>
+            ) : null}
+          </div>
         </section>
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
