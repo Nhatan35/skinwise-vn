@@ -799,6 +799,55 @@ tests/unit/dashboard-ui.test.ts
 
 Task 6 implemented the protected dashboard shell. Week 2 Task 2.2 points the Skin Profile nav link to `/skin-profile`; `/onboarding/skin-profile` remains available outside the main nav for first-time setup. Week 3 Task 2 points the Routines nav link to `/routines`. TASK DB-001 adds the authenticated Dashboard API and `/dashboard` data cards for Skin Profile, Routine counts, today's RoutineLog progress, latest Routine Analysis, and next actions. TASK PRODUCT-UI-001 points the Products nav link to `/products`, and the review fix makes the Products nav item active on `/products`. TASK DASHBOARD-ENHANCE-001 adds latest SkinJournal summary data, the Latest Journal Entry card, and journal-aware primary next action priority. The dashboard still does not implement weekly/monthly charts, advanced streaks, AI-generated insights, journal analytics, image upload, skin score, unrelated feature routes, fake data, or medical diagnosis.
 
+## 13. Post-MVP v1.3 Insights ownership
+
+Owned route files:
+
+```txt
+src/app/(dashboard)/insights/page.tsx
+src/app/api/insights/route.ts
+```
+
+Owned module files:
+
+```txt
+src/modules/insights/insights.client.ts
+src/modules/insights/insights.dto.ts
+src/modules/insights/insights.mapper.ts
+src/modules/insights/insights.schema.ts
+src/modules/insights/insights.types.ts
+src/modules/insights/insights.use-case.ts
+src/modules/insights/index.ts
+src/modules/insights/components/insights-page.tsx
+src/modules/insights/components/insights-overview-cards.tsx
+src/modules/insights/components/routine-consistency-calendar.tsx
+src/modules/insights/components/symptom-trend-card.tsx
+src/modules/insights/components/product-usage-card.tsx
+src/modules/insights/components/insights-next-actions-card.tsx
+```
+
+Owned tests:
+
+```txt
+tests/unit/insights-schema.test.ts
+tests/unit/insights-mapper.test.ts
+tests/unit/insights-use-case.test.ts
+tests/unit/insights-client.test.ts
+tests/unit/insights-api-contract.test.ts
+tests/unit/insights-ui.test.ts
+tests/e2e/insights.authenticated.spec.ts
+```
+
+Rules:
+
+- `/api/insights` derives `userId` from `getCurrentUser()` and never accepts client-submitted ownership.
+- Insights uses existing native MongoDB repositories and must not introduce Mongoose.
+- The DTO is routine-slot based and must preserve `totalRoutineSlots`, `completedRoutineSlots`, `partialRoutineSlots`, `skippedRoutineSlots`, and `notLoggedRoutineSlots`.
+- Product usage is owned by the Insights mapper/use case but product visibility remains owned by `src/modules/products/product.repository.ts`.
+- SkinJournal date-range access for insights is owned by the SkinJournal repository helper that filters by `userId` and `localDate`.
+- Client components must not import repositories, use cases, database helpers, auth helpers, or API route handlers.
+- UI copy must remain self-tracking focused and must not include skin scores, medical diagnosis, medication advice, treatment claims, face analysis, image analysis, or product-causality claims.
+
 ## 13. UI shared ownership
 
 Planned owned files:

@@ -1096,3 +1096,146 @@ Errors:
 - Returns `NOT_FOUND` for invalid ids, missing logs, or logs owned by another user.
 - Does not accept client-submitted `userId`.
 - Does not delete routines, routine analyses, skin profile records, journal entries, saved products, or other user data.
+
+## 12. Post-MVP v1.3 Insights API
+
+### GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD
+
+Returns routine consistency, journal activity, product usage, calendar summaries, and safe next actions for the authenticated user.
+
+Authentication:
+
+- Required.
+- The route derives ownership from the authenticated session.
+- Client-submitted `userId` is not accepted.
+- Unauthenticated requests return `UNAUTHORIZED`.
+
+Query params:
+
+```txt
+from?: YYYY-MM-DD
+to?: YYYY-MM-DD
+```
+
+Validation:
+
+- `from` and `to` may both be omitted; the use case then defaults to the latest 30 days including today.
+- If one date is provided, the other is required.
+- Dates must match `YYYY-MM-DD`.
+- Dates must be real calendar dates.
+- `from` must be before or equal to `to`.
+- Range length must not exceed 90 days.
+- Unknown query fields are rejected.
+
+Success response:
+
+```json
+{
+  "data": {
+    "insights": "InsightsDto"
+  },
+  "error": null
+}
+```
+
+Error response:
+
+```json
+{
+  "data": null,
+  "error": {
+    "code": "string",
+    "message": "string",
+    "details": {}
+  }
+}
+```
+
+Expected errors:
+
+| Status | Code | Reason |
+|---:|---|---|
+| 401 | `UNAUTHORIZED` | User is not authenticated |
+| 400 | `VALIDATION_ERROR` | Query params are invalid |
+| 500 | `INTERNAL_ERROR` | Unexpected server error |
+
+### InsightsDto
+
+The active Insights contract is routine-slot based because users may have multiple routines per day.
+
+```ts
+type InsightsDto = {
+  dateRange: {
+    from: string;
+    to: string;
+    totalDays: number;
+  };
+  routineConsistency: {
+    totalRoutineSlots: number;
+    completedRoutineSlots: number;
+    partialRoutineSlots: number;
+    skippedRoutineSlots: number;
+    notLoggedRoutineSlots: number;
+    completionRate: number;
+    maintainedDays: number;
+    currentStreak: number;
+    bestStreak: number;
+  };
+  journalActivity: {
+    totalEntries: number;
+    activeJournalDays: number;
+    mostCommonSymptoms: {
+      symptom: string;
+      count: number;
+    }[];
+  };
+  productUsage: {
+    mostUsedProducts: {
+      productId: string;
+      name: string;
+      brand?: string;
+      count: number;
+    }[];
+  };
+  calendarDays: {
+    localDate: string;
+    routineSummary: {
+      totalRoutines: number;
+      completed: number;
+      partial: number;
+      skipped: number;
+      notLogged: number;
+      dayStatus: "completed" | "partial" | "skipped" | "not_logged";
+    };
+    hasJournalEntry: boolean;
+    symptoms: string[];
+  }[];
+  nextActions: {
+    label: string;
+    description?: string;
+    href: string;
+    priority: "high" | "medium" | "low";
+  }[];
+};
+```
+
+Routine consistency:
+
+- `totalRoutineSlots = totalDays * totalRoutines`.
+- Completion rate is rounded from completed routine slots over total routine slots.
+- If `totalRoutineSlots = 0`, `completionRate = 0`.
+- `maintainedDays`, `currentStreak`, and `bestStreak` are based on completed calendar days.
+
+Calendar day status priority:
+
+1. `not_logged` when no routine exists or no routine slot was logged.
+2. `completed` when all routine slots were completed.
+3. `skipped` when all routine slots were skipped.
+4. `partial` for any mixed logged state, including skipped plus missing slots.
+
+Product usage:
+
+- Uses product IDs recorded in the authenticated user's SkinJournal entries.
+- Resolves product names and brands through visible product lookup.
+- Skips invalid, missing, hidden, deleted, or unauthorized products.
+- Does not make causal claims about product effects.

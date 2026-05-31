@@ -164,3 +164,24 @@ So that I can control what the app stores about me.
 - User can request account deletion.
 - Deleted user-owned objects are not accessible.
 - System does not log full personal notes by default.
+
+## 10. Post-MVP v1.3 Skin Progress Insights & Calendar
+
+### Story
+
+As a skincare tracker user,
+I want to review my routine consistency, journal activity, symptoms, product mentions, and calendar history,
+So that I can understand my own self-tracked skincare patterns without receiving diagnosis or appearance scoring.
+
+### Acceptance criteria
+
+- User can open the protected `/insights` route from dashboard navigation.
+- User can view a latest 30-day range by default.
+- User can request `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD`.
+- API validates real local dates and rejects partial, reversed, unknown-field, or over-90-day ranges.
+- Routine consistency uses routine slots, not only days, so multiple routines per day are handled accurately.
+- Calendar includes every local date in the selected range, including days with no logs or journal entries.
+- Journal activity counts only the authenticated user's SkinJournal entries.
+- Product usage shows only visible product catalogue records and skips missing, hidden, invalid, or unauthorized products.
+- Next actions link to existing safe tracking routes such as `/routine-logs/today`, `/journal`, and `/routines`.
+- UI copy remains neutral and must not include skin scores, diagnosis, medication advice, treatment claims, face analysis, or product-causality claims.

@@ -6,6 +6,7 @@ Last updated: 2026-05-29
 
 ```txt
 Completed
+Partially completed
 Not started
 Out of scope
 ```
@@ -44,6 +45,7 @@ npm run test:e2e: PASS — 24/24 tests
 | Routine Logs | Completed | `GET /api/routine-logs`; `PUT /api/routine-logs`; `DELETE /api/routine-logs/[id]` | Daily controls inside `/routines`; dedicated `/routine-logs/today` checklist with update/delete support | `routine_logs` with unique date/routine indexes | Unit/API/client/source checks; production smoke; authenticated E2E spec | Playwright covers Today Checklist access, completed status update, routine log deletion through UI, and protected `/routine-logs/today` redirect smoke. |
 | Skin Journal | Completed | `GET`/`POST /api/skin-journal`; `PATCH`/`DELETE /api/skin-journal/[id]` | `/journal` timeline with create/edit/delete and product labels | `skin_journals` with user/localDate unique index | Unit/API/client/source checks; production smoke; authenticated E2E spec | Playwright covers authenticated Skin Journal create/edit/delete and dashboard latest journal reflection. |
 | Dashboard | Completed | `GET /api/dashboard?localDate=YYYY-MM-DD` | `/dashboard` | Reuses user-scoped collections | Unit/API/source checks; production smoke; authenticated E2E spec | Dashboard uses real authenticated-user data for profile completion, saved product count, routine consistency, journal trends, and deterministic next actions. No fake analytics or new collections. |
+| Post-MVP v1.3 Skin Progress Insights & Calendar | Completed | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` | `/insights` | Reuses user-scoped `routines`, `routine_logs`, `skin_journals`, and visible `products` | Unit/API/client/UI tests and authenticated E2E spec | Implemented, tested, documented, and validated under Node v24.14.0 / npm 11.14.1. |
 | Settings / Data Control | Completed | `GET /api/me`; `POST /api/account/deletion-request`; `DELETE /api/routine-logs/[id]` | Protected `/settings` page, account overview, data management cards, account deletion request, routine log delete support | `app_user_profiles.accountDeletionRequestedAt`; user-owned `routine_logs` | Unit/API/source checks; authenticated E2E spec | MVP-safe data control center. No Auth.js hard-delete, bulk delete, export, notification workflow, or legal compliance claim. |
 | AI Provider Abstraction | Completed | Used by Routine Analysis and Ingredient Explanation use cases | N/A | N/A | Unit | `MockAIProvider`, `ValidatedAIProvider`, provider factory, output validation, and fallback behavior exist. |
 | Runtime baseline | Completed | N/A | Node 24.x / npm 11.x documented for local, CI, and deployment | N/A | Local validation and CI configuration | `.nvmrc`, `package.json` engines, GitHub Actions, README, and deployment docs target Node 24.x / npm 11.x. Local validation passed on Node v24.14.0 / npm 11.14.1. |
@@ -71,6 +73,28 @@ npm run test:e2e: PASS — 24/24 tests
 
 ```txt
 SkinWise VN MVP — FINAL DONE FOR PORTFOLIO / SUBMISSION
+```
+
+## 4.1 Post-MVP v1.3 Insights validation
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 78 files / 745 tests
+npm run build: PASS
+npm run test:e2e: PASS - 25/25 tests
+```
+
+Post-MVP v1.3 Insights status:
+
+```txt
+Implemented: YES
+Tested: YES
+Documented: YES
+Production-ready for the validated MVP environment: YES
+Environment blocked: NO
 ```
 
 Completed closeout tasks:

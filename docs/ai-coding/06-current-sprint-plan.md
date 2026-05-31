@@ -179,6 +179,57 @@ No real AI provider completion claim without implementation and verification.
 No full commercial production hardening claim.
 ```
 
+## 9. Post-MVP v1.3 active task
+
+Current post-MVP task:
+
+```txt
+POST-MVP-v1.3-INSIGHTS - Finish Skin Progress Insights & Calendar to production-ready standard
+```
+
+Scope:
+
+```txt
+Preserve existing /insights implementation.
+Preserve routine-slot based InsightsDto.
+Add focused schema, mapper, use-case, client, API contract, UI, route/nav, and authenticated E2E coverage.
+Update API, route, structure, user story, changelog, and AI coding documentation.
+Run validation under Node 24.x / npm 11.x.
+```
+
+Status:
+
+```txt
+Implementation: Existing feature preserved.
+Tests: Added in current task.
+Documentation: Updated in current task.
+Production-ready decision: PASS for the validated MVP environment.
+Environment baseline: Node 24.x / npm 11.x required.
+```
+
+Validation:
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 78 files / 745 tests
+npm run build: PASS
+npm run test:e2e: PASS - 25/25 tests
+```
+
+Safety boundaries:
+
+```txt
+No skin score.
+No diagnosis.
+No medication or treatment recommendation.
+No face or image analysis.
+No product-causality claim.
+No Mongoose or schema migration.
+```
+
 ## 9. Known MVP limitations
 
 ```txt

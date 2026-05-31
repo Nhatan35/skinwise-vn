@@ -280,3 +280,61 @@ node --require ./scripts/configure-node-dns.cjs ./node_modules/next/dist/bin/nex
 ```
 
 This is intentionally documented because local Windows/Node.js DNS resolution may fail for MongoDB Atlas `mongodb+srv://` even when `nslookup` succeeds. The preload sets DNS servers at process startup so Auth.js and MongoDB driver SRV lookups use the same known-good resolvers.
+
+## 10. Post-MVP v1.3 Insights structure
+
+The Skin Progress Insights & Calendar feature follows the existing modular-monolith pattern and does not introduce Mongoose or a new database architecture.
+
+Implemented route files:
+
+```txt
+src/app/(dashboard)/insights/page.tsx
+src/app/api/insights/route.ts
+```
+
+Implemented module files:
+
+```txt
+src/modules/insights/insights.client.ts
+src/modules/insights/insights.dto.ts
+src/modules/insights/insights.mapper.ts
+src/modules/insights/insights.schema.ts
+src/modules/insights/insights.types.ts
+src/modules/insights/insights.use-case.ts
+src/modules/insights/index.ts
+src/modules/insights/components/insights-page.tsx
+src/modules/insights/components/insights-overview-cards.tsx
+src/modules/insights/components/routine-consistency-calendar.tsx
+src/modules/insights/components/symptom-trend-card.tsx
+src/modules/insights/components/product-usage-card.tsx
+src/modules/insights/components/insights-next-actions-card.tsx
+```
+
+Related existing modules:
+
+```txt
+src/modules/routines/
+src/modules/routine-logs/
+src/modules/journals/
+src/modules/products/
+```
+
+Test files:
+
+```txt
+tests/unit/insights-schema.test.ts
+tests/unit/insights-mapper.test.ts
+tests/unit/insights-use-case.test.ts
+tests/unit/insights-client.test.ts
+tests/unit/insights-api-contract.test.ts
+tests/unit/insights-ui.test.ts
+tests/e2e/insights.authenticated.spec.ts
+```
+
+Ownership rules:
+
+- `src/app/api/insights/route.ts` validates query input, checks authentication, and calls the use case.
+- `insights.use-case.ts` orchestrates user-scoped routines, routine logs, skin journal entries, and visible product lookup.
+- `insights.mapper.ts` owns routine-slot calculations, calendar day summaries, symptom counts, product usage mapping, streaks, and next actions.
+- Client components may import only client-safe helpers, DTO types, shared UI, and route constants.
+- Product usage must resolve products through existing visible-product repository logic and skip invalid or hidden products.

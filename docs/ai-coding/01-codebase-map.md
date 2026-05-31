@@ -16,7 +16,7 @@ The repository now contains the SDD package plus a Next.js App Router foundation
 
 TASK AI-002 added strict Zod structured output validation for the current `AIProvider` output types from `src/infrastructure/ai/ai-provider.ts`. TASK AI-003 added `ValidatedAIProvider` and updated `getAIProvider()` so every successfully constructed raw provider is wrapped before being returned. Mock mode now returns `ValidatedAIProvider` around `MockAIProvider`. TASK AI-004 added an explicit provider-to-product Routine Analysis mapper so validated `AIProviderRoutineAnalysisResult` can be transformed into the stable product-facing `RoutineAnalysisResult` shape without leaking provider metadata or educational notes. TASK AI-005 wired `getAIProvider().analyzeRoutine()` into the Routine Analysis use case with deterministic safety guarding and fallback persistence. TASK AI-006 added safe internal provider failure classification and optional internal `providerFailureReason` persistence for provider fallback. TASK AI-007 added authenticated, rate-limited `POST /api/ingredients/explain` using `getAIProvider().explainIngredient()` through `ValidatedAIProvider`, provider-to-public mapping, and deterministic fallback. TASK SJ-001 added the authenticated SkinJournal backend API foundation with create/list/update/delete endpoints, strict validation, user-owned repository operations, duplicate `localDate` conflict handling, DTO mapping, and tests. TASK SJ-002 added the protected `/journal` SkinJournal Timeline UI, client API helper, client-side validation, source-level UI tests, and Journal dashboard navigation. TASK SJ-003 added UI-only SkinJournal product selection and product ID name resolution using the existing visible Product catalogue from `GET /api/products?limit=50`, parsing products from `data.items` while preserving the SkinJournal backend contract. TASK PRODUCT-UI-001 added the protected `/products` Product Catalogue UI, enabled Products dashboard navigation, protected `/products/:path*`, and extended the client-safe Product API helper to support search/filter query params while still parsing list responses from `data.items`. TASK PRODUCT-UI-002 added the protected `/products/[id]` Product Detail UI, `ProductDetail` client component, `getProductApiPath()`, `getProduct()`, and ProductCard detail navigation. TASK SAVED-PRODUCTS-001 added user-owned saved product bookmarks through `saved_products`, `/api/saved-products`, `/saved-products`, and Save/Saved actions in product UI. OpenAI and Gemini remain unsupported, so current provider-backed behavior uses the validated mock provider unless configuration selects an unsupported provider.
 
-Current unimplemented areas are Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved-product embedding, SkinJournal calendar/analytics views, SkinJournal AI analysis, skin score, image upload, marketplace/cart/payment, public sharing, ratings/reviews, and medical diagnosis.
+Current unimplemented areas are Product submission POST API, admin product management, real OpenAI/Gemini provider integration, external LLM/API calls, SkinJournal saved-product embedding, dedicated SkinJournal AI analysis, skin score, image upload, marketplace/cart/payment, public sharing, ratings/reviews, and medical diagnosis. Post-MVP v1.3 now includes a separate `/insights` calendar and self-tracked analytics view.
 
 ## 3. Root structure
 
@@ -475,6 +475,52 @@ src/shared/types/result.ts
 ```
 
 `routes.DASHBOARD` points to `/dashboard`, `routes.SKIN_PROFILE` points to `/skin-profile`, `routes.ONBOARDING_SKIN_PROFILE` points to `/onboarding/skin-profile`, `routes.ROUTINES` points to `/routines`, `routes.JOURNAL` points to `/journal`, `routes.PRODUCTS` points to `/products`, `routes.SAVED_PRODUCTS` points to `/saved-products`, and `routes.INGREDIENTS` points to `/ingredients`.
+
+## Post-MVP v1.3 Insights addendum
+
+`POST-MVP-v1.3-INSIGHTS` adds the protected Skin Progress Insights & Calendar feature without changing the existing modular-monolith architecture.
+
+Implemented route and API files:
+
+```txt
+src/app/(dashboard)/insights/page.tsx
+src/app/api/insights/route.ts
+```
+
+Implemented module files:
+
+```txt
+src/modules/insights/insights.client.ts
+src/modules/insights/insights.dto.ts
+src/modules/insights/insights.mapper.ts
+src/modules/insights/insights.schema.ts
+src/modules/insights/insights.types.ts
+src/modules/insights/insights.use-case.ts
+src/modules/insights/index.ts
+src/modules/insights/components/insights-page.tsx
+src/modules/insights/components/insights-overview-cards.tsx
+src/modules/insights/components/routine-consistency-calendar.tsx
+src/modules/insights/components/symptom-trend-card.tsx
+src/modules/insights/components/product-usage-card.tsx
+src/modules/insights/components/insights-next-actions-card.tsx
+```
+
+Responsibilities:
+
+- `src/app/api/insights/route.ts` owns the authenticated `GET /api/insights` contract and strict query validation.
+- `insights.schema.ts` validates optional paired `from`/`to` local dates, real calendar dates, reversed ranges, unknown fields, and the 90-day maximum range.
+- `insights.use-case.ts` loads current-user routines, routine logs, SkinJournal entries, and visible products through existing modules.
+- `insights.mapper.ts` owns the routine-slot based DTO, calendar day summaries, symptom counts, product usage mapping, streaks, and safe next actions.
+- `insights.client.ts` is client-safe and calls `/api/insights` with explicit `from` and `to` query params.
+- `/insights` is protected by `src/proxy.ts` through `"/insights/:path*"`.
+- Dashboard navigation exposes `routes.INSIGHTS` as an enabled `Insights` item.
+
+Current contract notes:
+
+- The active `InsightsDto` uses `totalRoutineSlots`, `completedRoutineSlots`, `partialRoutineSlots`, `skippedRoutineSlots`, and `notLoggedRoutineSlots`.
+- Do not replace the DTO with the older day-only `completedDays`/`partialDays` shape.
+- Product usage resolves product names and brands through visible product lookup and skips invalid, hidden, deleted, or unauthorized products.
+- UI copy must remain tracking-focused and must not add skin scores, diagnosis, treatment advice, medication advice, image analysis, face analysis, or product-causality claims.
 
 ### `src/config/`
 

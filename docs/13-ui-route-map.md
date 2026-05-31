@@ -1,6 +1,6 @@
 # UI and API Route Map - MVP v1.2.6
 
-Last updated: 2026-05-27
+Last updated: 2026-05-31
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data Control Center`.
+Latest completed source task: `POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar hardening`.
 
 ## Route Principles
 
@@ -32,6 +32,7 @@ Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data 
 | `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
 | `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
 | `/saved-products` | Current user's saved product list with remove action | Implemented | Authenticated | `GET /api/saved-products`, `DELETE /api/saved-products/[productId]` |
+| `/insights` | Skin Progress Insights calendar for routine-slot consistency, journal activity, symptoms, product mentions, and safe next actions | Implemented | Authenticated | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` |
 | `/ingredients` | Ingredient library list/search UI | Implemented | Authenticated | `GET /api/ingredients` |
 | `/ingredients/[id]` | Ingredient detail UI with explanation panel | Implemented | Authenticated | `GET /api/ingredients/[id]`, `POST /api/ingredients/explain` |
 | `/login` | Dedicated login page | Not started | Public if added later | Auth.js default sign-in route currently handles login |
@@ -52,6 +53,7 @@ Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data 
 | `/api/auth/[...nextauth]` | Auth.js-managed | Built-in Auth.js auth routes | Auth.js-managed | Implemented |
 | `/api/me` | `GET` | Current user plus SkinWise app profile fields | Required | Implemented |
 | `/api/dashboard` | `GET` | Authenticated dashboard summary for a local date | Required | Implemented |
+| `/api/insights` | `GET` | Authenticated routine-slot insights, journal activity, product usage, calendar days, and safe next actions for an optional date range | Required | Implemented |
 | `/api/skin-profile` | `GET`, `POST`, `PATCH`, `DELETE` | Current user's skin profile | Required | Implemented |
 | `/api/products` | `GET` | Visible product catalogue list/search/filter | Required | Implemented |
 | `/api/products/[id]` | `GET` | Visible product detail | Required | Implemented |
@@ -82,6 +84,7 @@ Latest completed source task: `MVP-DATA-CONTROL-001 - Settings and Privacy Data 
 /journal/:path*
 /products/:path*
 /saved-products/:path*
+/insights/:path*
 /ingredients/:path*
 /settings/:path*
 ```
@@ -98,6 +101,7 @@ Today Log
 Journal
 Products
 Saved Products
+Insights
 Ingredients
 Settings
 ```
@@ -133,4 +137,14 @@ Every route must avoid medical diagnosis claims, treatment guarantees, appearanc
 Use factual educational wording. For severe, painful, spreading, infected-looking, infected, or persistent symptoms, guide users to a qualified professional.
 
 
-Protected route matcher now includes `"/settings/:path*"` for the authenticated Settings & Data Control page. Routine logs remain managed through `/routine-logs/today`.
+Protected route matcher includes `"/insights/:path*"` for the authenticated Skin Progress Insights page and `"/settings/:path*"` for the authenticated Settings & Data Control page. Routine logs remain managed through `/routine-logs/today`.
+
+## Post-MVP v1.3 Insights Route Notes
+
+- `/insights` is a protected dashboard route rendered by `src/app/(dashboard)/insights/page.tsx`.
+- The page title is `Skin Progress Insights`.
+- The route is visible in dashboard navigation as `Insights`.
+- The client component calls `GET /api/insights` with explicit `from` and `to` query params based on the browser local default range.
+- The page includes overview cards, routine completion rate, current and best streaks, journal entry counts, most common symptom, routine consistency calendar, calendar legend, symptom trend card, product usage card, next actions card, loading state, error state, and empty state.
+- Safe route copy includes: `This page summarizes your self-tracked data and is not medical advice.`
+- The route must not include skin scoring, diagnosis, medication advice, treatment claims, face analysis, image analysis, or product-causality claims.

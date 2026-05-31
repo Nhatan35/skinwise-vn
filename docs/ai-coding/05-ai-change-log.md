@@ -3649,3 +3649,55 @@ npm run test:e2e: Not run because local MongoDB was not available on 127.0.0.1:2
 - Added user-scoped `DELETE /api/routine-logs/:id` and a Today Log `Xóa ghi nhận` action for existing daily routine logs.
 - Updated tests and docs for Settings, account deletion request, and routine log deletion.
 - Did not add export, notifications, admin CRUD, marketplace/payment, skin scoring, medical diagnosis, real AI provider integration, or bulk data deletion.
+
+## 2026-05-31 - POST-MVP-v1.3-INSIGHTS Skin Progress Insights & Calendar
+
+### Task
+
+Finish the existing Skin Progress Insights & Calendar feature to production-ready standard by preserving the implementation, adding focused coverage, updating documentation, and validating quality commands.
+
+### Files Added
+
+- `tests/unit/insights-schema.test.ts`
+- `tests/unit/insights-mapper.test.ts`
+- `tests/unit/insights-use-case.test.ts`
+- `tests/unit/insights-client.test.ts`
+- `tests/unit/insights-api-contract.test.ts`
+- `tests/unit/insights-ui.test.ts`
+- `tests/e2e/insights.authenticated.spec.ts`
+- `docs/22-post-mvp-insights-plan.md`
+- `docs/CHANGELOG-v1.3.md`
+
+### Files Updated
+
+- `tests/unit/dashboard-shell.test.ts`
+- `tests/unit/auth-middleware.test.ts`
+- `docs/02-user-stories.md`
+- `docs/05-api-contract.md`
+- `docs/10-project-structure.md`
+- `docs/13-ui-route-map.md`
+- `docs/ai-coding/01-codebase-map.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/04-file-ownership-map.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Reason
+
+The feature already existed in source as `/insights`, `/api/insights`, and `src/modules/insights`. The hardening task documents the active routine-slot based DTO, covers validation and aggregation behavior, confirms dashboard navigation and proxy protection, and records the safety boundaries for self-tracked skincare insights.
+
+### Notes
+
+- No rewrite of the Insights module was performed.
+- No Mongoose dependency, database schema migration, skin score, diagnosis, treatment recommendation, medication advice, face analysis, image analysis, product-causality claim, marketplace, or payment feature was added.
+- Product usage remains constrained by existing visible product lookup and skips invalid, missing, hidden, or unauthorized products.
+### Validation
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 78 files / 745 tests
+npm run build: PASS
+npm run test:e2e: PASS - 25/25 tests
+```
