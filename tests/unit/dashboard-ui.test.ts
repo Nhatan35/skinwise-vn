@@ -13,6 +13,10 @@ const dashboardOverviewPath = join(
   projectRoot,
   "src/modules/dashboard/components/dashboard-overview.tsx",
 );
+const onboardingProgressCardPath = join(
+  projectRoot,
+  "src/modules/dashboard/components/onboarding-progress-card.tsx",
+);
 const dashboardClientHelperPath = join(
   projectRoot,
   "src/modules/routine-logs/routine-log.client.ts",
@@ -24,6 +28,10 @@ const dashboardComponentsDir = join(
 
 const dashboardPageSource = readFileSync(dashboardPagePath, "utf8");
 const dashboardOverviewSource = readFileSync(dashboardOverviewPath, "utf8");
+const onboardingProgressCardSource = readFileSync(
+  onboardingProgressCardPath,
+  "utf8",
+);
 const componentSources = [
   "skin-profile-summary-card.tsx",
   "today-routine-progress-card.tsx",
@@ -82,6 +90,55 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(helperSource).toContain("date.getMonth() + 1");
     expect(helperSource).toContain("date.getDate()");
     expect(helperSource).not.toContain("toISOString().slice(0, 10)");
+  });
+
+  it("renders the onboarding progress checklist from DashboardOverview", () => {
+    expect(existsSync(onboardingProgressCardPath)).toBe(true);
+    expect(dashboardOverviewSource).toContain("OnboardingProgressCard");
+    expect(dashboardOverviewSource).toContain(
+      'from "./onboarding-progress-card"',
+    );
+    expect(dashboardOverviewSource).toContain(
+      "<OnboardingProgressCard dashboard={dashboard} />",
+    );
+
+    expect(onboardingProgressCardSource).toContain(
+      "Thiết lập SkinWise của bạn",
+    );
+    expect(onboardingProgressCardSource).toContain(
+      "Bạn đã hoàn tất các bước thiết lập chính. Tiếp tục duy trì routine",
+    );
+    expect(onboardingProgressCardSource).toContain(
+      "và nhật ký để SkinWise theo dõi tiến triển chính xác hơn.",
+    );
+    expect(onboardingProgressCardSource).toContain(
+      'from "@/shared/constants/routes"',
+    );
+
+    for (const routeConstant of [
+      "routes.SKIN_PROFILE",
+      "routes.PRODUCT_MATCH",
+      "routes.ROUTINES",
+      "routes.TODAY_LOG",
+      "routes.JOURNAL",
+    ]) {
+      expect(onboardingProgressCardSource).toContain(routeConstant);
+    }
+
+    for (const hardCodedRoute of [
+      '"/skin-profile"',
+      '"/product-match"',
+      '"/routines"',
+      '"/routine-logs/today"',
+      '"/journal"',
+    ]) {
+      expect(onboardingProgressCardSource).not.toContain(hardCodedRoute);
+    }
+
+    expect(onboardingProgressCardSource).toContain('role="progressbar"');
+    expect(onboardingProgressCardSource).toContain("aria-valuemin");
+    expect(onboardingProgressCardSource).toContain("aria-valuemax");
+    expect(onboardingProgressCardSource).toContain("aria-valuenow");
   });
 
   it("renders the required non-placeholder dashboard card labels", () => {

@@ -16,6 +16,8 @@ import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
 
+import { OnboardingProgressCard } from "./onboarding-progress-card";
+
 const DASHBOARD_API_PATH = "/api/dashboard";
 
 type ApiError = {
@@ -184,6 +186,8 @@ export function DashboardOverview() {
       {primaryNextAction ? (
         <PrimaryNextActionCard nextAction={primaryNextAction} />
       ) : null}
+
+      <OnboardingProgressCard dashboard={dashboard} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SkinProfileSummaryCard
