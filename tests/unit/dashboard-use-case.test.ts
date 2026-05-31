@@ -194,7 +194,9 @@ function mockDashboardSources(input: {
     .mockResolvedValueOnce(input.latestJournals ?? [])
     .mockResolvedValueOnce(input.todayJournals ?? [])
     .mockResolvedValueOnce(input.journalsLast14Days ?? []);
-  mockedCountSavedProductsByUser.mockResolvedValue(input.savedProductCount ?? 0);
+  mockedCountSavedProductsByUser.mockResolvedValue(
+    input.savedProductCount ?? (input.skinProfile ? 1 : 0),
+  );
 }
 
 describe("Dashboard use case", () => {
@@ -271,7 +273,7 @@ describe("Dashboard use case", () => {
       nextActions: [
         {
           label: "Hoàn thiện hồ sơ da",
-          href: "/skin-profile",
+          href: "/onboarding/skin-profile",
           priority: "high",
         },
       ],
@@ -538,6 +540,7 @@ describe("Dashboard use case", () => {
   it("recommends creating a routine when profile exists but no routines exist", async () => {
     mockDashboardSources({
       skinProfile: createSkinProfile(),
+      savedProductCount: 1,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -555,6 +558,7 @@ describe("Dashboard use case", () => {
     mockDashboardSources({
       skinProfile: createSkinProfile(),
       routines: [createRoutine()],
+      savedProductCount: 1,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -580,6 +584,7 @@ describe("Dashboard use case", () => {
       routineLogs: [createRoutineLog()],
       latestJournals: [oldJournal],
       todayJournals: [],
+      savedProductCount: 1,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -607,6 +612,7 @@ describe("Dashboard use case", () => {
       routineLogs: [createRoutineLog()],
       latestJournals: [todayJournal],
       todayJournals: [todayJournal],
+      savedProductCount: 1,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -630,6 +636,7 @@ describe("Dashboard use case", () => {
       latestRoutineAnalysis: createAnalysis(),
       latestJournals: [todayJournal],
       todayJournals: [todayJournal],
+      savedProductCount: 1,
     });
 
     const dashboard = await getDashboardForUser(userId, { localDate });
@@ -639,6 +646,23 @@ describe("Dashboard use case", () => {
         label: "Hôm nay bạn đã cập nhật đủ theo dõi skincare",
         href: "/dashboard",
         priority: "low",
+      },
+    ]);
+  });
+
+  it("recommends Product Match when profile exists but no products are saved", async () => {
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      savedProductCount: 0,
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.nextActions).toEqual([
+      {
+        label: "Tìm sản phẩm phù hợp với hồ sơ da",
+        href: "/product-match",
+        priority: "medium",
       },
     ]);
   });

@@ -8,7 +8,7 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
 
-Latest completed source task: `POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar hardening`.
+Latest completed source task: `MVP-v1.3-001 - Personalized Product Match`.
 
 ## Route Principles
 
@@ -31,6 +31,7 @@ Latest completed source task: `POST-MVP-v1.3-INSIGHTS - Skin Progress Insights &
 | `/journal` | Private skin journal timeline with create/edit/delete and product selection | Implemented | Authenticated | `/api/skin-journal`, `/api/skin-journal/[id]`, `/api/products?limit=50` |
 | `/products` | Product catalogue search/filter/list UI | Implemented | Authenticated | `GET /api/products` |
 | `/products/[id]` | Product detail UI for public Product DTO fields | Implemented | Authenticated | `GET /api/products/[id]` |
+| `/product-match` | Personalized educational product matches based on the authenticated user's Skin Profile | Implemented | Authenticated | `GET /api/product-match` |
 | `/saved-products` | Current user's saved product list with remove action | Implemented | Authenticated | `GET /api/saved-products`, `DELETE /api/saved-products/[productId]` |
 | `/insights` | Skin Progress Insights calendar for routine-slot consistency, journal activity, symptoms, product mentions, and safe next actions | Implemented | Authenticated | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` |
 | `/ingredients` | Ingredient library list/search UI | Implemented | Authenticated | `GET /api/ingredients` |
@@ -57,6 +58,7 @@ Latest completed source task: `POST-MVP-v1.3-INSIGHTS - Skin Progress Insights &
 | `/api/skin-profile` | `GET`, `POST`, `PATCH`, `DELETE` | Current user's skin profile | Required | Implemented |
 | `/api/products` | `GET` | Visible product catalogue list/search/filter | Required | Implemented |
 | `/api/products/[id]` | `GET` | Visible product detail | Required | Implemented |
+| `/api/product-match` | `GET` | Deterministic educational product matches from the current user's Skin Profile, visible product catalogue, and saved-product state | Required | Implemented |
 | `/api/saved-products` | `GET`, `POST` | Current user's saved products list and save endpoint | Required | Implemented |
 | `/api/saved-products/[productId]` | `DELETE` | Remove current user's saved-product record for one product | Required | Implemented |
 | `/api/ingredients` | `GET` | Ingredient list/search | Required | Implemented |
@@ -83,6 +85,7 @@ Latest completed source task: `POST-MVP-v1.3-INSIGHTS - Skin Progress Insights &
 /routine-logs/:path*
 /journal/:path*
 /products/:path*
+/product-match/:path*
 /saved-products/:path*
 /insights/:path*
 /ingredients/:path*
@@ -100,6 +103,7 @@ Routines
 Today Log
 Journal
 Products
+Product Match
 Saved Products
 Insights
 Ingredients
@@ -137,7 +141,18 @@ Every route must avoid medical diagnosis claims, treatment guarantees, appearanc
 Use factual educational wording. For severe, painful, spreading, infected-looking, infected, or persistent symptoms, guide users to a qualified professional.
 
 
-Protected route matcher includes `"/insights/:path*"` for the authenticated Skin Progress Insights page and `"/settings/:path*"` for the authenticated Settings & Data Control page. Routine logs remain managed through `/routine-logs/today`.
+Protected route matcher includes `"/product-match/:path*"` for the authenticated Product Match page, `"/insights/:path*"` for the authenticated Skin Progress Insights page, and `"/settings/:path*"` for the authenticated Settings & Data Control page. Routine logs remain managed through `/routine-logs/today`.
+
+## Post-MVP v1.3 Product Match Route Notes
+
+- `/product-match` is a protected dashboard route rendered by `src/app/(dashboard)/product-match/page.tsx`.
+- The page title is `Product Match`.
+- The route is visible in dashboard navigation as `Product Match`.
+- The client component calls `GET /api/product-match` and renders deterministic matches from the current user's Skin Profile.
+- The page includes a skin profile summary, educational safety banner, match cards, match score, match level badge, reasons, cautions, Save/Saved action, View details link, loading state, error state, no-profile empty state, and no-product empty state.
+- Safe route copy includes: `Educational product matches based on your skin profile. This is not medical advice.`
+- The route must not include diagnosis, skin scoring, appearance scoring, treatment guarantees, product-causality claims, image analysis, face analysis, marketplace, cart, checkout, or payment behavior.
+- The route depends on `/api/product-match`; product detail links continue to use `/products/[id]`, and save/remove actions reuse `/api/saved-products`.
 
 ## Post-MVP v1.3 Insights Route Notes
 

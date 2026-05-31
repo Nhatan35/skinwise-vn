@@ -92,7 +92,7 @@ const dashboardDto: DashboardDto = {
   nextActions: [
     {
       label: "Hoàn thiện hồ sơ da",
-      href: "/skin-profile",
+      href: "/onboarding/skin-profile",
       priority: "high",
     },
   ],

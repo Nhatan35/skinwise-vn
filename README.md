@@ -36,10 +36,10 @@ Final validation baseline:
 ```txt
 Node.js: v24.14.0
 npm: 11.14.1
-Unit test files: 72 passed / 72
-Unit tests: 719 passed / 719
+Unit test files: 84 passed / 84
+Unit tests: 777 passed / 777
 Database indexes: 32 indexes ensured
-Playwright E2E: 24 passed / 24
+Playwright E2E: 28 passed / 28
 ```
 
 ## Key Features
@@ -48,6 +48,7 @@ Playwright E2E: 24 passed / 24
 - Skin profile onboarding, viewing, and editing.
 - Product catalogue with product detail pages.
 - Saved products.
+- Personalized Product Match: rule-based educational product matching based on skin type, concerns, sensitivity, budget, and avoided ingredients.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow.
 - Routine builder.
@@ -71,6 +72,7 @@ Implemented UI routes:
 - `/journal`
 - `/products`
 - `/products/[id]`
+- `/product-match`
 - `/saved-products`
 - `/ingredients`
 - `/ingredients/[id]`
@@ -84,6 +86,7 @@ Implemented SkinWise API routes:
 - `/api/skin-profile`
 - `/api/products`
 - `/api/products/[id]`
+- `/api/product-match`
 - `/api/saved-products`
 - `/api/saved-products/[productId]`
 - `/api/ingredients`
@@ -125,6 +128,7 @@ Landing page
 -> Skin Profile
 -> Product Catalogue
 -> Product Detail
+-> Product Match
 -> Saved Products
 -> Ingredient Library
 -> Ingredient Detail and Explanation
@@ -197,15 +201,15 @@ Latest validation evidence:
 ```txt
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 72 files / 719 tests
+npm run test: PASS - 84 files / 777 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
-npm run test:e2e: PASS - 24/24 tests
+npm run test:e2e: PASS - 28/28 tests
 ```
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
-`npm run test:e2e` runs Playwright tests against a local/CI dev server with safe placeholder environment values and a test-only Auth.js Credentials provider. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Settings/Data Control, account deletion request, and Dashboard summary reflection.
+`npm run test:e2e` runs Playwright tests against a local/CI dev server with safe placeholder environment values and a test-only Auth.js Credentials provider. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Product Match review/save/detail flow, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Settings/Data Control, account deletion request, and Dashboard summary reflection.
 
 ## MVP Scope and Known Limitations
 

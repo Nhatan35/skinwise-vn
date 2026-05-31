@@ -445,6 +445,7 @@ export function mapJournalTrendSummary(
 
 export function buildDashboardNextActions(input: {
   hasSkinProfile: boolean;
+  savedProductCount: number;
   hasAnyRoutine: boolean;
   hasAnyRoutineLogToday: boolean;
   hasJournalToday: boolean;
@@ -454,8 +455,18 @@ export function buildDashboardNextActions(input: {
     return [
       {
         label: "Hoàn thiện hồ sơ da",
-        href: routes.SKIN_PROFILE,
+        href: routes.ONBOARDING_SKIN_PROFILE,
         priority: "high",
+      },
+    ];
+  }
+
+  if (input.savedProductCount === 0) {
+    return [
+      {
+        label: "Tìm sản phẩm phù hợp với hồ sơ da",
+        href: routes.PRODUCT_MATCH,
+        priority: "medium",
       },
     ];
   }
@@ -552,6 +563,7 @@ export function toDashboardDto(input: {
     journalTrend,
     nextActions: buildDashboardNextActions({
       hasSkinProfile: skinProfile.exists,
+      savedProductCount: input.savedProductCount,
       hasAnyRoutine: routines.hasAnyRoutine,
       hasAnyRoutineLogToday:
         todayRoutineLogs.completed +

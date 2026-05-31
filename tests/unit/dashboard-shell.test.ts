@@ -9,6 +9,7 @@ import {
   ingredientsRoute,
   insightsRoute,
   journalRoute,
+  productMatchRoute,
   productsRoute,
   routinesRoute,
   savedProductsRoute,
@@ -35,7 +36,7 @@ const dashboardNavigationSource = readFileSync(
 );
 
 describe("dashboard shell config", () => {
-  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Saved Products, Insights, Ingredients, and Settings as enabled protected routes", () => {
+  it("exposes dashboard, Skin Profile, Routines, Today Log, Journal, Products, Product Match, Saved Products, Insights, Ingredients, and Settings as enabled protected routes", () => {
     const enabledItems = dashboardNavItems.filter((item) => !item.disabled);
 
     expect(dashboardRoute).toBe("/dashboard");
@@ -44,6 +45,7 @@ describe("dashboard shell config", () => {
     expect(todayLogRoute).toBe(routes.TODAY_LOG);
     expect(journalRoute).toBe(routes.JOURNAL);
     expect(productsRoute).toBe(routes.PRODUCTS);
+    expect(productMatchRoute).toBe(routes.PRODUCT_MATCH);
     expect(savedProductsRoute).toBe(routes.SAVED_PRODUCTS);
     expect(insightsRoute).toBe(routes.INSIGHTS);
     expect(ingredientsRoute).toBe(routes.INGREDIENTS);
@@ -53,6 +55,7 @@ describe("dashboard shell config", () => {
     expect(routes.TODAY_LOG).toBe("/routine-logs/today");
     expect(routes.JOURNAL).toBe("/journal");
     expect(routes.PRODUCTS).toBe("/products");
+    expect(routes.PRODUCT_MATCH).toBe("/product-match");
     expect(routes.SAVED_PRODUCTS).toBe("/saved-products");
     expect(routes.INSIGHTS).toBe("/insights");
     expect(routes.INGREDIENTS).toBe("/ingredients");
@@ -92,6 +95,12 @@ describe("dashboard shell config", () => {
         disabled: false,
         href: "/products",
         label: "Products",
+        status: "Active",
+      },
+      {
+        disabled: false,
+        href: "/product-match",
+        label: "Product Match",
         status: "Active",
       },
       {

@@ -6,6 +6,7 @@ export const routinesRoute = routes.ROUTINES;
 export const todayLogRoute = routes.TODAY_LOG;
 export const journalRoute = routes.JOURNAL;
 export const productsRoute = routes.PRODUCTS;
+export const productMatchRoute = routes.PRODUCT_MATCH;
 export const savedProductsRoute = routes.SAVED_PRODUCTS;
 export const insightsRoute = routes.INSIGHTS;
 export const ingredientsRoute = routes.INGREDIENTS;
@@ -18,6 +19,7 @@ type DashboardNavHref =
   | typeof todayLogRoute
   | typeof journalRoute
   | typeof productsRoute
+  | typeof productMatchRoute
   | typeof savedProductsRoute
   | typeof insightsRoute
   | typeof ingredientsRoute
@@ -65,6 +67,12 @@ export const dashboardNavItems: DashboardNavItem[] = [
     disabled: false,
     href: productsRoute,
     label: "Products",
+    status: "Active",
+  },
+  {
+    disabled: false,
+    href: productMatchRoute,
+    label: "Product Match",
     status: "Active",
   },
   {

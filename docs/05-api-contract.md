@@ -303,6 +303,140 @@ Errors:
 - FORBIDDEN
 - NOT_FOUND
 
+## 4.1 Personalized Product Match
+
+### GET /api/product-match
+
+Returns deterministic, educational product matches for the authenticated user based on their Skin Profile and the visible product catalogue.
+
+Authentication and ownership:
+
+- Required.
+- The route derives `userId` from the authenticated session.
+- The client must not send `userId`.
+- If the user has no Skin Profile, the endpoint returns `skinProfileExists: false` with an empty `items` array.
+- Product candidates are limited to the same visible/recommendable product statuses used by the product catalogue.
+- Saved state is derived from the authenticated user's `saved_products` records.
+
+Query params:
+
+```txt
+limit?: number = 12 // integer, min 1, max 24
+```
+
+Validation:
+
+- Unknown query fields are rejected.
+- Invalid `limit` values return `VALIDATION_ERROR`.
+- The user-facing `limit` is applied after visible products are loaded, scored, sorted, and mapped.
+
+Success response:
+
+```json
+{
+  "data": {
+    "skinProfileExists": true,
+    "generatedAt": "2026-05-31T10:00:00.000Z",
+    "skinProfileSummary": {
+      "skinType": "oily",
+      "concerns": ["acne"],
+      "sensitivityLevel": "medium",
+      "budgetRange": "300k_700k",
+      "experienceLevel": "beginner",
+      "avoidIngredientsCount": 1
+    },
+    "items": [
+      {
+        "product": {
+          "id": "665000000000000000000320",
+          "name": "Niacinamide 5% Serum",
+          "brand": "SkinWise Demo",
+          "category": "serum",
+          "priceRange": "budget",
+          "ingredientsText": "Water, Niacinamide...",
+          "keyActives": ["Niacinamide"],
+          "tags": ["oiliness-support"],
+          "warnings": [],
+          "skinTypes": ["oily"],
+          "concerns": ["acne", "oiliness"],
+          "suitableFor": ["beginner serum step"],
+          "notRecommendedFor": [],
+          "verificationStatus": "verified",
+          "createdAt": "2026-05-31T00:00:00.000Z",
+          "updatedAt": "2026-05-31T00:00:00.000Z"
+        },
+        "matchScore": 85,
+        "matchLevel": "strong",
+        "reasons": ["Matches your oily skin type."],
+        "cautions": [
+          "Review the ingredient list carefully and patch test before applying widely.",
+          "This is educational guidance, not medical advice."
+        ],
+        "matchedSignals": {
+          "skinType": true,
+          "concerns": ["acne"],
+          "budget": true,
+          "sensitivity": false,
+          "avoidedIngredients": []
+        },
+        "isSaved": false
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+No-profile response:
+
+```json
+{
+  "data": {
+    "skinProfileExists": false,
+    "generatedAt": "2026-05-31T10:00:00.000Z",
+    "items": []
+  },
+  "error": null
+}
+```
+
+Error response:
+
+```json
+{
+  "data": null,
+  "error": {
+    "code": "string",
+    "message": "string",
+    "details": {}
+  }
+}
+```
+
+Expected errors:
+
+| Status | Code | Reason |
+|---:|---|---|
+| 401 | `UNAUTHORIZED` | User is not authenticated |
+| 400 | `VALIDATION_ERROR` | Query params are invalid |
+| 500 | `INTERNAL_ERROR` | Unexpected server error |
+
+DTO notes:
+
+- `ProductMatchResponseDto` is returned directly inside `data`; it is not returned raw and is not wrapped as `data.productMatch`.
+- `product` uses the existing public `ProductDto`.
+- `isSaved` is a boolean derived from the current user's saved products.
+- `matchScore` is clamped from 0 to 100.
+- `matchLevel` is one of `strong`, `good`, `cautious`, or `low`.
+- Avoided-ingredient matches and high-sensitivity plus strong-warning matches cannot be labeled `strong`.
+
+Safety boundary:
+
+- Product Match is deterministic and rule-based.
+- It does not call external AI providers.
+- It does not diagnose, prescribe, guarantee results, score skin or appearance, or claim a product cures, treats, fixes, heals, removes, or prevents a condition.
+- User-facing reasons and cautions must remain educational and cautious.
+
 ## 5. Saved Products
 
 Saved Products lets authenticated users bookmark visible products for later routine planning.

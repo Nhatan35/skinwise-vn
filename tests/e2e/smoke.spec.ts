@@ -73,6 +73,14 @@ test.describe("SkinWise VN smoke", () => {
     await expectSignInRedirect(page, "/saved-products");
   });
 
+  test("protected product match route redirects unauthenticated users", async ({
+    page,
+  }) => {
+    await page.goto("/product-match");
+
+    await expectSignInRedirect(page, "/product-match");
+  });
+
   test("protected routine route redirects unauthenticated users", async ({
     page,
   }) => {

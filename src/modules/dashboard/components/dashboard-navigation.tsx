@@ -25,6 +25,7 @@ const navLabelMap: Record<string, string> = {
   "Today Log": "Hôm nay",
   Journal: "Nhật ký",
   Products: "Sản phẩm",
+  "Product Match": "Product Match",
   "Saved Products": "Đã lưu",
   Insights: "Tiến độ",
   Ingredients: "Thành phần",

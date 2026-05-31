@@ -1,6 +1,6 @@
 # Feature Status Matrix - SkinWise VN MVP Final Closeout
 
-Last updated: 2026-05-29
+Last updated: 2026-05-31
 
 ## 1. Status categories
 
@@ -22,11 +22,11 @@ Out of scope
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS — 72 files / 719 tests
+npm run test: PASS — 84 files / 777 tests
 npm run build: PASS
 npm audit --omit=dev --audit-level=moderate: PASS — 0 vulnerabilities
 npm run db:indexes: PASS — 32 indexes ensured
-npm run test:e2e: PASS — 24/24 tests
+npm run test:e2e: PASS — 28/28 tests
 ```
 
 ## 3. Feature status matrix
@@ -38,6 +38,7 @@ npm run test:e2e: PASS — 24/24 tests
 | Product Catalogue | Completed | `GET /api/products` | `/products`; product picker in routines; product selection in journal | `products` collection and indexes | Unit/API/client/source checks; production smoke; authenticated E2E spec | Read-only visible product list with search/filter support. Deterministic local/test product seed data supports Playwright. |
 | Product Detail UI | Completed | `GET /api/products/[id]` | `/products/[id]` | Existing `products` collection | Unit/client/source checks; production smoke; authenticated E2E spec | Product detail navigation from catalogue is implemented and covered. |
 | Saved Products | Completed | `GET`/`POST /api/saved-products`; `DELETE /api/saved-products/[productId]` | `/saved-products`; Save/Saved actions in Product Catalogue and Product Detail | `saved_products` with unique `userId + productId` index | Unit/API/client/repository/source checks; authenticated E2E spec | User-owned product bookmarks with idempotent save/remove. No product schema change, marketplace, cart, recommendation algorithm, or public sharing. |
+| MVP-v1.3-001 Personalized Product Match | Completed | `GET /api/product-match` | `/product-match`; Product Match dashboard navigation; dashboard next action when profile exists and no products are saved | Reuses `skin_profiles`, visible `products`, and `saved_products` | Unit/API/client/UI/source tests and authenticated E2E spec; full validation passed | Deterministic educational matching by skin type, concerns, budget, sensitivity, avoided ingredients, visible product status, and saved state. No AI, diagnosis, skin score, marketplace, checkout, payment, or new recommendations collection. |
 | Ingredient Library | Completed | `GET /api/ingredients`; `GET /api/ingredients/[id]` | `/ingredients`; `/ingredients/[id]` | `ingredients` collection and indexes | Unit/API/client/source checks; authenticated E2E spec | Authenticated read-only ingredient library with search, detail view, and educational copy. |
 | Ingredient Explanation | Completed | `POST /api/ingredients/explain` | Explanation panel inside `/ingredients/[id]` | No persistence | Unit/API/client/source checks; authenticated E2E spec | Uses provider abstraction and validated mock provider with deterministic fallback. No external AI calls or explanation persistence in MVP. |
 | Routine Builder | Completed | `/api/routines` GET/POST; `/api/routines/[id]` GET/PATCH/DELETE | `/routines` | `routines` collection and indexes | Unit/API/source checks; production smoke; authenticated E2E spec | Playwright covers authenticated routine creation with deterministic E2E data and stable selectors. |
@@ -51,7 +52,7 @@ npm run test:e2e: PASS — 24/24 tests
 | Runtime baseline | Completed | N/A | Node 24.x / npm 11.x documented for local, CI, and deployment | N/A | Local validation and CI configuration | `.nvmrc`, `package.json` engines, GitHub Actions, README, and deployment docs target Node 24.x / npm 11.x. Local validation passed on Node v24.14.0 / npm 11.14.1. |
 | Deployment | Completed | N/A | Vercel production deployment | MongoDB Atlas production/demo configuration | Production smoke; production verification by project owner | Production URL `https://skinwise-vn.vercel.app` verified. Google OAuth login, authenticated dashboard, protected routes, MongoDB-backed read/write flows, sign-out, and runtime review are marked completed by project owner. |
 | CI / GitHub Actions | Completed | N/A | GitHub Actions CI workflow | MongoDB service container for E2E | Lint, typecheck, unit tests, build, audit, db indexes, E2E | CI workflow includes MongoDB service on `27017:27017`, health check, Node 24.x, Playwright Chromium install, database index step, and `npm run test:e2e`. |
-| E2E Tests | Completed | Test-only Auth.js Credentials provider enabled only for safe test environment | Playwright smoke and authenticated MVP core journey specs | Safe local/test MongoDB URI plus deterministic seed/reset logic | Latest E2E: 24/24 passed | Covers public landing page, protected redirects, authenticated dashboard, Skin Profile, Product Catalogue/Detail, Saved Products, Ingredient Library/Explanation, Routine Builder, Routine Analysis, Today Checklist, Routine Log delete, Skin Journal, Settings/Data Control, account deletion request, and dashboard reflection. |
+| E2E Tests | Completed | Test-only Auth.js Credentials provider enabled only for safe test environment | Playwright smoke and authenticated MVP core journey specs | Safe local/test MongoDB URI plus deterministic seed/reset logic | Latest E2E: 28/28 passed | Covers public landing page, protected redirects, authenticated dashboard, Skin Profile, Product Catalogue/Detail, Product Match review/save/detail flow, Saved Products, Ingredient Library/Explanation, Routine Builder, Routine Analysis, Today Checklist, Routine Log delete, Skin Journal, Settings/Data Control, account deletion request, and dashboard reflection. |
 | Clean Package Validation | Completed | N/A | N/A | N/A | Package hygiene check; source checks | Release package excludes `.env.local`, `.env`, `node_modules`, `.next`, `.git`, test artifacts, build artifacts, and generated tsbuildinfo files. |
 | Demo Data and Demo Script | Completed | Public seed data through `scripts/seed.ts`; user-owned setup through existing APIs/UI | Authenticated manual walkthrough | Public `products` and `ingredients`; user-owned collections scoped by real authenticated user | Seed validation through script schemas; full validation commands | Portfolio-ready demo data and walkthrough are documented without fake users, fake dashboard output, or auth bypass. |
 | Portfolio Documentation | Completed | Verified API methods documented from source | Case study, demo script, documentation walkthrough | N/A | Documentation review | Portfolio docs explain the problem, scope, requirements, architecture, features, validation, deployment summary, limitations, and roadmap. |
@@ -88,6 +89,29 @@ npm run test:e2e: PASS - 25/25 tests
 ```
 
 Post-MVP v1.3 Insights status:
+
+```txt
+Implemented: YES
+Tested: YES
+Documented: YES
+Production-ready for the validated MVP environment: YES
+Environment blocked: NO
+```
+
+## 4.2 MVP-v1.3-001 Product Match validation
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 84 files / 777 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 28/28 tests
+```
+
+Product Match status:
 
 ```txt
 Implemented: YES

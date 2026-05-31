@@ -45,11 +45,11 @@ Latest local validation evidence:
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS — 72 files / 719 tests
+npm run test: PASS — 84 files / 777 tests
 npm run build: PASS
 npm audit --omit=dev --audit-level=moderate: PASS — 0 vulnerabilities
 npm run db:indexes: PASS — 32 indexes ensured
-npm run test:e2e: PASS — 24/24 tests
+npm run test:e2e: PASS — 28/28 tests
 ```
 
 Validation summary:
@@ -156,7 +156,7 @@ Final release documentation: DONE
 [x] Add authenticated Playwright E2E coverage.
 [x] Add deterministic local/test E2E seed support.
 [x] Add GitHub Actions MongoDB service for E2E.
-[x] Run local E2E successfully with 24/24 tests.
+[x] Run local E2E successfully with 28/28 tests.
 [x] Mark screenshot capture as skipped because it is not required.
 [x] Complete final documentation closeout.
 ```
@@ -184,23 +184,23 @@ No full commercial production hardening claim.
 Current post-MVP task:
 
 ```txt
-POST-MVP-v1.3-INSIGHTS - Finish Skin Progress Insights & Calendar to production-ready standard
+MVP-v1.3-001 - Personalized Product Match
 ```
 
 Scope:
 
 ```txt
-Preserve existing /insights implementation.
-Preserve routine-slot based InsightsDto.
-Add focused schema, mapper, use-case, client, API contract, UI, route/nav, and authenticated E2E coverage.
-Update API, route, structure, user story, changelog, and AI coding documentation.
+Add a deterministic, rule-based Product Match feature.
+Recommend visible products based on the authenticated user's Skin Profile.
+Reuse existing ProductDto, product visibility, saved-products, auth, response envelope, and dashboard patterns.
+Add /product-match, GET /api/product-match, navigation, dashboard next action, focused unit/API/client/UI tests, authenticated E2E, and docs.
 Run validation under Node 24.x / npm 11.x.
 ```
 
 Status:
 
 ```txt
-Implementation: Existing feature preserved.
+Implementation: Added in current task.
 Tests: Added in current task.
 Documentation: Updated in current task.
 Production-ready decision: PASS for the validated MVP environment.
@@ -214,9 +214,10 @@ Node: v24.14.0
 npm: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 78 files / 745 tests
+npm run test: PASS - 84 files / 777 tests
 npm run build: PASS
-npm run test:e2e: PASS - 25/25 tests
+npm run db:indexes: PASS - 32 indexes ensured
+npm run test:e2e: PASS - 28/28 tests
 ```
 
 Safety boundaries:
@@ -224,10 +225,18 @@ Safety boundaries:
 ```txt
 No skin score.
 No diagnosis.
-No medication or treatment recommendation.
+No medication or treatment guarantee.
 No face or image analysis.
 No product-causality claim.
-No Mongoose or schema migration.
+No external AI provider.
+No Mongoose, schema migration, or recommendation collection.
+No cart, checkout, marketplace, payment, likes, ratings, reviews, or product CRUD.
+```
+
+Recently completed Post-MVP v1.3 task:
+
+```txt
+POST-MVP-v1.3-INSIGHTS - Skin Progress Insights & Calendar hardening: DONE
 ```
 
 ## 9. Known MVP limitations

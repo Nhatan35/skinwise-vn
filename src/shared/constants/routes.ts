@@ -6,6 +6,7 @@ export const routes = {
   TODAY_LOG: "/routine-logs/today",
   JOURNAL: "/journal",
   PRODUCTS: "/products",
+  PRODUCT_MATCH: "/product-match",
   SAVED_PRODUCTS: "/saved-products",
   INSIGHTS: "/insights",
   INGREDIENTS: "/ingredients",

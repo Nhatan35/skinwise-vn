@@ -19,6 +19,8 @@ const actionDescriptions: Record<string, string> = {
     "Đánh dấu routine hôm nay để duy trì thói quen theo dõi skincare.",
   "Thêm nhật ký da hôm nay":
     "Ghi lại cảm nhận và quan sát ngắn để dễ nhìn lại thay đổi theo thời gian.",
+  "Tìm sản phẩm phù hợp với hồ sơ da":
+    "Xem gợi ý sản phẩm mang tính giáo dục dựa trên loại da, mối quan tâm, ngân sách và thành phần bạn muốn tránh.",
   "Xem phân tích an toàn routine":
     "Xem lại routine bằng các quy tắc an toàn cơ bản trước khi tiếp tục sử dụng.",
   "Hôm nay bạn đã cập nhật đủ theo dõi skincare":

@@ -84,6 +84,14 @@ export async function searchVisibleProducts(
     .toArray();
 }
 
+export async function listVisibleProductsForMatching(): Promise<Product[]> {
+  const collection = await getProductCollection();
+
+  return collection
+    .find(visibleProductFilter())
+    .sort({ brand: 1, name: 1 })
+    .toArray();
+}
 
 export async function findVisibleProductsByIds(
   ids: string[],
