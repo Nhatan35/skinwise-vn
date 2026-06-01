@@ -1,6 +1,13 @@
 "use client";
 
-import { ArrowLeft, RotateCcw } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle2,
+  Info,
+  ListChecks,
+  RotateCcw,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -8,12 +15,14 @@ import {
   getProduct,
   ProductClientError,
 } from "@/modules/products/product.client";
+import {
+  buildProductDetailDecisionSupport,
+  type ProductDetailDecisionSupport,
+} from "@/modules/products/product-detail-decision-support";
 import type { ProductDto } from "@/modules/products/product.dto";
 import type {
   ProductCategory,
-  ProductConcern,
   ProductPriceRange,
-  ProductSkinType,
   ProductVerificationStatus,
 } from "@/modules/products/product.types";
 import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
@@ -37,6 +46,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type ProductDetailProps = {
   productId: string;
@@ -58,26 +68,6 @@ const priceRangeLabels: Record<ProductPriceRange, string> = {
   mid: "Tầm trung",
   premium: "Cao cấp",
   unknown: "Chưa rõ giá",
-};
-
-const skinTypeLabels: Record<ProductSkinType, string> = {
-  oily: "Da dầu",
-  dry: "Da khô",
-  combination: "Da hỗn hợp",
-  normal: "Da thường",
-  sensitive: "Da nhạy cảm",
-  unknown: "Chưa rõ",
-};
-
-const concernLabels: Record<ProductConcern, string> = {
-  acne: "Mụn",
-  oiliness: "Dầu thừa",
-  dryness: "Khô căng",
-  redness: "Đỏ da",
-  dark_spots: "Thâm/đốm tối màu",
-  texture: "Bề mặt da",
-  barrier_support: "Hỗ trợ hàng rào da",
-  unknown: "Chưa rõ",
 };
 
 const verificationLabels: Record<ProductVerificationStatus, string> = {
@@ -153,7 +143,9 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           }
 
           setIsSaved(
-            savedProducts.some((savedProduct) => savedProduct.productId === productId),
+            savedProducts.some(
+              (savedProduct) => savedProduct.productId === productId,
+            ),
           );
         } catch (error) {
           if (isMounted) {
@@ -191,7 +183,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (loadError?.status === 404) {
     return (
       <EmptyState
-        action={<BackToProductsButton />}
+        action={<ProductsLinkButton label="Xem tất cả sản phẩm" />}
         description="Sản phẩm này có thể không còn khả dụng trong catalogue."
         title="Không tìm thấy sản phẩm"
       />
@@ -210,7 +202,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
               <RotateCcw aria-hidden="true" />
               Thử lại
             </Button>
-            <BackToProductsButton />
+            <ProductsLinkButton label="Xem tất cả sản phẩm" />
           </div>
         }
         description={loadError.message}
@@ -222,66 +214,37 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (!product) {
     return (
       <EmptyState
-        action={<BackToProductsButton />}
+        action={<ProductsLinkButton label="Xem tất cả sản phẩm" />}
         description="Hãy quay lại catalogue và mở lại sản phẩm."
         title="Không tìm thấy sản phẩm"
       />
     );
   }
 
-  const suitabilityVisible =
-    product.skinTypes.length > 0 ||
-    product.concerns.length > 0 ||
-    product.suitableFor.length > 0 ||
-    product.notRecommendedFor.length > 0;
+  const decisionSupport = buildProductDetailDecisionSupport(product);
 
   return (
-    <article className="space-y-4">
-      <Card>
-        <CardHeader>
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold text-primary">
-                {product.brand || "SkinWise product"}
-              </p>
-              <CardTitle className="mt-2 text-3xl">{product.name}</CardTitle>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Badge variant="outline">{categoryLabels[product.category]}</Badge>
-                <Badge variant="outline">{priceRangeLabels[product.priceRange]}</Badge>
-                <Badge variant="secondary">
-                  {verificationLabels[product.verificationStatus]}
-                </Badge>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
-              <BackToProductsButton />
-              <SavedProductToggleButton
-                initialSaved={isSaved}
-                key={`${product.id}-${isSaved ? "saved" : "unsaved"}`}
-                mode="full"
-                onChange={setIsSaved}
-                productId={product.id}
-              />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-xs text-muted-foreground">
-            Product ID: {product.id} · Updated {formatUpdatedAt(product.updatedAt)}
-          </p>
-        </CardContent>
-      </Card>
+    <article className="space-y-5">
+      <ProductHero
+        decisionSupport={decisionSupport}
+        isSaved={isSaved}
+        onSavedChange={setIsSaved}
+        product={product}
+      />
 
       <Alert>
-        <AlertTitle>Educational product details</AlertTitle>
+        <Info aria-hidden="true" />
+        <AlertTitle>Thông tin tham khảo</AlertTitle>
         <AlertDescription>
-          Thông tin sản phẩm phục vụ lập routine và giáo dục về thành phần. Nội
-          dung này không phải chẩn đoán, điều trị hoặc lời khuyên y tế.
+          Nội dung dưới đây dựa trên dữ liệu sản phẩm hiện có, giúp bạn cân nhắc
+          trước khi thêm sản phẩm mới vào routine. Thông tin này không thay thế
+          tư vấn y tế.
         </AlertDescription>
       </Alert>
 
       {savedStateError ? (
         <Alert variant="destructive">
+          <AlertTriangle aria-hidden="true" />
           <AlertTitle>Chưa tải được trạng thái đã lưu</AlertTitle>
           <AlertDescription>
             {savedStateError} Bạn vẫn có thể xem chi tiết sản phẩm.
@@ -289,159 +252,300 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         </Alert>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Product information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-3">
-          <DetailField label="Danh mục" value={categoryLabels[product.category]} />
-          <DetailField label="Mức giá" value={priceRangeLabels[product.priceRange]} />
-          <DetailField
-            label="Trạng thái xem xét"
-            value={verificationLabels[product.verificationStatus]}
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)]">
+        <div className="space-y-5">
+          <OverviewSection overview={decisionSupport.overview} />
+          <SuitableForSection decisionSupport={decisionSupport} />
+          <IngredientSection
+            decisionSupport={decisionSupport}
+            ingredientsText={product.ingredientsText}
           />
+        </div>
+        <div className="space-y-5">
+          <CautionSection cautions={decisionSupport.cautions} />
+          <RoutineUsageSection tips={decisionSupport.routineUsageTips} />
+          <DataQualitySection notes={decisionSupport.dataQualityNotes} />
+        </div>
+      </div>
+
+      <Card>
+        <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center">
+          <SavedProductToggleButton
+            initialSaved={isSaved}
+            key={`${product.id}-${isSaved ? "saved" : "unsaved"}-footer`}
+            mode="full"
+            onChange={setIsSaved}
+            productId={product.id}
+          />
+          <ProductMatchLinkButton />
+          <ProductsLinkButton label="Xem tất cả sản phẩm" />
         </CardContent>
       </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Ingredients</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-foreground">
-              Bảng thành phần
-            </h3>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {product.ingredientsText}
-            </p>
-          </div>
-          <BadgeGroup
-            label="Hoạt chất chính"
-            values={product.keyActives}
-            variant="secondary"
-          />
-        </CardContent>
-      </Card>
-
-      {suitabilityVisible ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Có thể phù hợp / cần xem lại</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <BadgeGroup
-              label="Loại da"
-              values={product.skinTypes.map((skinType) => skinTypeLabels[skinType])}
-            />
-            <BadgeGroup
-              label="Mối quan tâm"
-              values={product.concerns.map((concern) => concernLabels[concern])}
-            />
-            <TextList label="Có thể phù hợp" values={product.suitableFor} />
-            <TextList
-              label="Không khuyến nghị cho"
-              values={product.notRecommendedFor}
-            />
-          </CardContent>
-        </Card>
-      ) : null}
-
-      {product.warnings.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Cần xem lại</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextList label="Ghi chú thận trọng" values={product.warnings} />
-          </CardContent>
-        </Card>
-      ) : null}
-
-      {product.tags.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Tags</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <BadgeGroup label="Tags" values={product.tags} />
-          </CardContent>
-        </Card>
-      ) : null}
     </article>
   );
 }
 
-function BackToProductsButton() {
+type ProductHeroProps = {
+  decisionSupport: ProductDetailDecisionSupport;
+  isSaved: boolean;
+  onSavedChange: (isSaved: boolean) => void;
+  product: ProductDto;
+};
+
+function ProductHero({
+  decisionSupport,
+  isSaved,
+  onSavedChange,
+  product,
+}: ProductHeroProps) {
   return (
-    <Button asChild aria-label="Quay lại sản phẩm" variant="outline">
-      <Link href="/products">
+    <Card>
+      <CardHeader>
+        <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold text-primary">
+              {product.brand || "SkinWise product"}
+            </p>
+            <CardTitle className="mt-2 text-3xl">{product.name}</CardTitle>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Badge variant="outline">{categoryLabels[product.category]}</Badge>
+              <Badge variant="outline">{priceRangeLabels[product.priceRange]}</Badge>
+              <Badge variant="secondary">
+                {verificationLabels[product.verificationStatus]}
+              </Badge>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
+            <ProductsLinkButton label="Xem tất cả sản phẩm" />
+            <ProductMatchLinkButton />
+            <SavedProductToggleButton
+              initialSaved={isSaved}
+              key={`${product.id}-${isSaved ? "saved" : "unsaved"}-hero`}
+              mode="full"
+              onChange={onSavedChange}
+              productId={product.id}
+            />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+          {decisionSupport.overview}
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Product ID: {product.id} · Updated {formatUpdatedAt(product.updatedAt)}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function OverviewSection({ overview }: { overview: string }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Tổng quan sản phẩm</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm leading-6 text-muted-foreground">{overview}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SuitableForSection({
+  decisionSupport,
+}: {
+  decisionSupport: ProductDetailDecisionSupport;
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Phù hợp với</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {decisionSupport.suitableFor.length > 0 ? (
+          <BadgeList values={decisionSupport.suitableFor} />
+        ) : (
+          <NoteText>
+            Dữ liệu về loại da hoặc mối quan tâm của sản phẩm chưa đầy đủ.
+          </NoteText>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function IngredientSection({
+  decisionSupport,
+  ingredientsText,
+}: {
+  decisionSupport: ProductDetailDecisionSupport;
+  ingredientsText: string;
+}) {
+  const hasIngredientsText = ingredientsText.trim().length > 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Thành phần / hoạt chất nổi bật</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-sm leading-6 text-muted-foreground">
+          Các thành phần dưới đây được hiển thị từ dữ liệu sản phẩm hiện có. Bạn
+          vẫn nên kiểm tra nhãn sản phẩm thực tế trước khi sử dụng.
+        </p>
+        {decisionSupport.ingredientHighlights.length > 0 ? (
+          <BadgeList
+            values={decisionSupport.ingredientHighlights}
+            variant="secondary"
+          />
+        ) : (
+          <NoteText>
+            Dữ liệu thành phần chưa đầy đủ. Bạn nên kiểm tra bảng thành phần
+            trên bao bì hoặc website chính thức của sản phẩm.
+          </NoteText>
+        )}
+        {hasIngredientsText ? (
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-foreground">
+              Bảng thành phần
+            </h3>
+            <p className="max-h-32 overflow-auto rounded-2xl bg-secondary p-3 text-sm leading-6 text-muted-foreground">
+              {ingredientsText}
+            </p>
+          </div>
+        ) : null}
+      </CardContent>
+    </Card>
+  );
+}
+
+function CautionSection({ cautions }: { cautions: string[] }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Cần lưu ý</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <IconTextList items={cautions} tone="caution" />
+      </CardContent>
+    </Card>
+  );
+}
+
+function RoutineUsageSection({ tips }: { tips: string[] }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Gợi ý dùng trong routine</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <IconTextList items={tips} tone="routine" />
+      </CardContent>
+    </Card>
+  );
+}
+
+function DataQualitySection({ notes }: { notes: string[] }) {
+  if (notes.length === 0) {
+    return null;
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Ghi chú dữ liệu</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <IconTextList items={notes} tone="info" />
+      </CardContent>
+    </Card>
+  );
+}
+
+function ProductMatchLinkButton() {
+  return (
+    <Button asChild variant="outline">
+      <Link href={routes.PRODUCT_MATCH}>Quay lại Product Match</Link>
+    </Button>
+  );
+}
+
+function ProductsLinkButton({ label }: { label: string }) {
+  return (
+    <Button asChild aria-label={label} variant="outline">
+      <Link href={routes.PRODUCTS}>
         <ArrowLeft aria-hidden="true" />
-        Quay lại sản phẩm
+        {label}
       </Link>
     </Button>
   );
 }
 
-type DetailFieldProps = {
-  label: string;
-  value: string;
-};
-
-function DetailField({ label, value }: DetailFieldProps) {
-  return (
-    <div className="rounded-2xl bg-secondary p-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-2 text-sm font-semibold text-foreground">{value}</p>
-    </div>
-  );
-}
-
-type BadgeGroupProps = {
-  label: string;
+type BadgeListProps = {
   values: string[];
   variant?: "outline" | "secondary";
 };
 
-function BadgeGroup({ label, values, variant = "outline" }: BadgeGroupProps) {
+function BadgeList({ values, variant = "outline" }: BadgeListProps) {
   if (values.length === 0) {
     return null;
   }
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
-      <div className="flex flex-wrap gap-2">
-        {values.map((value) => (
-          <Badge key={value} variant={variant}>
-            {value}
-          </Badge>
-        ))}
-      </div>
+    <div className="flex flex-wrap gap-2">
+      {values.map((value) => (
+        <Badge key={value} variant={variant}>
+          {value}
+        </Badge>
+      ))}
     </div>
   );
 }
 
-type TextListProps = {
-  label: string;
-  values: string[];
+type IconTextListProps = {
+  items: string[];
+  tone: "caution" | "info" | "routine";
 };
 
-function TextList({ label, values }: TextListProps) {
-  if (values.length === 0) {
+function IconTextList({ items, tone }: IconTextListProps) {
+  if (items.length === 0) {
     return null;
   }
 
+  const Icon =
+    tone === "caution" ? AlertTriangle : tone === "routine" ? ListChecks : Info;
+  const iconClassName =
+    tone === "caution"
+      ? "text-amber-700"
+      : tone === "routine"
+        ? "text-primary"
+        : "text-muted-foreground";
+
   return (
-    <div className="space-y-2">
-      <h3 className="text-sm font-semibold text-foreground">{label}</h3>
-      <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
-        {values.map((value) => (
-          <li key={value}>{value}</li>
-        ))}
-      </ul>
-    </div>
+    <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
+      {items.map((item) => (
+        <li className="flex gap-2" key={item}>
+          <Icon
+            aria-hidden="true"
+            className={`mt-1 size-4 shrink-0 ${iconClassName}`}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function NoteText({ children }: { children: string }) {
+  return (
+    <p className="flex gap-2 text-sm leading-6 text-muted-foreground">
+      <CheckCircle2
+        aria-hidden="true"
+        className="mt-1 size-4 shrink-0 text-muted-foreground"
+      />
+      <span>{children}</span>
+    </p>
   );
 }

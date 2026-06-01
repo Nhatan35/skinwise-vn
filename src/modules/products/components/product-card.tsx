@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
@@ -154,7 +155,7 @@ export function ProductCard({
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
           <Button asChild aria-label="Xem chi tiết" variant="outline">
-            <Link href={`/products/${product.id}`}>Xem chi tiết</Link>
+            <Link href={`${routes.PRODUCTS}/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
             initialSaved={initialSaved}
