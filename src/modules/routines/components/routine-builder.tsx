@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, Pencil, Plus, RotateCcw, Save, Trash2, X } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { ZodIssue } from "zod";
 
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
@@ -17,6 +18,13 @@ import { RoutineLogControls } from "@/modules/routines/components/routine-log-co
 import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
 import {
+  applyRoutineProductSelection,
+  buildRoutineProductOptions,
+  findRoutineProductOption,
+  type RoutineProductOption,
+  type RoutineProductOptions,
+} from "@/modules/routines/routine-product-options";
+import {
   createRoutineSchema,
   updateRoutineSchema,
 } from "@/modules/routines/routine.schema";
@@ -28,6 +36,8 @@ import {
   type RoutineStepFrequency,
   type RoutineTimeOfDay,
 } from "@/modules/routines/routine.types";
+import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import { listSavedProducts } from "@/modules/saved-products/saved-product.client";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -49,11 +59,15 @@ import { Label } from "@/shared/components/ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { routes } from "@/shared/constants/routes";
 import { cn } from "@/shared/utils";
 
 const ROUTINES_API_PATH = "/api/routines";
@@ -322,8 +336,18 @@ function formatUpdatedAt(value: string) {
   }).format(new Date(value));
 }
 
-function getProductLabel(product: ProductDto) {
-  return product.brand ? `${product.brand} — ${product.name}` : product.name;
+function getProductOptionLabel(option: RoutineProductOption) {
+  const brandAndName = option.brand
+    ? `${option.brand} — ${option.name}`
+    : option.name;
+  const categoryLabel = option.category ? ` — ${categoryLabels[option.category]}` : "";
+  const savedPrefix = option.source === "saved" ? "[Đã lưu] " : "";
+
+  return `${savedPrefix}${brandAndName}${categoryLabel}`;
+}
+
+function getProductOptionSourceLabel(option: RoutineProductOption) {
+  return option.source === "saved" ? "Sản phẩm đã lưu" : "Catalogue";
 }
 
 function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
@@ -357,6 +381,11 @@ export function RoutineBuilder() {
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [productLoadError, setProductLoadError] = useState<string | null>(null);
   const [isProductLoading, setIsProductLoading] = useState(false);
+  const [savedProducts, setSavedProducts] = useState<SavedProductDto[]>([]);
+  const [savedProductLoadError, setSavedProductLoadError] = useState<
+    string | null
+  >(null);
+  const [isSavedProductLoading, setIsSavedProductLoading] = useState(false);
   const [routineLogLocalDate] = useState(() => getBrowserLocalDate());
   const [routineLogTimezone] = useState(() => getBrowserTimezone());
   const [routineLogsByRoutineId, setRoutineLogsByRoutineId] = useState<
@@ -389,6 +418,14 @@ export function RoutineBuilder() {
     Record<string, boolean>
   >({});
   const [reloadKey, setReloadKey] = useState(0);
+  const productOptions = useMemo(
+    () =>
+      buildRoutineProductOptions({
+        catalogueProducts: products,
+        savedProducts,
+      }),
+    [products, savedProducts],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -434,6 +471,40 @@ export function RoutineBuilder() {
     }
 
     void loadProducts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadSavedProductOptions() {
+      setIsSavedProductLoading(true);
+      setSavedProductLoadError(null);
+
+      try {
+        const loadedSavedProducts = await listSavedProducts();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setSavedProducts(loadedSavedProducts);
+      } catch {
+        if (isMounted) {
+          setSavedProducts([]);
+          setSavedProductLoadError("Chưa tải được sản phẩm đã lưu.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsSavedProductLoading(false);
+        }
+      }
+    }
+
+    void loadSavedProductOptions();
 
     return () => {
       isMounted = false;
@@ -635,8 +706,9 @@ export function RoutineBuilder() {
           };
         }
 
-        const selectedProduct = products.find(
-          (product) => product.id === value,
+        const selectedProduct = findRoutineProductOption(
+          productOptions.combinedProductOptions,
+          value,
         );
 
         if (!selectedProduct) {
@@ -646,22 +718,16 @@ export function RoutineBuilder() {
           };
         }
 
-        const previousProduct = products.find(
-          (product) => product.id === step.productId,
+        const previousProduct = findRoutineProductOption(
+          productOptions.combinedProductOptions,
+          step.productId,
         );
-        const shouldAutoSetCategory =
-          !step.category ||
-          !step.productId ||
-          (previousProduct && step.category === previousProduct.category);
 
-        return {
-          ...step,
-          productId: selectedProduct.id,
-          customProductName: "",
-          category: shouldAutoSetCategory
-            ? selectedProduct.category
-            : step.category,
-        };
+        return applyRoutineProductSelection({
+          previousOption: previousProduct,
+          selectedOption: selectedProduct,
+          step,
+        });
       }),
     }));
     clearStepProductErrors(index);
@@ -1001,6 +1067,7 @@ export function RoutineBuilder() {
           formMode={formMode}
           formState={formState}
           isProductLoading={isProductLoading}
+          isSavedProductLoading={isSavedProductLoading}
           isSaving={isSaving}
           onAddStep={addStep}
           onCancel={cancelForm}
@@ -1010,7 +1077,8 @@ export function RoutineBuilder() {
           onStepProductSelectionChange={updateStepProductSelection}
           onSubmit={handleSubmit}
           productLoadError={productLoadError}
-          products={products}
+          productOptions={productOptions}
+          savedProductLoadError={savedProductLoadError}
         />
       ) : null}
 
@@ -1057,6 +1125,7 @@ type RoutineFormProps = {
   formMode: Exclude<FormMode, "none">;
   formState: RoutineFormState;
   isProductLoading: boolean;
+  isSavedProductLoading: boolean;
   isSaving: boolean;
   onAddStep: () => void;
   onCancel: () => void;
@@ -1073,7 +1142,8 @@ type RoutineFormProps = {
   onStepProductSelectionChange: (index: number, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   productLoadError: string | null;
-  products: ProductDto[];
+  productOptions: RoutineProductOptions;
+  savedProductLoadError: string | null;
 };
 
 function RoutineForm({
@@ -1081,6 +1151,7 @@ function RoutineForm({
   formMode,
   formState,
   isProductLoading,
+  isSavedProductLoading,
   isSaving,
   onAddStep,
   onCancel,
@@ -1090,7 +1161,8 @@ function RoutineForm({
   onStepProductSelectionChange,
   onSubmit,
   productLoadError,
-  products,
+  productOptions,
+  savedProductLoadError,
 }: RoutineFormProps) {
   return (
     <Card className="border-border bg-card">
@@ -1170,6 +1242,39 @@ function RoutineForm({
               </Alert>
             ) : null}
 
+            {savedProductLoadError ? (
+              <Alert>
+                <AlertTitle>Chưa tải được sản phẩm đã lưu</AlertTitle>
+                <AlertDescription>
+                  {savedProductLoadError} Catalogue và nhập thủ công vẫn có thể
+                  dùng như bình thường.
+                </AlertDescription>
+              </Alert>
+            ) : null}
+
+            {isSavedProductLoading ? (
+              <p className="text-xs text-muted-foreground">
+                Đang tải sản phẩm đã lưu...
+              </p>
+            ) : null}
+
+            {!isSavedProductLoading &&
+            !savedProductLoadError &&
+            productOptions.savedProductOptions.length === 0 ? (
+              <Alert>
+                <AlertTitle>Bạn chưa lưu sản phẩm nào</AlertTitle>
+                <AlertDescription className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <span>
+                    Bạn chưa lưu sản phẩm nào. Hãy xem gợi ý sản phẩm để lưu sản
+                    phẩm phù hợp trước khi xây routine.
+                  </span>
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={routes.PRODUCT_MATCH}>Xem gợi ý sản phẩm</Link>
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            ) : null}
+
             <div className="space-y-4">
               {formState.steps.map((step, index) => (
                 <div
@@ -1229,24 +1334,75 @@ function RoutineForm({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={MANUAL_PRODUCT_VALUE}>
-                            Nhập sản phẩm thủ công
-                          </SelectItem>
-                          {products.map((product) => (
-                            <SelectItem key={product.id} value={product.id}>
-                              {getProductLabel(product)}
+                          {productOptions.savedProductOptions.length > 0 ? (
+                            <SelectGroup>
+                              <SelectLabel>Sản phẩm đã lưu</SelectLabel>
+                              {productOptions.savedProductOptions.map(
+                                (option) => (
+                                  <SelectItem
+                                    data-testid="routine-saved-product-option"
+                                    key={option.id}
+                                    value={option.id}
+                                  >
+                                    {getProductOptionLabel(option)}
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectGroup>
+                          ) : null}
+                          {productOptions.savedProductOptions.length > 0 &&
+                          productOptions.catalogueProductOptions.length > 0 ? (
+                            <SelectSeparator />
+                          ) : null}
+                          {productOptions.catalogueProductOptions.length > 0 ? (
+                            <SelectGroup>
+                              <SelectLabel>Tất cả sản phẩm</SelectLabel>
+                              {productOptions.catalogueProductOptions.map(
+                                (option) => (
+                                  <SelectItem
+                                    data-testid="routine-catalogue-product-option"
+                                    key={option.id}
+                                    value={option.id}
+                                  >
+                                    {getProductOptionLabel(option)}
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectGroup>
+                          ) : null}
+                          {productOptions.savedProductOptions.length > 0 ||
+                          productOptions.catalogueProductOptions.length > 0 ? (
+                            <SelectSeparator />
+                          ) : null}
+                          <SelectGroup>
+                            <SelectLabel>Nhập thủ công</SelectLabel>
+                            <SelectItem value={MANUAL_PRODUCT_VALUE}>
+                              Tự nhập tên sản phẩm
                             </SelectItem>
-                          ))}
+                          </SelectGroup>
                           {step.productId &&
-                          !products.some(
-                            (product) => product.id === step.productId,
+                          !findRoutineProductOption(
+                            productOptions.combinedProductOptions,
+                            step.productId,
                           ) ? (
-                            <SelectItem value={step.productId}>
-                              Sản phẩm đã chọn trước đó
-                            </SelectItem>
+                            <>
+                              <SelectSeparator />
+                              <SelectGroup>
+                                <SelectLabel>Sản phẩm đã chọn</SelectLabel>
+                                <SelectItem value={step.productId}>
+                                  Sản phẩm đã chọn trước đó
+                                </SelectItem>
+                              </SelectGroup>
+                            </>
                           ) : null}
                         </SelectContent>
                       </Select>
+                      <SelectedProductContext
+                        option={findRoutineProductOption(
+                          productOptions.combinedProductOptions,
+                          step.productId,
+                        )}
+                      />
                       {isProductLoading ? (
                         <p className="text-xs text-muted-foreground">
                           Đang tải danh sách sản phẩm...
@@ -1409,6 +1565,28 @@ function RoutineForm({
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+function SelectedProductContext({
+  option,
+}: {
+  option?: RoutineProductOption;
+}) {
+  if (!option) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <Badge variant={option.source === "saved" ? "secondary" : "outline"}>
+        Nguồn: {getProductOptionSourceLabel(option)}
+      </Badge>
+      {option.brand ? <span>Brand: {option.brand}</span> : null}
+      {option.category ? (
+        <span>Nhóm bước: {categoryLabels[option.category]}</span>
+      ) : null}
+    </div>
   );
 }
 

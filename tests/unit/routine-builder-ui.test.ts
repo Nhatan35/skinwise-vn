@@ -15,10 +15,18 @@ const routineBuilderPath = join(
   projectRoot,
   "src/modules/routines/components/routine-builder.tsx",
 );
+const routineProductOptionsPath = join(
+  projectRoot,
+  "src/modules/routines/routine-product-options.ts",
+);
 const proxyPath = join(projectRoot, "src/proxy.ts");
 
 const routinesPageSource = readFileSync(routinesPagePath, "utf8");
 const routineBuilderSource = readFileSync(routineBuilderPath, "utf8");
+const routineProductOptionsSource = readFileSync(
+  routineProductOptionsPath,
+  "utf8",
+);
 const proxySource = readFileSync(proxyPath, "utf8");
 
 function getPayloadSource() {
@@ -58,6 +66,38 @@ describe("Routine Builder UI foundation", () => {
       "@/modules/auth",
     ]) {
       expect(routineBuilderSource).not.toContain(forbiddenImport);
+    }
+  });
+
+  it("adds a pure saved/catalogue product option helper", () => {
+    expect(existsSync(routineProductOptionsPath)).toBe(true);
+
+    for (const requiredSource of [
+      "RoutineProductOption",
+      "source: RoutineProductOptionSource",
+      '"saved" | "catalogue"',
+      "buildRoutineProductOptions",
+      "findRoutineProductOption",
+      "applyRoutineProductSelection",
+      "savedProductOptions",
+      "catalogueProductOptions",
+      "combinedProductOptions",
+      "savedProduct.product",
+    ]) {
+      expect(routineProductOptionsSource).toContain(requiredSource);
+    }
+
+    for (const forbiddenImport of [
+      "server-only",
+      "mongodb",
+      "repository",
+      "use-case",
+      "@/infrastructure/database",
+      "@/modules/auth",
+      "fetch(",
+      "process.env",
+    ]) {
+      expect(routineProductOptionsSource).not.toContain(forbiddenImport);
     }
   });
 
@@ -133,9 +173,50 @@ describe("Routine Builder UI foundation", () => {
     expect(routineBuilderSource).toContain('const PRODUCTS_API_PATH = "/api/products?limit=50"');
     expect(routineBuilderSource).toContain("fetch(PRODUCTS_API_PATH");
     expect(routineBuilderSource).toContain("body.data.items");
-    expect(routineBuilderSource).toContain("Nhập sản phẩm thủ công");
+    expect(routineBuilderSource).toContain("Tên sản phẩm thủ công");
+    expect(routineBuilderSource).toContain("Tự nhập tên sản phẩm");
     expect(routineBuilderSource).toContain("customProductName");
     expect(routineBuilderSource).toContain("productLoadError");
+  });
+
+  it("prioritizes saved products in the Routine Builder product selector", () => {
+    for (const requiredSource of [
+      "@/modules/saved-products/saved-product.client",
+      "listSavedProducts",
+      "buildRoutineProductOptions",
+      "productOptions.savedProductOptions",
+      "productOptions.catalogueProductOptions",
+      "productOptions.combinedProductOptions",
+      "SelectGroup",
+      "SelectLabel",
+      "SelectSeparator",
+      "Sản phẩm đã lưu",
+      "Tất cả sản phẩm",
+      "Nhập thủ công",
+      "[Đã lưu]",
+      "Nguồn: {getProductOptionSourceLabel(option)}",
+      "Chưa tải được sản phẩm đã lưu",
+      "Bạn chưa lưu sản phẩm nào",
+      "Xem gợi ý sản phẩm",
+      "routes.PRODUCT_MATCH",
+    ]) {
+      expect(routineBuilderSource).toContain(requiredSource);
+    }
+
+    expect(routineBuilderSource).toContain(
+      "<Link href={routes.PRODUCT_MATCH}>Xem gợi ý sản phẩm</Link>",
+    );
+  });
+
+  it("uses combined saved/catalogue options when selecting a routine product", () => {
+    expect(routineBuilderSource).toContain("findRoutineProductOption");
+    expect(routineBuilderSource).toContain("applyRoutineProductSelection");
+    expect(routineBuilderSource).toContain(
+      "productOptions.combinedProductOptions",
+    );
+    expect(routineBuilderSource).not.toContain(
+      "const selectedProduct = products.find",
+    );
   });
 
   it("keeps Product imports client-safe", () => {
@@ -231,7 +312,7 @@ describe("Routine Builder UI foundation", () => {
   });
 
   it("does not introduce forbidden feature scope", () => {
-    const combinedSource = `${routinesPageSource}\n${routineBuilderSource}`;
+    const combinedSource = `${routinesPageSource}\n${routineBuilderSource}\n${routineProductOptionsSource}`;
 
     for (const forbiddenScope of [
       "AIProvider",
@@ -244,6 +325,17 @@ describe("Routine Builder UI foundation", () => {
       "medical diagnosis",
       "dashboard data integration",
       "image upload",
+      "chữa khỏi",
+      "đảm bảo hiệu quả",
+      "an toàn tuyệt đối",
+      "trị mụn chắc chắn",
+      "phù hợp 100%",
+      "hiệu quả 100%",
+      "cure",
+      "guaranteed",
+      "100% effective",
+      "perfectly safe",
+      "will treat acne",
     ]) {
       expect(combinedSource).not.toContain(forbiddenScope);
     }
