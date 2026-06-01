@@ -8,6 +8,12 @@ const SKIN_JOURNAL_API_PATH = "/api/skin-journal";
 const DUPLICATE_LOCAL_DATE_MESSAGE =
   "You already have a journal entry for this date.";
 
+export type ListSkinJournalsOptions = {
+  from?: string;
+  to?: string;
+  limit?: number;
+};
+
 type ApiError = {
   code: string;
   details?: unknown;
@@ -105,6 +111,26 @@ async function requestSkinJournal<TData>(
   return body.data;
 }
 
+function getSkinJournalListEndpoint(options?: ListSkinJournalsOptions) {
+  const searchParams = new URLSearchParams();
+
+  if (options?.from) {
+    searchParams.set("from", options.from);
+  }
+
+  if (options?.to) {
+    searchParams.set("to", options.to);
+  }
+
+  if (typeof options?.limit === "number") {
+    searchParams.set("limit", String(options.limit));
+  }
+
+  const query = searchParams.toString();
+
+  return query ? `${SKIN_JOURNAL_API_PATH}?${query}` : SKIN_JOURNAL_API_PATH;
+}
+
 export function sanitizeCreateSkinJournalPayload(
   input: CreateSkinJournalClientInput,
 ): CreateSkinJournalClientInput {
@@ -138,9 +164,9 @@ export function sanitizeUpdateSkinJournalPayload(
   };
 }
 
-export async function listSkinJournals() {
+export async function listSkinJournals(options?: ListSkinJournalsOptions) {
   const data = await requestSkinJournal<{ skinJournals: SkinJournalDto[] }>(
-    SKIN_JOURNAL_API_PATH,
+    getSkinJournalListEndpoint(options),
     {
       method: "GET",
     },

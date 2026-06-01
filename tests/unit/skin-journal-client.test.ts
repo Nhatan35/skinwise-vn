@@ -47,6 +47,10 @@ function getLastRequestInit() {
   return mockedFetch.mock.calls.at(-1)?.[1] as RequestInit;
 }
 
+function getLastRequestPath() {
+  return String(mockedFetch.mock.calls.at(-1)?.[0]);
+}
+
 function getLastRequestBody() {
   return JSON.parse(String(getLastRequestInit().body)) as Record<
     string,
@@ -79,6 +83,51 @@ describe("SkinJournal client helpers", () => {
         method: "GET",
       }),
     );
+  });
+
+  it("lists journals with optional date range query params", async () => {
+    const skinJournals = [createJournal({ localDate: "2026-06-01" })];
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { skinJournals },
+        error: null,
+      }),
+    );
+
+    await expect(
+      listSkinJournals({
+        from: "2026-06-01",
+        to: "2026-06-01",
+        limit: 1,
+      }),
+    ).resolves.toEqual(skinJournals);
+
+    expect(getLastRequestPath()).toBe(
+      "/api/skin-journal?from=2026-06-01&to=2026-06-01&limit=1",
+    );
+    expect(getLastRequestInit()).toEqual(
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+        }),
+        method: "GET",
+      }),
+    );
+  });
+
+  it("does not send undefined journal list query params", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { skinJournals: [] },
+        error: null,
+      }),
+    );
+
+    await expect(listSkinJournals({ from: "2026-06-01" })).resolves.toEqual([]);
+
+    expect(getLastRequestPath()).toBe("/api/skin-journal?from=2026-06-01");
+    expect(getLastRequestPath()).not.toContain("to=");
+    expect(getLastRequestPath()).not.toContain("limit=");
   });
 
   it("creates journals through POST /api/skin-journal and reads data.skinJournal", async () => {

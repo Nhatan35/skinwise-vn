@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { listSkinJournals } from "@/modules/journals/skin-journal.client";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
+import { TodayJournalPromptCard } from "@/modules/routine-logs/components/today-journal-prompt-card";
 import {
   getBrowserLocalDate,
   getBrowserTimezone,
   groupRoutineLogsByRoutineId,
 } from "@/modules/routine-logs/routine-log.client";
+import { getTodayJournalPromptState } from "@/modules/routine-logs/today-journal-prompt";
 import { RoutineLogControls } from "@/modules/routines/components/routine-log-controls";
 import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
@@ -79,6 +82,11 @@ type SummaryCounts = {
   partial: number;
   skipped: number;
   notLogged: number;
+};
+
+type JournalTodayStatus = {
+  hasJournalToday?: boolean;
+  isKnown: boolean;
 };
 
 async function readApiResponse<TData>(
@@ -178,6 +186,10 @@ export function TodayRoutineChecklist() {
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState<
     string | null
   >(null);
+  const [journalTodayStatus, setJournalTodayStatus] =
+    useState<JournalTodayStatus>({
+      isKnown: false,
+    });
 
   useEffect(() => {
     let isMounted = true;
@@ -252,6 +264,8 @@ export function TodayRoutineChecklist() {
     () => getSummaryCounts(routines, logsByRoutineId),
     [logsByRoutineId, routines],
   );
+  const hasRoutineLogToday =
+    summaryCounts.completed + summaryCounts.partial + summaryCounts.skipped > 0;
   const morningRoutines = useMemo(
     () => routines.filter((routine) => routine.timeOfDay === "morning"),
     [routines],
@@ -261,6 +275,46 @@ export function TodayRoutineChecklist() {
     [routines],
   );
   const hasLoggedAllRoutines = routines.length > 0 && summaryCounts.notLogged === 0;
+  const todayJournalPromptState = getTodayJournalPromptState({
+    hasRoutineLogToday,
+    hasJournalToday: journalTodayStatus.hasJournalToday,
+    isJournalStatusKnown: journalTodayStatus.isKnown,
+  });
+
+  useEffect(() => {
+    if (!hasRoutineLogToday) {
+      return;
+    }
+
+    let isMounted = true;
+
+    async function loadJournalTodayStatus() {
+      try {
+        const journals = await listSkinJournals({
+          from: localDate,
+          to: localDate,
+          limit: 1,
+        });
+
+        if (isMounted) {
+          setJournalTodayStatus({
+            hasJournalToday: journals.length > 0,
+            isKnown: true,
+          });
+        }
+      } catch {
+        if (isMounted) {
+          setJournalTodayStatus({ isKnown: false });
+        }
+      }
+    }
+
+    void loadJournalTodayStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasRoutineLogToday, localDate]);
 
   function handleLogSaved(updatedLog: RoutineLogDto) {
     setLogsByRoutineId((current) => ({
@@ -474,6 +528,11 @@ export function TodayRoutineChecklist() {
           <SummaryItem label="Chưa ghi nhận" value={summaryCounts.notLogged} />
         </CardContent>
       </Card>
+
+      <TodayJournalPromptCard
+        journalHref={routes.JOURNAL}
+        state={todayJournalPromptState}
+      />
 
       {hasLoggedAllRoutines ? (
         <EmptyState

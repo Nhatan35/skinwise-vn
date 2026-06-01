@@ -24,10 +24,19 @@ const todayRoutineChecklistPath = join(
   projectRoot,
   "src/modules/routine-logs/components/today-routine-checklist.tsx",
 );
+const todayJournalPromptCardPath = join(
+  projectRoot,
+  "src/modules/routine-logs/components/today-journal-prompt-card.tsx",
+);
+const todayJournalPromptPath = join(
+  projectRoot,
+  "src/modules/routine-logs/today-journal-prompt.ts",
+);
 const todayRoutineLogPagePath = join(
   projectRoot,
   "src/app/(dashboard)/routine-logs/today/page.tsx",
 );
+const mistakenSkinJournalModulePath = join(projectRoot, "src/modules/skin-journal");
 
 const routineBuilderSource = readFileSync(routineBuilderPath, "utf8");
 const routineLogControlsSource = readFileSync(routineLogControlsPath, "utf8");
@@ -40,14 +49,21 @@ const todayRoutineChecklistSource = readFileSync(
   todayRoutineChecklistPath,
   "utf8",
 );
+const todayJournalPromptCardSource = readFileSync(
+  todayJournalPromptCardPath,
+  "utf8",
+);
+const todayJournalPromptSource = readFileSync(todayJournalPromptPath, "utf8");
 const todayRoutineLogPageSource = readFileSync(todayRoutineLogPagePath, "utf8");
-const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}\n${todayRoutineChecklistSource}`;
+const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}\n${todayRoutineChecklistSource}\n${todayJournalPromptCardSource}\n${todayJournalPromptSource}`;
 
 describe("RoutineLog UI integration", () => {
   it("adds focused RoutineLog UI components and client helpers", () => {
     expect(existsSync(routineLogControlsPath)).toBe(true);
     expect(existsSync(routineLogStatusBadgePath)).toBe(true);
     expect(existsSync(routineLogClientPath)).toBe(true);
+    expect(existsSync(todayJournalPromptCardPath)).toBe(true);
+    expect(existsSync(todayJournalPromptPath)).toBe(true);
     expect(routineBuilderSource).toContain("<RoutineLogControls");
     expect(routineBuilderSource).toContain("<RoutineLogStatusBadge");
   });
@@ -184,6 +200,75 @@ describe("RoutineLog UI integration", () => {
     expect(todayRoutineChecklistSource).not.toContain("routine-log.use-case");
     expect(todayRoutineChecklistSource).not.toContain("mongodb");
     expect(todayRoutineChecklistSource).not.toContain("server-only");
+  });
+
+  it("connects Today Routine Log to Journal after a routine log exists", () => {
+    expect(todayRoutineChecklistSource).toContain(
+      "@/modules/routine-logs/components/today-journal-prompt-card",
+    );
+    expect(todayRoutineChecklistSource).toContain(
+      "@/modules/routine-logs/today-journal-prompt",
+    );
+    expect(todayRoutineChecklistSource).toContain(
+      "@/modules/journals/skin-journal.client",
+    );
+    expect(todayRoutineChecklistSource).toContain("listSkinJournals");
+    expect(todayRoutineChecklistSource).toContain("hasRoutineLogToday");
+    expect(todayRoutineChecklistSource).toContain("summaryCounts.completed");
+    expect(todayRoutineChecklistSource).toContain("summaryCounts.partial");
+    expect(todayRoutineChecklistSource).toContain("summaryCounts.skipped");
+    expect(todayRoutineChecklistSource).toContain("from: localDate");
+    expect(todayRoutineChecklistSource).toContain("to: localDate");
+    expect(todayRoutineChecklistSource).toContain("limit: 1");
+    expect(todayRoutineChecklistSource).toContain("<TodayJournalPromptCard");
+    expect(todayRoutineChecklistSource).toContain("routes.JOURNAL");
+    expect(todayRoutineChecklistSource).not.toContain('"/journal"');
+  });
+
+  it("renders safe Journal prompt copy and CTA states", () => {
+    for (const requiredCopy of [
+      "Bạn đã ghi nhận routine hôm nay",
+      "Viết nhật ký da hôm nay",
+      "Bạn đã ghi nhật ký da hôm nay",
+      "Đi đến Journal",
+      "theo dõi phản ứng da",
+      "ghi lại phản ứng da và thay đổi nổi bật",
+      "không thay thế tư vấn y tế",
+    ]) {
+      expect(todayJournalPromptCardSource).toContain(requiredCopy);
+    }
+
+    expect(todayJournalPromptCardSource).toContain('state === "hidden"');
+    expect(todayJournalPromptCardSource).toContain("journalHref");
+    expect(todayJournalPromptCardSource).not.toContain('"/journal"');
+  });
+
+  it("keeps the Today Journal prompt client-safe and scoped to existing modules", () => {
+    expect(existsSync(mistakenSkinJournalModulePath)).toBe(false);
+
+    for (const forbiddenSource of [
+      "@/modules/skin-journal",
+      "routine-log.repository",
+      "routine-log.use-case",
+      "skin-journal.repository",
+      "create-skin-journal.use-case",
+      "list-skin-journal.use-case",
+      "@/infrastructure/database",
+      "mongodb",
+      "server-only",
+      "getCurrentUser",
+      "@/modules/auth",
+      "da bạn chắc chắn sẽ tốt hơn",
+      "routine này chữa mụn",
+      "journal sẽ chẩn đoán vấn đề da",
+      "đảm bảo tìm ra nguyên nhân kích ứng",
+      "da bạn sẽ hết mụn",
+      "chữa khỏi",
+      "đảm bảo hiệu quả",
+      "routine chắc chắn phù hợp",
+    ]) {
+      expect(combinedSource).not.toContain(forbiddenSource);
+    }
   });
 
   it("lets users delete an existing Today RoutineLog without breaking save controls", () => {
