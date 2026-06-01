@@ -67,49 +67,56 @@ const RISK_LEVEL_RANK = {
 
 const RULE_REASONS = {
   MISSING_SUNSCREEN_AM:
-    "Chong nang la buoc quan trong trong routine ban ngay.",
+    "Routine buổi sáng chưa có bước chống nắng. Dựa trên dữ liệu hiện có, đây là bước nên cân nhắc trước khi thêm treatment mới.",
   TOO_MANY_ACTIVES:
-    "Qua nhieu hoat chat manh trong cung routine co the lam routine kho theo doi va de gay kho chiu.",
+    "Routine có nhiều active ingredient mạnh trong cùng một buổi, nên có thể khó theo dõi phản ứng da.",
   RETINOID_PLUS_EXFOLIANT:
-    "Retinoid va acid tay da chet trong cung buoi co the qua manh, dac biet voi nguoi moi.",
+    "Retinoid và nhóm tẩy da chết hóa học trong cùng buổi có thể quá mạnh nếu da chưa quen.",
   TOO_MANY_STEPS_BEGINNER:
-    "Routine dai co the kho duy tri va kho xac dinh san pham nao gay kich ung.",
+    "Routine dài có thể khó duy trì và khó xác định sản phẩm nào làm da khó chịu.",
   FRAGRANCE_SENSITIVE_CAUTION:
-    "Nhieu san pham co huong lieu co the khong phu hop voi da nhay cam.",
+    "Với da nhạy cảm, nhiều sản phẩm có hương liệu có thể cần được theo dõi kỹ hơn.",
   MISSING_MOISTURIZER:
-    "Duong am giup routine co treatment hoac exfoliant can bang hon.",
+    "Routine có treatment hoặc active nhưng chưa có bước dưỡng ẩm hỗ trợ.",
   TOO_MANY_CUSTOM_PRODUCTS:
-    "Nhieu san pham tuy chinh thieu snapshot thanh phan nen ket qua chi la uoc tinh.",
+    "Nhiều sản phẩm nhập thủ công chưa có dữ liệu thành phần, nên kết quả phân tích chỉ dựa trên dữ liệu hiện có.",
 } as const satisfies Record<RoutineSafetyRuleCode, string>;
 
 const RULE_SUGGESTIONS = {
   MISSING_SUNSCREEN_AM: {
-    title: "Them buoc chong nang",
-    description: "Uu tien chong nang trong routine buoi sang truoc khi them treatment moi.",
+    title: "Cân nhắc thêm chống nắng cho routine buổi sáng",
+    description:
+      "Nếu routine này dùng ban ngày, nên có bước chống nắng ở cuối routine.",
   },
   TOO_MANY_ACTIVES: {
-    title: "Don gian hoa hoat chat",
-    description: "Giam bot so hoat chat manh de routine de theo doi hon.",
+    title: "Giảm số active dùng cùng lúc",
+    description:
+      "Nên tránh thêm quá nhiều treatment trong cùng một routine, đặc biệt khi da nhạy cảm hoặc mới bắt đầu.",
   },
   RETINOID_PLUS_EXFOLIANT: {
-    title: "Tach retinoid va exfoliant",
-    description: "Can nhac dung retinoid va acid tay da chet o cac buoi khac nhau.",
+    title: "Tách retinoid và exfoliant sang các buổi khác nhau",
+    description:
+      "Nếu da chưa quen, nên cân nhắc dùng retinoid và sản phẩm tẩy da chết hóa học ở các buổi khác nhau.",
   },
   TOO_MANY_STEPS_BEGINNER: {
-    title: "Rut gon routine",
-    description: "Nguoi moi nen bat dau voi routine it buoc va de duy tri.",
+    title: "Đơn giản hóa routine",
+    description:
+      "Routine ngắn hơn thường dễ duy trì và dễ theo dõi phản ứng da hơn.",
   },
   FRAGRANCE_SENSITIVE_CAUTION: {
-    title: "Theo doi huong lieu",
-    description: "Neu da nhay cam, hay can nhac giam so san pham co huong lieu.",
+    title: "Theo dõi sản phẩm có hương liệu",
+    description:
+      "Nếu da nhạy cảm, nên theo dõi kỹ phản ứng da khi dùng nhiều sản phẩm có hương liệu.",
   },
   MISSING_MOISTURIZER: {
-    title: "Them duong am ho tro",
-    description: "Dung duong am co the giup routine co treatment de chiu hon.",
+    title: "Cân nhắc thêm bước dưỡng ẩm",
+    description:
+      "Dưỡng ẩm có thể giúp routine cân bằng hơn, đặc biệt khi routine có treatment hoặc sản phẩm làm sạch. Nếu treatment còn mới, có thể bắt đầu từ tần suất thấp.",
   },
   TOO_MANY_CUSTOM_PRODUCTS: {
-    title: "Bo sung snapshot san pham",
-    description: "Them thong tin thanh phan hoac key actives de ket qua phan tich day du hon.",
+    title: "Bổ sung dữ liệu sản phẩm khi có thể",
+    description:
+      "Thêm thông tin thành phần hoặc key actives sẽ giúp lần phân tích sau rõ hơn.",
   },
 } as const satisfies Record<
   RoutineSafetyRuleCode,
@@ -118,6 +125,26 @@ const RULE_SUGGESTIONS = {
     description: string;
   }
 >;
+
+const RULE_SUGGESTION_PRIORITIES = {
+  MISSING_SUNSCREEN_AM: "must_fix",
+  TOO_MANY_ACTIVES: "must_fix",
+  RETINOID_PLUS_EXFOLIANT: "must_fix",
+  TOO_MANY_STEPS_BEGINNER: "should_fix",
+  FRAGRANCE_SENSITIVE_CAUTION: "should_fix",
+  MISSING_MOISTURIZER: "should_fix",
+  TOO_MANY_CUSTOM_PRODUCTS: "optional",
+} as const satisfies Record<
+  RoutineSafetyRuleCode,
+  RoutineAnalysisSuggestion["priority"]
+>;
+
+const JOURNAL_TRACKING_SUGGESTION = {
+  title: "Theo dõi phản ứng da trong Journal",
+  description:
+    "Sau khi chỉnh routine, hãy ghi lại cảm giác da, kích ứng hoặc thay đổi nổi bật trong Journal để theo dõi theo thời gian.",
+  priority: "optional",
+} as const satisfies RoutineAnalysisSuggestion;
 
 function toWarning(rule: RoutineSafetyRuleResult): RoutineAnalysisWarning {
   return {
@@ -134,8 +161,17 @@ function toSuggestion(rule: RoutineSafetyRuleResult): RoutineAnalysisSuggestion 
   return {
     title: suggestion.title,
     description: suggestion.description,
-    priority: rule.severity === "high" ? "must_fix" : rule.severity === "medium" ? "should_fix" : "optional",
+    priority: RULE_SUGGESTION_PRIORITIES[rule.code],
   };
+}
+
+function buildFallbackSuggestions(
+  triggeredRules: RoutineSafetyRuleResult[],
+): RoutineAnalysisSuggestion[] {
+  return [
+    ...triggeredRules.map(toSuggestion),
+    { ...JOURNAL_TRACKING_SUGGESTION },
+  ];
 }
 
 function createFallbackSummary(
@@ -143,18 +179,18 @@ function createFallbackSummary(
   triggeredRules: RoutineSafetyRuleResult[],
 ) {
   if (triggeredRules.length === 0) {
-    return "Routine hien khong co canh bao an toan co ban nao duoc kich hoat.";
+    return "Routine hiện chưa có cảnh báo lớn dựa trên dữ liệu routine hiện có. Bạn vẫn nên bắt đầu từ từ khi thêm sản phẩm mới và theo dõi phản ứng da.";
   }
 
   if (riskLevel === "high") {
-    return "Routine co mot so diem can don gian hoa truoc khi tiep tuc.";
+    return "Routine có một số điểm nên ưu tiên chỉnh trước khi tiếp tục, đặc biệt nếu có nhiều active hoặc treatment trong cùng buổi.";
   }
 
   if (riskLevel === "medium") {
-    return "Routine co mot so diem nen xem lai de an toan va de duy tri hon.";
+    return "Routine nhìn chung có thể tiếp tục được, nhưng có một vài điểm nên cân nhắc để dễ duy trì và dễ theo dõi phản ứng da hơn.";
   }
 
-  return "Routine co mot vai ghi chu nhe de ban theo doi them.";
+  return "Routine có một vài ghi chú nhẹ dựa trên dữ liệu hiện có; bạn có thể tiếp tục theo dõi bằng Today Log và Journal.";
 }
 
 function buildDeterministicFallbackResult(
@@ -165,7 +201,7 @@ function buildDeterministicFallbackResult(
     riskLevel,
     summary: createFallbackSummary(riskLevel, triggeredRules),
     warnings: triggeredRules.map(toWarning),
-    suggestions: triggeredRules.map(toSuggestion),
+    suggestions: buildFallbackSuggestions(triggeredRules),
     shouldSeeProfessional: false,
     disclaimer: ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER,
   };

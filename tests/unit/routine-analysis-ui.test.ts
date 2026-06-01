@@ -98,6 +98,45 @@ describe("Routine Analysis UI foundation", () => {
     }
   });
 
+  it("renders actionable routine analysis sections", () => {
+    for (const sectionHeading of [
+      "Tổng quan an toàn routine",
+      "Cần lưu ý",
+      "Gợi ý chỉnh sửa",
+      "Thông tin tham khảo",
+    ]) {
+      expect(routineAnalysisPanelSource).toContain(sectionHeading);
+    }
+  });
+
+  it("renders text priority labels for suggestions", () => {
+    for (const prioritySource of [
+      'must_fix: "Cao"',
+      'should_fix: "Trung bình"',
+      'optional: "Thấp"',
+      "Ưu tiên:",
+    ]) {
+      expect(routineAnalysisPanelSource).toContain(prioritySource);
+    }
+  });
+
+  it("renders clear empty states for warnings and suggestions", () => {
+    expect(routineAnalysisPanelSource).toContain(
+      "Chưa phát hiện lưu ý lớn từ dữ liệu hiện có.",
+    );
+    expect(routineAnalysisPanelSource).toContain(
+      "Bạn có thể tiếp tục theo dõi routine bằng Today Log và Journal.",
+    );
+  });
+
+  it("does not prioritize raw rule code as user-facing warning content", () => {
+    expect(routineAnalysisPanelSource).not.toContain(
+      ">{warning.code}</Badge>",
+    );
+    expect(routineAnalysisPanelSource).toContain("warning.message");
+    expect(routineAnalysisPanelSource).toContain("warning.reason");
+  });
+
   it("includes analyzing, history loading, error, empty history, and success states", () => {
     for (const stateSource of [
       "isAnalyzing",
@@ -158,6 +197,32 @@ describe("Routine Analysis UI foundation", () => {
     }
   });
 
+  it("keeps routine analysis UI copy free of unsafe skincare claims", () => {
+    for (const unsafeClaim of [
+      "chữa khỏi",
+      "điều trị chắc chắn",
+      "đảm bảo an toàn",
+      "đảm bảo hiệu quả",
+      "phù hợp 100%",
+      "routine này chắc chắn không gây kích ứng",
+      "không bao giờ kích ứng",
+      "bác sĩ khuyên",
+      "trị mụn chắc chắn",
+      "hiệu quả 100%",
+      "cure",
+      "guaranteed",
+      "100% safe",
+      "100% effective",
+      "never irritates",
+      "doctor recommended",
+      "medical diagnosis",
+    ]) {
+      expect(combinedSource.toLowerCase()).not.toContain(
+        unsafeClaim.toLowerCase(),
+      );
+    }
+  });
+
   it("does not introduce out-of-scope feature modules or new analysis UI routes", () => {
     for (const forbiddenScope of [
       "@/modules/ingredients",
@@ -166,7 +231,6 @@ describe("Routine Analysis UI foundation", () => {
       "/api/ingredients",
       "ProductPicker",
       "Dashboard",
-      "Journal",
       "Routine Logs",
       "image upload",
     ]) {

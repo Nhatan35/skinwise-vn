@@ -32,9 +32,36 @@ const suggestionPriorityLabels: Record<
   RoutineAnalysisDto["suggestions"][number]["priority"],
   string
 > = {
-  must_fix: "Nên ưu tiên",
-  optional: "Tùy chọn",
-  should_fix: "Nên chỉnh",
+  must_fix: "Cao",
+  optional: "Thấp",
+  should_fix: "Trung bình",
+};
+
+const suggestionPriorityClasses: Record<
+  RoutineAnalysisDto["suggestions"][number]["priority"],
+  string
+> = {
+  must_fix: "border-red-200 bg-red-50 text-red-800",
+  optional: "border-stone-200 bg-stone-50 text-stone-700",
+  should_fix: "border-amber-200 bg-amber-50 text-amber-800",
+};
+
+const warningSeverityLabels: Record<
+  RoutineAnalysisDto["warnings"][number]["severity"],
+  string
+> = {
+  high: "Cao",
+  low: "Thấp",
+  medium: "Trung bình",
+};
+
+const warningSeverityClasses: Record<
+  RoutineAnalysisDto["warnings"][number]["severity"],
+  string
+> = {
+  high: "border-red-200 bg-red-50 text-red-800",
+  low: "border-stone-200 bg-stone-50 text-stone-700",
+  medium: "border-amber-200 bg-amber-50 text-amber-800",
 };
 
 function formatAnalysisDate(value: string) {
@@ -52,7 +79,10 @@ function RoutineAnalysisResult({
   title: string;
 }) {
   return (
-    <div className="space-y-4 border border-border bg-card p-4" data-testid="routine-analysis-result">
+    <div
+      className="space-y-4 border border-border bg-card p-4"
+      data-testid="routine-analysis-result"
+    >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h4 className="font-semibold text-foreground">{title}</h4>
@@ -63,16 +93,44 @@ function RoutineAnalysisResult({
             Tạo lúc: {formatAnalysisDate(analysis.createdAt)}
           </p>
         </div>
-        <Badge className={riskLevelClasses[analysis.riskLevel]} variant="outline">
+        <Badge
+          className={riskLevelClasses[analysis.riskLevel]}
+          variant="outline"
+        >
           Mức rủi ro: {riskLevelLabels[analysis.riskLevel]}
         </Badge>
       </div>
 
-      <p className="text-sm leading-6 text-muted-foreground">{analysis.summary}</p>
+      <section className="space-y-3 border border-border bg-secondary/30 p-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <h5 className="text-sm font-semibold text-foreground">
+            Tổng quan an toàn routine
+          </h5>
+          <Badge
+            className={riskLevelClasses[analysis.riskLevel]}
+            variant="outline"
+          >
+            Dựa trên dữ liệu hiện có: {riskLevelLabels[analysis.riskLevel]}
+          </Badge>
+        </div>
+        <p className="text-sm leading-6 text-muted-foreground">
+          {analysis.summary}
+        </p>
 
-      <div className="space-y-3">
+        {analysis.shouldSeeProfessional ? (
+          <Alert>
+            <AlertTitle>Nên cân nhắc gặp chuyên gia</AlertTitle>
+            <AlertDescription>
+              Nếu kích ứng kéo dài, nghiêm trọng hoặc làm bạn lo lắng, nên trao
+              đổi với chuyên gia phù hợp để được tư vấn trực tiếp.
+            </AlertDescription>
+          </Alert>
+        ) : null}
+      </section>
+
+      <section className="space-y-3">
         <h5 className="text-sm font-semibold text-foreground">
-          Cảnh báo cần chú ý
+          Cần lưu ý
         </h5>
         {analysis.warnings.length > 0 ? (
           <ul className="space-y-2">
@@ -82,13 +140,17 @@ function RoutineAnalysisResult({
                 data-testid="routine-analysis-warning"
                 key={`${analysis.analysisId}-warning-${index}-${warning.code}`}
               >
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline">{warning.code}</Badge>
-                  <Badge variant="secondary">{warning.severity}</Badge>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <p className="text-sm font-medium text-foreground">
+                    {warning.message}
+                  </p>
+                  <Badge
+                    className={warningSeverityClasses[warning.severity]}
+                    variant="outline"
+                  >
+                    Mức độ: {warningSeverityLabels[warning.severity]}
+                  </Badge>
                 </div>
-                <p className="mt-2 text-sm font-medium text-foreground">
-                  {warning.message}
-                </p>
                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
                   {warning.reason}
                 </p>
@@ -97,14 +159,14 @@ function RoutineAnalysisResult({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Chưa có cảnh báo nào được trả về cho lần phân tích này.
+            Chưa phát hiện lưu ý lớn từ dữ liệu hiện có.
           </p>
         )}
-      </div>
+      </section>
 
-      <div className="space-y-3">
+      <section className="space-y-3">
         <h5 className="text-sm font-semibold text-foreground">
-          Gợi ý tiếp theo
+          Gợi ý chỉnh sửa
         </h5>
         {analysis.suggestions.length > 0 ? (
           <ul className="space-y-2">
@@ -114,12 +176,15 @@ function RoutineAnalysisResult({
                 data-testid="routine-analysis-suggestion"
                 key={`${analysis.analysisId}-suggestion-${index}-${suggestion.title}`}
               >
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <p className="text-sm font-medium text-foreground">
                     {suggestion.title}
                   </p>
-                  <Badge variant="outline">
-                    {suggestionPriorityLabels[suggestion.priority]}
+                  <Badge
+                    className={suggestionPriorityClasses[suggestion.priority]}
+                    variant="outline"
+                  >
+                    Ưu tiên: {suggestionPriorityLabels[suggestion.priority]}
                   </Badge>
                 </div>
                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
@@ -130,24 +195,19 @@ function RoutineAnalysisResult({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Chưa có gợi ý nào được trả về cho lần phân tích này.
+            Bạn có thể tiếp tục theo dõi routine bằng Today Log và Journal.
           </p>
         )}
-      </div>
+      </section>
 
-      {analysis.shouldSeeProfessional ? (
-        <Alert>
-          <AlertTitle>Nên cân nhắc gặp chuyên gia</AlertTitle>
-          <AlertDescription>
-            Kết quả phân tích đánh dấu rằng bạn nên cân nhắc trao đổi với
-            chuyên gia phù hợp.
-          </AlertDescription>
-        </Alert>
-      ) : null}
-
-      <p className="border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
-        {analysis.disclaimer}
-      </p>
+      <section className="space-y-2 border border-blue-100 bg-blue-50 p-3">
+        <h5 className="text-sm font-semibold text-blue-950">
+          Thông tin tham khảo
+        </h5>
+        <p className="text-sm leading-6 text-blue-950">
+          {analysis.disclaimer}
+        </p>
+      </section>
     </div>
   );
 }
@@ -168,8 +228,8 @@ export function RoutineAnalysisPanel({
         <div>
           <h4 className="font-semibold text-foreground">Phân tích routine</h4>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Đây là kết quả kiểm tra dựa trên routine bạn đã nhập, không phải
-            chẩn đoán y tế.
+            Dựa trên dữ liệu routine hiện có để chỉ ra điểm cần lưu ý và việc
+            nên chỉnh tiếp theo; thông tin này không thay thế tư vấn y tế.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">

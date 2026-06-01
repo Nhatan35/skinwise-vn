@@ -10,8 +10,8 @@ import type {
 
 const AI_PROVIDER_WARNING_CODE = "AI_PROVIDER_WARNING";
 const AI_PROVIDER_WARNING_REASON =
-  "This warning was generated from validated AI provider output and should be reviewed as educational guidance.";
-const AI_PROVIDER_RECOMMENDATION_TITLE = "AI recommendation";
+  "Lưu ý này được tạo từ dữ liệu phân tích đã được kiểm tra định dạng. Bạn vẫn nên theo dõi phản ứng da thực tế.";
+const AI_PROVIDER_RECOMMENDATION_TITLE = "Gợi ý tham khảo";
 
 function toSuggestionPriority(
   riskLevel: AIRiskLevel,

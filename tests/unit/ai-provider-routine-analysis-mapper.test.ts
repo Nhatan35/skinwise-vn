@@ -69,7 +69,7 @@ describe("mapAIProviderRoutineAnalysisToRoutineAnalysisResult", () => {
         severity: "medium",
         message: "Avoid combining too many strong actives.",
         reason:
-          "This warning was generated from validated AI provider output and should be reviewed as educational guidance.",
+          "Lưu ý này được tạo từ dữ liệu phân tích đã được kiểm tra định dạng. Bạn vẫn nên theo dõi phản ứng da thực tế.",
       },
     ]);
   });
@@ -92,7 +92,7 @@ describe("mapAIProviderRoutineAnalysisToRoutineAnalysisResult", () => {
 
     expect(mappedResult.suggestions).toEqual([
       {
-        title: "AI recommendation",
+        title: "Gợi ý tham khảo",
         description: "Simplify the routine before adding treatment steps.",
         priority: "should_fix",
       },

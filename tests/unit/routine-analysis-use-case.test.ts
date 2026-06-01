@@ -97,6 +97,14 @@ const mockedProvider: AIProvider = {
   classifySafety: mockedClassifySafety,
 };
 
+function mockProviderUnavailable() {
+  mockedGetAIProvider.mockImplementation(() => {
+    throw new AIProviderConfigurationError(
+      "OpenAI provider is not implemented yet.",
+    );
+  });
+}
+
 function createRoutine(overrides: Partial<Routine> = {}): Routine {
   return {
     _id: new ObjectId(routineId),
@@ -405,7 +413,7 @@ describe("AnalyzeRoutine use case", () => {
       ]),
       suggestions: expect.arrayContaining([
         expect.objectContaining({
-          title: "AI recommendation",
+          title: "Gợi ý tham khảo",
           description: "Provider recommendation.",
         }),
       ]),
@@ -473,11 +481,7 @@ describe("AnalyzeRoutine use case", () => {
   it("falls back when provider construction fails and returns a public DTO", async () => {
     mockedFindRoutineByIdAndUserId.mockResolvedValue(createRoutine());
     mockedFindSkinProfileByUserId.mockResolvedValue(null);
-    mockedGetAIProvider.mockImplementation(() => {
-      throw new AIProviderConfigurationError(
-        "OpenAI provider is not implemented yet.",
-      );
-    });
+    mockProviderUnavailable();
 
     const dto = await analyzeRoutineForCurrentUser({
       routineId,
@@ -501,10 +505,212 @@ describe("AnalyzeRoutine use case", () => {
           code: "MISSING_SUNSCREEN_AM",
         }),
       ],
+      suggestions: expect.arrayContaining([
+        expect.objectContaining({
+          priority: "must_fix",
+          title: "Cân nhắc thêm chống nắng cho routine buổi sáng",
+        }),
+        expect.objectContaining({
+          priority: "optional",
+          title: "Theo dõi phản ứng da trong Journal",
+        }),
+      ]),
     });
+    expect(JSON.stringify(dto)).toContain("dữ liệu hiện có");
+    expect(JSON.stringify(dto)).not.toContain("đảm bảo an toàn");
+    expect(JSON.stringify(dto)).not.toContain("hiệu quả 100%");
     expect(dto).not.toHaveProperty("providerFailureReason");
     expect(JSON.stringify(dto)).not.toContain(
       "OpenAI provider is not implemented yet.",
+    );
+  });
+
+  it("returns actionable fallback copy for routines with treatment", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(
+      createRoutine({
+        name: "Routine treatment buoi toi",
+        timeOfDay: "evening",
+        steps: [
+          {
+            stepId: "step-1",
+            customProductName: "Retinol serum",
+            category: "treatment",
+            order: 1,
+            frequency: "daily",
+            keyActivesSnapshot: ["retinol"],
+          },
+        ],
+      }),
+    );
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockProviderUnavailable();
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+
+    expect(dto?.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "MISSING_MOISTURIZER",
+          reason: expect.stringContaining("dưỡng ẩm"),
+        }),
+      ]),
+    );
+    expect(dto?.suggestions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          description: expect.stringContaining("tần suất thấp"),
+          priority: "should_fix",
+          title: "Cân nhắc thêm bước dưỡng ẩm",
+        }),
+      ]),
+    );
+  });
+
+  it("returns actionable fallback copy for routines with multiple actives", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(
+      createRoutine({
+        name: "Routine nhieu active",
+        timeOfDay: "evening",
+        steps: [
+          {
+            stepId: "step-1",
+            customProductName: "Retinol serum",
+            category: "serum",
+            order: 1,
+            frequency: "daily",
+            keyActivesSnapshot: ["retinol"],
+          },
+          {
+            stepId: "step-2",
+            customProductName: "BHA exfoliant",
+            category: "treatment",
+            order: 2,
+            frequency: "weekly_1_2",
+            keyActivesSnapshot: ["BHA"],
+          },
+          {
+            stepId: "step-3",
+            customProductName: "BPO treatment",
+            category: "treatment",
+            order: 3,
+            frequency: "weekly_1_2",
+            keyActivesSnapshot: ["benzoyl peroxide"],
+          },
+          {
+            stepId: "step-4",
+            customProductName: "Basic moisturizer",
+            category: "moisturizer",
+            order: 4,
+            frequency: "daily",
+          },
+        ],
+      }),
+    );
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockProviderUnavailable();
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+
+    expect(dto?.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "TOO_MANY_ACTIVES",
+          reason: expect.stringContaining("phản ứng da"),
+        }),
+      ]),
+    );
+    expect(dto?.suggestions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          priority: "must_fix",
+          title: "Giảm số active dùng cùng lúc",
+        }),
+      ]),
+    );
+  });
+
+  it("keeps simple balanced morning routines free of unnecessary must-fix actions", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(
+      createRoutine({
+        name: "Routine buoi sang can bang",
+        timeOfDay: "morning",
+        steps: [
+          {
+            stepId: "step-1",
+            customProductName: "Gentle cleanser",
+            category: "cleanser",
+            order: 1,
+            frequency: "daily",
+          },
+          {
+            stepId: "step-2",
+            customProductName: "Basic moisturizer",
+            category: "moisturizer",
+            order: 2,
+            frequency: "daily",
+          },
+          {
+            stepId: "step-3",
+            customProductName: "Daily sunscreen",
+            category: "sunscreen",
+            order: 3,
+            frequency: "daily",
+          },
+        ],
+      }),
+    );
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockProviderUnavailable();
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+
+    expect(dto?.riskLevel).toBe("low");
+    expect(dto?.warnings).toEqual([]);
+    expect(dto?.summary).toContain("dữ liệu routine hiện có");
+    expect(
+      dto?.suggestions.some((suggestion) => suggestion.priority === "must_fix"),
+    ).toBe(false);
+  });
+
+  it("handles empty evening routines without crashing", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(
+      createRoutine({
+        name: "Routine rong",
+        timeOfDay: "evening",
+        steps: [],
+      }),
+    );
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockProviderUnavailable();
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+
+    expect(dto).toMatchObject({
+      riskLevel: "low",
+      warnings: [],
+      shouldSeeProfessional: false,
+    });
+    expect(dto?.summary).toContain("Routine hiện chưa có cảnh báo lớn");
+    expect(dto?.disclaimer).toContain("không thay thế tư vấn y tế");
+    expect(dto?.suggestions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          priority: "optional",
+          title: "Theo dõi phản ứng da trong Journal",
+        }),
+      ]),
     );
   });
 
@@ -669,11 +875,16 @@ describe("AnalyzeRoutine use case", () => {
     expect(persistedInput.aiResult.suggestions).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          title: "Them buoc chong nang",
+          priority: "must_fix",
+          title: "Cân nhắc thêm chống nắng cho routine buổi sáng",
         }),
         expect.objectContaining({
-          title: "AI recommendation",
+          title: "Gợi ý tham khảo",
           description: "Provider recommendation.",
+        }),
+        expect.objectContaining({
+          priority: "optional",
+          title: "Theo dõi phản ứng da trong Journal",
         }),
       ]),
     );

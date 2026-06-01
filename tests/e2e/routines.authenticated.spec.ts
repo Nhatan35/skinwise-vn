@@ -109,7 +109,7 @@ test.describe("SkinWise VN authenticated routines", () => {
       if (
         (message.type() === "warning" || message.type() === "error") &&
         text.includes("Encountered two children with the same key") &&
-        text.includes("AI recommendation")
+        text.includes("Gợi ý tham khảo")
       ) {
         duplicateKeyWarnings.push(text);
       }
