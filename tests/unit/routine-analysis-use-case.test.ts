@@ -402,6 +402,7 @@ describe("AnalyzeRoutine use case", () => {
     expect(persistedInput.aiResult).toMatchObject({
       riskLevel: "medium",
       summary: "Provider educational summary.",
+      positiveFindings: expect.arrayContaining(["Có bước làm sạch."]),
       warnings: expect.arrayContaining([
         expect.objectContaining({
           code: "MISSING_SUNSCREEN_AM",
@@ -420,6 +421,9 @@ describe("AnalyzeRoutine use case", () => {
     });
     expect(persistedAiResultJson).not.toContain("providerMetadata");
     expect(persistedAiResultJson).not.toContain("educationalNotes");
+    expect(dto?.positiveFindings).toEqual(
+      expect.arrayContaining(["Có bước làm sạch."]),
+    );
     expect(dtoJson).not.toContain("providerMetadata");
     expect(dtoJson).not.toContain("educationalNotes");
     expect(dtoJson).not.toContain("providerFailureReason");
@@ -500,6 +504,7 @@ describe("AnalyzeRoutine use case", () => {
     });
     expect(dto).toMatchObject({
       riskLevel: "medium",
+      positiveFindings: ["Có bước làm sạch."],
       warnings: [
         expect.objectContaining({
           code: "MISSING_SUNSCREEN_AM",
@@ -561,11 +566,19 @@ describe("AnalyzeRoutine use case", () => {
     expect(dto?.suggestions).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          description: expect.stringContaining("tần suất thấp"),
+          description: expect.stringContaining("Dưỡng ẩm"),
           priority: "should_fix",
           title: "Cân nhắc thêm bước dưỡng ẩm",
         }),
+        expect.objectContaining({
+          description: expect.stringContaining("1–2 lần/tuần"),
+          priority: "should_fix",
+          title: "Bắt đầu treatment với tần suất thấp",
+        }),
       ]),
+    );
+    expect(JSON.stringify(dto?.suggestions)).not.toContain(
+      '"priority":"medium"',
     );
   });
 
@@ -631,8 +644,18 @@ describe("AnalyzeRoutine use case", () => {
           priority: "must_fix",
           title: "Giảm số active dùng cùng lúc",
         }),
+        expect.objectContaining({
+          priority: "should_fix",
+          title: "Bắt đầu treatment với tần suất thấp",
+        }),
       ]),
     );
+    expect(
+      dto?.suggestions.filter(
+        (suggestion) =>
+          suggestion.title === "Bắt đầu treatment với tần suất thấp",
+      ),
+    ).toHaveLength(1);
   });
 
   it("keeps simple balanced morning routines free of unnecessary must-fix actions", async () => {
@@ -675,10 +698,62 @@ describe("AnalyzeRoutine use case", () => {
 
     expect(dto?.riskLevel).toBe("low");
     expect(dto?.warnings).toEqual([]);
+    expect(dto?.positiveFindings).toEqual(
+      expect.arrayContaining([
+        "Có bước làm sạch.",
+        "Có bước dưỡng ẩm.",
+        "Có chống nắng cho routine buổi sáng.",
+        "Routine có nền tảng cơ bản với làm sạch và dưỡng ẩm.",
+        "Routine có số bước tương đối dễ theo dõi.",
+        "Routine buổi sáng có cấu trúc cơ bản khá đầy đủ.",
+      ]),
+    );
     expect(dto?.summary).toContain("dữ liệu routine hiện có");
     expect(
       dto?.suggestions.some((suggestion) => suggestion.priority === "must_fix"),
     ).toBe(false);
+  });
+
+  it("returns evening routine positive findings for cleanser and moisturizer", async () => {
+    mockedFindRoutineByIdAndUserId.mockResolvedValue(
+      createRoutine({
+        name: "Routine buoi toi co ban",
+        timeOfDay: "evening",
+        steps: [
+          {
+            stepId: "step-1",
+            customProductName: "Gentle cleanser",
+            category: "cleanser",
+            order: 1,
+            frequency: "daily",
+          },
+          {
+            stepId: "step-2",
+            customProductName: "Basic moisturizer",
+            category: "moisturizer",
+            order: 2,
+            frequency: "daily",
+          },
+        ],
+      }),
+    );
+    mockedFindSkinProfileByUserId.mockResolvedValue(null);
+    mockProviderUnavailable();
+
+    const dto = await analyzeRoutineForCurrentUser({
+      routineId,
+      currentUserId: userId,
+    });
+
+    expect(dto?.positiveFindings).toEqual(
+      expect.arrayContaining([
+        "Có bước làm sạch.",
+        "Có bước dưỡng ẩm.",
+        "Routine có nền tảng cơ bản với làm sạch và dưỡng ẩm.",
+        "Routine có số bước tương đối dễ theo dõi.",
+        "Routine buổi tối có nền tảng cơ bản để theo dõi đều đặn.",
+      ]),
+    );
   });
 
   it("handles empty evening routines without crashing", async () => {
@@ -699,6 +774,7 @@ describe("AnalyzeRoutine use case", () => {
 
     expect(dto).toMatchObject({
       riskLevel: "low",
+      positiveFindings: [],
       warnings: [],
       shouldSeeProfessional: false,
     });
@@ -861,6 +937,9 @@ describe("AnalyzeRoutine use case", () => {
     });
 
     const persistedInput = getPersistedInput();
+    expect(persistedInput.aiResult.positiveFindings).toEqual([
+      "Có bước làm sạch.",
+    ]);
     expect(persistedInput.aiResult.warnings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -946,6 +1025,7 @@ describe("AnalyzeRoutine use case", () => {
         aiResult: {
           riskLevel: "low",
           summary: "No warnings.",
+          positiveFindings: [],
           warnings: [],
           suggestions: [],
           shouldSeeProfessional: false,

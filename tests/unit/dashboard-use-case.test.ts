@@ -128,6 +128,7 @@ function createAnalysis(): RoutineAnalysis {
     aiResult: {
       riskLevel: "low",
       summary: "Routine looks safe.",
+      positiveFindings: [],
       warnings: [
         {
           code: "MISSING_SUNSCREEN_AM",

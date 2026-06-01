@@ -82,6 +82,7 @@ describe("Routine Analysis UI foundation", () => {
       "analysis.createdAt",
       "analysis.riskLevel",
       "analysis.summary",
+      "analysis.positiveFindings",
       "analysis.warnings",
       "warning.code",
       "warning.severity",
@@ -101,6 +102,7 @@ describe("Routine Analysis UI foundation", () => {
   it("renders actionable routine analysis sections", () => {
     for (const sectionHeading of [
       "Tổng quan an toàn routine",
+      "Điểm ổn",
       "Cần lưu ý",
       "Gợi ý chỉnh sửa",
       "Thông tin tham khảo",
@@ -122,11 +124,23 @@ describe("Routine Analysis UI foundation", () => {
 
   it("renders clear empty states for warnings and suggestions", () => {
     expect(routineAnalysisPanelSource).toContain(
+      "Chưa có đủ dữ liệu để xác định điểm mạnh của routine.",
+    );
+    expect(routineAnalysisPanelSource).toContain(
       "Chưa phát hiện lưu ý lớn từ dữ liệu hiện có.",
     );
     expect(routineAnalysisPanelSource).toContain(
       "Bạn có thể tiếp tục theo dõi routine bằng Today Log và Journal.",
     );
+  });
+
+  it("renders positive findings from the API response only", () => {
+    expect(routineAnalysisPanelSource).toContain("positiveFindings.length");
+    expect(routineAnalysisPanelSource).toContain("positiveFindings.map");
+    expect(routineAnalysisPanelSource).toContain(
+      'data-testid="routine-analysis-positive-finding"',
+    );
+    expect(routineAnalysisPanelSource).toContain('aria-hidden="true"');
   });
 
   it("does not prioritize raw rule code as user-facing warning content", () => {
@@ -206,6 +220,7 @@ describe("Routine Analysis UI foundation", () => {
       "phù hợp 100%",
       "routine này chắc chắn không gây kích ứng",
       "không bao giờ kích ứng",
+      "routine hoàn hảo",
       "bác sĩ khuyên",
       "trị mụn chắc chắn",
       "hiệu quả 100%",
@@ -214,6 +229,7 @@ describe("Routine Analysis UI foundation", () => {
       "100% safe",
       "100% effective",
       "never irritates",
+      "perfect routine",
       "doctor recommended",
       "medical diagnosis",
     ]) {

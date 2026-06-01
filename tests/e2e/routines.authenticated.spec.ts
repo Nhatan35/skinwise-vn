@@ -154,6 +154,14 @@ test.describe("SkinWise VN authenticated routines", () => {
     await expect(
       routineCard.getByText("Kết quả kiểm tra mới nhất"),
     ).toBeVisible();
+    await expect(latestAnalysisResult.getByText("Điểm ổn")).toBeVisible();
+    await expect(latestAnalysisResult.getByText("Cần lưu ý")).toBeVisible();
+    await expect(
+      latestAnalysisResult.getByText("Gợi ý chỉnh sửa"),
+    ).toBeVisible();
+    await expect(
+      latestAnalysisResult.getByText("Thông tin tham khảo"),
+    ).toBeVisible();
 
     expect(duplicateKeyWarnings).toEqual([]);
   });

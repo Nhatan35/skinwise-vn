@@ -46,6 +46,7 @@ const analysisDto = {
   routineId,
   riskLevel: "medium",
   summary: "Routine has warnings.",
+  positiveFindings: ["Có bước làm sạch."],
   warnings: [
     {
       code: "MISSING_SUNSCREEN_AM",
@@ -188,6 +189,7 @@ describe("Routine Analysis API contract", () => {
       "routineId",
       "riskLevel",
       "ruleResults",
+      "positiveFindings",
       "warnings",
       "aiResult",
       "modelProvider",
@@ -330,6 +332,7 @@ describe("Routine Analysis API contract", () => {
     const serializedBody = JSON.stringify(await readJson(response));
 
     expect(serializedBody).toContain("analysisId");
+    expect(serializedBody).toContain("positiveFindings");
     expect(serializedBody).not.toContain("_id");
     expect(serializedBody).not.toContain("ObjectId");
     expect(serializedBody).not.toContain("userId");
@@ -348,6 +351,7 @@ describe("Routine Analysis API contract", () => {
       "src/modules/ai-analysis/routine-analysis.schema.ts",
       "src/modules/ai-analysis/routine-analysis.dto.ts",
       "src/modules/ai-analysis/routine-analysis.mapper.ts",
+      "src/modules/ai-analysis/routine-analysis-positive-findings.ts",
       "src/modules/ai-analysis/routine-analysis.repository.ts",
       "src/modules/ai-analysis/ai-provider-failure-observability.ts",
       "src/modules/ai-analysis/ai-provider-routine-analysis.mapper.ts",

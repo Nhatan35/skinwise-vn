@@ -12,6 +12,7 @@ export function toRoutineAnalysisDto(
     routineId: analysis.routineId.toString(),
     riskLevel: analysis.riskLevel,
     summary: analysis.aiResult.summary,
+    positiveFindings: [...(analysis.aiResult.positiveFindings ?? [])],
     warnings: analysis.aiResult.warnings.map((warning) => ({ ...warning })),
     suggestions: analysis.aiResult.suggestions.map((suggestion) => ({
       ...suggestion,

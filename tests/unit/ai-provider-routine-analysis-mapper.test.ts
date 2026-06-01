@@ -55,6 +55,14 @@ describe("mapAIProviderRoutineAnalysisToRoutineAnalysisResult", () => {
     );
   });
 
+  it("uses an empty positiveFindings fallback because provider output does not require it", () => {
+    const mappedResult = mapAIProviderRoutineAnalysisToRoutineAnalysisResult(
+      buildProviderRoutineAnalysisResult(),
+    );
+
+    expect(mappedResult.positiveFindings).toEqual([]);
+  });
+
   it("maps provider warnings to structured product-facing warnings", () => {
     const mappedResult = mapAIProviderRoutineAnalysisToRoutineAnalysisResult(
       buildProviderRoutineAnalysisResult({

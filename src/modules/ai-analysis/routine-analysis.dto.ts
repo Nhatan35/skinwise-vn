@@ -21,6 +21,7 @@ export type RoutineAnalysisDto = {
   routineId: string;
   riskLevel: RoutineSafetyRiskLevel;
   summary: string;
+  positiveFindings: string[];
   warnings: RoutineAnalysisWarningDto[];
   suggestions: RoutineAnalysisSuggestionDto[];
   shouldSeeProfessional: boolean;

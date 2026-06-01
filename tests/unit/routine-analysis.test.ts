@@ -70,6 +70,7 @@ const createAnalysisInput = {
   aiResult: {
     riskLevel: "medium",
     summary: "Routine has warnings.",
+    positiveFindings: ["Có bước làm sạch."],
     warnings: [
       {
         code: "MISSING_SUNSCREEN_AM",
@@ -106,6 +107,35 @@ function createAnalysis(
   };
 }
 
+function createLegacyAnalysisWithoutPositiveFindings(): RoutineAnalysis {
+  const legacyAiResult = {
+    riskLevel: "medium",
+    summary: "Routine has warnings.",
+    warnings: [
+      {
+        code: "MISSING_SUNSCREEN_AM",
+        severity: "medium",
+        message: "Missing sunscreen",
+        reason: "Morning routines need sunscreen.",
+      },
+    ],
+    suggestions: [
+      {
+        title: "Add sunscreen",
+        description: "Use sunscreen in the morning.",
+        priority: "should_fix",
+      },
+    ],
+    shouldSeeProfessional: false,
+    disclaimer: "Educational only.",
+  } as const;
+
+  return {
+    ...createAnalysis(),
+    aiResult: legacyAiResult as unknown as RoutineAnalysis["aiResult"],
+  };
+}
+
 describe("RoutineAnalysis request schema", () => {
   it("allows missing and empty analyze request bodies", () => {
     expect(parseAnalyzeRoutineRequestText("")).toEqual({});
@@ -118,6 +148,7 @@ describe("RoutineAnalysis request schema", () => {
       "routineId",
       "riskLevel",
       "ruleResults",
+      "positiveFindings",
       "warnings",
       "aiResult",
       "modelProvider",
@@ -229,6 +260,7 @@ describe("RoutineAnalysis mapper", () => {
       routineId,
       riskLevel: "medium",
       summary: "Routine has warnings.",
+      positiveFindings: ["Có bước làm sạch."],
       warnings: [
         {
           code: "MISSING_SUNSCREEN_AM",
@@ -253,6 +285,13 @@ describe("RoutineAnalysis mapper", () => {
     expect(dto).not.toHaveProperty("ruleResults");
     expect(dto).not.toHaveProperty("providerFailureReason");
     expect(serializedDto).not.toContain("ObjectId");
+  });
+
+  it("falls back to empty positiveFindings for historical analyses", () => {
+    expect(
+      toRoutineAnalysisDto(createLegacyAnalysisWithoutPositiveFindings())
+        .positiveFindings,
+    ).toEqual([]);
   });
 
   it("maps history DTOs as newest-first DTO lists from repository order", () => {

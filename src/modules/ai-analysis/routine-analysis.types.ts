@@ -38,6 +38,7 @@ export type RoutineAnalysisSuggestion = {
 export type RoutineAnalysisResult = {
   riskLevel: RoutineSafetyRiskLevel;
   summary: string;
+  positiveFindings: string[];
   warnings: RoutineAnalysisWarning[];
   suggestions: RoutineAnalysisSuggestion[];
   shouldSeeProfessional: boolean;

@@ -6,6 +6,8 @@ import {
 } from "@/infrastructure/ai";
 import { analyzeRoutineSafety } from "@/domain/routine-safety";
 import type {
+  ActiveSignal,
+  NormalizedRoutineSignals,
   RoutineSafetyRiskLevel,
   RoutineSafetyRuleCode,
   RoutineSafetyRuleResult,
@@ -20,6 +22,7 @@ import {
   createRoutineAnalysisForUser,
   listRoutineAnalysesByRoutineIdAndUserId,
 } from "@/modules/ai-analysis/routine-analysis.repository";
+import { buildRoutinePositiveFindings } from "@/modules/ai-analysis/routine-analysis-positive-findings";
 import {
   ROUTINE_ANALYSIS_FALLBACK_MODEL_NAME,
   ROUTINE_ANALYSIS_FALLBACK_MODEL_PROVIDER,
@@ -111,7 +114,7 @@ const RULE_SUGGESTIONS = {
   MISSING_MOISTURIZER: {
     title: "Cân nhắc thêm bước dưỡng ẩm",
     description:
-      "Dưỡng ẩm có thể giúp routine cân bằng hơn, đặc biệt khi routine có treatment hoặc sản phẩm làm sạch. Nếu treatment còn mới, có thể bắt đầu từ tần suất thấp.",
+      "Dưỡng ẩm có thể giúp routine cân bằng hơn, đặc biệt khi routine có treatment hoặc sản phẩm làm sạch.",
   },
   TOO_MANY_CUSTOM_PRODUCTS: {
     title: "Bổ sung dữ liệu sản phẩm khi có thể",
@@ -146,6 +149,42 @@ const JOURNAL_TRACKING_SUGGESTION = {
   priority: "optional",
 } as const satisfies RoutineAnalysisSuggestion;
 
+const TREATMENT_FREQUENCY_SUGGESTION = {
+  title: "Bắt đầu treatment với tần suất thấp",
+  description:
+    "Nếu bạn mới dùng treatment hoặc active ingredient, có thể bắt đầu 1–2 lần/tuần và theo dõi phản ứng da.",
+  priority: "should_fix",
+} as const satisfies RoutineAnalysisSuggestion;
+
+const TREATMENT_ACTIVE_SIGNALS = [
+  "AHA",
+  "BHA",
+  "PHA",
+  "RETINOID",
+  "BENZOYL_PEROXIDE",
+  "VITAMIN_C_STRONG",
+] as const satisfies readonly ActiveSignal[];
+
+const TREATMENT_ACTIVE_SIGNAL_SET: ReadonlySet<ActiveSignal> = new Set(
+  TREATMENT_ACTIVE_SIGNALS,
+);
+
+const TREATMENT_KEYWORDS = [
+  "retinol",
+  "retinoid",
+  "tretinoin",
+  "adapalene",
+  "aha",
+  "bha",
+  "pha",
+  "exfoliant",
+  "peel",
+  "benzoyl peroxide",
+  "salicylic acid",
+  "glycolic acid",
+  "lactic acid",
+] as const;
+
 function toWarning(rule: RoutineSafetyRuleResult): RoutineAnalysisWarning {
   return {
     code: rule.code,
@@ -165,13 +204,100 @@ function toSuggestion(rule: RoutineSafetyRuleResult): RoutineAnalysisSuggestion 
   };
 }
 
+function normalizeSearchText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function containsKeyword(normalizedText: string, keyword: string) {
+  const normalizedKeyword = normalizeSearchText(keyword);
+
+  return ` ${normalizedText} `.includes(` ${normalizedKeyword} `);
+}
+
+function getTreatmentSearchTexts(step: Routine["steps"][number]) {
+  return [
+    step.productNameSnapshot,
+    step.customProductName,
+    ...(step.keyActivesSnapshot ?? []),
+    step.ingredientTextSnapshot,
+  ].filter((value): value is string => Boolean(value?.trim()));
+}
+
+function hasTreatmentKeyword(step: Routine["steps"][number]) {
+  return getTreatmentSearchTexts(step).some((text) => {
+    const normalizedText = normalizeSearchText(text);
+
+    return TREATMENT_KEYWORDS.some((keyword) =>
+      containsKeyword(normalizedText, keyword),
+    );
+  });
+}
+
+function hasTreatmentOrActive(
+  routine: Routine,
+  normalizedSignals: NormalizedRoutineSignals,
+) {
+  return (
+    routine.steps.some((step) => step.category === "treatment") ||
+    normalizedSignals.routineSignals.some((signal) =>
+      TREATMENT_ACTIVE_SIGNAL_SET.has(signal),
+    ) ||
+    routine.steps.some(hasTreatmentKeyword)
+  );
+}
+
+function normalizeSuggestionKey(value: string) {
+  return normalizeSearchText(value);
+}
+
+function dedupeSuggestions(
+  suggestions: RoutineAnalysisSuggestion[],
+): RoutineAnalysisSuggestion[] {
+  const seenKeys = new Set<string>();
+  const dedupedSuggestions: RoutineAnalysisSuggestion[] = [];
+
+  for (const suggestion of suggestions) {
+    const titleKey = normalizeSuggestionKey(suggestion.title);
+    const descriptionKey = normalizeSuggestionKey(suggestion.description);
+    const dedupeKey = `${titleKey}:${descriptionKey}`;
+
+    if (
+      seenKeys.has(titleKey) ||
+      seenKeys.has(descriptionKey) ||
+      seenKeys.has(dedupeKey)
+    ) {
+      continue;
+    }
+
+    seenKeys.add(titleKey);
+    seenKeys.add(descriptionKey);
+    seenKeys.add(dedupeKey);
+    dedupedSuggestions.push({ ...suggestion });
+  }
+
+  return dedupedSuggestions;
+}
+
 function buildFallbackSuggestions(
   triggeredRules: RoutineSafetyRuleResult[],
+  routine: Routine,
+  normalizedSignals: NormalizedRoutineSignals,
 ): RoutineAnalysisSuggestion[] {
-  return [
+  const suggestions = [
     ...triggeredRules.map(toSuggestion),
+    ...(hasTreatmentOrActive(routine, normalizedSignals)
+      ? [{ ...TREATMENT_FREQUENCY_SUGGESTION }]
+      : []),
     { ...JOURNAL_TRACKING_SUGGESTION },
   ];
+
+  return dedupeSuggestions(suggestions);
 }
 
 function createFallbackSummary(
@@ -196,12 +322,22 @@ function createFallbackSummary(
 function buildDeterministicFallbackResult(
   riskLevel: RoutineAnalysisResult["riskLevel"],
   triggeredRules: RoutineSafetyRuleResult[],
+  routine: Routine,
+  normalizedSignals: NormalizedRoutineSignals,
 ): RoutineAnalysisResult {
   return {
     riskLevel,
     summary: createFallbackSummary(riskLevel, triggeredRules),
+    positiveFindings: buildRoutinePositiveFindings({
+      timeOfDay: routine.timeOfDay,
+      steps: routine.steps,
+    }),
     warnings: triggeredRules.map(toWarning),
-    suggestions: buildFallbackSuggestions(triggeredRules),
+    suggestions: buildFallbackSuggestions(
+      triggeredRules,
+      routine,
+      normalizedSignals,
+    ),
     shouldSeeProfessional: false,
     disclaimer: ROUTINE_ANALYSIS_EDUCATIONAL_DISCLAIMER,
   };
@@ -210,8 +346,15 @@ function buildDeterministicFallbackResult(
 function buildFallbackExecutionResult(
   riskLevel: RoutineAnalysisResult["riskLevel"],
   triggeredRules: RoutineSafetyRuleResult[],
+  routine: Routine,
+  normalizedSignals: NormalizedRoutineSignals,
 ): RoutineAnalysisExecutionResult {
-  const aiResult = buildDeterministicFallbackResult(riskLevel, triggeredRules);
+  const aiResult = buildDeterministicFallbackResult(
+    riskLevel,
+    triggeredRules,
+    routine,
+    normalizedSignals,
+  );
 
   return {
     riskLevel: aiResult.riskLevel,
@@ -340,6 +483,18 @@ function mergeSuggestions(
   return mergedSuggestions;
 }
 
+function mergePositiveFindings(
+  providerPositiveFindings: readonly string[] | undefined,
+  deterministicPositiveFindings: readonly string[] | undefined,
+) {
+  return [
+    ...new Set([
+      ...(providerPositiveFindings ?? []),
+      ...(deterministicPositiveFindings ?? []),
+    ]),
+  ];
+}
+
 function applyDeterministicSafetyGuard(
   deterministicResult: RoutineAnalysisResult,
   providerResult: RoutineAnalysisResult,
@@ -355,6 +510,10 @@ function applyDeterministicSafetyGuard(
     warnings: mergeWarnings(
       deterministicResult.warnings,
       providerResult.warnings,
+    ),
+    positiveFindings: mergePositiveFindings(
+      providerResult.positiveFindings,
+      deterministicResult.positiveFindings,
     ),
     suggestions: mergeSuggestions(
       deterministicResult.suggestions,
@@ -423,6 +582,8 @@ export async function analyzeRoutineForCurrentUser(
   const fallbackExecutionResult = buildFallbackExecutionResult(
     safetyResult.riskLevel,
     safetyResult.triggeredRules,
+    routine,
+    safetyResult.normalizedSignals,
   );
   let executionResult = fallbackExecutionResult;
 

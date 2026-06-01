@@ -1,5 +1,7 @@
 "use client";
 
+import { Check } from "lucide-react";
+
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/components/ui/alert";
 import { Badge } from "@/shared/components/ui/badge";
@@ -78,6 +80,8 @@ function RoutineAnalysisResult({
   analysis: RoutineAnalysisDto;
   title: string;
 }) {
+  const positiveFindings = analysis.positiveFindings ?? [];
+
   return (
     <div
       className="space-y-4 border border-border bg-card p-4"
@@ -126,6 +130,31 @@ function RoutineAnalysisResult({
             </AlertDescription>
           </Alert>
         ) : null}
+      </section>
+
+      <section className="space-y-3">
+        <h5 className="text-sm font-semibold text-foreground">Điểm ổn</h5>
+        {positiveFindings.length > 0 ? (
+          <ul className="space-y-2">
+            {positiveFindings.map((finding, index) => (
+              <li
+                className="flex gap-2 border border-emerald-100 bg-emerald-50 p-3 text-sm leading-6 text-emerald-950"
+                data-testid="routine-analysis-positive-finding"
+                key={`${analysis.analysisId}-positive-${index}-${finding}`}
+              >
+                <Check
+                  aria-hidden="true"
+                  className="mt-0.5 size-4 shrink-0"
+                />
+                <span>{finding}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Chưa có đủ dữ liệu để xác định điểm mạnh của routine.
+          </p>
+        )}
       </section>
 
       <section className="space-y-3">

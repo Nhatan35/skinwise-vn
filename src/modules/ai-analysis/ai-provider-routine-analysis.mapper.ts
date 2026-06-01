@@ -36,6 +36,7 @@ export function mapAIProviderRoutineAnalysisToRoutineAnalysisResult(
   return {
     riskLevel,
     summary: providerResult.summary,
+    positiveFindings: [],
     warnings: providerResult.warnings.map((warning) => ({
       code: AI_PROVIDER_WARNING_CODE,
       severity: riskLevel,
