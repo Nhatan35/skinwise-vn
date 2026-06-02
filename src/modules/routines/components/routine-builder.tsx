@@ -7,6 +7,10 @@ import type { ZodIssue } from "zod";
 
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
 import type { ProductDto } from "@/modules/products/product.dto";
+import type {
+  ProductConcern,
+  ProductSkinType,
+} from "@/modules/products/product.types";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import {
   getBrowserLocalDate,
@@ -76,6 +80,7 @@ const ROUTINE_LOGS_API_PATH = "/api/routine-logs";
 const MANUAL_PRODUCT_VALUE = "__manual_product__";
 const ANALYZE_ROUTE_SEGMENT = "analyze";
 const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
+const ROUTINE_STEP_LIMIT = 15;
 
 type ApiError = {
   code: string;
@@ -131,6 +136,33 @@ const frequencyLabels: Record<RoutineStepFrequency, string> = {
   weekly_1_2: "1-2 lần/tuần",
   weekly_3_4: "3-4 lần/tuần",
   as_needed: "Khi cần",
+};
+
+const concernLabels: Record<ProductConcern, string> = {
+  acne: "mụn",
+  barrier_support: "hỗ trợ hàng rào da",
+  dark_spots: "đốm nâu",
+  dryness: "khô da",
+  oiliness: "dầu thừa",
+  redness: "đỏ da",
+  texture: "bề mặt da",
+  unknown: "chưa rõ",
+};
+
+const skinTypeLabels: Record<ProductSkinType, string> = {
+  combination: "da hỗn hợp",
+  dry: "da khô",
+  normal: "da thường",
+  oily: "da dầu",
+  sensitive: "da nhạy cảm",
+  unknown: "chưa rõ",
+};
+
+const timeOfDayDescriptions: Record<RoutineTimeOfDay, string> = {
+  morning:
+    "Routine buổi sáng thường ưu tiên làm sạch nhẹ, dưỡng ẩm, hỗ trợ hàng rào da và kem chống nắng khi phù hợp.",
+  evening:
+    "Routine buổi tối thường phù hợp hơn cho phục hồi hoặc hoạt chất, nhưng nên tránh dùng quá nhiều hoạt chất mạnh cùng lúc.",
 };
 
 function createBlankStep(): RoutineFormStepState {
@@ -1085,13 +1117,17 @@ export function RoutineBuilder() {
       {routines.length === 0 && formMode === "none" ? (
         <EmptyState
           action={
-            <Button data-testid="routine-create-button" onClick={startCreate} type="button">
+            <Button
+              data-testid="routine-create-button"
+              onClick={startCreate}
+              type="button"
+            >
               <Plus aria-hidden="true" />
-              Tạo routine
+              Tạo routine đầu tiên
             </Button>
           }
-          description="Bạn chưa có routine nào. Hãy bắt đầu bằng một routine đơn giản với các sản phẩm bạn đang dùng."
-          title="Chưa có routine nào"
+          description="Bắt đầu với một routine buổi sáng hoặc buổi tối đơn giản. SkinWise có thể giúp bạn xem lại các bước để phát hiện điểm cần chú ý như thiếu kem chống nắng, dùng quá nhiều hoạt chất mạnh, sản phẩm có thể chưa hợp với da nhạy cảm, hoặc thiếu bước hỗ trợ hàng rào da."
+          title="Xây dựng routine chăm sóc da đầu tiên"
         />
       ) : (
         <RoutineList
@@ -1211,6 +1247,15 @@ function RoutineForm({
             />
           </div>
 
+          {formState.timeOfDay ? (
+            <div
+              className="rounded-md border border-border bg-secondary/40 p-3 text-sm leading-6 text-muted-foreground"
+              data-testid="routine-time-of-day-guidance"
+            >
+              {timeOfDayDescriptions[formState.timeOfDay]}
+            </div>
+          ) : null}
+
           <div className="space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -1218,14 +1263,15 @@ function RoutineForm({
                   Các bước trong routine
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Product Picker cho phép chọn sản phẩm đã duyệt hoặc nhập thủ
-                  công. Thứ tự được tính từ trên xuống dưới. Cần có ít nhất một
+                  Thứ tự các bước sẽ được lưu từ trên xuống dưới. Bạn có thể
+                  chọn sản phẩm đã lưu, sản phẩm trong catalogue hoặc nhập thủ
+                  công. Cần có ít nhất một bước và tối đa {ROUTINE_STEP_LIMIT}{" "}
                   bước.
                 </p>
               </div>
               <Button
                 data-testid="routine-add-step-button"
-                disabled={formState.steps.length >= 15}
+                disabled={formState.steps.length >= ROUTINE_STEP_LIMIT}
                 onClick={onAddStep}
                 type="button"
                 variant="outline"
@@ -1288,7 +1334,9 @@ function RoutineForm({
                         Bước {index + 1}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Chọn sản phẩm đã duyệt hoặc nhập sản phẩm thủ công.
+                        Bước {index + 1} trong thứ tự sử dụng. Xóa bước này
+                        chỉ xóa khỏi routine, không xóa sản phẩm khỏi catalogue
+                        hoặc danh sách đã lưu.
                       </p>
                     </div>
                     <Button
@@ -1578,14 +1626,61 @@ function SelectedProductContext({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-      <Badge variant={option.source === "saved" ? "secondary" : "outline"}>
-        Nguồn: {getProductOptionSourceLabel(option)}
-      </Badge>
-      {option.brand ? <span>Brand: {option.brand}</span> : null}
-      {option.category ? (
-        <span>Nhóm bước: {categoryLabels[option.category]}</span>
-      ) : null}
+    <div
+      className="space-y-2 rounded-md border border-border bg-card p-3 text-xs text-muted-foreground"
+      data-testid="routine-selected-product-context"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-medium text-foreground">Sản phẩm đã chọn</span>
+        <Badge variant={option.source === "saved" ? "secondary" : "outline"}>
+          Nguồn: {getProductOptionSourceLabel(option)}
+        </Badge>
+        {option.warnings.length > 0 ? (
+          <Badge variant="outline">Có lưu ý cần đọc</Badge>
+        ) : null}
+      </div>
+      <dl className="grid gap-2 sm:grid-cols-2">
+        {option.brand ? (
+          <div>
+            <dt className="font-medium text-foreground">Thương hiệu</dt>
+            <dd>{option.brand}</dd>
+          </div>
+        ) : null}
+        {option.category ? (
+          <div>
+            <dt className="font-medium text-foreground">Danh mục</dt>
+            <dd>{categoryLabels[option.category]}</dd>
+          </div>
+        ) : null}
+        {option.keyActives.length > 0 ? (
+          <div>
+            <dt className="font-medium text-foreground">Hoạt chất chính</dt>
+            <dd>{option.keyActives.slice(0, 3).join(", ")}</dd>
+          </div>
+        ) : null}
+        {option.concerns.length > 0 ? (
+          <div>
+            <dt className="font-medium text-foreground">Nhu cầu liên quan</dt>
+            <dd>
+              {option.concerns
+                .slice(0, 3)
+                .map((concern) => concernLabels[concern])
+                .join(", ")}
+            </dd>
+          </div>
+        ) : null}
+        {option.skinTypes.length > 0 ? (
+          <div>
+            <dt className="font-medium text-foreground">Loại da gợi ý</dt>
+            <dd>
+              {option.skinTypes
+                .slice(0, 3)
+                .map((skinType) => skinTypeLabels[skinType])
+                .join(", ")}
+            </dd>
+          </div>
+        ) : null}
+      </dl>
     </div>
   );
 }
@@ -1641,11 +1736,24 @@ function RoutineList({
     <Card className="border-border bg-card">
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle>Danh sách routines</CardTitle>
-          <Button data-testid="routine-create-button" onClick={onCreate} type="button">
-            <Plus aria-hidden="true" />
-            Tạo routine
-          </Button>
+          <div>
+            <CardTitle>Danh sách routines</CardTitle>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              Sau khi tạo routine, bạn có thể phân tích độ an toàn và ghi nhận
+              tiến độ trong Checklist hôm nay.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button asChild variant="outline">
+              <Link data-testid="routine-today-log-link" href={routes.TODAY_LOG}>
+                Theo dõi routine hôm nay
+              </Link>
+            </Button>
+            <Button data-testid="routine-create-button" onClick={onCreate} type="button">
+              <Plus aria-hidden="true" />
+              Tạo routine
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -1686,6 +1794,9 @@ function RoutineList({
                 <p className="mt-2 text-sm text-muted-foreground">
                   Cập nhật: {formatUpdatedAt(routine.updatedAt)}
                 </p>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  {timeOfDayDescriptions[routine.timeOfDay]}
+                </p>
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row">
@@ -1720,10 +1831,11 @@ function RoutineList({
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="font-medium text-foreground">
-                        {index + 1}. {getRoutineStepDisplayName(step)}
+                        Bước {index + 1}: {getRoutineStepDisplayName(step)}
                       </p>
                       {step.keyActivesSnapshot?.length ? (
                         <div className="mt-2 flex flex-wrap gap-1.5">
+                          <Badge variant="outline">Hoạt chất chính</Badge>
                           {step.keyActivesSnapshot.map((active) => (
                             <Badge key={active} variant="secondary">
                               {active}

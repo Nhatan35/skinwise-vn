@@ -108,7 +108,7 @@ function RoutineAnalysisResult({
       <section className="space-y-3 border border-border bg-secondary/30 p-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <h5 className="text-sm font-semibold text-foreground">
-            Tổng quan an toàn routine
+            Tổng quan phân tích
           </h5>
           <Badge
             className={riskLevelClasses[analysis.riskLevel]}
@@ -133,7 +133,9 @@ function RoutineAnalysisResult({
       </section>
 
       <section className="space-y-3">
-        <h5 className="text-sm font-semibold text-foreground">Điểm ổn</h5>
+        <h5 className="text-sm font-semibold text-foreground">
+          Điểm ổn trong routine
+        </h5>
         {positiveFindings.length > 0 ? (
           <ul className="space-y-2">
             {positiveFindings.map((finding, index) => (
@@ -152,14 +154,15 @@ function RoutineAnalysisResult({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Chưa có đủ dữ liệu để xác định điểm mạnh của routine.
+            Chưa có đủ dữ liệu để nêu điểm ổn rõ ràng. Bạn vẫn có thể xem các
+            lưu ý và theo dõi phản ứng của da sau khi dùng routine.
           </p>
         )}
       </section>
 
       <section className="space-y-3">
         <h5 className="text-sm font-semibold text-foreground">
-          Cần lưu ý
+          Điểm cần lưu ý
         </h5>
         {analysis.warnings.length > 0 ? (
           <ul className="space-y-2">
@@ -183,19 +186,26 @@ function RoutineAnalysisResult({
                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
                   {warning.reason}
                 </p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Đây là tín hiệu giáo dục dựa trên dữ liệu routine hiện có. Bạn
+                  có thể cân nhắc giảm tần suất, tách routine hoặc theo dõi phản
+                  ứng của da nếu da đang nhạy cảm.
+                </p>
               </li>
             ))}
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Chưa phát hiện lưu ý lớn từ dữ liệu hiện có.
+            Chưa phát hiện lưu ý lớn từ dữ liệu hiện có. Kết quả này không đồng
+            nghĩa routine phù hợp với mọi người, nên vẫn cần theo dõi phản ứng
+            của da.
           </p>
         )}
       </section>
 
       <section className="space-y-3">
         <h5 className="text-sm font-semibold text-foreground">
-          Gợi ý chỉnh sửa
+          Gợi ý điều chỉnh
         </h5>
         {analysis.suggestions.length > 0 ? (
           <ul className="space-y-2">
@@ -224,14 +234,15 @@ function RoutineAnalysisResult({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Bạn có thể tiếp tục theo dõi routine bằng Today Log và Journal.
+            Bạn có thể tiếp tục theo dõi routine bằng Checklist hôm nay và
+            Journal.
           </p>
         )}
       </section>
 
       <section className="space-y-2 border border-blue-100 bg-blue-50 p-3">
         <h5 className="text-sm font-semibold text-blue-950">
-          Thông tin tham khảo
+          Lưu ý an toàn
         </h5>
         <p className="text-sm leading-6 text-blue-950">
           {analysis.disclaimer}
@@ -257,8 +268,9 @@ export function RoutineAnalysisPanel({
         <div>
           <h4 className="font-semibold text-foreground">Phân tích routine</h4>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Dựa trên dữ liệu routine hiện có để chỉ ra điểm cần lưu ý và việc
-            nên chỉnh tiếp theo; thông tin này không thay thế tư vấn y tế.
+            Dựa trên các bước đã nhập để tách rõ điểm ổn, điểm cần lưu ý và gợi
+            ý điều chỉnh. Đây là thông tin giáo dục, không phải chẩn đoán hay tư
+            vấn y tế cá nhân.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -292,7 +304,9 @@ export function RoutineAnalysisPanel({
 
       {isAnalyzing ? (
         <p className="text-sm text-muted-foreground">
-          Đang kiểm tra routine bằng các quy tắc an toàn cơ bản...
+          Đang kiểm tra routine bằng các quy tắc an toàn cơ bản. Việc này giúp
+          phát hiện các tín hiệu như thiếu kem chống nắng, nhiều hoạt chất mạnh
+          hoặc sản phẩm có thể cần thận trọng với da nhạy cảm.
         </p>
       ) : null}
 
@@ -304,7 +318,9 @@ export function RoutineAnalysisPanel({
       ) : (
         <div className="border border-dashed border-stone-300 bg-card p-4">
           <p className="text-sm text-muted-foreground">
-            Chưa có kết quả phân tích nào trong phiên này.
+            Chưa có kết quả phân tích trong phiên này. Hãy bấm nút Phân tích
+            routine để xem tổng quan, lưu ý và gợi ý điều chỉnh dựa trên dữ
+            liệu hiện có.
           </p>
         </div>
       )}

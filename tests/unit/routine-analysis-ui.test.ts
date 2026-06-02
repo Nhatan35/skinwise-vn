@@ -101,11 +101,11 @@ describe("Routine Analysis UI foundation", () => {
 
   it("renders actionable routine analysis sections", () => {
     for (const sectionHeading of [
-      "Tổng quan an toàn routine",
-      "Điểm ổn",
-      "Cần lưu ý",
-      "Gợi ý chỉnh sửa",
-      "Thông tin tham khảo",
+      "Tổng quan phân tích",
+      "Điểm ổn trong routine",
+      "Điểm cần lưu ý",
+      "Gợi ý điều chỉnh",
+      "Lưu ý an toàn",
     ]) {
       expect(routineAnalysisPanelSource).toContain(sectionHeading);
     }
@@ -124,13 +124,13 @@ describe("Routine Analysis UI foundation", () => {
 
   it("renders clear empty states for warnings and suggestions", () => {
     expect(routineAnalysisPanelSource).toContain(
-      "Chưa có đủ dữ liệu để xác định điểm mạnh của routine.",
+      "Chưa có đủ dữ liệu để nêu điểm ổn rõ ràng.",
     );
     expect(routineAnalysisPanelSource).toContain(
       "Chưa phát hiện lưu ý lớn từ dữ liệu hiện có.",
     );
     expect(routineAnalysisPanelSource).toContain(
-      "Bạn có thể tiếp tục theo dõi routine bằng Today Log và Journal.",
+      "Bạn có thể tiếp tục theo dõi routine bằng Checklist hôm nay",
     );
   });
 

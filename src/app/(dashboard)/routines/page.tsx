@@ -10,8 +10,10 @@ export default function RoutinesPage() {
           Xây dựng routine chăm sóc da
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
-          Tạo routine sáng hoặc tối bằng các bước đơn giản. Thông tin này chỉ
-          mang tính giáo dục và giúp bạn quản lý routine đã nhập.
+          Tạo routine sáng hoặc tối theo thứ tự dễ theo dõi, sau đó dùng phân
+          tích routine để xem các điểm cần lưu ý như thiếu kem chống nắng,
+          nhiều hoạt chất mạnh hoặc sản phẩm cần thận trọng với da nhạy cảm.
+          Thông tin này chỉ mang tính giáo dục.
         </p>
       </div>
 

@@ -14,8 +14,11 @@ export type RoutineProductOption = {
   brand: string;
   category?: RoutineStepCategory;
   concerns: ProductConcern[];
+  keyActives: string[];
   skinTypes: ProductSkinType[];
   source: RoutineProductOptionSource;
+  tags: string[];
+  warnings: string[];
 };
 
 export type RoutineProductOptions = {
@@ -40,8 +43,11 @@ function toRoutineProductOption(
     brand: product.brand,
     category: product.category,
     concerns: [...product.concerns],
+    keyActives: [...product.keyActives],
     skinTypes: [...product.skinTypes],
     source,
+    tags: [...product.tags],
+    warnings: [...product.warnings],
   };
 }
 

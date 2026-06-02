@@ -98,6 +98,10 @@ test.describe("SkinWise VN authenticated routines", () => {
 
     await expect(routineCard).toBeVisible({ timeout: 15_000 });
     await expect(routineCard.getByText("E2E Gentle Cleanser")).toBeVisible();
+    await expect(page.getByTestId("routine-today-log-link")).toHaveAttribute(
+      "href",
+      "/routine-logs/today",
+    );
   });
 
   test("authenticated user can run routine analysis", async ({ page }) => {
@@ -154,13 +158,20 @@ test.describe("SkinWise VN authenticated routines", () => {
     await expect(
       routineCard.getByText("Kết quả kiểm tra mới nhất"),
     ).toBeVisible();
-    await expect(latestAnalysisResult.getByText("Điểm ổn")).toBeVisible();
-    await expect(latestAnalysisResult.getByText("Cần lưu ý")).toBeVisible();
     await expect(
-      latestAnalysisResult.getByText("Gợi ý chỉnh sửa"),
+      latestAnalysisResult.getByText("Tổng quan phân tích"),
     ).toBeVisible();
     await expect(
-      latestAnalysisResult.getByText("Thông tin tham khảo"),
+      latestAnalysisResult.getByText("Điểm ổn trong routine"),
+    ).toBeVisible();
+    await expect(
+      latestAnalysisResult.getByText("Điểm cần lưu ý"),
+    ).toBeVisible();
+    await expect(
+      latestAnalysisResult.getByText("Gợi ý điều chỉnh"),
+    ).toBeVisible();
+    await expect(
+      latestAnalysisResult.getByText("Lưu ý an toàn"),
     ).toBeVisible();
 
     expect(duplicateKeyWarnings).toEqual([]);

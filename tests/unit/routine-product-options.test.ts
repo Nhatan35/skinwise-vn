@@ -65,6 +65,7 @@ describe("Routine product options", () => {
         name: "Moisturizing Cream",
         brand: "CeraVe",
         category: "moisturizer",
+        keyActives: ["Glycerin"],
         source: "saved",
       }),
     ]);
@@ -86,6 +87,7 @@ describe("Routine product options", () => {
         id: "product-2",
         category: "sunscreen",
         name: "Daily Sunscreen",
+        keyActives: ["Glycerin"],
         source: "catalogue",
       }),
     ]);
@@ -149,8 +151,11 @@ describe("Routine product options", () => {
       name: "Saved Product",
       brand: "",
       concerns: [],
+      keyActives: [],
       skinTypes: [],
       source: "saved",
+      tags: [],
+      warnings: [],
     };
 
     const nextStep = applyRoutineProductSelection({
@@ -175,8 +180,11 @@ describe("Routine product options", () => {
       brand: "Demo",
       category: "serum",
       concerns: [],
+      keyActives: [],
       skinTypes: [],
       source: "saved",
+      tags: [],
+      warnings: [],
     };
     const catalogueOption: RoutineProductOption = {
       id: "catalogue-product",
@@ -184,8 +192,11 @@ describe("Routine product options", () => {
       brand: "Demo",
       category: "sunscreen",
       concerns: [],
+      keyActives: [],
       skinTypes: [],
       source: "catalogue",
+      tags: [],
+      warnings: [],
     };
 
     expect(

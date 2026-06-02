@@ -119,7 +119,7 @@ describe("Routine Builder UI foundation", () => {
   it("includes loading, empty, list, create, edit, error, saving, deleting, and success states", () => {
     for (const stateCopy of [
       "Đang tải routines",
-      "Chưa có routine nào",
+      "Xây dựng routine chăm sóc da đầu tiên",
       "Danh sách routines",
       "Tạo routine",
       "Chỉnh sửa routine",
@@ -195,6 +195,9 @@ describe("Routine Builder UI foundation", () => {
       "Nhập thủ công",
       "[Đã lưu]",
       "Nguồn: {getProductOptionSourceLabel(option)}",
+      "Sản phẩm đã chọn",
+      "Hoạt chất chính",
+      "Nhu cầu liên quan",
       "Chưa tải được sản phẩm đã lưu",
       "Bạn chưa lưu sản phẩm nào",
       "Xem gợi ý sản phẩm",
@@ -217,6 +220,14 @@ describe("Routine Builder UI foundation", () => {
     expect(routineBuilderSource).not.toContain(
       "const selectedProduct = products.find",
     );
+  });
+
+  it("links Routine Builder to the existing Today Checklist route", () => {
+    expect(routes.TODAY_LOG).toBe("/routine-logs/today");
+    expect(routineBuilderSource).toContain("routes.TODAY_LOG");
+    expect(routineBuilderSource).toContain("routine-today-log-link");
+    expect(routineBuilderSource).toContain("Theo dõi routine hôm nay");
+    expect(routineBuilderSource).not.toContain('href="/today"');
   });
 
   it("keeps Product imports client-safe", () => {
