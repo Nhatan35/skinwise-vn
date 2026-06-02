@@ -11,10 +11,10 @@ import {
 import { cn } from "@/shared/utils";
 
 const dayStatusLabels: Record<InsightsDayStatus, string> = {
-  completed: "Completed",
-  partial: "Partial",
-  skipped: "Skipped",
-  not_logged: "Not logged",
+  completed: "Hoàn thành",
+  partial: "Hoàn thành một phần",
+  skipped: "Đã ghi nhận chưa làm",
+  not_logged: "Chưa có log",
 };
 
 const dayStatusClassNames: Record<InsightsDayStatus, string> = {
@@ -31,15 +31,27 @@ type RoutineConsistencyCalendarProps = {
 export function RoutineConsistencyCalendar({
   calendarDays,
 }: RoutineConsistencyCalendarProps) {
+  const fromDate = calendarDays[0]?.localDate;
+  const toDate = calendarDays.at(-1)?.localDate;
+  const dateRangeLabel =
+    fromDate && toDate ? `${fromDate} đến ${toDate}` : "Chưa có giai đoạn";
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Routine consistency calendar</CardTitle>
+        <CardTitle>Lịch độ đều đặn routine</CardTitle>
         <CardDescription>
-          Each day summarizes routine slots and whether a journal entry exists.
+          Giai đoạn {dateRangeLabel}. Mỗi ô dựa trên checklist routine đã ghi
+          nhận và nhật ký da nếu có.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <p className="text-sm leading-6 text-muted-foreground">
+          Ngày trống nghĩa là chưa có log trong SkinWise, không nhất thiết là
+          bạn không chăm sóc da. Các nhãn bên dưới giúp đọc trạng thái mà không
+          cần dựa vào màu sắc.
+        </p>
+
         <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
           {(Object.keys(dayStatusLabels) as InsightsDayStatus[]).map((status) => (
             <div className="flex items-center gap-2" key={status}>
@@ -55,6 +67,15 @@ export function RoutineConsistencyCalendar({
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
           {calendarDays.map((day) => (
             <div
+              aria-label={`${day.localDate}: ${
+                dayStatusLabels[day.routineSummary.dayStatus]
+              }, ${day.routineSummary.completed} hoàn thành, ${
+                day.routineSummary.partial
+              } một phần, ${day.routineSummary.skipped} đã ghi nhận chưa làm, ${
+                day.routineSummary.notLogged
+              } chưa có log${
+                day.hasJournalEntry ? ", có nhật ký da" : ", chưa có nhật ký da"
+              }`}
               className={cn(
                 "min-h-32 rounded-2xl border p-3 text-sm",
                 dayStatusClassNames[day.routineSummary.dayStatus],
@@ -64,16 +85,21 @@ export function RoutineConsistencyCalendar({
             >
               <div className="flex items-start justify-between gap-2">
                 <span className="font-semibold">{day.localDate.slice(5)}</span>
-                {day.hasJournalEntry ? <Badge variant="outline">Journal</Badge> : null}
+                <Badge variant="outline">
+                  {dayStatusLabels[day.routineSummary.dayStatus]}
+                </Badge>
               </div>
+              {day.hasJournalEntry ? (
+                <p className="mt-2 text-xs font-medium">Có nhật ký da</p>
+              ) : null}
               <dl className="mt-3 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
-                <dt>Done</dt>
+                <dt>Hoàn thành</dt>
                 <dd className="text-right font-semibold">{day.routineSummary.completed}</dd>
-                <dt>Partial</dt>
+                <dt>Một phần</dt>
                 <dd className="text-right font-semibold">{day.routineSummary.partial}</dd>
-                <dt>Skipped</dt>
+                <dt>Chưa làm</dt>
                 <dd className="text-right font-semibold">{day.routineSummary.skipped}</dd>
-                <dt>Missing</dt>
+                <dt>Chưa log</dt>
                 <dd className="text-right font-semibold">{day.routineSummary.notLogged}</dd>
               </dl>
               {day.symptoms.length > 0 ? (

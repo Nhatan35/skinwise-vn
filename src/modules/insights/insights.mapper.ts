@@ -167,16 +167,25 @@ function buildMostUsedProducts(input: {
 
 function buildNextActions(input: {
   completionRate: number;
+  totalRoutines: number;
   totalEntries: number;
   hasRoutineLogOnReferenceDate: boolean;
   hasJournalOnReferenceDate: boolean;
 }) {
   const nextActions: InsightsDto["nextActions"] = [];
 
-  if (!input.hasRoutineLogOnReferenceDate) {
+  if (input.totalRoutines === 0) {
     nextActions.push({
-      label: "Log today’s routine",
-      description: "Keep your routine history up to date.",
+      label: "Tạo routine chăm sóc da",
+      description:
+        "Bạn cần có routine trước khi Insights có thể theo dõi độ đều đặn.",
+      href: routes.ROUTINES,
+      priority: "high",
+    });
+  } else if (!input.hasRoutineLogOnReferenceDate) {
+    nextActions.push({
+      label: "Ghi nhận routine hôm nay",
+      description: "Cập nhật checklist để lịch độ đều đặn phản ánh dữ liệu mới nhất.",
       href: routes.TODAY_LOG,
       priority: "high",
     });
@@ -184,18 +193,19 @@ function buildNextActions(input: {
 
   if (!input.hasJournalOnReferenceDate) {
     nextActions.push({
-      label: "Write today’s skin journal",
+      label: "Thêm nhật ký da",
       description:
-        "A short journal entry can make your progress easier to review.",
+        "Một ghi chú ngắn giúp kết nối cảm nhận của da với routine log gần đây.",
       href: routes.JOURNAL,
       priority: "medium",
     });
   }
 
-  if (input.completionRate < 50) {
+  if (input.totalRoutines > 0 && input.completionRate < 50) {
     nextActions.push({
-      label: "Simplify your routine",
-      description: "A smaller routine may be easier to maintain consistently.",
+      label: "Xem lại routine",
+      description:
+        "Nếu routine khó duy trì, bạn có thể cân nhắc làm gọn các bước để dễ ghi nhận hơn.",
       href: routes.ROUTINES,
       priority: "medium",
     });
@@ -203,9 +213,9 @@ function buildNextActions(input: {
 
   if (input.totalEntries < 3) {
     nextActions.push({
-      label: "Add more journal entries",
+      label: "Ghi thêm vài nhật ký da",
       description:
-        "More logs can make your progress patterns easier to review.",
+        "Thêm dữ liệu tự ghi nhận sẽ giúp phần xu hướng dễ đọc hơn.",
       href: routes.JOURNAL,
       priority: "low",
     });
@@ -341,6 +351,7 @@ export function toInsightsDto(input: {
     calendarDays,
     nextActions: buildNextActions({
       completionRate,
+      totalRoutines,
       totalEntries: input.journals.length,
       hasRoutineLogOnReferenceDate:
         (referenceDay?.routineSummary.completed ?? 0) +

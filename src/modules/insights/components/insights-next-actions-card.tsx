@@ -15,15 +15,22 @@ type InsightsNextActionsCardProps = {
   nextActions: InsightsDto["nextActions"];
 };
 
+const priorityLabels: Record<InsightsDto["nextActions"][number]["priority"], string> = {
+  high: "Ưu tiên",
+  medium: "Nên làm",
+  low: "Bổ sung",
+};
+
 export function InsightsNextActionsCard({
   nextActions,
 }: InsightsNextActionsCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Next actions</CardTitle>
+        <CardTitle>Gợi ý tiếp theo</CardTitle>
         <CardDescription>
-          Safe actions that help keep your self-tracked history easier to review.
+          Các bước thực tế để dữ liệu theo dõi đầy đủ hơn, dựa trên trạng thái
+          routine log và nhật ký hiện tại.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -38,7 +45,7 @@ export function InsightsNextActionsCard({
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold text-foreground">{action.label}</h3>
-                      <Badge variant="outline">{action.priority}</Badge>
+                      <Badge variant="outline">{priorityLabels[action.priority]}</Badge>
                     </div>
                     {action.description ? (
                       <p className="mt-1 text-sm text-muted-foreground">
@@ -47,7 +54,7 @@ export function InsightsNextActionsCard({
                     ) : null}
                   </div>
                   <Button asChild size="sm" variant="outline">
-                    <Link href={action.href}>Open</Link>
+                    <Link href={action.href}>Mở</Link>
                   </Button>
                 </div>
               </li>
@@ -55,7 +62,8 @@ export function InsightsNextActionsCard({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            You are up to date for the selected period.
+            Bạn đã có dữ liệu routine và nhật ký cho cuối giai đoạn này. Có thể
+            tiếp tục theo dõi thêm vài ngày để xem mẫu hoạt động rõ hơn.
           </p>
         )}
       </CardContent>

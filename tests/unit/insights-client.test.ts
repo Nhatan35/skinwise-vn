@@ -137,7 +137,7 @@ describe("Insights client", () => {
       name: "InsightsClientError",
       code: "VALIDATION_ERROR",
       status: 400,
-      message: "The selected insight date range is invalid.",
+      message: "Giai đoạn Insights đã chọn không hợp lệ.",
     });
   });
 
@@ -146,7 +146,7 @@ describe("Insights client", () => {
 
     await expect(getInsights()).rejects.toMatchObject({
       name: "InsightsClientError",
-      message: expect.stringContaining("load your insights"),
+      message: expect.stringContaining("Chưa thể tải Insights"),
     });
   });
 });

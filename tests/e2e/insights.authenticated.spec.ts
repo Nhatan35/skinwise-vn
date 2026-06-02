@@ -45,15 +45,15 @@ test.describe("SkinWise VN authenticated insights", () => {
 
     expect((await insightsResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Skin Progress Insights" }),
+      page.getByRole("heading", { name: "Insights tiến trình chăm sóc da" }),
     ).toBeVisible();
-    await expect(page.getByText("Routine completion rate")).toBeVisible({
+    await expect(page.getByText("Tỷ lệ hoàn thành routine")).toBeVisible({
       timeout: 15_000,
     });
-    await expect(page.getByText("Routine consistency calendar")).toBeVisible();
-    await expect(page.getByText("Top symptoms")).toBeVisible();
-    await expect(page.getByText("Product usage in journal")).toBeVisible();
-    await expect(page.getByText("Next actions")).toBeVisible();
-    await expect(page.getByText("This page summarizes your self-tracked data")).toBeVisible();
+    await expect(page.getByText("Lịch độ đều đặn routine")).toBeVisible();
+    await expect(page.getByText("Xu hướng nhật ký da")).toBeVisible();
+    await expect(page.getByText("Sản phẩm xuất hiện trong nhật ký")).toBeVisible();
+    await expect(page.getByText("Gợi ý tiếp theo")).toBeVisible();
+    await expect(page.getByText("không phải chẩn đoán y khoa")).toBeVisible();
   });
 });

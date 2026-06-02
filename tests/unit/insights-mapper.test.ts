@@ -235,28 +235,23 @@ describe("Insights mapper", () => {
     ]);
     expect(insights.nextActions).toEqual([
       {
-        label: expect.stringContaining("Log today"),
-        description: "Keep your routine history up to date.",
-        href: routes.TODAY_LOG,
+        label: "Tạo routine chăm sóc da",
+        description:
+          "Bạn cần có routine trước khi Insights có thể theo dõi độ đều đặn.",
+        href: routes.ROUTINES,
         priority: "high",
       },
       {
-        label: expect.stringContaining("Write today"),
+        label: "Thêm nhật ký da",
         description:
-          "A short journal entry can make your progress easier to review.",
+          "Một ghi chú ngắn giúp kết nối cảm nhận của da với routine log gần đây.",
         href: routes.JOURNAL,
         priority: "medium",
       },
       {
-        label: "Simplify your routine",
-        description: "A smaller routine may be easier to maintain consistently.",
-        href: routes.ROUTINES,
-        priority: "medium",
-      },
-      {
-        label: "Add more journal entries",
+        label: "Ghi thêm vài nhật ký da",
         description:
-          "More logs can make your progress patterns easier to review.",
+          "Thêm dữ liệu tự ghi nhận sẽ giúp phần xu hướng dễ đọc hơn.",
         href: routes.JOURNAL,
         priority: "low",
       },

@@ -16,9 +16,11 @@ export function ProductUsageCard({ products }: ProductUsageCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Product usage in journal</CardTitle>
+        <CardTitle>Sản phẩm xuất hiện trong nhật ký</CardTitle>
         <CardDescription>
-          Products that appeared most often in your journal entries.
+          Dựa trên các lần bạn ghi nhận sản phẩm trong nhật ký. Thông tin này
+          giúp nhìn lại thói quen sử dụng, không kết luận sản phẩm gây ra hay
+          cải thiện tình trạng da.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -35,14 +37,14 @@ export function ProductUsageCard({ products }: ProductUsageCardProps) {
                     <span className="text-xs text-muted-foreground">{product.brand}</span>
                   ) : null}
                 </span>
-                <Badge variant="secondary">{product.count} entry(s)</Badge>
+                <Badge variant="secondary">{product.count} lần</Badge>
               </li>
             ))}
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            No product usage data yet. Products that appear in journal entries
-            will be summarized here.
+            Chưa có dữ liệu sản phẩm trong nhật ký. Khi bạn ghi nhận sản phẩm
+            đã dùng, SkinWise sẽ giúp bạn nhìn lại thói quen sử dụng.
           </p>
         )}
       </CardContent>

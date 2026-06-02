@@ -47,12 +47,12 @@ const combinedInsightsSource = [
 describe("Insights UI source", () => {
   it("renders the protected Insights page title, subtitle, and safe disclaimer", () => {
     expect(existsSync(insightsPageRoutePath)).toBe(true);
-    expect(routePageSource).toContain("Skin Progress Insights");
+    expect(routePageSource).toContain("Insights tiến trình chăm sóc da");
     expect(routePageSource).toContain(
-      "Review your routine consistency, journal activity, and recent skincare",
+      "Nhìn lại độ đều đặn của routine, nhật ký da, hoạt động theo dõi gần",
     );
     expect(insightsPageSource).toContain(
-      "This page summarizes your self-tracked data and is not medical advice.",
+      "không phải chẩn đoán y khoa",
     );
     expect(routePageSource).toContain("data-route={insightsRoute}");
     expect(routePageSource).toContain("<InsightsPage />");
@@ -61,33 +61,33 @@ describe("Insights UI source", () => {
   it("has loading, error, and empty states using shared components", () => {
     expect(insightsPageSource.startsWith('"use client";')).toBe(true);
     expect(insightsPageSource).toContain("LoadingState");
-    expect(insightsPageSource).toContain("Loading Skin Progress Insights");
+    expect(insightsPageSource).toContain("Đang tải Insights tiến trình chăm sóc da");
     expect(insightsPageSource).toContain("ErrorState");
-    expect(insightsPageSource).toContain("load your insights. Please try again.");
+    expect(insightsPageSource).toContain("Chưa thể tải Insights lúc này");
     expect(insightsPageSource).toContain("EmptyState");
-    expect(insightsPageSource).toContain("Not enough tracking data yet.");
+    expect(insightsPageSource).toContain("Chưa đủ dữ liệu theo dõi");
     expect(insightsPageSource).toContain(
-      "Start by logging your routine or writing a skin journal entry.",
+      "Ghi nhận routine hôm nay",
     );
   });
 
   it("renders the required overview, calendar, trend, product usage, and next-action sections", () => {
     for (const expectedCopy of [
-      "Routine completion rate",
-      "Current streak",
-      "Best streak",
-      "Journal entries",
-      "Most common symptom",
-      "Routine consistency calendar",
-      "Completed",
-      "Partial",
-      "Skipped",
-      "Not logged",
-      "Top symptoms",
-      "Product usage in journal",
-      "Products that appeared most often in your journal entries.",
-      "Next actions",
-      "Safe actions that help keep your self-tracked history easier to review.",
+      "Tỷ lệ hoàn thành routine",
+      "Chuỗi ngày gần đây",
+      "Chuỗi dài nhất",
+      "Nhật ký da",
+      "Triệu chứng thường gặp",
+      "Lịch độ đều đặn routine",
+      "Hoàn thành",
+      "Hoàn thành một phần",
+      "Đã ghi nhận chưa làm",
+      "Chưa có log",
+      "Xu hướng nhật ký da",
+      "Sản phẩm xuất hiện trong nhật ký",
+      "không kết luận sản phẩm gây ra hay",
+      "Gợi ý tiếp theo",
+      "dựa trên trạng thái",
     ]) {
       expect(combinedInsightsSource).toContain(expectedCopy);
     }

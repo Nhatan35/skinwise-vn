@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { InsightsNextActionsCard } from "@/modules/insights/components/insights-next-actions-card";
 import { InsightsOverviewCards } from "@/modules/insights/components/insights-overview-cards";
@@ -13,6 +14,7 @@ import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
+import { routes } from "@/shared/constants/routes";
 
 function hasNoTrackingData(insights: InsightsDto) {
   return (
@@ -37,7 +39,7 @@ export function InsightsPage() {
       setInsights(await getInsights(dateRange));
     } catch {
       setInsights(null);
-      setLoadError("We couldn’t load your insights. Please try again.");
+      setLoadError("Chưa thể tải Insights lúc này. Vui lòng thử lại sau.");
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +61,7 @@ export function InsightsPage() {
       } catch {
         if (isMounted) {
           setInsights(null);
-          setLoadError("We couldn’t load your insights. Please try again.");
+          setLoadError("Chưa thể tải Insights lúc này. Vui lòng thử lại sau.");
         }
       } finally {
         if (isMounted) {
@@ -76,7 +78,7 @@ export function InsightsPage() {
   }, [dateRange]);
 
   if (isLoading) {
-    return <LoadingState label="Loading Skin Progress Insights" />;
+    return <LoadingState label="Đang tải Insights tiến trình chăm sóc da" />;
   }
 
   if (loadError) {
@@ -84,11 +86,11 @@ export function InsightsPage() {
       <ErrorState
         action={
           <Button onClick={() => void loadInsights()} size="sm" variant="outline">
-            Try again
+            Thử lại
           </Button>
         }
         description={loadError}
-        title="We couldn’t load your insights"
+        title="Không thể tải Insights"
       />
     );
   }
@@ -96,8 +98,8 @@ export function InsightsPage() {
   if (!insights) {
     return (
       <ErrorState
-        description="We couldn’t load your insights. Please try again."
-        title="We couldn’t load your insights"
+        description="Chưa thể tải Insights lúc này. Vui lòng thử lại sau."
+        title="Không thể tải Insights"
       />
     );
   }
@@ -106,17 +108,29 @@ export function InsightsPage() {
     <div className="space-y-5">
       <div className="rounded-3xl border border-border bg-card p-5 shadow-sm shadow-stone-950/5">
         <p className="text-sm font-semibold text-primary">
-          {insights.dateRange.from} → {insights.dateRange.to}
+          Giai đoạn {insights.dateRange.from} đến {insights.dateRange.to}
         </p>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          This page summarizes your self-tracked data and is not medical advice.
+          Insights giúp bạn nhìn lại thói quen chăm sóc da dựa trên routine log
+          và nhật ký da đã ghi nhận. Các số liệu này hỗ trợ tự theo dõi và điều
+          chỉnh thói quen, không phải chẩn đoán y khoa.
         </p>
       </div>
 
       {hasNoTrackingData(insights) ? (
         <EmptyState
-          description="Start by logging your routine or writing a skin journal entry."
-          title="Not enough tracking data yet."
+          action={
+            <div className="flex flex-col justify-center gap-2 sm:flex-row">
+              <Button asChild size="sm">
+                <Link href={routes.TODAY_LOG}>Ghi nhận routine hôm nay</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.JOURNAL}>Thêm nhật ký da</Link>
+              </Button>
+            </div>
+          }
+          description="Chưa có routine log hoặc nhật ký da trong giai đoạn này. Hãy ghi nhận routine hôm nay hoặc thêm một ghi chú ngắn để Insights có dữ liệu phản ánh thói quen của bạn."
+          title="Chưa đủ dữ liệu theo dõi"
         />
       ) : null}
 

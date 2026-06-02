@@ -17,9 +17,10 @@ export function SymptomTrendCard({ symptoms }: SymptomTrendCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top symptoms</CardTitle>
+        <CardTitle>Xu hướng nhật ký da</CardTitle>
         <CardDescription>
-          Based on your logged data, these symptoms appeared most often in this period.
+          Dựa trên triệu chứng bạn tự ghi nhận trong nhật ký. Khi dữ liệu còn
+          ít, hãy xem đây là gợi ý để quan sát thêm thay vì kết luận chắc chắn.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -31,14 +32,14 @@ export function SymptomTrendCard({ symptoms }: SymptomTrendCardProps) {
                 key={symptom.symptom}
               >
                 <span className="font-medium">{getSymptomLabel(symptom.symptom)}</span>
-                <Badge variant="secondary">{symptom.count} time(s)</Badge>
+                <Badge variant="secondary">{symptom.count} lần</Badge>
               </li>
             ))}
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            No symptom data yet. When you record symptoms in your journal, they
-            will appear here as a simple count.
+            Chưa có dữ liệu triệu chứng trong nhật ký. Thêm một ghi chú ngắn để
+            theo dõi cảm nhận của da theo thời gian.
           </p>
         )}
       </CardContent>

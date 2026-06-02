@@ -70,14 +70,14 @@ async function readApiResponse<TData>(
 
 function getSafeErrorMessage(error?: ApiError | null, status = 500) {
   if (status === 401 || error?.code === "UNAUTHORIZED") {
-    return "You need to sign in to review your insights.";
+    return "Bạn cần đăng nhập để xem Insights.";
   }
 
   if (status === 400 || error?.code === "VALIDATION_ERROR") {
-    return "The selected insight date range is invalid.";
+    return "Giai đoạn Insights đã chọn không hợp lệ.";
   }
 
-  return "We couldn’t load your insights. Please try again.";
+  return "Chưa thể tải Insights lúc này. Vui lòng thử lại sau.";
 }
 
 function buildInsightsUrl(params?: InsightsDateRangeParams) {
