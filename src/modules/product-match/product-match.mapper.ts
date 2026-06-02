@@ -1,6 +1,7 @@
 import { toProductDto } from "@/modules/products/product.mapper";
 import type { Product } from "@/modules/products/product.types";
 import type { ProductMatchDto } from "@/modules/product-match/product-match.dto";
+import { buildProductMatchExplanation } from "@/modules/product-match/product-match-explanation";
 import type { ProductMatchScoringResult } from "@/modules/product-match/product-match.scoring";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
 
@@ -9,8 +10,9 @@ export function toProductMatchDto(input: {
   scoring: ProductMatchScoringResult;
   isSaved: boolean;
 }): ProductMatchDto {
-  return {
-    product: toProductDto(input.product),
+  const product = toProductDto(input.product);
+  const productMatch: ProductMatchDto = {
+    product,
     matchScore: input.scoring.matchScore,
     matchLevel: input.scoring.matchLevel,
     reasons: [...input.scoring.reasons],
@@ -25,6 +27,11 @@ export function toProductMatchDto(input: {
       ],
     },
     isSaved: input.isSaved,
+  };
+
+  return {
+    ...productMatch,
+    matchExplanation: buildProductMatchExplanation(productMatch),
   };
 }
 

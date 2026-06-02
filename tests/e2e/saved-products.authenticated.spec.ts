@@ -176,16 +176,18 @@ test.describe("SkinWise VN authenticated saved products", () => {
     await expect(
       page.getByText(deterministicProductName, { exact: true }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Bỏ lưu sản phẩm" }),
-    ).toBeVisible();
+    const removeSavedProductButton = page
+      .getByTestId("remove-saved-product-button")
+      .first();
+
+    await expect(removeSavedProductButton).toBeVisible();
 
     const removeResponsePromise = waitForRemoveSavedProductResponse(
       page,
       product.id,
     );
 
-    await page.getByRole("button", { name: "Bỏ lưu sản phẩm" }).click();
+    await removeSavedProductButton.click();
 
     expect((await removeResponsePromise).ok()).toBe(true);
 

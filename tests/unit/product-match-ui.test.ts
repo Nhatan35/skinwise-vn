@@ -21,6 +21,10 @@ const productMatchCardSource = readFileSync(
   join(productMatchModuleDir, "components/product-match-card.tsx"),
   "utf8",
 );
+const productMatchExplanationCardSource = readFileSync(
+  join(productMatchModuleDir, "components/product-match-explanation-card.tsx"),
+  "utf8",
+);
 const productMatchSummarySource = readFileSync(
   join(productMatchModuleDir, "components/product-match-summary.tsx"),
   "utf8",
@@ -37,10 +41,12 @@ const combinedProductMatchSource = [
   productMatchPageSource,
   productMatchComponentSource,
   productMatchCardSource,
+  productMatchExplanationCardSource,
   productMatchSummarySource,
   productMatchExplanationSource,
   productMatchEmptyStateSource,
 ].join("\n");
+const combinedProductMatchCardSource = `${productMatchCardSource}\n${productMatchExplanationCardSource}`;
 
 describe("Product Match UI source", () => {
   it("adds the protected /product-match dashboard page", () => {
@@ -87,47 +93,45 @@ describe("Product Match UI source", () => {
       'data-testid="product-match-reasons"',
       'data-testid="product-match-cautions"',
       'data-testid="product-match-view-details-link"',
-      "Vì sao được gợi ý",
-      "Phù hợp với bạn vì:",
-      "Cần lưu ý:",
-      "lý do khác trong dữ liệu gợi ý",
-      "lưu ý khác trong dữ liệu gợi ý",
-      "Loại da có tín hiệu khớp",
-      "Ngân sách có tín hiệu khớp",
-      "Có thành phần bạn muốn tránh",
+      "Vì sao",
       "product-match-explanation",
+      "product-match-explanation-summary",
+      "product-match-ingredient-highlights",
+      "product-match-data-quality-notes",
       "buildProductMatchExplanationViewModel",
+      "matchExplanation",
+      "positiveReasons.map",
+      "cautionReasons.map",
+      "ingredientHighlights",
+      "usageNote",
       "matchedSignals",
-      "Phù hợp cao",
-      "Phù hợp tốt",
-      "Cần xem kỹ",
-      "Phù hợp thấp",
       "SavedProductToggleButton",
       "initialSaved={item.isSaved}",
       "productId={product.id}",
-      "Xem chi tiết",
     ]) {
-      expect(productMatchCardSource).toContain(expectedSource);
+      expect(combinedProductMatchCardSource).toContain(expectedSource);
     }
 
-    expect(productMatchCardSource).toContain("visibleReasons.map");
-    expect(productMatchCardSource).toContain("visibleCautions.map");
-    expect(productMatchCardSource).not.toContain("item.reasons.map");
-    expect(productMatchCardSource).not.toContain("item.cautions.map");
+    expect(combinedProductMatchCardSource).toContain("fallback.visibleReasons");
+    expect(combinedProductMatchCardSource).toContain("fallback.visibleCautions");
+    expect(combinedProductMatchCardSource).not.toContain("item.reasons.map");
+    expect(combinedProductMatchCardSource).not.toContain("item.cautions.map");
   });
 
   it("uses a focused Product Match explanation helper with safe fallbacks", () => {
-    expect(productMatchExplanationSource).toContain(
+    for (const expectedSource of [
       "buildProductMatchExplanationViewModel",
-    );
-    expect(productMatchExplanationSource).toContain("MAX_VISIBLE_REASONS = 3");
-    expect(productMatchExplanationSource).toContain("MAX_VISIBLE_CAUTIONS = 2");
-    expect(productMatchExplanationSource).toContain(
+      "buildProductMatchExplanation",
+      "MAX_VISIBLE_REASONS = 3",
+      "MAX_VISIBLE_CAUTIONS = 2",
       "SkinWise chưa có đủ tín hiệu rõ ràng để giải thích chi tiết.",
-    );
-    expect(productMatchExplanationSource).toContain(
       "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ",
-    );
+      "matchLevel",
+      "matchedSignals",
+      "dataQualityNotes",
+    ]) {
+      expect(productMatchExplanationSource).toContain(expectedSource);
+    }
   });
 
   it("keeps Product Match UI client-safe and free of unsafe skincare claims", () => {

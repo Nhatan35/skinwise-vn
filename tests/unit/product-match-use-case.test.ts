@@ -2,10 +2,12 @@ import { ObjectId } from "mongodb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/modules/products/product.repository", () => ({
+  findVisibleProductById: vi.fn(),
   listVisibleProductsForMatching: vi.fn(),
 }));
 
 vi.mock("@/modules/saved-products/saved-product.repository", () => ({
+  isProductSavedByUser: vi.fn(),
   listSavedProductsByUser: vi.fn(),
 }));
 
@@ -13,10 +15,20 @@ vi.mock("@/modules/skin-profile/skin-profile.use-case", () => ({
   getSkinProfileForUser: vi.fn(),
 }));
 
-import { listVisibleProductsForMatching } from "@/modules/products/product.repository";
+import {
+  findVisibleProductById,
+  listVisibleProductsForMatching,
+} from "@/modules/products/product.repository";
 import type { Product } from "@/modules/products/product.types";
-import { getProductMatchesForUser } from "@/modules/product-match/product-match.use-case";
-import { listSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
+import { buildUnavailableProductMatchExplanation } from "@/modules/product-match/product-match-explanation";
+import {
+  getProductMatchForUserAndProduct,
+  getProductMatchesForUser,
+} from "@/modules/product-match/product-match.use-case";
+import {
+  isProductSavedByUser,
+  listSavedProductsByUser,
+} from "@/modules/saved-products/saved-product.repository";
 import type { SavedProduct } from "@/modules/saved-products/saved-product.types";
 import { getSkinProfileForUser } from "@/modules/skin-profile/skin-profile.use-case";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
@@ -25,7 +37,9 @@ const mockedGetSkinProfileForUser = vi.mocked(getSkinProfileForUser);
 const mockedListVisibleProductsForMatching = vi.mocked(
   listVisibleProductsForMatching,
 );
+const mockedFindVisibleProductById = vi.mocked(findVisibleProductById);
 const mockedListSavedProductsByUser = vi.mocked(listSavedProductsByUser);
+const mockedIsProductSavedByUser = vi.mocked(isProductSavedByUser);
 
 const userId = "auth-user-id";
 const fixedDate = new Date("2026-05-31T00:00:00.000Z");
@@ -83,8 +97,10 @@ function createSavedProduct(productId: string): SavedProduct {
 describe("Product Match use case", () => {
   beforeEach(() => {
     mockedGetSkinProfileForUser.mockReset();
+    mockedFindVisibleProductById.mockReset();
     mockedListVisibleProductsForMatching.mockReset();
     mockedListSavedProductsByUser.mockReset();
+    mockedIsProductSavedByUser.mockReset();
   });
 
   it("returns no-profile response without loading products or saved products", async () => {
@@ -144,6 +160,13 @@ describe("Product Match use case", () => {
       matchScore: 100,
       matchLevel: "strong",
       isSaved: true,
+      matchExplanation: {
+        summary: expect.any(String),
+        positiveReasons: expect.any(Array),
+        cautionReasons: expect.any(Array),
+        ingredientHighlights: expect.any(Array),
+        usageNote: expect.any(String),
+      },
     });
     expect(response.items[0]?.product).not.toHaveProperty("_id");
     expect(JSON.stringify(response)).not.toContain("userId");
@@ -176,5 +199,110 @@ describe("Product Match use case", () => {
       lowProductId,
     ]);
     expect(response.items.every((item) => item.isSaved === false)).toBe(true);
+  });
+
+  it("computes one requested product match without loading the full catalogue", async () => {
+    mockedFindVisibleProductById.mockResolvedValue(
+      createProduct(strongProductId, {
+        name: "Single Product",
+        keyActives: ["Niacinamide"],
+      }),
+    );
+    mockedGetSkinProfileForUser.mockResolvedValue(createSkinProfile());
+    mockedIsProductSavedByUser.mockResolvedValue(true);
+
+    const response = await getProductMatchForUserAndProduct(
+      userId,
+      strongProductId,
+    );
+
+    expect(mockedFindVisibleProductById).toHaveBeenCalledWith(strongProductId);
+    expect(mockedListVisibleProductsForMatching).not.toHaveBeenCalled();
+    expect(mockedListSavedProductsByUser).not.toHaveBeenCalled();
+    expect(mockedIsProductSavedByUser).toHaveBeenCalledWith(
+      userId,
+      strongProductId,
+    );
+    expect(response).toMatchObject({
+      productId: strongProductId,
+      matchAvailable: true,
+      skinProfileExists: true,
+      match: {
+        product: {
+          id: strongProductId,
+          name: "Single Product",
+        },
+        matchLevel: "strong",
+        isSaved: true,
+        matchExplanation: {
+          summary: expect.any(String),
+          usageNote: expect.any(String),
+        },
+      },
+    });
+    expect(JSON.stringify(response)).not.toContain("_id");
+    expect(JSON.stringify(response)).not.toContain("userId");
+    expect(JSON.stringify(response)).not.toContain("ObjectId");
+  });
+
+  it("returns null when the requested visible product does not exist", async () => {
+    mockedFindVisibleProductById.mockResolvedValue(null);
+
+    await expect(
+      getProductMatchForUserAndProduct(userId, strongProductId),
+    ).resolves.toBeNull();
+    expect(mockedGetSkinProfileForUser).not.toHaveBeenCalled();
+    expect(mockedIsProductSavedByUser).not.toHaveBeenCalled();
+  });
+
+  it("returns no-profile fallback without matchScore or matchLevel", async () => {
+    mockedFindVisibleProductById.mockResolvedValue(createProduct(strongProductId));
+    mockedGetSkinProfileForUser.mockResolvedValue(null);
+
+    const response = await getProductMatchForUserAndProduct(
+      userId,
+      strongProductId,
+    );
+
+    expect(response).toEqual({
+      productId: strongProductId,
+      matchAvailable: false,
+      skinProfileExists: false,
+      matchUnavailableReason: "NO_SKIN_PROFILE",
+      matchExplanation:
+        buildUnavailableProductMatchExplanation("NO_SKIN_PROFILE"),
+    });
+    expect(JSON.stringify(response)).not.toContain("matchLevel");
+    expect(JSON.stringify(response)).not.toContain("matchScore");
+    expect(JSON.stringify(response)).not.toContain('"usageNote":null');
+    expect(mockedIsProductSavedByUser).not.toHaveBeenCalled();
+  });
+
+  it("returns no-ingredient-data fallback without matchScore or matchLevel", async () => {
+    mockedFindVisibleProductById.mockResolvedValue(
+      createProduct(strongProductId, {
+        ingredientsText: "",
+        keyActives: [],
+      }),
+    );
+    mockedGetSkinProfileForUser.mockResolvedValue(createSkinProfile());
+
+    const response = await getProductMatchForUserAndProduct(
+      userId,
+      strongProductId,
+    );
+
+    expect(response).toEqual({
+      productId: strongProductId,
+      matchAvailable: false,
+      skinProfileExists: true,
+      matchUnavailableReason: "NO_INGREDIENT_DATA",
+      matchExplanation:
+        buildUnavailableProductMatchExplanation("NO_INGREDIENT_DATA"),
+    });
+    expect(JSON.stringify(response)).not.toContain("matchLevel");
+    expect(JSON.stringify(response)).not.toContain("matchScore");
+    expect(JSON.stringify(response)).not.toContain('"usageNote":null');
+    expect(mockedIsProductSavedByUser).not.toHaveBeenCalled();
   });
 });

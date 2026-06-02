@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
+  deleteAccountAppData,
+  exportAccountData,
   fetchCurrentUser,
   requestAccountDeletion,
   SettingsClientError,
 } from "@/modules/settings/settings.client";
+import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 import type { MeUserDto } from "@/modules/users/app-user-profile.types";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
@@ -120,10 +124,59 @@ function formatOptionalDate(value?: string) {
   }
 }
 
+function getExportFileName(exportedAt: string) {
+  const exportDate = exportedAt.slice(0, 10);
+
+  return `skinwise-vn-data-export-${exportDate}.json`;
+}
+
+function downloadJsonFile(fileName: string, data: unknown) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+function formatDeletedCounts(
+  counts: DeleteAccountAppDataDto["deletedCounts"],
+) {
+  const total =
+    counts.skinProfiles +
+    counts.savedProducts +
+    counts.routines +
+    counts.routineLogs +
+    counts.routineAnalyses +
+    counts.skinJournals;
+
+  return `${total} bản ghi đã được xóa khỏi dữ liệu skincare app cá nhân.`;
+}
+
 export function SettingsDataControlCenter() {
+  const router = useRouter();
   const [user, setUser] = useState<MeUserDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [exportSuccessMessage, setExportSuccessMessage] = useState<string | null>(
+    null,
+  );
+  const [isAppDataDeleteConfirmed, setIsAppDataDeleteConfirmed] =
+    useState(false);
+  const [isDeletingAppData, setIsDeletingAppData] = useState(false);
+  const [appDataDeleteError, setAppDataDeleteError] = useState<string | null>(
+    null,
+  );
+  const [appDataDeleteSuccessMessage, setAppDataDeleteSuccessMessage] =
+    useState<string | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -194,6 +247,72 @@ export function SettingsDataControlCenter() {
       );
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function exportMySkincareData() {
+    setIsExporting(true);
+    setExportError(null);
+    setExportSuccessMessage(null);
+
+    try {
+      const accountDataExport = await exportAccountData();
+
+      downloadJsonFile(
+        getExportFileName(accountDataExport.exportedAt),
+        accountDataExport,
+      );
+      setExportSuccessMessage("Đã tải xuống file JSON export dữ liệu skincare.");
+    } catch (error) {
+      setExportError(
+        error instanceof SettingsClientError
+          ? error.message
+          : "Không thể export dữ liệu lúc này. Vui lòng thử lại.",
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
+  async function deleteMySkincareAppData() {
+    if (!isAppDataDeleteConfirmed || isDeletingAppData) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Thao tác này sẽ xóa dữ liệu skincare app cá nhân của bạn, nhưng không xóa tài khoản đăng nhập Auth.js. Bạn muốn tiếp tục?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIsDeletingAppData(true);
+    setAppDataDeleteError(null);
+    setAppDataDeleteSuccessMessage(null);
+
+    try {
+      const result = await deleteAccountAppData();
+
+      setIsAppDataDeleteConfirmed(false);
+      setUser((currentUser) =>
+        currentUser
+          ? {
+              ...currentUser,
+              onboardingCompleted: false,
+            }
+          : currentUser,
+      );
+      router.refresh();
+      setAppDataDeleteSuccessMessage(formatDeletedCounts(result.deletedCounts));
+    } catch (error) {
+      setAppDataDeleteError(
+        error instanceof SettingsClientError
+          ? error.message
+          : "Không thể xóa dữ liệu skincare app lúc này. Vui lòng thử lại.",
+      );
+    } finally {
+      setIsDeletingAppData(false);
     }
   }
 
@@ -305,6 +424,94 @@ export function SettingsDataControlCenter() {
               </p>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      <Card className="border-border bg-card" data-testid="settings-export-data">
+        <CardHeader>
+          <CardTitle>Export data</CardTitle>
+          <CardDescription>
+            Tải xuống dữ liệu skincare app cá nhân của bạn dưới dạng JSON. File
+            export chỉ chứa payload dữ liệu, không chứa token, session hoặc
+            wrapper API nội bộ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Button
+            data-testid="settings-export-data-button"
+            disabled={isExporting}
+            onClick={exportMySkincareData}
+            type="button"
+          >
+            {isExporting ? "Đang export..." : "Export my skincare data"}
+          </Button>
+
+          {exportSuccessMessage ? (
+            <Alert>
+              <AlertDescription>{exportSuccessMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          {exportError ? (
+            <Alert variant="destructive">
+              <AlertDescription>{exportError}</AlertDescription>
+            </Alert>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <Card
+        className="border-destructive/40 bg-card"
+        data-testid="settings-delete-app-data"
+      >
+        <CardHeader>
+          <CardTitle>Danger zone</CardTitle>
+          <CardDescription>
+            Delete my skincare app data chỉ xóa dữ liệu skincare cá nhân như
+            skin profile, saved products, routines, routine logs, routine
+            analyses và skin journals. Thao tác này không xóa tài khoản đăng
+            nhập Auth.js, OAuth account, session hoặc catalogue dùng chung.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-secondary/50 p-3 text-sm font-normal text-muted-foreground">
+            <input
+              data-testid="app-data-delete-confirm-checkbox"
+              checked={isAppDataDeleteConfirmed}
+              className="mt-1"
+              onChange={(event) =>
+                setIsAppDataDeleteConfirmed(event.target.checked)
+              }
+              type="checkbox"
+            />
+            <span>
+              I understand this will delete my personal skincare app data from SkinWise VN.
+            </span>
+          </Label>
+
+          {appDataDeleteSuccessMessage ? (
+            <Alert>
+              <AlertDescription>{appDataDeleteSuccessMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          {appDataDeleteError ? (
+            <Alert variant="destructive">
+              <AlertDescription>{appDataDeleteError}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <Button
+            data-testid="app-data-delete-button"
+            disabled={!isAppDataDeleteConfirmed || isDeletingAppData}
+            onClick={deleteMySkincareAppData}
+            type="button"
+            variant="destructive"
+          >
+            {isDeletingAppData
+              ? "Đang xóa dữ liệu..."
+              : "Delete my skincare app data"}
+          </Button>
         </CardContent>
       </Card>
 

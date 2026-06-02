@@ -20,6 +20,14 @@ const productClientPath = join(
   projectRoot,
   "src/modules/products/product.client.ts",
 );
+const productMatchExplanationCardPath = join(
+  projectRoot,
+  "src/modules/product-match/components/product-match-explanation-card.tsx",
+);
+const productMatchClientPath = join(
+  projectRoot,
+  "src/modules/product-match/product-match.client.ts",
+);
 const decisionSupportPath = join(
   projectRoot,
   "src/modules/products/product-detail-decision-support.ts",
@@ -29,8 +37,13 @@ const productDetailPageSource = readFileSync(productDetailPagePath, "utf8");
 const productDetailSource = readFileSync(productDetailPath, "utf8");
 const productCardSource = readFileSync(productCardPath, "utf8");
 const productClientSource = readFileSync(productClientPath, "utf8");
+const productMatchExplanationCardSource = readFileSync(
+  productMatchExplanationCardPath,
+  "utf8",
+);
+const productMatchClientSource = readFileSync(productMatchClientPath, "utf8");
 const decisionSupportSource = readFileSync(decisionSupportPath, "utf8");
-const combinedClientSource = `${productDetailSource}\n${productCardSource}\n${productClientSource}\n${decisionSupportSource}`;
+const combinedClientSource = `${productDetailSource}\n${productCardSource}\n${productClientSource}\n${productMatchExplanationCardSource}\n${productMatchClientSource}\n${decisionSupportSource}`;
 const combinedProductDetailUiSource = `${productDetailPageSource}\n${combinedClientSource}`;
 
 describe("Product Detail UI", () => {
@@ -56,6 +69,8 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain("getProduct");
     expect(productDetailSource).toContain("getProduct(productId)");
     expect(productDetailSource).toContain("listSavedProducts");
+    expect(productDetailSource).toContain("getProductMatchForProduct");
+    expect(productDetailSource).toContain("ProductMatchExplanationCard");
     expect(productDetailSource).toContain("SavedProductToggleButton");
     expect(productDetailSource).toContain('mode="full"');
     expect(productDetailSource).toContain("useEffect");
@@ -97,6 +112,36 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain(
       "Dữ liệu thành phần chưa đầy đủ.",
     );
+  });
+
+  it("renders a non-blocking personalized match explanation section", () => {
+    for (const requiredSource of [
+      "ProductDetailPersonalizedMatchSection",
+      "Giải thích mức độ phù hợp cá nhân hóa",
+      "Đang tải giải thích phù hợp cá nhân hóa",
+      "Chưa tải được giải thích cá nhân hóa",
+      "Bạn vẫn có thể xem thông tin sản phẩm bên dưới.",
+      "productMatch.matchAvailable",
+      "productMatch.matchExplanation",
+      "match={productMatch.match}",
+      "onRetry={() => void loadPersonalizedMatch()}",
+    ]) {
+      expect(productDetailSource).toContain(requiredSource);
+    }
+
+    for (const requiredSource of [
+      'data-testid="product-match-explanation-card"',
+      'data-testid="product-match-explanation-summary"',
+      'data-testid="product-match-reasons"',
+      'data-testid="product-match-cautions"',
+      'data-testid="product-match-ingredient-highlights"',
+      "Điểm phù hợp",
+      "Tín hiệu phù hợp:",
+      "Cần lưu ý:",
+      "Thành phần liên quan",
+    ]) {
+      expect(productMatchExplanationCardSource).toContain(requiredSource);
+    }
   });
 
   it("displays only safe public ProductDto fields in ProductDetail", () => {
@@ -202,9 +247,6 @@ describe("Product Detail UI", () => {
       "updateProduct",
       "deleteProduct",
       "AI recommendation",
-      "matchScore",
-      "matchLevel",
-      "skinProfile",
       "add-to-routine",
     ]) {
       expect(combinedProductDetailUiSource).not.toContain(forbiddenScope);

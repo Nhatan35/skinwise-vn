@@ -1,6 +1,6 @@
 # Demo Data and Demo Script - SkinWise VN
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## 1. Purpose
 
@@ -21,7 +21,7 @@ User-owned demo data is intentionally not seeded by default. The project uses Au
 
 ## 3. Public Shared Seed Data
 
-The existing public seed script contains curated products and ingredients for demo, development, and rule-engine behavior.
+The existing public seed script contains curated products and ingredients for demo, development, Product Match explanations, Ingredient Library browsing, and routine safety behavior.
 
 Run only against a known safe local or demo database:
 
@@ -42,10 +42,20 @@ Public demo product coverage includes:
 | Clogged-pore caution example | BHA 2% Exfoliant |
 | Lightweight barrier support | Barrier Repair Moisturizer |
 | Morning sunscreen | Daily Lightweight Sunscreen SPF50 |
+| Expanded v1.6 sunscreen examples | SunNest Mineral Comfort Sunscreen SPF50, DailyKind Lightweight Sunscreen SPF50, SoftRoutine Dew Sunscreen SPF50 |
+| Expanded v1.6 barrier examples | CalmBarrier Ceramide Recovery Cream, DermaPlain Fragrance-Free Barrier Lotion, BarrierNest Panthenol Repair Balm |
+| Expanded v1.6 active examples | ClearBalance BHA Pore Support Liquid, MildTheory Mandelic PHA Resurfacing Liquid, RoutineBase Retinal Night Support |
 | Product Match strong/good candidate | Niacinamide 5% Serum, Barrier Repair Moisturizer, or Daily Lightweight Sunscreen SPF50 depending on profile signals |
 | Product Match caution candidate | BHA 2% Exfoliant or another active-heavy product with warning text |
 
-Public demo ingredient coverage includes niacinamide, azelaic acid, salicylic acid/BHA, ceramide, panthenol, glycerin, hyaluronic acid, zinc PCA, green tea extract, sunscreen-related entries where represented in product text, and additional active/safety examples used by the routine safety engine.
+Public demo seed size after MVP v1.6:
+
+```txt
+Ingredients: 40 curated records
+Products: 38 curated records
+```
+
+Public demo ingredient coverage includes barrier support, hydration, oiliness/acne-support positioning, exfoliation, retinoid-related ingredients, tone support, soothing support, sunscreen filters, potential irritants, and texture/emollient/occlusive support.
 
 ## 4. Demo User Story
 

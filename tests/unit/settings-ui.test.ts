@@ -48,6 +48,39 @@ describe("Settings data control UI", () => {
     expect(settingsComponentSource).not.toContain("provider account");
   });
 
+  it("adds export data controls that download the export payload only", () => {
+    expect(settingsComponentSource).toContain("Export data");
+    expect(settingsComponentSource).toContain("Export my skincare data");
+    expect(settingsComponentSource).toContain("settings-export-data-button");
+    expect(settingsComponentSource).toContain("downloadJsonFile");
+    expect(settingsComponentSource).toContain("skinwise-vn-data-export-");
+    expect(settingsClientSource).toContain('fetch("/api/account/export"');
+    expect(settingsClientSource).toContain('method: "GET"');
+    expect(settingsClientSource).toContain("body.data.export");
+    expect(settingsComponentSource).not.toContain("body.data");
+    expect(settingsComponentSource).not.toContain("access_token");
+    expect(settingsComponentSource).not.toContain("refresh_token");
+  });
+
+  it("adds a separate danger zone for deleting only skincare app data", () => {
+    expect(settingsComponentSource).toContain("Danger zone");
+    expect(settingsComponentSource).toContain("Delete my skincare app data");
+    expect(settingsComponentSource).toContain(
+      "I understand this will delete my personal skincare app data from SkinWise VN.",
+    );
+    expect(settingsComponentSource).toContain("app-data-delete-confirm-checkbox");
+    expect(settingsComponentSource).toContain("app-data-delete-button");
+    expect(settingsComponentSource).toContain("isAppDataDeleteConfirmed");
+    expect(settingsComponentSource).toContain("window.confirm");
+    expect(settingsComponentSource).toContain("useRouter");
+    expect(settingsComponentSource).toContain("router.refresh()");
+    expect(settingsComponentSource).toContain("onboardingCompleted: false");
+    expect(settingsClientSource).toContain('fetch("/api/account/app-data"');
+    expect(settingsClientSource).toContain('method: "DELETE"');
+    expect(settingsComponentSource).not.toContain("Delete my account permanently");
+    expect(settingsClientSource).not.toContain("/api/auth");
+  });
+
   it("links to every user-owned data management area", () => {
     for (const route of [
       "routes.SKIN_PROFILE",
@@ -81,6 +114,9 @@ describe("Settings data control UI", () => {
       "Saved products",
       "Product and ingredient catalogue",
       "Shared app data",
+      "Export data",
+      "Danger zone",
+      "Auth.js",
     ]) {
       expect(settingsComponentSource).toContain(copy);
     }

@@ -252,6 +252,16 @@ Public landing-page routes can be added later, but should not reuse private app 
 ## Settings and privacy data control center
 
 - The authenticated Settings page centralizes user data control and links to the user-owned data areas for Skin Profile, Routines, Today Log, Skin Journal, and Saved Products.
+- `GET /api/account/export` lets the authenticated user export only their own skincare app data as JSON. The export includes schema metadata, safe account/app profile fields, skin profile, saved products with minimal linked product metadata, routines, routine logs, routine analyses, and skin journal entries.
+- The export intentionally excludes Auth.js users, accounts, sessions, verification tokens, OAuth provider data, access tokens, refresh tokens, secrets, raw MongoDB `_id` fields, and the full shared product/ingredient catalogues.
+- The Settings download action saves only `body.data.export` from the API response, not the full `{ data, error }` envelope.
+- `DELETE /api/account/app-data` deletes only current-user skincare app data from `skin_profiles`, `saved_products`, `routines`, `routine_logs`, `routine_analyses`, and `skin_journals`.
+- App data deletion intentionally does not delete shared catalogue records, Auth.js identity records, OAuth account records, sessions, verification tokens, or another user's records.
+- The `app_user_profiles` document is preserved. The deletion flow resets `onboardingCompleted` to `false` when needed and updates `updatedAt` only when that reset happens, while preserving role, `createdAt`, and account deletion request metadata.
+- `DELETE /api/account/app-data` is idempotent: calling it when no app data exists returns success with zero deletion counts.
 - Account deletion is implemented as an MVP-safe manual request marker stored as `accountDeletionRequestedAt`; the MVP does not automatically hard-delete Auth.js identity or adapter documents.
 - RoutineLog deletion is user-scoped and requires matching the current authenticated user id with the target routine log id.
+- `GET /api/products/[id]/match` computes personalized Product Detail matching only for the current authenticated user. The route derives identity from Auth.js session state, ignores client-provided `userId`, loads only the requested visible product plus the current user's Skin Profile, and returns public DTOs without raw MongoDB `_id`, raw `userId`, Auth.js account/session/provider data, OAuth tokens, refresh tokens, or secrets.
+- Product Match explanations on Product Match result cards and Product Detail are deterministic and rule-based. They do not call a real AI provider or LLM, do not diagnose, and do not make medical treatment or outcome claims.
 - The Settings page explains that shared product and ingredient catalogue records are app data, not private user-owned records deleted from Settings.
+- Full Auth.js account deletion remains out of scope for MVP v1.4. The existing account deletion request flow remains separate from skincare app data deletion.

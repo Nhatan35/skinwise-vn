@@ -1,4 +1,6 @@
 import type { MeUserDto } from "@/modules/users/app-user-profile.types";
+import type { AccountDataExportDto } from "@/modules/account-data/account-data-export.dto";
+import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 
 export type ApiError = {
   code: string;
@@ -50,6 +52,12 @@ function getFriendlySettingsError(error?: ApiError | null) {
   return "Không thể tải thông tin Settings. Vui lòng thử lại.";
 }
 
+function hasApiData<TData>(
+  body: ApiResponse<TData>,
+): body is { data: TData; error: null } {
+  return body.error === null && body.data !== null;
+}
+
 export async function fetchCurrentUser(): Promise<MeUserDto> {
   const response = await fetch("/api/me", {
     headers: {
@@ -59,7 +67,7 @@ export async function fetchCurrentUser(): Promise<MeUserDto> {
   });
   const body = await readApiResponse<{ user: MeUserDto }>(response);
 
-  if (!response.ok || body.error) {
+  if (!response.ok || !hasApiData(body)) {
     throw new SettingsClientError(
       getFriendlySettingsError(body.error),
       body.error?.code,
@@ -84,11 +92,53 @@ export async function requestAccountDeletion(): Promise<{
     accountDeletionRequestedAt: string;
   }>(response);
 
-  if (!response.ok || body.error) {
+  if (!response.ok || !hasApiData(body)) {
     throw new SettingsClientError(
       body.error?.code === "UNAUTHORIZED"
         ? "Bạn cần đăng nhập để gửi yêu cầu xóa tài khoản."
         : "Không thể gửi yêu cầu xóa tài khoản lúc này. Vui lòng thử lại.",
+      body.error?.code,
+    );
+  }
+
+  return body.data;
+}
+
+export async function exportAccountData(): Promise<AccountDataExportDto> {
+  const response = await fetch("/api/account/export", {
+    headers: {
+      Accept: "application/json",
+    },
+    method: "GET",
+  });
+  const body = await readApiResponse<{ export: AccountDataExportDto }>(response);
+
+  if (!response.ok || !hasApiData(body)) {
+    throw new SettingsClientError(
+      body.error?.code === "UNAUTHORIZED"
+        ? "Bạn cần đăng nhập để export dữ liệu."
+        : "Không thể export dữ liệu lúc này. Vui lòng thử lại.",
+      body.error?.code,
+    );
+  }
+
+  return body.data.export;
+}
+
+export async function deleteAccountAppData(): Promise<DeleteAccountAppDataDto> {
+  const response = await fetch("/api/account/app-data", {
+    headers: {
+      Accept: "application/json",
+    },
+    method: "DELETE",
+  });
+  const body = await readApiResponse<DeleteAccountAppDataDto>(response);
+
+  if (!response.ok || !hasApiData(body)) {
+    throw new SettingsClientError(
+      body.error?.code === "UNAUTHORIZED"
+        ? "Bạn cần đăng nhập để xóa dữ liệu skincare app."
+        : "Không thể xóa dữ liệu skincare app lúc này. Vui lòng thử lại.",
       body.error?.code,
     );
   }

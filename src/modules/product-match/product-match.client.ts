@@ -6,7 +6,9 @@ import {
   PRODUCT_VERIFICATION_STATUSES,
 } from "@/modules/products/product.types";
 import type {
+  ProductDetailMatchResponseDto,
   ProductMatchDto,
+  ProductMatchExplanationDto,
   ProductMatchLevel,
   ProductMatchResponseDto,
 } from "@/modules/product-match/product-match.dto";
@@ -20,6 +22,8 @@ import {
 
 const PRODUCT_MATCH_API_PATH = "/api/product-match";
 const PRODUCT_MATCH_ERROR_MESSAGE = "Không thể tải gợi ý sản phẩm.";
+const PRODUCT_DETAIL_MATCH_ERROR_MESSAGE =
+  "Không thể tải giải thích phù hợp cá nhân hóa.";
 const matchLevels: ProductMatchLevel[] = [
   "strong",
   "good",
@@ -71,6 +75,10 @@ export function getProductMatchApiPath(params?: ProductMatchClientParams) {
   return queryString
     ? `${PRODUCT_MATCH_API_PATH}?${queryString}`
     : PRODUCT_MATCH_API_PATH;
+}
+
+export function getProductMatchForProductApiPath(productId: string) {
+  return `/api/products/${encodeURIComponent(productId)}/match`;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -142,6 +150,48 @@ function isProductDto(value: unknown) {
   );
 }
 
+function isProductMatchExplanationReason(value: unknown) {
+  return (
+    isRecord(value) &&
+    isString(value.type) &&
+    isString(value.message) &&
+    (value.relatedIngredients === undefined ||
+      isStringArray(value.relatedIngredients)) &&
+    (value.relatedConcerns === undefined ||
+      (Array.isArray(value.relatedConcerns) &&
+        value.relatedConcerns.every((concern) =>
+          isOneOf(SKIN_CONCERNS, concern),
+        )))
+  );
+}
+
+function isProductMatchIngredientHighlight(value: unknown) {
+  return (
+    isRecord(value) &&
+    isString(value.ingredientName) &&
+    isOneOf(["positive", "caution", "neutral"] as const, value.effect) &&
+    isString(value.reason)
+  );
+}
+
+function isProductMatchExplanationDto(
+  value: unknown,
+): value is ProductMatchExplanationDto {
+  return (
+    isRecord(value) &&
+    isString(value.summary) &&
+    Array.isArray(value.positiveReasons) &&
+    value.positiveReasons.every(isProductMatchExplanationReason) &&
+    Array.isArray(value.cautionReasons) &&
+    value.cautionReasons.every(isProductMatchExplanationReason) &&
+    Array.isArray(value.ingredientHighlights) &&
+    value.ingredientHighlights.every(isProductMatchIngredientHighlight) &&
+    isString(value.usageNote) &&
+    (value.dataQualityNotes === undefined ||
+      isStringArray(value.dataQualityNotes))
+  );
+}
+
 function isProductMatchDto(value: unknown): value is ProductMatchDto {
   return (
     isRecord(value) &&
@@ -161,6 +211,31 @@ function isProductMatchDto(value: unknown): value is ProductMatchDto {
     isStringArray(value.matchedSignals.avoidedIngredients) &&
     isBoolean(value.isSaved)
   );
+}
+
+function sanitizeProductMatchDto(item: ProductMatchDto): ProductMatchDto {
+  if (!isRecord(item) || !isProductMatchExplanationDto(item.matchExplanation)) {
+    return {
+      product: item.product,
+      matchScore: item.matchScore,
+      matchLevel: item.matchLevel,
+      reasons: item.reasons,
+      cautions: item.cautions,
+      matchedSignals: item.matchedSignals,
+      isSaved: item.isSaved,
+    };
+  }
+
+  return item;
+}
+
+function sanitizeProductMatchResponseDto(
+  response: ProductMatchResponseDto,
+): ProductMatchResponseDto {
+  return {
+    ...response,
+    items: response.items.map(sanitizeProductMatchDto),
+  };
 }
 
 function isSkinProfileSummary(value: unknown) {
@@ -188,6 +263,43 @@ function isProductMatchResponseDto(
     (value.skinProfileSummary === undefined ||
       isSkinProfileSummary(value.skinProfileSummary))
   );
+}
+
+function isProductDetailMatchResponseDto(
+  value: unknown,
+): value is ProductDetailMatchResponseDto {
+  if (
+    !isRecord(value) ||
+    !isString(value.productId) ||
+    !isBoolean(value.matchAvailable) ||
+    !isBoolean(value.skinProfileExists)
+  ) {
+    return false;
+  }
+
+  if (value.matchAvailable) {
+    return value.skinProfileExists === true && isProductMatchDto(value.match);
+  }
+
+  return (
+    isOneOf(
+      ["NO_SKIN_PROFILE", "NO_INGREDIENT_DATA", "MATCH_UNAVAILABLE"] as const,
+      value.matchUnavailableReason,
+    ) && isProductMatchExplanationDto(value.matchExplanation)
+  );
+}
+
+function sanitizeProductDetailMatchResponseDto(
+  response: ProductDetailMatchResponseDto,
+): ProductDetailMatchResponseDto {
+  if (!response.matchAvailable) {
+    return response;
+  }
+
+  return {
+    ...response,
+    match: sanitizeProductMatchDto(response.match),
+  };
 }
 
 async function readApiResponse(
@@ -256,5 +368,42 @@ export async function getProductMatches(
     );
   }
 
-  return body.data;
+  return sanitizeProductMatchResponseDto(body.data);
+}
+
+export async function getProductMatchForProduct(
+  productId: string,
+): Promise<ProductDetailMatchResponseDto> {
+  let response: Response;
+
+  try {
+    response = await fetch(getProductMatchForProductApiPath(productId), {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+  } catch {
+    throw new ProductMatchClientError(PRODUCT_DETAIL_MATCH_ERROR_MESSAGE);
+  }
+
+  const body = await readApiResponse(response);
+
+  if (!response.ok || body.error !== null || body.data === null) {
+    throw new ProductMatchClientError(
+      PRODUCT_DETAIL_MATCH_ERROR_MESSAGE,
+      body.error?.code,
+      response.status,
+    );
+  }
+
+  if (!isProductDetailMatchResponseDto(body.data)) {
+    throw new ProductMatchClientError(
+      PRODUCT_DETAIL_MATCH_ERROR_MESSAGE,
+      "INTERNAL_ERROR",
+      response.status,
+    );
+  }
+
+  return sanitizeProductDetailMatchResponseDto(body.data);
 }

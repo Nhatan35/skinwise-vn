@@ -1,13 +1,12 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
+import { ProductMatchExplanationCard } from "@/modules/product-match/components/product-match-explanation-card";
 import type {
   ProductMatchDto,
   ProductMatchLevel,
 } from "@/modules/product-match/product-match.dto";
-import { buildProductMatchExplanationViewModel } from "@/modules/product-match/product-match-explanation";
 import type {
   ProductCategory,
   ProductPriceRange,
@@ -115,10 +114,6 @@ export function ProductMatchCard({
   onSavedChange,
 }: ProductMatchCardProps) {
   const product = item.product;
-  const explanation = buildProductMatchExplanationViewModel({
-    reasons: item.reasons,
-    cautions: item.cautions,
-  });
   const matchedSignalItems = getMatchedSignalItems(item);
   const explanationHeadingId = `product-match-explanation-${product.id}`;
 
@@ -150,22 +145,8 @@ export function ProductMatchCard({
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
-        <section
-          aria-labelledby={explanationHeadingId}
-          className="space-y-4 rounded-2xl border border-border bg-muted/30 p-4"
-        >
-          <h3
-            className="text-base font-semibold text-foreground"
-            id={explanationHeadingId}
-          >
-            Vì sao được gợi ý
-          </h3>
-
-          <div className="space-y-3" data-testid="product-match-reasons">
-            <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <CheckCircle2 aria-hidden="true" className="size-4" />
-              Phù hợp với bạn vì:
-            </h4>
+        {item.matchExplanation ? (
+          <div className="space-y-3">
             {matchedSignalItems.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {matchedSignalItems.map((signal) => (
@@ -179,53 +160,16 @@ export function ProductMatchCard({
                   </Badge>
                 ))}
               </div>
-            ) : (
-              <p className="text-sm leading-6 text-muted-foreground">
-                Dựa trên hồ sơ hiện tại, SkinWise chưa thấy nhiều tín hiệu khớp
-                rõ ràng.
-              </p>
-            )}
-            <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
-              {explanation.visibleReasons.map((reason) => (
-                <li className="flex gap-2" key={reason}>
-                  <CheckCircle2
-                    aria-hidden="true"
-                    className="mt-1 size-4 shrink-0 text-emerald-700"
-                  />
-                  <span>{reason}</span>
-                </li>
-              ))}
-            </ul>
-            {explanation.hiddenReasonsCount > 0 ? (
-              <p className="text-xs font-medium text-muted-foreground">
-                +{explanation.hiddenReasonsCount} lý do khác trong dữ liệu gợi ý
-              </p>
             ) : null}
+            <ProductMatchExplanationCard
+              explanation={item.matchExplanation}
+              headingId={explanationHeadingId}
+              match={item}
+              showMatchBadges={false}
+              title="Vì sao được gợi ý"
+            />
           </div>
-
-          <div className="space-y-3" data-testid="product-match-cautions">
-            <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <AlertTriangle aria-hidden="true" className="size-4" />
-              Cần lưu ý:
-            </h4>
-            <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
-              {explanation.visibleCautions.map((caution) => (
-                <li className="flex gap-2" key={caution}>
-                  <AlertTriangle
-                    aria-hidden="true"
-                    className="mt-1 size-4 shrink-0 text-amber-700"
-                  />
-                  <span>{caution}</span>
-                </li>
-              ))}
-            </ul>
-            {explanation.hiddenCautionsCount > 0 ? (
-              <p className="text-xs font-medium text-muted-foreground">
-                +{explanation.hiddenCautionsCount} lưu ý khác trong dữ liệu gợi ý
-              </p>
-            ) : null}
-          </div>
-        </section>
+        ) : null}
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
           <Button asChild variant="outline">

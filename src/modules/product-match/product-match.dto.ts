@@ -9,6 +9,28 @@ import type {
 
 export type ProductMatchLevel = "strong" | "good" | "cautious" | "low";
 
+export type ProductMatchExplanationReason = {
+  type: string;
+  message: string;
+  relatedIngredients?: string[];
+  relatedConcerns?: SkinConcern[];
+};
+
+export type ProductMatchIngredientHighlight = {
+  ingredientName: string;
+  effect: "positive" | "caution" | "neutral";
+  reason: string;
+};
+
+export type ProductMatchExplanationDto = {
+  summary: string;
+  positiveReasons: ProductMatchExplanationReason[];
+  cautionReasons: ProductMatchExplanationReason[];
+  ingredientHighlights: ProductMatchIngredientHighlight[];
+  usageNote: string;
+  dataQualityNotes?: string[];
+};
+
 export type ProductMatchDto = {
   product: ProductDto;
   matchScore: number;
@@ -23,6 +45,7 @@ export type ProductMatchDto = {
     avoidedIngredients: string[];
   };
   isSaved: boolean;
+  matchExplanation?: ProductMatchExplanationDto;
 };
 
 export type ProductMatchSkinProfileSummaryDto = {
@@ -40,3 +63,23 @@ export type ProductMatchResponseDto = {
   skinProfileSummary?: ProductMatchSkinProfileSummaryDto;
   items: ProductMatchDto[];
 };
+
+export type ProductMatchUnavailableReason =
+  | "NO_SKIN_PROFILE"
+  | "NO_INGREDIENT_DATA"
+  | "MATCH_UNAVAILABLE";
+
+export type ProductDetailMatchResponseDto =
+  | {
+      productId: string;
+      matchAvailable: true;
+      skinProfileExists: true;
+      match: ProductMatchDto;
+    }
+  | {
+      productId: string;
+      matchAvailable: false;
+      skinProfileExists: boolean;
+      matchUnavailableReason: ProductMatchUnavailableReason;
+      matchExplanation: ProductMatchExplanationDto;
+    };

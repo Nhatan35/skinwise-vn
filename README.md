@@ -23,13 +23,20 @@ Production verification status:
 
 ## Current Status
 
-Current phase: **MVP final closeout / portfolio-ready release**.
+Current phase: **MVP v1.6 Catalogue Data Quality & Ingredient Metadata Upgrade**.
 
-Completed closeout tasks:
+Recently completed MVP improvements:
 
-- `MVP-RELEASE-HYGIENE-001` - clean release package and rerun core validation.
-- `MVP-CI-FIX-001` - add MongoDB service for GitHub Actions E2E and stabilize Playwright selectors for the Vietnamese UI.
-- `MVP-PRODUCTION-VERIFY-001` - verify production deployment, OAuth, MongoDB-backed flows, protected routes, and runtime readiness.
+- `MVP v1.4` - Data Export & Data Control Upgrade.
+- `MVP v1.4.1` - Security QA, Data Control Hardening & Empty-State Stabilization.
+- `MVP v1.5` - Product Matching Explanation Upgrade.
+- `MVP v1.5.1` - Product Detail Personalized Match Explanation.
+- `MVP v1.5.2` - Product Match Explanation Polish & Documentation Sync.
+- `MVP v1.6` - Catalogue Data Quality & Ingredient Metadata Upgrade.
+
+Recommended next MVP improvement:
+
+- `MVP v1.7` - Routine Builder Usability & Demo Flow Refinement.
 
 Final validation baseline:
 
@@ -46,9 +53,10 @@ Playwright E2E: 28 passed / 28
 
 - Google OAuth authentication with protected app routes.
 - Skin profile onboarding, viewing, and editing.
-- Product catalogue with product detail pages.
+- Product catalogue with product detail pages and personalized match explanation on Product Detail.
+- Curated v1.6 seed catalogue with 38 fictional/demo-safe products and 40 educational ingredient records.
 - Saved products.
-- Personalized Product Match: rule-based educational product matching based on skin type, concerns, sensitivity, budget, and avoided ingredients.
+- Personalized Product Match: rule-based educational product matching with score, level, Vietnamese explanations, ingredient highlights, cautions, fallback notes, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow.
 - Routine builder.
@@ -83,11 +91,14 @@ Implemented UI routes:
 Implemented SkinWise API routes:
 
 - `/api/me`
+- `/api/account/app-data`
 - `/api/account/deletion-request`
+- `/api/account/export`
 - `/api/dashboard`
 - `/api/skin-profile`
 - `/api/products`
 - `/api/products/[id]`
+- `/api/products/[id]/match`
 - `/api/product-match`
 - `/api/saved-products`
 - `/api/saved-products/[productId]`
@@ -188,7 +199,7 @@ Database commands use `.env.local` and must only be run against a known local/de
 
 ## Validation Commands
 
-Run these before release packaging or after meaningful changes:
+Run these after meaningful changes:
 
 ```bash
 node -v
@@ -234,9 +245,9 @@ Out of scope for this MVP:
 
 ## Release Status
 
-SkinWise VN is ready as an MVP portfolio/submission release.
+SkinWise VN has completed prior MVP release and deployment verification work. The current direction is continued MVP product-quality improvement.
 
-Final closeout status:
+Previously completed release/deployment checks:
 
 - Source hygiene: completed.
 - Local validation: completed.

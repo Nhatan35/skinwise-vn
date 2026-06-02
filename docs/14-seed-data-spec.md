@@ -1,56 +1,47 @@
-# 14-seed-data-spec.md
+# Seed Data Spec - MVP v1.6 Catalogue Data Quality Upgrade
 
-# Seed Data Spec — MVP v1.2.6 Final
+Last updated: 2026-06-02
 
 ## 1. Purpose
 
-This document defines the minimum safe seed data for SkinWise VN MVP.
+Seed data supports local development, tests, portfolio demos, Product Catalogue, Product Detail, Ingredient Library, Product Match, and Routine Safety Analysis.
 
-Seed data exists to support demos, development, tests, and AI/rule-engine behavior. It must not make medical claims, guarantee results, imply product endorsement, or expand MVP scope.
+The v1.6 upgrade improves catalogue realism and metadata quality without adding new application features, new schema fields, real AI provider integration, marketplace behavior, medical diagnosis, or treatment claims.
 
-This document must stay aligned with `docs/04-data-model.md`. If the data model changes later, this seed spec must be updated in the same patch.
+## 2. Data Size Targets
 
-## 2. Seed data rules
+Ingredient catalogue:
 
-- Keep seed data small, curated, and auditable.
-- Use only fields that exist in the canonical data model unless a field is explicitly marked as a non-persisted authoring note.
-- Mark product verification status clearly.
-- Do not use seed data to imply endorsement.
-- Do not claim a product treats, cures, or guarantees improvement.
-- Include enough variety to test routine categories and safety rules.
-- Ingredient explanations must be educational and cautious.
-- Seed scripts must not silently create new schema fields.
+```txt
+Minimum: 30 curated records
+Target range: 30-40 curated records
+Current v1.6 seed: 40 curated records
+```
 
-## 3. Ingredient seed minimum
+Product catalogue:
 
-Minimum ingredient records:
+```txt
+Minimum: 35 curated records
+Target range: 35-45 curated records
+Current v1.6 seed: 38 curated records
+```
 
-| Ingredient | Functions / Type | Common use | Safety notes |
-|---|---|---|---|
-| Niacinamide | active, barrier support | oil-control support, barrier support | usually beginner-friendly but irritation can still happen |
-| Salicylic Acid / BHA | exfoliant | clogged pore support, exfoliation | avoid overuse; caution with sensitive skin |
-| Glycolic Acid / AHA | exfoliant | surface exfoliation | avoid overuse; sunscreen is important |
-| Lactic Acid / AHA | exfoliant | gentler exfoliation support | still can irritate |
-| Retinol | retinoid | texture support | introduce slowly; avoid pregnancy-related advice beyond professional referral |
-| Retinal | retinoid | texture support | introduce slowly |
-| Adapalene | retinoid-like active in some markets | acne-related support | do not prescribe; advise professional guidance |
-| Benzoyl Peroxide | acne-related active | blemish support | can dry/irritate; avoid making prescription claims |
-| Vitamin C / Ascorbic Acid | antioxidant | antioxidant/brightening support | can irritate sensitive skin |
-| Fragrance / Parfum | fragrance | scent | potential irritant for sensitive skin |
-| Essential Oil | fragrance/volatile | scent | potential irritant |
-| Ceramide | barrier support | skin barrier support | generally supportive |
-| Glycerin | humectant | hydration support | generally supportive |
-| Hyaluronic Acid | humectant | hydration support | generally supportive |
-| Panthenol | soothing/support | calming support | generally supportive |
-| Green Tea Extract | antioxidant/support | comfort and oiliness-prone routine support | botanical extracts can still bother some users |
-| Centella Asiatica | soothing/support | calming support | generally supportive |
-| Sunscreen Filters | UV protection | sun protection | daily use is important; do not overclaim |
+## 3. Ingredient Coverage
 
-## 4. Ingredient seed contract
+The ingredient seed set should cover:
 
-Ingredient seed data must align with `docs/04-data-model.md`.
+- Barrier support: ceramides, cholesterol, fatty acids, panthenol, squalane.
+- Hydration: glycerin, hyaluronic acid, betaine, sodium PCA, urea-style humectant coverage where represented.
+- Oiliness and acne-support positioning: niacinamide, salicylic acid, zinc PCA, benzoyl peroxide, sulfur.
+- Exfoliation: AHA/BHA/PHA examples such as salicylic acid, glycolic acid, lactic acid, mandelic acid, and gluconolactone.
+- Retinoid-related ingredients: retinol, retinal, adapalene.
+- Tone support: azelaic acid, vitamin C/ascorbic acid, tranexamic acid, alpha arbutin, licorice root extract.
+- Soothing support: centella asiatica, madecassoside, allantoin, green tea extract.
+- Sunscreen filters: zinc oxide, avobenzone, Tinosorb S/BEMT-style UV filter coverage.
+- Potential irritants: fragrance/parfum/perfume, essential oil blend, alcohol denat., menthol.
+- Texture, emollient, and occlusive support: dimethicone, shea butter, petrolatum, squalane.
 
-Persisted seed records must use this shape:
+Ingredient records must use the existing schema:
 
 ```ts
 type IngredientSeed = {
@@ -66,56 +57,34 @@ type IngredientSeed = {
 };
 ```
 
-Do not persist these non-model fields into the `Ingredient` collection:
+## 4. Product Coverage
+
+The v1.6 product seed set targets this distribution:
+
+| Category | Target count |
+|---|---:|
+| cleanser | 4 |
+| toner | 3 |
+| serum | 9 |
+| moisturizer | 6 |
+| sunscreen | 6 |
+| treatment | 7 |
+| mask | 2 |
+| other | 1 |
+
+Products must cover these skin types:
 
 ```txt
-name
-category
-summaryVi
-beginnerNotesVi
-cautionNotesVi
-educationalDisclaimerVi
+oily, dry, combination, normal, sensitive, unknown
 ```
 
-If authoring notes are helpful during manual content review, keep them outside the persisted record, for example in a separate draft document or local fixture comment. They must not be inserted into the production `Ingredient` collection unless the canonical data model is explicitly revised.
+Products must cover these concerns:
 
-Example valid ingredient seed:
-
-```ts
-const niacinamideSeed: IngredientSeed = {
-  inciName: "Niacinamide",
-  aliases: ["Vitamin B3", "Nicotinamide"],
-  functions: ["barrier_support", "oil_control_support"],
-  commonUses: ["barrier support", "oiliness support", "beginner-friendly active"],
-  suitableFor: ["oily", "combination", "normal", "barrier_support"],
-  cautionFor: ["very sensitive skin", "recently irritated skin"],
-  avoidWith: [],
-  evidenceLevel: "moderate",
-  sourceRefs: ["manual-curation"]
-};
+```txt
+acne, oiliness, dryness, redness, dark_spots, texture, barrier_support, unknown
 ```
 
-## 5. Product seed minimum
-
-MVP seed products should cover at least:
-
-| Category | Minimum count | Purpose |
-|---|---:|---|
-| cleanser | 2 | routine foundation |
-| moisturizer | 2 | barrier support |
-| sunscreen | 2 | morning routine safety |
-| serum | 2 | active/support examples |
-| treatment | 2 | rule engine examples |
-| toner | 1 | optional step example |
-| other | 1 | fallback/custom behavior |
-
-Total recommended seed count: 12–20 products.
-
-## 6. Product seed contract
-
-Product seed data must align with `docs/04-data-model.md`.
-
-Persisted seed records must use this shape:
+Product records must use the existing schema and canonical enum values:
 
 ```ts
 type ProductSeed = {
@@ -136,120 +105,96 @@ type ProductSeed = {
 };
 ```
 
-Do not use these values in MVP product seed data:
+## 5. MVP v1.6 Data Quality Rules
+
+- Use fictional but realistic product and brand names.
+- Preserve deterministic seed product names that tests or demo docs use as anchors.
+- Keep seed data schema-compliant and manually curated.
+- Use canonical enum values only.
+- Do not add fields that the current Product or Ingredient models do not accept.
+- Do not introduce duplicate ingredient `inciName` values.
+- Do not introduce duplicate product `brand + name` pairs.
+- Include meaningful warnings, `suitableFor`, and `notRecommendedFor` metadata.
+- Include enough sunscreen, exfoliant, retinoid, benzoyl peroxide, fragrance, and barrier-support products to demo matching and routine-safety behavior.
+- Keep catalogue/list performance unchanged; seed data quality should improve existing flows without requiring catalogue-wide personalized explanation generation.
+
+## 6. Routine Safety Demo Support
+
+The seed catalogue should support:
+
+- Missing sunscreen warning in a morning routine without a sunscreen step.
+- Active conflict examples using routine-safety-recognized aliases:
+  - `mandelic acid` or `AHA`
+  - `salicylic acid` or `BHA`
+  - `retinol`, `retinal`, `adapalene`, or `retinoid`
+  - `benzoyl peroxide`
+- Sensitive-skin fragrance caution examples using:
+  - `fragrance`
+  - `parfum`
+  - `perfume`
+  - `essential oil blend`
+- Barrier recovery examples using:
+  - ceramide
+  - panthenol
+  - glycerin
+  - cholesterol
+  - fatty acids
+  - squalane
+- Uneven tone support examples using:
+  - sunscreen
+  - azelaic acid
+  - vitamin C / ascorbic acid
+  - tranexamic acid
+  - alpha arbutin
+  - niacinamide
+
+## 7. Seed Validation
+
+`scripts/seed.ts` validates seed records before writing to MongoDB.
+
+Validation covers:
+
+- Zod schema compliance.
+- Ingredient count >= 30.
+- Product count >= 35.
+- Duplicate ingredient `inciName` detection.
+- Duplicate product `brand + name` detection.
+- Required product category coverage.
+- Required skin type coverage.
+- Required concern coverage.
+- Active conflict demo data.
+- Sunscreen demo data.
+- Sensitive-skin fragrance demo data.
+- Barrier recovery demo data.
+- Dark spots / uneven tone support demo data.
+
+The seed script must preserve existing upsert behavior:
+
+- Ingredients use `inciName` as stable identity.
+- Products use `brand + name + source` as stable identity.
+
+## 8. Safety And Claim Boundaries
+
+Seed data is manually curated demo data. It is educational and not medical advice.
+
+Do not use seed data to claim:
+
+- diagnosis;
+- treatment or cure;
+- guaranteed results;
+- permanent removal of acne, scars, melasma, rosacea, eczema, dermatitis, or other medical concerns;
+- suitability for everyone;
+- zero risk;
+- dermatologist or doctor endorsement unless an actual verified source system exists.
+
+User-facing metadata should use cautious wording such as:
 
 ```txt
-priceRange: "mid_range"
-source: "seed"
+supports
+may help support
+commonly used for
+use with caution
+patch test first
+introduce slowly
+consult a professional for medical concerns
 ```
-
-Rationale:
-
-- `priceRange` must use the canonical enum value `"mid"` from the Product model.
-- `source` must use `"manual"` because `"seed"` is not part of the Product model. Seed data is inserted manually/administratively, but the persisted value remains model-compliant.
-- `verificationStatus` should be `"reviewed"` or `"verified"` so seed products can appear safely in demo/search flows.
-
-Example valid product seed:
-
-```ts
-const exampleCleanserSeed: ProductSeed = {
-  name: "Example Gentle Cleanser",
-  brand: "Example Brand",
-  category: "cleanser",
-  priceRange: "budget",
-  ingredientsText: "Water, Glycerin, Mild Surfactant, Panthenol",
-  keyActives: ["Panthenol"],
-  tags: ["gentle", "basic-routine"],
-  warnings: [],
-  skinTypes: ["normal", "combination", "sensitive"],
-  concerns: ["dryness", "barrier_support"],
-  suitableFor: ["basic morning routine", "basic evening routine"],
-  notRecommendedFor: ["known allergy to listed ingredients"],
-  source: "manual",
-  verificationStatus: "reviewed"
-};
-```
-
-## 7. Seed data safety examples
-
-Good product note:
-
-```txt
-Phù hợp để minh họa routine cơ bản. Người dùng vẫn nên patch test và theo dõi phản ứng da.
-```
-
-Bad product note:
-
-```txt
-Trị sạch mụn sau 7 ngày.
-```
-
-Good ingredient note:
-
-```txt
-Thành phần này thường được dùng để hỗ trợ hàng rào bảo vệ da, nhưng mỗi người có thể phản ứng khác nhau.
-```
-
-Bad ingredient note:
-
-```txt
-Thành phần này chắc chắn chữa khỏi mụn.
-```
-
-## 8. Rule engine seed requirements
-
-Seed data must allow testing these cases:
-
-- morning routine missing sunscreen;
-- routine with too many strong actives;
-- retinoid plus AHA/BHA caution;
-- sensitive skin plus fragrance caution;
-- beginner routine too complex;
-- moisturizing/barrier support missing.
-
-## 9. Seed script location
-
-Recommended future location:
-
-```txt
-scripts/seed.ts
-src/infrastructure/database/seed-data/
-```
-
-Do not create a seed script until database foundation exists.
-
-When a seed script is created, it must:
-
-- validate seed data against Zod schemas before insertion;
-- use the canonical enum values from `docs/04-data-model.md`;
-- avoid creating fields not present in the target collection model;
-- be idempotent where practical;
-- avoid overwriting user-created data.
-
-## 10. Demo data strategy - TASK DEMO-DATA-001
-
-TASK DEMO-DATA-001 prepares the MVP for a professional portfolio/demo walkthrough without expanding product scope.
-
-Public/shared demo data:
-
-- Products and ingredients are seeded through `scripts/seed.ts`.
-- Product seed data uses only the existing Product model fields.
-- Ingredient seed data uses only the existing Ingredient model fields.
-- The curated demo set supports oily or combination-oily skin, acne-prone concerns, clogged-pore texture, post-acne dark spots, mild sensitivity, morning sunscreen, simple barrier support, and active-combination caution examples.
-
-User-owned demo data:
-
-- Skin profile, routines, routine logs, journal entries, and routine analysis records remain user-owned.
-- User-owned demo data must be created through the authenticated UI unless a future explicit `DEMO_USER_ID` seed script is added.
-- Do not hardcode fake user ids.
-- Do not create fake Auth.js users.
-- Do not bypass authenticated ownership checks.
-- Do not fake dashboard output.
-
-Recommended demo setup and presentation flow are documented in:
-
-```txt
-docs/ai-coding/07-demo-data-and-demo-script.md
-```
-
-TASK DEMO-DATA-001 did not add new product features, Product CRUD, admin UI, real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, or medical diagnosis.

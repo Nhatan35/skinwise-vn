@@ -303,6 +303,120 @@ Errors:
 - FORBIDDEN
 - NOT_FOUND
 
+### GET /api/products/:id/match
+
+Returns a deterministic, personalized single-product match explanation for the authenticated user and one visible product.
+
+Authentication and ownership:
+
+- Required.
+- The route derives `userId` from the authenticated session.
+- The client must not send `userId`; query/body `userId` values are ignored.
+- The endpoint loads only the requested visible product by route id.
+- The endpoint loads only the current user's Skin Profile.
+- Saved state is scoped to the current user and requested product only.
+- The endpoint does not load the full product catalogue and does not perform catalogue-wide matching.
+
+Success response when matching is available:
+
+```json
+{
+  "data": {
+    "productId": "665000000000000000000320",
+    "matchAvailable": true,
+    "skinProfileExists": true,
+    "match": {
+      "product": {},
+      "matchScore": 82,
+      "matchLevel": "good",
+      "reasons": [],
+      "cautions": [],
+      "matchedSignals": {
+        "skinType": true,
+        "concerns": ["acne"],
+        "budget": true,
+        "sensitivity": false,
+        "avoidedIngredients": []
+      },
+      "isSaved": false,
+      "matchExplanation": {
+        "summary": "Sản phẩm này có thể phù hợp với hồ sơ da của bạn dựa trên dữ liệu sản phẩm hiện có.",
+        "positiveReasons": [],
+        "cautionReasons": [],
+        "ingredientHighlights": [],
+        "usageNote": "Hãy patch test trước và đưa sản phẩm vào routine từ từ.",
+        "dataQualityNotes": []
+      }
+    }
+  },
+  "error": null
+}
+```
+
+Fallback response when Skin Profile is missing:
+
+```json
+{
+  "data": {
+    "productId": "665000000000000000000320",
+    "matchAvailable": false,
+    "skinProfileExists": false,
+    "matchUnavailableReason": "NO_SKIN_PROFILE",
+    "matchExplanation": {
+      "summary": "Hoàn thành hồ sơ da để xem giải thích mức độ phù hợp được cá nhân hóa.",
+      "positiveReasons": [],
+      "cautionReasons": [],
+      "ingredientHighlights": [],
+      "usageNote": "Hãy hoàn thành hồ sơ da trước khi sử dụng đánh giá phù hợp được cá nhân hóa.",
+      "dataQualityNotes": [
+        "Chưa thể cá nhân hóa vì người dùng chưa có hồ sơ da hoàn chỉnh."
+      ]
+    }
+  },
+  "error": null
+}
+```
+
+Fallback response when ingredient metadata is missing:
+
+```json
+{
+  "data": {
+    "productId": "665000000000000000000320",
+    "matchAvailable": false,
+    "skinProfileExists": true,
+    "matchUnavailableReason": "NO_INGREDIENT_DATA",
+    "matchExplanation": {
+      "summary": "Chưa đủ dữ liệu thành phần để giải thích mức độ phù hợp của sản phẩm này.",
+      "positiveReasons": [],
+      "cautionReasons": [],
+      "ingredientHighlights": [],
+      "usageNote": "Hãy kiểm tra nhãn sản phẩm và patch test trước khi sử dụng.",
+      "dataQualityNotes": [
+        "Dữ liệu thành phần hiện chưa đủ để tạo giải thích chi tiết."
+      ]
+    }
+  },
+  "error": null
+}
+```
+
+DTO notes:
+
+- `matchAvailable: true` returns the existing `ProductMatchDto`.
+- `matchAvailable: false` does not return `matchScore`, `matchLevel`, or unsupported match levels.
+- `matchUnavailableReason` is one of `NO_SKIN_PROFILE`, `NO_INGREDIENT_DATA`, or `MATCH_UNAVAILABLE`.
+- `usageNote` is always a string.
+- `matchExplanation` reuses the same `ProductMatchExplanationDto` used by `/api/product-match`.
+- `matchScore` and `matchLevel` are not duplicated inside `matchExplanation`.
+- Public DTO output must not expose raw MongoDB `_id`, raw `userId`, Auth.js account/session/provider data, OAuth tokens, refresh tokens, or secrets.
+
+Errors:
+
+- UNAUTHORIZED
+- NOT_FOUND
+- INTERNAL_ERROR
+
 ## 4.1 Personalized Product Match
 
 ### GET /api/product-match
@@ -379,7 +493,33 @@ Success response:
           "sensitivity": false,
           "avoidedIngredients": []
         },
-        "isSaved": false
+        "isSaved": false,
+        "matchExplanation": {
+          "summary": "Sản phẩm này có thể phù hợp với hồ sơ da của bạn dựa trên dữ liệu sản phẩm hiện có và điểm phù hợp 85/100.",
+          "positiveReasons": [
+            {
+              "type": "skin_concern_support",
+              "message": "Sản phẩm có metadata liên quan đến mụn trong hồ sơ của bạn.",
+              "relatedIngredients": ["Niacinamide"],
+              "relatedConcerns": ["acne"]
+            }
+          ],
+          "cautionReasons": [
+            {
+              "type": "match_caution",
+              "message": "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ trước khi sử dụng rộng rãi."
+            }
+          ],
+          "ingredientHighlights": [
+            {
+              "ingredientName": "Niacinamide",
+              "effect": "positive",
+              "reason": "Dữ liệu sản phẩm liệt kê thành phần này trong bảng thành phần hoặc hoạt chất nổi bật; SkinWise dùng metadata hiện có để hỗ trợ giải thích matching."
+            }
+          ],
+          "usageNote": "Hãy patch test trước và đưa sản phẩm vào routine từ từ, đặc biệt nếu da bạn nhạy cảm, đang kích ứng hoặc đang phản ứng.",
+          "dataQualityNotes": []
+        }
       }
     ]
   },
@@ -431,6 +571,11 @@ DTO notes:
 - `matchLevel` is one of `strong`, `good`, `cautious`, or `low`.
 - Avoided-ingredient matches and high-sensitivity plus strong-warning matches cannot be labeled `strong`.
 - `reasons` and `cautions` are user-facing Vietnamese strings.
+- `matchExplanation` is optional for backward compatibility. Current producers include it when product matching is generated through the mapper.
+- `matchExplanation` is deterministic and rule-based. It is derived from existing score, level, reasons, cautions, matched signals, and public product metadata already loaded for matching.
+- `matchExplanation.ingredientHighlights` only uses existing product ingredient text, key actives, and avoided-ingredient matches. It does not join ingredient-library documents or invent ingredient facts.
+- Missing profile returns the existing `skinProfileExists: false` response. Missing ingredient or fit metadata returns limited-data notes instead of speculative claims.
+- The client validator accepts older responses without `matchExplanation`, accepts valid extended responses, and drops malformed optional `matchExplanation` data so the UI falls back safely.
 - Raw product names, brand names, ingredient names, user-entered avoided ingredients, IDs, and API enum values are not translated in the DTO.
 
 Safety boundary:
@@ -439,7 +584,9 @@ Safety boundary:
 - It does not call external AI providers.
 - It does not diagnose, prescribe, guarantee results, score skin or appearance, or claim a product cures, treats, fixes, heals, removes, or prevents a condition.
 - It reuses existing collections and does not create a new recommendation collection.
-- User-facing reasons and cautions must remain educational and cautious.
+- User-facing reasons, cautions, explanations, usage notes, and data-quality notes must remain educational and cautious.
+- Full personalized explanations are available on Product Match result cards and Product Detail through `GET /api/products/:id/match`.
+- Catalogue/list pages do not compute full personalized explanations to avoid extra catalogue-wide matching or ingredient loading work.
 
 ## 5. Saved Products
 
@@ -1216,7 +1363,97 @@ Errors:
 - NOT_FOUND
 
 
-## Account deletion request API
+## Account data control APIs
+
+### `GET /api/account/export`
+
+- Requires authentication.
+- The server derives the current user id from the authenticated session; the endpoint does not accept `userId` from request body, query string, route params, headers, or client input.
+- Returns the standard SkinWise API envelope with `data.export`.
+- The exported JSON download in Settings must contain only `body.data.export`, not the full `{ data, error }` API wrapper.
+- Includes `schemaVersion`, `exportedAt`, safe current-user profile fields, app profile status, skin profile, saved products, routines, routine logs, routine analyses, and skin journal entries owned by the current user.
+- Converts MongoDB ObjectId values to string `id` fields and Date values to ISO strings.
+- Does not expose raw MongoDB `_id`, `userId`, Auth.js sessions, OAuth accounts, provider tokens, refresh tokens, verification tokens, or secrets.
+- Does not export the full shared product or ingredient catalogue. Saved product exports may include minimal linked product metadata such as product id, name, brand, category, and key actives.
+
+Success response:
+
+```json
+{
+  "data": {
+    "export": {
+      "schemaVersion": "1.0",
+      "exportedAt": "2026-06-01T00:00:00.000Z",
+      "user": {
+        "id": "auth-user-id",
+        "email": "an@example.com",
+        "name": "An"
+      },
+      "appProfile": {
+        "role": "USER",
+        "onboardingCompleted": true,
+        "accountDeletionRequestStatus": "not_requested",
+        "createdAt": "2026-05-01T00:00:00.000Z",
+        "updatedAt": "2026-05-02T00:00:00.000Z"
+      },
+      "skinProfile": null,
+      "savedProducts": [],
+      "routines": [],
+      "routineLogs": [],
+      "routineAnalyses": [],
+      "skinJournals": []
+    }
+  },
+  "error": null
+}
+```
+
+Expected errors:
+
+- `UNAUTHORIZED`
+- `INTERNAL_ERROR`
+
+### `DELETE /api/account/app-data`
+
+- Requires authentication.
+- Deletes only the current authenticated user's skincare application data.
+- The endpoint is not full account deletion and does not delete Auth.js identity collections.
+- The server derives the current user id from the authenticated session; the endpoint does not accept client-submitted `userId`.
+- Deletes user-owned records from `skin_profiles`, `saved_products`, `routines`, `routine_logs`, `routine_analyses`, and `skin_journals`.
+- Does not delete `products`, `ingredients`, `users`, `accounts`, `sessions`, `verification_tokens`, shared catalogue data, or another user's data.
+- Does not delete the `app_user_profiles` document by default. It preserves `role`, `createdAt`, account deletion request metadata, and account-level metadata. It resets `onboardingCompleted` to `false` when needed and updates `updatedAt` only when that reset happens, so the app returns to an onboarding-safe empty state without changing profile metadata on repeated calls.
+- Uses narrowly scoped delete operations with `{ userId: currentUser.id }`; broad `deleteMany({})` operations are not allowed.
+- Idempotent: if no skincare app data exists, returns success with zero counts.
+- If any delete/reset operation fails, returns `INTERNAL_ERROR` and does not return `deleted: true`.
+
+Success response:
+
+```json
+{
+  "data": {
+    "deleted": true,
+    "deletedAt": "2026-06-01T00:00:00.000Z",
+    "deletedCounts": {
+      "skinProfiles": 1,
+      "savedProducts": 5,
+      "routines": 2,
+      "routineLogs": 14,
+      "routineAnalyses": 3,
+      "skinJournals": 8
+    },
+    "appUserProfile": {
+      "preserved": true,
+      "onboardingCompletedReset": true
+    }
+  },
+  "error": null
+}
+```
+
+Expected errors:
+
+- `UNAUTHORIZED`
+- `INTERNAL_ERROR`
 
 ### `POST /api/account/deletion-request`
 

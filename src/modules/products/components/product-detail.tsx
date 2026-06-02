@@ -11,6 +11,12 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { ProductMatchExplanationCard } from "@/modules/product-match/components/product-match-explanation-card";
+import {
+  getProductMatchForProduct,
+  ProductMatchClientError,
+} from "@/modules/product-match/product-match.client";
+import type { ProductDetailMatchResponseDto } from "@/modules/product-match/product-match.dto";
 import {
   getProduct,
   ProductClientError,
@@ -104,16 +110,44 @@ function getSavedStateError(error: unknown) {
   return "Could not load saved product state.";
 }
 
+function getProductMatchError(error: unknown) {
+  if (error instanceof ProductMatchClientError) {
+    return error.message;
+  }
+
+  return "Không thể tải giải thích phù hợp cá nhân hóa.";
+}
+
 export function ProductDetail({ productId }: ProductDetailProps) {
   const [product, setProduct] = useState<ProductDto | null>(null);
+  const [productMatch, setProductMatch] =
+    useState<ProductDetailMatchResponseDto | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProductMatchLoading, setIsProductMatchLoading] = useState(false);
   const [loadError, setLoadError] = useState<{
     message: string;
     status: number;
   } | null>(null);
   const [savedStateError, setSavedStateError] = useState<string | null>(null);
+  const [productMatchError, setProductMatchError] = useState<string | null>(
+    null,
+  );
   const [reloadKey, setReloadKey] = useState(0);
+
+  async function loadPersonalizedMatch() {
+    setIsProductMatchLoading(true);
+    setProductMatchError(null);
+
+    try {
+      setProductMatch(await getProductMatchForProduct(productId));
+    } catch (error) {
+      setProductMatch(null);
+      setProductMatchError(getProductMatchError(error));
+    } finally {
+      setIsProductMatchLoading(false);
+    }
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -122,8 +156,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       setIsLoading(true);
       setLoadError(null);
       setProduct(null);
+      setProductMatch(null);
       setIsSaved(false);
       setSavedStateError(null);
+      setProductMatchError(null);
+      setIsProductMatchLoading(false);
 
       try {
         const loadedProduct = await getProduct(productId);
@@ -134,23 +171,32 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
         setProduct(loadedProduct);
         setIsLoading(false);
+        setIsProductMatchLoading(true);
 
-        try {
-          const savedProducts = await listSavedProducts();
+        const [savedProductsResult, productMatchResult] =
+          await Promise.allSettled([
+            listSavedProducts(),
+            getProductMatchForProduct(productId),
+          ]);
 
-          if (!isMounted) {
-            return;
-          }
+        if (!isMounted) {
+          return;
+        }
 
+        if (savedProductsResult.status === "fulfilled") {
           setIsSaved(
-            savedProducts.some(
+            savedProductsResult.value.some(
               (savedProduct) => savedProduct.productId === productId,
             ),
           );
-        } catch (error) {
-          if (isMounted) {
-            setSavedStateError(getSavedStateError(error));
-          }
+        } else {
+          setSavedStateError(getSavedStateError(savedProductsResult.reason));
+        }
+
+        if (productMatchResult.status === "fulfilled") {
+          setProductMatch(productMatchResult.value);
+        } else {
+          setProductMatchError(getProductMatchError(productMatchResult.reason));
         }
       } catch (error) {
         if (isMounted) {
@@ -159,6 +205,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       } finally {
         if (isMounted) {
           setIsLoading(false);
+          setIsProductMatchLoading(false);
         }
       }
     }
@@ -241,6 +288,13 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           tư vấn y tế.
         </AlertDescription>
       </Alert>
+
+      <ProductDetailPersonalizedMatchSection
+        errorMessage={productMatchError}
+        isLoading={isProductMatchLoading}
+        onRetry={() => void loadPersonalizedMatch()}
+        productMatch={productMatch}
+      />
 
       {savedStateError ? (
         <Alert variant="destructive">
@@ -337,6 +391,84 @@ function ProductHero({
         </p>
       </CardContent>
     </Card>
+  );
+}
+
+function ProductDetailPersonalizedMatchSection({
+  errorMessage,
+  isLoading,
+  onRetry,
+  productMatch,
+}: {
+  errorMessage: string | null;
+  isLoading: boolean;
+  onRetry: () => void;
+  productMatch: ProductDetailMatchResponseDto | null;
+}) {
+  const headingId = "product-detail-personalized-match";
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent>
+          <LoadingState label="Đang tải giải thích phù hợp cá nhân hóa" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <Alert>
+        <AlertTriangle aria-hidden="true" />
+        <AlertTitle>Chưa tải được giải thích cá nhân hóa</AlertTitle>
+        <AlertDescription className="space-y-3">
+          <span className="block">
+            {errorMessage} Bạn vẫn có thể xem thông tin sản phẩm bên dưới.
+          </span>
+          <Button onClick={onRetry} size="sm" type="button" variant="outline">
+            <RotateCcw aria-hidden="true" />
+            Thử lại
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (!productMatch) {
+    return null;
+  }
+
+  if (productMatch.matchAvailable) {
+    return (
+      <ProductMatchExplanationCard
+        explanation={
+          productMatch.match.matchExplanation ?? {
+            summary:
+              "Giải thích chi tiết còn giới hạn vì một số metadata còn thiếu.",
+            positiveReasons: [],
+            cautionReasons: [],
+            ingredientHighlights: [],
+            usageNote:
+              "Hãy patch test trước và đưa sản phẩm vào routine từ từ.",
+            dataQualityNotes: [
+              "Chưa tải được dữ liệu giải thích chi tiết cho sản phẩm này.",
+            ],
+          }
+        }
+        headingId={headingId}
+        match={productMatch.match}
+        title="Giải thích mức độ phù hợp cá nhân hóa"
+      />
+    );
+  }
+
+  return (
+    <ProductMatchExplanationCard
+      explanation={productMatch.matchExplanation}
+      headingId={headingId}
+      title="Giải thích mức độ phù hợp cá nhân hóa"
+    />
   );
 }
 

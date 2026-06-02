@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { ProductMatchResponseDto } from "@/modules/product-match/product-match.dto";
+import type {
+  ProductDetailMatchResponseDto,
+  ProductMatchResponseDto,
+} from "@/modules/product-match/product-match.dto";
 import {
+  getProductMatchForProduct,
+  getProductMatchForProductApiPath,
   getProductMatchApiPath,
   getProductMatches,
   ProductMatchClientError,
@@ -9,6 +14,7 @@ import {
 
 const fetchMock = vi.fn<typeof fetch>();
 const generatedAt = "2026-05-31T10:00:00.000Z";
+const productId = "665000000000000000004001";
 
 const productMatchResponse: ProductMatchResponseDto = {
   skinProfileExists: true,
@@ -79,6 +85,9 @@ describe("Product Match client", () => {
       "/api/product-match?limit=8",
     );
     expect(getProductMatchApiPath()).not.toContain("undefined");
+    expect(getProductMatchForProductApiPath(productId)).toBe(
+      `/api/products/${productId}/match`,
+    );
   });
 
   it("parses the direct data envelope for ProductMatchResponseDto", async () => {
@@ -100,6 +109,77 @@ describe("Product Match client", () => {
     });
   });
 
+  it("accepts a valid optional matchExplanation field", async () => {
+    const responseWithExplanation: ProductMatchResponseDto = {
+      ...productMatchResponse,
+      items: productMatchResponse.items.map((item) => ({
+        ...item,
+        matchExplanation: {
+          summary:
+            "Sản phẩm này có thể phù hợp dựa trên dữ liệu sản phẩm hiện có.",
+          positiveReasons: [
+            {
+              type: "skin_type_match",
+              message:
+                "Loại da trong hồ sơ của bạn có tín hiệu khớp với metadata sản phẩm.",
+              relatedIngredients: ["Glycerin"],
+              relatedConcerns: ["acne"],
+            },
+          ],
+          cautionReasons: [
+            {
+              type: "general_patch_test",
+              message:
+                "Nên patch test trước khi sử dụng sản phẩm mới trong routine.",
+            },
+          ],
+          ingredientHighlights: [
+            {
+              ingredientName: "Glycerin",
+              effect: "positive",
+              reason:
+                "Dữ liệu sản phẩm liệt kê thành phần này trong bảng thành phần.",
+            },
+          ],
+          usageNote:
+            "Hãy patch test trước và đưa sản phẩm vào routine từ từ.",
+          dataQualityNotes: [],
+        },
+      })),
+    };
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: responseWithExplanation,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatches()).resolves.toEqual(responseWithExplanation);
+  });
+
+  it("drops malformed optional matchExplanation without rejecting the otherwise valid response", async () => {
+    const responseWithMalformedExplanation = {
+      ...productMatchResponse,
+      items: productMatchResponse.items.map((item) => ({
+        ...item,
+        matchExplanation: {
+          summary: 123,
+          positiveReasons: "not-an-array",
+        },
+      })),
+    };
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: responseWithMalformedExplanation,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatches()).resolves.toEqual(productMatchResponse);
+  });
+
   it("parses the no-profile response shape", async () => {
     const noProfileResponse: ProductMatchResponseDto = {
       skinProfileExists: false,
@@ -115,6 +195,132 @@ describe("Product Match client", () => {
     );
 
     await expect(getProductMatches()).resolves.toEqual(noProfileResponse);
+  });
+
+  it("parses a single-product matchAvailable=true response", async () => {
+    const detailMatchResponse: ProductDetailMatchResponseDto = {
+      productId,
+      matchAvailable: true,
+      skinProfileExists: true,
+      match: {
+        ...productMatchResponse.items[0],
+        matchExplanation: {
+          summary:
+            "Sản phẩm này có thể phù hợp dựa trên dữ liệu sản phẩm hiện có.",
+          positiveReasons: [],
+          cautionReasons: [],
+          ingredientHighlights: [],
+          usageNote: "Hãy patch test trước.",
+          dataQualityNotes: [],
+        },
+      },
+    };
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: detailMatchResponse,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatchForProduct(productId)).resolves.toEqual(
+      detailMatchResponse,
+    );
+    expect(fetchMock).toHaveBeenCalledWith(`/api/products/${productId}/match`, {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+  });
+
+  it("parses single-product unavailable fallback responses", async () => {
+    const noProfileResponse: ProductDetailMatchResponseDto = {
+      productId,
+      matchAvailable: false,
+      skinProfileExists: false,
+      matchUnavailableReason: "NO_SKIN_PROFILE",
+      matchExplanation: {
+        summary:
+          "Hoàn thành hồ sơ da để xem giải thích mức độ phù hợp được cá nhân hóa.",
+        positiveReasons: [],
+        cautionReasons: [],
+        ingredientHighlights: [],
+        usageNote:
+          "Hãy hoàn thành hồ sơ da trước khi sử dụng đánh giá phù hợp được cá nhân hóa.",
+        dataQualityNotes: [
+          "Chưa thể cá nhân hóa vì người dùng chưa có hồ sơ da hoàn chỉnh.",
+        ],
+      },
+    };
+
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        data: noProfileResponse,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatchForProduct(productId)).resolves.toEqual(
+      noProfileResponse,
+    );
+
+    const noIngredientResponse: ProductDetailMatchResponseDto = {
+      productId,
+      matchAvailable: false,
+      skinProfileExists: true,
+      matchUnavailableReason: "NO_INGREDIENT_DATA",
+      matchExplanation: {
+        summary:
+          "Chưa đủ dữ liệu thành phần để giải thích mức độ phù hợp của sản phẩm này.",
+        positiveReasons: [],
+        cautionReasons: [],
+        ingredientHighlights: [],
+        usageNote: "Hãy kiểm tra nhãn sản phẩm và patch test trước khi sử dụng.",
+        dataQualityNotes: [
+          "Dữ liệu thành phần hiện chưa đủ để tạo giải thích chi tiết.",
+        ],
+      },
+    };
+
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        data: noIngredientResponse,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatchForProduct(productId)).resolves.toEqual(
+      noIngredientResponse,
+    );
+  });
+
+  it("drops malformed optional matchExplanation on a single-product available response", async () => {
+    const detailMatchResponse = {
+      productId,
+      matchAvailable: true,
+      skinProfileExists: true,
+      match: {
+        ...productMatchResponse.items[0],
+        matchExplanation: {
+          summary: 123,
+        },
+      },
+    };
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: detailMatchResponse,
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatchForProduct(productId)).resolves.toEqual({
+      productId,
+      matchAvailable: true,
+      skinProfileExists: true,
+      match: productMatchResponse.items[0],
+    });
   });
 
   it("maps API errors to ProductMatchClientError", async () => {
@@ -157,6 +363,23 @@ describe("Product Match client", () => {
     );
 
     await expect(getProductMatches()).rejects.toMatchObject({
+      code: "INTERNAL_ERROR",
+      status: 200,
+    });
+
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        data: {
+          productMatch: {
+            productId,
+            matchAvailable: true,
+          },
+        },
+        error: null,
+      }),
+    );
+
+    await expect(getProductMatchForProduct(productId)).rejects.toMatchObject({
       code: "INTERNAL_ERROR",
       status: 200,
     });
