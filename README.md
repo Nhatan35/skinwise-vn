@@ -23,7 +23,11 @@ Production verification status:
 
 ## Current Status
 
-Current phase: **MVP v1.6 Catalogue Data Quality & Ingredient Metadata Upgrade**.
+Current core implementation release: **MVP v1.8 Insights Usability & Progress Story Refinement**.
+
+Previous cleanup patch: **MVP v1.6.1 Validation Evidence & Documentation Truth Sync**.
+
+MVP v1.8 is a focused Insights usability and progress-story refinement. It improves the existing Insights page intro, overview card context, routine consistency calendar readability, journal/product usage safety copy, next actions, and empty/error/loading states without changing the Insights API response shape, adding AI, or introducing medical/product-causality logic.
 
 Recently completed MVP improvements:
 
@@ -33,20 +37,29 @@ Recently completed MVP improvements:
 - `MVP v1.5.1` - Product Detail Personalized Match Explanation.
 - `MVP v1.5.2` - Product Match Explanation Polish & Documentation Sync.
 - `MVP v1.6` - Catalogue Data Quality & Ingredient Metadata Upgrade.
+- `MVP v1.6.1` - Validation Evidence & Documentation Truth Sync.
+- `MVP v1.7` - Routine Builder Usability & Demo Flow Refinement.
+- `MVP v1.8` - Insights Usability & Progress Story Refinement.
 
 Recommended next MVP improvement:
 
-- `MVP v1.7` - Routine Builder Usability & Demo Flow Refinement.
+- `MVP v1.9` - Production Monitoring & Demo Evidence Stabilization.
 
-Final validation baseline:
+Current validation evidence for MVP v1.8:
 
 ```txt
 Node.js: v24.14.0
 npm: 11.14.1
-Unit test files: 84 passed / 84
-Unit tests: 777 passed / 777
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run test:e2e: PASS - 29/29 tests
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm audit: NOT RUN - not part of the v1.8 validation scope
 Database indexes: 32 indexes ensured
-Playwright E2E: 28 passed / 28
+Note: `npm run build` and `npm run test:e2e` initially hit Windows sandbox `spawn EPERM`; both passed on scoped rerun outside the sandbox.
 ```
 
 ## Key Features
@@ -59,11 +72,11 @@ Playwright E2E: 28 passed / 28
 - Personalized Product Match: rule-based educational product matching with score, level, Vietnamese explanations, ingredient highlights, cautions, fallback notes, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow.
-- Routine builder.
-- Routine safety analysis with deterministic rule checks and safe AI-provider fallback behavior.
+- Routine builder with clearer empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
+- Routine safety analysis with deterministic rule checks, scannable result sections, and safe AI-provider fallback behavior.
 - Today routine checklist and routine logs.
 - Skin journal.
-- Skin Progress Insights and calendar.
+- Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, and calendar readability improvements.
 - Dashboard summary based on user-owned data.
 - Settings and data control center.
 - Demo seed data and demo walkthrough documentation.
@@ -209,8 +222,8 @@ npm run typecheck
 npm run test
 npm run build
 npm run db:indexes
+npm run db:seed
 npm run test:e2e
-npm audit --omit=dev --audit-level=moderate
 ```
 
 Latest validation evidence:
@@ -218,10 +231,12 @@ Latest validation evidence:
 ```txt
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 84 files / 777 tests
+npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
-npm run test:e2e: PASS - 28/28 tests
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 tests
+npm audit: NOT RUN during v1.8
 ```
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.

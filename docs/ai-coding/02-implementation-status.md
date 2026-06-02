@@ -5,7 +5,7 @@ Last updated: 2026-06-02
 ## 1. Current Phase
 
 ```txt
-MVP v1.6 Catalogue Data Quality & Ingredient Metadata Upgrade is completed.
+MVP v1.8 Insights Usability & Progress Story Refinement is completed.
 ```
 
 SkinWise VN remains in active MVP product-quality improvement. The previous release and portfolio preparation work is historical context, not the current next task.
@@ -19,6 +19,9 @@ MVP v1.5 - Product Matching Explanation Upgrade: DONE
 MVP v1.5.1 - Product Detail Personalized Match Explanation & Verification: DONE
 MVP v1.5.2 - Product Match Explanation Polish & Documentation Sync: DONE
 MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: DONE
+MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: DONE
+MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: DONE
+MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
 ```
 
 ## 2. Completed Product Scope
@@ -66,6 +69,27 @@ Concern metadata now covers acne, oiliness, dryness, redness, dark_spots, textur
 Seed data supports sunscreen, active conflict, fragrance caution, barrier recovery, and uneven tone demo cases.
 ```
 
+MVP v1.7 routine usability status:
+
+```txt
+Routine Builder empty state is refined for clearer first-use guidance.
+Morning/evening routine purpose is clarified in the builder and routine cards.
+Routine steps now surface clearer ordering guidance and compact selected-product context from already-loaded product option metadata.
+Routine Analysis readability and safety copy are improved without changing the deterministic safety rules.
+Routine Builder now links to the existing Today Checklist route for demo continuity.
+```
+
+MVP v1.8 Insights usability status:
+
+```txt
+Insights page intro now explains that the view is based on routine logs and skin journal entries.
+Overview cards include clearer helper text and no-data context for routine, journal, and symptom metrics.
+Routine consistency calendar now explains the displayed period, no-log days, status legend, and accessible day summaries.
+Journal trend and product usage sections frame data as self-reported reflection only, with no diagnosis or product causality claim.
+Next actions use existing routes for routine creation/review, Today Checklist, and Skin Journal without adding new routes.
+The Insights API response shape, DTO fields, database collections, and external-provider behavior are unchanged.
+```
+
 ## 3. Safety And Privacy Boundaries
 
 ```txt
@@ -75,18 +99,34 @@ Personalized match APIs derive user identity from the authenticated session and 
 Public DTOs must not expose raw MongoDB _id, raw userId, Auth.js account/session/provider data, OAuth tokens, refresh tokens, or secrets.
 ```
 
-## 4. Validation Baseline
+## 4. Validation Evidence
 
-Latest known full validation before v1.5.2 was performed with Node 24.x and npm 11.x. v1.5.2 validation results should be recorded in the task final report after commands are run.
-
-Expected validation commands for meaningful changes:
+Current v1.8 validation environment:
 
 ```txt
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-npm run test:e2e
+Node.js: v24.14.0
+npm: 11.14.1
+Target baseline: Node.js 24.x / npm 11.x
+Baseline match: YES
+```
+
+Current v1.8 validation results:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run test:e2e: PASS - 29/29 tests
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm audit: NOT RUN - not part of the v1.8 validation scope
+```
+
+Environment note:
+
+```txt
+Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPERM. Both commands passed after scoped reruns outside the sandbox process-spawn restriction.
 ```
 
 ## 5. Known MVP Limitations
@@ -104,10 +144,10 @@ Medical diagnosis and treatment advice are out of scope.
 ## 6. Recommended Next MVP Task
 
 ```txt
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
-This recommendation is product-quality scope only. It is not implemented as part of v1.6.
+This recommendation is product-quality scope only. It is not implemented as part of v1.8.
 
 ## 7. Update Rule
 

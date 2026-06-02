@@ -224,4 +224,4 @@ Use the demo to explain:
 - medical diagnosis or treatment advice;
 - new Product Match persistence collection.
 
-Next recommended task: `GitHub Release & Portfolio Submission`.
+Next recommended task: `MVP v1.8 - Insights Usability & Progress Story Refinement`.

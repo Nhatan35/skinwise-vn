@@ -2,9 +2,11 @@
 
 Last updated: 2026-05-31
 
+Historical note: this document records the MVP v1.3 release milestone. The current project state is MVP v1.6 with MVP v1.6.1 validation evidence and documentation truth sync. See `docs/final-release-checklist.md` for current status.
+
 ## Summary
 
-SkinWise VN v1.3 is the final release documentation sync for the portfolio-ready MVP. It records the completed Personalized Product Match feature, the completed Skin Progress Insights feature, current validation evidence, and the final release/demo documentation package.
+SkinWise VN v1.3 was the release documentation sync for an earlier portfolio-ready MVP milestone. It records the completed Personalized Product Match feature, the completed Skin Progress Insights feature, then-current validation evidence, and the final release/demo documentation package for that milestone.
 
 This release is intended for GitHub release notes, portfolio review, interview walkthroughs, demo presentation, and final project submission.
 
@@ -28,9 +30,9 @@ This release is intended for GitHub release notes, portfolio review, interview w
 - Portfolio case study updated to include Product Match and Insights.
 - Demo script updated to include Product Match, saving a matched product, product detail navigation, and Insights.
 - Demo data guide updated to support Product Match and Insights walkthroughs.
-- Deployment checklist updated with current validation evidence and Product Match/Insights smoke-test coverage.
+- Deployment checklist updated with then-current validation evidence and Product Match/Insights smoke-test coverage.
 - Final release checklist updated for v1.3 release readiness.
-- Current validation evidence updated across release/status documentation.
+- Then-current validation evidence updated across release/status documentation.
 
 ## Testing and Validation
 
@@ -97,4 +99,4 @@ Interview demo: READY
 Final submission: READY
 ```
 
-This readiness statement is based on the latest known validation evidence above and the completed documentation sync. Production deployment remains an MVP portfolio/demo deployment, not a full commercial production hardening claim.
+This historical readiness statement is based on the v1.3 validation evidence above and the completed v1.3 documentation sync. Production deployment remains an MVP portfolio/demo deployment, not a full commercial production hardening claim.

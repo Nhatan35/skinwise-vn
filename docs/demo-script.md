@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## 1. Demo Objective
 
@@ -57,11 +57,11 @@ Supporting setup guide:
 | 8 | Saved Products `/saved-products` | Open saved products | "Saved Products lets users bookmark products they want to revisit without adding marketplace, cart, or public sharing." | Retention and routine planning support | User-owned saved_products module, API, and UI |
 | 9 | Ingredient Library `/ingredients` | Search for Niacinamide | "The ingredient library explains common skincare ingredients in beginner-friendly language." | Education without diagnosis | Authenticated ingredient API and client UI |
 | 10 | Ingredient Detail `/ingredients/[id]` | Open ingredient detail and request explanation | "The detail page shows uses, suitability, cautions, and an educational explanation that may use a safe fallback." | Safety copy and scope control | Detail route, explanation API, provider abstraction |
-| 11 | Routine Builder `/routines` | Show Morning/Evening routines | "The user can turn product choices into ordered routine steps." | Core workflow design | Routine API and product snapshot behavior |
-| 12 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis uses deterministic safety rules first, then mock/validated provider explanation." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
-| 13 | Today Routine Log `/routine-logs/today` | Mark routine status | "RoutineLog tracks behavior separately from skin observations." | Distinguishes behavior tracking from journaling | Upsert by user/routine/localDate |
+| 11 | Routine Builder `/routines` | Show Morning/Evening routines and ordered steps | "The user can turn product choices into a simple morning or evening routine, with compact context for selected products." | Core workflow design and usability | Routine API, product snapshot behavior, and saved/catalogue product picker |
+| 12 | Routine Safety Analysis `/routines` | Run or show analysis result | "The analysis separates overview, positive findings, caution points, suggestions, and safety notes using deterministic rules first." | Safety requirement and scope control | Rule engine, provider abstraction, fallback |
+| 13 | Today Routine Log `/routine-logs/today` | Use the Routine Builder CTA or mark routine status | "After building a routine, the user can open Checklist hôm nay to track completion." | Clear demo continuity from planning to tracking | Upsert by user/routine/localDate |
 | 14 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
-| 15 | Insights `/insights` | Review progress insights | "Insights summarizes routine consistency, journal activity, symptoms, product usage, and calendar days from self-tracked data." | Progress review without diagnosis | Aggregation use case and protected API route |
+| 15 | Insights `/insights` | Review progress insights | "Insights tells a progress story from routine logs and journal entries: consistency, recent activity, self-reported symptoms, product mentions, and safe next actions." | Reflective progress review without diagnosis or causality claims | Aggregation use case, protected API route, DTO-preserving v1.8 usability refinement |
 | 16 | Settings `/settings` | Show data control | "Settings makes account and data control visible without overpromising full commercial privacy tooling." | Trust and privacy scope | `/api/me` and account deletion request flow |
 | 17 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
 
@@ -121,11 +121,14 @@ Ingredient Detail:
 Routine Builder:
 
 - "The routine builder supports morning and evening routines with ordered steps."
-- "This turns scattered product choices into an actionable routine."
+- "Morning copy explains lighter cleansing, hydration, barrier support, and sunscreen; evening copy frames recovery or active steps without encouraging too many strong actives."
+- "The selected product context shows source, brand, category, key actives, and caution cues from already-loaded product metadata."
+- "The CTA to Checklist hôm nay connects planning to daily tracking without adding a new route."
 
 Routine Safety Analysis:
 
 - "The safety engine runs deterministic rules before AI-style explanation."
+- "The result is easier to scan: overview, positive findings, caution points, suggestions, safety note, and history."
 - "The current provider is mock/validated for demo use; real OpenAI/Gemini is not implemented."
 
 Routine Logs:
@@ -140,8 +143,10 @@ Skin Journal:
 
 Insights:
 
-- "Insights summarizes self-tracked routine logs and journal entries."
-- "It helps users review patterns without turning observations into medical interpretation."
+- "Insights summarizes self-tracked routine logs and journal entries in one progress dashboard."
+- "The calendar explains logged, partial, completed, and no-log days without shaming the user."
+- "Journal and product sections are reflective only: they do not diagnose symptoms or claim that a product caused or fixed anything."
+- "Next actions point back to existing flows such as Checklist hôm nay, Routine Builder, and Skin Journal."
 
 Dashboard summary:
 
@@ -160,7 +165,7 @@ Dashboard summary:
 | Why is Product CRUD not implemented? | The MVP focuses on user routine tracking and a curated demo catalogue. Admin/product submission is future scope. |
 | What BA skills does this show? | Problem framing, user journey, scope control, user stories, acceptance criteria, requirements traceability, and demo storytelling. |
 | What technical skills does this show? | Next.js App Router, TypeScript, MongoDB, Auth.js, Zod, modular code organization, API routes, DTO mapping, testing, and Vercel deployment readiness. |
-| What would you improve next? | GitHub release and portfolio submission first, then optional post-MVP work such as monitoring, admin product management, data export, and later real provider integration with strict safety controls. |
+| What would you improve next? | After MVP v1.8, the next focused product-quality task can be MVP v1.9 - Production Monitoring & Demo Evidence Stabilization. Later work can include admin product management and real provider integration with strict safety controls. |
 
 ## 7. Closing Explanation
 

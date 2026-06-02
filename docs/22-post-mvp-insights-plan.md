@@ -1,6 +1,6 @@
-# Post-MVP v1.3 Skin Progress Insights & Calendar
+# Post-MVP Skin Progress Insights & Calendar
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## Feature name
 
@@ -29,6 +29,7 @@ Users can log routines and skin journal entries, but they need one protected pla
 - Calendar rows for every local date in the selected range.
 - Safe deterministic next actions.
 - Unit/API/client/UI coverage and authenticated E2E coverage when local E2E dependencies are available.
+- MVP v1.8 usability refinement for Vietnamese progress-story copy, clearer overview cards, calendar legend/no-log explanation, reflective product usage wording, and safer next actions.
 
 ## Out of scope
 
@@ -48,7 +49,7 @@ Users can log routines and skin journal entries, but they need one protected pla
 
 - Protected dashboard route.
 - Dashboard navigation label: `Insights`.
-- Page title: `Skin Progress Insights`.
+- Current page title: `Insights tiến trình chăm sóc da`.
 - Relationship: calls `GET /api/insights` through the client helper in `src/modules/insights/insights.client.ts`.
 
 ## API endpoint

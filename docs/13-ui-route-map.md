@@ -1,14 +1,14 @@
 # UI and API Route Map - MVP v1.2.6
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## Purpose
 
 This document maps the routes that exist in the current source tree. Use `src/app` and `src/app/api` as the source of truth when this document and implementation drift.
 
-Current phase: post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness.
+Current phase: MVP v1.7 Routine Builder usability and demo-flow refinement after the MVP v1.6 catalogue data quality upgrade and v1.6.1 documentation truth sync.
 
-Latest completed source task: `MVP-v1.3-001 - Personalized Product Match`.
+Latest completed source task before v1.7: `MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade`.
 
 ## Route Principles
 

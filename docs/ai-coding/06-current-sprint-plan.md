@@ -5,7 +5,7 @@ Last updated: 2026-06-02
 ## 1. Current Sprint
 
 ```txt
-MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade
+MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
 Status:
@@ -13,67 +13,55 @@ Status:
 ```txt
 Implementation: DONE
 Documentation sync: DONE
-Validation: record final command results in the task report
+Validation evidence recording: DONE
 ```
+
+MVP v1.8 is a focused usability and portfolio demo-flow refinement for the existing Insights experience. It is not a medical insight engine, product effectiveness engine, analytics platform, schema rewrite, API redesign, or AI provider integration.
 
 ## 2. Objective
 
-Improve the quality, realism, and usefulness of the curated skincare catalogue and ingredient library so portfolio demos for Product Catalogue, Product Detail, Product Match, Ingredient Library, and Routine Safety Analysis are more convincing.
+Make the existing Insights page easier to understand within a short product demo by connecting routine logs, skin journal entries, recent tracking activity, reflective product usage, and safe next actions.
 
-This sprint is seed-data and documentation work. It does not add new user-facing features or rewrite matching, scoring, routine safety, Auth.js, or API response architecture.
+The improved flow should help a reviewer see:
+
+```txt
+Routine logs -> skin journal entries -> Insights progress story -> route-connected next actions
+```
 
 ## 3. Scope
 
-Completed scope:
+Completed v1.8 scope:
 
 ```txt
-[x] Expand ingredient seed data to at least 30 curated records.
-[x] Expand product seed data to at least 35 curated records.
-[x] Improve category, skin type, concern, active, warning, suitableFor, and notRecommendedFor metadata.
-[x] Add seed validation assertions for counts, duplicate identities, required coverage, and demo support signals.
-[x] Support routine-safety demo cases for missing sunscreen, active conflict, fragrance caution, barrier recovery, and uneven tone support.
-[x] Update seed data spec and AI coding status docs.
-[x] Update README current phase and next recommendation.
+[x] Improve Insights page intro and progress-story framing.
+[x] Improve overview card labels, helper text, and no-data context.
+[x] Improve routine consistency calendar date range, legend, no-log explanation, and accessible day summaries.
+[x] Improve journal/symptom trend copy for self-reported, low-data interpretation.
+[x] Improve product usage safety copy without causality or effectiveness claims.
+[x] Improve next actions using existing route constants and current data states.
+[x] Preserve the Insights API response shape, DTO fields, database collections, and external-provider behavior.
+[x] Update focused unit/source/E2E tests for the improved flow.
+[x] Run full validation and record current results.
 ```
 
 ## 4. Non-Goals
 
 ```txt
+No new UI route or Insights subroute.
+No new API route.
+No Insights API response shape change.
+No new database collection or persistent field.
+No product effectiveness scoring or causality logic.
+No product matching or recommendation logic change.
 No real AI provider integration.
-No LLM or external API call.
-No image upload or face analysis.
-No skin score.
-No marketplace, cart, checkout, payment, shipping, subscription, ratings, or reviews.
-No admin CRUD.
-No medical diagnosis, treatment claim, cure claim, or guaranteed result.
-No new product matching algorithm.
-No Product Match scoring or match-level rewrite.
-No Routine Safety rule rewrite.
-No database schema change.
+No image upload, skin scoring, marketplace, cart, checkout, payment, admin CRUD, reviews, or notifications.
+No medical diagnosis, treatment claim, or guaranteed skincare outcome.
 No new dependency.
 ```
 
-## 5. Acceptance Criteria
+## 5. Validation Commands
 
-```txt
-Ingredient count >= 30.
-Product count >= 35.
-Seed data is schema-compliant.
-No duplicate ingredient inciName.
-No duplicate product brand/name pair.
-All product categories are covered.
-All product skin types are covered.
-All product concerns are covered.
-Warnings and caution metadata are meaningful and educational.
-Routine safety demo aliases are present in product keyActives or ingredientsText.
-No diagnosis, treatment, or guaranteed-result claim is added.
-Relevant documentation is synced.
-Validation commands pass or failures are reported honestly.
-```
-
-## 6. Validation Commands
-
-Run:
+Run and record:
 
 ```txt
 npm run lint
@@ -81,32 +69,45 @@ npm run typecheck
 npm run test
 npm run build
 npm run test:e2e
-```
-
-Run if local MongoDB is available and safe:
-
-```txt
 npm run db:indexes
 npm run db:seed
 ```
 
-Do not run npm audit for this sprint unless explicitly requested.
+Database commands should run only against the configured safe local/development or explicit demo database.
 
-## 7. Current Seed Coverage
+## 6. Validation Evidence
 
-```txt
-Ingredients: 40 curated records.
-Products: 38 curated records.
-Categories: cleanser, toner, serum, moisturizer, sunscreen, treatment, mask, other.
-Skin types: oily, dry, combination, normal, sensitive, unknown.
-Concerns: acne, oiliness, dryness, redness, dark_spots, texture, barrier_support, unknown.
-Routine safety aliases: mandelic acid, salicylic acid, retinol, benzoyl peroxide, fragrance, parfum, essential oil blend.
-```
-
-## 8. Recommended Next Task
+Environment:
 
 ```txt
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement
+Node.js: v24.14.0
+npm: 11.14.1
+Target baseline: Node.js 24.x / npm 11.x
+Baseline match: YES
 ```
 
-This is a recommendation only and is not part of MVP v1.6.
+Results:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run test:e2e: PASS - 29/29 tests
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+```
+
+Environment-specific note:
+
+```txt
+Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPERM. Both commands passed after scoped reruns outside the sandbox process-spawn restriction.
+```
+
+## 7. Recommended Next Task
+
+```txt
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+```
+
+This is a recommendation only and is not part of MVP v1.8.

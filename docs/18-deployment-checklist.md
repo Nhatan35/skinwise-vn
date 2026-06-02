@@ -1,18 +1,21 @@
-# Deployment and Production Readiness Checklist - SkinWise VN MVP v1.3
+# Deployment and Production Readiness Checklist - SkinWise VN MVP
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## 1. Current Deployment Status
 
 ```txt
 Deployment status: VERIFIED FOR MVP PORTFOLIO RELEASE
+Current core implementation release: MVP v1.7
+Previous cleanup patch: MVP v1.6.1
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
 Runtime baseline: Node.js 24.x / npm 11.x
 Latest validated runtime: Node v24.14.0 / npm 11.14.1
 Screenshot capture: skipped - not required for this submission
-Release notes: docs/release-notes-v1.3.md
+Current checklist: docs/final-release-checklist.md
+Historical v1.3 release notes: docs/release-notes-v1.3.md
 ```
 
 Production verification was completed by the project owner for the MVP demo scope.
@@ -45,10 +48,11 @@ Verified areas:
 | Project builds successfully | PASS | `npm run build` passed. |
 | TypeScript has no blocking errors | PASS | `npm run typecheck` passed. |
 | Lint passes | PASS | `npm run lint` passed. |
-| Unit tests pass | PASS | 84 files / 777 tests passed. |
-| E2E tests pass | PASS | 28/28 Playwright tests passed. |
+| Unit tests pass | PASS | 96 files / 889 tests passed. |
+| E2E tests pass | PASS | 29/29 Playwright tests passed. |
 | Database indexes verified | PASS | 32 indexes ensured. |
-| Production audit passed | PASS | 0 recorded production vulnerabilities in final validation. |
+| Seed data validation passes | PASS | `npm run db:seed` passed with 40 ingredients and 38 products. |
+| Production audit passed | NOT RUN | `npm audit` was not part of the MVP v1.7 validation scope; no current audit result is claimed. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
 | README setup instructions accurate | PASS | Updated for final closeout. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |

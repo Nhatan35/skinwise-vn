@@ -1,16 +1,18 @@
 # CHANGELOG v1.3
 
+Historical note: this changelog records the MVP v1.3 milestone. The current project state is documented in `docs/final-release-checklist.md` and the AI coding status docs.
+
 ## 2026-05-31 - Final Release Documentation Sync
 
 ### Changed
 
 - Synchronized final release, deployment, portfolio, demo, and AI coding status documentation for the v1.3 release.
-- Created `docs/release-notes-v1.3.md` and made it discoverable from current release documentation.
-- Updated current release evidence to Node v24.14.0, npm 11.14.1, 84 files / 777 tests, 28/28 Playwright E2E tests, and 32 MongoDB indexes ensured.
+- Created `docs/release-notes-v1.3.md` and made it discoverable from then-current release documentation.
+- Updated v1.3 release evidence to Node v24.14.0, npm 11.14.1, 84 files / 777 tests, 28/28 Playwright E2E tests, and 32 MongoDB indexes ensured.
 - Updated final release checklist and deployment checklist to include Product Match and Insights.
 - Updated portfolio case study, demo script, and demo data guide to cover Product Match, saving a matched product, product detail navigation, and Insights.
 
-### Current validation evidence
+### Historical v1.3 validation evidence
 
 ```txt
 Node: v24.14.0

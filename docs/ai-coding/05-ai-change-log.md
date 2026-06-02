@@ -4,6 +4,8 @@
 
 This file records AI-assisted changes so future coding sessions understand what changed and why.
 
+Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
+
 ## 2026-05-31 - MVP-v1.3-FIX-002 Final Release Documentation Sync
 
 ### Task

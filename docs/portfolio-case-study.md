@@ -4,7 +4,7 @@
 
 SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users organize their skincare context, review rule-based product matches, discover products and ingredients, build routines, track daily routine completion, write skin journal entries, and review dashboard/insights summaries.
 
-The project was built as a portfolio-ready full-stack MVP and BA practice project. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, test coverage, CI/E2E validation, and production verification.
+The project was built as a portfolio-ready full-stack MVP and BA practice project. The current repository state is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation, and production verification.
 
 Production demo:
 
@@ -45,6 +45,7 @@ This MVP does not target medical diagnosis, prescription treatment, or clinical 
 - Google OAuth authentication.
 - Skin Profile.
 - Product Catalogue and Product Detail.
+- Curated v1.6 product and ingredient seed catalogue.
 - Personalized Product Match.
 - Saved Products.
 - Ingredient Library and Ingredient Detail.
@@ -100,7 +101,7 @@ Ingredients -> Search -> Ingredient detail -> Explanation request -> Safe educat
 ### Flow 5 - Routine Management
 
 ```txt
-Routines -> Create routine -> Add product-backed steps -> Save routine -> Run routine analysis
+Routines -> Create morning/evening routine -> Add product-backed or manual steps -> Review selected-product context -> Save routine -> Run routine analysis -> Open Today Checklist
 ```
 
 ### Flow 6 - Daily Tracking
@@ -112,7 +113,7 @@ Today Routine Checklist -> Mark routine complete -> Review log -> Delete log if 
 ### Flow 7 - Skin Journal and Insights
 
 ```txt
-Journal -> Create entry -> Edit entry -> Delete entry -> Insights -> Review routine consistency, calendar, symptoms, and product usage
+Journal -> Create entry -> Edit entry -> Delete entry -> Insights -> Review routine consistency, calendar, self-reported symptoms, reflective product usage, and next actions
 ```
 
 ## 6. Architecture
@@ -156,11 +157,12 @@ Validation evidence:
 ```txt
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 84 files / 777 tests
+npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
-npm run test:e2e: PASS - 28/28 tests
-npm audit --omit=dev --audit-level=moderate: PASS - 0 recorded production vulnerabilities
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 tests
+npm audit: NOT RUN during MVP v1.8
 ```
 
 The Playwright E2E suite covers public landing behavior, protected route redirects, authenticated dashboard access, profile creation/update, product browsing/detail, Product Match review/save/detail flow, saved products, ingredient library/detail/explanation, routine builder, routine analysis, today routine checklist, routine log deletion, skin journal, Insights, settings/data control, account deletion request, and dashboard summary reflection.
@@ -201,6 +203,9 @@ This project demonstrates:
 - Safe product boundary definition.
 - Traceability from business needs to implementation and tests.
 - Release readiness and validation evidence.
+- Documentation truth-sync after MVP v1.6.
+- Usability refinement of the routine demo flow in MVP v1.7.
+- Insights progress-story and safety-copy refinement in MVP v1.8.
 
 ## 11. Engineering Practices Demonstrated
 
@@ -210,7 +215,7 @@ This project demonstrates:
 - Repository/use-case separation.
 - Deterministic routine safety rules before AI-style explanation.
 - Deterministic Product Match scoring with match score, match level, reasons, cautions, saved-product integration, and product detail navigation.
-- Routine-slot based Insights aggregation for routine consistency, journal activity, product usage, calendar days, and safe next actions.
+- Routine-slot based Insights aggregation for routine consistency, journal activity, product usage, calendar days, and safe next actions, with v1.8 UI framing that avoids diagnosis and product causality claims.
 - Mock/fallback provider behavior for MVP reliability.
 - Unit and contract testing.
 - Playwright E2E testing.
@@ -219,22 +224,24 @@ This project demonstrates:
 
 ## 12. Final Outcome
 
-SkinWise VN is ready as an MVP portfolio/submission project.
+SkinWise VN is ready as an MVP portfolio/interview demo project for the current MVP v1.8 state.
 
-Final release status:
+Current release status:
 
 ```txt
-SkinWise VN MVP v1.3 - READY FOR GITHUB RELEASE / PORTFOLIO / SUBMISSION
+MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
+MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
+MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
+MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
 ```
 
 ## 13. Future Improvements
 
-Recommended post-MVP roadmap:
+Recommended next MVP roadmap:
 
-1. Real AI provider integration with monitoring and cost controls.
-2. Admin Product/Ingredient CRUD.
-3. Data export and hard-delete account flow.
+1. MVP v1.9 - Production Monitoring & Demo Evidence Stabilization.
+2. Real AI provider integration with monitoring and cost controls.
+3. Admin Product/Ingredient CRUD.
 4. Image upload for journal entries.
 5. Error monitoring and production analytics.
 6. Notification reminders.
-7. Expanded ingredient/product dataset.

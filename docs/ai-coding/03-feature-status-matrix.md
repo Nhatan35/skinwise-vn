@@ -23,11 +23,11 @@ Out of scope
 | Saved Products | Completed | `GET`/`POST /api/saved-products`; `DELETE /api/saved-products/[productId]` | `/saved-products`; save actions in product surfaces | `saved_products` unique `userId + productId` index | Unit/API/client/E2E | User-owned product bookmarks with idempotent save/remove behavior. |
 | Ingredient Library | Completed | `GET /api/ingredients`; `GET /api/ingredients/[id]` | `/ingredients`; `/ingredients/[id]` | `ingredients` collection and indexes | Unit/API/client/E2E; seed validation | Authenticated read-only ingredient library with educational detail view. MVP v1.6 expands curated ingredient seed data to 40 records covering barrier, hydration, oiliness/acne-support, exfoliation, retinoids, tone support, soothing, UV filters, potential irritants, and emollient/occlusive support. |
 | Ingredient Explanation | Completed | `POST /api/ingredients/explain` | Explanation panel in ingredient detail | No persistence | Unit/API/client/E2E | Uses provider abstraction and validated mock/fallback behavior. No external AI provider is required for MVP. |
-| Routine Builder | Completed | `/api/routines`; `/api/routines/[id]` | `/routines` | `routines` collection and indexes | Unit/API/E2E | Authenticated routine creation and management are implemented. |
-| Routine Analysis | Completed | `POST /api/routines/[id]/analyze`; `GET /api/routines/[id]/analyses` | Analysis panel in routines | `routine_analyses`; `rate_limits` | Unit/API/E2E | Deterministic safety rules run before mock/fallback AI explanation. MVP v1.6 seed data supports missing sunscreen, active conflict, sensitive-skin fragrance caution, barrier recovery, and uneven tone support demos without changing routine safety rules. |
-| Routine Logs | Completed | `GET /api/routine-logs`; `PUT /api/routine-logs`; `DELETE /api/routine-logs/[id]` | `/routines`; `/routine-logs/today` | `routine_logs` with user/date indexes | Unit/API/client/E2E | Daily routine status update and delete flow are implemented. |
+| Routine Builder | Completed | `/api/routines`; `/api/routines/[id]` | `/routines` | `routines` collection and indexes | Unit/API/E2E | Authenticated routine creation and management are implemented. MVP v1.7 refines empty state copy, morning/evening guidance, step-order guidance, selected-product context, and the CTA to Today Checklist without changing schema or APIs. |
+| Routine Analysis | Completed | `POST /api/routines/[id]/analyze`; `GET /api/routines/[id]/analyses` | Analysis panel in routines | `routine_analyses`; `rate_limits` | Unit/API/E2E | Deterministic safety rules run before mock/fallback AI explanation. MVP v1.7 improves result readability and safety wording without changing routine safety rules. |
+| Routine Logs | Completed | `GET /api/routine-logs`; `PUT /api/routine-logs`; `DELETE /api/routine-logs/[id]` | `/routines`; `/routine-logs/today` | `routine_logs` with user/date indexes | Unit/API/client/E2E | Daily routine status update and delete flow are implemented. Routine Builder links to the existing Today Checklist route for clearer demo continuity. |
 | Skin Journal | Completed | `GET`/`POST /api/skin-journal`; `PATCH`/`DELETE /api/skin-journal/[id]` | `/journal` | `skin_journals` with user/localDate unique index | Unit/API/client/E2E | User-scoped journal create, edit, and delete are implemented. |
-| Insights | Completed | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` | `/insights` | Reuses user-scoped collections | Unit/API/client/UI/E2E | Routine consistency, journal activity, product usage, calendar summaries, and safe next actions are implemented. |
+| Insights | Completed | `GET /api/insights?from=YYYY-MM-DD&to=YYYY-MM-DD` | `/insights` | Reuses user-scoped collections | Unit/API/client/UI/E2E | Routine consistency, journal activity, product usage, calendar summaries, and safe next actions are implemented. MVP v1.8 improves progress-story framing, overview helper text, calendar readability, self-reported journal trend copy, product usage safety wording, and route-connected next actions without changing the API response shape or adding causality logic. |
 | Dashboard | Completed | `GET /api/dashboard?localDate=YYYY-MM-DD` | `/dashboard` | Reuses user-scoped collections | Unit/API/E2E | Dashboard uses authenticated user data for profile, saved products, routines, journal, and next actions. |
 | Settings / Data Control | Completed | `GET /api/account/export`; `DELETE /api/account/app-data`; `POST /api/account/deletion-request` | `/settings` | User-owned skincare collections plus AppUserProfile marker | Unit/API/E2E | Data export and skincare app data deletion are implemented without Auth.js hard-delete. |
 | Runtime Baseline | Completed | N/A | N/A | N/A | Validation commands | Node 24.x and npm 11.x are the expected runtime baseline. |
@@ -57,8 +57,9 @@ The explanation system is deterministic and rule-based.
 No real AI provider, LLM integration, diagnosis, treatment claim, skin score, marketplace, checkout, or new recommendation engine is introduced.
 ```
 
-## 5. Recommended Next MVP Task
+## 5. Current / Recommended MVP Task
 
 ```txt
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement
+Current: MVP v1.8 - Insights Usability & Progress Story Refinement
+Next recommended: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```

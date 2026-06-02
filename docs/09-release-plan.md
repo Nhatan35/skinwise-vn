@@ -174,54 +174,60 @@ Extract:
 | Scope creep | Keep marketplace and diagnosis out of MVP |
 
 
-## 6. Current v1.3 release status
+## 6. Current release status
 
 ```txt
-MVP-v1.3-FIX-002 - Final Release Documentation Sync
+MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
+MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
+MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
 ```
 
-Current v1.3 release documentation is available in:
+Current release documentation is available in:
 
 ```txt
-docs/release-notes-v1.3.md
 docs/final-release-checklist.md
-docs/deployment/vercel-deployment.md
-docs/18-deployment-checklist.md
+docs/14-seed-data-spec.md
+docs/ai-coding/02-implementation-status.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/06-current-sprint-plan.md
 docs/portfolio-case-study.md
 docs/demo-script.md
 ```
 
+Historical v1.3 release notes and changelog remain preserved in `docs/release-notes-v1.3.md` and `docs/CHANGELOG-v1.3.md`.
+
 Current status:
 
 ```txt
-Release documentation: READY
-GitHub release: READY
-Portfolio review: READY
-Interview demo: READY
-Final submission: READY
-Production deployment: VERIFIED FOR MVP PORTFOLIO RELEASE
+Core implementation release: MVP v1.7 completed
+Previous cleanup patch: MVP v1.6.1 completed
+Documentation truth sync: COMPLETED
+Validation evidence: RECORDED FOR v1.7
+Portfolio review: READY FOR CURRENT MVP STATE
+Interview demo: READY FOR CURRENT MVP STATE
 Production URL: https://skinwise-vn.vercel.app
-Google OAuth production login: VERIFIED
-MongoDB-backed authenticated flows: VERIFIED
+Prior production deployment verification: VERIFIED BY PROJECT OWNER
 ```
 
-Latest known validation evidence:
+Current v1.7 validation evidence:
 
 ```txt
-Node: v24.14.0
+Node.js: v24.14.0
 npm: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 84 files / 777 tests
+npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
-npm run test:e2e: PASS - 28/28 tests
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 tests
+npm audit: NOT RUN during v1.7
 ```
 
 Next release task:
 
 ```txt
-GitHub Release & Portfolio Submission
+MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
 ## 7. Historical SDD freeze note
