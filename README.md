@@ -284,3 +284,8 @@ MVP v1.11 - Portfolio Demo Readiness: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Next recommended work: optional screenshots, case-study polish, release tag, and future-scope planning only
 ```
+
+
+## Post-MVP Backlog
+
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. The recommended next implementation is `v1.13 - UX Polish & Empty State Improvement`.

@@ -5,74 +5,69 @@ Last updated: 2026-06-04
 ## 1. Current Sprint
 
 ```txt
-MVP v1.11 - Portfolio Demo Readiness Polish
+MVP v1.12 - Post-MVP Backlog Planning
 ```
 
 Status:
 
 ```txt
-Product implementation: COMPLETE
-Local validation evidence: PASS
-Production smoke evidence: PASS, user-reported
-Production monitoring evidence: PASS, user-reported
-Portfolio/demo documentation: DONE
+Product implementation: COMPLETE at MVP level
+Stable baseline: v1.11-final-mvp / v1.11-portfolio-demo-ready
+Post-MVP backlog: CREATED
 Source code changes in this sprint: NONE
+Database/schema changes in this sprint: NONE
+Portfolio screenshots/demo polish: SKIPPED for now by user decision
 ```
 
-MVP v1.11 is a documentation and presentation-readiness sprint. It updates the project narrative, release checklist, production evidence notes, demo script, portfolio case study, and screenshot checklist so the project is easier to present in portfolio/demo/interview contexts.
+MVP v1.12 is a planning and documentation sprint. It creates a controlled post-MVP backlog so future work can continue without disturbing the completed MVP baseline.
 
 ## 2. Objective
 
-Make the repository communicate the current state clearly:
+Create a clear boundary between:
 
 ```txt
-MVP core complete -> local quality gate passed -> production smoke/monitoring verified by user -> portfolio demo package ready
+Completed MVP scope
 ```
 
-The sprint should help a reviewer quickly understand:
-
-- what problem the product solves;
-- what features are implemented;
-- what is intentionally out of scope;
-- how the project was validated;
-- how to demo the app;
-- how to discuss the project in an interview;
-- what future improvements are optional.
-
-## 3. Scope
-
-Completed v1.11 scope:
+and:
 
 ```txt
-[x] Update README for portfolio-ready status.
-[x] Update portfolio case study.
-[x] Update demo script and demo flow.
-[x] Update final release checklist.
-[x] Update production smoke test evidence as user-reported PASS.
-[x] Update production monitoring runbook with current PASS summary.
-[x] Update deployment checklist.
-[x] Update implementation status.
-[x] Update screenshot checklist.
-[x] Preserve product safety boundaries.
-[x] Avoid adding source-code or feature changes.
+Optional post-MVP improvements
+```
+
+The sprint should make the next development direction explicit, prioritised, and safe.
+
+## 3. Completed v1.12 Scope
+
+```txt
+[x] Create docs/post-mvp-backlog.md.
+[x] Define current stable baseline.
+[x] Separate MVP-complete scope from future work.
+[x] Prioritise post-MVP candidates.
+[x] Mark screenshots/demo polish as skipped for now, not pending.
+[x] Recommend the next implementation task: v1.13 UX Polish & Empty State Improvement.
+[x] Preserve safety boundaries.
+[x] Avoid source-code, API, database, dependency, or business-logic changes.
 ```
 
 ## 4. Non-Goals
 
 ```txt
-No new product feature.
+No new feature implementation.
+No source-code changes.
 No route/API/schema/business-logic change.
 No dependency update.
 No database migration.
 No real AI provider integration.
-No image upload, skin score, marketplace, cart, checkout, payment, admin CRUD, reviews, or notifications.
+No admin CRUD implementation.
+No marketplace, cart, checkout, payment, reviews, notifications, image upload, or skin score.
 No medical diagnosis, treatment claim, or guaranteed skincare outcome.
 No secrets or private user data in documentation.
 ```
 
-## 5. Evidence Summary
+## 5. Current Evidence Summary
 
-Local validation:
+Local validation from the stable baseline:
 
 ```txt
 Evidence date: 2026-06-04
@@ -90,7 +85,7 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm ci: NOT CAPTURED in the provided terminal log
 ```
 
-Production verification:
+Production verification from the stable baseline:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
@@ -100,28 +95,51 @@ Critical blockers reported: None
 Evidence date: 2026-06-04
 ```
 
-## 6. Next Recommended Task
+## 6. Post-MVP Priority Direction
+
+Recommended order:
 
 ```txt
-Portfolio Presentation Polish
+P1 - UX polish and empty states
+P1 - Error/loading/helper copy
+P2 - Product and ingredient data quality
+P2 - Production observability/release confidence
+P3 - Admin/content management
+P3 - Optional real AI provider integration
+P4 - Portfolio assets, skipped for now
 ```
 
-Detailed next tasks:
+## 7. Next Recommended Task
 
 ```txt
-1. Capture optional screenshots.
-2. Practice the 3-5 minute demo script.
-3. Commit the docs update.
-4. Create a release tag, for example v1.11-portfolio-demo-ready.
-5. Add the project to CV/portfolio with demo link and case study.
+v1.13 - UX Polish & Empty State Improvement
 ```
 
-## 7. Suggested Commit
+Reason:
+
+```txt
+It improves the existing app without risky feature expansion, database changes, auth changes, or architecture rewrites.
+```
+
+Target areas:
+
+```txt
+Loading states
+Empty states
+Error messages
+Helper text
+CTA consistency
+Mobile spacing
+Dashboard hierarchy
+First-time user guidance
+```
+
+## 8. Suggested Commit
 
 ```bash
 git add .
-git commit -m "docs: finalize portfolio demo readiness"
-git tag v1.11-portfolio-demo-ready
+git commit -m "docs: add post-MVP backlog"
 git push
-git push origin v1.11-portfolio-demo-ready
 ```
+
+After that, start v1.13 on a separate commit/branch.

@@ -3981,3 +3981,56 @@ npm run test: PASS - 78 files / 745 tests
 npm run build: PASS
 npm run test:e2e: PASS - 25/25 tests
 ```
+
+## 2026-06-04 - MVP-v1.12 Post-MVP Backlog Planning
+
+### Task
+
+Create a controlled post-MVP backlog after the stable MVP release so future work can continue without changing the completed MVP baseline.
+
+### Files Added
+
+- `docs/post-mvp-backlog.md`
+
+### Files Updated
+
+- `docs/00-source-of-truth.md`
+- `docs/09-release-plan.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Reason
+
+The MVP is already complete and validated at local level, with production smoke/monitoring recorded as user-reported PASS. The next safe step is not to add a large feature immediately, but to create a prioritised post-MVP backlog and identify a low-risk first task.
+
+### Outcome
+
+- Marked `MVP v1.12 - Post-MVP Backlog Planning` as complete.
+- Added prioritised backlog categories: UX polish, data quality, release observability, admin/content management, optional real AI integration, and portfolio assets.
+- Marked portfolio screenshots/demo polish as skipped for now by user decision.
+- Recommended next implementation task: `v1.13 - UX Polish & Empty State Improvement`.
+
+### Scope Boundaries
+
+- No source-code change.
+- No database/schema change.
+- No dependency update.
+- No new product feature.
+- No auth/business-rule change.
+- No real AI provider integration.
+- No marketplace/payment/image upload/skin score/admin implementation.
+
+### Validation
+
+```txt
+Documentation-only update.
+Automated validation was not rerun in this sandbox.
+Existing stable baseline evidence remains:
+- npm run lint: PASS
+- npm run typecheck: PASS
+- npm run test: PASS - 96 files / 889 tests
+- npm run build: PASS
+- npm run test:e2e: PASS - 29/29 tests
+- npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```

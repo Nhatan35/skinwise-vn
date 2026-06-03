@@ -11,9 +11,10 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 MVP v1.9 - Local Validation Evidence: PASS
 MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
 ```
 
-The MVP product scope is complete. Current work is no longer core feature implementation; it is portfolio/demo presentation, release tagging, and optional future-scope planning.
+The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP planning. The active post-MVP backlog is `docs/post-mvp-backlog.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -75,6 +76,7 @@ The MVP product scope is complete. Current work is no longer core feature implem
 | MVP v1.9 | PASS | Local validation evidence captured. |
 | MVP v1.10 | PASS, user-reported | Production smoke and monitoring verification recorded. |
 | MVP v1.11 | DONE | Portfolio/demo readiness documentation polished. |
+| MVP v1.12 | DONE | Post-MVP backlog created and future work prioritised. |
 
 ## 4. Validation Evidence
 
@@ -112,6 +114,7 @@ Evidence date: 2026-06-04
 Release decision: READY for portfolio/demo/interview at MVP level
 Product scope decision: freeze core MVP features
 Documentation decision: v1.11 portfolio demo package complete
+Post-MVP planning decision: v1.12 backlog created
 ```
 
 ## 6. Recommended Next Work
@@ -119,11 +122,10 @@ Documentation decision: v1.11 portfolio demo package complete
 Do next:
 
 ```txt
-1. Capture optional screenshots if needed.
-2. Commit and push the v1.11 docs update.
-3. Create a release tag: v1.11-portfolio-demo-ready.
-4. Practice the 3-5 minute demo script.
-5. Add project link and case-study summary to portfolio/CV.
+1. Commit and push the v1.12 post-MVP backlog update.
+2. Keep the completed MVP baseline stable.
+3. Start v1.13 - UX Polish & Empty State Improvement only after the backlog commit.
+4. Avoid large feature expansion until the P1 UX polish work is complete.
 ```
 
 Do not do next unless intentionally starting post-MVP:
@@ -138,13 +140,19 @@ Do not expand scope before portfolio submission.
 
 ## 7. Optional Future Roadmap
 
-### v2.0 candidates
+### Post-MVP candidates
 
 - Admin product/ingredient management.
 - More complete account deletion automation.
 - Stronger observability and error tracking.
 - More curated product/ingredient data.
 - Optional real AI provider integration with strict output validation and safety policy.
-- Portfolio screenshot page.
+- Portfolio screenshot page, currently skipped by user decision.
+
+Recommended next implementation:
+
+```txt
+v1.13 - UX Polish & Empty State Improvement
+```
 
 These are future enhancements, not MVP blockers.

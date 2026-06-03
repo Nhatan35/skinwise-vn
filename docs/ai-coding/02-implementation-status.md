@@ -5,7 +5,7 @@ Last updated: 2026-06-04
 ## 1. Current Phase
 
 ```txt
-MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
 ```
 
 Current completed chain:
@@ -17,9 +17,10 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 MVP v1.9 - Local Validation Evidence: PASS
 MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, and portfolio/demo documentation has been refreshed.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, and the post-MVP backlog has been created.
 
 Evidence boundary:
 
@@ -147,20 +148,41 @@ The implemented MVP remains within these boundaries:
 
 ## 6. Current Recommended Next Work
 
-Do **not** add large features immediately. The next work should be polish and presentation only:
+Do **not** add large features immediately. The post-MVP backlog is now the control point for future work.
+
+Current backlog file:
 
 ```txt
-1. Capture optional screenshots for portfolio/slides.
-2. Commit and tag the v1.11 portfolio-ready release.
-3. Prepare a 3-5 minute spoken demo.
-4. Add project to CV/portfolio website.
-5. Keep a future-improvement backlog separate from MVP scope.
+docs/post-mvp-backlog.md
 ```
 
-Optional future product scope:
+Recommended next implementation:
+
+```txt
+v1.13 - UX Polish & Empty State Improvement
+```
+
+Recommended v1.13 scope:
+
+- Loading states.
+- Empty states.
+- Error messages.
+- Helper text.
+- CTA consistency.
+- Mobile spacing.
+- Dashboard visual hierarchy.
+- First-time user guidance.
+
+Intentionally skipped for now:
+
+- Portfolio screenshots.
+- Demo video.
+- CV/portfolio publishing polish.
+
+Optional later product scope:
 
 - Admin product/ingredient management.
 - More complete account deletion workflow.
 - Better production observability.
 - Optional real provider integration with strict safety controls.
-- More curated data coverage.
+- More curated product/ingredient data coverage.
