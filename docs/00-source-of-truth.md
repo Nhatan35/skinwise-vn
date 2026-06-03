@@ -8,6 +8,8 @@ This document defines which files are authoritative for SkinWise VN and how AI c
 
 The goal is to prevent random implementation decisions, duplicate logic, scope creep, and AI-generated code that violates the SDD.
 
+Current release note: this file preserves the historical MVP v1.2.6 SDD freeze. Current release status is tracked in `README.md`, `AGENTS.md`, `docs/final-release-checklist.md`, and `docs/ai-coding/02-implementation-status.md`. As of MVP v1.8.2, the current completed product release is MVP v1.8, MVP v1.8.1 is the completed documentation truth sync patch, MVP v1.8.2 is the completed final documentation consistency hotfix, and MVP v1.9 is the next main task.
+
 ## 2. Version meaning
 
 MVP v1.2.6 is the final SDD freeze before Week 1 implementation.

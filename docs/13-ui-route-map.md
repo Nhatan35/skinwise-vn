@@ -1,4 +1,4 @@
-# UI and API Route Map - MVP v1.2.6
+# UI and API Route Map - SkinWise VN Current MVP Scope
 
 Last updated: 2026-06-03
 
@@ -8,7 +8,9 @@ This document maps the routes that exist in the current source tree. Use `src/ap
 
 Current completed product release: MVP v1.8 Insights Usability & Progress Story Refinement.
 
-Current documentation cleanup patch/task: MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup.
+Completed documentation cleanup patch: MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup.
+
+Latest documentation consistency hotfix: MVP v1.8.2 Final Documentation Consistency Hotfix.
 
 Recommended next task: MVP v1.9 Production Monitoring & Demo Evidence Stabilization.
 

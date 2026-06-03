@@ -4,16 +4,22 @@ Last updated: 2026-06-03
 
 ## 1. Release Summary
 
-Current core implementation release:
+Current completed product release:
 
 ```txt
 MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Current documentation cleanup patch/task:
+Completed documentation cleanup patch:
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+```
+
+Latest documentation consistency hotfix:
+
+```txt
+MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape or adding medical/product-causality logic.
@@ -38,21 +44,23 @@ MVP v1.3 was an earlier portfolio release documentation milestone. It is preserv
 | Progress story refinement | PASS | Insights connects routine logs, journal activity, product mentions, and safe next actions without diagnosis or causality claims. |
 | Routine Safety Analysis | PASS | Existing deterministic rules pass validation and seed data supports active/fragrance/sunscreen demo cases. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, and account deletion request marker are implemented. |
-| Local validation | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
+| Local validation | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
 | Documentation truth sync | PASS | MVP v1.8.1 documentation truth sync is reflected in README, release, deployment, demo, status, smoke-test, monitoring, and changelog docs. |
-| Production smoke test evidence | NEXT | Current v1.8.1 production smoke evidence is pending v1.9 verification. |
-| Production monitoring/evidence | NEXT | Monitoring and demo recovery evidence are next-step work for MVP v1.9. |
+| Final documentation consistency hotfix | PASS | MVP v1.8.2 final documentation consistency hotfix is complete. |
+| Portfolio/demo/interview readiness | READY | Ready at MVP level. |
+| Production smoke test evidence | NOT RUN | Production smoke test evidence remains NOT RUN until manually verified. |
+| Production monitoring/evidence | PENDING | Production monitoring evidence remains PENDING until manually verified. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
 ## 3. Documentation Readiness
 
 | Document | Status | Notes |
 |---|---|---|
-| `README.md` | PASS | Current v1.8 completed release, v1.8.1 cleanup task, v1.9 next task, and pending evidence status are current. |
+| `README.md` | PASS | Current v1.8 completed release, v1.8.1 cleanup patch, v1.8.2 hotfix, v1.9 next task, and pending evidence status are current. |
 | `docs/14-seed-data-spec.md` | PASS | Documents v1.6 seed data targets, coverage, validation, and safety boundaries. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Shows v1.8 completed product release, v1.8.1 cleanup status, and v1.9 next task. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Shows v1.8 completed product release, v1.8.1 cleanup status, v1.8.2 hotfix status, and v1.9 next task. |
 | `docs/ai-coding/03-feature-status-matrix.md` | PASS | Feature statuses reflect completed MVP scope and v1.8 Insights refinements. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.8.1 documentation cleanup, with v1.9 recommended next. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.8.2 documentation consistency hotfix, with v1.9 recommended next. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo flow reflects implemented routes and MVP v1.9 as next recommended task. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke checklist exists with default NOT RUN/PENDING status. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring and demo recovery runbook exists for v1.9 evidence hardening. |
@@ -62,7 +70,7 @@ MVP v1.3 was an earlier portfolio release documentation milestone. It is preserv
 
 ## 4. Current Validation Evidence
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
 
 Latest historical MVP v1.8 validation evidence:
 
@@ -79,17 +87,17 @@ Results:
 
 | Command | Status | Evidence |
 |---|---|---|
-| `node -v` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm -v` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm ci` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run lint` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run typecheck` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run test` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run build` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run db:indexes` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run db:seed` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm run test:e2e` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
-| `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `node -v` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm -v` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm ci` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run lint` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run typecheck` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run test` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run build` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run db:indexes` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run db:seed` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm run test:e2e` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+| `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
 
 ## 5. Verified Feature Scope
 
@@ -138,8 +146,8 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Production smoke test evidence is pending v1.9 verification.
-- Production monitoring and demo recovery evidence are pending v1.9 verification.
-- Full validation rerun is pending after this documentation-only task.
+- Production monitoring evidence is pending manual verification.
+- Full validation rerun is NOT RUN in this v1.8.2 documentation hotfix.
 
 ## 8. Final Decision
 
@@ -148,6 +156,7 @@ Current decision:
 ```txt
 MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 ```
 
 Recommended next MVP task:

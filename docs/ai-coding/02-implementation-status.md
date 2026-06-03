@@ -6,7 +6,8 @@ Last updated: 2026-06-03
 
 ```txt
 MVP v1.8 Insights Usability & Progress Story Refinement is completed.
-MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup is the current documentation cleanup patch/task.
+MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
+MVP v1.8.2 Final Documentation Consistency Hotfix is the latest completed documentation consistency hotfix.
 ```
 
 SkinWise VN is ready for portfolio/demo/interview use as an MVP. The previous release and portfolio preparation work is historical context; the current next recommended task is production monitoring and demo evidence stabilization.
@@ -24,6 +25,7 @@ MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: DONE
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: DONE
 MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 ```
 
 ## 2. Completed Product Scope
@@ -131,12 +133,12 @@ Environment note:
 Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPERM. Both commands passed after scoped reruns outside the sandbox process-spawn restriction.
 ```
 
-MVP v1.8.1 validation note:
+MVP v1.8.2 validation note:
 
 ```txt
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
-Production smoke test evidence is pending MVP v1.9 verification.
-Production monitoring/demo recovery evidence is pending MVP v1.9 verification.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
+Production smoke test evidence is NOT RUN until manually verified.
+Production monitoring evidence is PENDING until manually verified.
 ```
 
 ## 5. Known MVP Limitations
@@ -157,7 +159,7 @@ Medical diagnosis and treatment advice are out of scope.
 MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
-This recommendation is product-quality scope only. It is not implemented as part of v1.8.
+This recommendation is product-quality scope only. It is not implemented as part of v1.8.2.
 
 ## 7. Update Rule
 

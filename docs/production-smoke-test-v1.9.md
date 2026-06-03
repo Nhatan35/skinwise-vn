@@ -6,13 +6,12 @@ Last updated: 2026-06-03
 
 This checklist is for `MVP v1.9 - Production Monitoring & Demo Evidence Stabilization`.
 
-It is a production smoke test checklist, not production evidence by itself. Treat every item as `NOT RUN` or `PENDING` until it is actually verified against the deployed app and recorded with date, environment, tester, and relevant notes.
+It is a production smoke test checklist, not production evidence by itself. Production smoke test evidence remains `NOT RUN` until manually verified against the deployed app and recorded with date, environment, tester, and relevant notes.
 
 Allowed statuses:
 
 ```txt
 NOT RUN
-PENDING
 PASS
 FAIL
 BLOCKED
@@ -25,7 +24,8 @@ Use `PASS` only after a real verification run succeeds. Use `FAIL` only after a 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Current documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
 Next recommended task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 Default evidence status: NOT RUN
 ```

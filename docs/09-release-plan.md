@@ -1,6 +1,6 @@
 # 09-release-plan.md
 
-# Release Plan — MVP v1.2.6
+# Release Plan - SkinWise VN Current MVP Status
 
 ## 1. Six-week MVP roadmap
 
@@ -182,6 +182,7 @@ MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
 MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
+MVP v1.8.2 - Final Documentation Consistency Hotfix: COMPLETED
 ```
 
 Current release documentation is available in:
@@ -202,16 +203,18 @@ Current status:
 
 ```txt
 Core implementation release: MVP v1.8 completed
-Current documentation cleanup patch/task: MVP v1.8.1 completed
+Completed documentation cleanup patch: MVP v1.8.1 completed
+Latest documentation consistency hotfix: MVP v1.8.2 completed
 MVP core scope: COMPLETED
 Documentation truth sync: COMPLETED FOR v1.8.1
-Validation evidence: HISTORICAL v1.8 EVIDENCE RECORDED; v1.8.1 FULL VALIDATION NOT RERUN
+Final documentation consistency hotfix: COMPLETED FOR v1.8.2
+Validation evidence: HISTORICAL v1.8 EVIDENCE RECORDED; v1.8.2 FULL VALIDATION NOT RERUN
 Portfolio review: READY FOR CURRENT MVP STATE
 Demo review: READY FOR CURRENT MVP STATE
 Interview demo: READY FOR CURRENT MVP STATE
 Production URL: https://skinwise-vn.vercel.app
-Current production smoke test evidence: PENDING v1.9 VERIFICATION
-Current production monitoring/demo recovery evidence: PENDING v1.9 VERIFICATION
+Current production smoke test evidence: NOT RUN UNTIL MANUALLY VERIFIED
+Current production monitoring/demo recovery evidence: PENDING UNTIL MANUALLY VERIFIED
 ```
 
 Latest historical MVP v1.8 validation evidence:
@@ -229,7 +232,7 @@ npm run test:e2e: PASS - 29/29 tests
 npm audit: NOT RUN during v1.8
 ```
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
 
 Next release task:
 

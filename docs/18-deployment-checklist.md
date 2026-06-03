@@ -7,8 +7,9 @@ Last updated: 2026-06-03
 ```txt
 Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY; CURRENT PRODUCTION EVIDENCE PENDING
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Current documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
-Recommended next task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
+Next main task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
@@ -19,31 +20,32 @@ Current checklist: docs/final-release-checklist.md
 Historical v1.3 release notes: docs/release-notes-v1.3.md
 ```
 
-The project is no longer missing core MVP scope before portfolio/demo/interview use. MVP v1.8 completes the core product release, and v1.8.1 synchronizes release documentation.
+The project is no longer missing core MVP scope before portfolio/demo/interview use. MVP v1.8 completes the product release, MVP v1.8.1 completed documentation truth sync, and MVP v1.8.2 completes the final documentation consistency hotfix.
 
 Current evidence boundary:
 
 - Portfolio/demo/interview readiness is achieved at MVP level.
-- Current production smoke test evidence is still pending unless `docs/production-smoke-test-v1.9.md` is executed and updated with real results.
-- Current production monitoring/demo recovery evidence is still pending unless the runbook checks are executed against the live deployment.
-- Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
-- Historical deployment verification notes remain preserved in older records, but are not treated as fresh v1.8.1 production evidence.
+- Production smoke test evidence remains NOT RUN until `docs/production-smoke-test-v1.9.md` is executed and updated with real results.
+- Production monitoring evidence remains PENDING until the runbook checks are executed against the live deployment.
+- Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
+- Latest historical validation evidence remains MVP v1.8 validation evidence. This v1.8.2 documentation hotfix did not rerun validation.
+- Historical deployment verification notes remain preserved in older records, but are not treated as fresh v1.8.2 production evidence.
 
 ## 2. Pre-Deployment Checks
 
 | Check | Status | Notes |
 |---|---|---|
-| `npm ci` | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run lint` | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run typecheck` | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run test` | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run build` | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
+| `npm ci` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
+| `npm run lint` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
+| `npm run typecheck` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
+| `npm run test` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
+| `npm run build` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
 | `npm run db:indexes` | NOT RUN | Not run in this documentation-only task; requires confirmed safe database target. |
 | `npm run db:seed` | NOT RUN | Not run in this documentation-only task; requires confirmed safe local/development/demo database target. |
 | `npm run test:e2e` | NOT RUN | Not run in this documentation-only task; requires browser/test auth/database setup. |
 | `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run in this documentation-only task. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.8.1 documentation truth sync. |
+| README setup instructions accurate | PASS | Updated for v1.8.2 documentation consistency hotfix. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
@@ -138,6 +140,7 @@ Optional provider/media variables may remain empty for MVP if the related featur
 ```txt
 MVP v1.8 - Core MVP product release: DONE
 MVP v1.8.1 - Documentation truth sync: DONE
+MVP v1.8.2 - Final documentation consistency hotfix: DONE
 MVP v1.9 - Production smoke/monitoring/demo recovery evidence: NEXT
 ```
 

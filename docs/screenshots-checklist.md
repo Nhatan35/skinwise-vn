@@ -4,6 +4,8 @@ Status: **Optional / skipped for current submission**
 
 Screenshots are not required for the current portfolio/submission package. This file is kept only as an optional checklist if screenshots are needed later for a visual portfolio page, CV attachment, or presentation deck.
 
+Current release context: MVP v1.8 is the completed product release, MVP v1.8.1 is the completed documentation truth sync patch, MVP v1.8.2 is the completed final documentation consistency hotfix, and MVP v1.9 is the next main task. Production smoke test evidence remains NOT RUN until manually verified, and production monitoring evidence remains PENDING until manually verified.
+
 ## Optional Screenshot List
 
 - Landing page.
@@ -35,4 +37,4 @@ The project can still be presented using:
 - Demo script.
 - Release notes.
 - Final release checklist.
-- Validation evidence.
+- Historical validation evidence.

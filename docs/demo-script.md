@@ -19,7 +19,7 @@ Before the demo:
 - confirm the account has a demo Skin Profile, Product Match candidates, saved product example, routines, routine logs, and journal entries;
 - confirm no private secrets or personal data are visible on screen.
 
-Current evidence note: SkinWise VN is ready for portfolio/demo/interview use as an MVP after MVP v1.8. Current production smoke test evidence and monitoring/demo recovery evidence are pending MVP v1.9 verification unless those checks are actually run and recorded.
+Current evidence note: SkinWise VN is ready for portfolio/demo/interview use as an MVP after MVP v1.8. MVP v1.8.1 and MVP v1.8.2 are completed documentation cleanup/hotfix patches. Production smoke test evidence is NOT RUN until manually verified, and production monitoring evidence is PENDING until manually verified.
 
 ## 3. Demo Data Preparation Note
 
@@ -177,5 +177,5 @@ Dashboard summary:
 Close the demo with:
 
 ```txt
-SkinWise VN is valuable as a portfolio project because it shows both BA thinking and full-stack execution. I defined the problem, scoped the MVP, documented requirements, implemented the core user journey, and prepared a realistic demo without expanding into unsafe or unsupported features. The current MVP is portfolio/demo/interview ready, while fresh production smoke test and monitoring evidence remain the recommended v1.9 hardening task.
+SkinWise VN is valuable as a portfolio project because it shows both BA thinking and full-stack execution. I defined the problem, scoped the MVP, documented requirements, implemented the core user journey, and prepared a realistic demo without expanding into unsafe or unsupported features. The current MVP is portfolio/demo/interview ready, while production smoke test and monitoring evidence remain the recommended v1.9 hardening task.
 ```

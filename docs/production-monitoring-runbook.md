@@ -8,6 +8,8 @@ This runbook helps check production errors and recover during portfolio, demo, o
 
 It supports `MVP v1.9 - Production Monitoring & Demo Evidence Stabilization`. It does not prove production readiness unless the checks are actually executed and evidence is recorded.
 
+Monitoring evidence is pending until MVP v1.9 production verification. MVP v1.8.2 is a documentation consistency hotfix and does not create monitoring evidence.
+
 ## 2. Where to Check Production Errors
 
 - Vercel deployment logs.

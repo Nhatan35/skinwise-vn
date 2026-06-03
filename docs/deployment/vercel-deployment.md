@@ -10,13 +10,14 @@ Production URL: https://skinwise-vn.vercel.app
 Production branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Current documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
-Recommended next task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
+Next main task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
 This is an MVP demo/portfolio deployment, not a full commercial production release.
 
-Current v1.8.1 note: production smoke test evidence and monitoring/demo recovery evidence are pending v1.9 verification unless the checks are actually run and recorded.
+Current v1.8.2 note: production smoke test evidence is NOT RUN until manually verified, and monitoring/demo recovery evidence is PENDING until manually verified.
 
 SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, payment, or other out-of-scope features during this release.
 
@@ -132,10 +133,11 @@ Use `docs/production-smoke-test-v1.9.md` for the current v1.9 smoke-test evidenc
 
 ## Final Verification Result
 
-Current v1.8.1 documentation cleanup does not rerun production verification.
+Current v1.8.2 documentation hotfix does not rerun production verification.
 
 ```txt
 MVP v1.8 - Core MVP product release: DONE
 MVP v1.8.1 - Documentation truth sync: DONE
+MVP v1.8.2 - Final documentation consistency hotfix: DONE
 MVP v1.9 - Production smoke/monitoring/demo recovery evidence: NEXT
 ```

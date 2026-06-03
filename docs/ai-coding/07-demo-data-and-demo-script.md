@@ -14,10 +14,12 @@ Current release context:
 
 ```txt
 Completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
-Next recommended task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
-Portfolio/demo/interview readiness: ready at MVP level
-Production smoke and monitoring evidence: pending v1.9 verification
+Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
+Next main task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Portfolio/demo/interview readiness: READY at MVP level
+Production smoke test evidence: NOT RUN until manually verified
+Production monitoring evidence: PENDING until manually verified
 ```
 
 ## 2. Data Ownership Strategy
@@ -212,7 +214,7 @@ Use the demo to explain:
 - functional requirements such as authenticated routines, Product Match, product browsing, journal entries, Insights, and dashboard summary;
 - non-functional requirements such as privacy, validation, route protection, and safe copy;
 - MVP scope control through explicit exclusions;
-- validation mindset through lint, typecheck, tests, build, audit, and smoke testing, while clearly marking current v1.8.1 validation and production evidence as pending if not rerun;
+- validation mindset through lint, typecheck, tests, build, audit, and smoke testing, while clearly marking v1.8.2 validation and production evidence as NOT RUN or PENDING if not manually verified;
 - traceability from user needs to implemented features.
 
 ## 11. Technical Presentation Angle

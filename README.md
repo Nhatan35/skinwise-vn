@@ -15,16 +15,19 @@ Production demo:
 Current production evidence status:
 
 - MVP portfolio/demo/interview readiness: ready at MVP level.
-- Current MVP v1.8.1 production smoke test evidence: pending v1.9 verification.
-- Current production monitoring/demo recovery evidence: pending v1.9 verification.
-- Full validation rerun for v1.8.1: not rerun in this documentation cleanup task.
-- Historical deployment verification notes are preserved in older release records, but they are not treated as fresh v1.8.1 production evidence.
+- Portfolio/demo/interview readiness: READY at MVP level.
+- MVP v1.8.2 production smoke test evidence: NOT RUN until manually verified.
+- Production monitoring evidence: PENDING until manually verified.
+- Full local validation rerun for v1.8.2: NOT RUN in this documentation hotfix.
+- Historical deployment verification notes are preserved in older release records, but they are not treated as fresh v1.8.2 production evidence.
 
 ## Current Status
 
 Current completed product release: **MVP v1.8 - Insights Usability & Progress Story Refinement**.
 
-Current documentation cleanup patch/task: **MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup**.
+Completed documentation cleanup patch: **MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE**.
+
+Latest documentation consistency hotfix: **MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE**.
 
 MVP v1.8 is a focused Insights usability and progress-story refinement. It improves the existing Insights page intro, overview card context, routine consistency calendar readability, journal/product usage safety copy, next actions, and empty/error/loading states without changing the Insights API response shape, adding AI, or introducing medical/product-causality logic.
 
@@ -39,8 +42,10 @@ Recently completed MVP improvements:
 - `MVP v1.6.1` - Validation Evidence & Documentation Truth Sync.
 - `MVP v1.7` - Routine Builder Usability & Demo Flow Refinement.
 - `MVP v1.8` - Insights Usability & Progress Story Refinement.
+- `MVP v1.8.1` - Documentation Truth Sync & Release Evidence Cleanup.
+- `MVP v1.8.2` - Final Documentation Consistency Hotfix.
 
-Recommended next MVP improvement:
+Next main task:
 
 - `MVP v1.9` - Production Monitoring & Demo Evidence Stabilization.
 
@@ -63,7 +68,7 @@ Database indexes: 32 indexes ensured
 Note: `npm run build` and `npm run test:e2e` initially hit Windows sandbox `spawn EPERM`; both passed on scoped rerun outside the sandbox.
 ```
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
 
 ## Key Features
 
@@ -246,7 +251,7 @@ npm run test:e2e: PASS - 29/29 tests
 npm audit: NOT RUN during v1.8
 ```
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
@@ -269,14 +274,16 @@ Out of scope for this MVP:
 
 ## Release Status
 
-SkinWise VN has completed the MVP v1.8 product release and is ready for portfolio/demo/interview use as an MVP. The current v1.8.1 task is documentation truth sync and release evidence cleanup, not a product feature release.
+SkinWise VN has completed the MVP v1.8 product release and is ready for portfolio/demo/interview use as an MVP. MVP v1.8.1 is the completed documentation truth sync patch, and MVP v1.8.2 is the completed final documentation consistency hotfix. Neither patch is a product feature release.
 
 Current release/evidence status:
 
 - Core MVP scope: completed.
 - MVP v1.8 Insights usability refinement: completed.
-- MVP v1.8.1 documentation truth sync: completed by this task when this diff is accepted.
-- Portfolio/demo/interview readiness: ready at MVP level.
-- Production smoke test evidence: next-step work for MVP v1.9.
-- Production monitoring/demo recovery evidence: next-step work for MVP v1.9.
-- Full validation rerun: pending unless executed in a separate validation pass.
+- MVP v1.8.1 documentation truth sync: completed.
+- MVP v1.8.2 final documentation consistency hotfix: completed.
+- Portfolio/demo/interview readiness: READY at MVP level.
+- Production smoke test evidence: NOT RUN until manually verified.
+- Production monitoring evidence: PENDING until manually verified.
+- Full local validation rerun: NOT RUN in this v1.8.2 documentation hotfix.
+- MVP v1.9 production monitoring and demo evidence stabilization: next main task.

@@ -34,7 +34,7 @@ The product must not:
 Current phase:
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+MVP v1.8.2 - Final Documentation Consistency Hotfix
 ```
 
 The main MVP implementation and MVP v1.8 product release are completed.
@@ -54,10 +54,16 @@ Latest completed product release:
 MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Current documentation cleanup patch/task:
+Completed documentation cleanup patch:
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+```
+
+Latest documentation consistency hotfix:
+
+```txt
+MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
 ```
 
 Recommended next task:
@@ -66,7 +72,7 @@ Recommended next task:
 MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
-MVP core scope is completed and the product is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence, production monitoring/demo recovery evidence, and a full validation rerun remain pending unless actually verified and recorded.
+MVP core scope is completed and the product is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence is NOT RUN until manually verified, production monitoring evidence is PENDING until manually verified, and a full validation rerun remains NOT RUN for v1.8.2 unless actually executed.
 
 ---
 
@@ -671,7 +677,8 @@ README should accurately state:
 
 - MVP v1.8 is the completed product release.
 - MVP core scope is completed.
-- MVP v1.8.1 is the documentation cleanup patch/task.
+- MVP v1.8.1 is the completed documentation cleanup patch.
+- MVP v1.8.2 is the latest completed documentation consistency hotfix.
 - MVP v1.9 is the next recommended task.
 - Portfolio/demo/interview readiness is achieved at MVP level.
 - Production smoke test and monitoring/demo recovery evidence are pending unless actually verified.
@@ -1082,7 +1089,7 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup`, the recommended next task is:
+After `MVP v1.8.2 - Final Documentation Consistency Hotfix`, the recommended next task is:
 
 ```txt
 MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
@@ -1131,7 +1138,8 @@ Use this style in docs and final reports:
 
 ```txt
 MVP v1.8 - Insights Usability & Progress Story Refinement is the completed product release.
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the current documentation cleanup patch/task.
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
+MVP v1.8.2 - Final Documentation Consistency Hotfix is the latest completed documentation consistency hotfix.
 MVP v1.9 - Production Monitoring & Demo Evidence Stabilization is the recommended next task.
 SkinWise VN is ready for portfolio/demo/interview use as an MVP.
 AI provider abstraction is implemented, with a mock provider available for local/demo use.

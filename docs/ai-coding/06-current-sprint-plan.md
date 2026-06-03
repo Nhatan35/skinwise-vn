@@ -5,20 +5,20 @@ Last updated: 2026-06-03
 ## 1. Current Sprint
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+MVP v1.8.2 - Final Documentation Consistency Hotfix
 ```
 
 Status:
 
 ```txt
 Product implementation: NOT APPLICABLE - documentation-only cleanup
-Documentation sync: DONE
+Documentation consistency hotfix: DONE
 Validation rerun: NOT RUN
 Production smoke evidence: NEXT
 Production monitoring/demo recovery evidence: NEXT
 ```
 
-MVP v1.8.1 is a documentation cleanup patch/task after the completed MVP v1.8 product release. It synchronizes release status, demo readiness, validation wording, production evidence status, and next-task documentation without adding features, changing source code, or changing product behavior.
+MVP v1.8.2 is the final documentation consistency hotfix after the completed MVP v1.8 product release and the completed MVP v1.8.1 documentation truth sync patch. It adds the latest v1.8.2 status references and fixes remaining current-status headings/wording without adding features, changing source code, or changing product behavior.
 
 ## 2. Objective
 
@@ -27,23 +27,25 @@ Make the repository documentation truthful and consistent for portfolio/demo/int
 The synchronized docs should help a reviewer see:
 
 ```txt
-MVP v1.8 completed product release -> MVP v1.8.1 documentation cleanup -> MVP v1.9 production evidence hardening
+MVP v1.8 completed product release -> MVP v1.8.1 documentation truth sync -> MVP v1.8.2 final documentation consistency hotfix -> MVP v1.9 production evidence hardening
 ```
 
 ## 3. Scope
 
-Completed v1.8.1 documentation scope:
+Completed v1.8.2 documentation hotfix scope:
 
 ```txt
 [x] Mark MVP v1.8 as the completed product release.
 [x] Mark MVP core scope as completed.
 [x] Mark the product ready for portfolio/demo/interview as an MVP.
-[x] Document MVP v1.8.1 as a documentation cleanup patch/task, not a feature release.
-[x] Document MVP v1.9 as the next recommended task.
-[x] Clarify production smoke test evidence as pending v1.9 work.
-[x] Clarify production monitoring/demo recovery evidence as pending v1.9 work.
+[x] Keep MVP v1.8.1 as the completed documentation truth sync patch.
+[x] Document MVP v1.8.2 as the latest completed documentation consistency hotfix, not a feature release.
+[x] Document MVP v1.9 as the next main task.
+[x] Clarify production smoke test evidence as NOT RUN until manually verified.
+[x] Clarify production monitoring evidence as PENDING until manually verified.
+[x] Clarify full local validation rerun as NOT RUN in this v1.8.2 hotfix.
 [x] Preserve historical v1.6/v1.7/v1.8 references where they are release history.
-[x] Add/update production smoke test and monitoring/demo recovery docs.
+[x] Fix current release/route-map headings that still implied MVP v1.2.6 current status.
 ```
 
 ## 4. Non-Goals
@@ -59,7 +61,7 @@ No medical diagnosis, treatment claim, or guaranteed skincare outcome.
 
 ## 5. Validation Commands
 
-For v1.8.1, record whether these were run:
+For v1.8.2, record whether these were run:
 
 ```txt
 node -v
@@ -79,7 +81,7 @@ Database commands should run only against the configured safe local/development 
 
 ## 6. Validation Evidence
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
 
 Latest historical MVP v1.8 environment:
 
@@ -114,4 +116,4 @@ Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPE
 MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
-This is a recommendation only and is not part of MVP v1.8.
+This is a recommendation only and is not part of MVP v1.8.2.

@@ -4,7 +4,7 @@
 
 SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users organize their skincare context, review rule-based product matches, discover products and ingredients, build routines, track daily routine completion, write skin journal entries, and review dashboard/insights summaries.
 
-The project was built as a portfolio-ready full-stack MVP and BA practice project. The current completed product release is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. The current documentation cleanup patch/task is MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation discipline, and MVP-level portfolio/demo readiness.
+The project was built as a portfolio-ready full-stack MVP and BA practice project. The current completed product release is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. MVP v1.8.1 is the completed documentation truth sync patch, and MVP v1.8.2 is the completed final documentation consistency hotfix. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation discipline, and MVP-level portfolio/demo readiness.
 
 Production demo:
 
@@ -170,7 +170,7 @@ The Playwright E2E suite covers public landing behavior, protected route redirec
 
 ## 9. Production Evidence Status
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. Current production smoke test evidence and production monitoring/demo recovery evidence are pending MVP v1.9 verification unless those checks are actually run and recorded.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence is NOT RUN until manually verified, and production monitoring evidence is PENDING until manually verified.
 
 MVP v1.9 evidence targets:
 
@@ -235,6 +235,7 @@ MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
 MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
+MVP v1.8.2 - Final Documentation Consistency Hotfix: COMPLETED
 ```
 
 ## 13. Future Improvements

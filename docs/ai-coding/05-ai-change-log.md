@@ -6,6 +6,75 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-03 - MVP v1.8.2 Final Documentation Consistency Hotfix
+
+### Task
+
+Apply the final documentation consistency hotfix after MVP v1.8.1.
+
+This is a documentation consistency hotfix. No product feature was added.
+
+### Files Changed
+
+- `README.md`
+- `AGENTS.md`
+- `docs/09-release-plan.md`
+- `docs/13-ui-route-map.md`
+- `docs/18-deployment-checklist.md`
+- `docs/final-release-checklist.md`
+- `docs/production-smoke-test-v1.9.md`
+- `docs/production-monitoring-runbook.md`
+- `docs/portfolio-case-study.md`
+- `docs/demo-script.md`
+- `docs/deployment/vercel-deployment.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Main Corrections
+
+- Added `MVP v1.8.2 - Final Documentation Consistency Hotfix` as the latest completed documentation hotfix.
+- Kept `MVP v1.8 - Insights Usability & Progress Story Refinement` as the completed product release.
+- Kept `MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup` as the completed documentation truth sync patch.
+- Kept `MVP v1.9 - Production Monitoring & Demo Evidence Stabilization` as the next main task.
+- Fixed current release/route-map headings that still used old `MVP v1.2.6` wording.
+- Clarified portfolio/demo/interview readiness as READY at MVP level.
+- Clarified production smoke test evidence as NOT RUN until manually verified.
+- Clarified production monitoring evidence as PENDING until manually verified.
+
+### Validation Status
+
+```txt
+Validation not rerun in this v1.8.2 documentation hotfix.
+Latest historical validation evidence remains MVP v1.8 validation evidence where documented.
+This v1.8.2 task did not rerun npm/build/test validation.
+```
+
+### Boundaries
+
+- No schema change was made.
+- No dependency was added.
+- No business logic was changed.
+- No route was changed.
+- No UI/UX was changed.
+- No source code was changed.
+- No production evidence was claimed.
+
+### Remaining Risks
+
+- Full local validation remains pending.
+- Production smoke test evidence remains NOT RUN until manually verified.
+- Production monitoring evidence remains PENDING until manually verified.
+- OAuth, database seed/index, E2E, and demo recovery evidence remain pending live verification.
+
+### Recommended Next Task
+
+```txt
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+```
+
 ## 2026-06-03 - MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup
 
 ### Task
@@ -65,7 +134,7 @@ npm run test:e2e: NOT RUN
 npm audit --omit=dev --audit-level=moderate: NOT RUN
 ```
 
-Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Validation was not rerun in the v1.8.1 documentation cleanup task. Pending local verification on Node.js 24.x and npm 11.x.
 
 ### Boundaries
 
