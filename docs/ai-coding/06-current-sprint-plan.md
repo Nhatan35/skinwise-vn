@@ -1,83 +1,87 @@
 # Current Sprint Plan - SkinWise VN MVP
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Current Sprint
 
 ```txt
-MVP v1.8 - Insights Usability & Progress Story Refinement
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
 ```
 
 Status:
 
 ```txt
-Implementation: DONE
+Product implementation: NOT APPLICABLE - documentation-only cleanup
 Documentation sync: DONE
-Validation evidence recording: DONE
+Validation rerun: NOT RUN
+Production smoke evidence: NEXT
+Production monitoring/demo recovery evidence: NEXT
 ```
 
-MVP v1.8 is a focused usability and portfolio demo-flow refinement for the existing Insights experience. It is not a medical insight engine, product effectiveness engine, analytics platform, schema rewrite, API redesign, or AI provider integration.
+MVP v1.8.1 is a documentation cleanup patch/task after the completed MVP v1.8 product release. It synchronizes release status, demo readiness, validation wording, production evidence status, and next-task documentation without adding features, changing source code, or changing product behavior.
 
 ## 2. Objective
 
-Make the existing Insights page easier to understand within a short product demo by connecting routine logs, skin journal entries, recent tracking activity, reflective product usage, and safe next actions.
+Make the repository documentation truthful and consistent for portfolio/demo/interview use after MVP v1.8 completion.
 
-The improved flow should help a reviewer see:
+The synchronized docs should help a reviewer see:
 
 ```txt
-Routine logs -> skin journal entries -> Insights progress story -> route-connected next actions
+MVP v1.8 completed product release -> MVP v1.8.1 documentation cleanup -> MVP v1.9 production evidence hardening
 ```
 
 ## 3. Scope
 
-Completed v1.8 scope:
+Completed v1.8.1 documentation scope:
 
 ```txt
-[x] Improve Insights page intro and progress-story framing.
-[x] Improve overview card labels, helper text, and no-data context.
-[x] Improve routine consistency calendar date range, legend, no-log explanation, and accessible day summaries.
-[x] Improve journal/symptom trend copy for self-reported, low-data interpretation.
-[x] Improve product usage safety copy without causality or effectiveness claims.
-[x] Improve next actions using existing route constants and current data states.
-[x] Preserve the Insights API response shape, DTO fields, database collections, and external-provider behavior.
-[x] Update focused unit/source/E2E tests for the improved flow.
-[x] Run full validation and record current results.
+[x] Mark MVP v1.8 as the completed product release.
+[x] Mark MVP core scope as completed.
+[x] Mark the product ready for portfolio/demo/interview as an MVP.
+[x] Document MVP v1.8.1 as a documentation cleanup patch/task, not a feature release.
+[x] Document MVP v1.9 as the next recommended task.
+[x] Clarify production smoke test evidence as pending v1.9 work.
+[x] Clarify production monitoring/demo recovery evidence as pending v1.9 work.
+[x] Preserve historical v1.6/v1.7/v1.8 references where they are release history.
+[x] Add/update production smoke test and monitoring/demo recovery docs.
 ```
 
 ## 4. Non-Goals
 
 ```txt
-No new UI route or Insights subroute.
-No new API route.
-No Insights API response shape change.
-No new database collection or persistent field.
-No product effectiveness scoring or causality logic.
-No product matching or recommendation logic change.
+No source code, route, API, schema, business logic, UI/UX, dependency, test, or package-file change.
+No new product feature release.
+No production evidence claim without a real verification run.
 No real AI provider integration.
 No image upload, skin scoring, marketplace, cart, checkout, payment, admin CRUD, reviews, or notifications.
 No medical diagnosis, treatment claim, or guaranteed skincare outcome.
-No new dependency.
 ```
 
 ## 5. Validation Commands
 
-Run and record:
+For v1.8.1, record whether these were run:
 
 ```txt
+node -v
+npm -v
+npm ci
 npm run lint
 npm run typecheck
 npm run test
 npm run build
-npm run test:e2e
 npm run db:indexes
 npm run db:seed
+npm run test:e2e
+npm audit --omit=dev --audit-level=moderate
 ```
 
 Database commands should run only against the configured safe local/development or explicit demo database.
 
 ## 6. Validation Evidence
 
-Environment:
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+
+Latest historical MVP v1.8 environment:
 
 ```txt
 Node.js: v24.14.0
@@ -86,7 +90,7 @@ Target baseline: Node.js 24.x / npm 11.x
 Baseline match: YES
 ```
 
-Results:
+Latest historical MVP v1.8 results:
 
 ```txt
 npm run lint: PASS

@@ -34,10 +34,10 @@ The product must not:
 Current phase:
 
 ```txt
-Post Week 6 MVP cleanup, validation, deployment preparation, and portfolio readiness
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
 ```
 
-The main MVP implementation is considered completed or nearly completed through Week 6.
+The main MVP implementation and MVP v1.8 product release are completed.
 
 Known implementation status:
 
@@ -48,25 +48,25 @@ Known implementation status:
 - Week 5 — AI provider abstraction, mock AI provider, validated AI provider, and Ingredient Explanation API: completed.
 - Week 6 — Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
 
-Latest completed task:
+Latest completed product release:
 
 ```txt
-PRODUCT-UI-002 - Implement Product Detail UI
+MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Current active cleanup tasks:
+Current documentation cleanup patch/task:
 
 ```txt
-SECURITY-CLEANUP-001
-DOCS-SYNC-001
-LOCAL-VALIDATION-001
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
 ```
 
-Recommended next task after cleanup and validation:
+Recommended next task:
 
 ```txt
-DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
+
+MVP core scope is completed and the product is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence, production monitoring/demo recovery evidence, and a full validation rerun remain pending unless actually verified and recorded.
 
 ---
 
@@ -669,10 +669,12 @@ docs/18-deployment-checklist.md
 
 README should accurately state:
 
-- Week 1-6 MVP implementation is completed or nearly completed.
-- Current phase is security cleanup, documentation sync, local validation, deployment preparation, and portfolio readiness.
-- Latest completed task is `PRODUCT-UI-002 - Implement Product Detail UI`.
-- Deployment is not complete unless there is real deployment evidence.
+- MVP v1.8 is the completed product release.
+- MVP core scope is completed.
+- MVP v1.8.1 is the documentation cleanup patch/task.
+- MVP v1.9 is the next recommended task.
+- Portfolio/demo/interview readiness is achieved at MVP level.
+- Production smoke test and monitoring/demo recovery evidence are pending unless actually verified.
 - Real production AI provider integration is not verified unless actually verified.
 - `.env.local` must not be committed or shared.
 
@@ -1080,18 +1082,19 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `SECURITY-CLEANUP-001`, `DOCS-SYNC-001`, and `LOCAL-VALIDATION-001` are completed, the recommended next task is:
+After `MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup`, the recommended next task is:
 
 ```txt
-TASK DEPLOY-001 - Prepare Vercel deployment for SkinWise VN MVP
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
 Reason:
 
-- The MVP implementation is already past the main Week 1-6 build phase.
-- Cleanup and validation should happen before deployment.
-- Deployment preparation is the next logical step for portfolio review.
-- Vercel deployment will verify production build behavior, environment variables, Auth.js callback URLs, MongoDB connectivity, and public demo readiness.
+- MVP v1.8 is the completed product release.
+- MVP core scope is portfolio/demo/interview ready at MVP level.
+- Current production smoke test evidence is pending unless actually verified.
+- Current production monitoring and demo recovery evidence are pending unless actually verified.
+- MVP v1.9 should verify production behavior, environment variables, Auth.js callback URLs, MongoDB connectivity, Vercel logs, and demo recovery paths without adding new product scope.
 
 ---
 
@@ -1127,12 +1130,13 @@ Do not implement these unless the user explicitly asks and the scope is approved
 Use this style in docs and final reports:
 
 ```txt
-MVP Week 1-6 core implementation is completed or nearly completed.
-Current phase focuses on security cleanup, documentation synchronization, local validation, deployment preparation, and portfolio readiness.
-Latest completed task: PRODUCT-UI-002 - Implement Product Detail UI.
+MVP v1.8 - Insights Usability & Progress Story Refinement is the completed product release.
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the current documentation cleanup patch/task.
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization is the recommended next task.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP.
 AI provider abstraction is implemented, with a mock provider available for local/demo use.
 Production AI provider integration is deployment/configuration dependent and not verified unless explicitly tested.
-Deployment is not complete unless a real deployed URL and smoke-test evidence are available.
+Production smoke test evidence and monitoring/demo recovery evidence are pending unless actually verified and recorded.
 ```
 
 Avoid this style:

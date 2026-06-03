@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Demo Objective
 
@@ -18,6 +18,8 @@ Before the demo:
 - confirm Google sign-in works;
 - confirm the account has a demo Skin Profile, Product Match candidates, saved product example, routines, routine logs, and journal entries;
 - confirm no private secrets or personal data are visible on screen.
+
+Current evidence note: SkinWise VN is ready for portfolio/demo/interview use as an MVP after MVP v1.8. Current production smoke test evidence and monitoring/demo recovery evidence are pending MVP v1.9 verification unless those checks are actually run and recorded.
 
 ## 3. Demo Data Preparation Note
 
@@ -62,8 +64,11 @@ Supporting setup guide:
 | 13 | Today Routine Log `/routine-logs/today` | Use the Routine Builder CTA or mark routine status | "After building a routine, the user can open Checklist hôm nay to track completion." | Clear demo continuity from planning to tracking | Upsert by user/routine/localDate |
 | 14 | Skin Journal `/journal` | Show/create/edit entry | "The journal captures observations, symptoms, products, sleep, stress, and notes." | Progress tracking and privacy | User-owned journal API and DTO mapping |
 | 15 | Insights `/insights` | Review progress insights | "Insights tells a progress story from routine logs and journal entries: consistency, recent activity, self-reported symptoms, product mentions, and safe next actions." | Reflective progress review without diagnosis or causality claims | Aggregation use case, protected API route, DTO-preserving v1.8 usability refinement |
-| 16 | Settings `/settings` | Show data control | "Settings makes account and data control visible without overpromising full commercial privacy tooling." | Trust and privacy scope | `/api/me` and account deletion request flow |
-| 17 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and deployment readiness." | BA portfolio narrative | Full-stack implementation narrative |
+| 16 | Settings `/settings` | Show data control | "Settings makes account and data control visible without overpromising full commercial privacy tooling." | Trust and privacy scope | `/api/me`, export, app-data deletion, and account deletion request flows |
+| 17 | Data Export `/settings` action | Show export option | "The user can export their SkinWise app data from the settings flow." | Data control and privacy requirement | `GET /api/account/export` |
+| 18 | Delete Request `/settings` action | Show deletion request option | "The MVP supports a safe account deletion request marker and app-data deletion controls without pretending to automate every provider-side account record." | Honest MVP data control scope | `POST /api/account/deletion-request`, `DELETE /api/account/app-data` |
+| 19 | Sign out | End session | "The demo closes by ending the authenticated session and confirming private routes remain protected." | Privacy closure | Auth.js sign-out behavior |
+| 20 | Closing | Summarize | "The project demonstrates MVP thinking, safe scope, requirements traceability, testing, and MVP-level portfolio readiness." | BA portfolio narrative | Full-stack implementation narrative |
 
 ## 5. What To Say At Each Screen
 
@@ -172,5 +177,5 @@ Dashboard summary:
 Close the demo with:
 
 ```txt
-SkinWise VN is valuable as a portfolio project because it shows both BA thinking and full-stack execution. I defined the problem, scoped the MVP, documented requirements, implemented the core user journey, validated it with tests and deployment checks, and prepared a realistic demo without expanding into unsafe or unsupported features.
+SkinWise VN is valuable as a portfolio project because it shows both BA thinking and full-stack execution. I defined the problem, scoped the MVP, documented requirements, implemented the core user journey, and prepared a realistic demo without expanding into unsafe or unsupported features. The current MVP is portfolio/demo/interview ready, while fresh production smoke test and monitoring evidence remain the recommended v1.9 hardening task.
 ```

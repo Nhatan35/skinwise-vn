@@ -1,14 +1,15 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Current Phase
 
 ```txt
 MVP v1.8 Insights Usability & Progress Story Refinement is completed.
+MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup is the current documentation cleanup patch/task.
 ```
 
-SkinWise VN remains in active MVP product-quality improvement. The previous release and portfolio preparation work is historical context, not the current next task.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The previous release and portfolio preparation work is historical context; the current next recommended task is production monitoring and demo evidence stabilization.
 
 Recently completed MVP improvements:
 
@@ -22,6 +23,7 @@ MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: DONE
 MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: DONE
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: DONE
 MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
 ```
 
 ## 2. Completed Product Scope
@@ -101,7 +103,7 @@ Public DTOs must not expose raw MongoDB _id, raw userId, Auth.js account/session
 
 ## 4. Validation Evidence
 
-Current v1.8 validation environment:
+Latest historical MVP v1.8 validation environment:
 
 ```txt
 Node.js: v24.14.0
@@ -110,7 +112,7 @@ Target baseline: Node.js 24.x / npm 11.x
 Baseline match: YES
 ```
 
-Current v1.8 validation results:
+Latest historical MVP v1.8 validation results:
 
 ```txt
 npm run lint: PASS
@@ -127,6 +129,14 @@ Environment note:
 
 ```txt
 Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPERM. Both commands passed after scoped reruns outside the sandbox process-spawn restriction.
+```
+
+MVP v1.8.1 validation note:
+
+```txt
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+Production smoke test evidence is pending MVP v1.9 verification.
+Production monitoring/demo recovery evidence is pending MVP v1.9 verification.
 ```
 
 ## 5. Known MVP Limitations

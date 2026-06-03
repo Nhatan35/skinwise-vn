@@ -1,17 +1,22 @@
 # Vercel Deployment Runbook - SkinWise VN MVP
 
-Last updated: 2026-05-31
+Last updated: 2026-06-03
 
 ## Current Deployment Status
 
 ```txt
-Deployment status: VERIFIED FOR MVP PORTFOLIO RELEASE
+Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY; CURRENT PRODUCTION EVIDENCE PENDING
 Production URL: https://skinwise-vn.vercel.app
 Production branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
+Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
+Current documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+Recommended next task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
 
 This is an MVP demo/portfolio deployment, not a full commercial production release.
+
+Current v1.8.1 note: production smoke test evidence and monitoring/demo recovery evidence are pending v1.9 verification unless the checks are actually run and recorded.
 
 SkinWise VN is a skincare routine tracker and educational MVP. It is not a medical diagnosis app, does not prescribe medication, does not guarantee treatment outcomes, and must not add skin scoring, attractiveness scoring, image analysis, marketplace, payment, or other out-of-scope features during this release.
 
@@ -103,6 +108,8 @@ Checklist:
 
 ## Manual Production Smoke Test
 
+Use `docs/production-smoke-test-v1.9.md` for the current v1.9 smoke-test evidence table. The checklist below describes expected behavior only; it is not current production evidence unless executed.
+
 | Flow | Expected Result |
 |---|---|
 | Landing page | Page loads without 500/blank screen. |
@@ -125,8 +132,10 @@ Checklist:
 
 ## Final Verification Result
 
-Production verification completed by project owner for MVP release.
+Current v1.8.1 documentation cleanup does not rerun production verification.
 
 ```txt
-MVP-PRODUCTION-VERIFY-001 — DONE
+MVP v1.8 - Core MVP product release: DONE
+MVP v1.8.1 - Documentation truth sync: DONE
+MVP v1.9 - Production smoke/monitoring/demo recovery evidence: NEXT
 ```

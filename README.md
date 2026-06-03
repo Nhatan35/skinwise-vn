@@ -2,7 +2,7 @@
 
 SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products and ingredients, save products, build routines, track routine completion, write skin journal entries, and review dashboard summaries.
 
-The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, full-stack implementation, validation, CI/E2E stabilization, deployment verification, and release closeout.
+The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, full-stack implementation, validation discipline, CI/E2E coverage, and release closeout.
 
 SkinWise VN is not a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
 
@@ -12,20 +12,19 @@ Production demo:
 
 - https://skinwise-vn.vercel.app
 
-Production verification status:
+Current production evidence status:
 
-- Vercel production deployment: verified.
-- Google OAuth production login: verified.
-- MongoDB-backed authenticated read/write flows: verified.
-- Protected route behavior: verified.
-- Core MVP user journeys: verified.
-- Screenshot capture: intentionally skipped because it is not required for this submission.
+- MVP portfolio/demo/interview readiness: ready at MVP level.
+- Current MVP v1.8.1 production smoke test evidence: pending v1.9 verification.
+- Current production monitoring/demo recovery evidence: pending v1.9 verification.
+- Full validation rerun for v1.8.1: not rerun in this documentation cleanup task.
+- Historical deployment verification notes are preserved in older release records, but they are not treated as fresh v1.8.1 production evidence.
 
 ## Current Status
 
-Current core implementation release: **MVP v1.8 Insights Usability & Progress Story Refinement**.
+Current completed product release: **MVP v1.8 - Insights Usability & Progress Story Refinement**.
 
-Previous cleanup patch: **MVP v1.6.1 Validation Evidence & Documentation Truth Sync**.
+Current documentation cleanup patch/task: **MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup**.
 
 MVP v1.8 is a focused Insights usability and progress-story refinement. It improves the existing Insights page intro, overview card context, routine consistency calendar readability, journal/product usage safety copy, next actions, and empty/error/loading states without changing the Insights API response shape, adding AI, or introducing medical/product-causality logic.
 
@@ -45,7 +44,9 @@ Recommended next MVP improvement:
 
 - `MVP v1.9` - Production Monitoring & Demo Evidence Stabilization.
 
-Current validation evidence for MVP v1.8:
+MVP v2.0 or later is optional future enhancement scope only.
+
+Latest historical validation evidence for MVP v1.8:
 
 ```txt
 Node.js: v24.14.0
@@ -61,6 +62,8 @@ npm audit: NOT RUN - not part of the v1.8 validation scope
 Database indexes: 32 indexes ensured
 Note: `npm run build` and `npm run test:e2e` initially hit Windows sandbox `spawn EPERM`; both passed on scoped rerun outside the sandbox.
 ```
+
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
 
 ## Key Features
 
@@ -163,9 +166,11 @@ Landing page
 -> Routine Builder
 -> Routine Safety Analysis
 -> Today Routine Checklist
+-> Routine Logs
 -> Skin Journal
 -> Insights
--> Settings / Data Control
+-> Settings / Data Export
+-> Delete Request
 -> Sign out
 ```
 
@@ -177,6 +182,8 @@ Landing page
 - Release notes v1.3: `docs/release-notes-v1.3.md`
 - Historical release notes v1.0: `docs/release-notes-v1.0.md`
 - Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
+- Production smoke test checklist: `docs/production-smoke-test-v1.9.md`
+- Production monitoring/demo recovery runbook: `docs/production-monitoring-runbook.md`
 - Demo data and setup guide: `docs/ai-coding/07-demo-data-and-demo-script.md`
 - Screenshot checklist: `docs/screenshots-checklist.md` — optional only; screenshots are not required for the current submission.
 
@@ -226,7 +233,7 @@ npm run db:seed
 npm run test:e2e
 ```
 
-Latest validation evidence:
+Latest historical validation evidence:
 
 ```txt
 npm run lint: PASS
@@ -238,6 +245,8 @@ npm run db:seed: PASS - 40 ingredients / 38 products
 npm run test:e2e: PASS - 29/29 tests
 npm audit: NOT RUN during v1.8
 ```
+
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
 
 `npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
 
@@ -260,12 +269,14 @@ Out of scope for this MVP:
 
 ## Release Status
 
-SkinWise VN has completed prior MVP release and deployment verification work. The current direction is continued MVP product-quality improvement.
+SkinWise VN has completed the MVP v1.8 product release and is ready for portfolio/demo/interview use as an MVP. The current v1.8.1 task is documentation truth sync and release evidence cleanup, not a product feature release.
 
-Previously completed release/deployment checks:
+Current release/evidence status:
 
-- Source hygiene: completed.
-- Local validation: completed.
-- CI/E2E MongoDB support: completed.
-- Production verification: completed by project owner.
-- Screenshots: skipped intentionally; not required for this submission.
+- Core MVP scope: completed.
+- MVP v1.8 Insights usability refinement: completed.
+- MVP v1.8.1 documentation truth sync: completed by this task when this diff is accepted.
+- Portfolio/demo/interview readiness: ready at MVP level.
+- Production smoke test evidence: next-step work for MVP v1.9.
+- Production monitoring/demo recovery evidence: next-step work for MVP v1.9.
+- Full validation rerun: pending unless executed in a separate validation pass.

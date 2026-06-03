@@ -4,7 +4,7 @@
 
 SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users organize their skincare context, review rule-based product matches, discover products and ingredients, build routines, track daily routine completion, write skin journal entries, and review dashboard/insights summaries.
 
-The project was built as a portfolio-ready full-stack MVP and BA practice project. The current repository state is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation, and production verification.
+The project was built as a portfolio-ready full-stack MVP and BA practice project. The current completed product release is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. The current documentation cleanup patch/task is MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation discipline, and MVP-level portfolio/demo readiness.
 
 Production demo:
 
@@ -12,7 +12,7 @@ Production demo:
 https://skinwise-vn.vercel.app
 ```
 
-Screenshots are intentionally omitted for this submission. The project is documented through live demo access, feature walkthrough, validation evidence, release notes, and implementation documentation.
+Screenshots are intentionally omitted for this submission. The project is documented through live demo access, feature walkthrough, historical validation evidence, release notes, and implementation documentation.
 
 ## 2. Problem
 
@@ -59,7 +59,8 @@ This MVP does not target medical diagnosis, prescription treatment, or clinical 
 - Dashboard summary.
 - Settings and Data Control.
 - CI/E2E validation.
-- Vercel production deployment verification.
+- MVP-level portfolio/demo/interview readiness.
+- Vercel deployment target and production smoke-test checklist.
 
 ### Out of Scope
 
@@ -167,14 +168,14 @@ npm audit: NOT RUN during MVP v1.8
 
 The Playwright E2E suite covers public landing behavior, protected route redirects, authenticated dashboard access, profile creation/update, product browsing/detail, Product Match review/save/detail flow, saved products, ingredient library/detail/explanation, routine builder, routine analysis, today routine checklist, routine log deletion, skin journal, Insights, settings/data control, account deletion request, and dashboard summary reflection.
 
-## 9. Production Verification
+## 9. Production Evidence Status
 
-Production verification was completed for the MVP demo scope.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. Current production smoke test evidence and production monitoring/demo recovery evidence are pending MVP v1.9 verification unless those checks are actually run and recorded.
 
-Verified areas:
+MVP v1.9 evidence targets:
 
-- Vercel production deployment.
-- Google OAuth login.
+- Vercel deployment status and runtime logs.
+- Google OAuth production login.
 - MongoDB Atlas-backed authenticated read/write flows.
 - Protected route behavior.
 - Dashboard after login.
@@ -184,10 +185,10 @@ Verified areas:
 - Saved Products.
 - Ingredient Library and Ingredient Detail.
 - Routine Builder and Routine Analysis.
-- Today Routine Log.
+- Today Routine Log and Routine Logs.
 - Skin Journal.
 - Insights.
-- Settings/Data Control.
+- Settings/Data Control, data export, and deletion request flow.
 - Sign out.
 
 ## 10. BA / Product Thinking Demonstrated
@@ -202,7 +203,7 @@ This project demonstrates:
 - Data model design.
 - Safe product boundary definition.
 - Traceability from business needs to implementation and tests.
-- Release readiness and validation evidence.
+- Release readiness and honest validation/evidence reporting.
 - Documentation truth-sync after MVP v1.6.
 - Usability refinement of the routine demo flow in MVP v1.7.
 - Insights progress-story and safety-copy refinement in MVP v1.8.
@@ -220,7 +221,7 @@ This project demonstrates:
 - Unit and contract testing.
 - Playwright E2E testing.
 - GitHub Actions CI with MongoDB service.
-- Production deployment verification.
+- MVP-level portfolio/demo readiness with production smoke/monitoring evidence separated as next-step hardening.
 
 ## 12. Final Outcome
 
@@ -233,6 +234,7 @@ MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
 MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
 MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
 ```
 
 ## 13. Future Improvements
@@ -240,7 +242,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
 Recommended next MVP roadmap:
 
 1. MVP v1.9 - Production Monitoring & Demo Evidence Stabilization.
-2. Real AI provider integration with monitoring and cost controls.
+2. MVP v2.0 or later optional future enhancements, such as real AI provider integration with monitoring and cost controls.
 3. Admin Product/Ingredient CRUD.
 4. Image upload for journal entries.
 5. Error monitoring and production analytics.

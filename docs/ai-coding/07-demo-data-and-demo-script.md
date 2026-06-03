@@ -1,6 +1,6 @@
 # Demo Data and Demo Script - SkinWise VN
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Purpose
 
@@ -9,6 +9,16 @@ Last updated: 2026-06-02
 The demo data supports a realistic skincare tracking story for a beginner-to-intermediate user with oily or combination-oily skin, acne-prone concerns, clogged-pore texture, post-acne dark spots, mild sensitivity, Product Match review, and Insights review.
 
 SkinWise VN remains an educational skincare MVP. The demo must not claim diagnosis, treatment guarantees, skin scoring, attractiveness scoring, real AI dermatologist behavior, or image-based face/skin analysis.
+
+Current release context:
+
+```txt
+Completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
+Documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
+Next recommended task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Portfolio/demo/interview readiness: ready at MVP level
+Production smoke and monitoring evidence: pending v1.9 verification
+```
 
 ## 2. Data Ownership Strategy
 
@@ -104,7 +114,11 @@ Use the deployed app or local app with a real authenticated demo account.
 18. Open `/journal`.
 19. Add 5-7 journal entries over recent local dates.
 20. Open `/insights` and review routine consistency, journal activity, symptoms, product usage, and calendar days.
-21. Return to `/dashboard` and show the resulting summary.
+21. Open `/settings`.
+22. Show data export as an available user data control.
+23. Show the account deletion request flow without submitting it during a live demo unless intended.
+24. Return to `/dashboard` and show the resulting summary.
+25. Sign out and confirm protected routes require authentication again.
 
 ## 6. Recommended Routines
 
@@ -168,19 +182,26 @@ Create entries through `/journal`. Keep wording educational and observational, n
 
 1. Open landing page.
 2. Log in.
-3. View Skin Profile.
-4. Review Product Match.
-5. Save a matched product.
-6. Open Product Detail from the matched product card.
-7. Open Saved Products.
-8. Browse Product Catalogue.
-9. View or create Morning Routine.
-10. View or create Evening Routine.
-11. Run Routine Safety Analysis.
-12. Add or view Routine Logs.
-13. Add or view Skin Journal entries.
-14. Review Insights.
-15. View Dashboard summary.
+3. View Dashboard.
+4. View or update Skin Profile.
+5. Review Product Match.
+6. Save a matched product.
+7. Open Product Detail from the matched product card.
+8. Open Saved Products.
+9. Browse Product Catalogue.
+10. Browse Ingredient Library.
+11. Open Ingredient Detail and request an explanation.
+12. View or create Morning Routine.
+13. View or create Evening Routine.
+14. Run Routine Safety Analysis.
+15. Open Today Routine Checklist.
+16. Add or view Routine Logs.
+17. Add or view Skin Journal entries.
+18. Review Insights.
+19. Open Settings.
+20. Show Data Export.
+21. Show Delete Request.
+22. Sign out.
 
 ## 10. BA Presentation Angle
 
@@ -191,7 +212,7 @@ Use the demo to explain:
 - functional requirements such as authenticated routines, Product Match, product browsing, journal entries, Insights, and dashboard summary;
 - non-functional requirements such as privacy, validation, route protection, and safe copy;
 - MVP scope control through explicit exclusions;
-- validation mindset through lint, typecheck, tests, build, audit, and smoke testing;
+- validation mindset through lint, typecheck, tests, build, audit, and smoke testing, while clearly marking current v1.8.1 validation and production evidence as pending if not rerun;
 - traceability from user needs to implemented features.
 
 ## 11. Technical Presentation Angle
@@ -208,7 +229,7 @@ Use the demo to explain:
 - deterministic Product Match scoring without a new recommendation collection or external AI provider;
 - routine-slot based Insights aggregation from user-owned data;
 - AI provider abstraction with the mock provider for demo;
-- Vitest coverage and deployment readiness;
+- Vitest coverage and MVP-level portfolio/demo readiness;
 - Vercel deployment target and environment variable discipline.
 
 ## 12. Scope Boundaries
@@ -224,4 +245,4 @@ Use the demo to explain:
 - medical diagnosis or treatment advice;
 - new Product Match persistence collection.
 
-Next recommended task: `MVP v1.8 - Insights Usability & Progress Story Refinement`.
+Next recommended task: `MVP v1.9 - Production Monitoring & Demo Evidence Stabilization`.

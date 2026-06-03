@@ -6,6 +6,74 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-03 - MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup
+
+### Task
+
+Synchronize README and project documentation after the completed MVP v1.8 product release.
+
+This is a documentation truth sync task, not feature implementation.
+
+### Reason For Update
+
+Avoid stale release status when using SkinWise VN for portfolio, demo, and interview review.
+
+### Files Changed
+
+- `README.md`
+- `AGENTS.md`
+- `docs/09-release-plan.md`
+- `docs/13-ui-route-map.md`
+- `docs/18-deployment-checklist.md`
+- `docs/deployment/vercel-deployment.md`
+- `docs/final-release-checklist.md`
+- `docs/portfolio-case-study.md`
+- `docs/demo-script.md`
+- `docs/production-smoke-test-v1.9.md`
+- `docs/production-monitoring-runbook.md`
+- `docs/release-notes-v1.3.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Main Documentation Sync Points
+
+- MVP v1.8 is the completed product release.
+- MVP core scope is completed.
+- SkinWise VN is ready for portfolio/demo/interview use as an MVP.
+- MVP v1.8.1 is a documentation cleanup patch/task, not a product feature release.
+- MVP v1.9 is the next recommended task.
+- Production smoke test evidence is next-step work.
+- Production monitoring/demo recovery evidence is next-step work.
+- MVP v2.0 or later remains optional future enhancement scope.
+
+### Validation
+
+```txt
+node -v: PASS - v24.14.0
+npm -v: PASS - 11.14.1
+npm ci: NOT RUN
+npm run lint: NOT RUN
+npm run typecheck: NOT RUN
+npm run test: NOT RUN
+npm run build: NOT RUN
+npm run db:indexes: NOT RUN
+npm run db:seed: NOT RUN
+npm run test:e2e: NOT RUN
+npm audit --omit=dev --audit-level=moderate: NOT RUN
+```
+
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+
+### Boundaries
+
+- No source code, business logic, database schema, route, UI/UX, test, package, or dependency change.
+- No production evidence is claimed for v1.8.1.
+- No real OpenAI/Gemini integration is claimed.
+- No medical diagnosis, prescription, skin scoring, face analysis, marketplace, checkout, or payment scope was added.
+
 ## 2026-05-31 - MVP-v1.3-FIX-002 Final Release Documentation Sync
 
 ### Task

@@ -1,22 +1,22 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Release Summary
 
 Current core implementation release:
 
 ```txt
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement
+MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Previous cleanup patch:
+Current documentation cleanup patch/task:
 
 ```txt
-MVP v1.6.1 - Validation Evidence & Documentation Truth Sync
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
 ```
 
-MVP v1.7 is a focused routine usability and demo-flow refinement. It improves the existing Routine Builder, Routine Analysis readability, and Today Checklist navigation without adding a new routine architecture, API contract, schema, or safety engine.
+MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape or adding medical/product-causality logic.
 
 Historical note:
 
@@ -28,32 +28,43 @@ MVP v1.3 was an earlier portfolio release documentation milestone. It is preserv
 
 | Area | Status | Notes |
 |---|---|---|
+| Core MVP | PASS | MVP core scope is complete and ready for portfolio/demo/interview use as an MVP. |
 | MVP v1.6 catalogue data quality | PASS | Seed data includes 40 ingredient records and 38 product records with validation checks. |
 | Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs and Product Detail personalized match section. |
 | Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, and safety-bounded. |
 | Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded v1.6 metadata. |
 | Routine Builder usability | PASS | Empty state, morning/evening guidance, step-order guidance, selected-product context, and Today Checklist CTA are refined in v1.7. |
+| Insights usability refinement | PASS | MVP v1.8 progress-story framing, calendar readability, reflective product usage copy, and next actions are complete. |
+| Progress story refinement | PASS | Insights connects routine logs, journal activity, product mentions, and safe next actions without diagnosis or causality claims. |
 | Routine Safety Analysis | PASS | Existing deterministic rules pass validation and seed data supports active/fragrance/sunscreen demo cases. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, and account deletion request marker are implemented. |
-| Local validation | PASS | v1.7 validation commands passed under Node 24.x / npm 11.x. |
-| Documentation truth sync | PASS | README, implementation status, sprint plan, seed spec, release checklist, and portfolio notes are synchronized. |
+| Local validation | NOT RUN | Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x. |
+| Documentation truth sync | PASS | MVP v1.8.1 documentation truth sync is reflected in README, release, deployment, demo, status, smoke-test, monitoring, and changelog docs. |
+| Production smoke test evidence | NEXT | Current v1.8.1 production smoke evidence is pending v1.9 verification. |
+| Production monitoring/evidence | NEXT | Monitoring and demo recovery evidence are next-step work for MVP v1.9. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
 ## 3. Documentation Readiness
 
 | Document | Status | Notes |
 |---|---|---|
-| `README.md` | PASS | Current phase, v1.7 routine refinement status, validation evidence, and next task are current. |
+| `README.md` | PASS | Current v1.8 completed release, v1.8.1 cleanup task, v1.9 next task, and pending evidence status are current. |
 | `docs/14-seed-data-spec.md` | PASS | Documents v1.6 seed data targets, coverage, validation, and safety boundaries. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Shows v1.7 routine refinement status and validation evidence. |
-| `docs/ai-coding/03-feature-status-matrix.md` | PASS | Feature statuses reflect v1.7 routine usability refinements and implemented data-control features. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.7 routine usability/demo-flow refinement. |
-| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo seed coverage reflects v1.6 data size. |
-| `docs/portfolio-case-study.md` | PASS | Portfolio case study reflects current MVP v1.7 state. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Shows v1.8 completed product release, v1.8.1 cleanup status, and v1.9 next task. |
+| `docs/ai-coding/03-feature-status-matrix.md` | PASS | Feature statuses reflect completed MVP scope and v1.8 Insights refinements. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.8.1 documentation cleanup, with v1.9 recommended next. |
+| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo flow reflects implemented routes and MVP v1.9 as next recommended task. |
+| `docs/production-smoke-test-v1.9.md` | PASS | Production smoke checklist exists with default NOT RUN/PENDING status. |
+| `docs/production-monitoring-runbook.md` | PASS | Monitoring and demo recovery runbook exists for v1.9 evidence hardening. |
+| `docs/portfolio-case-study.md` | PASS | Portfolio case study reflects current MVP v1.8 state and pending production evidence. |
 | `docs/release-notes-v1.3.md` | HISTORICAL | Preserved as historical v1.3 release notes. |
 | `docs/CHANGELOG-v1.3.md` | HISTORICAL | Preserved as historical v1.3 changelog. |
 
 ## 4. Current Validation Evidence
+
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
+
+Latest historical MVP v1.8 validation evidence:
 
 Environment:
 
@@ -68,14 +79,17 @@ Results:
 
 | Command | Status | Evidence |
 |---|---|---|
-| `npm run lint` | PASS | ESLint completed successfully. |
-| `npm run typecheck` | PASS | TypeScript completed successfully. |
-| `npm run test` | PASS | 96 test files passed / 889 tests passed. |
-| `npm run build` | PASS | Next.js production build completed successfully after scoped rerun outside the Windows sandbox spawn restriction. |
-| `npm run test:e2e` | PASS | 29 Playwright E2E tests passed / 29 after scoped rerun outside the Windows sandbox spawn restriction. |
-| `npm run db:indexes` | PASS | 32 MongoDB indexes ensured. |
-| `npm run db:seed` | PASS | Seed validation and upsert passed with 40 ingredients and 38 products. |
-| `npm audit` | NOT RUN | Not part of the v1.7 validation scope; no current audit result is claimed. |
+| `node -v` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm -v` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm ci` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run lint` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run typecheck` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run test` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run build` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run db:indexes` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run db:seed` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm run test:e2e` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
+| `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run during v1.8.1 documentation cleanup. |
 
 ## 5. Verified Feature Scope
 
@@ -101,7 +115,7 @@ Results:
 - MVP-safe account deletion request marker.
 - Curated v1.6 seed catalogue with 40 ingredients and 38 products.
 - GitHub Actions CI with MongoDB-backed E2E support.
-- Prior Vercel production deployment verification.
+- Portfolio/demo/interview readiness at MVP level.
 
 ## 6. Safety Boundaries
 
@@ -123,18 +137,21 @@ These are intentional MVP boundaries, not release blockers:
 - Product and ingredient data is curated/demo-oriented.
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
-- Production deployment evidence is prior project-owner verification, not rerun during v1.7.
+- Production smoke test evidence is pending v1.9 verification.
+- Production monitoring and demo recovery evidence are pending v1.9 verification.
+- Full validation rerun is pending after this documentation-only task.
 
 ## 8. Final Decision
 
 Current decision:
 
 ```txt
-MVP v1.7 Routine Builder Usability & Demo Flow Refinement: DONE
+MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
 ```
 
 Recommended next MVP task:
 
 ```txt
-MVP v1.8 - Insights Usability & Progress Story Refinement
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```

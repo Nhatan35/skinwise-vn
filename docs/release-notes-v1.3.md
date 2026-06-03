@@ -2,7 +2,7 @@
 
 Last updated: 2026-05-31
 
-Historical note: this document records the MVP v1.3 release milestone. The current project state is MVP v1.6 with MVP v1.6.1 validation evidence and documentation truth sync. See `docs/final-release-checklist.md` for current status.
+Historical note: this document records the MVP v1.3 release milestone. Later documentation updates moved the project through MVP v1.6, MVP v1.6.1, MVP v1.7, and MVP v1.8. See `docs/final-release-checklist.md` for current status.
 
 ## Summary
 

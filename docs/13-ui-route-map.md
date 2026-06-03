@@ -1,14 +1,18 @@
 # UI and API Route Map - MVP v1.2.6
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## Purpose
 
 This document maps the routes that exist in the current source tree. Use `src/app` and `src/app/api` as the source of truth when this document and implementation drift.
 
-Current phase: MVP v1.7 Routine Builder usability and demo-flow refinement after the MVP v1.6 catalogue data quality upgrade and v1.6.1 documentation truth sync.
+Current completed product release: MVP v1.8 Insights Usability & Progress Story Refinement.
 
-Latest completed source task before v1.7: `MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade`.
+Current documentation cleanup patch/task: MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup.
+
+Recommended next task: MVP v1.9 Production Monitoring & Demo Evidence Stabilization.
+
+Historical notes for MVP v1.6, v1.6.1, and v1.7 remain valid as previous milestones.
 
 ## Route Principles
 
@@ -53,6 +57,9 @@ Latest completed source task before v1.7: `MVP v1.6 - Catalogue Data Quality & I
 |---|---|---|---|---|
 | `/api/auth/[...nextauth]` | Auth.js-managed | Built-in Auth.js auth routes | Auth.js-managed | Implemented |
 | `/api/me` | `GET` | Current user plus SkinWise app profile fields | Required | Implemented |
+| `/api/account/export` | `GET` | Export current user's SkinWise app data | Required | Implemented |
+| `/api/account/app-data` | `DELETE` | Delete current user's SkinWise app data without hard-deleting Auth.js account records | Required | Implemented |
+| `/api/account/deletion-request` | `POST` | MVP-safe account deletion request marker | Required | Implemented |
 | `/api/dashboard` | `GET` | Authenticated dashboard summary for a local date | Required | Implemented |
 | `/api/insights` | `GET` | Authenticated routine-slot insights, journal activity, product usage, calendar days, and safe next actions for an optional date range | Required | Implemented |
 | `/api/skin-profile` | `GET`, `POST`, `PATCH`, `DELETE` | Current user's skin profile | Required | Implemented |

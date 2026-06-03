@@ -1,6 +1,6 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## 1. Status Categories
 
@@ -61,5 +61,9 @@ No real AI provider, LLM integration, diagnosis, treatment claim, skin score, ma
 
 ```txt
 Current: MVP v1.8 - Insights Usability & Progress Story Refinement
+Documentation cleanup patch/task: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup
 Next recommended: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+MVP core scope: Completed and portfolio/demo/interview ready at MVP level
+Production smoke test evidence: Pending MVP v1.9 verification
+Production monitoring/demo recovery evidence: Pending MVP v1.9 verification
 ```

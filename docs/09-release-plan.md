@@ -180,6 +180,8 @@ Extract:
 MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
 MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
 MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
+MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
 ```
 
 Current release documentation is available in:
@@ -199,17 +201,20 @@ Historical v1.3 release notes and changelog remain preserved in `docs/release-no
 Current status:
 
 ```txt
-Core implementation release: MVP v1.7 completed
-Previous cleanup patch: MVP v1.6.1 completed
-Documentation truth sync: COMPLETED
-Validation evidence: RECORDED FOR v1.7
+Core implementation release: MVP v1.8 completed
+Current documentation cleanup patch/task: MVP v1.8.1 completed
+MVP core scope: COMPLETED
+Documentation truth sync: COMPLETED FOR v1.8.1
+Validation evidence: HISTORICAL v1.8 EVIDENCE RECORDED; v1.8.1 FULL VALIDATION NOT RERUN
 Portfolio review: READY FOR CURRENT MVP STATE
+Demo review: READY FOR CURRENT MVP STATE
 Interview demo: READY FOR CURRENT MVP STATE
 Production URL: https://skinwise-vn.vercel.app
-Prior production deployment verification: VERIFIED BY PROJECT OWNER
+Current production smoke test evidence: PENDING v1.9 VERIFICATION
+Current production monitoring/demo recovery evidence: PENDING v1.9 VERIFICATION
 ```
 
-Current v1.7 validation evidence:
+Latest historical MVP v1.8 validation evidence:
 
 ```txt
 Node.js: v24.14.0
@@ -221,14 +226,18 @@ npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
 npm run db:seed: PASS - 40 ingredients / 38 products
 npm run test:e2e: PASS - 29/29 tests
-npm audit: NOT RUN during v1.7
+npm audit: NOT RUN during v1.8
 ```
+
+Validation not rerun in this task. Pending local verification on Node.js 24.x and npm 11.x.
 
 Next release task:
 
 ```txt
-MVP v1.8 - Insights Usability & Progress Story Refinement
+MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
 ```
+
+MVP v2.0 or later is optional future enhancement scope only and is not required for MVP portfolio/demo/interview readiness.
 
 ## 7. Historical SDD freeze note
 
