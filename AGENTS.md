@@ -34,10 +34,21 @@ The product must not:
 Current phase:
 
 ```txt
-MVP v1.8.2 - Final Documentation Consistency Hotfix
+MVP v1.11 - Portfolio Demo Readiness Polish
 ```
 
 The main MVP implementation and MVP v1.8 product release are completed.
+
+Current release chain:
+
+```txt
+MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
+MVP v1.9 - Local Validation Evidence: PASS
+MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+```
 
 Known implementation status:
 
@@ -46,33 +57,31 @@ Known implementation status:
 - Week 3 — Routine Builder and RoutineLog: completed.
 - Week 4 — Routine Safety Engine and Routine Analysis: completed.
 - Week 5 — AI provider abstraction, mock AI provider, validated AI provider, and Ingredient Explanation API: completed.
-- Week 6 — Skin Journal, Dashboard enhancement, Product Catalogue UI, and Product Detail UI: completed.
+- Week 6 — Skin Journal, Dashboard enhancement, Product Catalogue UI, Product Detail UI, Insights, Settings, and Data Control: completed.
 
-Latest completed product release:
-
-```txt
-MVP v1.8 - Insights Usability & Progress Story Refinement
-```
-
-Completed documentation cleanup patch:
+Current readiness:
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+MVP core scope: COMPLETE
+Local validation evidence: PASS
+Production smoke evidence: PASS, user-reported
+Production monitoring evidence: PASS, user-reported
+Portfolio/demo/interview readiness: READY at MVP level
 ```
 
-Latest documentation consistency hotfix:
+Evidence boundary:
 
-```txt
-MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
-```
+- Local validation is supported by terminal output.
+- Production PASS is based on the user's reported manual verification with no blockers reported.
+- Screenshots, Vercel deployment ids, browser logs, and sanitized production log snippets should be stored separately if strict traceability is required.
 
 Recommended next task:
 
 ```txt
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Optional portfolio polish only: screenshots, release tag, CV/portfolio case-study integration, and spoken demo practice.
 ```
 
-MVP core scope is completed and the product is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence is NOT RUN until manually verified, production monitoring evidence is PENDING until manually verified, and a full validation rerun remains NOT RUN for v1.8.2 unless actually executed.
+Do not add new product features unless the user explicitly starts a post-MVP scope.
 
 ---
 
@@ -1089,19 +1098,19 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.8.2 - Final Documentation Consistency Hotfix`, the recommended next task is:
+After `MVP v1.11 - Portfolio Demo Readiness Polish`, the recommended next task is optional portfolio presentation polish only:
 
 ```txt
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Optional next work: screenshots, release tag, CV/portfolio case-study integration, and spoken demo practice.
 ```
 
 Reason:
 
 - MVP v1.8 is the completed product release.
-- MVP core scope is portfolio/demo/interview ready at MVP level.
-- Current production smoke test evidence is pending unless actually verified.
-- Current production monitoring and demo recovery evidence are pending unless actually verified.
-- MVP v1.9 should verify production behavior, environment variables, Auth.js callback URLs, MongoDB connectivity, Vercel logs, and demo recovery paths without adding new product scope.
+- MVP v1.9 local validation evidence is PASS.
+- MVP v1.10 production smoke/monitoring evidence is PASS based on user-reported manual verification with no blockers reported.
+- MVP v1.11 portfolio demo readiness documentation is DONE.
+- Further work should not add product scope unless the user explicitly starts a post-MVP enhancement.
 
 ---
 

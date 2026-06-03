@@ -1,166 +1,166 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## 1. Current Phase
 
 ```txt
-MVP v1.8 Insights Usability & Progress Story Refinement is completed.
-MVP v1.8.1 Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
-MVP v1.8.2 Final Documentation Consistency Hotfix is the latest completed documentation consistency hotfix.
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The previous release and portfolio preparation work is historical context; the current next recommended task is production monitoring and demo evidence stabilization.
-
-Recently completed MVP improvements:
+Current completed chain:
 
 ```txt
-MVP v1.4 - Data Export & Data Control Upgrade: DONE
-MVP v1.4.1 - Security QA, Data Control Hardening & Empty-State Stabilization: DONE
-MVP v1.5 - Product Matching Explanation Upgrade: DONE
-MVP v1.5.1 - Product Detail Personalized Match Explanation & Verification: DONE
-MVP v1.5.2 - Product Match Explanation Polish & Documentation Sync: DONE
-MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: DONE
-MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: DONE
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: DONE
 MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
 MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
+MVP v1.9 - Local Validation Evidence: PASS
+MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 ```
 
-## 2. Completed Product Scope
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, and portfolio/demo documentation has been refreshed.
 
-Completed user-facing MVP features:
+Evidence boundary:
+
+- Local validation is supported by terminal output.
+- Production PASS is based on user-reported manual verification with no blockers reported.
+- Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
+
+## 2. Implemented Product Scope
+
+| Area | Status | Notes |
+|---|---|---|
+| Landing page | DONE | Public product entry. |
+| Google OAuth / Auth.js | DONE | Protected app routes use authenticated user context. |
+| Dashboard | DONE | User-owned summary. |
+| Skin Profile | DONE | Onboarding/view/edit/delete flows. |
+| Product Catalogue | DONE | Product list and detail flows. |
+| Product Match | DONE | Rule-based educational matching. |
+| Product Detail personalized match | DONE | Single-product match explanation. |
+| Saved Products | DONE | Save/unsave user-owned products. |
+| Ingredient Library | DONE | Ingredient list/detail/explanation. |
+| Routine Builder | DONE | Morning/evening routine management. |
+| Routine Safety Analysis | DONE | Deterministic analysis and safe fallback behavior. |
+| Today Routine Checklist | DONE | Daily completion flow. |
+| Routine Logs | DONE | Tracking history. |
+| Skin Journal | DONE | Journal entry management. |
+| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
+| Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
+| Seed data | DONE | 40 ingredients and 38 products. |
+| Portfolio docs | DONE | README, case study, demo script, checklists, runbooks. |
+
+## 3. Route Coverage
+
+UI routes:
 
 ```txt
-[x] Google OAuth authentication and protected app routes
-[x] Dashboard summary
-[x] Skin Profile onboarding, view, edit, and delete
-[x] Product Catalogue and Product Detail
-[x] Personalized Product Match result cards with rule-based explanation
-[x] Product Detail personalized single-product match explanation through GET /api/products/[id]/match
-[x] Saved Products
-[x] Ingredient Library and Ingredient Detail
-[x] Ingredient explanation with mock/fallback AI-provider behavior
-[x] Routine Builder
-[x] Routine Safety Analysis
-[x] Routine Analysis history
-[x] Today Routine Checklist and routine logs
-[x] Skin Journal
-[x] Skin Progress Insights and Calendar
-[x] Settings and Data Control
-[x] User-owned skincare data export
-[x] User-owned skincare app data deletion
-[x] MVP-safe account deletion request marker
+/
+/dashboard
+/onboarding/skin-profile
+/skin-profile
+/routines
+/routine-logs/today
+/journal
+/products
+/products/[id]
+/product-match
+/saved-products
+/insights
+/ingredients
+/ingredients/[id]
+/settings
 ```
 
-Product Match explanation status:
+API routes:
 
 ```txt
-Product Match result cards: personalized explanation available.
-Product Detail: personalized explanation available through single-product match API.
-Product Catalogue/List: full personalized explanations are not expanded there to avoid catalogue-wide matching or extra ingredient loading.
-```
-
-MVP v1.6 data quality status:
-
-```txt
-Ingredient catalogue expanded to 40 curated records.
-Product catalogue expanded to 38 curated records.
-Product categories now cover cleanser, toner, serum, moisturizer, sunscreen, treatment, mask, and other.
-Product metadata now better covers oily, dry, combination, normal, sensitive, and unknown skin types.
-Concern metadata now covers acne, oiliness, dryness, redness, dark_spots, texture, barrier_support, and unknown.
-Seed data supports sunscreen, active conflict, fragrance caution, barrier recovery, and uneven tone demo cases.
-```
-
-MVP v1.7 routine usability status:
-
-```txt
-Routine Builder empty state is refined for clearer first-use guidance.
-Morning/evening routine purpose is clarified in the builder and routine cards.
-Routine steps now surface clearer ordering guidance and compact selected-product context from already-loaded product option metadata.
-Routine Analysis readability and safety copy are improved without changing the deterministic safety rules.
-Routine Builder now links to the existing Today Checklist route for demo continuity.
-```
-
-MVP v1.8 Insights usability status:
-
-```txt
-Insights page intro now explains that the view is based on routine logs and skin journal entries.
-Overview cards include clearer helper text and no-data context for routine, journal, and symptom metrics.
-Routine consistency calendar now explains the displayed period, no-log days, status legend, and accessible day summaries.
-Journal trend and product usage sections frame data as self-reported reflection only, with no diagnosis or product causality claim.
-Next actions use existing routes for routine creation/review, Today Checklist, and Skin Journal without adding new routes.
-The Insights API response shape, DTO fields, database collections, and external-provider behavior are unchanged.
-```
-
-## 3. Safety And Privacy Boundaries
-
-```txt
-Product Match explanations are deterministic and rule-based.
-No real AI provider, LLM integration, external API call, diagnosis, treatment claim, skin score, face analysis, marketplace, cart, checkout, or payment feature is part of Product Match.
-Personalized match APIs derive user identity from the authenticated session and do not trust client-provided userId.
-Public DTOs must not expose raw MongoDB _id, raw userId, Auth.js account/session/provider data, OAuth tokens, refresh tokens, or secrets.
+/api/me
+/api/account/app-data
+/api/account/deletion-request
+/api/account/export
+/api/dashboard
+/api/skin-profile
+/api/products
+/api/products/[id]
+/api/products/[id]/match
+/api/product-match
+/api/saved-products
+/api/saved-products/[productId]
+/api/insights
+/api/ingredients
+/api/ingredients/[id]
+/api/ingredients/explain
+/api/routines
+/api/routines/[id]
+/api/routines/[id]/analyze
+/api/routines/[id]/analyses
+/api/routine-logs
+/api/routine-logs/[id]
+/api/skin-journal
+/api/skin-journal/[id]
+/api/auth/*
 ```
 
 ## 4. Validation Evidence
 
-Latest historical MVP v1.8 validation environment:
+Local evidence:
 
 ```txt
-Node.js: v24.14.0
-npm: 11.14.1
-Target baseline: Node.js 24.x / npm 11.x
-Baseline match: YES
-```
-
-Latest historical MVP v1.8 validation results:
-
-```txt
+Evidence date: 2026-06-04
+Environment: Local Windows / Git Bash
+Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
-npm run test:e2e: PASS - 29/29 tests
 npm run db:indexes: PASS - 32 indexes ensured
 npm run db:seed: PASS - 40 ingredients / 38 products
-npm audit: NOT RUN - not part of the v1.8 validation scope
+npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
 ```
 
-Environment note:
+Production evidence:
 
 ```txt
-Initial sandbox runs of npm run build and npm run test:e2e hit Windows spawn EPERM. Both commands passed after scoped reruns outside the sandbox process-spawn restriction.
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASS - user-reported manual verification completed
+Production monitoring: PASS - user-reported checks completed
+Critical blockers reported: None
+Evidence date: 2026-06-04
 ```
 
-MVP v1.8.2 validation note:
+## 5. Safety Boundary
+
+The implemented MVP remains within these boundaries:
+
+- No medical diagnosis.
+- No treatment/cure guarantee.
+- No prescription guidance.
+- No dermatologist replacement.
+- No skin/face/appearance score.
+- No image upload or face analysis.
+- No marketplace/payment/checkout.
+- No required real external AI provider for demo.
+
+## 6. Current Recommended Next Work
+
+Do **not** add large features immediately. The next work should be polish and presentation only:
 
 ```txt
-Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
-Production smoke test evidence is NOT RUN until manually verified.
-Production monitoring evidence is PENDING until manually verified.
+1. Capture optional screenshots for portfolio/slides.
+2. Commit and tag the v1.11 portfolio-ready release.
+3. Prepare a 3-5 minute spoken demo.
+4. Add project to CV/portfolio website.
+5. Keep a future-improvement backlog separate from MVP scope.
 ```
 
-## 5. Known MVP Limitations
+Optional future product scope:
 
-```txt
-Product and ingredient data remains demo/seed-style catalogue data.
-Ingredient metadata is intentionally limited and explanations avoid invented skincare facts.
-Real OpenAI/Gemini provider integration is not implemented.
-Image upload and AI face analysis are out of scope.
-Marketplace, cart, checkout, payment, subscriptions, likes, ratings, and reviews are out of scope.
-Admin Product/Ingredient CRUD is out of scope.
-Medical diagnosis and treatment advice are out of scope.
-```
-
-## 6. Recommended Next MVP Task
-
-```txt
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
-```
-
-This recommendation is product-quality scope only. It is not implemented as part of v1.8.2.
-
-## 7. Update Rule
-
-Update this file when MVP feature status, API/UI behavior, safety boundaries, or validation evidence materially changes.
+- Admin product/ingredient management.
+- More complete account deletion workflow.
+- Better production observability.
+- Optional real provider integration with strict safety controls.
+- More curated data coverage.

@@ -1,40 +1,64 @@
 # Screenshots Checklist - SkinWise VN
 
-Status: **Optional / skipped for current submission**
+Last updated: 2026-06-04
 
-Screenshots are not required for the current portfolio/submission package. This file is kept only as an optional checklist if screenshots are needed later for a visual portfolio page, CV attachment, or presentation deck.
+Status: **Optional but recommended for portfolio polish**
 
-Current release context: MVP v1.8 is the completed product release, MVP v1.8.1 is the completed documentation truth sync patch, MVP v1.8.2 is the completed final documentation consistency hotfix, and MVP v1.9 is the next main task. Production smoke test evidence remains NOT RUN until manually verified, and production monitoring evidence remains PENDING until manually verified.
+Screenshots are not required for the current MVP v1.11 portfolio/demo readiness package, because the project can be presented through the live demo, README, portfolio case study, release checklist, and demo script.
 
-## Optional Screenshot List
+However, screenshots are recommended if the project will be added to a CV, portfolio website, LinkedIn post, or slide deck.
 
-- Landing page.
-- Google login entry point.
-- Dashboard.
-- Skin Profile.
-- Product Catalogue.
-- Product Detail.
-- Saved Products.
-- Ingredient Library.
-- Ingredient Detail.
-- Routine Builder.
-- Routine Analysis result.
-- Today Routine Checklist.
-- Skin Journal.
-- Settings/Data Control.
+Current release context:
+
+```txt
+MVP v1.9 local validation: PASS
+MVP v1.10 production smoke/monitoring: PASS, user-reported
+MVP v1.11 portfolio demo readiness: DONE
+```
+
+## Recommended Screenshot List
+
+| Screen | Priority | Notes |
+|---|---|---|
+| Landing page | High | Show product positioning and safety boundary. |
+| Dashboard | High | Show user-owned overview after login. |
+| Skin Profile | High | Show personalization context. |
+| Product Catalogue | High | Show seeded product data. |
+| Product Match result | High | Show rule-based recommendations and explanations. |
+| Product Detail with match explanation | High | Show personalized reasoning. |
+| Saved Products | Medium | Show user curation flow. |
+| Ingredient Library | Medium | Show educational ingredient data. |
+| Ingredient Detail / Explanation | Medium | Show explanation/fallback behavior. |
+| Routine Builder | High | Show morning/evening routine structure. |
+| Routine Analysis | High | Show safety/caution logic. |
+| Today Routine Checklist | Medium | Show daily completion flow. |
+| Routine Logs | Medium | Show tracking history. |
+| Skin Journal | High | Show reflection and observations. |
+| Insights | High | Show progress story and consistency view. |
+| Settings / Data Export | High | Show data control and privacy thinking. |
+
+## Screenshot Safety Rules
+
+Do not include:
+
+- real OAuth secrets;
+- `.env.local` values;
+- database URIs;
+- access tokens;
+- private personal notes;
+- private email details beyond a safe demo label;
+- medical diagnosis or treatment claims.
+
+## Suggested Portfolio Order
+
+```txt
+Landing -> Dashboard -> Skin Profile -> Product Match -> Product Detail -> Routine Analysis -> Journal -> Insights -> Settings/Data Export
+```
 
 ## Current Decision
 
 ```txt
-Screenshot capture: SKIPPED — not required for this submission.
+Screenshot capture: OPTIONAL
+Portfolio/demo readiness without screenshots: READY
+Recommended next polish: capture 8-10 key screenshots if building a visual portfolio page
 ```
-
-The project can still be presented using:
-
-- Production demo URL.
-- README.
-- Portfolio case study.
-- Demo script.
-- Release notes.
-- Final release checklist.
-- Historical validation evidence.

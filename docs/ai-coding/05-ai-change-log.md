@@ -6,6 +6,107 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+
+## 2026-06-04 - MVP v1.11 Portfolio Demo Readiness Polish
+
+### Task
+
+Finalize portfolio/demo/interview readiness documentation after local validation passed and production smoke/monitoring checks were user-reported as completed with no blockers.
+
+This is a documentation-only update. No source code, route, API, schema, dependency, or business-logic change was made.
+
+### Files Changed
+
+- `README.md`
+- `AGENTS.md`
+- `docs/00-source-of-truth.md`
+- `docs/09-release-plan.md`
+- `docs/13-ui-route-map.md`
+- `docs/18-deployment-checklist.md`
+- `docs/final-release-checklist.md`
+- `docs/portfolio-case-study.md`
+- `docs/demo-script.md`
+- `docs/screenshots-checklist.md`
+- `docs/production-smoke-test-v1.9.md`
+- `docs/production-monitoring-runbook.md`
+- `docs/deployment/vercel-deployment.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Evidence Recorded
+
+```txt
+MVP v1.9 local validation: PASS
+MVP v1.10 production smoke test: PASS - user-reported
+MVP v1.10 production monitoring: PASS - user-reported
+MVP v1.11 portfolio demo readiness: DONE
+Critical blockers reported: None
+```
+
+### Evidence Boundary
+
+- Local validation evidence is supported by the terminal output already recorded in the repository docs.
+- Production PASS is based on the user's reported manual verification, with no blockers reported.
+- Screenshots, deployment ids, browser logs, and sanitized Vercel logs should be preserved separately if stricter audit evidence is required.
+- No real secrets, OAuth tokens, database URIs, or private user data were added.
+
+### Recommended Next Task
+
+```txt
+Optional portfolio polish: capture screenshots, practice 3-5 minute demo, commit/tag v1.11, and add the project to portfolio/CV.
+```
+
+## 2026-06-04 - MVP v1.9 Local Validation Evidence Update
+
+### Task
+
+Record local validation evidence after the completed MVP v1.8.2 documentation consistency hotfix.
+
+This is an evidence/documentation update. No product feature was added.
+
+### Files Changed
+
+- `README.md`
+- `docs/09-release-plan.md`
+- `docs/18-deployment-checklist.md`
+- `docs/final-release-checklist.md`
+- `docs/production-smoke-test-v1.9.md`
+- `docs/production-monitoring-runbook.md`
+- `docs/portfolio-case-study.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Validation Evidence Recorded
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
+```
+
+### Boundaries
+
+- No source code was changed.
+- No schema, API, route, UI, business logic, dependency, or package-file change was made.
+- Production smoke test evidence remains NOT RUN until manually verified against the deployed Vercel app.
+- Production monitoring evidence remains PENDING until Vercel logs, browser console/network, OAuth, and MongoDB checks are manually verified.
+
+### Recommended Next Task
+
+```txt
+MVP v1.9 - Production Smoke Test, Monitoring Evidence, and Demo Evidence Stabilization
+```
+
 ## 2026-06-03 - MVP v1.8.2 Final Documentation Consistency Hotfix
 
 ### Task

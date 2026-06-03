@@ -1,10 +1,12 @@
 # SkinWise VN - Portfolio Case Study
 
-## 1. Project Overview
+Last updated: 2026-06-04
 
-SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users organize their skincare context, review rule-based product matches, discover products and ingredients, build routines, track daily routine completion, write skin journal entries, and review dashboard/insights summaries.
+## 1. Executive Summary
 
-The project was built as a portfolio-ready full-stack MVP and BA practice project. The current completed product release is MVP v1.8, a focused Insights usability and progress-story refinement after the completed MVP v1.7 routine demo-flow refinement, MVP v1.6 catalogue data-quality upgrade, and MVP v1.6.1 documentation truth sync. MVP v1.8.1 is the completed documentation truth sync patch, and MVP v1.8.2 is the completed final documentation consistency hotfix. It demonstrates product thinking, requirement scoping, safe domain boundaries, modular implementation, curated data quality, test coverage, CI/E2E validation discipline, and MVP-level portfolio/demo readiness.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users organize their skin profile, review rule-based product matches, understand products and ingredients, build routines, track daily completion, write skin journal entries, and review progress insights over time.
+
+This project was built as a portfolio-ready full-stack MVP and BA practice project. It demonstrates problem framing, MVP scoping, requirement discipline, safe product boundaries, modular full-stack implementation, testing, release evidence, production smoke-test discipline, and demo readiness.
 
 Production demo:
 
@@ -12,239 +14,259 @@ Production demo:
 https://skinwise-vn.vercel.app
 ```
 
-Screenshots are intentionally omitted for this submission. The project is documented through live demo access, feature walkthrough, historical validation evidence, release notes, and implementation documentation.
+Current portfolio status:
 
-## 2. Problem
+```txt
+MVP v1.8 - Product release: DONE
+MVP v1.8.1 - Documentation truth sync: DONE
+MVP v1.8.2 - Final documentation consistency hotfix: DONE
+MVP v1.9 - Local validation evidence: PASS
+MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
+MVP v1.11 - Portfolio demo readiness: DONE
+```
+
+Evidence note: local validation is supported by command output. Production smoke and monitoring PASS are recorded from the user's reported completed manual verification with no blockers reported. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+
+## 2. Problem Statement
 
 Skincare beginners often struggle with:
 
-- Remembering their skin profile and concerns.
-- Understanding what products and ingredients are for.
-- Building a safe and consistent routine.
-- Tracking whether they completed their routine.
-- Recording skin observations over time.
-- Distinguishing educational guidance from medical advice.
+- remembering their skin profile and concerns;
+- understanding what products and ingredients are for;
+- choosing products that fit their profile without overclaiming medical outcomes;
+- building a safe and consistent routine;
+- tracking whether they completed their routine;
+- recording observations over time;
+- distinguishing educational guidance from diagnosis or medical advice.
 
-SkinWise VN addresses these needs with a safe MVP that focuses on organization, education, and tracking rather than diagnosis or appearance scoring.
+SkinWise VN addresses these needs with a safe MVP focused on organization, education, routine consistency, and reflection rather than medical diagnosis, treatment, or appearance scoring.
 
 ## 3. Target Users
 
 Primary users:
 
-- Vietnamese skincare beginners.
-- Users who want to organize their skincare routine.
-- Users who want lightweight product/ingredient education.
-- Users who want a personal skincare journal and dashboard.
+- Vietnamese skincare beginners;
+- users who want to organize a skincare routine;
+- users who want lightweight product and ingredient education;
+- users who want a personal routine log and skin journal;
+- users who want progress reflection without unsafe claims.
 
-This MVP does not target medical diagnosis, prescription treatment, or clinical decision-making.
+This MVP does not target clinical diagnosis, prescription treatment, or commercial skincare purchase conversion.
 
 ## 4. Product Scope
 
-### In Scope
+### In scope
 
-- Google OAuth authentication.
-- Skin Profile.
+- Authentication and protected user-owned data.
+- Skin Profile onboarding and management.
 - Product Catalogue and Product Detail.
-- Curated v1.6 product and ingredient seed catalogue.
-- Personalized Product Match.
+- Rule-based Product Match.
 - Saved Products.
 - Ingredient Library and Ingredient Detail.
-- Ingredient Explanation API.
+- Ingredient Explanation with safe fallback behavior.
 - Routine Builder.
 - Routine Safety Analysis.
-- Today Routine Checklist.
-- Routine Logs.
+- Today Routine Checklist and Routine Logs.
 - Skin Journal.
-- Skin Progress Insights and Calendar.
-- Dashboard summary.
-- Settings and Data Control.
-- CI/E2E validation.
-- MVP-level portfolio/demo/interview readiness.
-- Vercel deployment target and production smoke-test checklist.
+- Insights and Dashboard summary.
+- Settings/Data Control, data export, app data deletion, account deletion request marker.
+- Demo data, smoke checklist, release checklist, and portfolio documentation.
 
-### Out of Scope
+### Out of scope
 
-- Real AI provider integration.
-- Image upload.
-- AI face analysis.
-- Skin score or appearance score.
-- Marketplace/cart/payment.
-- Admin product/ingredient CRUD.
-- Notifications.
-- Full commercial monitoring/analytics.
+- Medical diagnosis.
+- Medication prescription.
+- Treatment guarantee.
+- Dermatologist replacement.
+- Skin score, appearance score, attractiveness scoring, or before/after pressure.
+- Image upload or image-based skin analysis.
+- Marketplace, cart, checkout, payment, subscription, ratings, or reviews.
+- Admin product management in the current MVP.
+- Required real external AI integration.
 
-## 5. Key User Flows
+## 5. Core User Journey
 
-### Flow 1 - New User Onboarding
+The intended demo story is:
 
 ```txt
-Landing page -> Google login -> Dashboard -> Skin Profile -> Save profile -> Dashboard summary updates
+A skincare beginner logs in
+-> creates or reviews their Skin Profile
+-> checks product matches
+-> opens product details and ingredient context
+-> saves useful products
+-> builds morning/evening routines
+-> runs routine safety analysis
+-> completes today's routine
+-> writes journal entries
+-> reviews progress insights
+-> exports or controls their data in Settings
 ```
 
-### Flow 2 - Product Discovery
+## 6. BA Perspective
+
+### Requirement thinking shown in this project
+
+| BA concern | How SkinWise VN demonstrates it |
+|---|---|
+| Problem framing | Focuses on skincare organization and education, not medical decision-making. |
+| Scope control | Excludes marketplace, image analysis, admin CRUD, payments, and diagnosis from MVP. |
+| User journey | Connects profile, product match, product detail, routine, journal, and insights. |
+| Business rules | Product Match and Routine Analysis use deterministic rules and safety boundaries. |
+| Non-functional awareness | Includes protected routes, privacy boundaries, validation, fallback, and evidence docs. |
+| Traceability | Docs map features to routes, APIs, tests, and release evidence. |
+| Release discipline | Local validation, smoke test, monitoring runbook, and final checklist are documented. |
+
+### Requirement examples
+
+| Requirement type | Example |
+|---|---|
+| Functional | User can create and update a Skin Profile. |
+| Functional | User can run Product Match based on profile data. |
+| Functional | User can save and unsave products. |
+| Non-functional | Protected app routes require authentication. |
+| Non-functional | Product guidance must remain educational and non-medical. |
+| Business rule | Product Match must not guarantee skincare outcomes. |
+| Data rule | User-owned data must be scoped to the authenticated user. |
+| Safety rule | Routine Analysis must include caution wording for potentially risky combinations. |
+
+## 7. Technical Architecture Summary
+
+SkinWise VN uses a modular Next.js application structure with clear boundaries:
 
 ```txt
-Products -> Search/filter -> Product detail -> Save product -> Saved Products -> Remove saved product
+App Router pages/routes
+-> API route handlers
+-> application/use-case services
+-> domain rules and validation
+-> repository/infrastructure layer
+-> MongoDB persistence
 ```
 
-### Flow 3 - Personalized Product Match
+Key technical choices:
+
+- Next.js App Router for full-stack routing.
+- Auth.js/NextAuth for authentication.
+- MongoDB for document storage.
+- Zod for environment/data validation boundaries.
+- DTO mappers for API response consistency.
+- Vitest for unit tests.
+- Playwright for E2E tests.
+- Vercel for production deployment.
+
+## 8. Validation and Release Evidence
+
+Local validation evidence:
 
 ```txt
-Skin Profile -> Product Match -> Review match score, level, reasons, and cautions -> Save matched product -> Product detail
-```
-
-### Flow 4 - Ingredient Education
-
-```txt
-Ingredients -> Search -> Ingredient detail -> Explanation request -> Safe educational response/fallback
-```
-
-### Flow 5 - Routine Management
-
-```txt
-Routines -> Create morning/evening routine -> Add product-backed or manual steps -> Review selected-product context -> Save routine -> Run routine analysis -> Open Today Checklist
-```
-
-### Flow 6 - Daily Tracking
-
-```txt
-Today Routine Checklist -> Mark routine complete -> Review log -> Delete log if needed
-```
-
-### Flow 7 - Skin Journal and Insights
-
-```txt
-Journal -> Create entry -> Edit entry -> Delete entry -> Insights -> Review routine consistency, calendar, self-reported symptoms, reflective product usage, and next actions
-```
-
-## 6. Architecture
-
-The project uses a modular monolith structure with clear boundaries:
-
-- `src/app` for Next.js App Router pages and API routes.
-- `src/modules` for feature modules, use cases, schemas, repositories, DTO mappers, and UI components.
-- `src/domain` for domain logic such as routine safety rules.
-- `src/infrastructure` for database, AI provider abstraction, and platform concerns.
-- `tests/unit` for unit and contract tests.
-- `tests/e2e` for Playwright E2E coverage.
-- `docs` for product, architecture, validation, release, and demo documentation.
-
-The implementation separates route handling, validation, business logic, persistence, and UI composition to keep the MVP testable and maintainable.
-
-## 7. Tech Stack
-
-- Next.js App Router.
-- TypeScript.
-- Tailwind CSS.
-- MongoDB.
-- Auth.js / NextAuth.
-- Zod.
-- Vitest.
-- Playwright.
-- GitHub Actions.
-- Vercel.
-
-## 8. Quality and Validation
-
-Final validation baseline:
-
-```txt
-Node.js: v24.14.0
-npm: 11.14.1
-```
-
-Validation evidence:
-
-```txt
+Evidence date: 2026-06-04
+Environment: Local Windows / Git Bash
+Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
 npm run db:seed: PASS - 40 ingredients / 38 products
-npm run test:e2e: PASS - 29/29 tests
-npm audit: NOT RUN during MVP v1.8
+npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
 ```
 
-The Playwright E2E suite covers public landing behavior, protected route redirects, authenticated dashboard access, profile creation/update, product browsing/detail, Product Match review/save/detail flow, saved products, ingredient library/detail/explanation, routine builder, routine analysis, today routine checklist, routine log deletion, skin journal, Insights, settings/data control, account deletion request, and dashboard summary reflection.
-
-## 9. Production Evidence Status
-
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. Production smoke test evidence is NOT RUN until manually verified, and production monitoring evidence is PENDING until manually verified.
-
-MVP v1.9 evidence targets:
-
-- Vercel deployment status and runtime logs.
-- Google OAuth production login.
-- MongoDB Atlas-backed authenticated read/write flows.
-- Protected route behavior.
-- Dashboard after login.
-- Skin Profile.
-- Product Match.
-- Product Catalogue and Product Detail.
-- Saved Products.
-- Ingredient Library and Ingredient Detail.
-- Routine Builder and Routine Analysis.
-- Today Routine Log and Routine Logs.
-- Skin Journal.
-- Insights.
-- Settings/Data Control, data export, and deletion request flow.
-- Sign out.
-
-## 10. BA / Product Thinking Demonstrated
-
-This project demonstrates:
-
-- MVP scoping.
-- Requirement breakdown.
-- User story thinking.
-- Functional and non-functional requirement separation.
-- API contract thinking.
-- Data model design.
-- Safe product boundary definition.
-- Traceability from business needs to implementation and tests.
-- Release readiness and honest validation/evidence reporting.
-- Documentation truth-sync after MVP v1.6.
-- Usability refinement of the routine demo flow in MVP v1.7.
-- Insights progress-story and safety-copy refinement in MVP v1.8.
-
-## 11. Engineering Practices Demonstrated
-
-- Modular feature-based structure.
-- Zod validation at API boundaries.
-- DTO mapping to avoid leaking internal database fields.
-- Repository/use-case separation.
-- Deterministic routine safety rules before AI-style explanation.
-- Deterministic Product Match scoring with match score, match level, reasons, cautions, saved-product integration, and product detail navigation.
-- Routine-slot based Insights aggregation for routine consistency, journal activity, product usage, calendar days, and safe next actions, with v1.8 UI framing that avoids diagnosis and product causality claims.
-- Mock/fallback provider behavior for MVP reliability.
-- Unit and contract testing.
-- Playwright E2E testing.
-- GitHub Actions CI with MongoDB service.
-- MVP-level portfolio/demo readiness with production smoke/monitoring evidence separated as next-step hardening.
-
-## 12. Final Outcome
-
-SkinWise VN is ready as an MVP portfolio/interview demo project for the current MVP v1.8 state.
-
-Current release status:
+Production evidence:
 
 ```txt
-MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
-MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
-MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
-MVP v1.8.2 - Final Documentation Consistency Hotfix: COMPLETED
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASS - user-reported manual verification completed
+Production monitoring: PASS - user-reported checks completed
+Critical blockers reported: None
+Evidence date: 2026-06-04
 ```
 
-## 13. Future Improvements
+Production evidence should be strengthened with screenshots, Vercel deployment id, browser/network notes, and issue records if the project is submitted for a formal audit.
 
-Recommended next MVP roadmap:
+## 9. Demo Script Summary
 
-1. MVP v1.9 - Production Monitoring & Demo Evidence Stabilization.
-2. MVP v2.0 or later optional future enhancements, such as real AI provider integration with monitoring and cost controls.
-3. Admin Product/Ingredient CRUD.
-4. Image upload for journal entries.
-5. Error monitoring and production analytics.
-6. Notification reminders.
+Use this 3-5 minute structure:
+
+1. Introduce the problem and safety boundary.
+2. Show landing page and Google login.
+3. Show Dashboard as the personal skincare hub.
+4. Show Skin Profile.
+5. Run Product Match.
+6. Open Product Detail and save a product.
+7. Show Ingredient Library and explanation.
+8. Build or review a routine.
+9. Run Routine Safety Analysis.
+10. Complete Today Routine.
+11. Add/review Skin Journal.
+12. Show Insights.
+13. Show Settings/Data Export.
+14. Close with validation evidence and MVP boundaries.
+
+## 10. Demo Data Checklist
+
+Recommended demo account data:
+
+- 1 complete Skin Profile.
+- 3-5 Saved Products.
+- 1 Morning Routine.
+- 1 Evening Routine.
+- 1 Routine Safety Analysis example.
+- 3-5 Routine Logs.
+- 5-7 Skin Journal entries.
+- Insights page with visible activity.
+- Data Export tested once.
+- Account deletion request flow understood but used carefully.
+
+## 11. Screenshots Checklist
+
+Screenshots are optional, but useful for a portfolio page or slide deck:
+
+- Landing page.
+- Dashboard.
+- Skin Profile.
+- Product Catalogue.
+- Product Match result.
+- Product Detail with match explanation.
+- Saved Products.
+- Ingredient Library.
+- Ingredient Detail/Explanation.
+- Routine Builder.
+- Routine Analysis.
+- Today Routine.
+- Skin Journal.
+- Insights.
+- Settings/Data Export.
+
+## 12. Strong Interview Talking Points
+
+- I controlled MVP scope instead of building too many features.
+- I separated educational skincare guidance from medical claims.
+- I used deterministic rules before depending on external AI.
+- I protected user-owned data behind authentication.
+- I validated the project with unit tests, E2E tests, build checks, lint, typecheck, database seed/index scripts, audit, production smoke checks, and release documentation.
+- I prepared the project for demo with a clear case study, demo script, and evidence checklist.
+
+## 13. Limitations and Future Improvements
+
+Intentional MVP limitations:
+
+- Product/ingredient data is curated and demo-oriented.
+- External AI provider use is not required for the MVP.
+- Admin CRUD is out of MVP scope.
+- Marketplace/payment is out of MVP scope.
+- Full production observability with external monitoring tools is out of MVP scope.
+
+Future improvements:
+
+- Admin product/ingredient management.
+- Better analytics and structured progress review.
+- Optional real provider integration with strict safety controls.
+- More robust production monitoring.
+- Screenshot-based portfolio page.
+- More complete account deletion workflow.
+
+## 14. Closing Statement
+
+SkinWise VN is valuable as a portfolio project because it shows both BA thinking and full-stack execution. It defines a clear user problem, controls MVP scope, implements a complete core journey, documents safety boundaries, validates quality, verifies production readiness, and presents the result in a form suitable for demo, interview, and portfolio review.

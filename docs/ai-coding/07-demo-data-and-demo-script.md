@@ -1,250 +1,137 @@
 # Demo Data and Demo Script - SkinWise VN
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
-## 1. Purpose
-
-`TASK DEMO-DATA-001 - Prepare Professional Demo Data` prepares SkinWise VN for a portfolio and BA internship demo without adding product scope.
-
-The demo data supports a realistic skincare tracking story for a beginner-to-intermediate user with oily or combination-oily skin, acne-prone concerns, clogged-pore texture, post-acne dark spots, mild sensitivity, Product Match review, and Insights review.
-
-SkinWise VN remains an educational skincare MVP. The demo must not claim diagnosis, treatment guarantees, skin scoring, attractiveness scoring, real AI dermatologist behavior, or image-based face/skin analysis.
-
-Current release context:
+## 1. Current Release Context
 
 ```txt
-Completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
-Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
-Next main task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
-Portfolio/demo/interview readiness: READY at MVP level
-Production smoke test evidence: NOT RUN until manually verified
-Production monitoring evidence: PENDING until manually verified
+MVP v1.9 local validation: PASS
+MVP v1.10 production smoke/monitoring: PASS, user-reported
+MVP v1.11 portfolio demo readiness: DONE
+Production URL: https://skinwise-vn.vercel.app
 ```
+
+This document explains what demo data should exist before presenting SkinWise VN. It complements `docs/demo-script.md` and `docs/portfolio-case-study.md`.
 
 ## 2. Data Ownership Strategy
 
 | Data category | Data | Strategy |
 |---|---|---|
-| Public/shared demo data | Products and ingredients | Seeded through the existing `scripts/seed.ts` public seed structure. |
-| User-owned demo data | Skin profile, saved product example, routines, routine logs, journal entries, routine analysis records | Created manually through the authenticated UI for the real demo account. |
+| Public/shared demo data | Products and ingredients | Seeded through `scripts/seed.ts`. |
+| User-owned demo data | Skin profile, saved products, routines, routine logs, journal entries, routine analysis records | Created manually through the authenticated UI for the real demo account. |
 
-User-owned demo data is intentionally not seeded by default. The project uses Auth.js users and user-scoped collections, so hardcoding a fake `userId` would risk bypassing the real authenticated ownership flow. A future optional `DEMO_USER_ID` seed script can be added only if the target user id and demo database are explicitly confirmed safe.
+User-owned demo data should not be hardcoded into the public seed script because it must remain scoped to the authenticated user.
 
 ## 3. Public Shared Seed Data
 
-The existing public seed script contains curated products and ingredients for demo, development, Product Match explanations, Ingredient Library browsing, and routine safety behavior.
+The existing public seed script supports Product Catalogue, Product Match, Ingredient Library, routine safety behavior, and demo walkthroughs.
 
-Run only against a known safe local or demo database:
+Expected seeded data:
+
+```txt
+Ingredients: 40
+Products: 38
+```
+
+Safe seed command for local/demo database only:
 
 ```bash
 npm run db:seed
 ```
 
-Do not run seed commands against an important production database unless the target is explicitly confirmed safe.
+Do not run seed commands against an unknown or sensitive production database unless the target database is explicitly safe.
 
-Public demo product coverage includes:
+## 4. User-Owned Demo Data Checklist
 
-| Demo need | Seed product examples |
-|---|---|
-| Basic cleanser | Gentle Low pH Cleanser |
-| Hydration layer | Gentle Hydrating Toner |
-| Oil-control serum | Niacinamide 5% Serum |
-| Post-acne mark support | Azelaic Acid 10% Cream |
-| Clogged-pore caution example | BHA 2% Exfoliant |
-| Lightweight barrier support | Barrier Repair Moisturizer |
-| Morning sunscreen | Daily Lightweight Sunscreen SPF50 |
-| Expanded v1.6 sunscreen examples | SunNest Mineral Comfort Sunscreen SPF50, DailyKind Lightweight Sunscreen SPF50, SoftRoutine Dew Sunscreen SPF50 |
-| Expanded v1.6 barrier examples | CalmBarrier Ceramide Recovery Cream, DermaPlain Fragrance-Free Barrier Lotion, BarrierNest Panthenol Repair Balm |
-| Expanded v1.6 active examples | ClearBalance BHA Pore Support Liquid, MildTheory Mandelic PHA Resurfacing Liquid, RoutineBase Retinal Night Support |
-| Product Match strong/good candidate | Niacinamide 5% Serum, Barrier Repair Moisturizer, or Daily Lightweight Sunscreen SPF50 depending on profile signals |
-| Product Match caution candidate | BHA 2% Exfoliant or another active-heavy product with warning text |
+Create this through the production UI using the authenticated demo account:
 
-Public demo seed size after MVP v1.6:
+| Data | Target | Reason |
+|---|---:|---|
+| Skin Profile | 1 complete profile | Enables Product Match and personalized explanation. |
+| Saved Products | 3-5 products | Shows user curation. |
+| Morning Routine | 1 routine | Shows routine organization. |
+| Evening Routine | 1 routine | Shows routine organization. |
+| Routine Analysis | 1-2 examples | Shows safety/caution reasoning. |
+| Routine Logs | 3-5 entries | Powers routine consistency story. |
+| Skin Journal | 5-7 entries | Powers reflection and Insights story. |
+| Insights data | Visible activity | Prevents empty demo screen. |
+| Data Export | Checked once | Shows data control. |
 
-```txt
-Ingredients: 40 curated records
-Products: 38 curated records
-```
+## 5. Suggested Demo Profile
 
-Public demo ingredient coverage includes barrier support, hydration, oiliness/acne-support positioning, exfoliation, retinoid-related ingredients, tone support, soothing support, sunscreen filters, potential irritants, and texture/emollient/occlusive support.
-
-## 4. Demo User Story
-
-Recommended demo persona:
+Use safe, non-medical wording:
 
 ```txt
-Name: Use the authenticated Google account display name.
-Skin type: combination or oily.
-Concerns: acne, oiliness, dark_spots, texture.
-Sensitivity level: medium.
-Budget: 300k_700k or 700k_1500k.
-Experience level: beginner or intermediate.
-Avoid ingredients: fragrance, essential oils.
-Goal: keep a simple routine, reduce oiliness, track skin progress, and avoid unsafe active combinations.
+Skin type: Combination / oily-prone
+Main concerns: oiliness, occasional breakouts, uneven texture
+Sensitivity: mild sensitivity
+Routine goal: build a simple, consistent routine
+Avoided claims: no diagnosis, no treatment guarantee
 ```
 
-Use the existing `/skin-profile` or `/onboarding/skin-profile` UI to create this profile.
+## 6. Suggested Demo Routine
 
-## 5. Manual Demo Setup Flow
+Morning:
 
-Use the deployed app or local app with a real authenticated demo account.
+```txt
+Cleanser -> Hydrating serum -> Moisturizer -> Sunscreen
+```
 
-1. Open `/`.
-2. Sign in with Google.
-3. Open `/skin-profile`.
-4. Create or update the demo skin profile:
-   - `skinType`: `combination` or `oily`
-   - `concerns`: `acne`, `oiliness`, `dark_spots`, `texture`
-   - `sensitivityLevel`: `medium`
-   - `budgetRange`: `300k_700k`
-   - `experienceLevel`: `beginner` or `intermediate`
-   - `avoidIngredients`: `fragrance`, `essential oils`
-5. Open `/product-match`.
-6. Confirm at least one visible product match appears, including score, level, reasons, cautions, and Save/Saved state.
-7. Save one matched product.
-8. Open product detail from the matched product card.
-9. Open `/saved-products` and confirm the saved product is listed.
-10. Open `/products`.
-11. Search/filter products for cleanser, niacinamide, azelaic acid, BHA, moisturizer, sunscreen, and toner.
-12. Open `/routines`.
-13. Create the Morning Routine.
-14. Create the Evening Routine.
-15. Create the optional caution routine only if you want to demonstrate routine analysis warnings.
-16. Run Routine Safety Analysis from `/routines`.
-17. Add routine logs for today through `/routine-logs/today` when available.
-18. Open `/journal`.
-19. Add 5-7 journal entries over recent local dates.
-20. Open `/insights` and review routine consistency, journal activity, symptoms, product usage, and calendar days.
-21. Open `/settings`.
-22. Show data export as an available user data control.
-23. Show the account deletion request flow without submitting it during a live demo unless intended.
-24. Return to `/dashboard` and show the resulting summary.
-25. Sign out and confirm protected routes require authentication again.
+Evening:
 
-## 6. Recommended Routines
+```txt
+Cleanser -> Gentle treatment product -> Moisturizer
+```
 
-Morning Routine:
+Keep the routine simple. Avoid showing too many actives at once unless the point is to demonstrate caution handling.
 
-| Order | Product | Category | Frequency | Instructions |
-|---:|---|---|---|---|
-| 1 | Gentle Low pH Cleanser | cleanser | daily | Massage gently, rinse, and avoid over-cleansing. |
-| 2 | Niacinamide 5% Serum | serum | daily | Apply a thin layer after cleansing. |
-| 3 | Barrier Repair Moisturizer | moisturizer | daily | Use enough to keep skin comfortable. |
-| 4 | Daily Lightweight Sunscreen SPF50 | sunscreen | daily | Apply as the last morning step. |
+## 7. Demo Walkthrough
 
-Evening Routine:
+Use the fuller script in `docs/demo-script.md`. The short flow is:
 
-| Order | Product | Category | Frequency | Instructions |
-|---:|---|---|---|---|
-| 1 | Gentle Low pH Cleanser | cleanser | daily | Cleanse sunscreen and daily buildup gently. |
-| 2 | Azelaic Acid 10% Cream | treatment | daily | Use as the single evening active if skin feels comfortable. |
-| 3 | Barrier Repair Moisturizer | moisturizer | daily | Seal the routine with a simple moisturizer. |
+```txt
+Landing
+-> Login
+-> Dashboard
+-> Skin Profile
+-> Product Match
+-> Product Detail
+-> Saved Products
+-> Ingredient Library
+-> Routine Builder
+-> Routine Analysis
+-> Today Routine
+-> Journal
+-> Insights
+-> Settings/Data Export
+```
 
-Optional caution routine for safety analysis:
+## 8. Demo Safety Notes
 
-| Order | Product | Category | Frequency | Instructions |
-|---:|---|---|---|---|
-| 1 | Gentle Low pH Cleanser | cleanser | daily | Keep cleansing gentle. |
-| 2 | BHA 2% Exfoliant | treatment | weekly_1_2 | Use occasionally, not every night. |
-| 3 | Azelaic Acid 10% Cream | treatment | daily | Avoid stacking too many actives if irritation appears. |
-| 4 | Barrier Repair Moisturizer | moisturizer | daily | Keep barrier support in the routine. |
+Do not show:
 
-Do not add unsupported safety rules just to force a warning. Use whatever the current deterministic safety engine and mock provider return.
+- real private emails if avoidable;
+- real private journal notes;
+- `.env.local`;
+- Vercel secret values;
+- MongoDB URI;
+- OAuth tokens;
+- medical diagnosis claims;
+- before/after appearance claims.
 
-## 7. Suggested Routine Log Pattern
+Use these phrases:
 
-Create routine logs through the `/routines` UI. Use recent local dates when possible, or demonstrate today's log if the UI only supports current-day controls.
+- educational guidance;
+- rule-based match;
+- caution note;
+- safe fallback;
+- reflection over time;
+- not medical advice.
 
-| Day | Morning | Evening | Demo note |
-|---|---|---|---|
-| Day 1 | completed | completed | Routine started consistently. |
-| Day 2 | completed | skipped | Evening routine missed due to late schedule. |
-| Day 3 | completed | completed | Skin feels less oily by afternoon. |
-| Day 4 | completed | completed | Minor dryness managed with moisturizer. |
-| Day 5 | skipped | completed | Morning routine missed, evening recovered. |
-| Day 6 | completed | completed | Routine feels manageable. |
-| Day 7 | completed | completed | Dashboard has meaningful tracking context. |
+## 9. Readiness Decision
 
-## 8. Suggested Journal Entries
-
-Create entries through `/journal`. Keep wording educational and observational, not diagnostic.
-
-| Day | Symptoms | Stress | Sleep | Notes |
-|---|---|---|---:|---|
-| Day 1 | oiliness, new_breakouts, redness | medium | 6.5 | Skin feels oily around the T-zone with a few active blemishes near forehead and chin. Starting a simpler routine and tracking reactions. |
-| Day 2 | oiliness, new_breakouts | medium | 7 | Some clogged-pore texture remains. No strong irritation after cleanser, niacinamide, moisturizer, and sunscreen. |
-| Day 3 | oiliness | low | 7.5 | Oiliness feels slightly more controlled by afternoon. A few blemishes remain, but skin feels more balanced. |
-| Day 4 | dryness | medium | 6 | Mild dryness after active treatment. Added moisturizer carefully and avoided adding another active. |
-| Day 5 | new_breakouts | low | 7 | Fewer active-looking blemishes today. Post-acne marks are still visible, so sunscreen remains important. |
-| Day 6 | oiliness | medium | 6.5 | Skin feels calmer overall. Missed one routine but continued tracking without adding extra products. |
-| Day 7 | other | low | 8 | Routine feels manageable. Less visible redness today; continue tracking progress and avoid overloading actives. |
-
-## 9. Recommended Demo Flow
-
-1. Open landing page.
-2. Log in.
-3. View Dashboard.
-4. View or update Skin Profile.
-5. Review Product Match.
-6. Save a matched product.
-7. Open Product Detail from the matched product card.
-8. Open Saved Products.
-9. Browse Product Catalogue.
-10. Browse Ingredient Library.
-11. Open Ingredient Detail and request an explanation.
-12. View or create Morning Routine.
-13. View or create Evening Routine.
-14. Run Routine Safety Analysis.
-15. Open Today Routine Checklist.
-16. Add or view Routine Logs.
-17. Add or view Skin Journal entries.
-18. Review Insights.
-19. Open Settings.
-20. Show Data Export.
-21. Show Delete Request.
-22. Sign out.
-
-## 10. BA Presentation Angle
-
-Use the demo to explain:
-
-- user persona thinking;
-- user journey from profile setup to routine tracking;
-- functional requirements such as authenticated routines, Product Match, product browsing, journal entries, Insights, and dashboard summary;
-- non-functional requirements such as privacy, validation, route protection, and safe copy;
-- MVP scope control through explicit exclusions;
-- validation mindset through lint, typecheck, tests, build, audit, and smoke testing, while clearly marking v1.8.2 validation and production evidence as NOT RUN or PENDING if not manually verified;
-- traceability from user needs to implemented features.
-
-## 11. Technical Presentation Angle
-
-Use the demo to explain:
-
-- Next.js App Router structure;
-- TypeScript and Zod validation;
-- Tailwind/shadcn UI foundation;
-- MongoDB collections and user ownership;
-- Auth.js protected routes and current-user flow;
-- DTO mappers at API boundaries;
-- deterministic routine safety before AI;
-- deterministic Product Match scoring without a new recommendation collection or external AI provider;
-- routine-slot based Insights aggregation from user-owned data;
-- AI provider abstraction with the mock provider for demo;
-- Vitest coverage and MVP-level portfolio/demo readiness;
-- Vercel deployment target and environment variable discipline.
-
-## 12. Scope Boundaries
-
-`TASK DEMO-DATA-001` did not add:
-
-- new product features;
-- Product CRUD or admin UI;
-- real OpenAI/Gemini provider integration;
-- image upload or AI face analysis;
-- skin score or attractiveness scoring;
-- marketplace, payment, subscription, or notifications;
-- medical diagnosis or treatment advice;
-- new Product Match persistence collection.
-
-Next recommended task: `MVP v1.9 - Production Monitoring & Demo Evidence Stabilization`.
+```txt
+Demo data readiness: READY after user-owned demo data is created or confirmed
+Portfolio demo readiness: READY at MVP level
+Next polish: optional screenshots and release tag
+```

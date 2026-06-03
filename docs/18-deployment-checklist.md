@@ -1,66 +1,59 @@
 # Deployment and Production Readiness Checklist - SkinWise VN MVP
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## 1. Current Deployment Status
 
 ```txt
-Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY; CURRENT PRODUCTION EVIDENCE PENDING
+Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
-Completed documentation cleanup patch: MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
-Latest documentation consistency hotfix: MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
-Next main task: MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Documentation closeout: MVP v1.8.1 and MVP v1.8.2 DONE
+Local validation evidence: MVP v1.9 PASS
+Production smoke/monitoring evidence: MVP v1.10 PASS, user-reported
+Portfolio demo readiness: MVP v1.11 DONE
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
 Runtime baseline: Node.js 24.x / npm 11.x
-Latest historical validated runtime: Node v24.14.0 / npm 11.14.1
-Screenshot capture: skipped - not required for this submission
-Current checklist: docs/final-release-checklist.md
-Historical v1.3 release notes: docs/release-notes-v1.3.md
 ```
 
-The project is no longer missing core MVP scope before portfolio/demo/interview use. MVP v1.8 completes the product release, MVP v1.8.1 completed documentation truth sync, and MVP v1.8.2 completes the final documentation consistency hotfix.
+Evidence boundary:
 
-Current evidence boundary:
-
-- Portfolio/demo/interview readiness is achieved at MVP level.
-- Production smoke test evidence remains NOT RUN until `docs/production-smoke-test-v1.9.md` is executed and updated with real results.
-- Production monitoring evidence remains PENDING until the runbook checks are executed against the live deployment.
-- Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
-- Latest historical validation evidence remains MVP v1.8 validation evidence. This v1.8.2 documentation hotfix did not rerun validation.
-- Historical deployment verification notes remain preserved in older records, but are not treated as fresh v1.8.2 production evidence.
+- Local validation evidence is supported by terminal output.
+- Production smoke/monitoring PASS is recorded from user-reported manual verification.
+- Keep deployment id, screenshots, and sanitized logs separately if formal evidence is required.
+- Do not expose secrets in docs or screenshots.
 
 ## 2. Pre-Deployment Checks
 
 | Check | Status | Notes |
 |---|---|---|
-| `npm ci` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run lint` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run typecheck` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run test` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run build` | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| `npm run db:indexes` | NOT RUN | Not run in this documentation-only task; requires confirmed safe database target. |
-| `npm run db:seed` | NOT RUN | Not run in this documentation-only task; requires confirmed safe local/development/demo database target. |
-| `npm run test:e2e` | NOT RUN | Not run in this documentation-only task; requires browser/test auth/database setup. |
-| `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run in this documentation-only task. |
+| `npm ci` | NOT CAPTURED | Not shown in the provided terminal log. Rerun if strict install evidence is required. |
+| `npm run lint` | PASS | `eslint .` completed with no reported errors. |
+| `npm run typecheck` | PASS | `tsc --noEmit` completed with no reported errors. |
+| `npm run test` | PASS | 96 test files passed; 889 tests passed. |
+| `npm run build` | PASS | Next.js production build completed successfully. |
+| `npm run db:indexes` | PASS | 32 indexes ensured. |
+| `npm run db:seed` | PASS | 40 ingredients and 38 products matched/updated. |
+| `npm run test:e2e` | PASS | 29/29 Playwright tests passed. |
+| `npm audit --omit=dev --audit-level=moderate` | PASS | 0 vulnerabilities found. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.8.2 documentation consistency hotfix. |
+| README setup instructions accurate | PASS | Updated for v1.11 portfolio demo readiness. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
 
 ## 3. Vercel Project Settings
 
-| Setting | Expected Value |
-|---|---|
-| Framework Preset | Next.js |
-| Root Directory | Project root |
-| Install Command | `npm ci` |
-| Build Command | `npm run build` |
-| Output Directory | Default Next.js output |
-| Node.js Version | Node 24.x |
-| Production Branch | `main` |
+| Setting | Expected Value | Status |
+|---|---|---|
+| Framework Preset | Next.js | PASS, user-reported |
+| Root Directory | Project root | PASS, user-reported |
+| Install Command | `npm ci` | PASS, expected |
+| Build Command | `npm run build` | PASS, expected |
+| Output Directory | Default Next.js output | PASS, expected |
+| Node.js Version | Node 24.x | PASS, expected |
+| Production Branch | `main` | PASS, expected |
 
 ## 4. Production Environment Variables
 
@@ -91,49 +84,47 @@ FEATURE_MARKETPLACE=false
 FEATURE_SKIN_SCORE=false
 ```
 
-Optional provider/media variables may remain empty for MVP if the related feature is disabled.
-
 ## 5. Google OAuth Checklist
 
 | Check | Status | Notes |
 |---|---|---|
-| Google OAuth client exists | PENDING | Re-check during MVP v1.9 production smoke test. |
-| Production redirect URI configured | PENDING | Expected URI: `https://skinwise-vn.vercel.app/api/auth/callback/google`. Re-check during v1.9. |
-| `AUTH_GOOGLE_ID` set in Vercel | PENDING | Confirm in Vercel settings without exposing the value. |
-| `AUTH_GOOGLE_SECRET` set in Vercel | PENDING | Confirm in Vercel settings without exposing the value. |
-| Production Google login works | PENDING | Verify during v1.9 production smoke test. |
+| Google OAuth client exists | PASS | User-reported checked. |
+| Production redirect URI configured | PASS | Expected URI: `https://skinwise-vn.vercel.app/api/auth/callback/google`. |
+| `AUTH_GOOGLE_ID` set in Vercel | PASS | User-reported checked; value not exposed. |
+| `AUTH_GOOGLE_SECRET` set in Vercel | PASS | User-reported checked; value not exposed. |
+| Production Google login works | PASS | User-reported production smoke verification completed. |
 
 ## 6. MongoDB Atlas Checklist
 
 | Check | Status | Notes |
 |---|---|---|
-| Production MongoDB URI configured | PENDING | Confirm in Vercel settings without exposing the value. |
-| Database user has required access | PENDING | Verify during v1.9 production smoke test. |
-| Network access allows Vercel runtime | PENDING | Verify during v1.9 production smoke test. |
-| Authenticated read/write works | PENDING | Verify through authenticated flows during v1.9. |
+| Production MongoDB URI configured | PASS | User-reported checked; value not exposed. |
+| Database user has required access | PASS | User-reported authenticated flows work. |
+| Network access allows Vercel runtime | PASS | User-reported checked through production behavior. |
+| Authenticated read/write works | PASS | User-reported checked through app flows. |
 
 ## 7. Manual Production Smoke Test
 
 | Flow | Status |
 |---|---|
-| Public landing page loads | NOT RUN |
-| Protected route redirects unauthenticated users | NOT RUN |
-| Google OAuth login | NOT RUN |
-| Dashboard after login | NOT RUN |
-| Skin Profile create/update/read/delete | NOT RUN |
-| Product Match review/save/detail navigation | NOT RUN |
-| Product Catalogue | NOT RUN |
-| Product Detail | NOT RUN |
-| Saved Products save/remove | NOT RUN |
-| Ingredient library/detail/explanation | NOT RUN |
-| Routine Builder create/update | NOT RUN |
-| Routine Analysis mock/fallback | NOT RUN |
-| Today Routine Log complete/delete | NOT RUN |
-| Routine Logs | NOT RUN |
-| Skin Journal create/edit/delete | NOT RUN |
-| Insights review | NOT RUN |
-| Settings/Data Control export/delete request | NOT RUN |
-| Sign out and protected route redirect | NOT RUN |
+| Public landing page loads | PASS |
+| Protected route redirects unauthenticated users | PASS |
+| Google OAuth login | PASS |
+| Dashboard after login | PASS |
+| Skin Profile create/update/read/delete | PASS |
+| Product Match review/save/detail navigation | PASS |
+| Product Catalogue | PASS |
+| Product Detail | PASS |
+| Saved Products save/remove | PASS |
+| Ingredient library/detail/explanation | PASS |
+| Routine Builder create/update | PASS |
+| Routine Analysis mock/fallback | PASS |
+| Today Routine Log complete/delete | PASS |
+| Routine Logs | PASS |
+| Skin Journal create/edit/delete | PASS |
+| Insights review | PASS |
+| Settings/Data Control export/delete request | PASS |
+| Sign out and protected route redirect | PASS |
 
 ## 8. Final Deployment Decision
 
@@ -141,7 +132,8 @@ Optional provider/media variables may remain empty for MVP if the related featur
 MVP v1.8 - Core MVP product release: DONE
 MVP v1.8.1 - Documentation truth sync: DONE
 MVP v1.8.2 - Final documentation consistency hotfix: DONE
-MVP v1.9 - Production smoke/monitoring/demo recovery evidence: NEXT
+MVP v1.9 - Local validation evidence: PASS
+MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
+MVP v1.11 - Portfolio demo readiness: DONE
+Decision: READY for portfolio/demo/interview at MVP level
 ```
-
-SkinWise VN is ready for MVP portfolio/demo/interview use. Full production evidence and monitoring hardening remain next-step work for MVP v1.9.

@@ -1,260 +1,150 @@
-# 09-release-plan.md
-
 # Release Plan - SkinWise VN Current MVP Status
 
-## 1. Six-week MVP roadmap
+Last updated: 2026-06-04
+
+## 1. Current Release Chain
+
+```txt
+MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
+MVP v1.9 - Local Validation Evidence: PASS
+MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+```
+
+The MVP product scope is complete. Current work is no longer core feature implementation; it is portfolio/demo presentation, release tagging, and optional future-scope planning.
+
+## 2. Historical Six-Week MVP Roadmap
 
 ### Week 1: Foundation
 
-- Create Next.js project.
-- Configure TypeScript.
-- Configure Tailwind and shadcn/ui.
-- Setup MongoDB connection.
-- Setup environment validation.
-- Setup Auth.js / NextAuth with consistent `AUTH_*` variables.
-- Add AGENTS.md and docs folder.
-- Add base layout and dashboard shell.
-- Add folder structure from `docs/10-project-structure.md`.
-- Add DTO mapper pattern for API responses.
-- Add feature flag config.
-- Add repeatable database index script placeholder.
-- Add PR checklist and CI workflow template.
+- Next.js project.
+- TypeScript.
+- Tailwind/shadcn-style UI foundation.
+- MongoDB connection.
+- Environment validation.
+- Auth.js / NextAuth setup.
+- Project docs and structure.
 
-### Week 2: Skin Profile, Product Database, and Ingredient Knowledge Base
+### Week 2: Skin Profile, Product Database, Ingredient Knowledge Base
 
-- Implement SkinProfile schema.
-- Implement SkinProfile APIs.
-- Implement skin profile UI.
-- Implement Product schema with product-fit fields.
-- Seed initial product data.
-- Implement product search and filters.
-- Implement Ingredient schema.
-- Seed initial ingredient data.
-- Implement `GET /api/ingredients`.
-- Implement `GET /api/ingredients/:id`.
+- SkinProfile schema and APIs.
+- Skin profile UI.
+- Product schema and seed data.
+- Product search/list/detail foundation.
+- Ingredient schema, seed data, list/detail APIs.
 
 ### Week 3: Routine Builder and RoutineLog
 
-- Implement Routine schema.
-- Implement RoutineStep snapshot fields.
-- Implement Routine APIs.
-- Implement create/edit/delete routine.
-- Implement routine step ordering.
-- Implement RoutineLog schema and APIs.
-- Add ownership checks.
+- Routine schema and APIs.
+- Routine steps and product snapshots.
+- Routine builder UI.
+- Routine log model and daily tracking.
 
-### Week 4: Routine Safety Engine
+### Week 4: Routine Safety and Product Matching
 
-- Implement domain rule engine.
-- Implement rule table from `docs/11-routine-safety-rules.md`.
-- Implement safety rule test cases.
-- Implement active ingredient normalization before rules run.
-- Implement `POST /api/routines/:id/analyze`.
-- Implement `GET /api/routines/:id/analyses`.
-- Store all rule results and routine snapshot.
-- Store top-level `RoutineAnalysis.riskLevel`.
-- Build analysis result UI.
+- Routine safety rules.
+- Routine analysis flow.
+- Product Match rule engine.
+- Personalized product match explanations.
 
-### Week 5: AI Explanation and Ingredient Explainer
+### Week 5: AI Provider Abstraction and Fallbacks
 
-- Implement AIProvider abstraction.
-- Add routine-analysis prompt.
-- Add ingredient-explainer prompt.
-- Add safety-classifier prompt.
-- Implement `POST /api/ingredients/explain`.
-- Implement `modules/ai-analysis/explain-ingredient.use-case.ts`.
-- Run safety classifier before ingredient explanation when user input may contain unsafe claims or prompt injection.
-- Add structured output validation for `RoutineAnalysisResult`.
-- Add structured output validation for `IngredientExplanationResult`.
-- Save AI analysis metadata.
-- Add AI error handling.
-- Add AI eval tests.
+- Provider abstraction.
+- Mock/fallback provider behavior.
+- Ingredient explanation flow.
+- Safe output validation.
 
-### Week 6: Skin Journal and Polish
+### Week 6: Journal, Dashboard, Insights, Settings
 
-- Implement SkinJournal schema with localDate/timezone.
-- Implement journal APIs.
-- Implement journal timeline UI.
-- Add dashboard cards.
-- Add RoutineLog consistency summary.
-- Add error/loading/empty states.
-- Add README updates.
-- Prepare portfolio case study.
+- Skin Journal.
+- Dashboard summary.
+- Product Catalogue and Product Detail polish.
+- Insights.
+- Settings/Data Control.
+- Export/deletion-related flows.
 
-## 2. MVP release checklist
+## 3. Completed Closeout Milestones
+
+| Milestone | Status | Purpose |
+|---|---|---|
+| MVP v1.8 | DONE | Final product usability refinement for Insights/progress story. |
+| MVP v1.8.1 | DONE | Documentation truth sync and evidence cleanup. |
+| MVP v1.8.2 | DONE | Final documentation consistency hotfix. |
+| MVP v1.9 | PASS | Local validation evidence captured. |
+| MVP v1.10 | PASS, user-reported | Production smoke and monitoring verification recorded. |
+| MVP v1.11 | DONE | Portfolio/demo readiness documentation polished. |
+
+## 4. Validation Evidence
+
+Local evidence:
 
 ```txt
-[ ] User can sign in.
-[ ] User can create skin profile.
-[ ] User can search products.
-[ ] Product list hides other users' unverified submissions.
-[ ] User can see their own unverified submitted products only with includeMine=true.
-[ ] Product has product-fit fields.
-[ ] User can search ingredients.
-[ ] User can view ingredient details.
-[ ] User can request AI ingredient explanation through POST /api/ingredients/explain.
-[ ] Ingredient explanation follows IngredientExplanationResult schema.
-[ ] Safety classifier runs before ingredient explanation when needed.
-[ ] User can create routine.
-[ ] RoutineStep has snapshot fields.
-[ ] User can create RoutineLog.
-[ ] User can run routine safety analysis through POST /api/routines/:id/analyze.
-[ ] Rule engine runs before AI.
-[ ] RoutineAnalysis stores routineSnapshot.
-[ ] RoutineAnalysis stores top-level riskLevel.
-[ ] Database stores all RuleResult entries; API exposes only triggered warnings.
-[ ] AI output follows JSON schema.
-[ ] Disclaimer appears in AI result.
-[ ] User can create skin journal using localDate/timezone.
-[ ] localDate validation uses YYYY-MM-DD format.
-[ ] All user-owned APIs check ownership.
-[ ] Unit tests pass.
-[ ] Integration tests pass.
-[ ] E2E happy path passes.
-[ ] No secrets are exposed.
-[ ] README setup is accurate.
-```
-
-## 3. Beta release checklist
-
-```txt
-[ ] Add persistent rate limiting storage.
-[ ] Add admin product review UI.
-[ ] Add AI response caching.
-[ ] Add prompt version dashboard.
-[ ] Expand ingredient knowledge base.
-[ ] Add admin ingredient management.
-[ ] Add ingredient/product comparison.
-[ ] Add image upload with private access.
-[ ] Add data deletion flow.
-[ ] Add basic observability.
-[ ] Add stronger AI eval dataset.
-```
-
-## 4. Future scalability plan
-
-### Stage 1: Modular monolith
-
-- Single app.
-- Single database.
-- Simple deployment.
-- Strong module boundaries.
-
-### Stage 2: Background workers
-
-- Add queue for AI analysis.
-- Add retry for AI provider failures.
-- Add scheduled reminders.
-
-### Stage 3: Search and knowledge base
-
-- Expand ingredient knowledge base.
-- Add vector search for ingredient/product explanations.
-- Add product verification workflow.
-
-### Stage 4: Service extraction
-
-Extract:
-
-- AI Analysis Service.
-- Product Knowledge Service.
-- Notification Worker.
-- Image Processing Service.
-
-## 5. Release risks
-
-| Risk | Mitigation |
-|---|---|
-| AI gives unsafe advice | Rule engine, structured output, safety prompt, eval tests |
-| Privacy concerns | Data minimization, deletion, private images |
-| Product database too small | Support custom product input |
-| Unverified product data appears publicly | Product visibility rule and tests |
-| Historical analysis changes after product edit | Product and routine snapshots |
-| High AI cost | Rate limits, caching, prompt optimization |
-| Scope creep | Keep marketplace and diagnosis out of MVP |
-
-
-## 6. Current release status
-
-```txt
-MVP v1.6 - Catalogue Data Quality & Ingredient Metadata Upgrade: COMPLETED
-MVP v1.6.1 - Validation Evidence & Documentation Truth Sync: COMPLETED
-MVP v1.7 - Routine Builder Usability & Demo Flow Refinement: COMPLETED
-MVP v1.8 - Insights Usability & Progress Story Refinement: COMPLETED
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: COMPLETED
-MVP v1.8.2 - Final Documentation Consistency Hotfix: COMPLETED
-```
-
-Current release documentation is available in:
-
-```txt
-docs/final-release-checklist.md
-docs/14-seed-data-spec.md
-docs/ai-coding/02-implementation-status.md
-docs/ai-coding/03-feature-status-matrix.md
-docs/ai-coding/06-current-sprint-plan.md
-docs/portfolio-case-study.md
-docs/demo-script.md
-```
-
-Historical v1.3 release notes and changelog remain preserved in `docs/release-notes-v1.3.md` and `docs/CHANGELOG-v1.3.md`.
-
-Current status:
-
-```txt
-Core implementation release: MVP v1.8 completed
-Completed documentation cleanup patch: MVP v1.8.1 completed
-Latest documentation consistency hotfix: MVP v1.8.2 completed
-MVP core scope: COMPLETED
-Documentation truth sync: COMPLETED FOR v1.8.1
-Final documentation consistency hotfix: COMPLETED FOR v1.8.2
-Validation evidence: HISTORICAL v1.8 EVIDENCE RECORDED; v1.8.2 FULL VALIDATION NOT RERUN
-Portfolio review: READY FOR CURRENT MVP STATE
-Demo review: READY FOR CURRENT MVP STATE
-Interview demo: READY FOR CURRENT MVP STATE
-Production URL: https://skinwise-vn.vercel.app
-Current production smoke test evidence: NOT RUN UNTIL MANUALLY VERIFIED
-Current production monitoring/demo recovery evidence: PENDING UNTIL MANUALLY VERIFIED
-```
-
-Latest historical MVP v1.8 validation evidence:
-
-```txt
-Node.js: v24.14.0
-npm: 11.14.1
+Evidence date: 2026-06-04
+Environment: Local Windows / Git Bash
+Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
 npm run db:indexes: PASS - 32 indexes ensured
 npm run db:seed: PASS - 40 ingredients / 38 products
-npm run test:e2e: PASS - 29/29 tests
-npm audit: NOT RUN during v1.8
+npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
 ```
 
-Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
-
-Next release task:
+Production evidence:
 
 ```txt
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASS - user-reported manual verification completed
+Production monitoring: PASS - user-reported checks completed
+Critical blockers reported: None
+Evidence date: 2026-06-04
 ```
 
-MVP v2.0 or later is optional future enhancement scope only and is not required for MVP portfolio/demo/interview readiness.
+## 5. Current Release Decision
 
-## 7. Historical SDD freeze note
+```txt
+Release decision: READY for portfolio/demo/interview at MVP level
+Product scope decision: freeze core MVP features
+Documentation decision: v1.11 portfolio demo package complete
+```
 
-After v1.2.6, the SDD is considered frozen for Week 1 Implementation Plan. v1.2.6 is the final freeze before Week 1 implementation and supersedes v1.2.5 by adding final engineering execution guardrails and documentation cleanup without changing MVP product scope.
+## 6. Recommended Next Work
 
-Allowed changes after this point:
+Do next:
 
-- bug fixes in documentation;
-- implementation notes discovered during Week 1;
-- security corrections.
+```txt
+1. Capture optional screenshots if needed.
+2. Commit and push the v1.11 docs update.
+3. Create a release tag: v1.11-portfolio-demo-ready.
+4. Practice the 3-5 minute demo script.
+5. Add project link and case-study summary to portfolio/CV.
+```
 
-Not allowed without deliberate product review:
+Do not do next unless intentionally starting post-MVP:
 
-- new MVP features;
-- medical diagnosis features;
-- marketplace/affiliate scope;
-- public product or ingredient APIs beyond the documented MVP auth policy.
+```txt
+Do not add marketplace/payment.
+Do not add image upload/skin score.
+Do not add real AI provider without safety design.
+Do not refactor core architecture without a clear defect.
+Do not expand scope before portfolio submission.
+```
+
+## 7. Optional Future Roadmap
+
+### v2.0 candidates
+
+- Admin product/ingredient management.
+- More complete account deletion automation.
+- Stronger observability and error tracking.
+- More curated product/ingredient data.
+- Optional real AI provider integration with strict output validation and safety policy.
+- Portfolio screenshot page.
+
+These are future enhancements, not MVP blockers.

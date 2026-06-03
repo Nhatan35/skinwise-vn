@@ -1,10 +1,10 @@
 # SkinWise VN
 
-SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products and ingredients, save products, build routines, track routine completion, write skin journal entries, and review dashboard summaries.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products and ingredients, save products, build routines, track routine completion, write skin journal entries, and review dashboard/insights summaries.
 
-The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, full-stack implementation, validation discipline, CI/E2E coverage, and release closeout.
+The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, modular full-stack implementation, validation discipline, CI/E2E coverage, production smoke-check discipline, and release closeout.
 
-SkinWise VN is not a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
+SkinWise VN is **not** a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
 
 ## Live Demo
 
@@ -12,82 +12,61 @@ Production demo:
 
 - https://skinwise-vn.vercel.app
 
-Current production evidence status:
+Current evidence status:
 
-- MVP portfolio/demo/interview readiness: ready at MVP level.
-- Portfolio/demo/interview readiness: READY at MVP level.
-- MVP v1.8.2 production smoke test evidence: NOT RUN until manually verified.
-- Production monitoring evidence: PENDING until manually verified.
-- Full local validation rerun for v1.8.2: NOT RUN in this documentation hotfix.
-- Historical deployment verification notes are preserved in older release records, but they are not treated as fresh v1.8.2 production evidence.
+- MVP portfolio/demo/interview readiness: **READY** at MVP level.
+- Local validation evidence: **PASS** for MVP v1.9 local quality gate.
+- Production smoke test evidence: **PASS — user-reported manual verification completed; no blockers reported.**
+- Production monitoring evidence: **PASS — user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
+- Portfolio demo readiness documentation: **MVP v1.11 completed.**
+
+Evidence boundary:
+
+- Automated local evidence is supported by terminal output.
+- Production PASS status is based on the user's reported completed manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
+- No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
 
-Current completed product release: **MVP v1.8 - Insights Usability & Progress Story Refinement**.
-
-Completed documentation cleanup patch: **MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE**.
-
-Latest documentation consistency hotfix: **MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE**.
-
-MVP v1.8 is a focused Insights usability and progress-story refinement. It improves the existing Insights page intro, overview card context, routine consistency calendar readability, journal/product usage safety copy, next actions, and empty/error/loading states without changing the Insights API response shape, adding AI, or introducing medical/product-causality logic.
-
-Recently completed MVP improvements:
-
-- `MVP v1.4` - Data Export & Data Control Upgrade.
-- `MVP v1.4.1` - Security QA, Data Control Hardening & Empty-State Stabilization.
-- `MVP v1.5` - Product Matching Explanation Upgrade.
-- `MVP v1.5.1` - Product Detail Personalized Match Explanation.
-- `MVP v1.5.2` - Product Match Explanation Polish & Documentation Sync.
-- `MVP v1.6` - Catalogue Data Quality & Ingredient Metadata Upgrade.
-- `MVP v1.6.1` - Validation Evidence & Documentation Truth Sync.
-- `MVP v1.7` - Routine Builder Usability & Demo Flow Refinement.
-- `MVP v1.8` - Insights Usability & Progress Story Refinement.
-- `MVP v1.8.1` - Documentation Truth Sync & Release Evidence Cleanup.
-- `MVP v1.8.2` - Final Documentation Consistency Hotfix.
-
-Next main task:
-
-- `MVP v1.9` - Production Monitoring & Demo Evidence Stabilization.
-
-MVP v2.0 or later is optional future enhancement scope only.
-
-Latest historical validation evidence for MVP v1.8:
+Current completed product release:
 
 ```txt
-Node.js: v24.14.0
-npm: 11.14.1
-npm run lint: PASS
-npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
-npm run build: PASS
-npm run test:e2e: PASS - 29/29 tests
-npm run db:indexes: PASS - 32 indexes ensured
-npm run db:seed: PASS - 40 ingredients / 38 products
-npm audit: NOT RUN - not part of the v1.8 validation scope
-Database indexes: 32 indexes ensured
-Note: `npm run build` and `npm run test:e2e` initially hit Windows sandbox `spawn EPERM`; both passed on scoped rerun outside the sandbox.
+MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
+Completed closeout milestones:
+
+```txt
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
+MVP v1.9 - Local Validation Evidence: PASS
+MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+```
+
+MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
+
+MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features or change source logic. It prepares the repository for portfolio review, demo walkthrough, and interview discussion.
 
 ## Key Features
 
 - Google OAuth authentication with protected app routes.
-- Skin profile onboarding, viewing, and editing.
+- Skin profile onboarding, viewing, editing, and deletion.
 - Product catalogue with product detail pages and personalized match explanation on Product Detail.
-- Curated v1.6 seed catalogue with 38 fictional/demo-safe products and 40 educational ingredient records.
+- Curated demo-safe catalogue with 38 fictional/demo-safe products and 40 educational ingredient records.
 - Saved products.
 - Personalized Product Match: rule-based educational product matching with score, level, Vietnamese explanations, ingredient highlights, cautions, fallback notes, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
-- Ingredient explanation API using the validated provider flow.
-- Routine builder with clearer empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
+- Ingredient explanation API using the validated provider flow and safe fallback behavior.
+- Routine builder with empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
 - Routine safety analysis with deterministic rule checks, scannable result sections, and safe AI-provider fallback behavior.
 - Today routine checklist and routine logs.
 - Skin journal.
 - Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, and calendar readability improvements.
 - Dashboard summary based on user-owned data.
 - Settings and data control center.
-- Demo seed data and demo walkthrough documentation.
+- Data export, app-data deletion, and MVP-safe account deletion request marker.
+- Demo seed data, demo walkthrough documentation, and portfolio case study.
 
 ## Implemented Routes
 
@@ -143,6 +122,7 @@ Auth.js owns `/api/auth/*` and its response format.
 
 - Next.js App Router.
 - TypeScript.
+- React.
 - Tailwind CSS.
 - shadcn/ui-style component foundation.
 - MongoDB.
@@ -152,6 +132,37 @@ Auth.js owns `/api/auth/*` and its response format.
 - Playwright.
 - GitHub Actions with MongoDB service for E2E.
 - Vercel.
+
+## Validation Evidence
+
+Latest local validation evidence:
+
+```txt
+Evidence date: 2026-06-04
+Environment: Local Windows / Git Bash
+Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
+```
+
+Production evidence:
+
+```txt
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASS - user-reported manual verification completed
+Production monitoring: PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed
+Critical production blockers reported: None
+Evidence date: 2026-06-04
+Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
+```
 
 ## Demo Flow
 
@@ -184,13 +195,14 @@ Landing page
 - Portfolio case study: `docs/portfolio-case-study.md`
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
-- Release notes v1.3: `docs/release-notes-v1.3.md`
-- Historical release notes v1.0: `docs/release-notes-v1.0.md`
+- Deployment checklist: `docs/18-deployment-checklist.md`
 - Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
 - Production smoke test checklist: `docs/production-smoke-test-v1.9.md`
 - Production monitoring/demo recovery runbook: `docs/production-monitoring-runbook.md`
 - Demo data and setup guide: `docs/ai-coding/07-demo-data-and-demo-script.md`
-- Screenshot checklist: `docs/screenshots-checklist.md` — optional only; screenshots are not required for the current submission.
+- Screenshot checklist: `docs/screenshots-checklist.md`
+- Historical release notes v1.3: `docs/release-notes-v1.3.md`
+- Historical release notes v1.0: `docs/release-notes-v1.0.md`
 
 ## Local Setup
 
@@ -206,8 +218,8 @@ npm: 11.x
 Expected validated baseline:
 
 ```txt
-node: v24.14.0
-npm: 11.14.1
+node: v24.x
+npm: 11.x
 ```
 
 ### Setup commands
@@ -229,6 +241,7 @@ Run these after meaningful changes:
 ```bash
 node -v
 npm -v
+npm ci
 npm run lint
 npm run typecheck
 npm run test
@@ -236,54 +249,38 @@ npm run build
 npm run db:indexes
 npm run db:seed
 npm run test:e2e
+npm audit --omit=dev --audit-level=moderate
 ```
 
-Latest historical validation evidence:
+## Product Safety Boundaries
+
+SkinWise VN intentionally avoids unsafe or unsupported claims:
+
+- No diagnosis.
+- No treatment or cure claims.
+- No prescription or medication guidance.
+- No dermatologist replacement.
+- No skin score, face score, attractiveness score, or before/after pressure.
+- No image upload or face/skin image analysis in the MVP.
+- No marketplace, payment, cart, checkout, subscription, rating, or review flow.
+- No admin CRUD in the current MVP.
+- No real external AI provider is required for the MVP demo.
+
+## Known MVP Limitations
+
+These are intentional MVP boundaries, not release blockers:
+
+- AI provider remains mock/fallback-based for MVP safety.
+- Product and ingredient data is curated/demo-oriented.
+- Full Auth.js hard-delete account automation is not implemented.
+- Full commercial monitoring/error tracking is outside the MVP.
+- Screenshots are optional; capture them only if needed for CV, portfolio page, or slide deck.
+- `npm ci` was not captured in the provided local terminal evidence and can be rerun if strict install evidence is required.
+
+## Final Portfolio Decision
 
 ```txt
-npm run lint: PASS
-npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
-npm run build: PASS
-npm run db:indexes: PASS - 32 indexes ensured
-npm run db:seed: PASS - 40 ingredients / 38 products
-npm run test:e2e: PASS - 29/29 tests
-npm audit: NOT RUN during v1.8
+MVP v1.11 - Portfolio Demo Readiness: DONE
+Decision: READY for portfolio/demo/interview at MVP level
+Next recommended work: optional screenshots, case-study polish, release tag, and future-scope planning only
 ```
-
-Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
-
-`npm run build` requires the production-required environment variables defined in `src/config/env.ts`. Use real values locally only in `.env.local` or safe temporary placeholder values for build validation.
-
-`npm run test:e2e` runs Playwright tests against a local/CI dev server with safe placeholder environment values and a test-only Auth.js Credentials provider. The suite covers public landing page loading, unauthenticated protected-route redirects, authenticated dashboard access, Skin Profile create/update, Product Catalogue browsing, Product Detail navigation, Product Match review/save/detail flow, Saved Products save/list/remove flow, Ingredient Library search/detail/explanation, Routine Builder, Routine Analysis, Today Routine Checklist, Routine Log deletion through UI, Skin Journal create/edit/delete, Insights review, Settings/Data Control, account deletion request, and Dashboard summary reflection.
-
-## MVP Scope and Known Limitations
-
-This MVP intentionally focuses on skincare tracking, routine management, product/ingredient education, safe routine analysis, and portfolio-quality engineering evidence.
-
-Out of scope for this MVP:
-
-- Real AI provider integration.
-- Image upload.
-- AI face analysis.
-- Skin scoring or appearance scoring.
-- Marketplace, cart, payment, or checkout.
-- Admin product/ingredient CRUD.
-- Notifications.
-- Full commercial monitoring and analytics.
-
-## Release Status
-
-SkinWise VN has completed the MVP v1.8 product release and is ready for portfolio/demo/interview use as an MVP. MVP v1.8.1 is the completed documentation truth sync patch, and MVP v1.8.2 is the completed final documentation consistency hotfix. Neither patch is a product feature release.
-
-Current release/evidence status:
-
-- Core MVP scope: completed.
-- MVP v1.8 Insights usability refinement: completed.
-- MVP v1.8.1 documentation truth sync: completed.
-- MVP v1.8.2 final documentation consistency hotfix: completed.
-- Portfolio/demo/interview readiness: READY at MVP level.
-- Production smoke test evidence: NOT RUN until manually verified.
-- Production monitoring evidence: PENDING until manually verified.
-- Full local validation rerun: NOT RUN in this v1.8.2 documentation hotfix.
-- MVP v1.9 production monitoring and demo evidence stabilization: next main task.

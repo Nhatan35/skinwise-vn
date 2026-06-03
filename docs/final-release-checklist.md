@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## 1. Release Summary
 
@@ -10,96 +10,81 @@ Current completed product release:
 MVP v1.8 - Insights Usability & Progress Story Refinement
 ```
 
-Completed documentation cleanup patch:
+Completed closeout milestones:
 
 ```txt
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup - DONE
+MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
+MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
+MVP v1.9 - Local Validation Evidence: PASS
+MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
+MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 ```
 
-Latest documentation consistency hotfix:
-
-```txt
-MVP v1.8.2 - Final Documentation Consistency Hotfix - DONE
-```
-
-MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape or adding medical/product-causality logic.
-
-Historical note:
-
-```txt
-MVP v1.3 was an earlier portfolio release documentation milestone. It is preserved in historical release notes and changelog files, but it is not the current project state.
-```
+MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
 
 ## 2. Current Readiness Checklist
 
 | Area | Status | Notes |
 |---|---|---|
 | Core MVP | PASS | MVP core scope is complete and ready for portfolio/demo/interview use as an MVP. |
-| MVP v1.6 catalogue data quality | PASS | Seed data includes 40 ingredient records and 38 product records with validation checks. |
 | Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs and Product Detail personalized match section. |
 | Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, and safety-bounded. |
-| Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded v1.6 metadata. |
-| Routine Builder usability | PASS | Empty state, morning/evening guidance, step-order guidance, selected-product context, and Today Checklist CTA are refined in v1.7. |
-| Insights usability refinement | PASS | MVP v1.8 progress-story framing, calendar readability, reflective product usage copy, and next actions are complete. |
-| Progress story refinement | PASS | Insights connects routine logs, journal activity, product mentions, and safe next actions without diagnosis or causality claims. |
-| Routine Safety Analysis | PASS | Existing deterministic rules pass validation and seed data supports active/fragrance/sunscreen demo cases. |
+| Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded metadata. |
+| Routine Builder | PASS | Empty state, morning/evening guidance, selected-product context, and Today Checklist CTA are implemented. |
+| Routine Safety Analysis | PASS | Deterministic rules and safe fallback behavior are implemented. |
+| Today Routine and Routine Logs | PASS | Completion and log flows are implemented and covered by tests. |
+| Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
+| Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, and next actions are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, and account deletion request marker are implemented. |
-| Local validation | NOT RUN | Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x. |
-| Documentation truth sync | PASS | MVP v1.8.1 documentation truth sync is reflected in README, release, deployment, demo, status, smoke-test, monitoring, and changelog docs. |
-| Final documentation consistency hotfix | PASS | MVP v1.8.2 final documentation consistency hotfix is complete. |
+| Local validation | PASS | MVP v1.9 local validation evidence captured from local Windows / Git Bash: lint PASS, typecheck PASS, 96/96 unit test files PASS, 889/889 tests PASS, build PASS, db indexes PASS, db seed PASS, 29/29 E2E tests PASS, audit PASS with 0 vulnerabilities. |
+| Production smoke test evidence | PASS | MVP v1.10 production smoke test is recorded as user-reported completed with no blockers reported. |
+| Production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks are recorded as user-reported completed with no critical blockers reported. |
+| Portfolio case study | PASS | `docs/portfolio-case-study.md` is updated for v1.11 portfolio demo readiness. |
+| Demo script | PASS | `docs/demo-script.md` contains a 3-5 minute demo flow and backup plan. |
+| Screenshot checklist | PASS | `docs/screenshots-checklist.md` contains optional portfolio screenshot guidance. |
+| Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
-| Production smoke test evidence | NOT RUN | Production smoke test evidence remains NOT RUN until manually verified. |
-| Production monitoring/evidence | PENDING | Production monitoring evidence remains PENDING until manually verified. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
-## 3. Documentation Readiness
+## 3. Validation Evidence
 
-| Document | Status | Notes |
-|---|---|---|
-| `README.md` | PASS | Current v1.8 completed release, v1.8.1 cleanup patch, v1.8.2 hotfix, v1.9 next task, and pending evidence status are current. |
-| `docs/14-seed-data-spec.md` | PASS | Documents v1.6 seed data targets, coverage, validation, and safety boundaries. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Shows v1.8 completed product release, v1.8.1 cleanup status, v1.8.2 hotfix status, and v1.9 next task. |
-| `docs/ai-coding/03-feature-status-matrix.md` | PASS | Feature statuses reflect completed MVP scope and v1.8 Insights refinements. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.8.2 documentation consistency hotfix, with v1.9 recommended next. |
-| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo flow reflects implemented routes and MVP v1.9 as next recommended task. |
-| `docs/production-smoke-test-v1.9.md` | PASS | Production smoke checklist exists with default NOT RUN/PENDING status. |
-| `docs/production-monitoring-runbook.md` | PASS | Monitoring and demo recovery runbook exists for v1.9 evidence hardening. |
-| `docs/portfolio-case-study.md` | PASS | Portfolio case study reflects current MVP v1.8 state and pending production evidence. |
-| `docs/release-notes-v1.3.md` | HISTORICAL | Preserved as historical v1.3 release notes. |
-| `docs/CHANGELOG-v1.3.md` | HISTORICAL | Preserved as historical v1.3 changelog. |
-
-## 4. Current Validation Evidence
-
-Validation not rerun in this v1.8.2 documentation hotfix. Pending local verification on Node.js 24.x and npm 11.x.
-
-Latest historical MVP v1.8 validation evidence:
-
-Environment:
+Local validation evidence:
 
 ```txt
-Node.js: v24.14.0
-npm: 11.14.1
-Target baseline: Node.js 24.x / npm 11.x
-Baseline match: YES
+Evidence date: 2026-06-04
+Environment: Local Windows / Git Bash
+Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run db:indexes: PASS - 32 indexes ensured
+npm run db:seed: PASS - 40 ingredients / 38 products
+npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm ci: NOT CAPTURED in the provided terminal log
 ```
 
-Results:
+Production evidence:
 
-| Command | Status | Evidence |
-|---|---|---|
-| `node -v` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm -v` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm ci` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run lint` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run typecheck` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run test` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run build` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run db:indexes` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run db:seed` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm run test:e2e` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
-| `npm audit --omit=dev --audit-level=moderate` | NOT RUN | Not run during v1.8.2 documentation hotfix. |
+```txt
+Production URL: https://skinwise-vn.vercel.app
+Production smoke test: PASS - user-reported manual verification completed
+Production monitoring: PASS - user-reported checks completed
+Critical production blockers reported: None
+Evidence date: 2026-06-04
+Evidence strength: user-reported production verification; no screenshot/log snippets included in repository
+```
 
-## 5. Verified Feature Scope
+Evidence boundary:
+
+- Local validation is supported by terminal output.
+- Production PASS is based on user-reported manual verification.
+- Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
+- Do not commit or document real secrets.
+
+## 4. Verified Feature Scope
 
 - Google OAuth authentication.
 - Protected dashboard and private app routes.
@@ -111,7 +96,6 @@ Results:
 - Ingredient Library and Ingredient Detail.
 - Ingredient Explanation API with mock/fallback-safe provider behavior.
 - Routine Builder.
-- Routine Builder usability/demo-flow refinement.
 - Routine Safety Analysis.
 - Today Routine Checklist and Routine Logs.
 - Skin Journal.
@@ -121,9 +105,25 @@ Results:
 - User-owned skincare data export.
 - User-owned skincare app data deletion.
 - MVP-safe account deletion request marker.
-- Curated v1.6 seed catalogue with 40 ingredients and 38 products.
+- Curated seed catalogue with 40 ingredients and 38 products.
 - GitHub Actions CI with MongoDB-backed E2E support.
-- Portfolio/demo/interview readiness at MVP level.
+- Portfolio/demo/interview readiness documentation.
+
+## 5. Documentation Readiness
+
+| Document | Status | Notes |
+|---|---|---|
+| `README.md` | PASS | Current v1.11 portfolio/demo status and evidence boundaries are documented. |
+| `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
+| `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
+| `docs/final-release-checklist.md` | PASS | Final release status reflects local PASS, production PASS, and portfolio readiness. |
+| `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
+| `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
+| `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes current PASS summary and recovery plan. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase and next optional tasks are synchronized. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current sprint is v1.11 portfolio demo readiness. |
+| `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
+| `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |
 
 ## 6. Safety Boundaries
 
@@ -135,7 +135,7 @@ Results:
 - No image upload or face analysis.
 - No marketplace, cart, checkout, order, payment, subscription, rating, or review flow.
 - No admin CRUD in the current MVP.
-- No real OpenAI/Gemini provider integration is enabled.
+- No real OpenAI/Gemini provider integration is required for the MVP demo.
 
 ## 7. Known MVP Limitations
 
@@ -145,22 +145,13 @@ These are intentional MVP boundaries, not release blockers:
 - Product and ingredient data is curated/demo-oriented.
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
-- Production smoke test evidence is pending v1.9 verification.
-- Production monitoring evidence is pending manual verification.
-- Full validation rerun is NOT RUN in this v1.8.2 documentation hotfix.
+- Screenshots are optional unless needed for portfolio/slides.
+- `npm ci` was not captured in the provided terminal log and can be rerun if strict install evidence is required.
 
 ## 8. Final Decision
 
-Current decision:
-
 ```txt
-MVP v1.8 - Insights Usability & Progress Story Refinement: DONE
-MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup: DONE
-MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
-```
-
-Recommended next MVP task:
-
-```txt
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization
+MVP v1.11 - Portfolio Demo Readiness: DONE
+Decision: READY for portfolio/demo/interview at MVP level
+Remaining work: optional screenshots, release tag, CV/portfolio page, and future-scope planning
 ```
