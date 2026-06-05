@@ -1,6 +1,6 @@
 # Deployment and Production Readiness Checklist - SkinWise VN MVP
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Current Deployment Status
 
@@ -11,6 +11,11 @@ Documentation closeout: MVP v1.8.1 and MVP v1.8.2 DONE
 Local validation evidence: MVP v1.9 PASS
 Production smoke/monitoring evidence: MVP v1.10 PASS, user-reported
 Portfolio demo readiness: MVP v1.11 DONE
+Post-MVP backlog planning: MVP v1.12 DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
@@ -38,7 +43,7 @@ Evidence boundary:
 | `npm run test:e2e` | PASS | 29/29 Playwright tests passed. |
 | `npm audit --omit=dev --audit-level=moderate` | PASS | 0 vulnerabilities found. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.11 portfolio demo readiness. |
+| README setup instructions accurate | PASS | Updated for v1.13 status, v1.14 next product task, and portfolio evidence boundaries. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
@@ -135,5 +140,9 @@ MVP v1.8.2 - Final documentation consistency hotfix: DONE
 MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
+MVP v1.12 - Post-MVP backlog planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 Decision: READY for portfolio/demo/interview at MVP level
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
 ```

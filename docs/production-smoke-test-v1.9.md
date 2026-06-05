@@ -1,6 +1,6 @@
 # Production Smoke Test Checklist - MVP v1.10
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## Purpose
 
@@ -15,6 +15,9 @@ MVP v1.8.2 - Final documentation consistency hotfix: DONE
 MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke test and monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
+MVP v1.12 - Post-MVP backlog planning: DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
 ```
 
 Allowed statuses:
@@ -103,6 +106,7 @@ Production smoke test evidence: PASS
 Production monitoring evidence: PASS
 Critical production blockers: None reported
 Portfolio demo readiness impact: READY at MVP level
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 ## Evidence Improvement Note

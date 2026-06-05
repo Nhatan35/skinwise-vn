@@ -1,11 +1,11 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Current Phase
 
 ```txt
-MVP v1.12 - Post-MVP Backlog Planning: DONE
+Post-MVP controlled improvement
 ```
 
 Current completed chain:
@@ -18,9 +18,22 @@ MVP v1.9 - Local Validation Evidence: PASS
 MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, and the post-MVP backlog has been created.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, and v1.13 has improved first-time UX states without expanding product scope.
+
+Current status:
+
+```txt
+Core MVP: COMPLETE
+Portfolio demo readiness: COMPLETE
+Post-MVP backlog planning: COMPLETE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+```
 
 Evidence boundary:
 
@@ -49,6 +62,7 @@ Evidence boundary:
 | Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
 | Seed data | DONE | 40 ingredients and 38 products. |
+| UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, case study, demo script, checklists, runbooks. |
 
 ## 3. Route Coverage
@@ -109,18 +123,21 @@ Local evidence:
 
 ```txt
 Evidence date: 2026-06-04
-Environment: Local Windows / Git Bash
+Environment: Local Windows / PowerShell
 Branch: main
-Runtime baseline: Node.js 24.x / npm 11.x
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
-npm run db:indexes: PASS - 32 indexes ensured
-npm run db:seed: PASS - 40 ingredients / 38 products
 npm run test:e2e: PASS - 29/29 Playwright tests
-npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
-npm ci: NOT CAPTURED in the provided terminal log
+```
+
+Validation notes:
+
+```txt
+This v1.13 validation did not require database commands because no schema, seed data, index, or persistence behavior changed.
+The first sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+Historical MVP v1.9 evidence still records db:indexes, db:seed, audit, and baseline local validation.
 ```
 
 Production evidence:
@@ -156,13 +173,13 @@ Current backlog file:
 docs/post-mvp-backlog.md
 ```
 
-Recommended next implementation:
+Completed post-MVP implementation:
 
 ```txt
 v1.13 - UX Polish & Empty State Improvement
 ```
 
-Recommended v1.13 scope:
+Completed v1.13 scope:
 
 - Loading states.
 - Empty states.
@@ -173,7 +190,13 @@ Recommended v1.13 scope:
 - Dashboard visual hierarchy.
 - First-time user guidance.
 
-Intentionally skipped for now:
+Recommended next implementation:
+
+```txt
+v1.14 - Data Quality Expansion
+```
+
+Portfolio evidence tasks:
 
 - Portfolio screenshots.
 - Demo video.

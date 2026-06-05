@@ -1,10 +1,10 @@
 # Screenshots Checklist - SkinWise VN
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
-Status: **Optional but recommended for portfolio polish**
+Status: **Optional portfolio evidence task**
 
-Screenshots are not required for the current MVP v1.11 portfolio/demo readiness package, because the project can be presented through the live demo, README, portfolio case study, release checklist, and demo script.
+Screenshots are not required for product correctness, MVP completion, portfolio demo readiness, or post-MVP backlog planning. The project can be presented through the live demo, README, portfolio case study, release checklist, and demo script.
 
 However, screenshots are recommended if the project will be added to a CV, portfolio website, LinkedIn post, or slide deck.
 
@@ -14,6 +14,10 @@ Current release context:
 MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
+MVP v1.12 post-MVP backlog planning: DONE
+MVP v1.13 UX Polish & Empty State Improvement: DONE
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
 ```
 
 ## Recommended Screenshot List
@@ -60,5 +64,5 @@ Landing -> Dashboard -> Skin Profile -> Product Match -> Product Detail -> Routi
 ```txt
 Screenshot capture: OPTIONAL
 Portfolio/demo readiness without screenshots: READY
-Recommended next polish: capture 8-10 key screenshots if building a visual portfolio page
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```

@@ -1,15 +1,21 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
-Portfolio/demo/interview readiness: READY at MVP level
+Portfolio demo readiness: COMPLETE
+Post-MVP backlog planning: COMPLETE
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 ## Feature Matrix
@@ -58,6 +64,7 @@ Portfolio/demo/interview readiness: READY at MVP level
 
 ```txt
 Core MVP features: COMPLETE
-Do not add new features before portfolio/demo submission
-Next work: screenshots, release tag, spoken demo practice, portfolio/CV presentation
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks are optional and not product correctness blockers
 ```

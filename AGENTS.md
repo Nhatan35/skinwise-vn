@@ -34,7 +34,7 @@ The product must not:
 Current phase:
 
 ```txt
-MVP v1.11 - Portfolio Demo Readiness Polish
+Post-MVP controlled improvement
 ```
 
 The main MVP implementation and MVP v1.8 product release are completed.
@@ -48,6 +48,8 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 MVP v1.9 - Local Validation Evidence: PASS
 MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 ```
 
 Known implementation status:
@@ -62,26 +64,35 @@ Known implementation status:
 Current readiness:
 
 ```txt
-MVP core scope: COMPLETE
+Core MVP: COMPLETE
 Local validation evidence: PASS
 Production smoke evidence: PASS, user-reported
 Production monitoring evidence: PASS, user-reported
-Portfolio/demo/interview readiness: READY at MVP level
+Portfolio demo readiness: COMPLETE
+Post-MVP backlog planning: COMPLETE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
 ```
 
 Evidence boundary:
 
 - Local validation is supported by terminal output.
 - Production PASS is based on the user's reported manual verification with no blockers reported.
-- Screenshots, Vercel deployment ids, browser logs, and sanitized production log snippets should be stored separately if strict traceability is required.
+- Portfolio evidence tasks such as screenshots, demo video, CV/portfolio case study, Vercel deployment ids, browser logs, and sanitized production log snippets should be stored separately if strict traceability is required.
 
-Recommended next task:
+Recommended next product task:
 
 ```txt
-Optional portfolio polish only: screenshots, release tag, CV/portfolio case-study integration, and spoken demo practice.
+MVP v1.14 - Data Quality Expansion
 ```
 
-Do not add new product features unless the user explicitly starts a post-MVP scope.
+Portfolio evidence tasks:
+
+```txt
+Screenshots, demo video, CV/portfolio case study
+```
+
+Do not add new product features unless the user explicitly starts a scoped post-MVP task.
 
 ---
 
@@ -687,10 +698,14 @@ README should accurately state:
 - MVP v1.8 is the completed product release.
 - MVP core scope is completed.
 - MVP v1.8.1 is the completed documentation cleanup patch.
-- MVP v1.8.2 is the latest completed documentation consistency hotfix.
-- MVP v1.9 is the next recommended task.
-- Portfolio/demo/interview readiness is achieved at MVP level.
-- Production smoke test and monitoring/demo recovery evidence are pending unless actually verified.
+- MVP v1.8.2 is the completed documentation consistency hotfix.
+- MVP v1.11 portfolio demo readiness is complete.
+- MVP v1.12 post-MVP backlog planning is complete.
+- MVP v1.13 is the latest completed milestone.
+- Current phase is post-MVP controlled improvement.
+- MVP v1.14 Data Quality Expansion is the next recommended product task.
+- Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study are optional evidence tasks, not product correctness blockers.
+- Production smoke test and monitoring/demo recovery evidence must be described according to the latest verified evidence.
 - Real production AI provider integration is not verified unless actually verified.
 - `.env.local` must not be committed or shared.
 
@@ -1098,10 +1113,10 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.11 - Portfolio Demo Readiness Polish`, the recommended next task is optional portfolio presentation polish only:
+After `MVP v1.13 - UX Polish & Empty State Improvement`, the recommended next product task is:
 
 ```txt
-Optional next work: screenshots, release tag, CV/portfolio case-study integration, and spoken demo practice.
+MVP v1.14 - Data Quality Expansion
 ```
 
 Reason:
@@ -1110,7 +1125,15 @@ Reason:
 - MVP v1.9 local validation evidence is PASS.
 - MVP v1.10 production smoke/monitoring evidence is PASS based on user-reported manual verification with no blockers reported.
 - MVP v1.11 portfolio demo readiness documentation is DONE.
-- Further work should not add product scope unless the user explicitly starts a post-MVP enhancement.
+- MVP v1.12 post-MVP backlog planning is DONE.
+- MVP v1.13 UX polish and empty state improvement is DONE.
+- Further product work should remain controlled and data-focused unless the user explicitly starts another scoped post-MVP enhancement.
+
+Portfolio evidence tasks remain optional:
+
+```txt
+screenshots, demo video, CV/portfolio case-study integration
+```
 
 ---
 
@@ -1148,12 +1171,15 @@ Use this style in docs and final reports:
 ```txt
 MVP v1.8 - Insights Usability & Progress Story Refinement is the completed product release.
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
-MVP v1.8.2 - Final Documentation Consistency Hotfix is the latest completed documentation consistency hotfix.
-MVP v1.9 - Production Monitoring & Demo Evidence Stabilization is the recommended next task.
-SkinWise VN is ready for portfolio/demo/interview use as an MVP.
+MVP v1.8.2 - Final Documentation Consistency Hotfix is the completed documentation consistency hotfix.
+MVP v1.13 - UX Polish & Empty State Improvement is the latest completed milestone.
+Current phase: Post-MVP controlled improvement.
+Next recommended product task: MVP v1.14 - Data Quality Expansion.
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.
+SkinWise VN is ready for portfolio/demo/interview use at MVP level.
 AI provider abstraction is implemented, with a mock provider available for local/demo use.
 Production AI provider integration is deployment/configuration dependent and not verified unless explicitly tested.
-Production smoke test evidence and monitoring/demo recovery evidence are pending unless actually verified and recorded.
+Production smoke test evidence and monitoring/demo recovery evidence must be described according to the latest verified evidence.
 ```
 
 Avoid this style:

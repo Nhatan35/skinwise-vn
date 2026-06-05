@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Demo Objective
 
@@ -15,6 +15,11 @@ Production URL: https://skinwise-vn.vercel.app
 MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
+MVP v1.12 post-MVP backlog planning: DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 Critical blockers reported: None
 ```
 
@@ -232,7 +237,7 @@ If demo data is missing:
 | How did you control scope? | I excluded diagnosis, image analysis, marketplace, payments, admin CRUD, and unsupported AI claims. |
 | How did you validate it? | Local lint, typecheck, 889 unit tests, production build, database seed/index scripts, 29 E2E tests, audit, production smoke check, and release docs. |
 | What is the strongest BA part? | Problem framing, scope control, safety requirements, user journey traceability, and release evidence. |
-| What would you improve next? | Optional screenshots, stronger monitoring, admin data management, and stricter production evidence records. |
+| What would you improve next? | The next recommended product task is v1.14 Data Quality Expansion. Screenshots, a demo video, and CV/portfolio case study polish are portfolio evidence tasks, not product blockers. |
 
 ## 9. Final Demo Checklist
 

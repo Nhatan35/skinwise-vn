@@ -1,11 +1,14 @@
 # UI Route Map - SkinWise VN
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 Current status:
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
 Production URL: https://skinwise-vn.vercel.app
 ```
 
@@ -39,5 +42,6 @@ Production URL: https://skinwise-vn.vercel.app
 
 ```txt
 All MVP UI routes required for portfolio/demo are implemented.
-Next work: optional screenshots and presentation polish only.
+Next recommended product task: MVP v1.14 - Data Quality Expansion.
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.
 ```

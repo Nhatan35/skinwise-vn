@@ -6,6 +6,83 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-05 - Documentation Status Synchronization for MVP v1.13
+
+### Task
+
+Synchronize repository documentation so v1.13 is treated as the latest completed milestone, v1.14 Data Quality Expansion is the next recommended product task, and portfolio evidence tasks remain separate from product correctness.
+
+### Scope
+
+- Documentation-only status synchronization.
+- No product features, runtime configuration, database schema, dependency updates, or source refactors.
+
+### Current Status Wording
+
+```txt
+Core MVP: COMPLETE
+Portfolio demo readiness: COMPLETE
+Post-MVP backlog planning: COMPLETE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+```
+
+## 2026-06-04 - MVP v1.13 UX Polish & Empty State Improvement
+
+### Task
+
+Improve first-time UX states across the existing MVP without adding new product scope, changing persistence behavior, or changing auth/business rules.
+
+### Files Updated
+
+- Shared loading, empty, and error state components.
+- Dashboard, product, Product Match, saved products, ingredient, routine, today routine, journal, insights, settings, and skin profile UI components.
+- Affected unit UI tests and ingredient E2E text assertions.
+- `README.md`
+- `docs/post-mvp-backlog.md`
+- `docs/09-release-plan.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added more specific Vietnamese loading messages.
+- Improved empty states with clearer titles, descriptions, and existing-route/action CTAs.
+- Improved error states and recovery guidance.
+- Added first-time dashboard guidance using existing routes.
+- Improved Product Match missing-profile guidance.
+- Reduced mixed English/Vietnamese copy in touched UX states.
+- Kept shared component prop changes backward-compatible.
+
+### Scope Boundaries
+
+- No database schema, collection, index, seed data, DTO, or persistence behavior change.
+- No authentication or authorization logic change.
+- No Product Match rule change.
+- No Routine Safety Engine change.
+- No real AI provider integration.
+- No admin, marketplace, payment, notification, review, rating, image upload, or skin score scope.
+
+### Validation
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 96 files / 889 tests
+npm run build: PASS
+npm run test:e2e: PASS - 29/29 Playwright tests
+```
+
+Validation note:
+
+```txt
+The first sandboxed build and E2E attempts failed with spawn EPERM. The same commands passed when rerun outside the sandbox.
+Database commands were not required because v1.13 did not change schema, seed data, indexes, or persistence behavior.
+Production smoke and monitoring were not rerun for v1.13.
+```
 
 ## 2026-06-04 - MVP v1.11 Portfolio Demo Readiness Polish
 
@@ -214,9 +291,9 @@ Avoid stale release status when using SkinWise VN for portfolio, demo, and inter
 - MVP core scope is completed.
 - SkinWise VN is ready for portfolio/demo/interview use as an MVP.
 - MVP v1.8.1 is a documentation cleanup patch/task, not a product feature release.
-- MVP v1.9 is the next recommended task.
-- Production smoke test evidence is next-step work.
-- Production monitoring/demo recovery evidence is next-step work.
+- Historical note: MVP v1.9 was identified as the next recommended task at that time.
+- Historical note: production smoke test evidence was next-step work at that time.
+- Historical note: production monitoring/demo recovery evidence was next-step work at that time.
 - MVP v2.0 or later remains optional future enhancement scope.
 
 ### Validation
@@ -4008,8 +4085,8 @@ The MVP is already complete and validated at local level, with production smoke/
 
 - Marked `MVP v1.12 - Post-MVP Backlog Planning` as complete.
 - Added prioritised backlog categories: UX polish, data quality, release observability, admin/content management, optional real AI integration, and portfolio assets.
-- Marked portfolio screenshots/demo polish as skipped for now by user decision.
-- Recommended next implementation task: `v1.13 - UX Polish & Empty State Improvement`.
+- Marked portfolio screenshots/demo polish as optional portfolio evidence work, not a product blocker.
+- Historical note: `v1.13 - UX Polish & Empty State Improvement` was selected as the next implementation task at this point and is now complete.
 
 ### Scope Boundaries
 

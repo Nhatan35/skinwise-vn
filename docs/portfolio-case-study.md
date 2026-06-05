@@ -1,6 +1,6 @@
 # SkinWise VN - Portfolio Case Study
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Executive Summary
 
@@ -23,6 +23,11 @@ MVP v1.8.2 - Final documentation consistency hotfix: DONE
 MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
+MVP v1.12 - Post-MVP backlog planning: DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 Evidence note: local validation is supported by command output. Production smoke and monitoring PASS are recorded from the user's reported completed manual verification with no blockers reported. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
@@ -183,7 +188,7 @@ Critical blockers reported: None
 Evidence date: 2026-06-04
 ```
 
-Production evidence should be strengthened with screenshots, Vercel deployment id, browser/network notes, and issue records if the project is submitted for a formal audit.
+Production evidence can be strengthened with screenshots, Vercel deployment id, browser/network notes, and issue records if the project is submitted for a formal audit. These are portfolio evidence tasks, not product correctness blockers.
 
 ## 9. Demo Script Summary
 
@@ -260,11 +265,12 @@ Intentional MVP limitations:
 
 Future improvements:
 
+- MVP v1.14 Data Quality Expansion for product and ingredient coverage.
 - Admin product/ingredient management.
 - Better analytics and structured progress review.
 - Optional real provider integration with strict safety controls.
 - More robust production monitoring.
-- Screenshot-based portfolio page.
+- Optional screenshot/demo video portfolio evidence.
 - More complete account deletion workflow.
 
 ## 14. Closing Statement

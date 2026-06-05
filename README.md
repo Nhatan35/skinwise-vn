@@ -15,10 +15,18 @@ Production demo:
 Current evidence status:
 
 - MVP portfolio/demo/interview readiness: **READY** at MVP level.
-- Local validation evidence: **PASS** for MVP v1.9 local quality gate.
-- Production smoke test evidence: **PASS — user-reported manual verification completed; no blockers reported.**
-- Production monitoring evidence: **PASS — user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
+- Core MVP: **COMPLETE**.
+- Portfolio demo readiness: **COMPLETE**.
+- Post-MVP backlog planning: **COMPLETE**.
+- Latest completed milestone: **MVP v1.13 - UX Polish & Empty State Improvement**.
+- Current phase: **Post-MVP controlled improvement**.
+- Next recommended product task: **MVP v1.14 - Data Quality Expansion**.
+- Portfolio evidence tasks: **screenshots, demo video, CV/portfolio case study**.
+- Local validation evidence: **PASS** for MVP v1.13 UX polish quality gate.
+- Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
+- Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
+- Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
 
 Evidence boundary:
 
@@ -42,11 +50,19 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix: DONE
 MVP v1.9 - Local Validation Evidence: PASS
 MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features or change source logic. It prepares the repository for portfolio review, demo walkthrough, and interview discussion.
+
+MVP v1.12 is a completed post-MVP backlog planning milestone.
+
+MVP v1.13 is a post-MVP UX polish milestone. It improves loading, empty, error, helper, CTA, and first-time guidance states without changing database behavior, authentication, authorization, Product Match rules, Routine Safety rules, or AI provider behavior.
+
+The current phase is post-MVP controlled improvement. The next recommended product task is MVP v1.14 - Data Quality Expansion, focused on product and ingredient data quality without expanding product scope.
 
 ## Key Features
 
@@ -139,18 +155,21 @@ Latest local validation evidence:
 
 ```txt
 Evidence date: 2026-06-04
-Environment: Local Windows / Git Bash
+Environment: Local Windows / PowerShell
 Branch: main
-Runtime baseline: Node.js 24.x / npm 11.x
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 96 files / 889 tests
 npm run build: PASS
-npm run db:indexes: PASS - 32 indexes ensured
-npm run db:seed: PASS - 40 ingredients / 38 products
 npm run test:e2e: PASS - 29/29 Playwright tests
-npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
-npm ci: NOT CAPTURED in the provided terminal log
+```
+
+Validation note:
+
+```txt
+v1.13 did not require database commands because no schema, seed data, indexes, or persistence behavior changed.
+The first sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+Historical v1.9 evidence still records db:indexes, db:seed, audit, and baseline local validation.
 ```
 
 Production evidence:
@@ -281,11 +300,15 @@ These are intentional MVP boundaries, not release blockers:
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
+MVP v1.12 - Post-MVP Backlog Planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 Decision: READY for portfolio/demo/interview at MVP level
-Next recommended work: optional screenshots, case-study polish, release tag, and future-scope planning only
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. The recommended next implementation is `v1.13 - UX Polish & Empty State Improvement`.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.13 - UX Polish & Empty State Improvement` is complete. The recommended next controlled implementation is `v1.14 - Data Quality Expansion`.

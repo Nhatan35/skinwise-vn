@@ -1,16 +1,20 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Current Stable Baseline
 
 ```txt
 Stable MVP release: v1.11-final-mvp / v1.11-portfolio-demo-ready
-Current planning sprint: v1.12 - Post-MVP Backlog Planning
+Post-MVP backlog planning: v1.12 - DONE
+Latest post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 MVP core scope: COMPLETE
+Portfolio demo readiness: COMPLETE
+Current phase: Post-MVP controlled improvement
+Next recommended product task: v1.14 - Data Quality Expansion
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
-Portfolio screenshots/demo polish: intentionally skipped for now
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 This backlog starts **after** the stable MVP. It must not rewrite history or turn optional future ideas into MVP blockers.
@@ -58,13 +62,13 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 
 | Priority | Theme | Recommended Status | Why It Matters |
 |---|---|---|---|
-| P1 | UX polish and empty states | Do first | Makes the existing MVP easier to use without risky architecture changes. |
-| P1 | Error/loading/helper copy | Do first | Improves confidence during demo and real use. |
-| P2 | Data quality expansion | Do after UX polish | Makes Product Match and Ingredient Library feel more realistic. |
+| P1 | UX polish and empty states | DONE in v1.13 | Makes the existing MVP easier to use without risky architecture changes. |
+| P1 | Error/loading/helper copy | DONE in v1.13 | Improves confidence during demo and real use. |
+| P2 | Data quality expansion | Recommended next | Makes Product Match and Ingredient Library feel more realistic. |
 | P2 | Release/observability polish | Do after UX polish | Improves production confidence and debugging. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
-| P4 | Portfolio assets | Skipped for now | Useful for presentation, but intentionally not required at this stage. |
+| P4 | Portfolio assets | Optional evidence task | Useful for presentation, but not required for product correctness. |
 
 ## 5. P1 - UX Polish & Empty State Improvement
 
@@ -72,7 +76,13 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 
 Improve the user experience of the existing app without changing core business logic.
 
-### Candidate Tasks
+### Status
+
+```txt
+v1.13 - UX Polish & Empty State Improvement: DONE
+```
+
+### Completed Tasks
 
 - Improve loading states on main app pages.
 - Improve empty states for first-time users.
@@ -108,45 +118,45 @@ Improve the user experience of the existing app without changing core business l
 Saved products empty state:
 
 ```txt
-You have not saved any products yet.
-Browse the product catalogue and save products you want to compare later.
-CTA: Browse products
+Chưa có sản phẩm đã lưu
+Hãy khám phá danh mục sản phẩm và lưu những sản phẩm bạn muốn xem lại hoặc so sánh sau.
+CTA: Xem sản phẩm
 ```
 
 Routine empty state:
 
 ```txt
-No routine created yet.
-Create a morning or evening routine to start tracking your skincare habits.
-CTA: Create routine
+Chưa có routine nào
+Hãy tạo routine buổi sáng hoặc buổi tối để bắt đầu theo dõi thói quen chăm sóc da của bạn.
+CTA: Tạo routine
 ```
 
 Journal empty state:
 
 ```txt
-No journal entries yet.
-Add your first skin journal entry to track how your skin feels over time.
-CTA: Add journal entry
+Chưa có nhật ký da
+Hãy thêm nhật ký đầu tiên để theo dõi cảm nhận của làn da theo thời gian.
+CTA: Thêm nhật ký
 ```
 
 Error state:
 
 ```txt
-We could not load your skincare data.
-Please refresh the page or try again later.
+Không thể tải dữ liệu chăm sóc da.
+Vui lòng thử lại hoặc làm mới trang.
 ```
 
 ### Acceptance Criteria
 
 ```txt
-[ ] Existing app routes still work.
-[ ] First-time users have clear next actions.
-[ ] Empty states are not blank or confusing.
-[ ] Error messages are user-friendly and not overly technical.
-[ ] Loading copy feels specific to the page.
-[ ] No database schema change.
-[ ] No auth/business-rule change.
-[ ] Existing tests pass.
+[x] Existing app routes still work.
+[x] First-time users have clear next actions.
+[x] Empty states are not blank or confusing.
+[x] Error messages are user-friendly and not overly technical.
+[x] Loading copy feels specific to the page.
+[x] No database schema change.
+[x] No auth/business-rule change.
+[x] Existing tests pass.
 ```
 
 ### Suggested Version
@@ -326,8 +336,8 @@ Improve external presentation. This is intentionally skipped for now, but can be
 ### Status
 
 ```txt
-SKIPPED for now by user decision.
-Not a blocker for post-MVP development.
+Optional portfolio evidence task.
+Not a blocker for product correctness or post-MVP development.
 ```
 
 ## 11. Not Recommended Right Now
@@ -355,34 +365,34 @@ These items either increase product risk, safety risk, or implementation complex
 The next implementation task should be:
 
 ```txt
-v1.13 - UX Polish & Empty State Improvement
+v1.14 - Data Quality Expansion
 ```
 
 Reason:
 
-- It improves the current MVP immediately.
-- It has low technical risk.
-- It does not require schema changes.
-- It makes first-time user flows clearer.
-- It prepares the app for stronger post-MVP work later.
+- v1.13 UX polish is complete.
+- Product Match and Ingredient Library can feel more realistic with stronger curated data.
+- Data work must remain educational, demo-safe, and free of unsafe medical claims.
 
-## 13. v1.13 Starter Checklist
+## 13. v1.13 Completion Checklist
 
 ```txt
-[ ] Review main routes for missing loading states.
-[ ] Review main routes for weak empty states.
-[ ] Review form pages for unclear validation copy.
-[ ] Review API failure states in client components.
-[ ] Add next-action CTAs where useful.
-[ ] Keep copy concise and skincare-focused.
-[ ] Run lint/typecheck/test/build/e2e.
-[ ] Update docs/ai-coding/06-current-sprint-plan.md for v1.13 when starting implementation.
+[x] Review main routes for missing loading states.
+[x] Review main routes for weak empty states.
+[x] Review form pages for unclear validation copy.
+[x] Review API failure states in client components.
+[x] Add next-action CTAs where useful.
+[x] Keep copy concise and skincare-focused.
+[x] Run lint/typecheck/test/build/e2e.
+[x] Update docs/ai-coding/06-current-sprint-plan.md for v1.13 completion.
 ```
 
 ## 14. Decision Log
 
 ```txt
 2026-06-04: Created post-MVP backlog after MVP v1.11 portfolio demo readiness.
-2026-06-04: Portfolio screenshots/demo polish intentionally skipped for now.
-2026-06-04: Recommended next development task is v1.13 UX Polish & Empty State Improvement.
+2026-06-04: Portfolio screenshots/demo polish recorded as optional evidence work.
+2026-06-04: Recommended next development task was v1.13 UX Polish & Empty State Improvement.
+2026-06-04: Completed v1.13 UX Polish & Empty State Improvement with local lint/typecheck/test/build/E2E PASS.
+2026-06-05: Synchronized documentation status so v1.13 is latest completed and v1.14 Data Quality Expansion is the next recommended product task.
 ```

@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -14,8 +14,13 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Portfolio/demo/interview readiness: READY at MVP level
-Next recommended implementation: v1.13 - UX Polish & Empty State Improvement
+Core MVP: COMPLETE
+Portfolio demo readiness: COMPLETE
+Post-MVP backlog planning: COMPLETE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
+Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 
 Primary current documents:
@@ -38,6 +43,6 @@ Evidence boundary:
 
 - Local validation is supported by terminal output.
 - Production PASS is based on user-reported manual verification with no blockers reported.
-- v1.12 is documentation/planning only and does not include source-code changes.
-- Portfolio screenshots/demo polish is intentionally skipped for now by user decision.
+- v1.12 is completed documentation/planning only and did not include source-code changes.
+- Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

@@ -1,6 +1,6 @@
 # Vercel Deployment Runbook - SkinWise VN
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## 1. Current Deployment Status
 
@@ -12,6 +12,10 @@ Runtime baseline: Node.js 24.x / npm 11.x
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio readiness: MVP v1.11 DONE
+Post-MVP backlog planning: MVP v1.12 DONE
+Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Current phase: Post-MVP controlled improvement
+Next recommended product task: MVP v1.14 - Data Quality Expansion
 ```
 
 This document explains the expected Vercel setup and how to verify/recover production behavior.
@@ -92,5 +96,7 @@ If production fails:
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
 Deployment readiness: READY at MVP level
+Current phase: Post-MVP controlled improvement
 ```
