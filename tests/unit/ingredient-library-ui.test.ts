@@ -86,8 +86,8 @@ describe("Ingredient Library UI", () => {
   it("supports q search and reset without adding CRUD behavior", () => {
     for (const requiredSource of [
       "ingredient-search",
-      "Search ingredients",
-      "Reset",
+      "Tìm thành phần",
+      "Xóa tìm kiếm",
       "limit: 50",
       "getIngredientsApiPath",
       'params.set("q", q)',
@@ -112,12 +112,11 @@ describe("Ingredient Library UI", () => {
 
   it("renders loading, error, empty, educational, and card states", () => {
     for (const requiredCopy of [
-      "Loading ingredient library",
-      "Ingredient library could not load",
-      "No ingredients found",
-      "Could not load the ingredient library.",
-      "Educational ingredient library",
-      "not medical diagnosis",
+      "Đang tải thư viện thành phần",
+      "Không thể tải thư viện thành phần",
+      "Không tìm thấy thành phần phù hợp",
+      "Thư viện thành phần tham khảo",
+      "không phải chẩn đoán y khoa",
       "data-testid=\"ingredient-card\"",
       "Xem chi tiết",
     ]) {

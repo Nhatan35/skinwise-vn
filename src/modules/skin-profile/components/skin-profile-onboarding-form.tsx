@@ -181,7 +181,7 @@ function getLoadErrorMessage(error?: ApiError | null) {
     return "Bạn cần đăng nhập để tiếp tục.";
   }
 
-  return "Hiện chưa thể tải hồ sơ da. Vui lòng thử lại sau.";
+  return "Không thể chuẩn bị biểu mẫu hồ sơ da. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 function getSaveErrorMessage(error?: ApiError | null) {
@@ -266,7 +266,9 @@ export function SkinProfileOnboardingForm() {
         setHasExistingProfile(true);
       } catch {
         if (isMounted) {
-          setApiError("Hiện chưa thể tải hồ sơ da. Vui lòng thử lại sau.");
+          setApiError(
+            "Không thể chuẩn bị biểu mẫu hồ sơ da. Vui lòng thử lại hoặc làm mới trang.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -385,7 +387,7 @@ export function SkinProfileOnboardingForm() {
     return (
       <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Đang tải hồ sơ da" />
+          <LoadingState label="Đang chuẩn bị biểu mẫu hồ sơ da..." />
         </CardContent>
       </Card>
     );
@@ -400,7 +402,7 @@ export function SkinProfileOnboardingForm() {
           </Button>
         }
         description={apiError}
-        title="Chưa tải được hồ sơ da"
+        title="Không thể chuẩn bị biểu mẫu hồ sơ da"
       />
     );
   }

@@ -65,19 +65,19 @@ type SkinJournalEntryFormProps = {
 };
 
 const symptomLabels: Record<SkinJournalSymptom, string> = {
-  dryness: "Dryness",
-  oiliness: "Oiliness",
-  redness: "Redness",
-  stinging: "Stinging",
-  new_breakouts: "New breakouts",
-  itchiness: "Itchiness",
-  other: "Other",
+  dryness: "Khô da",
+  oiliness: "Đổ dầu",
+  redness: "Đỏ da",
+  stinging: "Châm chích",
+  new_breakouts: "Nổi mụn mới",
+  itchiness: "Ngứa",
+  other: "Khác",
 };
 
 const stressLabels: Record<SkinJournalStressLevel, string> = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
+  low: "Thấp",
+  medium: "Vừa",
+  high: "Cao",
 };
 
 function entryToFormState(entry?: SkinJournalDto): SkinJournalFormState {
@@ -103,7 +103,7 @@ function getFormErrorMessage(error: unknown) {
     return error.message;
   }
 
-  return "Unable to save this journal entry. Please try again.";
+  return "Không thể lưu nhật ký da. Vui lòng thử lại.";
 }
 
 export function SkinJournalEntryForm({
@@ -209,21 +209,25 @@ export function SkinJournalEntryForm({
     <Card className="border-border bg-card">
       <CardHeader>
         <CardTitle>
-          {mode === "create" ? "Create journal entry" : "Edit journal entry"}
+          {mode === "create" ? "Thêm nhật ký da" : "Sửa nhật ký da"}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6" data-testid="skin-journal-form" onSubmit={handleSubmit}>
+        <form
+          className="space-y-6"
+          data-testid="skin-journal-form"
+          onSubmit={handleSubmit}
+        >
           {formError ? (
             <Alert variant="destructive">
-              <AlertTitle>Journal entry was not saved</AlertTitle>
+              <AlertTitle>Chưa lưu được nhật ký</AlertTitle>
               <AlertDescription>{formError}</AlertDescription>
             </Alert>
           ) : null}
 
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="skin-journal-local-date">Date</Label>
+              <Label htmlFor="skin-journal-local-date">Ngày ghi nhận</Label>
               {mode === "create" ? (
                 <Input
                   aria-describedby={
@@ -274,7 +278,7 @@ export function SkinJournalEntryForm({
           />
 
           <TextareaField
-            description="Use one observation per line or separate items with commas."
+            description="Ghi mỗi quan sát trên một dòng hoặc phân tách bằng dấu phẩy."
             error={fieldErrors.observationsText}
             dataTestId="skin-journal-observations-input"
             id="skin-journal-observations"
@@ -334,7 +338,7 @@ export function SkinJournalEntryForm({
               error={fieldErrors.sleepHours}
               id="skin-journal-sleep-hours"
               inputMode="decimal"
-              label="Sleep hours"
+              label="Số giờ ngủ"
               max="24"
               min="0"
               onChange={(value) => updateField("sleepHours", value)}
@@ -345,7 +349,7 @@ export function SkinJournalEntryForm({
             />
 
             <div className="space-y-2">
-              <Label htmlFor="skin-journal-stress-level">Mức stress</Label>
+              <Label htmlFor="skin-journal-stress-level">Mức căng thẳng</Label>
               <Select
                 onValueChange={(value) =>
                   updateField(
@@ -373,7 +377,7 @@ export function SkinJournalEntryForm({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Not tracked</SelectItem>
+                  <SelectItem value="none">Chưa theo dõi</SelectItem>
                   {SKIN_JOURNAL_STRESS_LEVELS.map((stressLevel) => (
                     <SelectItem key={stressLevel} value={stressLevel}>
                       {stressLabels[stressLevel]}
@@ -396,7 +400,7 @@ export function SkinJournalEntryForm({
             error={fieldErrors.notes}
             dataTestId="skin-journal-notes-input"
             id="skin-journal-notes"
-            label="Notes"
+            label="Ghi chú"
             maxLength={3000}
             onChange={(value) => updateField("notes", value)}
             rows={5}
@@ -405,8 +409,8 @@ export function SkinJournalEntryForm({
 
           <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm leading-6 text-muted-foreground">
-              Skin Journal is for tracking observations, not diagnosis or
-              treatment advice.
+              Nhật ký da dùng để theo dõi quan sát cá nhân, không phải chẩn đoán
+              hoặc lời khuyên điều trị.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button
@@ -416,11 +420,15 @@ export function SkinJournalEntryForm({
                 variant="outline"
               >
                 <X aria-hidden="true" />
-                Cancel
+                Hủy
               </Button>
-              <Button data-testid="skin-journal-save-button" disabled={isSaving} type="submit">
+              <Button
+                data-testid="skin-journal-save-button"
+                disabled={isSaving}
+                type="submit"
+              >
                 <Save aria-hidden="true" />
-                {isSaving ? "Saving..." : "Save entry"}
+                {isSaving ? "Đang lưu..." : "Lưu nhật ký"}
               </Button>
             </div>
           </div>
@@ -465,18 +473,21 @@ function ProductSelectionField({
       </legend>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Đang tải danh sách sản phẩm...</p>
+        <p className="text-sm text-muted-foreground">
+          Đang tải danh sách sản phẩm...
+        </p>
       ) : null}
 
       {loadError ? (
         <p className="text-sm text-amber-700">
-          Could not load the product catalogue.
+          Không thể tải danh mục sản phẩm. Bạn vẫn có thể lưu nhật ký không kèm
+          sản phẩm.
         </p>
       ) : null}
 
       {!isLoading && !loadError && products.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No catalogue products are available yet.
+          Chưa có sản phẩm trong danh mục để chọn cho nhật ký.
         </p>
       ) : null}
 
@@ -530,13 +541,13 @@ function ProductSelectionField({
 
       {loadError && selectedProductIds.length > 0 ? (
         <p className="text-sm text-muted-foreground">
-          Existing product selections will be preserved when you save.
+          Các sản phẩm đã chọn trước đó sẽ được giữ lại khi bạn lưu.
         </p>
       ) : null}
 
       {!loadError && hasUnresolvedSelection ? (
         <p className="text-sm text-muted-foreground">
-          Unknown product selections will be preserved when you save.
+          Các sản phẩm chưa xác định sẽ được giữ lại khi bạn lưu.
         </p>
       ) : null}
 

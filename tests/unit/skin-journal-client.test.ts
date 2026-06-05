@@ -228,7 +228,7 @@ describe("SkinJournal client helpers", () => {
       }),
     ).rejects.toMatchObject({
       code: "CONFLICT",
-      message: "You already have a journal entry for this date.",
+      message: "Bạn đã có nhật ký cho ngày này.",
       status: 409,
     });
   });
@@ -248,7 +248,7 @@ describe("SkinJournal client helpers", () => {
     );
 
     await expect(listSkinJournals()).rejects.toThrow(
-      "Unable to update Skin Journal. Please try again.",
+      "Không thể cập nhật nhật ký da. Vui lòng thử lại.",
     );
   });
 
@@ -257,7 +257,7 @@ describe("SkinJournal client helpers", () => {
 
     await expect(listSkinJournals()).rejects.toMatchObject({
       code: "INTERNAL_ERROR",
-      message: "Unable to update Skin Journal. Please try again.",
+      message: "Không thể cập nhật nhật ký da. Vui lòng thử lại.",
     });
   });
 

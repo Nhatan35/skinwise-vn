@@ -93,7 +93,7 @@ describe("Saved Products UI", () => {
       "Đang tải sản phẩm đã lưu",
       "Không thể tải sản phẩm đã lưu",
       "Chưa có sản phẩm đã lưu",
-      "Khám phá sản phẩm",
+      "Xem sản phẩm",
       "Thử lại",
       "saved-product-card",
     ]) {

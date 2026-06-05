@@ -61,13 +61,13 @@ describe("Insights UI source", () => {
   it("has loading, error, and empty states using shared components", () => {
     expect(insightsPageSource.startsWith('"use client";')).toBe(true);
     expect(insightsPageSource).toContain("LoadingState");
-    expect(insightsPageSource).toContain("Đang tải Insights tiến trình chăm sóc da");
+    expect(insightsPageSource).toContain("Đang chuẩn bị insights tiến trình");
     expect(insightsPageSource).toContain("ErrorState");
-    expect(insightsPageSource).toContain("Chưa thể tải Insights lúc này");
+    expect(insightsPageSource).toContain("Chưa thể chuẩn bị insights tiến trình");
     expect(insightsPageSource).toContain("EmptyState");
-    expect(insightsPageSource).toContain("Chưa đủ dữ liệu theo dõi");
+    expect(insightsPageSource).toContain("Chưa đủ dữ liệu để xem insights");
     expect(insightsPageSource).toContain(
-      "Ghi nhận routine hôm nay",
+      "Đi tới routine hôm nay",
     );
   });
 

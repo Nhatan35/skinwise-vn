@@ -122,7 +122,7 @@ function getLoadErrorMessage(error?: ApiError | null) {
     return "Ngày ghi nhận routine chưa hợp lệ. Vui lòng tải lại trang.";
   }
 
-  return "Không thể tải checklist routine hôm nay. Vui lòng thử lại.";
+  return "Không thể tải checklist routine hôm nay. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
@@ -244,7 +244,9 @@ export function TodayRoutineChecklist() {
         if (isMounted) {
           setRoutines([]);
           setLogsByRoutineId({});
-          setLoadError("Không thể tải checklist routine hôm nay. Vui lòng thử lại.");
+          setLoadError(
+            "Không thể tải checklist routine hôm nay. Vui lòng thử lại hoặc làm mới trang.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -472,14 +474,14 @@ export function TodayRoutineChecklist() {
   }
 
   if (isLoading) {
-    return <LoadingState label="Đang tải routine hôm nay" />;
+    return <LoadingState label="Đang tải checklist routine hôm nay..." />;
   }
 
   if (loadError) {
     return (
       <ErrorState
         description={loadError}
-        title="Chưa tải được routine hôm nay"
+        title="Không thể tải checklist routine hôm nay"
       />
     );
   }
@@ -489,11 +491,11 @@ export function TodayRoutineChecklist() {
       <EmptyState
         action={
           <Button asChild>
-            <Link href={routes.ROUTINES}>Đi tới Routine Builder</Link>
+            <Link href={routes.ROUTINES}>Tạo routine</Link>
           </Button>
         }
-        description="Hãy tạo morning/evening routine trước khi theo dõi tiến độ hằng ngày."
-        title="Bạn chưa có routine nào để ghi nhận hôm nay."
+        description="Hãy tạo routine buổi sáng hoặc buổi tối trước khi theo dõi tiến độ hằng ngày."
+        title="Chưa có routine nào"
       />
     );
   }
@@ -538,11 +540,11 @@ export function TodayRoutineChecklist() {
         <EmptyState
           action={
             <Button asChild variant="outline">
-              <Link href={routes.DASHBOARD}>Xem Dashboard</Link>
+              <Link href={routes.DASHBOARD}>Xem dashboard</Link>
             </Button>
           }
-          description="Có thể quay lại Dashboard để xem tiến độ."
-          title="Bạn đã ghi nhận tất cả routine hôm nay."
+          description="Bạn có thể quay lại dashboard để xem tiến độ hôm nay."
+          title="Đã ghi nhận tất cả routine hôm nay"
         />
       ) : null}
 

@@ -573,7 +573,9 @@ export function RoutineBuilder() {
         setRoutines(body.data.routines);
       } catch {
         if (isMounted) {
-          setLoadError("Hiện chưa thể tải routines. Vui lòng thử lại sau.");
+          setLoadError(
+            "Không thể tải routine của bạn. Vui lòng thử lại hoặc làm mới trang.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -1052,7 +1054,7 @@ export function RoutineBuilder() {
     return (
       <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Đang tải routines" />
+          <LoadingState label="Đang chuẩn bị routine builder..." />
         </CardContent>
       </Card>
     );
@@ -1071,7 +1073,7 @@ export function RoutineBuilder() {
           </Button>
         }
         description={loadError}
-        title="Chưa tải được routines"
+        title="Không thể tải routine của bạn"
       />
     );
   }
@@ -1123,11 +1125,11 @@ export function RoutineBuilder() {
               type="button"
             >
               <Plus aria-hidden="true" />
-              Tạo routine đầu tiên
+              Tạo routine
             </Button>
           }
-          description="Bắt đầu với một routine buổi sáng hoặc buổi tối đơn giản. SkinWise có thể giúp bạn xem lại các bước để phát hiện điểm cần chú ý như thiếu kem chống nắng, dùng quá nhiều hoạt chất mạnh, sản phẩm có thể chưa hợp với da nhạy cảm, hoặc thiếu bước hỗ trợ hàng rào da."
-          title="Xây dựng routine chăm sóc da đầu tiên"
+          description="Hãy tạo routine buổi sáng hoặc buổi tối để bắt đầu theo dõi thói quen chăm sóc da của bạn."
+          title="Chưa có routine nào"
         />
       ) : (
         <RoutineList

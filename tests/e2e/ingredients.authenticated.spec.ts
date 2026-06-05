@@ -69,7 +69,7 @@ test.describe("SkinWise VN authenticated ingredients", () => {
     const searchResponsePromise = waitForIngredientsResponse(page);
 
     await page.getByTestId("ingredient-search").fill("Niacinamide");
-    await page.getByRole("button", { name: "Search ingredients" }).click();
+    await page.getByRole("button", { name: "Tìm thành phần" }).click();
 
     const searchResponse = await searchResponsePromise;
 
@@ -94,7 +94,9 @@ test.describe("SkinWise VN authenticated ingredients", () => {
       timeout: 15_000,
     });
     await expect(
-      page.getByText("Educational ingredient details", { exact: true }),
+      page.getByText("Thông tin thành phần tham khảo", {
+        exact: true,
+      }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Niacinamide" }),
@@ -110,11 +112,11 @@ test.describe("SkinWise VN authenticated ingredients", () => {
     const explanationResponse = await explanationResponsePromise;
 
     expect(explanationResponse.ok()).toBeTruthy();
-    await expect(page.getByText("Simple explanation")).toBeVisible();
+    await expect(page.getByText("Giải thích ngắn gọn")).toBeVisible();
     await expect(
       page
         .getByText("AI", { exact: true })
-        .or(page.getByText("Fallback", { exact: true }))
+        .or(page.getByText("Phản hồi dự phòng", { exact: true }))
         .first(),
     ).toBeVisible();
   });

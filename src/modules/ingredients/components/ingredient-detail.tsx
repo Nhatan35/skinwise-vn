@@ -33,14 +33,14 @@ type IngredientDetailProps = {
 };
 
 const evidenceLevelLabels: Record<IngredientEvidenceLevel, string> = {
-  basic: "Basic evidence",
-  moderate: "Moderate evidence",
-  strong: "Strong evidence",
-  uncertain: "Uncertain evidence",
+  basic: "Bằng chứng cơ bản",
+  moderate: "Bằng chứng trung bình",
+  strong: "Bằng chứng mạnh",
+  uncertain: "Bằng chứng chưa chắc chắn",
 };
 
 function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
   }).format(new Date(value));
 }
@@ -48,13 +48,15 @@ function formatDate(value: string) {
 function getLoadError(error: unknown) {
   if (error instanceof IngredientClientError) {
     return {
-      message: error.message,
+      message:
+        "Không thể tải thông tin thành phần này. Vui lòng quay lại thư viện thành phần hoặc thử lại sau.",
       status: error.status,
     };
   }
 
   return {
-    message: "Could not load the ingredient details.",
+    message:
+      "Không thể tải thông tin thành phần này. Vui lòng quay lại thư viện thành phần hoặc thử lại sau.",
     status: 500,
   };
 }
@@ -106,7 +108,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
     return (
       <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Loading ingredient details" />
+          <LoadingState label="Đang tải thông tin thành phần..." />
         </CardContent>
       </Card>
     );
@@ -116,8 +118,8 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
     return (
       <EmptyState
         action={<BackToIngredientsButton />}
-        description="This ingredient may be unavailable in the library."
-        title="Ingredient not found"
+        description="Thành phần này có thể không còn khả dụng trong thư viện. Hãy quay lại thư viện để chọn thành phần khác."
+        title="Không tìm thấy thành phần"
       />
     );
   }
@@ -138,7 +140,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
           </div>
         }
         description={loadError.message}
-        title="Ingredient details could not load"
+        title="Không thể tải thông tin thành phần"
       />
     );
   }
@@ -147,8 +149,8 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
     return (
       <EmptyState
         action={<BackToIngredientsButton />}
-        description="Try returning to the ingredient library and opening the ingredient again."
-        title="Ingredient not found"
+        description="Hãy quay lại thư viện thành phần và mở lại thành phần này."
+        title="Không tìm thấy thành phần"
       />
     );
   }
@@ -160,7 +162,7 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="text-sm font-medium text-emerald-700">
-                Ingredient Library
+                Thư viện thành phần
               </p>
               <h2 className="mt-2 text-3xl font-semibold text-foreground">
                 {ingredient.inciName}
@@ -181,71 +183,71 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground">
-            Ingredient ID: {ingredient.id} - Updated{" "}
+            Mã thành phần: {ingredient.id} · Cập nhật{" "}
             {formatDate(ingredient.updatedAt)}
           </p>
         </CardContent>
       </Card>
 
       <Alert>
-        <AlertTitle>Educational ingredient details</AlertTitle>
+        <AlertTitle>Thông tin thành phần tham khảo</AlertTitle>
         <AlertDescription>
-          Ingredient information is provided for education only. It does not
-          diagnose skin conditions, replace professional advice, or guarantee
-          that an ingredient is suitable for every person.
+          Thông tin thành phần chỉ phục vụ mục đích giáo dục. Nội dung này
+          không chẩn đoán tình trạng da, không thay thế tư vấn chuyên môn và
+          không cam kết thành phần phù hợp với mọi người.
         </AlertDescription>
       </Alert>
 
       <Card className="border-border bg-card">
         <CardHeader>
-          <CardTitle>Ingredient information</CardTitle>
+          <CardTitle>Thông tin thành phần</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
           <DetailField
-            label="INCI name"
+            label="Tên INCI"
             value={ingredient.inciName}
           />
           <DetailField
-            label="Evidence level"
+            label="Mức bằng chứng"
             value={evidenceLevelLabels[ingredient.evidenceLevel]}
           />
-          <DetailField label="Created" value={formatDate(ingredient.createdAt)} />
+          <DetailField label="Ngày tạo" value={formatDate(ingredient.createdAt)} />
         </CardContent>
       </Card>
 
       <Card className="border-border bg-card">
         <CardHeader>
-          <CardTitle>Common names and functions</CardTitle>
+          <CardTitle>Tên thường gặp và công dụng</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          <BadgeGroup label="Aliases" values={ingredient.aliases} />
+          <BadgeGroup label="Tên gọi khác" values={ingredient.aliases} />
           <BadgeGroup
-            label="Functions"
+            label="Công dụng"
             values={ingredient.functions}
             variant="secondary"
           />
-          <TextList label="Common uses" values={ingredient.commonUses} />
+          <TextList label="Cách dùng thường gặp" values={ingredient.commonUses} />
         </CardContent>
       </Card>
 
       <Card className="border-border bg-card">
         <CardHeader>
-          <CardTitle>Suitability and caution</CardTitle>
+          <CardTitle>Phù hợp và cần thận trọng</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          <BadgeGroup label="May suit" values={ingredient.suitableFor} />
-          <TextList label="Use extra caution" values={ingredient.cautionFor} />
-          <TextList label="Avoid with" values={ingredient.avoidWith} />
+          <BadgeGroup label="Có thể phù hợp" values={ingredient.suitableFor} />
+          <TextList label="Cần thận trọng hơn" values={ingredient.cautionFor} />
+          <TextList label="Nên tránh kết hợp với" values={ingredient.avoidWith} />
         </CardContent>
       </Card>
 
       {ingredient.sourceRefs.length > 0 ? (
         <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle>Source references</CardTitle>
+            <CardTitle>Nguồn tham khảo</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextList label="References" values={ingredient.sourceRefs} />
+            <TextList label="Tài liệu tham khảo" values={ingredient.sourceRefs} />
           </CardContent>
         </Card>
       ) : null}
@@ -260,7 +262,7 @@ function BackToIngredientsButton() {
     <Button asChild variant="outline">
       <Link href="/ingredients">
         <ArrowLeft aria-hidden="true" />
-        Back to ingredients
+        Quay lại thư viện
       </Link>
     </Button>
   );

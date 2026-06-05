@@ -66,8 +66,13 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(dashboardOverviewSource).toContain("getBrowserLocalDate");
     expect(dashboardOverviewSource).toContain("LatestJournalCard");
     expect(dashboardOverviewSource).toContain("dashboard.latestJournal");
-    expect(dashboardOverviewSource).toContain("Đang tải dashboard");
-    expect(dashboardOverviewSource).toContain("Không thể tải dashboard");
+    expect(dashboardOverviewSource).toContain("Đang tải dashboard chăm sóc da");
+    expect(dashboardOverviewSource).toContain("Không thể tải tổng quan dashboard");
+    expect(dashboardOverviewSource).toContain(
+      "Bắt đầu hành trình chăm sóc da của bạn",
+    );
+    expect(dashboardOverviewSource).toContain("Tạo hồ sơ da");
+    expect(dashboardOverviewSource).toContain("Đi tới routine hôm nay");
 
     for (const forbiddenImport of [
       "repository",

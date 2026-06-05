@@ -19,10 +19,14 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof SavedProductClientError) {
-    return error.message;
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "Bạn cần đăng nhập để xem sản phẩm đã lưu.";
+    }
+
+    return "Không thể tải sản phẩm đã lưu. Vui lòng thử lại hoặc làm mới trang.";
   }
 
-  return "Could not load saved products.";
+  return "Không thể tải sản phẩm đã lưu. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 export function SavedProductsPage() {
@@ -93,7 +97,7 @@ export function SavedProductsPage() {
     return (
       <Card>
         <CardContent>
-          <LoadingState label="Đang tải sản phẩm đã lưu" />
+          <LoadingState label="Đang tải sản phẩm đã lưu..." />
         </CardContent>
       </Card>
     );
@@ -103,11 +107,11 @@ export function SavedProductsPage() {
     return (
       <EmptyState
         action={
-          <Button asChild aria-label="Khám phá sản phẩm">
-            <Link href={routes.PRODUCTS}>Khám phá sản phẩm</Link>
+          <Button asChild aria-label="Xem sản phẩm">
+            <Link href={routes.PRODUCTS}>Xem sản phẩm</Link>
           </Button>
         }
-        description="Lưu sản phẩm bạn muốn xem lại trước khi thêm vào routine. Đây không phải giỏ hàng mua sắm."
+        description="Hãy khám phá danh mục sản phẩm và lưu những sản phẩm bạn muốn xem lại hoặc so sánh sau."
         title="Chưa có sản phẩm đã lưu"
       />
     );

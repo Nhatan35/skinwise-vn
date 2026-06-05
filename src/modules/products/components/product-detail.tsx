@@ -91,23 +91,25 @@ function formatUpdatedAt(value: string) {
 function getLoadError(error: unknown) {
   if (error instanceof ProductClientError) {
     return {
-      message: error.message,
+      message:
+        "Không thể tải thông tin sản phẩm này. Vui lòng quay lại danh mục sản phẩm hoặc thử lại sau.",
       status: error.status,
     };
   }
 
   return {
-    message: "Could not load the product details.",
+    message:
+      "Không thể tải thông tin sản phẩm này. Vui lòng quay lại danh mục sản phẩm hoặc thử lại sau.",
     status: 500,
   };
 }
 
 function getSavedStateError(error: unknown) {
   if (error instanceof SavedProductClientError) {
-    return error.message;
+    return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
   }
 
-  return "Could not load saved product state.";
+  return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
 }
 
 function getProductMatchError(error: unknown) {
@@ -221,7 +223,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
     return (
       <Card>
         <CardContent>
-          <LoadingState label="Đang tải thông tin sản phẩm" />
+          <LoadingState label="Đang tải thông tin sản phẩm..." />
         </CardContent>
       </Card>
     );
@@ -230,8 +232,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (loadError?.status === 404) {
     return (
       <EmptyState
-        action={<ProductsLinkButton label="Xem tất cả sản phẩm" />}
-        description="Sản phẩm này có thể không còn khả dụng trong catalogue."
+        action={<ProductsLinkButton label="Xem sản phẩm" />}
+        description="Sản phẩm này có thể không còn khả dụng trong danh mục. Hãy quay lại danh mục để chọn sản phẩm khác."
         title="Không tìm thấy sản phẩm"
       />
     );
@@ -249,7 +251,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
               <RotateCcw aria-hidden="true" />
               Thử lại
             </Button>
-            <ProductsLinkButton label="Xem tất cả sản phẩm" />
+            <ProductsLinkButton label="Xem sản phẩm" />
           </div>
         }
         description={loadError.message}
@@ -261,7 +263,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (!product) {
     return (
       <EmptyState
-        action={<ProductsLinkButton label="Xem tất cả sản phẩm" />}
+        action={<ProductsLinkButton label="Xem sản phẩm" />}
         description="Hãy quay lại catalogue và mở lại sản phẩm."
         title="Không tìm thấy sản phẩm"
       />
@@ -332,7 +334,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
             productId={product.id}
           />
           <ProductMatchLinkButton />
-          <ProductsLinkButton label="Xem tất cả sản phẩm" />
+          <ProductsLinkButton label="Xem sản phẩm" />
         </CardContent>
       </Card>
     </article>
@@ -370,7 +372,7 @@ function ProductHero({
             </div>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
-            <ProductsLinkButton label="Xem tất cả sản phẩm" />
+            <ProductsLinkButton label="Xem sản phẩm" />
             <ProductMatchLinkButton />
             <SavedProductToggleButton
               initialSaved={isSaved}
@@ -411,7 +413,7 @@ function ProductDetailPersonalizedMatchSection({
     return (
       <Card>
         <CardContent>
-          <LoadingState label="Đang tải giải thích phù hợp cá nhân hóa" />
+          <LoadingState label="Đang tải giải thích phù hợp cá nhân hóa..." />
         </CardContent>
       </Card>
     );

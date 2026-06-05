@@ -32,35 +32,35 @@ function getExplanationError(error: unknown) {
     if (error.code === "RATE_LIMITED" || error.status === 429) {
       return {
         message:
-          "Explanation requests are temporarily limited. Please try again later.",
-        title: "Explanation limit reached",
+          "Tạm thời có quá nhiều yêu cầu giải thích. Vui lòng thử lại sau.",
+        title: "Đã đạt giới hạn giải thích",
       };
     }
 
     if (error.code === "UNAUTHORIZED" || error.status === 401) {
       return {
-        message: "You need to sign in to request ingredient explanations.",
-        title: "Sign in required",
+        message: "Bạn cần đăng nhập để yêu cầu giải thích thành phần.",
+        title: "Cần đăng nhập",
       };
     }
 
     if (error.code === "VALIDATION_ERROR" || error.status === 400) {
       return {
         message:
-          "This ingredient name could not be explained. Try opening the ingredient again.",
-        title: "Ingredient explanation could not run",
+          "Chưa thể giải thích tên thành phần này. Hãy mở lại thành phần và thử lại.",
+        title: "Chưa thể giải thích thành phần",
       };
     }
 
     return {
-      message: error.message,
-      title: "Ingredient explanation could not load",
+      message: "Không thể tải giải thích thành phần. Vui lòng thử lại sau.",
+      title: "Không thể tải giải thích thành phần",
     };
   }
 
   return {
-    message: "Could not explain this ingredient. Please try again.",
-    title: "Ingredient explanation could not load",
+    message: "Không thể giải thích thành phần này. Vui lòng thử lại.",
+    title: "Không thể tải giải thích thành phần",
   };
 }
 
@@ -99,11 +99,11 @@ export function IngredientExplanationPanel({
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <CardTitle>Ingredient explanation</CardTitle>
+            <CardTitle>Giải thích thành phần</CardTitle>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Request a beginner-friendly explanation through the existing
-              provider flow. Explanations are educational and may use a safe
-              fallback when the AI service is unavailable or disabled.
+              Yêu cầu giải thích dễ hiểu qua luồng provider hiện có. Nội dung
+              chỉ mang tính giáo dục và có thể dùng phản hồi dự phòng an toàn
+              khi dịch vụ AI không khả dụng hoặc đang tắt.
             </p>
           </div>
           <Button disabled={isLoading} onClick={handleExplain} type="button">
@@ -115,7 +115,7 @@ export function IngredientExplanationPanel({
       <CardContent className="space-y-4">
         {isLoading ? (
           <p className="text-sm text-muted-foreground">
-            Loading ingredient explanation...
+            Đang chuẩn bị giải thích thành phần...
           </p>
         ) : null}
 
@@ -134,7 +134,7 @@ type ExplanationResultProps = {
 };
 
 function ExplanationResult({ explanation }: ExplanationResultProps) {
-  const sourceLabel = explanation.source === "ai" ? "AI" : "Fallback";
+  const sourceLabel = explanation.source === "ai" ? "AI" : "Phản hồi dự phòng";
 
   return (
     <div className="space-y-5">
@@ -147,30 +147,32 @@ function ExplanationResult({ explanation }: ExplanationResultProps) {
 
       {explanation.source === "fallback" ? (
         <Alert>
-          <AlertTitle>Safe fallback response</AlertTitle>
+          <AlertTitle>Đang dùng phản hồi dự phòng</AlertTitle>
           <AlertDescription>
-            This explanation uses a safe fallback response because the AI
-            explanation service is unavailable or disabled.
+            Giải thích này dùng phản hồi dự phòng an toàn vì dịch vụ AI không
+            khả dụng hoặc đang tắt.
           </AlertDescription>
         </Alert>
       ) : null}
 
       <div className="space-y-2">
         <h3 className="text-sm font-medium text-foreground">
-          Simple explanation
+          Giải thích ngắn gọn
         </h3>
         <p className="text-sm leading-6 text-muted-foreground">
           {explanation.simpleExplanation}
         </p>
       </div>
 
-      <TextList label="Common uses" values={explanation.commonUses} />
-      <TextList label="May suit" values={explanation.suitableFor} />
-      <TextList label="Use extra caution" values={explanation.cautions} />
-      <TextList label="Avoid with" values={explanation.avoidWith} />
+      <TextList label="Cách dùng thường gặp" values={explanation.commonUses} />
+      <TextList label="Có thể phù hợp" values={explanation.suitableFor} />
+      <TextList label="Cần thận trọng hơn" values={explanation.cautions} />
+      <TextList label="Nên tránh kết hợp với" values={explanation.avoidWith} />
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-foreground">Beginner advice</h3>
+        <h3 className="text-sm font-medium text-foreground">
+          Gợi ý cho người mới bắt đầu
+        </h3>
         <p className="text-sm leading-6 text-muted-foreground">
           {explanation.beginnerAdvice}
         </p>

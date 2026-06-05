@@ -147,11 +147,11 @@ describe("Product Catalogue UI", () => {
 
   it("renders loading, error, empty, and educational states", () => {
     for (const requiredCopy of [
-      "Đang tải danh sách sản phẩm",
-      "Không thể tải danh sách sản phẩm",
+      "Đang tải danh mục sản phẩm",
+      "Không thể tải danh mục sản phẩm",
       "Không tìm thấy sản phẩm phù hợp",
-      "Could not load the product catalogue.",
-      "Catalogue tham khảo",
+      "Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm",
+      "Danh mục tham khảo",
       "không phải chẩn đoán y khoa",
     ]) {
       expect(combinedProductUiSource).toContain(requiredCopy);

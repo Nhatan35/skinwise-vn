@@ -46,10 +46,10 @@ async function readApiResponse<TData>(
 
 function getFriendlySettingsError(error?: ApiError | null) {
   if (error?.code === "UNAUTHORIZED") {
-    return "Bạn cần đăng nhập để xem Settings.";
+    return "Bạn cần đăng nhập để xem cài đặt.";
   }
 
-  return "Không thể tải thông tin Settings. Vui lòng thử lại.";
+  return "Không thể tải phần cài đặt. Vui lòng thử lại.";
 }
 
 function hasApiData<TData>(
@@ -116,8 +116,8 @@ export async function exportAccountData(): Promise<AccountDataExportDto> {
   if (!response.ok || !hasApiData(body)) {
     throw new SettingsClientError(
       body.error?.code === "UNAUTHORIZED"
-        ? "Bạn cần đăng nhập để export dữ liệu."
-        : "Không thể export dữ liệu lúc này. Vui lòng thử lại.",
+        ? "Bạn cần đăng nhập để xuất dữ liệu."
+        : "Không thể xuất dữ liệu lúc này. Vui lòng thử lại.",
       body.error?.code,
     );
   }
@@ -137,8 +137,8 @@ export async function deleteAccountAppData(): Promise<DeleteAccountAppDataDto> {
   if (!response.ok || !hasApiData(body)) {
     throw new SettingsClientError(
       body.error?.code === "UNAUTHORIZED"
-        ? "Bạn cần đăng nhập để xóa dữ liệu skincare app."
-        : "Không thể xóa dữ liệu skincare app lúc này. Vui lòng thử lại.",
+        ? "Bạn cần đăng nhập để xóa dữ liệu skincare trong app."
+        : "Không thể xóa dữ liệu skincare trong app lúc này. Vui lòng thử lại.",
       body.error?.code,
     );
   }

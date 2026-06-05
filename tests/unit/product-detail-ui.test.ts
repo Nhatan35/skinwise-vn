@@ -83,7 +83,7 @@ describe("Product Detail UI", () => {
       "Đang tải thông tin sản phẩm",
       "Không thể tải thông tin sản phẩm",
       "Không tìm thấy sản phẩm",
-      "Could not load the product details.",
+      "Vui lòng quay lại danh mục sản phẩm hoặc thử lại sau.",
       "Thử lại",
       "product.name",
       "Product ID: {product.id}",

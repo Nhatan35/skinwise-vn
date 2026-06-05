@@ -12,8 +12,8 @@ export function ProductMatchNoProfileEmptyState() {
           <Link href={routes.ONBOARDING_SKIN_PROFILE}>Tạo hồ sơ da</Link>
         </Button>
       }
-      description="Tạo hồ sơ da trước để xem gợi ý sản phẩm phù hợp."
-      title="Cần hồ sơ da"
+      description="Product Match hoạt động tốt hơn khi bạn đã thiết lập loại da, mối quan tâm và độ nhạy cảm của da."
+      title="Hãy tạo hồ sơ da trước"
     />
   );
 }
@@ -21,8 +21,8 @@ export function ProductMatchNoProfileEmptyState() {
 export function ProductMatchNoProductsEmptyState() {
   return (
     <EmptyState
-      description="Hiện chưa có gợi ý sản phẩm phù hợp để hiển thị. Vui lòng quay lại sau khi có thêm sản phẩm đã được kiểm duyệt."
-      title="Chưa có gợi ý sản phẩm phù hợp"
+      description="Hiện chưa có sản phẩm phù hợp để hiển thị. Bạn có thể quay lại sau khi danh mục có thêm sản phẩm đã được kiểm duyệt."
+      title="Chưa có sản phẩm để gợi ý"
     />
   );
 }

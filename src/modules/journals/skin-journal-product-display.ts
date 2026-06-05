@@ -1,6 +1,6 @@
 import type { ProductDto } from "@/modules/products/product.dto";
 
-export const UNKNOWN_PRODUCT_LABEL = "Unknown product";
+export const UNKNOWN_PRODUCT_LABEL = "Sản phẩm chưa xác định";
 
 export type ProductLookup = Record<string, ProductDto>;
 

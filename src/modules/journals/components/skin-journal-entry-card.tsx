@@ -83,7 +83,7 @@ export function SkinJournalEntryCard({
               {entry.localDate} · {entry.timezone}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Updated {formatUpdatedAt(entry.updatedAt)}
+              Cập nhật {formatUpdatedAt(entry.updatedAt)}
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -94,7 +94,7 @@ export function SkinJournalEntryCard({
               variant="outline"
             >
               <Pencil aria-hidden="true" />
-              Edit
+              Sửa
             </Button>
             <Button
               data-testid="skin-journal-delete-button"
@@ -104,7 +104,7 @@ export function SkinJournalEntryCard({
               variant="destructive"
             >
               <Trash2 aria-hidden="true" />
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? "Đang xóa..." : "Xóa"}
             </Button>
           </div>
         </div>
@@ -121,7 +121,9 @@ export function SkinJournalEntryCard({
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No symptoms selected.</p>
+            <p className="text-sm text-muted-foreground">
+              Chưa chọn dấu hiệu nào.
+            </p>
           )}
         </div>
 
@@ -130,7 +132,7 @@ export function SkinJournalEntryCard({
 
         <div className="grid gap-3 sm:grid-cols-2">
           <JournalDetail
-            label="Sleep"
+            label="Giấc ngủ"
             value={
               entry.sleepHours !== undefined
                 ? `${entry.sleepHours} giờ`
@@ -147,7 +149,7 @@ export function SkinJournalEntryCard({
 
         {entry.notes ? (
           <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-foreground">Notes</h3>
+            <h3 className="text-sm font-semibold text-foreground">Ghi chú</h3>
             <p className="whitespace-pre-wrap text-sm leading-6 text-muted-foreground">
               {entry.notes}
             </p>
@@ -178,7 +180,9 @@ function JournalProductList({ productLabels }: JournalProductListProps) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">No products recorded.</p>
+        <p className="text-sm text-muted-foreground">
+          Chưa ghi nhận sản phẩm nào.
+        </p>
       )}
     </div>
   );
@@ -214,7 +218,7 @@ function JournalList({ label, values }: JournalListProps) {
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-muted-foreground">No items recorded.</p>
+        <p className="text-sm text-muted-foreground">Chưa có mục nào.</p>
       )}
     </div>
   );

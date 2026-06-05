@@ -71,7 +71,9 @@ describe("Product Match UI source", () => {
   it("renders loading, error, no-profile, and no-product states", () => {
     for (const expectedSource of [
       "LoadingState",
+      "Đang chuẩn bị Product Match",
       "ErrorState",
+      "Không thể chuẩn bị Product Match",
       "loadProductMatches",
       "ProductMatchNoProfileEmptyState",
       "ProductMatchNoProductsEmptyState",
@@ -83,6 +85,7 @@ describe("Product Match UI source", () => {
     expect(productMatchEmptyStateSource).toContain(
       "href={routes.ONBOARDING_SKIN_PROFILE}",
     );
+    expect(productMatchEmptyStateSource).toContain("Hãy tạo hồ sơ da trước");
   });
 
   it("renders match cards with score, level, explanation, save, and detail actions", () => {

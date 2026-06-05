@@ -181,7 +181,7 @@ function getLoadErrorMessage(error?: ApiError | null) {
     return "Bạn cần đăng nhập để tiếp tục.";
   }
 
-  return "Hiện chưa thể tải hồ sơ da. Vui lòng thử lại sau.";
+  return "Không thể tải hồ sơ da. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 function getSaveErrorMessage(error?: ApiError | null) {
@@ -282,7 +282,9 @@ export function SkinProfileViewEdit() {
         setIsEditing(false);
       } catch {
         if (isMounted) {
-          setLoadError("Hiện chưa thể tải hồ sơ da. Vui lòng thử lại sau.");
+          setLoadError(
+            "Không thể tải hồ sơ da. Vui lòng thử lại hoặc làm mới trang.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -417,7 +419,7 @@ export function SkinProfileViewEdit() {
     return (
       <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Đang tải hồ sơ da" />
+          <LoadingState label="Đang tải hồ sơ da..." />
         </CardContent>
       </Card>
     );
@@ -436,7 +438,7 @@ export function SkinProfileViewEdit() {
           </Button>
         }
         description={loadError}
-        title="Chưa tải được hồ sơ da"
+        title="Không thể tải hồ sơ da"
       />
     );
   }
@@ -451,11 +453,11 @@ export function SkinProfileViewEdit() {
                 data-testid="skin-profile-setup-link"
                 href={routes.ONBOARDING_SKIN_PROFILE}
               >
-                Thiết lập hồ sơ da
+                Tạo hồ sơ da
               </Link>
             </Button>
           }
-          description="Bạn chưa có hồ sơ da. Hãy hoàn tất bước thiết lập đầu tiên để SkinWise có ngữ cảnh cơ bản trước khi bạn chỉnh sửa về sau."
+          description="Hãy hoàn thiện hồ sơ da để SkinWise cá nhân hóa trải nghiệm theo loại da và mối quan tâm của bạn."
           title="Chưa có hồ sơ da"
         />
       </div>

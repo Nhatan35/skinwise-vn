@@ -70,17 +70,17 @@ describe("Ingredient Detail UI", () => {
 
   it("renders loading, error, not-found, retry, back, and explanation states", () => {
     for (const requiredCopy of [
-      "Loading ingredient details",
-      "Ingredient details could not load",
-      "Ingredient not found",
-      "Could not load the ingredient details.",
+      "Đang tải thông tin thành phần",
+      "Không thể tải thông tin thành phần",
+      "Không tìm thấy thành phần",
+      "Vui lòng quay lại thư viện thành phần hoặc thử lại sau.",
       "Thử lại",
-      "Back to ingredients",
+      "Quay lại thư viện",
       'href="/ingredients"',
       "Giải thích thành phần này",
       "data-testid=\"ingredient-explanation-panel\"",
-      "Explanation requests are temporarily limited",
-      "Safe fallback response",
+      "Tạm thời có quá nhiều yêu cầu giải thích",
+      "Đang dùng phản hồi dự phòng",
     ]) {
       expect(combinedDetailSource).toContain(requiredCopy);
     }

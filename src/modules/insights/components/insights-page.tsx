@@ -39,7 +39,9 @@ export function InsightsPage() {
       setInsights(await getInsights(dateRange));
     } catch {
       setInsights(null);
-      setLoadError("Chưa thể tải Insights lúc này. Vui lòng thử lại sau.");
+      setLoadError(
+        "Chưa thể chuẩn bị insights tiến trình. Hãy thêm hoạt động hoặc thử lại sau.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +63,9 @@ export function InsightsPage() {
       } catch {
         if (isMounted) {
           setInsights(null);
-          setLoadError("Chưa thể tải Insights lúc này. Vui lòng thử lại sau.");
+          setLoadError(
+            "Chưa thể chuẩn bị insights tiến trình. Hãy thêm hoạt động hoặc thử lại sau.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -78,7 +82,7 @@ export function InsightsPage() {
   }, [dateRange]);
 
   if (isLoading) {
-    return <LoadingState label="Đang tải Insights tiến trình chăm sóc da" />;
+    return <LoadingState label="Đang chuẩn bị insights tiến trình..." />;
   }
 
   if (loadError) {
@@ -90,7 +94,7 @@ export function InsightsPage() {
           </Button>
         }
         description={loadError}
-        title="Không thể tải Insights"
+        title="Chưa thể chuẩn bị insights"
       />
     );
   }
@@ -98,8 +102,8 @@ export function InsightsPage() {
   if (!insights) {
     return (
       <ErrorState
-        description="Chưa thể tải Insights lúc này. Vui lòng thử lại sau."
-        title="Không thể tải Insights"
+        description="Chưa thể chuẩn bị insights tiến trình. Hãy thêm hoạt động hoặc thử lại sau."
+        title="Chưa thể chuẩn bị insights"
       />
     );
   }
@@ -122,15 +126,15 @@ export function InsightsPage() {
           action={
             <div className="flex flex-col justify-center gap-2 sm:flex-row">
               <Button asChild size="sm">
-                <Link href={routes.TODAY_LOG}>Ghi nhận routine hôm nay</Link>
+                <Link href={routes.TODAY_LOG}>Đi tới routine hôm nay</Link>
               </Button>
               <Button asChild size="sm" variant="outline">
-                <Link href={routes.JOURNAL}>Thêm nhật ký da</Link>
+                <Link href={routes.JOURNAL}>Thêm nhật ký</Link>
               </Button>
             </div>
           }
-          description="Chưa có routine log hoặc nhật ký da trong giai đoạn này. Hãy ghi nhận routine hôm nay hoặc thêm một ghi chú ngắn để Insights có dữ liệu phản ánh thói quen của bạn."
-          title="Chưa đủ dữ liệu theo dõi"
+          description="Hãy hoàn thành routine và thêm nhật ký trong vài ngày để SkinWise có thêm dữ liệu hiển thị xu hướng."
+          title="Chưa đủ dữ liệu để xem insights"
         />
       ) : null}
 

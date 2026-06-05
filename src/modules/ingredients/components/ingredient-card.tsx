@@ -46,7 +46,7 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
               <p className="mt-2 text-sm text-muted-foreground">
                 Còn được biết đến như {ingredient.aliases.slice(0, 2).join(", ")}
                 {ingredient.aliases.length > 2
-                  ? `, +${ingredient.aliases.length - 2} more`
+                  ? `, +${ingredient.aliases.length - 2} tên khác`
                   : ""}
               </p>
             ) : null}
@@ -58,15 +58,15 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
       </CardHeader>
       <CardContent className="space-y-5">
         <BadgeGroup
-          label="Functions"
+          label="Công dụng"
           values={ingredient.functions}
           variant="secondary"
         />
-        <TextList label="Common uses" values={ingredient.commonUses} />
-        <BadgeGroup label="May suit" values={ingredient.suitableFor} />
+        <TextList label="Cách dùng thường gặp" values={ingredient.commonUses} />
+        <BadgeGroup label="Có thể phù hợp" values={ingredient.suitableFor} />
 
         <p className="border-t border-border pt-4 text-xs text-muted-foreground">
-          Updated {formatUpdatedAt(ingredient.updatedAt)}
+          Cập nhật {formatUpdatedAt(ingredient.updatedAt)}
         </p>
 
         <div className="border-t border-border pt-4">
@@ -105,7 +105,9 @@ function BadgeGroup({
             {value}
           </Badge>
         ))}
-        {hiddenCount > 0 ? <Badge variant="outline">+{hiddenCount} more</Badge> : null}
+        {hiddenCount > 0 ? (
+          <Badge variant="outline">+{hiddenCount} mục khác</Badge>
+        ) : null}
       </div>
     </div>
   );
@@ -132,7 +134,9 @@ function TextList({ label, values }: TextListProps) {
         ))}
       </ul>
       {hiddenCount > 0 ? (
-        <p className="text-xs text-muted-foreground">+{hiddenCount} more</p>
+        <p className="text-xs text-muted-foreground">
+          +{hiddenCount} mục khác
+        </p>
       ) : null}
     </div>
   );

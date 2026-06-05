@@ -126,18 +126,22 @@ function hasActiveFilters(filters: ProductFilterState) {
 
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof ProductClientError) {
-    return error.message;
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "Bạn cần đăng nhập để xem danh mục sản phẩm.";
+    }
+
+    return "Không thể tải danh mục sản phẩm. Vui lòng thử lại hoặc làm mới trang.";
   }
 
-  return "Could not load the product catalogue.";
+  return "Không thể tải danh mục sản phẩm. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 function getSavedStateErrorMessage(error: unknown) {
   if (error instanceof SavedProductClientError) {
-    return error.message;
+    return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
   }
 
-  return "Could not load saved product state.";
+  return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
 }
 
 export function ProductCatalogue() {
@@ -355,13 +359,13 @@ export function ProductCatalogue() {
             </Button>
           }
           description={loadError}
-          title="Không thể tải danh sách sản phẩm"
+          title="Không thể tải danh mục sản phẩm"
         />
       ) : null}
 
       {!loadError ? (
         <Alert>
-          <AlertTitle>Catalogue tham khảo</AlertTitle>
+          <AlertTitle>Danh mục tham khảo</AlertTitle>
           <AlertDescription>
             Thông tin sản phẩm phục vụ lập routine và giáo dục về thành phần,
             không phải chẩn đoán y khoa hoặc lời khuyên điều trị.
@@ -381,7 +385,7 @@ export function ProductCatalogue() {
       {isLoading ? (
         <Card>
           <CardContent>
-            <LoadingState label="Đang tải danh sách sản phẩm" />
+            <LoadingState label="Đang tải danh mục sản phẩm..." />
           </CardContent>
         </Card>
       ) : null}
@@ -397,10 +401,14 @@ export function ProductCatalogue() {
           }
           description={
             hasActiveFilters(activeFilters)
-              ? "Hãy thử từ khóa, danh mục hoặc mối quan tâm khác."
-              : "Hiện chưa có sản phẩm nào trong catalogue."
+              ? "Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để tìm thêm sản phẩm chăm sóc da."
+              : "Hiện chưa có sản phẩm nào trong danh mục. Bạn có thể quay lại sau khi dữ liệu được bổ sung."
           }
-          title="Không tìm thấy sản phẩm phù hợp"
+          title={
+            hasActiveFilters(activeFilters)
+              ? "Không tìm thấy sản phẩm phù hợp"
+              : "Chưa có sản phẩm trong danh mục"
+          }
         />
       ) : null}
 

@@ -40,7 +40,7 @@ describe("Settings data control UI", () => {
     expect(settingsClientSource).toContain('fetch("/api/me"');
     expect(settingsClientSource).toContain("body.data.user");
     expect(settingsComponentSource).toContain("Thông tin tài khoản");
-    expect(settingsComponentSource).toContain("App role");
+    expect(settingsComponentSource).toContain("Vai trò trong app");
     expect(settingsComponentSource).toContain("Onboarding");
     expect(settingsComponentSource).toContain(
       "Trạng thái yêu cầu xóa tài khoản",
@@ -49,8 +49,8 @@ describe("Settings data control UI", () => {
   });
 
   it("adds export data controls that download the export payload only", () => {
-    expect(settingsComponentSource).toContain("Export data");
-    expect(settingsComponentSource).toContain("Export my skincare data");
+    expect(settingsComponentSource).toContain("Xuất dữ liệu");
+    expect(settingsComponentSource).toContain("Xuất dữ liệu skincare");
     expect(settingsComponentSource).toContain("settings-export-data-button");
     expect(settingsComponentSource).toContain("downloadJsonFile");
     expect(settingsComponentSource).toContain("skinwise-vn-data-export-");
@@ -63,10 +63,10 @@ describe("Settings data control UI", () => {
   });
 
   it("adds a separate danger zone for deleting only skincare app data", () => {
-    expect(settingsComponentSource).toContain("Danger zone");
-    expect(settingsComponentSource).toContain("Delete my skincare app data");
+    expect(settingsComponentSource).toContain("Khu vực cần thận trọng");
+    expect(settingsComponentSource).toContain("Xóa dữ liệu skincare trong app");
     expect(settingsComponentSource).toContain(
-      "I understand this will delete my personal skincare app data from SkinWise VN.",
+      "Tôi hiểu thao tác này sẽ xóa dữ liệu skincare cá nhân của tôi trong SkinWise VN.",
     );
     expect(settingsComponentSource).toContain("app-data-delete-confirm-checkbox");
     expect(settingsComponentSource).toContain("app-data-delete-button");
@@ -93,11 +93,11 @@ describe("Settings data control UI", () => {
     }
 
     for (const copy of [
-      "Quản lý Skin Profile",
-      "Quản lý Routines",
-      "Mở Today Log",
-      "Mở Skin Journal",
-      "Mở Saved Products",
+      "Quản lý hồ sơ da",
+      "Quản lý routine",
+      "Mở routine hôm nay",
+      "Mở nhật ký da",
+      "Xem sản phẩm đã lưu",
     ]) {
       expect(settingsComponentSource).toContain(copy);
     }
@@ -106,17 +106,16 @@ describe("Settings data control UI", () => {
   it("explains stored data without overstating MVP privacy scope", () => {
     for (const copy of [
       "app_user_profiles",
-      "Auth.js identity",
-      "Skin profile",
-      "Routines",
-      "Routine logs",
-      "Skin journal",
-      "Saved products",
-      "Product and ingredient catalogue",
-      "Shared app data",
-      "Export data",
-      "Danger zone",
-      "Auth.js",
+      "danh tính Auth.js",
+      "Hồ sơ da",
+      "Routine",
+      "Ghi nhận routine",
+      "Nhật ký da",
+      "Sản phẩm đã lưu",
+      "Danh mục sản phẩm và thành phần",
+      "Dữ liệu dùng chung",
+      "Xuất dữ liệu",
+      "Khu vực cần thận trọng",
     ]) {
       expect(settingsComponentSource).toContain(copy);
     }

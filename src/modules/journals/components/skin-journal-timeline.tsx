@@ -32,11 +32,6 @@ type Feedback = {
 
 type FormMode = "create" | "edit" | "none";
 
-// Legacy source-test copy kept while Vietnamese UI copy is shown:
-// Loading Skin Journal | Unable to load Skin Journal | No journal entries yet
-// Journal entry created. | Journal entry updated. | Journal entry deleted. | New entry
-// Could not load the product catalogue.
-
 function sortSkinJournals(entries: SkinJournalDto[]) {
   return [...entries].sort((first, second) => {
     const localDateOrder = second.localDate.localeCompare(first.localDate);
@@ -99,7 +94,9 @@ export function SkinJournalTimeline() {
         setEntries(sortSkinJournals(skinJournals));
       } catch {
         if (isMounted) {
-          setLoadError("Không thể tải Nhật ký da. Vui lòng thử lại.");
+          setLoadError(
+            "Không thể tải nhật ký da. Vui lòng thử lại hoặc làm mới trang.",
+          );
           setEntries([]);
         }
       } finally {
@@ -134,7 +131,9 @@ export function SkinJournalTimeline() {
       } catch {
         if (isMounted) {
           setProducts([]);
-          setProductLoadError("Không thể tải danh sách sản phẩm.");
+          setProductLoadError(
+            "Không thể tải danh mục sản phẩm. Bạn vẫn có thể lưu nhật ký không kèm sản phẩm.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -223,7 +222,7 @@ export function SkinJournalTimeline() {
     return (
       <Card className="border-border bg-card">
         <CardContent>
-          <LoadingState label="Đang tải Nhật ký da" />
+          <LoadingState label="Đang tải nhật ký da..." />
         </CardContent>
       </Card>
     );
@@ -242,7 +241,7 @@ export function SkinJournalTimeline() {
           </Button>
         }
         description={loadError}
-        title="Chưa tải được Nhật ký da"
+        title="Không thể tải nhật ký da"
       />
     );
   }
@@ -258,7 +257,11 @@ export function SkinJournalTimeline() {
             Nhật ký được sắp xếp theo ngày, mới nhất ở trên.
           </p>
         </div>
-        <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
+        <Button
+          data-testid="skin-journal-new-entry-button"
+          onClick={startCreate}
+          type="button"
+        >
           <Plus aria-hidden="true" />
           Thêm nhật ký
         </Button>
@@ -295,12 +298,16 @@ export function SkinJournalTimeline() {
       {sortedEntries.length === 0 && formMode !== "create" ? (
         <EmptyState
           action={
-            <Button data-testid="skin-journal-new-entry-button" onClick={startCreate} type="button">
+            <Button
+              data-testid="skin-journal-new-entry-button"
+              onClick={startCreate}
+              type="button"
+            >
               <Plus aria-hidden="true" />
-              Thêm nhật ký đầu tiên
+              Thêm nhật ký
             </Button>
           }
-          description="Ghi lại quan sát hôm nay, routine, triệu chứng, giấc ngủ, stress và ghi chú riêng tư."
+          description="Hãy thêm nhật ký đầu tiên để theo dõi cảm nhận của làn da theo thời gian."
           title="Chưa có nhật ký da"
         />
       ) : null}

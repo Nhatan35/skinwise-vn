@@ -177,12 +177,12 @@ describe("RoutineLog UI integration", () => {
 
   it("renders Today Checklist metadata, progress summary, empty state, and CTAs", () => {
     for (const requiredCopy of [
-      "Bạn chưa có routine nào để ghi nhận hôm nay.",
-      "Hãy tạo morning/evening routine trước khi theo dõi tiến độ hằng ngày.",
-      "Đi tới Routine Builder",
-      "Bạn đã ghi nhận tất cả routine hôm nay.",
-      "Có thể quay lại Dashboard để xem tiến độ.",
-      "Xem Dashboard",
+      "Chưa có routine nào",
+      "Hãy tạo routine buổi sáng hoặc buổi tối trước khi theo dõi tiến độ hằng ngày.",
+      "Tạo routine",
+      "Đã ghi nhận tất cả routine hôm nay",
+      "Bạn có thể quay lại dashboard để xem tiến độ hôm nay.",
+      "Xem dashboard",
       "Ngày hôm nay",
       "Múi giờ",
       "Tổng routine",

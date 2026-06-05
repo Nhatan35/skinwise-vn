@@ -48,10 +48,10 @@ describe("SkinJournal product display helpers", () => {
     );
   });
 
-  it("displays Unknown product for missing product data", () => {
-    expect(getProductDisplayName(null)).toBe("Unknown product");
+  it("displays a Vietnamese fallback for missing product data", () => {
+    expect(getProductDisplayName(null)).toBe("Sản phẩm chưa xác định");
     expect(getProductDisplayName(createProduct({ brand: "", name: "" }))).toBe(
-      "Unknown product",
+      "Sản phẩm chưa xác định",
     );
   });
 
@@ -80,7 +80,7 @@ describe("SkinJournal product display helpers", () => {
       },
       {
         id: "deleted_product",
-        label: "Unknown product",
+        label: "Sản phẩm chưa xác định",
       },
     ]);
   });

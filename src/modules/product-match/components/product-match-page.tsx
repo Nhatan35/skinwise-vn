@@ -17,6 +17,16 @@ import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
 
+function getProductMatchLoadErrorMessage(error: unknown) {
+  if (error instanceof ProductMatchClientError) {
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "Bạn cần đăng nhập để dùng Product Match.";
+    }
+  }
+
+  return "Không thể chuẩn bị Product Match. Vui lòng kiểm tra hồ sơ da hoặc thử lại sau.";
+}
+
 export function ProductMatchPage() {
   const [productMatch, setProductMatch] =
     useState<ProductMatchResponseDto | null>(null);
@@ -30,13 +40,8 @@ export function ProductMatchPage() {
     try {
       setProductMatch(await getProductMatches());
     } catch (error) {
-      const message =
-        error instanceof ProductMatchClientError
-          ? error.message
-          : "Không thể tải gợi ý sản phẩm.";
-
       setProductMatch(null);
-      setLoadError(message);
+      setLoadError(getProductMatchLoadErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -57,13 +62,8 @@ export function ProductMatchPage() {
         }
       } catch (error) {
         if (isMounted) {
-          const message =
-            error instanceof ProductMatchClientError
-              ? error.message
-              : "Không thể tải gợi ý sản phẩm.";
-
           setProductMatch(null);
-          setLoadError(message);
+          setLoadError(getProductMatchLoadErrorMessage(error));
         }
       } finally {
         if (isMounted) {
@@ -80,7 +80,7 @@ export function ProductMatchPage() {
   }, []);
 
   if (isLoading) {
-    return <LoadingState label="Đang tải gợi ý sản phẩm" />;
+    return <LoadingState label="Đang chuẩn bị Product Match..." />;
   }
 
   if (loadError) {
@@ -92,7 +92,7 @@ export function ProductMatchPage() {
           </Button>
         }
         description={loadError}
-        title="Không thể tải gợi ý sản phẩm"
+        title="Không thể chuẩn bị Product Match"
       />
     );
   }
@@ -100,8 +100,8 @@ export function ProductMatchPage() {
   if (!productMatch) {
     return (
       <ErrorState
-        description="Không thể tải gợi ý sản phẩm."
-        title="Không thể tải gợi ý sản phẩm"
+        description="Không thể chuẩn bị Product Match. Vui lòng kiểm tra hồ sơ da hoặc thử lại sau."
+        title="Không thể chuẩn bị Product Match"
       />
     );
   }

@@ -6,7 +6,7 @@ import type {
 
 const SKIN_JOURNAL_API_PATH = "/api/skin-journal";
 const DUPLICATE_LOCAL_DATE_MESSAGE =
-  "You already have a journal entry for this date.";
+  "Bạn đã có nhật ký cho ngày này.";
 
 export type ListSkinJournalsOptions = {
   from?: string;
@@ -64,18 +64,18 @@ function getSafeErrorMessage(error?: ApiError | null, status = 500) {
   }
 
   if (error?.code === "UNAUTHORIZED") {
-    return "You need to sign in to use Skin Journal.";
+    return "Bạn cần đăng nhập để dùng nhật ký da.";
   }
 
   if (error?.code === "VALIDATION_ERROR") {
-    return "Some journal details are invalid. Please check the form.";
+    return "Một vài thông tin nhật ký chưa hợp lệ. Vui lòng kiểm tra lại biểu mẫu.";
   }
 
   if (error?.code === "NOT_FOUND") {
-    return "This journal entry no longer exists.";
+    return "Mục nhật ký này không còn tồn tại.";
   }
 
-  return "Unable to update Skin Journal. Please try again.";
+  return "Không thể cập nhật nhật ký da. Vui lòng thử lại.";
 }
 
 async function requestSkinJournal<TData>(

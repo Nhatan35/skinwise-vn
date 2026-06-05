@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analysis-card";
@@ -15,6 +16,7 @@ import { getBrowserLocalDate } from "@/modules/routine-logs/routine-log.client";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
+import { routes } from "@/shared/constants/routes";
 
 import { OnboardingProgressCard } from "./onboarding-progress-card";
 
@@ -58,10 +60,10 @@ function getDashboardLoadErrorMessage(error?: ApiError | null) {
   }
 
   if (error?.code === "VALIDATION_ERROR") {
-    return "Ngày dashboard không hợp lệ. Vui lòng tải lại trang.";
+    return "Ngày dashboard không hợp lệ. Vui lòng làm mới trang.";
   }
 
-  return "Không thể tải dashboard. Vui lòng thử lại.";
+  return "Không thể tải tổng quan dashboard. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 export function DashboardOverview() {
@@ -96,7 +98,9 @@ export function DashboardOverview() {
 
       setDashboard(body.data.dashboard);
     } catch {
-      setDashboardLoadError("Không thể tải dashboard. Vui lòng thử lại.");
+      setDashboardLoadError(
+        "Không thể tải tổng quan dashboard. Vui lòng thử lại hoặc làm mới trang.",
+      );
       setDashboard(null);
     } finally {
       setIsLoadingDashboard(false);
@@ -135,7 +139,9 @@ export function DashboardOverview() {
         setDashboard(body.data.dashboard);
       } catch {
         if (isMounted) {
-          setDashboardLoadError("Không thể tải dashboard. Vui lòng thử lại.");
+          setDashboardLoadError(
+            "Không thể tải tổng quan dashboard. Vui lòng thử lại hoặc làm mới trang.",
+          );
           setDashboard(null);
         }
       } finally {
@@ -153,7 +159,7 @@ export function DashboardOverview() {
   }, [dashboardLocalDate]);
 
   if (isLoadingDashboard) {
-    return <LoadingState label="Đang tải dashboard" />;
+    return <LoadingState label="Đang tải dashboard chăm sóc da..." />;
   }
 
   if (dashboardLoadError) {
@@ -165,7 +171,7 @@ export function DashboardOverview() {
           </Button>
         }
         description={dashboardLoadError}
-        title="Không thể tải dashboard"
+        title="Không thể tải tổng quan dashboard"
       />
     );
   }
@@ -173,17 +179,23 @@ export function DashboardOverview() {
   if (!dashboard) {
     return (
       <ErrorState
-        description="Không thể tải dashboard. Vui lòng thử lại."
-        title="Không thể tải dashboard"
+        description="Không thể tải tổng quan dashboard. Vui lòng thử lại hoặc làm mới trang."
+        title="Không thể tải tổng quan dashboard"
       />
     );
   }
 
   const primaryNextAction = dashboard.nextActions[0];
+  const isFirstTimeDashboard =
+    !dashboard.skinProfile.exists &&
+    !dashboard.routines.hasAnyRoutine &&
+    !dashboard.latestJournal.exists;
 
   return (
     <div className="space-y-5">
-      {primaryNextAction ? (
+      {isFirstTimeDashboard ? (
+        <FirstTimeDashboardGuidance />
+      ) : primaryNextAction ? (
         <PrimaryNextActionCard nextAction={primaryNextAction} />
       ) : null}
 
@@ -211,5 +223,34 @@ export function DashboardOverview() {
         <NextActionsCard nextActions={dashboard.nextActions} />
       </div>
     </div>
+  );
+}
+
+function FirstTimeDashboardGuidance() {
+  return (
+    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm shadow-stone-950/5 sm:p-6">
+      <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+            Bắt đầu hành trình chăm sóc da của bạn
+          </h3>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+            Hoàn thiện hồ sơ da, tạo routine và ghi nhật ký để dashboard có
+            thêm dữ liệu hiển thị tiến trình.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
+          <Button asChild>
+            <Link href={routes.ONBOARDING_SKIN_PROFILE}>Tạo hồ sơ da</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={routes.TODAY_LOG}>Đi tới routine hôm nay</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={routes.JOURNAL}>Thêm nhật ký</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
   );
 }

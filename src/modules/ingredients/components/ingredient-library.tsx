@@ -34,10 +34,14 @@ function toClientInput(query: string): IngredientListClientInput {
 
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof IngredientClientError) {
-    return error.message;
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "Bạn cần đăng nhập để xem thư viện thành phần.";
+    }
+
+    return "Không thể tải thư viện thành phần. Vui lòng thử lại hoặc làm mới trang.";
   }
 
-  return "Could not load the ingredient library.";
+  return "Không thể tải thư viện thành phần. Vui lòng thử lại hoặc làm mới trang.";
 }
 
 export function IngredientLibrary() {
@@ -125,7 +129,7 @@ export function IngredientLibrary() {
 
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
               <Button
-                aria-label="Reset"
+                aria-label="Xóa tìm kiếm"
                 onClick={handleReset}
                 type="button"
                 variant="outline"
@@ -133,7 +137,7 @@ export function IngredientLibrary() {
                 <X aria-hidden="true" />
                 Xóa tìm kiếm
               </Button>
-              <Button aria-label="Search ingredients" type="submit">
+              <Button aria-label="Tìm thành phần" type="submit">
                 <Search aria-hidden="true" />
                 Tìm thành phần
               </Button>
@@ -154,17 +158,17 @@ export function IngredientLibrary() {
             </Button>
           }
           description={loadError}
-          title="Ingredient library could not load"
+          title="Không thể tải thư viện thành phần"
         />
       ) : null}
 
       {!loadError ? (
         <Alert>
-          <AlertTitle>Educational ingredient library</AlertTitle>
+          <AlertTitle>Thư viện thành phần tham khảo</AlertTitle>
           <AlertDescription>
-            Thông tin thành phần giúp bạn hiểu routine tốt hơn, nhưng not
-            medical diagnosis, lời khuyên điều trị hoặc cam kết phù hợp với mọi
-            người.
+            Thông tin thành phần giúp bạn hiểu routine tốt hơn. Nội dung này
+            không phải chẩn đoán y khoa, lời khuyên điều trị hoặc cam kết phù
+            hợp với mọi người.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -172,7 +176,7 @@ export function IngredientLibrary() {
       {isLoading ? (
         <Card>
           <CardContent>
-            <LoadingState label="Loading ingredient library" />
+            <LoadingState label="Đang tải thư viện thành phần..." />
           </CardContent>
         </Card>
       ) : null}
@@ -186,8 +190,8 @@ export function IngredientLibrary() {
               </Button>
             ) : null
           }
-          description="Hãy thử tên thành phần, alias, công dụng hoặc từ khóa khác."
-          title="No ingredients found"
+          description="Hãy thử thay đổi từ khóa tìm kiếm hoặc xóa tìm kiếm để khám phá thêm thành phần."
+          title="Không tìm thấy thành phần phù hợp"
         />
       ) : null}
 

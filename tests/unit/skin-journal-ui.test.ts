@@ -154,7 +154,7 @@ describe("SkinJournal Timeline UI", () => {
     expect(clientSource).toContain("data.skinJournal");
     expect(clientSource).toContain("data.deleted");
     expect(clientSource).toContain(
-      "You already have a journal entry for this date.",
+      "Bạn đã có nhật ký cho ngày này.",
     );
   });
 
@@ -170,21 +170,18 @@ describe("SkinJournal Timeline UI", () => {
     expect(timelineSource).toContain("listProducts");
     expect(timelineSource).toContain("isProductLoading");
     expect(timelineSource).toContain(
-      "Could not load the product catalogue.",
+      "Không thể tải danh mục sản phẩm",
     );
     expect(timelineSource).toContain("setProductLoadError");
-    expect(timelineSource).not.toContain(
-      'setLoadError("Could not load the product catalogue.',
-    );
   });
 
   it("resolves journal product ids to readable card labels", () => {
     expect(cardSource).toContain("resolveJournalProductLabels");
     expect(cardSource).toContain("productLookup");
     expect(cardSource).toContain("productLabel.label");
-    expect(cardSource).toContain("No products recorded.");
+    expect(cardSource).toContain("Chưa ghi nhận sản phẩm nào.");
     expect(productDisplaySource).toContain(" - ");
-    expect(productDisplaySource).toContain("Unknown product");
+    expect(productDisplaySource).toContain("Sản phẩm chưa xác định");
   });
 
   it("renders product selection without sending product names or objects", () => {
@@ -196,7 +193,7 @@ describe("SkinJournal Timeline UI", () => {
     expect(formSource).toContain("UNKNOWN_PRODUCT_LABEL");
     expect(formSource).toContain("unresolvedProductIds.map");
     expect(formSource).toContain("onToggle(productId, event.target.checked)");
-    expect(formSource).toContain("Existing product selections will be preserved");
+    expect(formSource).toContain("Các sản phẩm đã chọn trước đó sẽ được giữ lại");
     expect(validationSource).toContain("productsUsed: string[]");
     expect(validationSource).toContain(
       "productsUsed: normalizeProductsUsed(formState.productsUsed)",
@@ -207,16 +204,16 @@ describe("SkinJournal Timeline UI", () => {
 
   it("renders loading, error, empty, success, create, edit, and delete flows", () => {
     for (const requiredCopy of [
-      "Loading Skin Journal",
-      "Unable to load Skin Journal",
-      "No journal entries yet",
-      "Journal entry created.",
-      "Journal entry updated.",
-      "Journal entry deleted.",
-      "Create journal entry",
-      "Edit journal entry",
-      "New entry",
-      "Delete",
+      "Đang tải nhật ký da",
+      "Không thể tải nhật ký da",
+      "Chưa có nhật ký da",
+      "Đã thêm nhật ký.",
+      "Đã cập nhật nhật ký.",
+      "Đã xóa nhật ký.",
+      "Thêm nhật ký",
+      "Sửa",
+      "Lưu nhật ký",
+      "Xóa",
       "window.confirm",
     ]) {
       expect(combinedUiSource).toContain(requiredCopy);

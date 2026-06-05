@@ -32,80 +32,80 @@ import { routes } from "@/shared/constants/routes";
 const managementCards = [
   {
     testId: "settings-data-card-skin-profile",
-    title: "Skin Profile",
+    title: "Hồ sơ da",
     description:
       "Quản lý loại da, mối quan tâm về da, mức nhạy cảm và các thành phần muốn tránh.",
-    cta: "Quản lý Skin Profile",
+    cta: "Quản lý hồ sơ da",
     href: routes.SKIN_PROFILE,
   },
   {
     testId: "settings-data-card-routines",
-    title: "Routines",
+    title: "Routine",
     description:
-      "Quản lý morning/evening routine, sản phẩm và các bước chăm sóc da.",
-    cta: "Quản lý Routines",
+      "Quản lý routine buổi sáng hoặc buổi tối, sản phẩm và các bước chăm sóc da.",
+    cta: "Quản lý routine",
     href: routes.ROUTINES,
   },
   {
     testId: "settings-data-card-today-log",
-    title: "Today Routine Logs",
+    title: "Routine hôm nay",
     description:
-      "Ghi nhận routine hôm nay, kiểm tra trạng thái routine logs và xóa ghi nhận hôm nay nếu cần.",
-    cta: "Mở Today Log",
+      "Ghi nhận routine hôm nay, kiểm tra trạng thái và xóa ghi nhận hôm nay nếu cần.",
+    cta: "Mở routine hôm nay",
     href: routes.TODAY_LOG,
   },
   {
     testId: "settings-data-card-journal",
-    title: "Skin Journal",
+    title: "Nhật ký da",
     description:
       "Quản lý nhật ký da, quan sát hằng ngày, triệu chứng và ghi chú cá nhân.",
-    cta: "Mở Skin Journal",
+    cta: "Mở nhật ký da",
     href: routes.JOURNAL,
   },
   {
     testId: "settings-data-card-saved-products",
-    title: "Saved Products",
+    title: "Sản phẩm đã lưu",
     description: "Quản lý danh sách sản phẩm đã lưu.",
-    cta: "Mở Saved Products",
+    cta: "Xem sản phẩm đã lưu",
     href: routes.SAVED_PRODUCTS,
   },
 ] as const;
 
 const dataCategories = [
   {
-    title: "App profile",
+    title: "Hồ sơ trong app",
     description:
-      "Lưu trong app_user_profiles, gồm app role, trạng thái onboarding và trạng thái yêu cầu xóa tài khoản. Đây là dữ liệu profile cấp ứng dụng, tách biệt với Auth.js identity.",
+      "Lưu trong app_user_profiles, gồm vai trò trong app, trạng thái onboarding và trạng thái yêu cầu xóa tài khoản. Đây là dữ liệu hồ sơ cấp ứng dụng, tách biệt với danh tính Auth.js.",
   },
   {
-    title: "Skin profile",
+    title: "Hồ sơ da",
     description:
-      "Được quản lý tại Skin Profile. Bạn có thể xem, cập nhật hoặc xóa qua trang/API hiện có.",
+      "Được quản lý tại Hồ sơ da. Bạn có thể xem, cập nhật hoặc xóa qua trang hiện có.",
   },
   {
-    title: "Routines",
+    title: "Routine",
     description:
-      "Được quản lý tại Routines. Bạn có thể tạo, cập nhật hoặc xóa morning/evening routine qua Routine Builder.",
+      "Được quản lý tại Routine. Bạn có thể tạo, cập nhật hoặc xóa routine buổi sáng hoặc buổi tối trên trang Routine.",
   },
   {
-    title: "Routine logs",
+    title: "Ghi nhận routine",
     description:
-      "Được quản lý qua Today Log và RoutineLog API. Bạn có thể tạo/cập nhật ghi nhận hôm nay và xóa một ghi nhận routine hiện có.",
+      "Được quản lý qua Routine hôm nay. Bạn có thể tạo/cập nhật ghi nhận hôm nay và xóa một ghi nhận routine hiện có.",
   },
   {
-    title: "Skin journal",
+    title: "Nhật ký da",
     description:
-      "Được quản lý tại Skin Journal. Bạn có thể tạo, cập nhật hoặc xóa journal entry qua trang/API hiện có.",
+      "Được quản lý tại Nhật ký da. Bạn có thể tạo, cập nhật hoặc xóa mục nhật ký qua trang hiện có.",
   },
   {
-    title: "Saved products",
+    title: "Sản phẩm đã lưu",
     description:
-      "Được quản lý tại Saved Products. Bạn có thể gỡ sản phẩm đã lưu qua UI/API hiện có.",
+      "Được quản lý tại Sản phẩm đã lưu. Bạn có thể gỡ sản phẩm đã lưu qua trang hiện có.",
   },
   {
-    title: "Product and ingredient catalogue",
+    title: "Danh mục sản phẩm và thành phần",
     description:
-      "Catalogue sản phẩm và thành phần là dữ liệu dùng chung của ứng dụng, không phải dữ liệu riêng tư do từng người dùng sở hữu, nên không xóa trực tiếp từ Settings.",
+      "Danh mục sản phẩm và thành phần là dữ liệu dùng chung của ứng dụng, không phải dữ liệu riêng tư do từng người dùng sở hữu, nên không xóa trực tiếp từ Cài đặt.",
   },
 ] as const;
 
@@ -200,7 +200,7 @@ export function SettingsDataControlCenter() {
           setLoadError(
             error instanceof SettingsClientError
               ? error.message
-              : "Không thể tải thông tin Settings. Vui lòng thử lại.",
+              : "Không thể tải phần cài đặt và quản lý dữ liệu. Vui lòng thử lại hoặc làm mới trang.",
           );
         }
       } finally {
@@ -267,7 +267,7 @@ export function SettingsDataControlCenter() {
       setExportError(
         error instanceof SettingsClientError
           ? error.message
-          : "Không thể export dữ liệu lúc này. Vui lòng thử lại.",
+          : "Không thể xuất dữ liệu lúc này. Vui lòng thử lại.",
       );
     } finally {
       setIsExporting(false);
@@ -309,7 +309,7 @@ export function SettingsDataControlCenter() {
       setAppDataDeleteError(
         error instanceof SettingsClientError
           ? error.message
-          : "Không thể xóa dữ liệu skincare app lúc này. Vui lòng thử lại.",
+          : "Không thể xóa dữ liệu skincare trong app lúc này. Vui lòng thử lại.",
       );
     } finally {
       setIsDeletingAppData(false);
@@ -317,14 +317,14 @@ export function SettingsDataControlCenter() {
   }
 
   if (isLoading) {
-    return <LoadingState label="Đang tải cài đặt và quản lý dữ liệu" />;
+    return <LoadingState label="Đang tải cài đặt..." />;
   }
 
   if (loadError) {
     return (
       <ErrorState
         description={loadError}
-        title="Chưa tải được cài đặt và quản lý dữ liệu"
+        title="Không thể tải phần cài đặt và quản lý dữ liệu"
       />
     );
   }
@@ -346,14 +346,14 @@ export function SettingsDataControlCenter() {
         <CardHeader>
           <CardTitle>Thông tin tài khoản</CardTitle>
           <CardDescription>
-            Chỉ hiển thị các trường an toàn phục vụ trải nghiệm app. Settings
-            không hiển thị token, session hoặc dữ liệu xác thực nội bộ.
+            Chỉ hiển thị các trường an toàn phục vụ trải nghiệm app. Cài đặt
+            không hiển thị token, phiên đăng nhập hoặc dữ liệu xác thực nội bộ.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
           <AccountField label="Tên" value={user.name ?? "Chưa có"} />
           <AccountField label="Email" value={user.email ?? "Chưa có"} />
-          <AccountField label="App role" value={user.role} />
+          <AccountField label="Vai trò trong app" value={user.role} />
           <AccountField
             label="Onboarding"
             value={user.onboardingCompleted ? "Đã hoàn thành" : "Chưa hoàn thành"}
@@ -415,8 +415,8 @@ export function SettingsDataControlCenter() {
             >
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-medium text-foreground">{category.title}</h3>
-                {category.title === "Product and ingredient catalogue" ? (
-                  <Badge variant="secondary">Shared app data</Badge>
+                {category.title === "Danh mục sản phẩm và thành phần" ? (
+                  <Badge variant="secondary">Dữ liệu dùng chung</Badge>
                 ) : null}
               </div>
               <p className="mt-1 text-sm leading-6 text-muted-foreground">
@@ -429,11 +429,11 @@ export function SettingsDataControlCenter() {
 
       <Card className="border-border bg-card" data-testid="settings-export-data">
         <CardHeader>
-          <CardTitle>Export data</CardTitle>
+          <CardTitle>Xuất dữ liệu</CardTitle>
           <CardDescription>
             Tải xuống dữ liệu skincare app cá nhân của bạn dưới dạng JSON. File
-            export chỉ chứa payload dữ liệu, không chứa token, session hoặc
-            wrapper API nội bộ.
+            xuất chỉ chứa dữ liệu skincare cá nhân, không chứa token, phiên
+            đăng nhập hoặc dữ liệu xác thực nội bộ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -443,7 +443,7 @@ export function SettingsDataControlCenter() {
             onClick={exportMySkincareData}
             type="button"
           >
-            {isExporting ? "Đang export..." : "Export my skincare data"}
+            {isExporting ? "Đang xuất dữ liệu..." : "Xuất dữ liệu skincare"}
           </Button>
 
           {exportSuccessMessage ? (
@@ -465,12 +465,12 @@ export function SettingsDataControlCenter() {
         data-testid="settings-delete-app-data"
       >
         <CardHeader>
-          <CardTitle>Danger zone</CardTitle>
+          <CardTitle>Khu vực cần thận trọng</CardTitle>
           <CardDescription>
-            Delete my skincare app data chỉ xóa dữ liệu skincare cá nhân như
-            skin profile, saved products, routines, routine logs, routine
-            analyses và skin journals. Thao tác này không xóa tài khoản đăng
-            nhập Auth.js, OAuth account, session hoặc catalogue dùng chung.
+            Xóa dữ liệu skincare trong app chỉ xóa dữ liệu cá nhân như hồ sơ da,
+            sản phẩm đã lưu, routine, ghi nhận routine, phân tích routine và
+            nhật ký da. Thao tác này không xóa tài khoản đăng nhập, tài khoản
+            OAuth, phiên đăng nhập hoặc danh mục dùng chung.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -485,7 +485,7 @@ export function SettingsDataControlCenter() {
               type="checkbox"
             />
             <span>
-              I understand this will delete my personal skincare app data from SkinWise VN.
+              Tôi hiểu thao tác này sẽ xóa dữ liệu skincare cá nhân của tôi trong SkinWise VN.
             </span>
           </Label>
 
@@ -510,7 +510,7 @@ export function SettingsDataControlCenter() {
           >
             {isDeletingAppData
               ? "Đang xóa dữ liệu..."
-              : "Delete my skincare app data"}
+              : "Xóa dữ liệu skincare trong app"}
           </Button>
         </CardContent>
       </Card>

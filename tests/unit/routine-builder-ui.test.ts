@@ -118,8 +118,8 @@ describe("Routine Builder UI foundation", () => {
 
   it("includes loading, empty, list, create, edit, error, saving, deleting, and success states", () => {
     for (const stateCopy of [
-      "Đang tải routines",
-      "Xây dựng routine chăm sóc da đầu tiên",
+      "Đang chuẩn bị routine builder",
+      "Chưa có routine nào",
       "Danh sách routines",
       "Tạo routine",
       "Chỉnh sửa routine",
