@@ -6,26 +6,72 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-05 - MVP v1.14 Data Quality Expansion
+
+### Task
+
+Expand curated product and ingredient seed data for better demo quality and Product Match coverage without adding new product features or changing schema, routes, auth, Product Match scoring, or AI-provider behavior.
+
+### Files Updated
+
+- `scripts/seed.ts`
+- `tests/unit/seed-data-quality.test.ts`
+- `README.md`
+- `docs/14-seed-data-spec.md`
+- `docs/post-mvp-backlog.md`
+- `docs/09-release-plan.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Outcome
+
+- Product seed data expanded from 38 to 58 curated products.
+- Ingredient seed data expanded from 40 to 59 curated ingredients.
+- Product Match seed coverage improved for oily/acne-prone, dry/barrier-support, sensitive/redness-prone, dark-spots, texture, sunscreen, and minimal-routine demo journeys.
+- Seed assertions now enforce v1.14 minimum counts, product-name uniqueness, brand/name uniqueness, category/skin-type/concern coverage, and strong-active cautions.
+- Added focused unit coverage for seed counts, uniqueness, coverage, strong-active safety, and useful Product Match candidates.
+
+### Validation
+
+```txt
+npm ci: PASS after sandbox EPERM rerun outside sandbox
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 97 files / 894 tests
+npm run build: PASS after sandbox EPERM rerun outside sandbox
+npm run test:e2e: PASS after sandbox EPERM rerun outside sandbox - 29/29 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Next Recommended Task
+
+```txt
+Portfolio Evidence Package
+```
+
 ## 2026-06-05 - Documentation Status Synchronization for MVP v1.13
 
 ### Task
 
-Synchronize repository documentation so v1.13 is treated as the latest completed milestone, v1.14 Data Quality Expansion is the next recommended product task, and portfolio evidence tasks remain separate from product correctness.
+Synchronize repository documentation at that point so v1.13 was treated as the completed milestone, v1.14 Data Quality Expansion was the next scoped product task, and portfolio evidence tasks remained separate from product correctness.
 
 ### Scope
 
 - Documentation-only status synchronization.
 - No product features, runtime configuration, database schema, dependency updates, or source refactors.
 
-### Current Status Wording
+### Historical Status Wording Captured In That Sync
 
 ```txt
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Completed milestone at that point: MVP v1.13 - UX Polish & Empty State Improvement
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
+Next scoped product task at that point: MVP v1.14 - Data Quality Expansion
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 ```
 

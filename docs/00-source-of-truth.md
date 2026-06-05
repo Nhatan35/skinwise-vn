@@ -14,13 +14,14 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
+MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
 Primary current documents:
@@ -45,4 +46,5 @@ Evidence boundary:
 - Production PASS is based on user-reported manual verification with no blockers reported.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
+- v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

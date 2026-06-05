@@ -13,6 +13,7 @@ MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 ```
 
 The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP improvements. The active post-MVP backlog is `docs/post-mvp-backlog.md`.
@@ -79,6 +80,7 @@ The MVP product scope is complete. Current work is no longer core feature implem
 | MVP v1.11 | DONE | Portfolio/demo readiness documentation polished. |
 | MVP v1.12 | DONE | Post-MVP backlog created and future work prioritised. |
 | MVP v1.13 | DONE | UX states polished without feature, schema, auth, or business-rule expansion. |
+| MVP v1.14 | DONE | Product and ingredient seed data expanded without schema or feature-scope changes. |
 
 ## 4. Validation Evidence
 
@@ -88,19 +90,22 @@ Local evidence:
 Evidence date: 2026-06-04
 Environment: Local Windows / PowerShell
 Branch: main
+npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
+npm run test: PASS - 97 files / 894 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-v1.13 did not run database commands because no schema, seed data, indexes, DTOs, or persistence behavior changed.
-The first sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
-Historical v1.9 evidence still records db:indexes, db:seed, audit, and baseline local validation.
+v1.14 expanded curated seed data to 58 products and 59 ingredients.
+No schema, route, auth, authorization, Product Match scoring, or AI-provider behavior changed.
+Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
 Production evidence:
@@ -121,9 +126,9 @@ Product scope decision: freeze core MVP features
 Documentation decision: v1.11 portfolio demo package complete
 Post-MVP planning decision: v1.12 backlog created
 Post-MVP UX polish decision: v1.13 complete
+Post-MVP data quality decision: v1.14 complete
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
 ## 6. Recommended Next Work
@@ -132,7 +137,7 @@ Do next:
 
 ```txt
 1. Keep the completed MVP baseline stable.
-2. Start v1.14 - Data Quality Expansion only as a controlled post-MVP task.
+2. Prepare Portfolio Evidence Package if the goal is interview/demo readiness.
 3. Keep portfolio evidence tasks separate from product correctness.
 4. Avoid large feature expansion until data quality/release confidence work is deliberately scoped.
 ```
@@ -158,10 +163,10 @@ Do not expand scope before portfolio submission.
 - Optional real AI provider integration with strict output validation and safety policy.
 - Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study.
 
-Recommended next implementation:
+Recommended next task:
 
 ```txt
-v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
-These are future enhancements, not MVP blockers.
+This is presentation/evidence work, not a product blocker.

@@ -15,19 +15,19 @@ Product implementation: COMPLETE at MVP level
 Stable baseline: v1.11-final-mvp / v1.11-portfolio-demo-ready
 Post-MVP backlog: CREATED in v1.12
 UX polish implementation: DONE in v1.13
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
-Database/schema changes in this sprint: NONE
-Auth/authorization changes in this sprint: NONE
-Business-rule changes in this sprint: NONE
+Data quality expansion: DONE in v1.14
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
+Database/schema changes in v1.14: NONE
+Auth/authorization changes in v1.14: NONE
+Business-rule changes in v1.14: NONE
 ```
 
-MVP v1.13 is a post-MVP UX polish sprint. It improves first-time user clarity, loading/empty/error/helper states, CTA wording, and small dashboard hierarchy without expanding product scope.
+MVP v1.14 is a controlled post-MVP data quality milestone. It improves curated product and ingredient seed coverage without expanding product scope.
 
 ## 2. Objective
 
-Improve the existing MVP experience while preserving:
+Improve demo data quality while preserving:
 
 ```txt
 Core MVP behavior
@@ -38,18 +38,15 @@ Routine safety rules
 AI provider abstraction and fallback behavior
 ```
 
-## 3. Completed v1.13 Scope
+## 3. Completed v1.14 Scope
 
 ```txt
-[x] Reviewed shared LoadingState, EmptyState, and ErrorState components.
-[x] Added screen-specific Vietnamese loading copy.
-[x] Improved empty states and next-action CTAs where existing routes/actions already existed.
-[x] Improved user-friendly Vietnamese error copy.
-[x] Improved first-time dashboard guidance.
-[x] Improved Product Match missing-profile guidance.
-[x] Improved Saved Products, Products, Ingredients, Routines, Today Routine, Journal, Insights, Settings, and Skin Profile state copy.
-[x] Kept shared component prop changes backward-compatible.
-[x] Updated affected unit and E2E UI text assertions only.
+[x] Expanded product seed data from 38 to 58 curated products.
+[x] Expanded ingredient seed data from 40 to 59 curated ingredients.
+[x] Improved Product Match coverage for common demo profiles.
+[x] Added v1.14 seed assertions for counts, uniqueness, coverage, and strong-active cautions.
+[x] Added seed data quality unit tests.
+[x] Kept schema, routes, auth, scoring, and AI behavior unchanged.
 [x] Updated documentation truthfully after validation.
 ```
 
@@ -57,7 +54,7 @@ AI provider abstraction and fallback behavior
 
 ```txt
 No new product feature.
-No database schema, collection, index, seed, DTO, or persistence behavior change.
+No database schema, collection, index, DTO, or persistence behavior change.
 No auth or authorization logic change.
 No Product Match business-rule change.
 No Routine Safety Engine change.
@@ -65,31 +62,33 @@ No real AI provider integration.
 No admin panel.
 No marketplace, payment, cart, checkout, notification, review, rating, image upload, or skin score.
 No large component rewrite or architecture refactor.
-No production validation claim for this sprint.
+No production smoke rerun claim for this sprint.
 ```
 
 ## 5. Validation Evidence
 
-Local validation from this sprint:
+Local validation from v1.14:
 
 ```txt
-Evidence date: 2026-06-04
+Evidence date: 2026-06-05
 Environment: Local Windows / PowerShell
 Branch: main
+npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
+npm run test: PASS - 97 files / 894 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-The first sandboxed build and E2E attempts failed with spawn EPERM.
-The same npm run build and npm run test:e2e commands passed when rerun outside the sandbox.
-Database commands were not required because v1.13 did not change schema, seed data, indexes, or persistence behavior.
-Production smoke and monitoring were not rerun for v1.13.
+Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM.
+The same commands passed when rerun outside the sandbox.
+E2E global setup seeded the local test database with the expanded v1.14 seed data.
+Production smoke and monitoring were not rerun for v1.14.
 ```
 
 Production verification from the stable baseline:
@@ -104,32 +103,32 @@ Evidence date: 2026-06-04
 
 ## 6. Post-MVP Priority Direction
 
-Recommended order after v1.13:
+Recommended order after v1.14:
 
 ```txt
-P2 - Product and ingredient data quality
+P2 - Product and ingredient data quality: DONE in v1.14
 P2 - Production observability/release confidence
 P3 - Admin/content management
 P3 - Optional real AI provider integration
-P4 - Portfolio assets, skipped for now
+P4 - Portfolio assets
 ```
 
 ## 7. Next Recommended Task
 
 ```txt
-v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
 Reason:
 
 ```txt
-v1.13 completed the low-risk UX polish layer. The next controlled post-MVP improvement is curated product and ingredient data quality, while preserving safety boundaries and avoiding medical claims.
+v1.14 completed the practical data-quality layer. The next practical step for interview/demo readiness is to package portfolio evidence: screenshots, demo video, and CV/portfolio case-study polish.
 ```
 
-## 8. Suggested Historical Commit
+## 8. Suggested Commit
 
 ```bash
 git add .
-git commit -m "polish: improve post-MVP UX states"
+git commit -m "data: expand skincare product and ingredient seed data"
 git push
 ```

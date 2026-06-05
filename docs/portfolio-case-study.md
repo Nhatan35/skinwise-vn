@@ -24,13 +24,12 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
-Evidence note: local validation is supported by command output. Production smoke and monitoring PASS are recorded from the user's reported completed manual verification with no blockers reported. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+Evidence note: local validation is supported by command output. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.14. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
 
 ## 2. Problem Statement
 
@@ -163,27 +162,25 @@ Key technical choices:
 Local validation evidence:
 
 ```txt
-Evidence date: 2026-06-04
-Environment: Local Windows / Git Bash
+Evidence date: 2026-06-05
+Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
+npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
+npm run test: PASS - 97 files / 894 tests
 npm run build: PASS
-npm run db:indexes: PASS - 32 indexes ensured
-npm run db:seed: PASS - 40 ingredients / 38 products
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
-npm ci: NOT CAPTURED in the provided terminal log
 ```
 
 Production evidence:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASS - user-reported manual verification completed
-Production monitoring: PASS - user-reported checks completed
+Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
+Production smoke and monitoring were not rerun specifically for v1.14 because v1.14 was a local data-quality seed update.
 Critical blockers reported: None
 Evidence date: 2026-06-04
 ```
@@ -265,7 +262,7 @@ Intentional MVP limitations:
 
 Future improvements:
 
-- MVP v1.14 Data Quality Expansion for product and ingredient coverage.
+- Portfolio Evidence Package for screenshots, demo video, and CV/portfolio case-study polish.
 - Admin product/ingredient management.
 - Better analytics and structured progress review.
 - Optional real provider integration with strict safety controls.

@@ -31,6 +31,8 @@ type SeedWriteSummary = {
 };
 
 const MANUAL_PRODUCT_SOURCE = PRODUCT_SOURCES[0];
+const MINIMUM_V1_14_INGREDIENT_COUNT = 55;
+const MINIMUM_V1_14_PRODUCT_COUNT = 55;
 const stringListSchema = z.array(z.string().trim().min(1));
 
 const ingredientSeedSchema = z
@@ -93,6 +95,40 @@ const requiredProductConcerns = [
   "texture",
   "barrier_support",
   "unknown",
+] as const;
+const strongActiveTerms = [
+  "aha",
+  "bha",
+  "retinol",
+  "retinal",
+  "retinoid",
+  "adapalene",
+  "benzoyl peroxide",
+  "salicylic acid",
+  "glycolic acid",
+  "lactic acid",
+  "mandelic acid",
+  "kojic acid",
+  "tea tree oil",
+  "sulfur",
+  "vitamin c",
+  "ascorbic acid",
+] as const;
+const requiredStrongActiveIngredients = [
+  "Salicylic Acid",
+  "Benzoyl Peroxide",
+  "Sulfur",
+  "Tea Tree Oil",
+  "Retinol",
+  "Retinal",
+  "Adapalene",
+  "Glycolic Acid",
+  "Lactic Acid",
+  "Mandelic Acid",
+  "Gluconolactone",
+  "Kojic Acid",
+  "Vitamin C",
+  "Sodium Ascorbyl Phosphate",
 ] as const;
 
 function assertSeedCondition(condition: boolean, message: string) {
@@ -163,6 +199,59 @@ function assertProductTextIncludes(
   }
 }
 
+function containsAnySeedTerm(text: string, terms: readonly string[]) {
+  const normalizedText = normalizeSeedText(text);
+
+  return terms.some((term) => normalizedText.includes(term));
+}
+
+function assertStrongActiveProductWarnings(products: ProductSeed[]) {
+  for (const product of products) {
+    const activeText = [
+      product.ingredientsText,
+      ...product.keyActives,
+      ...product.tags,
+    ].join(" ");
+
+    if (containsAnySeedTerm(activeText, strongActiveTerms)) {
+      assertSeedCondition(
+        product.warnings.length > 0,
+        `Strong active product must include a caution warning: ${product.brand} ${product.name}`,
+      );
+    }
+  }
+}
+
+function assertStrongActiveIngredientCautions(ingredients: IngredientSeed[]) {
+  const ingredientsByName = new Map(
+    ingredients.map((ingredient) => [ingredient.inciName, ingredient]),
+  );
+
+  for (const ingredientName of requiredStrongActiveIngredients) {
+    const ingredient = ingredientsByName.get(ingredientName);
+
+    assertSeedCondition(
+      Boolean(ingredient),
+      `Seed data must include strong active ingredient: ${ingredientName}`,
+    );
+    assertSeedCondition(
+      (ingredient?.cautionFor.length ?? 0) > 0,
+      `Strong active ingredient must include cautionFor: ${ingredientName}`,
+    );
+  }
+}
+
+export function validateSeedData() {
+  const seedData = {
+    ingredients: z.array(ingredientSeedSchema).parse(ingredientSeeds),
+    products: z.array(productSeedSchema).parse(productSeeds),
+  };
+
+  assertSeedQuality(seedData);
+
+  return seedData;
+}
+
 function assertSeedQuality(input: {
   ingredients: IngredientSeed[];
   products: ProductSeed[];
@@ -170,16 +259,24 @@ function assertSeedQuality(input: {
   const { ingredients, products } = input;
 
   assertSeedCondition(
-    ingredients.length >= 30,
-    "Seed data must include at least 30 ingredients.",
+    ingredients.length >= MINIMUM_V1_14_INGREDIENT_COUNT,
+    `Seed data must include at least ${MINIMUM_V1_14_INGREDIENT_COUNT} ingredients.`,
   );
   assertSeedCondition(
-    products.length >= 35,
-    "Seed data must include at least 35 products.",
+    products.length >= MINIMUM_V1_14_PRODUCT_COUNT,
+    `Seed data must include at least ${MINIMUM_V1_14_PRODUCT_COUNT} products.`,
   );
   assertUniqueValues(
     ingredients.map((ingredient) => ingredient.inciName),
     "Duplicate ingredient inciName",
+  );
+  assertUniqueValues(
+    ingredients.flatMap((ingredient) => ingredient.aliases),
+    "Duplicate ingredient alias",
+  );
+  assertUniqueValues(
+    products.map((product) => product.name),
+    "Duplicate product name",
   );
   assertUniqueValues(
     products.map((product) => `${product.brand}::${product.name}`),
@@ -225,6 +322,8 @@ function assertSeedQuality(input: {
     ["azelaic acid", "vitamin c", "tranexamic acid", "alpha arbutin", "niacinamide"],
     "Seed data must support uneven-tone demo coverage",
   );
+  assertStrongActiveProductWarnings(products);
+  assertStrongActiveIngredientCautions(ingredients);
 }
 
 const ingredientSeeds = [
@@ -263,7 +362,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Retinol",
-    aliases: ["Vitamin A", "Retinoid"],
+    aliases: ["Vitamin A"],
     functions: ["retinoid", "active", "texture_support"],
     commonUses: ["texture support", "signs-of-aging support"],
     suitableFor: ["normal", "combination", "texture"],
@@ -339,8 +438,8 @@ const ingredientSeeds = [
     sourceRefs: ["manual-curation"],
   },
   {
-    inciName: "Centella Asiatica",
-    aliases: ["Cica", "Gotu Kola"],
+    inciName: "Centella Asiatica Extract",
+    aliases: ["Centella Asiatica", "Cica", "Gotu Kola"],
     functions: ["soothing_support", "barrier_support"],
     commonUses: ["comfort support", "redness-prone skin support"],
     suitableFor: ["sensitive", "redness", "barrier_support"],
@@ -362,7 +461,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Glycolic Acid",
-    aliases: ["AHA", "Alpha Hydroxy Acid"],
+    aliases: ["Glycolic Acid AHA"],
     functions: ["exfoliant", "texture_support", "active"],
     commonUses: ["surface exfoliation", "texture support"],
     suitableFor: ["normal", "combination", "texture"],
@@ -373,7 +472,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Lactic Acid",
-    aliases: ["AHA", "Alpha Hydroxy Acid"],
+    aliases: ["Lactic Acid AHA"],
     functions: ["exfoliant", "humectant", "active"],
     commonUses: ["gentler exfoliation support", "texture support"],
     suitableFor: ["normal", "dry", "texture"],
@@ -472,7 +571,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Mandelic Acid",
-    aliases: ["AHA", "Alpha Hydroxy Acid"],
+    aliases: ["Mandelic Acid AHA"],
     functions: ["exfoliant", "texture_support", "active"],
     commonUses: ["gentle exfoliation support", "uneven texture support"],
     suitableFor: ["normal", "combination", "texture"],
@@ -494,7 +593,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Retinal",
-    aliases: ["Retinaldehyde", "Retinoid"],
+    aliases: ["Retinaldehyde"],
     functions: ["retinoid", "active", "texture_support"],
     commonUses: ["texture support", "advanced evening routine support"],
     suitableFor: ["normal", "combination", "texture"],
@@ -505,7 +604,7 @@ const ingredientSeeds = [
   },
   {
     inciName: "Adapalene",
-    aliases: ["Retinoid"],
+    aliases: ["Adapalene retinoid"],
     functions: ["retinoid", "active"],
     commonUses: ["blemish-prone routine support", "texture support"],
     suitableFor: ["oily", "acne", "texture"],
@@ -668,6 +767,215 @@ const ingredientSeeds = [
     evidenceLevel: "strong",
     sourceRefs: ["manual-curation"],
   },
+  {
+    inciName: "Ceramide AP",
+    aliases: ["Ceramide AP lipid"],
+    functions: ["barrier_support", "emollient"],
+    commonUses: ["barrier support", "moisturizer support"],
+    suitableFor: ["dry", "sensitive", "barrier_support"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "moderate",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Ceramide EOP",
+    aliases: ["Ceramide EOP lipid"],
+    functions: ["barrier_support", "emollient"],
+    commonUses: ["barrier support", "rich moisturizer support"],
+    suitableFor: ["dry", "sensitive", "barrier_support"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "moderate",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Beta-Glucan",
+    aliases: ["Beta Glucan"],
+    functions: ["soothing_support", "hydration_support", "barrier_support"],
+    commonUses: ["comfort support", "hydration support"],
+    suitableFor: ["dry", "sensitive", "redness", "barrier_support"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Trehalose",
+    aliases: ["Trehalose humectant"],
+    functions: ["humectant", "hydration_support"],
+    commonUses: ["hydration support", "lightweight serum support"],
+    suitableFor: ["dry", "normal", "combination", "sensitive"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Aloe Barbadensis Leaf Juice",
+    aliases: ["Aloe Vera"],
+    functions: ["soothing_support", "hydration_support", "botanical_extract"],
+    commonUses: ["comfort support", "light hydration support"],
+    suitableFor: ["normal", "combination", "sensitive", "redness"],
+    cautionFor: ["known sensitivity to aloe or botanical extracts"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Bisabolol",
+    aliases: ["Alpha-Bisabolol"],
+    functions: ["soothing_support", "skin_conditioning"],
+    commonUses: ["comfort support", "redness-prone routine support"],
+    suitableFor: ["dry", "sensitive", "redness"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Oat Extract",
+    aliases: ["Avena Sativa Kernel Extract"],
+    functions: ["soothing_support", "skin_conditioning"],
+    commonUses: ["comfort support", "barrier routine support"],
+    suitableFor: ["dry", "sensitive", "redness", "barrier_support"],
+    cautionFor: ["known sensitivity to oat-derived ingredients"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Kojic Acid",
+    aliases: ["Kojic Acid Dipalmitate"],
+    functions: ["tone_support", "active"],
+    commonUses: ["uneven tone support", "dark-spot routine support"],
+    suitableFor: ["normal", "combination", "dark_spots"],
+    cautionFor: ["sensitive skin", "recently irritated skin"],
+    avoidWith: ["too many strong actives in one routine"],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Sodium Ascorbyl Phosphate",
+    aliases: ["SAP", "Vitamin C derivative"],
+    functions: ["antioxidant", "tone_support", "active"],
+    commonUses: ["antioxidant support", "tone support"],
+    suitableFor: ["oily", "combination", "normal", "dark_spots"],
+    cautionFor: ["very sensitive skin", "recently irritated skin"],
+    avoidWith: ["too many strong actives in one routine"],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Titanium Dioxide",
+    aliases: ["Titanium Dioxide UV Filter"],
+    functions: ["uv_filter", "skin_protective"],
+    commonUses: ["mineral sunscreen filter", "daytime routine support"],
+    suitableFor: ["sensitive", "redness", "dark_spots"],
+    cautionFor: ["users who dislike white cast or thicker textures"],
+    avoidWith: [],
+    evidenceLevel: "strong",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Diethylamino Hydroxybenzoyl Hexyl Benzoate",
+    aliases: ["Uvinul A Plus", "DHHB"],
+    functions: ["uv_filter"],
+    commonUses: ["UVA sunscreen filter", "daytime routine support"],
+    suitableFor: ["normal", "combination", "dark_spots"],
+    cautionFor: ["known sensitivity to sunscreen formulas"],
+    avoidWith: [],
+    evidenceLevel: "strong",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Octocrylene",
+    aliases: ["Octocrylene UV Filter"],
+    functions: ["uv_filter"],
+    commonUses: ["sunscreen filter support", "daytime routine support"],
+    suitableFor: ["normal", "combination", "oily", "dark_spots"],
+    cautionFor: ["known sensitivity to chemical UV filters"],
+    avoidWith: [],
+    evidenceLevel: "strong",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Tea Tree Oil",
+    aliases: ["Melaleuca Alternifolia Leaf Oil"],
+    functions: ["fragrance_component", "botanical_extract", "oil_balance"],
+    commonUses: ["oiliness-prone routine support", "scent"],
+    suitableFor: ["oily skin that tolerates essential oils"],
+    cautionFor: ["sensitive skin", "redness-prone skin", "recently irritated skin"],
+    avoidWith: ["strong exfoliant routines", "retinoid routines"],
+    evidenceLevel: "uncertain",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Ferulic Acid",
+    aliases: ["Ferulic antioxidant"],
+    functions: ["antioxidant", "active"],
+    commonUses: ["antioxidant support", "vitamin C formula support"],
+    suitableFor: ["normal", "combination", "dark_spots"],
+    cautionFor: ["very sensitive skin", "recently irritated skin"],
+    avoidWith: ["too many strong actives in one routine"],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Tocopherol",
+    aliases: ["Vitamin E"],
+    functions: ["antioxidant", "skin_conditioning"],
+    commonUses: ["antioxidant support", "moisturizer support"],
+    suitableFor: ["dry", "normal", "combination", "barrier_support"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Caffeine",
+    aliases: ["Caffeine skin-conditioning agent"],
+    functions: ["skin_conditioning", "antioxidant"],
+    commonUses: ["lightweight serum support", "refreshing eye-area formula support"],
+    suitableFor: ["normal", "combination", "oiliness"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Kaolin",
+    aliases: ["White Clay"],
+    functions: ["absorbent", "texture_support"],
+    commonUses: ["oiliness-prone mask support", "rinse-off clay formula support"],
+    suitableFor: ["oily", "combination", "oiliness"],
+    cautionFor: ["dry skin", "sensitive skin", "recently irritated skin"],
+    avoidWith: ["over-exfoliated skin"],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Caprylic/Capric Triglyceride",
+    aliases: ["CCT emollient"],
+    functions: ["emollient", "texture_support"],
+    commonUses: ["lightweight moisturizer support", "soft skin feel"],
+    suitableFor: ["dry", "normal", "combination", "barrier_support"],
+    cautionFor: ["users who dislike richer emollient textures"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
+  {
+    inciName: "Palmitoyl Tripeptide-1",
+    aliases: ["Signal peptide"],
+    functions: ["skin_conditioning", "texture_support"],
+    commonUses: ["texture support", "moisturizer or serum support"],
+    suitableFor: ["dry", "normal", "combination", "texture"],
+    cautionFor: ["known sensitivity to the product formula"],
+    avoidWith: [],
+    evidenceLevel: "basic",
+    sourceRefs: ["manual-curation"],
+  },
 ] satisfies IngredientSeed[];
 
 const productSeeds = [
@@ -733,7 +1041,7 @@ const productSeeds = [
     category: "moisturizer",
     priceRange: "mid",
     ingredientsText: "Water, Centella Asiatica Extract, Glycerin, Panthenol",
-    keyActives: ["Centella Asiatica", "Panthenol"],
+    keyActives: ["Centella Asiatica Extract", "Panthenol"],
     tags: ["cica", "soothing-support"],
     warnings: ["Botanical extracts can still bother some sensitive skin."],
     skinTypes: ["normal", "combination", "sensitive"],
@@ -1079,7 +1387,7 @@ const productSeeds = [
     category: "serum",
     priceRange: "mid",
     ingredientsText: "Water, Centella Asiatica Extract, Madecassoside, Allantoin, Glycerin",
-    keyActives: ["Centella Asiatica", "Madecassoside", "Allantoin"],
+    keyActives: ["Centella Asiatica Extract", "Madecassoside", "Allantoin"],
     tags: ["cica", "soothing-support", "fragrance-free"],
     warnings: ["Botanical extracts can still bother some users; patch test first."],
     skinTypes: ["sensitive", "dry", "normal", "combination"],
@@ -1238,8 +1546,8 @@ const productSeeds = [
     brand: "RoutineBase",
     category: "treatment",
     priceRange: "premium",
-    ingredientsText: "Water, Retinal, Retinoid, Glycerin, Peptide Complex",
-    keyActives: ["Retinal", "Retinoid", "Peptide Complex"],
+    ingredientsText: "Water, Retinal, Glycerin, Palmitoyl Tripeptide-1",
+    keyActives: ["Retinal", "Palmitoyl Tripeptide-1", "Glycerin"],
     tags: ["retinoid", "night-routine", "advanced-active"],
     warnings: ["Introduce slowly; avoid same-routine AHA/BHA products and use daytime sunscreen."],
     skinTypes: ["normal", "combination"],
@@ -1271,7 +1579,7 @@ const productSeeds = [
     category: "mask",
     priceRange: "mid",
     ingredientsText: "Water, Centella Asiatica Extract, Madecassoside, Panthenol, Allantoin",
-    keyActives: ["Centella Asiatica", "Madecassoside", "Panthenol"],
+    keyActives: ["Centella Asiatica Extract", "Madecassoside", "Panthenol"],
     tags: ["mask", "cica", "soothing-support", "fragrance-free"],
     warnings: ["Use as an optional support step; do not replace moisturizer if skin feels dry."],
     skinTypes: ["sensitive", "dry", "normal", "combination"],
@@ -1297,6 +1605,326 @@ const productSeeds = [
     source: "manual",
     verificationStatus: "reviewed",
   },
+  {
+    name: "OatCloud Milk Cleanser",
+    brand: "OatCloud",
+    category: "cleanser",
+    priceRange: "mid",
+    ingredientsText: "Water, Glycerin, Oat Extract, Beta-Glucan, Mild Surfactant Blend",
+    keyActives: ["Oat Extract", "Beta-Glucan", "Glycerin"],
+    tags: ["cream-cleanser", "fragrance-free", "sensitive-skin"],
+    warnings: ["Patch test first if you are sensitive to oat-derived ingredients."],
+    skinTypes: ["dry", "normal", "sensitive"],
+    concerns: ["dryness", "redness", "barrier_support"],
+    suitableFor: ["gentle evening cleanse", "dry or sensitive routine foundation"],
+    notRecommendedFor: ["known sensitivity to oat-derived ingredients"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "ClearBalance BHA Gel Cleanser",
+    brand: "ClearBalance",
+    category: "cleanser",
+    priceRange: "budget",
+    ingredientsText: "Water, Mild Surfactant Blend, Salicylic Acid, Glycerin, Zinc PCA",
+    keyActives: ["Salicylic Acid", "Zinc PCA"],
+    tags: ["gel-cleanser", "bha", "oiliness-support"],
+    warnings: ["Contains Salicylic Acid; avoid over-cleansing and patch test first."],
+    skinTypes: ["oily", "combination"],
+    concerns: ["acne", "oiliness", "texture"],
+    suitableFor: ["oily evening cleanse", "simple blemish-prone routine support"],
+    notRecommendedFor: ["dry, sensitive, or recently irritated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "CalmBarrier Oat Beta-Glucan Cream",
+    brand: "CalmBarrier",
+    category: "moisturizer",
+    priceRange: "mid",
+    ingredientsText: "Water, Glycerin, Beta-Glucan, Oat Extract, Ceramide NP, Squalane",
+    keyActives: ["Beta-Glucan", "Oat Extract", "Ceramide NP"],
+    tags: ["barrier-support", "fragrance-free", "comfort-cream"],
+    warnings: ["Patch test first if you are sensitive to oat-derived ingredients."],
+    skinTypes: ["dry", "normal", "sensitive"],
+    concerns: ["dryness", "redness", "barrier_support"],
+    suitableFor: ["barrier support routine", "redness-prone comfort routine"],
+    notRecommendedFor: ["known sensitivity to oat-derived ingredients"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "LipidKind Ceramide Triple Lotion",
+    brand: "LipidKind",
+    category: "moisturizer",
+    priceRange: "premium",
+    ingredientsText: "Water, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Cholesterol, Fatty Acids",
+    keyActives: ["Ceramide NP", "Ceramide AP", "Ceramide EOP", "Cholesterol"],
+    tags: ["barrier-support", "fragrance-free", "lipid-lotion"],
+    warnings: ["Rich lipid textures may feel heavy for very oily skin."],
+    skinTypes: ["dry", "normal", "sensitive"],
+    concerns: ["dryness", "barrier_support", "redness"],
+    suitableFor: ["dry barrier support routine", "simple evening moisturizer"],
+    notRecommendedFor: ["very oily skin that dislikes richer textures"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "AloeCica Water Gel Moisturizer",
+    brand: "AloeCica",
+    category: "moisturizer",
+    priceRange: "budget",
+    ingredientsText: "Water, Aloe Barbadensis Leaf Juice, Centella Asiatica Extract, Glycerin, Panthenol",
+    keyActives: ["Aloe Barbadensis Leaf Juice", "Centella Asiatica Extract", "Panthenol"],
+    tags: ["gel-moisturizer", "soothing-support", "lightweight"],
+    warnings: ["Botanical extracts can bother some users; patch test first."],
+    skinTypes: ["oily", "combination", "normal", "sensitive"],
+    concerns: ["redness", "oiliness", "barrier_support"],
+    suitableFor: ["lightweight moisturizer step", "redness-prone routine support"],
+    notRecommendedFor: ["known sensitivity to aloe or botanical extracts"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "SimpleStep Basic Moisture Gel",
+    brand: "SimpleStep",
+    category: "moisturizer",
+    priceRange: "budget",
+    ingredientsText: "Water, Glycerin, Trehalose, Sodium PCA, Dimethicone",
+    keyActives: ["Glycerin", "Trehalose", "Sodium PCA"],
+    tags: ["minimal-routine", "lightweight", "fragrance-free"],
+    warnings: ["Patch test first if your skin is currently reactive."],
+    skinTypes: ["oily", "combination", "normal", "unknown"],
+    concerns: ["dryness", "barrier_support", "unknown"],
+    suitableFor: ["minimal routine moisturizer", "beginner basic routine"],
+    notRecommendedFor: ["users who need a richer cream texture"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "SunNest Sensitive Mineral Fluid SPF50",
+    brand: "SunNest",
+    category: "sunscreen",
+    priceRange: "premium",
+    ingredientsText: "Water, Zinc Oxide, Titanium Dioxide, Glycerin, Bisabolol",
+    keyActives: ["Zinc Oxide", "Titanium Dioxide", "Bisabolol"],
+    tags: ["sunscreen", "mineral", "sensitive-skin", "fragrance-free"],
+    warnings: ["May leave a visible cast depending on amount used and skin tone."],
+    skinTypes: ["sensitive", "dry", "normal"],
+    concerns: ["redness", "dark_spots", "barrier_support"],
+    suitableFor: ["sensitive morning routine", "daily sunscreen step"],
+    notRecommendedFor: ["users avoiding mineral sunscreen texture"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "DailyKind Aqua UV Gel SPF50",
+    brand: "DailyKind",
+    category: "sunscreen",
+    priceRange: "mid",
+    ingredientsText: "Water, Diethylamino Hydroxybenzoyl Hexyl Benzoate, Octocrylene, Glycerin, Trehalose",
+    keyActives: ["DHHB", "Octocrylene", "Trehalose"],
+    tags: ["sunscreen", "lightweight", "gel-texture", "morning-routine"],
+    warnings: ["Patch test first if you are sensitive to chemical UV filters."],
+    skinTypes: ["oily", "combination", "normal"],
+    concerns: ["dark_spots", "oiliness", "texture"],
+    suitableFor: ["lightweight daily sunscreen", "oily or combination morning routine"],
+    notRecommendedFor: ["known sensitivity to chemical UV filters"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "BarrierSun Cream Sunscreen SPF50",
+    brand: "BarrierSun",
+    category: "sunscreen",
+    priceRange: "mid",
+    ingredientsText: "Water, Tinosorb S, DHHB, Glycerin, Ceramide AP, Panthenol",
+    keyActives: ["Tinosorb S", "DHHB", "Ceramide AP", "Panthenol"],
+    tags: ["sunscreen", "barrier-support", "cream-texture"],
+    warnings: ["Cream finish may feel rich for very oily skin."],
+    skinTypes: ["dry", "normal", "sensitive"],
+    concerns: ["dark_spots", "dryness", "barrier_support"],
+    suitableFor: ["dry morning routine", "sunscreen step with comfort support"],
+    notRecommendedFor: ["very oily skin that dislikes cream sunscreen"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "TonePath SAP Licorice Serum",
+    brand: "TonePath",
+    category: "serum",
+    priceRange: "mid",
+    ingredientsText: "Water, Sodium Ascorbyl Phosphate, Licorice Root Extract, Glycerin, Panthenol",
+    keyActives: ["Sodium Ascorbyl Phosphate", "Licorice Root Extract"],
+    tags: ["tone-support", "vitamin-c-derivative", "fragrance-free"],
+    warnings: ["Introduce gradually and use sunscreen consistently in the morning."],
+    skinTypes: ["oily", "combination", "normal", "sensitive"],
+    concerns: ["dark_spots", "redness", "texture"],
+    suitableFor: ["gentler tone-support routine", "morning or evening serum step"],
+    notRecommendedFor: ["currently irritated skin"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "SpotSoft Kojic Licorice Serum",
+    brand: "SpotSoft",
+    category: "serum",
+    priceRange: "premium",
+    ingredientsText: "Water, Kojic Acid, Licorice Root Extract, Niacinamide, Glycerin",
+    keyActives: ["Kojic Acid", "Licorice Root Extract", "Niacinamide"],
+    tags: ["tone-support", "dark-spot-support", "strong-active"],
+    warnings: ["Kojic Acid may irritate sensitive skin; introduce slowly and patch test first."],
+    skinTypes: ["normal", "combination", "oily"],
+    concerns: ["dark_spots", "texture"],
+    suitableFor: ["experienced tone-support routine", "routine with daily sunscreen"],
+    notRecommendedFor: ["sensitive, over-exfoliated, or recently irritated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "AquaMild Trehalose Hydration Ampoule",
+    brand: "AquaMild",
+    category: "serum",
+    priceRange: "budget",
+    ingredientsText: "Water, Trehalose, Sodium PCA, Hyaluronic Acid, Glycerin",
+    keyActives: ["Trehalose", "Sodium PCA", "Hyaluronic Acid"],
+    tags: ["hydrating", "humectant", "fragrance-free"],
+    warnings: ["Use with moisturizer if skin feels dry after humectant layers."],
+    skinTypes: ["dry", "normal", "combination", "sensitive"],
+    concerns: ["dryness", "barrier_support"],
+    suitableFor: ["hydration support under moisturizer", "minimal routine serum"],
+    notRecommendedFor: ["users who prefer moisturizer-only routines"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "PeptideNest Barrier Support Serum",
+    brand: "PeptideNest",
+    category: "serum",
+    priceRange: "premium",
+    ingredientsText: "Water, Palmitoyl Tripeptide-1, Panthenol, Glycerin, Ceramide NP",
+    keyActives: ["Palmitoyl Tripeptide-1", "Panthenol", "Ceramide NP"],
+    tags: ["barrier-support", "texture-support", "fragrance-free"],
+    warnings: ["Patch test first if your skin is currently reactive."],
+    skinTypes: ["dry", "normal", "combination", "sensitive"],
+    concerns: ["barrier_support", "dryness", "texture"],
+    suitableFor: ["barrier support serum step", "texture support without exfoliation"],
+    notRecommendedFor: ["known sensitivity to peptide formulas"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "MildTheory PHA Comfort Toner",
+    brand: "MildTheory",
+    category: "toner",
+    priceRange: "mid",
+    ingredientsText: "Water, Gluconolactone, Panthenol, Beta-Glucan, Glycerin",
+    keyActives: ["Gluconolactone", "Panthenol", "Beta-Glucan"],
+    tags: ["pha", "gentle-exfoliant", "hydrating"],
+    warnings: ["Avoid overuse and avoid stacking with other exfoliants in the same routine."],
+    skinTypes: ["dry", "normal", "combination", "sensitive"],
+    concerns: ["texture", "dryness", "barrier_support"],
+    suitableFor: ["occasional mild texture support", "hydrating toner step"],
+    notRecommendedFor: ["recently irritated or over-exfoliated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "OatCloud Aloe Mist Toner",
+    brand: "OatCloud",
+    category: "toner",
+    priceRange: "budget",
+    ingredientsText: "Water, Aloe Barbadensis Leaf Juice, Oat Extract, Trehalose, Glycerin",
+    keyActives: ["Aloe Barbadensis Leaf Juice", "Oat Extract", "Trehalose"],
+    tags: ["hydrating", "soothing-support", "fragrance-free"],
+    warnings: ["Patch test first if you are sensitive to aloe or oat-derived ingredients."],
+    skinTypes: ["dry", "normal", "combination", "sensitive"],
+    concerns: ["dryness", "redness", "barrier_support"],
+    suitableFor: ["optional hydration mist", "sensitive routine support"],
+    notRecommendedFor: ["known sensitivity to aloe or oat-derived ingredients"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "ClayKind Sulfur Clarifying Mask",
+    brand: "ClayKind",
+    category: "mask",
+    priceRange: "mid",
+    ingredientsText: "Water, Kaolin, Sulfur, Zinc PCA, Glycerin",
+    keyActives: ["Sulfur", "Zinc PCA", "Kaolin"],
+    tags: ["mask", "oiliness-support", "rinse-off", "strong-active"],
+    warnings: ["Sulfur and clay can feel drying; limit frequency and patch test first."],
+    skinTypes: ["oily", "combination"],
+    concerns: ["acne", "oiliness", "texture"],
+    suitableFor: ["occasional rinse-off mask for oily routines"],
+    notRecommendedFor: ["dry, sensitive, or recently irritated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "CalmSleep Barrier Sleeping Mask",
+    brand: "CalmSleep",
+    category: "mask",
+    priceRange: "premium",
+    ingredientsText: "Water, Glycerin, Squalane, Ceramide EOP, Panthenol, Beta-Glucan",
+    keyActives: ["Squalane", "Ceramide EOP", "Panthenol", "Beta-Glucan"],
+    tags: ["sleeping-mask", "barrier-support", "fragrance-free"],
+    warnings: ["Richer texture may feel heavy for very oily skin."],
+    skinTypes: ["dry", "normal", "sensitive"],
+    concerns: ["dryness", "redness", "barrier_support"],
+    suitableFor: ["post-active rest night", "dry-feeling evening routine"],
+    notRecommendedFor: ["very oily skin that dislikes rich textures"],
+    source: "manual",
+    verificationStatus: "verified",
+  },
+  {
+    name: "ClearLeaf Tea Tree Spot Gel",
+    brand: "ClearLeaf Lab",
+    category: "treatment",
+    priceRange: "budget",
+    ingredientsText: "Water, Tea Tree Oil, Zinc PCA, Panthenol, Glycerin",
+    keyActives: ["Tea Tree Oil", "Zinc PCA"],
+    tags: ["spot-care", "essential-oil", "oiliness-support"],
+    warnings: ["Tea Tree Oil can irritate sensitive skin; use sparingly and patch test first."],
+    skinTypes: ["oily", "combination"],
+    concerns: ["acne", "oiliness"],
+    suitableFor: ["limited spot-care use for users who tolerate essential oils"],
+    notRecommendedFor: ["sensitive skin", "redness-prone skin", "recently irritated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "MildTheory Lactic PHA Texture Lotion",
+    brand: "MildTheory",
+    category: "treatment",
+    priceRange: "mid",
+    ingredientsText: "Water, Lactic Acid, Gluconolactone, Glycerin, Panthenol",
+    keyActives: ["Lactic Acid", "Gluconolactone"],
+    tags: ["aha", "pha", "texture-support", "weekly-use"],
+    warnings: ["Avoid overuse and avoid same-routine retinoids or other exfoliants."],
+    skinTypes: ["dry", "normal", "combination"],
+    concerns: ["texture", "dryness", "dark_spots"],
+    suitableFor: ["occasional texture support", "experienced users using sunscreen consistently"],
+    notRecommendedFor: ["sensitive, over-exfoliated, or recently irritated skin"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
+  {
+    name: "RoutineBase Minimal Routine Set",
+    brand: "RoutineBase",
+    category: "other",
+    priceRange: "unknown",
+    ingredientsText: "Low pH cleanser, simple moisturizer, daily sunscreen planning card",
+    keyActives: ["Glycerin", "Panthenol", "Sunscreen"],
+    tags: ["minimal-routine", "beginner-routine", "education-support"],
+    warnings: ["Use the set as planning support; check each product label before use."],
+    skinTypes: ["unknown", "normal", "combination"],
+    concerns: ["unknown", "dryness", "barrier_support"],
+    suitableFor: ["beginner minimal routine planning", "demo account routine walkthrough"],
+    notRecommendedFor: ["users who need a personalized product review before choosing items"],
+    source: "manual",
+    verificationStatus: "reviewed",
+  },
 ] satisfies ProductSeed[];
 
 function requireMongoUriFromProcess() {
@@ -1309,17 +1937,6 @@ function requireMongoUriFromProcess() {
   if (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://")) {
     throw new Error("MONGODB_URI must start with mongodb:// or mongodb+srv://.");
   }
-}
-
-function validateSeedData() {
-  const seedData = {
-    ingredients: z.array(ingredientSeedSchema).parse(ingredientSeeds),
-    products: z.array(productSeedSchema).parse(productSeeds),
-  };
-
-  assertSeedQuality(seedData);
-
-  return seedData;
 }
 
 function summarizeWriteResult(result: BulkWriteResult): SeedWriteSummary {

@@ -19,9 +19,10 @@ MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, and v1.13 has improved first-time UX states without expanding product scope.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, and v1.14 expanded curated seed data without expanding product scope.
 
 Current status:
 
@@ -29,10 +30,9 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
 Evidence boundary:
@@ -61,7 +61,7 @@ Evidence boundary:
 | Skin Journal | DONE | Journal entry management. |
 | Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
-| Seed data | DONE | 40 ingredients and 38 products. |
+| Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, case study, demo script, checklists, runbooks. |
 
@@ -125,19 +125,22 @@ Local evidence:
 Evidence date: 2026-06-04
 Environment: Local Windows / PowerShell
 Branch: main
+npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
+npm run test: PASS - 97 files / 894 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-This v1.13 validation did not require database commands because no schema, seed data, index, or persistence behavior changed.
-The first sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
-Historical MVP v1.9 evidence still records db:indexes, db:seed, audit, and baseline local validation.
+v1.14 changed seed data only: 58 products and 59 ingredients.
+No schema, route, auth, authorization, Product Match scoring, or AI-provider behavior changed.
+Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
 Production evidence:
@@ -176,24 +179,21 @@ docs/post-mvp-backlog.md
 Completed post-MVP implementation:
 
 ```txt
-v1.13 - UX Polish & Empty State Improvement
+v1.14 - Data Quality Expansion
 ```
 
-Completed v1.13 scope:
+Completed v1.14 scope:
 
-- Loading states.
-- Empty states.
-- Error messages.
-- Helper text.
-- CTA consistency.
-- Mobile spacing.
-- Dashboard visual hierarchy.
-- First-time user guidance.
+- Product seed data expanded from 38 to 58 curated records.
+- Ingredient seed data expanded from 40 to 59 curated records.
+- Product Match coverage improved across common skin types and concerns.
+- Seed assertions now enforce v1.14 minimum counts, uniqueness, coverage, and strong-active cautions.
+- No schema, feature, route, auth, scoring, or AI-provider changes.
 
-Recommended next implementation:
+Recommended next task:
 
 ```txt
-v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
 Portfolio evidence tasks:

@@ -7,11 +7,12 @@ Last updated: 2026-06-05
 ```txt
 Stable MVP release: v1.11-final-mvp / v1.11-portfolio-demo-ready
 Post-MVP backlog planning: v1.12 - DONE
-Latest post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
+Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
+Latest completed milestone: v1.14 - Data Quality Expansion: DONE
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Next recommended product task: v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
@@ -64,7 +65,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 |---|---|---|---|
 | P1 | UX polish and empty states | DONE in v1.13 | Makes the existing MVP easier to use without risky architecture changes. |
 | P1 | Error/loading/helper copy | DONE in v1.13 | Improves confidence during demo and real use. |
-| P2 | Data quality expansion | Recommended next | Makes Product Match and Ingredient Library feel more realistic. |
+| P2 | Data quality expansion | DONE in v1.14 | Makes Product Match and Ingredient Library feel more realistic. |
 | P2 | Release/observability polish | Do after UX polish | Improves production confidence and debugging. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
@@ -178,10 +179,16 @@ git commit -m "feat: improve post-MVP UX states"
 
 Make the product catalogue and ingredient library feel more realistic and useful.
 
-### Candidate Tasks
+### Status
 
-- Add more curated skincare products.
-- Add more ingredients.
+```txt
+v1.14 - Data Quality Expansion: DONE
+```
+
+### Completed Tasks
+
+- Expanded curated skincare products from 38 to 58.
+- Expanded curated ingredients from 40 to 59.
 - Improve category coverage.
 - Add better skin concern tags.
 - Review ingredient benefit/risk explanations.
@@ -191,12 +198,12 @@ Make the product catalogue and ingredient library feel more realistic and useful
 ### Acceptance Criteria
 
 ```txt
-[ ] Seed script still runs successfully.
-[ ] Product catalogue loads correctly.
-[ ] Product detail pages still work.
-[ ] Product Match still works with expanded data.
-[ ] Ingredient library and ingredient detail still work.
-[ ] No unsafe medical claims are added.
+[x] Seed validation passes successfully.
+[x] Product catalogue loads correctly.
+[x] Product detail pages still work.
+[x] Product Match still works with expanded data.
+[x] Ingredient library and ingredient detail still work.
+[x] No unsafe medical claims are added.
 ```
 
 ### Suggested Version
@@ -362,17 +369,17 @@ These items either increase product risk, safety risk, or implementation complex
 
 ## 12. Recommended Next Task
 
-The next implementation task should be:
+The recommended next task is:
 
 ```txt
-v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
 Reason:
 
-- v1.13 UX polish is complete.
-- Product Match and Ingredient Library can feel more realistic with stronger curated data.
-- Data work must remain educational, demo-safe, and free of unsafe medical claims.
+- v1.14 data quality expansion is complete.
+- The app is portfolio/demo ready at MVP level.
+- Screenshots, demo video, and CV/portfolio case-study polish are practical next evidence tasks, not product blockers.
 
 ## 13. v1.13 Completion Checklist
 
@@ -395,4 +402,5 @@ Reason:
 2026-06-04: Recommended next development task was v1.13 UX Polish & Empty State Improvement.
 2026-06-04: Completed v1.13 UX Polish & Empty State Improvement with local lint/typecheck/test/build/E2E PASS.
 2026-06-05: Synchronized documentation status so v1.13 is latest completed and v1.14 Data Quality Expansion is the next recommended product task.
+2026-06-05: Completed v1.14 Data Quality Expansion with 58 products, 59 ingredients, seed quality assertions, and local validation PASS.
 ```

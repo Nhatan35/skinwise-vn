@@ -7,15 +7,14 @@ Last updated: 2026-06-05
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
 ## Feature Matrix
@@ -30,6 +29,7 @@ Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 | Product Catalogue | DONE | Seeded demo products. |
 | Product Detail | DONE | Product detail and personalized match section. |
 | Product Match | DONE | Rule-based educational matching. |
+| Product and ingredient seed data | DONE | v1.14 expanded coverage to 58 products and 59 ingredients. |
 | Saved Products | DONE | Save/unsave flow. |
 | Ingredient Library | DONE | Ingredient list/detail. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
@@ -41,7 +41,7 @@ Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 | Insights | DONE | Progress story and safe next actions. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker. |
 | Data Export | DONE | User-owned app data export. |
-| Local validation evidence | PASS | 96 files / 889 tests, build, E2E, audit PASS. |
+| Local validation evidence | PASS | 97 files / 894 tests, build, E2E, audit PASS. |
 | Production smoke evidence | PASS | User-reported production verification completed. |
 | Production monitoring evidence | PASS | User-reported checks completed. |
 | Portfolio demo docs | DONE | README, case study, demo script, checklists updated. |
@@ -64,7 +64,7 @@ Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
 Portfolio evidence tasks are optional and not product correctness blockers
 ```

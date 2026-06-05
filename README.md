@@ -18,11 +18,11 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.13 - UX Polish & Empty State Improvement**.
+- Latest completed milestone: **MVP v1.14 - Data Quality Expansion**.
 - Current phase: **Post-MVP controlled improvement**.
-- Next recommended product task: **MVP v1.14 - Data Quality Expansion**.
+- Recommended next task: **Portfolio Evidence Package**.
 - Portfolio evidence tasks: **screenshots, demo video, CV/portfolio case study**.
-- Local validation evidence: **PASS** for MVP v1.13 UX polish quality gate.
+- Local validation evidence: **PASS** for MVP v1.14 data quality gate.
 - Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
 - Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
@@ -52,6 +52,7 @@ MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -62,14 +63,16 @@ MVP v1.12 is a completed post-MVP backlog planning milestone.
 
 MVP v1.13 is a post-MVP UX polish milestone. It improves loading, empty, error, helper, CTA, and first-time guidance states without changing database behavior, authentication, authorization, Product Match rules, Routine Safety rules, or AI provider behavior.
 
-The current phase is post-MVP controlled improvement. The next recommended product task is MVP v1.14 - Data Quality Expansion, focused on product and ingredient data quality without expanding product scope.
+MVP v1.14 is a post-MVP data quality milestone. It expands curated product and ingredient seed data, strengthens seed quality assertions, and improves Product Match demo coverage without changing schema, routes, authentication, authorization, or scoring logic.
+
+The current phase remains post-MVP controlled improvement. The recommended next task is Portfolio Evidence Package for screenshots, demo video, and CV/portfolio case study polish.
 
 ## Key Features
 
 - Google OAuth authentication with protected app routes.
 - Skin profile onboarding, viewing, editing, and deletion.
 - Product catalogue with product detail pages and personalized match explanation on Product Detail.
-- Curated demo-safe catalogue with 38 fictional/demo-safe products and 40 educational ingredient records.
+- Curated demo-safe catalogue with 58 fictional/demo-safe products and 59 educational ingredient records.
 - Saved products.
 - Personalized Product Match: rule-based educational product matching with score, level, Vietnamese explanations, ingredient highlights, cautions, fallback notes, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
@@ -154,30 +157,33 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
-Evidence date: 2026-06-04
+Evidence date: 2026-06-05
 Environment: Local Windows / PowerShell
 Branch: main
+npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 96 files / 889 tests
+npm run test: PASS - 97 files / 894 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation note:
 
 ```txt
-v1.13 did not require database commands because no schema, seed data, indexes, or persistence behavior changed.
-The first sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
-Historical v1.9 evidence still records db:indexes, db:seed, audit, and baseline local validation.
+v1.14 changed seed data only: 58 products and 59 ingredients.
+No schema, route, auth, authorization, Product Match scoring, or AI-provider behavior changed.
+Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
 Production evidence:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASS - user-reported manual verification completed
-Production monitoring: PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed
+Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
+Production smoke and monitoring were not rerun specifically for v1.14 because v1.14 was a local data-quality seed update.
 Critical production blockers reported: None
 Evidence date: 2026-06-04
 Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
@@ -294,7 +300,7 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots are optional; capture them only if needed for CV, portfolio page, or slide deck.
-- `npm ci` was not captured in the provided local terminal evidence and can be rerun if strict install evidence is required.
+- `npm ci` passed in the v1.14 validation evidence.
 
 ## Final Portfolio Decision
 
@@ -302,13 +308,13 @@ These are intentional MVP boundaries, not release blockers:
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.13 - UX Polish & Empty State Improvement` is complete. The recommended next controlled implementation is `v1.14 - Data Quality Expansion`.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.14 - Data Quality Expansion` is complete. The recommended next task is Portfolio Evidence Package; it is evidence/presentation work, not a product correctness blocker.
