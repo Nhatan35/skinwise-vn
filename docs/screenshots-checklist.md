@@ -17,7 +17,7 @@ MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.13 UX Polish & Empty State Improvement: DONE
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
 ```
 
 ## Recommended Screenshot List

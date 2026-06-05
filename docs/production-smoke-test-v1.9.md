@@ -16,7 +16,7 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke test and monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
 ```
 

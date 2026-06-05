@@ -16,10 +16,9 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Recommended next task: Portfolio Evidence Package
 Critical blockers reported: None
 ```
 
@@ -47,8 +46,8 @@ Before the demo:
 Public/shared data is seeded through `scripts/seed.ts`:
 
 ```txt
-Products: 38
-Ingredients: 40
+Products: 58
+Ingredients: 59
 ```
 
 User-owned demo data should be created through the authenticated UI:
@@ -235,9 +234,9 @@ If demo data is missing:
 | Why did you build this? | To practice building a scoped full-stack MVP with BA-level requirements discipline and safe product boundaries. |
 | Why rule-based match instead of full AI? | Rule-based matching is safer, more explainable, easier to test, and better for MVP validation. |
 | How did you control scope? | I excluded diagnosis, image analysis, marketplace, payments, admin CRUD, and unsupported AI claims. |
-| How did you validate it? | Local lint, typecheck, 889 unit tests, production build, database seed/index scripts, 29 E2E tests, audit, production smoke check, and release docs. |
+| How did you validate it? | Local lint, typecheck, 894 unit tests, production build, E2E seed/data flow, 29 E2E tests, audit, production smoke check, and release docs. |
 | What is the strongest BA part? | Problem framing, scope control, safety requirements, user journey traceability, and release evidence. |
-| What would you improve next? | The next recommended product task is v1.14 Data Quality Expansion. Screenshots, a demo video, and CV/portfolio case study polish are portfolio evidence tasks, not product blockers. |
+| What would you improve next? | Portfolio Evidence Package: screenshots, demo video, and CV/portfolio case study polish. These are evidence tasks, not product blockers. |
 
 ## 9. Final Demo Checklist
 

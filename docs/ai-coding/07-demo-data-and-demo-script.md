@@ -9,9 +9,9 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
 Production URL: https://skinwise-vn.vercel.app
 ```
 
@@ -33,8 +33,8 @@ The existing public seed script supports Product Catalogue, Product Match, Ingre
 Expected seeded data:
 
 ```txt
-Ingredients: 40
-Products: 38
+Products: 58
+Ingredients: 59
 ```
 
 Safe seed command for local/demo database only:

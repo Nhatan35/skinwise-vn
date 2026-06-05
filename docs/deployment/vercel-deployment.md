@@ -13,9 +13,9 @@ Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
-Next recommended product task: MVP v1.14 - Data Quality Expansion
+Recommended next task: Portfolio Evidence Package
 ```
 
 This document explains the expected Vercel setup and how to verify/recover production behavior.
@@ -97,6 +97,7 @@ If production fails:
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 Deployment readiness: READY at MVP level
 Current phase: Post-MVP controlled improvement
 ```

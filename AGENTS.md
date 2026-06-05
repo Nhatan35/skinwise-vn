@@ -50,6 +50,7 @@ MVP v1.10 - Production Smoke Test & Monitoring Evidence: PASS, user-reported
 MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
+MVP v1.14 - Data Quality Expansion: DONE
 ```
 
 Known implementation status:
@@ -70,8 +71,9 @@ Production smoke evidence: PASS, user-reported
 Production monitoring evidence: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.13 - UX Polish & Empty State Improvement
+Latest completed milestone: MVP v1.14 - Data Quality Expansion
 Current phase: Post-MVP controlled improvement
+Recommended next task: Portfolio Evidence Package
 ```
 
 Evidence boundary:
@@ -80,10 +82,10 @@ Evidence boundary:
 - Production PASS is based on the user's reported manual verification with no blockers reported.
 - Portfolio evidence tasks such as screenshots, demo video, CV/portfolio case study, Vercel deployment ids, browser logs, and sanitized production log snippets should be stored separately if strict traceability is required.
 
-Recommended next product task:
+Recommended next task:
 
 ```txt
-MVP v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
 Portfolio evidence tasks:
@@ -701,9 +703,10 @@ README should accurately state:
 - MVP v1.8.2 is the completed documentation consistency hotfix.
 - MVP v1.11 portfolio demo readiness is complete.
 - MVP v1.12 post-MVP backlog planning is complete.
-- MVP v1.13 is the latest completed milestone.
+- MVP v1.13 UX polish and empty state improvement is complete.
+- MVP v1.14 Data Quality Expansion is the latest completed milestone.
 - Current phase is post-MVP controlled improvement.
-- MVP v1.14 Data Quality Expansion is the next recommended product task.
+- Portfolio Evidence Package is the recommended next task.
 - Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study are optional evidence tasks, not product correctness blockers.
 - Production smoke test and monitoring/demo recovery evidence must be described according to the latest verified evidence.
 - Real production AI provider integration is not verified unless actually verified.
@@ -1113,10 +1116,10 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.13 - UX Polish & Empty State Improvement`, the recommended next product task is:
+After `MVP v1.14 - Data Quality Expansion`, the recommended next task is:
 
 ```txt
-MVP v1.14 - Data Quality Expansion
+Portfolio Evidence Package
 ```
 
 Reason:
@@ -1127,7 +1130,8 @@ Reason:
 - MVP v1.11 portfolio demo readiness documentation is DONE.
 - MVP v1.12 post-MVP backlog planning is DONE.
 - MVP v1.13 UX polish and empty state improvement is DONE.
-- Further product work should remain controlled and data-focused unless the user explicitly starts another scoped post-MVP enhancement.
+- MVP v1.14 data quality expansion is DONE.
+- Further product work should not start unless the user explicitly starts another scoped post-MVP enhancement.
 
 Portfolio evidence tasks remain optional:
 
@@ -1172,9 +1176,10 @@ Use this style in docs and final reports:
 MVP v1.8 - Insights Usability & Progress Story Refinement is the completed product release.
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
 MVP v1.8.2 - Final Documentation Consistency Hotfix is the completed documentation consistency hotfix.
-MVP v1.13 - UX Polish & Empty State Improvement is the latest completed milestone.
+MVP v1.13 - UX Polish & Empty State Improvement is complete.
+MVP v1.14 - Data Quality Expansion is the latest completed milestone.
 Current phase: Post-MVP controlled improvement.
-Next recommended product task: MVP v1.14 - Data Quality Expansion.
+Recommended next task: Portfolio Evidence Package.
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.
 SkinWise VN is ready for portfolio/demo/interview use at MVP level.
 AI provider abstraction is implemented, with a mock provider available for local/demo use.
