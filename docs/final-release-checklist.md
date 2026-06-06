@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## 1. Release Summary
 
@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.14 - Data Quality Expansion
+MVP v1.15 - Product Match Explainability & Safety Guardrails
 ```
 
 Completed closeout milestones:
@@ -27,6 +27,7 @@ MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -39,8 +40,8 @@ Recommended next task: Portfolio Evidence Package.
 | Area | Status | Notes |
 |---|---|---|
 | Core MVP | PASS | MVP core scope is complete and ready for portfolio/demo/interview use as an MVP. |
-| Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs and Product Detail personalized match section. |
-| Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, and safety-bounded. |
+| Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs, Product Detail personalized match section, and v1.15 decision-support wording. |
+| Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, and improved with v1.15 explainability/caution guardrails. |
 | Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded metadata. |
 | Routine Builder | PASS | Empty state, morning/evening guidance, selected-product context, and Today Checklist CTA are implemented. |
 | Routine Safety Analysis | PASS | Deterministic rules and safe fallback behavior are implemented. |
@@ -48,16 +49,16 @@ Recommended next task: Portfolio Evidence Package.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, and next actions are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, and account deletion request marker are implemented. |
-| Local validation | PASS | MVP v1.14 local validation evidence: npm ci PASS, lint PASS, typecheck PASS, 97 test files / 894 tests PASS, build PASS, 29/29 E2E tests PASS, production audit PASS with 0 vulnerabilities. |
-| Production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it was not rerun specifically for v1.14. |
-| Production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they were not rerun specifically for v1.14. |
+| Local validation | PASS | MVP v1.15 local validation evidence: npm ci PASS, lint PASS, typecheck PASS, 97 test files / 899 tests PASS, build PASS, 29/29 E2E tests PASS, production audit PASS with 0 vulnerabilities. |
+| Production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it was not rerun specifically for v1.15. |
+| Production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they were not rerun specifically for v1.15. |
 | Portfolio case study | PASS | `docs/portfolio-case-study.md` is updated for portfolio/demo readiness and current post-MVP status. |
 | Demo script | PASS | `docs/demo-script.md` contains a 3-5 minute demo flow and backup plan. |
 | Screenshot checklist | PASS | `docs/screenshots-checklist.md` contains optional portfolio evidence guidance. |
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.14 data quality expansion is complete. |
+| Latest post-MVP implementation | PASS | MVP v1.15 Product Match explainability and safety guardrails are complete. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
 ## 3. Validation Evidence
@@ -65,14 +66,14 @@ Recommended next task: Portfolio Evidence Package.
 Local validation evidence:
 
 ```txt
-Evidence date: 2026-06-05
+Evidence date: 2026-06-06
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 894 tests
+npm run test: PASS - 97 files / 899 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -83,7 +84,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.14 because v1.14 was a local data-quality seed update.
+Production smoke and monitoring were not rerun specifically for v1.15 because v1.15 was validated locally as a controlled Product Match/Product Detail explainability update.
 Critical production blockers reported: None
 Evidence date: 2026-06-04
 Evidence strength: user-reported production verification; no screenshot/log snippets included in repository
@@ -92,7 +93,7 @@ Evidence strength: user-reported production verification; no screenshot/log snip
 Evidence boundary:
 
 - Local validation is supported by terminal output.
-- Production PASS is based on the previously user-reported stable MVP baseline and was not rerun specifically for v1.14.
+- Production PASS is based on the previously user-reported stable MVP baseline and was not rerun specifically for v1.15.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - Do not commit or document real secrets.
 
@@ -125,15 +126,15 @@ Evidence boundary:
 
 | Document | Status | Notes |
 |---|---|---|
-| `README.md` | PASS | Current v1.14 status, next evidence task, and evidence boundaries are documented. |
+| `README.md` | PASS | Current v1.15 status, next evidence task, and evidence boundaries are documented. |
 | `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
-| `docs/final-release-checklist.md` | PASS | Final release status reflects local PASS, production PASS, portfolio readiness, backlog planning, and v1.14 completion. |
+| `docs/final-release-checklist.md` | PASS | Final release status reflects local PASS, production PASS, portfolio readiness, backlog planning, and v1.15 completion. |
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes current PASS summary and recovery plan. |
 | `docs/ai-coding/02-implementation-status.md` | PASS | Current phase and recommended next task are synchronized. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase is post-MVP controlled improvement after v1.14 completion. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase is post-MVP controlled improvement after v1.15 completion. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
 | `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |
 
@@ -158,7 +159,7 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots are optional unless needed for portfolio/slides.
-- `npm ci` passed in the v1.14 validation evidence.
+- `npm ci` passed in the v1.15 validation evidence.
 
 ## 8. Final Decision
 
@@ -167,6 +168,7 @@ MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package

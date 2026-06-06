@@ -19,6 +19,7 @@ export function toProductMatchDto(input: {
     cautions: [...input.scoring.cautions],
     matchedSignals: {
       skinType: input.scoring.matchedSignals.skinType,
+      skinTypes: [...input.scoring.matchedSignals.skinTypes],
       concerns: [...input.scoring.matchedSignals.concerns],
       budget: input.scoring.matchedSignals.budget,
       sensitivity: input.scoring.matchedSignals.sensitivity,

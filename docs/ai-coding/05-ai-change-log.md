@@ -6,6 +6,48 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-06 - MVP v1.15 Product Match Explainability & Safety Guardrails
+
+### Task
+
+Improve Product Match and Product Detail explainability, caution wording, and missing/unknown-profile guidance without adding clinical advice behavior, changing database schema, or redesigning the recommendation engine.
+
+### Files Updated
+
+- `src/modules/product-match/*`
+- `src/modules/products/product-safety-signals.ts`
+- `src/modules/products/product-detail-decision-support.ts`
+- `src/modules/products/components/product-detail.tsx`
+- Product Match and Product Detail unit tests.
+- Release/status documentation.
+
+### Outcome
+
+- Product Match explanations now name matched skin type and selected concern signals more clearly.
+- Product Match cards show clearer matched-factor labels.
+- Product Match caution notes now cover exfoliating acids, multiple exfoliating acids, retinoid/BPO-style strong actives, fragrance/essential oils, sensitive skin, and dry/barrier-prone caution signals.
+- Product Detail decision support now uses clearer fit, caution, routine usage, and data-quality/uncertainty wording.
+- No-profile and unknown-profile states now guide users to complete or update their skin profile.
+- Portfolio Evidence Package remains the recommended next presentation/evidence task, not a product correctness blocker.
+
+### Validation
+
+```txt
+npm ci: PASS after sandbox EPERM rerun outside sandbox
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 97 files / 899 tests
+npm run build: PASS after sandbox EPERM rerun outside sandbox
+npm run test:e2e: PASS after sandbox EPERM rerun outside sandbox - 29/29 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Next Recommended Task
+
+```txt
+Portfolio Evidence Package
+```
+
 ## 2026-06-05 - MVP v1.14 Data Quality Expansion
 
 ### Task

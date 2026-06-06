@@ -5,7 +5,10 @@ import type {
   ProductMatchIngredientHighlight,
   ProductMatchUnavailableReason,
 } from "@/modules/product-match/product-match.dto";
-import type { SkinConcern } from "@/modules/skin-profile/skin-profile.types";
+import type {
+  SkinConcern,
+  SkinType,
+} from "@/modules/skin-profile/skin-profile.types";
 
 export const PRODUCT_MATCH_FALLBACK_REASON =
   "SkinWise chưa có đủ tín hiệu rõ ràng để giải thích chi tiết. Bạn có thể xem thành phần và cập nhật hồ sơ da để nhận gợi ý chính xác hơn.";
@@ -15,14 +18,23 @@ export const PRODUCT_MATCH_FALLBACK_CAUTION =
 
 const MAX_VISIBLE_REASONS = 3;
 const MAX_VISIBLE_CAUTIONS = 2;
-const MAX_EXPLANATION_REASONS = 4;
+const MAX_EXPLANATION_REASONS = 5;
 const MAX_INGREDIENT_HIGHLIGHTS = 6;
 const LIMITED_DATA_NOTE =
   "Giải thích còn giới hạn vì dữ liệu thành phần hoặc metadata sản phẩm chưa đầy đủ.";
 const INGREDIENTS_MISSING_NOTE =
   "Chưa đủ dữ liệu thành phần để giải thích chi tiết mức độ phù hợp của sản phẩm này.";
 const DEFAULT_USAGE_NOTE =
-  "Hãy patch test trước và đưa sản phẩm vào routine từ từ, đặc biệt nếu da bạn nhạy cảm, đang kích ứng hoặc đang phản ứng.";
+  "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục, không phải lời khuyên y tế. Hãy patch test trước và đưa sản phẩm vào routine từ từ, đặc biệt nếu da bạn nhạy cảm hoặc đang kích ứng.";
+
+const skinTypeLabels: Record<SkinType, string> = {
+  oily: "da dầu",
+  dry: "da khô",
+  combination: "da hỗn hợp",
+  normal: "da thường",
+  sensitive: "da nhạy cảm",
+  unknown: "loại da chưa rõ",
+};
 
 const concernLabels: Record<SkinConcern, string> = {
   acne: "mụn",
@@ -117,10 +129,17 @@ function buildPositiveReasons(input: ProductMatchDto) {
   const ingredientNames = parseIngredientNames(input);
 
   if (matchedSignals.skinType) {
+    const matchedSkinTypes = matchedSignals.skinTypes ?? [];
+    const matchedSkinTypeText = matchedSkinTypes
+      .map((skinType) => skinTypeLabels[skinType])
+      .join(", ");
+
     reasons.push(
       toReason(
         "skin_type_match",
-        "Loại da trong hồ sơ của bạn có tín hiệu khớp với metadata sản phẩm.",
+        matchedSkinTypeText
+          ? `Sản phẩm này có thể phù hợp với loại da bạn đã chọn: ${matchedSkinTypeText}.`
+          : "Loại da trong hồ sơ của bạn có tín hiệu khớp với metadata sản phẩm.",
       ),
     );
   }
@@ -129,13 +148,25 @@ function buildPositiveReasons(input: ProductMatchDto) {
     reasons.push(
       toReason(
         "skin_concern_support",
-        `Sản phẩm có metadata liên quan đến ${matchedSignals.concerns
+        `Sản phẩm này liên quan đến các mối quan tâm bạn đã chọn, như ${matchedSignals.concerns
           .map((concern) => concernLabels[concern])
-          .join(", ")} trong hồ sơ của bạn.`,
+          .join(", ")}.`,
         {
           relatedConcerns: matchedSignals.concerns,
           relatedIngredients: ingredientNames.slice(0, 3),
         },
+      ),
+    );
+  }
+
+  if (ingredientNames.length > 0) {
+    reasons.push(
+      toReason(
+        "ingredient_or_attribute_fit",
+        `Dữ liệu sản phẩm ghi nhận thành phần hoặc thuộc tính liên quan như ${ingredientNames
+          .slice(0, 3)
+          .join(", ")} để hỗ trợ phần giải thích phù hợp.`,
+        { relatedIngredients: ingredientNames.slice(0, 3) },
       ),
     );
   }
@@ -243,7 +274,7 @@ function buildIngredientHighlights(
       ingredientName,
       effect: hasPersonalSignal ? "positive" : "neutral",
       reason: hasPersonalSignal
-        ? "Dữ liệu sản phẩm liệt kê thành phần này trong bảng thành phần hoặc hoạt chất nổi bật; SkinWise dùng metadata hiện có để hỗ trợ giải thích matching."
+        ? "Dữ liệu sản phẩm liệt kê thành phần này trong bảng thành phần hoặc hoạt chất nổi bật; SkinWise dùng metadata hiện có để giải thích vì sao sản phẩm có thể liên quan đến hồ sơ da của bạn."
         : "Thành phần này được liệt kê trong dữ liệu sản phẩm, nhưng chưa có tín hiệu cá nhân hóa rõ ràng.",
     });
   }
@@ -296,14 +327,14 @@ export function buildUnavailableProductMatchExplanation(
   if (reason === "NO_SKIN_PROFILE") {
     return {
       summary:
-        "Hoàn thành hồ sơ da để xem giải thích mức độ phù hợp được cá nhân hóa.",
+        "SkinWise cần thêm thông tin hồ sơ da để gợi ý sản phẩm phù hợp hơn.",
       positiveReasons: [],
       cautionReasons: [],
       ingredientHighlights: [],
       usageNote:
-        "Hãy hoàn thành hồ sơ da trước khi sử dụng đánh giá phù hợp được cá nhân hóa.",
+        "Hãy hoàn thiện hồ sơ da, cập nhật mối quan tâm về da và kiểm tra lại loại da trước khi dùng Product Match.",
       dataQualityNotes: [
-        "Chưa thể cá nhân hóa vì người dùng chưa có hồ sơ da hoàn chỉnh.",
+        "Chưa thể cá nhân hóa vì hồ sơ da chưa đủ thông tin để tạo giải thích ổn định.",
       ],
     };
   }

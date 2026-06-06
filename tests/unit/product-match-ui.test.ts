@@ -85,7 +85,11 @@ describe("Product Match UI source", () => {
     expect(productMatchEmptyStateSource).toContain(
       "href={routes.ONBOARDING_SKIN_PROFILE}",
     );
-    expect(productMatchEmptyStateSource).toContain("Hãy tạo hồ sơ da trước");
+    expect(productMatchEmptyStateSource).toContain(
+      "SkinWise cần thêm thông tin hồ sơ da",
+    );
+    expect(productMatchEmptyStateSource).toContain("Hoàn thiện hồ sơ da");
+    expect(productMatchSummarySource).toContain("Cập nhật hồ sơ da");
   });
 
   it("renders match cards with score, level, explanation, save, and detail actions", () => {
@@ -108,6 +112,8 @@ describe("Product Match UI source", () => {
       "ingredientHighlights",
       "usageNote",
       "matchedSignals",
+      "Loại da khớp",
+      "Mối quan tâm khớp",
       "SavedProductToggleButton",
       "initialSaved={item.isSaved}",
       "productId={product.id}",
@@ -132,6 +138,8 @@ describe("Product Match UI source", () => {
       "matchLevel",
       "matchedSignals",
       "dataQualityNotes",
+      "Sản phẩm này có thể phù hợp với loại da bạn đã chọn",
+      "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục",
     ]) {
       expect(productMatchExplanationSource).toContain(expectedSource);
     }

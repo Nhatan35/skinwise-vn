@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -16,10 +16,11 @@ MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
@@ -47,4 +48,5 @@ Evidence boundary:
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
+- v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

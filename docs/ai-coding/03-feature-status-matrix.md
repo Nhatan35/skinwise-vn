@@ -1,13 +1,13 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
@@ -27,8 +27,8 @@ Recommended next task: Portfolio Evidence Package
 | Skin Profile onboarding | DONE | Create/update/view profile. |
 | Skin Profile management | DONE | View/edit/delete supported. |
 | Product Catalogue | DONE | Seeded demo products. |
-| Product Detail | DONE | Product detail and personalized match section. |
-| Product Match | DONE | Rule-based educational matching. |
+| Product Detail | DONE | Product detail, personalized match section, and v1.15 decision-support safety wording. |
+| Product Match | DONE | Rule-based educational matching with v1.15 explainability and caution guardrails. |
 | Product and ingredient seed data | DONE | v1.14 expanded coverage to 58 products and 59 ingredients. |
 | Saved Products | DONE | Save/unsave flow. |
 | Ingredient Library | DONE | Ingredient list/detail. |
@@ -41,7 +41,7 @@ Recommended next task: Portfolio Evidence Package
 | Insights | DONE | Progress story and safe next actions. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker. |
 | Data Export | DONE | User-owned app data export. |
-| Local validation evidence | PASS | 97 files / 894 tests, build, E2E, audit PASS. |
+| Local validation evidence | PASS | 97 files / 899 tests, build, E2E, audit PASS. |
 | Production smoke evidence | PASS | User-reported production verification completed. |
 | Production monitoring evidence | PASS | User-reported checks completed. |
 | Portfolio demo docs | DONE | README, case study, demo script, checklists updated. |
@@ -64,7 +64,7 @@ Recommended next task: Portfolio Evidence Package
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Recommended next task: Portfolio Evidence Package
 Portfolio evidence tasks are optional and not product correctness blockers
 ```

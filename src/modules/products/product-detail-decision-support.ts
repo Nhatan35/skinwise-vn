@@ -1,4 +1,5 @@
 import type { ProductDto } from "@/modules/products/product.dto";
+import { detectProductSafetySignals } from "@/modules/products/product-safety-signals";
 import type {
   ProductCategory,
   ProductConcern,
@@ -17,10 +18,10 @@ export type ProductDetailDecisionSupport = {
 
 const MAX_SUITABLE_FOR = 6;
 const MAX_INGREDIENT_HIGHLIGHTS = 8;
-const MAX_CAUTIONS = 4;
+const MAX_CAUTIONS = 6;
 const MAX_ROUTINE_USAGE_TIPS = 3;
 const MEDICAL_DISCLAIMER =
-  "Thông tin này chỉ mang tính tham khảo, không thay thế tư vấn y tế.";
+  "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục, không phải lời khuyên y tế hoặc chẩn đoán.";
 const INGREDIENTS_MISSING_NOTE =
   "Dữ liệu thành phần chưa đầy đủ. Bạn nên kiểm tra bảng thành phần trên bao bì hoặc website chính thức của sản phẩm.";
 const FIT_DATA_MISSING_NOTE =
@@ -102,7 +103,7 @@ function buildOverview(product: ProductDto) {
     .join(" và ");
 
   if (concernLabelsText) {
-    return `Đây là sản phẩm thuộc nhóm ${category}${brandText}, có thể hỗ trợ routine chăm sóc da liên quan đến ${concernLabelsText} dựa trên dữ liệu sản phẩm hiện có.`;
+    return `Đây là sản phẩm thuộc nhóm ${category}${brandText}, có thể hỗ trợ bạn cân nhắc routine liên quan đến ${concernLabelsText} dựa trên dữ liệu sản phẩm hiện có.`;
   }
 
   return `Đây là sản phẩm thuộc nhóm ${category}${brandText}, có thể được cân nhắc trong routine dựa trên dữ liệu sản phẩm hiện có.`;
@@ -113,10 +114,16 @@ function buildSuitableFor(product: ProductDto) {
     [
       ...product.skinTypes
         .filter((skinType) => skinType !== "unknown")
-        .map((skinType) => `Có thể phù hợp với ${skinTypeLabels[skinType]}`),
+        .map(
+          (skinType) =>
+            `Có thể phù hợp nếu hồ sơ da của bạn là ${skinTypeLabels[skinType]}`,
+        ),
       ...product.concerns
         .filter((concern) => concern !== "unknown")
-        .map((concern) => `Có thể hỗ trợ mối quan tâm: ${concernLabels[concern]}`),
+        .map(
+          (concern) =>
+            `Có thể hữu ích khi bạn muốn hỗ trợ mối quan tâm: ${concernLabels[concern]}`,
+        ),
       ...product.suitableFor,
       product.priceRange === "unknown"
         ? ""
@@ -153,6 +160,7 @@ function hasIngredientsText(product: ProductDto) {
 }
 
 function buildCautions(product: ProductDto) {
+  const safetySignals = detectProductSafetySignals(product);
   const cautions = [
     ...product.warnings,
     ...product.notRecommendedFor.map(
@@ -163,6 +171,39 @@ function buildCautions(product: ProductDto) {
   if (product.category === "treatment") {
     cautions.push(
       "Nếu đây là sản phẩm treatment, nên bắt đầu với tần suất thấp và theo dõi phản ứng da.",
+    );
+  }
+
+  if (safetySignals.hasExfoliatingAcidSignal) {
+    cautions.push(
+      "Có chứa thành phần tẩy da chết; nên bắt đầu chậm nếu da bạn nhạy cảm hoặc chưa quen hoạt chất.",
+    );
+  }
+
+  if (safetySignals.hasMultipleExfoliatingAcidSignals) {
+    cautions.push(
+      "Không nên kết hợp nhiều hoạt chất tẩy da chết trong cùng routine nếu bạn chưa biết da mình dung nạp tốt hay không.",
+    );
+  }
+
+  if (
+    safetySignals.hasRetinoidSignal ||
+    safetySignals.hasBenzoylPeroxideSignal
+  ) {
+    cautions.push(
+      "Có hoạt chất mạnh; nên tránh dùng cùng nhiều active mạnh khác trong một routine khi chưa chắc da dung nạp tốt.",
+    );
+  }
+
+  if (safetySignals.hasFragranceOrEssentialOilSignal) {
+    cautions.push(
+      "Có hương liệu hoặc tinh dầu; nên patch test nếu da bạn nhạy cảm, dễ đỏ hoặc đang kích ứng.",
+    );
+  }
+
+  if (safetySignals.hasDryingActiveSignal) {
+    cautions.push(
+      "Có thể không lý tưởng nếu da đang khô căng hoặc hàng rào da đang yếu.",
     );
   }
 
@@ -224,6 +265,10 @@ function buildRoutineUsageTips(product: ProductDto) {
 
 function buildDataQualityNotes(product: ProductDto) {
   const notes: string[] = [];
+
+  notes.push(
+    "Các gợi ý này dựa trên metadata sản phẩm hiện có; hãy đối chiếu nhãn sản phẩm thực tế nếu bạn không chắc chắn.",
+  );
 
   if (!hasIngredientsText(product)) {
     notes.push(INGREDIENTS_MISSING_NOTE);

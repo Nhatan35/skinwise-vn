@@ -39,6 +39,7 @@ export type ProductMatchDto = {
   cautions: string[];
   matchedSignals: {
     skinType: boolean;
+    skinTypes?: SkinType[];
     concerns: SkinConcern[];
     budget: boolean;
     sensitivity: boolean;

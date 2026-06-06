@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## 1. Current Phase
 
@@ -20,9 +20,10 @@ MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, and v1.14 expanded curated seed data without expanding product scope.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, and v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope.
 
 Current status:
 
@@ -30,7 +31,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
@@ -51,7 +52,7 @@ Evidence boundary:
 | Skin Profile | DONE | Onboarding/view/edit/delete flows. |
 | Product Catalogue | DONE | Product list and detail flows. |
 | Product Match | DONE | Rule-based educational matching. |
-| Product Detail personalized match | DONE | Single-product match explanation. |
+| Product Detail personalized match | DONE | Single-product match explanation with v1.15 decision-support and caution wording polish. |
 | Saved Products | DONE | Save/unsave user-owned products. |
 | Ingredient Library | DONE | Ingredient list/detail/explanation. |
 | Routine Builder | DONE | Morning/evening routine management. |
@@ -122,13 +123,13 @@ API routes:
 Local evidence:
 
 ```txt
-Evidence date: 2026-06-04
+Evidence date: 2026-06-06
 Environment: Local Windows / PowerShell
 Branch: main
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 894 tests
+npm run test: PASS - 97 files / 899 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -137,8 +138,8 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation notes:
 
 ```txt
-v1.14 changed seed data only: 58 products and 59 ingredients.
-No schema, route, auth, authorization, Product Match scoring, or AI-provider behavior changed.
+v1.15 changed Product Match/Product Detail explainability and safety guidance only.
+No database schema, route, auth, authorization, persistence, or AI-provider behavior changed.
 Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
@@ -180,6 +181,7 @@ Completed post-MVP implementation:
 
 ```txt
 v1.14 - Data Quality Expansion
+v1.15 - Product Match Explainability & Safety Guardrails
 ```
 
 Completed v1.14 scope:
@@ -189,6 +191,14 @@ Completed v1.14 scope:
 - Product Match coverage improved across common skin types and concerns.
 - Seed assertions now enforce v1.14 minimum counts, uniqueness, coverage, and strong-active cautions.
 - No schema, feature, route, auth, scoring, or AI-provider changes.
+
+Completed v1.15 scope:
+
+- Product Match explanations now name matched skin type and selected concern signals more clearly.
+- Product Match caution notes now cover exfoliating acids, retinoid/BPO-style strong actives, fragrance/essential oils, sensitive-skin caution, and dry/barrier-prone caution signals.
+- Product Detail decision support now uses clearer good-fit, caution, routine-usage, and uncertainty wording.
+- No-profile and unknown-profile states now guide users to complete or update their skin profile.
+- No schema, route, auth, persistence, or AI-provider changes.
 
 Recommended next task:
 

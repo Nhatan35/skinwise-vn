@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## 1. Current Stable Baseline
 
@@ -8,7 +8,8 @@ Last updated: 2026-06-05
 Stable MVP release: v1.11-final-mvp / v1.11-portfolio-demo-ready
 Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
-Latest completed milestone: v1.14 - Data Quality Expansion: DONE
+Data quality implementation: v1.14 - Data Quality Expansion: DONE
+Latest completed milestone: v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
@@ -66,7 +67,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P1 | UX polish and empty states | DONE in v1.13 | Makes the existing MVP easier to use without risky architecture changes. |
 | P1 | Error/loading/helper copy | DONE in v1.13 | Improves confidence during demo and real use. |
 | P2 | Data quality expansion | DONE in v1.14 | Makes Product Match and Ingredient Library feel more realistic. |
-| P2 | Release/observability polish | Do after UX polish | Improves production confidence and debugging. |
+| P2 | Product Match explainability and safety guardrails | DONE in v1.15 | Makes matching and Product Detail decisions clearer without medical overclaiming. |
+| P2 | Release/observability polish | Future post-v1.15 option | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Optional evidence task | Useful for presentation, but not required for product correctness. |
@@ -246,7 +248,40 @@ Improve confidence in production behavior and release handover.
 ### Suggested Version
 
 ```txt
-v1.15 - Release Evidence & Observability Polish
+v1.16 - Release Evidence & Observability Polish
+```
+
+## 7A. P2 - Product Match Explainability & Safety Guardrails
+
+### Goal
+
+Improve Product Match and Product Detail decision support without changing the database schema or adding clinical advice behavior.
+
+### Status
+
+```txt
+v1.15 - Product Match Explainability & Safety Guardrails: DONE
+```
+
+### Completed Tasks
+
+- Improved Product Match explanations for matched skin type, selected concerns, ingredient/attribute signals, routine usage, and uncertainty notes.
+- Improved caution notes for exfoliating acids, retinoids, benzoyl peroxide, fragrance/essential oils, dry/barrier-prone mismatch, and high-sensitivity profiles.
+- Improved Product Detail decision-support wording for good-fit signals, caution notes, routine placement, and data-quality uncertainty.
+- Improved no-profile and unknown-profile guidance without changing SkinProfile schema.
+- Added focused unit coverage and reran full lint/typecheck/test/build/E2E/audit validation.
+
+### Acceptance Criteria
+
+```txt
+[x] Product Match explains why products may fit the saved profile.
+[x] Matched skin type and selected concern signals are visible.
+[x] Strong active and sensitive-skin caution notes are generated.
+[x] Product Detail includes clearer fit, caution, routine usage, and uncertainty guidance.
+[x] Missing or incomplete profile states guide the user clearly.
+[x] Wording remains educational and non-medical.
+[x] No schema, route, auth, persistence, or AI-provider change.
+[x] Validation passed before marking DONE.
 ```
 
 ## 8. P3 - Admin / Content Management
@@ -281,7 +316,7 @@ This is larger than UX polish because it touches access control and content-writ
 ### Suggested Version
 
 ```txt
-v1.16 - Admin Content Management Foundation
+v1.17 - Admin Content Management Foundation
 ```
 
 ## 9. P3 - Real AI Provider Integration
@@ -323,7 +358,7 @@ No raw unvalidated AI output displayed directly.
 ### Suggested Version
 
 ```txt
-v1.17 - Optional Real AI Provider Integration
+v1.18 - Optional Real AI Provider Integration
 ```
 
 ## 10. P4 - Portfolio Assets
@@ -377,7 +412,7 @@ Portfolio Evidence Package
 
 Reason:
 
-- v1.14 data quality expansion is complete.
+- v1.15 Product Match explainability and safety guardrails are complete.
 - The app is portfolio/demo ready at MVP level.
 - Screenshots, demo video, and CV/portfolio case-study polish are practical next evidence tasks, not product blockers.
 
@@ -403,4 +438,5 @@ Reason:
 2026-06-04: Completed v1.13 UX Polish & Empty State Improvement with local lint/typecheck/test/build/E2E PASS.
 2026-06-05: Synchronized documentation status so v1.13 is latest completed and v1.14 Data Quality Expansion is the next recommended product task.
 2026-06-05: Completed v1.14 Data Quality Expansion with 58 products, 59 ingredients, seed quality assertions, and local validation PASS.
+2026-06-06: Completed v1.15 Product Match Explainability & Safety Guardrails with local lint/typecheck/test/build/E2E/audit PASS; Portfolio Evidence Package remains the next presentation task.
 ```

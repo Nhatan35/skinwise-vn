@@ -1,6 +1,6 @@
 # Release Plan - SkinWise VN Current MVP Status
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## 1. Current Release Chain
 
@@ -14,6 +14,7 @@ MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 ```
 
 The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP improvements. The active post-MVP backlog is `docs/post-mvp-backlog.md`.
@@ -81,19 +82,20 @@ The MVP product scope is complete. Current work is no longer core feature implem
 | MVP v1.12 | DONE | Post-MVP backlog created and future work prioritised. |
 | MVP v1.13 | DONE | UX states polished without feature, schema, auth, or business-rule expansion. |
 | MVP v1.14 | DONE | Product and ingredient seed data expanded without schema or feature-scope changes. |
+| MVP v1.15 | DONE | Product Match and Product Detail explainability, caution wording, and profile guidance improved without schema or route changes. |
 
 ## 4. Validation Evidence
 
 Local evidence:
 
 ```txt
-Evidence date: 2026-06-04
+Evidence date: 2026-06-06
 Environment: Local Windows / PowerShell
 Branch: main
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 894 tests
+npm run test: PASS - 97 files / 899 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -102,8 +104,8 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation notes:
 
 ```txt
-v1.14 expanded curated seed data to 58 products and 59 ingredients.
-No schema, route, auth, authorization, Product Match scoring, or AI-provider behavior changed.
+v1.15 improved Product Match/Product Detail explainability and safety guidance.
+No database schema, route, auth, authorization, persistence, or AI-provider behavior changed.
 Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
@@ -127,6 +129,7 @@ Documentation decision: v1.11 portfolio demo package complete
 Post-MVP planning decision: v1.12 backlog created
 Post-MVP UX polish decision: v1.13 complete
 Post-MVP data quality decision: v1.14 complete
+Post-MVP explainability and safety decision: v1.15 complete
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```

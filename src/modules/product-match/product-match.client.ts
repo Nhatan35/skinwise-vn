@@ -202,6 +202,11 @@ function isProductMatchDto(value: unknown): value is ProductMatchDto {
     isStringArray(value.cautions) &&
     isRecord(value.matchedSignals) &&
     isBoolean(value.matchedSignals.skinType) &&
+    (value.matchedSignals.skinTypes === undefined ||
+      (Array.isArray(value.matchedSignals.skinTypes) &&
+        value.matchedSignals.skinTypes.every((skinType) =>
+          isOneOf(SKIN_TYPES, skinType),
+        ))) &&
     Array.isArray(value.matchedSignals.concerns) &&
     value.matchedSignals.concerns.every((concern) =>
       isOneOf(SKIN_CONCERNS, concern),

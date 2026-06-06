@@ -283,11 +283,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
       <Alert>
         <Info aria-hidden="true" />
-        <AlertTitle>Thông tin tham khảo</AlertTitle>
+        <AlertTitle>Thông tin giáo dục</AlertTitle>
         <AlertDescription>
           Nội dung dưới đây dựa trên dữ liệu sản phẩm hiện có, giúp bạn cân nhắc
-          trước khi thêm sản phẩm mới vào routine. Thông tin này không thay thế
-          tư vấn y tế.
+          trước khi thêm sản phẩm mới vào routine. Đây không phải chẩn đoán hoặc
+          lời khuyên y tế.
         </AlertDescription>
       </Alert>
 
@@ -495,7 +495,7 @@ function SuitableForSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Phù hợp với</CardTitle>
+        <CardTitle>Sản phẩm này có phù hợp với bạn không?</CardTitle>
       </CardHeader>
       <CardContent>
         {decisionSupport.suitableFor.length > 0 ? (

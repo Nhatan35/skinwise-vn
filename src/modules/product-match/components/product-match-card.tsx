@@ -11,6 +11,10 @@ import type {
   ProductCategory,
   ProductPriceRange,
 } from "@/modules/products/product.types";
+import type {
+  SkinConcern,
+  SkinType,
+} from "@/modules/skin-profile/skin-profile.types";
 import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -47,6 +51,26 @@ const priceRangeLabels: Record<ProductPriceRange, string> = {
   unknown: "Chưa rõ giá",
 };
 
+const skinTypeLabels: Record<SkinType, string> = {
+  oily: "da dầu",
+  dry: "da khô",
+  combination: "da hỗn hợp",
+  normal: "da thường",
+  sensitive: "da nhạy cảm",
+  unknown: "loại da chưa rõ",
+};
+
+const concernLabels: Record<SkinConcern, string> = {
+  acne: "mụn",
+  oiliness: "dầu thừa",
+  dryness: "khô căng",
+  redness: "đỏ da",
+  dark_spots: "thâm hoặc đốm tối màu",
+  texture: "bề mặt da chưa đều",
+  barrier_support: "hàng rào da",
+  unknown: "mối quan tâm chưa rõ",
+};
+
 const matchLevelVariants: Record<
   ProductMatchLevel,
   "default" | "outline" | "secondary"
@@ -72,15 +96,25 @@ function getMatchedSignalItems(item: ProductMatchDto) {
   const signals: ProductMatchSignalItem[] = [];
 
   if (matchedSignals.skinType) {
+    const matchedSkinTypeLabels = matchedSignals.skinTypes
+      ?.map((skinType) => skinTypeLabels[skinType])
+      .join(", ");
+
     signals.push({
-      label: "Loại da có tín hiệu khớp",
+      label: matchedSkinTypeLabels
+        ? `Loại da khớp: ${matchedSkinTypeLabels}`
+        : "Loại da có tín hiệu khớp",
       tone: "positive",
     });
   }
 
   if (matchedSignals.concerns.length > 0) {
+    const matchedConcernLabels = matchedSignals.concerns
+      .map((concern) => concernLabels[concern])
+      .join(", ");
+
     signals.push({
-      label: `${matchedSignals.concerns.length} mối quan tâm có tín hiệu khớp`,
+      label: `Mối quan tâm khớp: ${matchedConcernLabels}`,
       tone: "positive",
     });
   }

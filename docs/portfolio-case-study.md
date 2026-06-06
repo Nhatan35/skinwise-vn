@@ -1,6 +1,6 @@
 # SkinWise VN - Portfolio Case Study
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 ## 1. Executive Summary
 
@@ -24,12 +24,12 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
 
-Evidence note: local validation is supported by command output. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.14. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+Evidence note: local validation is supported by command output. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.15. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
 
 ## 2. Problem Statement
 
@@ -162,14 +162,14 @@ Key technical choices:
 Local validation evidence:
 
 ```txt
-Evidence date: 2026-06-05
+Evidence date: 2026-06-06
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 894 tests
+npm run test: PASS - 97 files / 899 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -180,7 +180,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.14 because v1.14 was a local data-quality seed update.
+Production smoke and monitoring were not rerun specifically for v1.15 because v1.15 was validated locally as a controlled Product Match/Product Detail explainability update.
 Critical blockers reported: None
 Evidence date: 2026-06-04
 ```

@@ -4,6 +4,7 @@ import type {
   ProductPriceRange,
 } from "@/modules/products/product.types";
 import type { Product } from "@/modules/products/product.types";
+import { detectProductSafetySignals } from "@/modules/products/product-safety-signals";
 import type { ProductMatchLevel } from "@/modules/product-match/product-match.dto";
 import type {
   BudgetRange,
@@ -19,28 +20,6 @@ const beginnerFriendlyCoreCategories = new Set<ProductCategory>([
 const treatmentOrActiveHeavyCategories = new Set<ProductCategory>([
   "treatment",
 ]);
-const strongWarningTerms = [
-  "irritation",
-  "irritate",
-  "exfoliation",
-  "exfoliant",
-  "exfoliating",
-  "retinoid",
-  "retinol",
-  "acid",
-  "peeling",
-  "stinging",
-  "sting",
-  "sensitive skin",
-  "aha",
-  "bha",
-  "benzoyl peroxide",
-  "salicylic acid",
-  "glycolic acid",
-  "lactic acid",
-  "vitamin c",
-  "ascorbic acid",
-];
 const budgetAlignment: Record<BudgetRange, ProductPriceRange[]> = {
   under_300k: ["budget"],
   "300k_700k": ["budget", "mid"],
@@ -73,6 +52,7 @@ export type ProductMatchScoringResult = {
   cautions: string[];
   matchedSignals: {
     skinType: boolean;
+    skinTypes: SkinType[];
     concerns: ProductConcern[];
     budget: boolean;
     sensitivity: boolean;
@@ -86,12 +66,6 @@ function normalizeText(value: string) {
 
 function normalizeList(values: string[] | undefined) {
   return (values ?? []).map(normalizeText).filter(Boolean);
-}
-
-function includesAnyTerm(text: string, terms: string[]) {
-  const normalizedText = normalizeText(text);
-
-  return terms.some((term) => normalizedText.includes(term));
 }
 
 function clampScore(score: number) {
@@ -153,13 +127,7 @@ export function detectAvoidedIngredients(
 export function hasStrongWarnings(
   product: Pick<Product, "warnings" | "keyActives">,
 ) {
-  const warningText = normalizeList(product.warnings ?? []).join(" ");
-  const activeText = normalizeList(product.keyActives ?? []).join(" ");
-
-  return (
-    includesAnyTerm(warningText, strongWarningTerms) ||
-    includesAnyTerm(activeText, strongWarningTerms)
-  );
+  return detectProductSafetySignals(product).hasStrongCautionSignal;
 }
 
 export function isBeginnerFriendlyCoreCategory(category: ProductCategory) {
@@ -167,9 +135,11 @@ export function isBeginnerFriendlyCoreCategory(category: ProductCategory) {
 }
 
 export function isTreatmentOrActiveHeavy(product: Pick<Product, "category" | "keyActives">) {
+  const safetySignals = detectProductSafetySignals(product);
+
   return (
     treatmentOrActiveHeavyCategories.has(product.category) ||
-    includesAnyTerm(normalizeList(product.keyActives ?? []).join(" "), strongWarningTerms)
+    safetySignals.hasStrongActiveSignal
   );
 }
 
@@ -228,27 +198,29 @@ export function scoreProductMatch(input: {
 }): ProductMatchScoringResult {
   const { product, skinProfile } = input;
   const reasons: string[] = [];
-  const cautions = [
-    "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ trước khi sử dụng rộng rãi.",
-    "Đây là thông tin tham khảo, không phải tư vấn y tế.",
-  ];
+  const cautions: string[] = [];
   const matchedConcerns = getMatchedConcerns(skinProfile.concerns, product);
   const avoidedIngredients = detectAvoidedIngredients(
     skinProfile.avoidIngredients,
     product,
   );
-  const strongWarnings = hasStrongWarnings(product);
+  const safetySignals = detectProductSafetySignals(product);
+  const strongWarnings = safetySignals.hasStrongCautionSignal;
+  const sensitiveSkinCautionSignal =
+    safetySignals.hasSensitiveSkinCautionSignal;
   const notRecommendedForProfile = isNotRecommendedForProfile(
     product,
     skinProfile,
   );
   const treatmentOrActiveHeavy = isTreatmentOrActiveHeavy(product);
-  let score = 40;
-
-  if (
+  const matchedSkinTypes =
     skinProfile.skinType !== "unknown" &&
     (product.skinTypes ?? []).includes(skinProfile.skinType)
-  ) {
+      ? [skinProfile.skinType]
+      : [];
+  let score = 40;
+
+  if (matchedSkinTypes.length > 0) {
     score += 25;
     reasons.push(`Phù hợp với ${skinTypeLabels[skinProfile.skinType]} của bạn.`);
   }
@@ -284,10 +256,48 @@ export function scoreProductMatch(input: {
     );
   }
 
-  if (skinProfile.sensitivityLevel === "high" && strongWarnings) {
+  if (skinProfile.sensitivityLevel === "high" && sensitiveSkinCautionSignal) {
     score -= 25;
     cautions.push(
-      "Hãy xem kỹ bảng thành phần nếu da bạn dễ nhạy cảm.",
+      "Hồ sơ da của bạn có độ nhạy cảm cao; nên dùng thận trọng và thử trên một vùng da nhỏ trước.",
+    );
+  }
+
+  if (safetySignals.hasExfoliatingAcidSignal) {
+    cautions.push(
+      "Có chứa thành phần tẩy da chết. Nên bắt đầu chậm nếu da bạn nhạy cảm hoặc chưa quen hoạt chất.",
+    );
+  }
+
+  if (safetySignals.hasMultipleExfoliatingAcidSignals) {
+    cautions.push(
+      "Tránh kết hợp nhiều hoạt chất tẩy da chết trong cùng routine nếu bạn chưa biết da mình dung nạp tốt hay không.",
+    );
+  }
+
+  if (
+    safetySignals.hasRetinoidSignal ||
+    safetySignals.hasBenzoylPeroxideSignal
+  ) {
+    cautions.push(
+      "Có hoạt chất mạnh; nên tránh dùng cùng nhiều active mạnh khác trong một routine khi chưa chắc da dung nạp tốt.",
+    );
+  }
+
+  if (safetySignals.hasFragranceOrEssentialOilSignal) {
+    cautions.push(
+      "Có hương liệu hoặc tinh dầu; nên thử trên một vùng da nhỏ nếu da bạn nhạy cảm hoặc dễ đỏ.",
+    );
+  }
+
+  if (
+    (skinProfile.skinType === "dry" ||
+      skinProfile.concerns.includes("barrier_support")) &&
+    (safetySignals.hasDryingActiveSignal ||
+      safetySignals.hasExfoliatingAcidSignal)
+  ) {
+    cautions.push(
+      "Có thể không lý tưởng nếu da đang khô căng, hàng rào da đang yếu hoặc dễ kích ứng.",
     );
   }
 
@@ -305,6 +315,11 @@ export function scoreProductMatch(input: {
     );
   }
 
+  cautions.push(
+    "Nên xem kỹ bảng thành phần và thử trên một vùng da nhỏ trước khi sử dụng rộng rãi.",
+    "Thông tin này chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục, không phải lời khuyên y tế.",
+  );
+
   const matchScore = clampScore(score);
 
   return {
@@ -317,12 +332,12 @@ export function scoreProductMatch(input: {
     reasons,
     cautions,
     matchedSignals: {
-      skinType:
-        skinProfile.skinType !== "unknown" &&
-        (product.skinTypes ?? []).includes(skinProfile.skinType),
+      skinType: matchedSkinTypes.length > 0,
+      skinTypes: matchedSkinTypes,
       concerns: matchedConcerns,
       budget: alignsBudget(skinProfile.budgetRange, product.priceRange),
-      sensitivity: skinProfile.sensitivityLevel === "high" && strongWarnings,
+      sensitivity:
+        skinProfile.sensitivityLevel === "high" && sensitiveSkinCautionSignal,
       avoidedIngredients,
     },
   };

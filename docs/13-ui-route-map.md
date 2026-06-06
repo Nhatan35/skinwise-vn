@@ -7,7 +7,7 @@ Current status:
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Current phase: Post-MVP controlled improvement
 Production URL: https://skinwise-vn.vercel.app
 ```

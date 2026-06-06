@@ -6,7 +6,10 @@ import type {
   SkinConcern,
   SkinType,
 } from "@/modules/skin-profile/skin-profile.types";
+import Link from "next/link";
+
 import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type ProductMatchSummaryProps = {
   productMatch: ProductMatchResponseDto;
@@ -59,6 +63,22 @@ const experienceLabels: Record<ExperienceLevel, string> = {
   advanced: "Có kinh nghiệm với hoạt chất",
 };
 
+function hasKnownConcern(concerns: SkinConcern[]) {
+  return concerns.some((concern) => concern !== "unknown");
+}
+
+function needsMoreProfileInfo(profile: {
+  concerns: SkinConcern[];
+  sensitivityLevel: SensitivityLevel;
+  skinType: SkinType;
+}) {
+  return (
+    profile.skinType === "unknown" ||
+    profile.sensitivityLevel === "unknown" ||
+    !hasKnownConcern(profile.concerns)
+  );
+}
+
 export function ProductMatchSummary({
   productMatch,
 }: ProductMatchSummaryProps) {
@@ -67,6 +87,8 @@ export function ProductMatchSummary({
   if (!profile) {
     return null;
   }
+
+  const shouldPromptForMoreProfileInfo = needsMoreProfileInfo(profile);
 
   return (
     <Card>
@@ -77,6 +99,17 @@ export function ProductMatchSummary({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2">
+        {shouldPromptForMoreProfileInfo ? (
+          <div className="mb-2 flex w-full flex-col gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-950 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6">
+              SkinWise cần thêm thông tin hồ sơ da để gợi ý sản phẩm phù hợp
+              hơn. Hãy kiểm tra lại loại da, độ nhạy cảm và mối quan tâm về da.
+            </p>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.SKIN_PROFILE}>Cập nhật hồ sơ da</Link>
+            </Button>
+          </div>
+        ) : null}
         <Badge variant="secondary">
           Loại da: {skinTypeLabels[profile.skinType]}
         </Badge>

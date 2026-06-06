@@ -62,8 +62,8 @@ describe("Product Detail decision support", () => {
     expect(decisionSupport.overview).toContain("mụn");
     expect(decisionSupport.suitableFor).toEqual(
       expect.arrayContaining([
-        "Có thể hỗ trợ mối quan tâm: mụn",
-        "Có thể hỗ trợ mối quan tâm: dầu thừa",
+        "Có thể hữu ích khi bạn muốn hỗ trợ mối quan tâm: mụn",
+        "Có thể hữu ích khi bạn muốn hỗ trợ mối quan tâm: dầu thừa",
       ]),
     );
     expect(decisionSupport.routineUsageTips).toContain(
@@ -124,6 +124,44 @@ describe("Product Detail decision support", () => {
     expect(decisionSupport.cautions.join(" ")).toContain("Nên patch test");
   });
 
+  it("adds educational caution notes for active-heavy or fragranced products", () => {
+    const decisionSupport = buildProductDetailDecisionSupport(
+      createProduct({
+        category: "treatment",
+        ingredientsText:
+          "Water, Salicylic Acid, Mandelic Acid, Fragrance, Glycerin",
+        keyActives: ["Salicylic Acid", "Mandelic Acid", "Fragrance"],
+        tags: ["aha", "bha", "fragranced"],
+      }),
+    );
+
+    expect(decisionSupport.cautions.join(" ")).toContain(
+      "Có chứa thành phần tẩy da chết",
+    );
+    expect(decisionSupport.cautions.join(" ")).toContain(
+      "Không nên kết hợp nhiều hoạt chất tẩy da chết",
+    );
+    expect(decisionSupport.cautions.join(" ")).toContain(
+      "Có hương liệu hoặc tinh dầu",
+    );
+    expectNoUnsafeClaims(decisionSupport.cautions.join(" "));
+  });
+
+  it("does not treat fragrance-free tags or alpha terms as fragrance or PHA cautions", () => {
+    const decisionSupport = buildProductDetailDecisionSupport(
+      createProduct({
+        ingredientsText: "Water, Alpha Arbutin, Glycerin",
+        keyActives: ["Alpha Arbutin", "Glycerin"],
+        tags: ["fragrance-free", "tone-support"],
+        warnings: [],
+      }),
+    );
+    const cautions = decisionSupport.cautions.join(" ");
+
+    expect(cautions).not.toContain("Có hương liệu hoặc tinh dầu");
+    expect(cautions).not.toContain("Có chứa thành phần tẩy da chết");
+  });
+
   it("limits many ingredients and cautions", () => {
     const decisionSupport = buildProductDetailDecisionSupport(
       createProduct({
@@ -142,7 +180,7 @@ describe("Product Detail decision support", () => {
     );
 
     expect(decisionSupport.ingredientHighlights.length).toBeLessThanOrEqual(8);
-    expect(decisionSupport.cautions.length).toBeLessThanOrEqual(4);
+    expect(decisionSupport.cautions.length).toBeLessThanOrEqual(6);
   });
 
   it("adds a data quality note when skin type and concern data is missing", () => {

@@ -75,6 +75,7 @@ describe("Product Match scoring", () => {
     );
     expect(result.matchedSignals).toMatchObject({
       skinType: true,
+      skinTypes: ["oily"],
       concerns: ["acne", "oiliness"],
       budget: true,
       sensitivity: false,
@@ -136,7 +137,33 @@ describe("Product Match scoring", () => {
     expect(result.matchedSignals.sensitivity).toBe(true);
     expect(result.cautions).toEqual(
       expect.arrayContaining([
-        "Hãy xem kỹ bảng thành phần nếu da bạn dễ nhạy cảm.",
+        "Hồ sơ da của bạn có độ nhạy cảm cao; nên dùng thận trọng và thử trên một vùng da nhỏ trước.",
+      ]),
+    );
+  });
+
+  it("adds clear caution notes for exfoliating acids, fragrance, and barrier-prone profiles", () => {
+    const result = scoreProductMatch({
+      product: createProduct({
+        category: "treatment",
+        ingredientsText:
+          "Water, Salicylic Acid, Mandelic Acid, Fragrance, Glycerin",
+        keyActives: ["Salicylic Acid", "Mandelic Acid", "Fragrance"],
+        tags: ["bha", "aha", "fragranced"],
+      }),
+      skinProfile: createSkinProfile({
+        concerns: ["barrier_support"],
+        sensitivityLevel: "high",
+      }),
+    });
+
+    expect(result.matchedSignals.sensitivity).toBe(true);
+    expect(result.cautions).toEqual(
+      expect.arrayContaining([
+        "Có chứa thành phần tẩy da chết. Nên bắt đầu chậm nếu da bạn nhạy cảm hoặc chưa quen hoạt chất.",
+        "Tránh kết hợp nhiều hoạt chất tẩy da chết trong cùng routine nếu bạn chưa biết da mình dung nạp tốt hay không.",
+        "Có hương liệu hoặc tinh dầu; nên thử trên một vùng da nhỏ nếu da bạn nhạy cảm hoặc dễ đỏ.",
+        "Có thể không lý tưởng nếu da đang khô căng, hàng rào da đang yếu hoặc dễ kích ứng.",
       ]),
     );
   });
@@ -246,6 +273,7 @@ describe("Product Match scoring", () => {
     expect(result.matchLevel).toBe("cautious");
     expect(result.matchedSignals).toEqual({
       skinType: false,
+      skinTypes: [],
       concerns: [],
       budget: false,
       sensitivity: false,

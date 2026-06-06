@@ -51,6 +51,7 @@ MVP v1.11 - Portfolio Demo Readiness Polish: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
+MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 ```
 
 Known implementation status:
@@ -71,7 +72,7 @@ Production smoke evidence: PASS, user-reported
 Production monitoring evidence: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.14 - Data Quality Expansion
+Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
@@ -704,7 +705,8 @@ README should accurately state:
 - MVP v1.11 portfolio demo readiness is complete.
 - MVP v1.12 post-MVP backlog planning is complete.
 - MVP v1.13 UX polish and empty state improvement is complete.
-- MVP v1.14 Data Quality Expansion is the latest completed milestone.
+- MVP v1.14 Data Quality Expansion is complete.
+- MVP v1.15 Product Match Explainability & Safety Guardrails is the latest completed milestone.
 - Current phase is post-MVP controlled improvement.
 - Portfolio Evidence Package is the recommended next task.
 - Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study are optional evidence tasks, not product correctness blockers.
@@ -1116,7 +1118,7 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.14 - Data Quality Expansion`, the recommended next task is:
+After `MVP v1.15 - Product Match Explainability & Safety Guardrails`, the recommended next task is:
 
 ```txt
 Portfolio Evidence Package
@@ -1131,6 +1133,7 @@ Reason:
 - MVP v1.12 post-MVP backlog planning is DONE.
 - MVP v1.13 UX polish and empty state improvement is DONE.
 - MVP v1.14 data quality expansion is DONE.
+- MVP v1.15 Product Match explainability and safety guardrails are DONE.
 - Further product work should not start unless the user explicitly starts another scoped post-MVP enhancement.
 
 Portfolio evidence tasks remain optional:
@@ -1177,7 +1180,8 @@ MVP v1.8 - Insights Usability & Progress Story Refinement is the completed produ
 MVP v1.8.1 - Documentation Truth Sync & Release Evidence Cleanup is the completed documentation cleanup patch.
 MVP v1.8.2 - Final Documentation Consistency Hotfix is the completed documentation consistency hotfix.
 MVP v1.13 - UX Polish & Empty State Improvement is complete.
-MVP v1.14 - Data Quality Expansion is the latest completed milestone.
+MVP v1.14 - Data Quality Expansion is complete.
+MVP v1.15 - Product Match Explainability & Safety Guardrails is the latest completed milestone.
 Current phase: Post-MVP controlled improvement.
 Recommended next task: Portfolio Evidence Package.
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.

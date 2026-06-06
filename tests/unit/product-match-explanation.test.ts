@@ -51,6 +51,7 @@ function createProductMatch(
     cautions: ["Đây là thông tin tham khảo, không phải tư vấn y tế."],
     matchedSignals: {
       skinType: true,
+      skinTypes: ["oily"],
       concerns: ["acne", "oiliness"],
       budget: true,
       sensitivity: false,
@@ -146,8 +147,15 @@ describe("Product Match explanation generator", () => {
       expect.arrayContaining([
         "skin_type_match",
         "skin_concern_support",
+        "ingredient_or_attribute_fit",
         "budget_fit",
       ]),
+    );
+    expect(explanation.positiveReasons.map((reason) => reason.message).join(" ")).toContain(
+      "da dầu",
+    );
+    expect(explanation.positiveReasons.map((reason) => reason.message).join(" ")).toContain(
+      "mụn, dầu thừa",
     );
     expect(explanation.ingredientHighlights).toEqual(
       expect.arrayContaining([
@@ -168,6 +176,7 @@ describe("Product Match explanation generator", () => {
         matchLevel: "cautious",
         matchedSignals: {
           skinType: true,
+          skinTypes: ["oily"],
           concerns: ["acne"],
           budget: true,
           sensitivity: true,
@@ -215,6 +224,7 @@ describe("Product Match explanation generator", () => {
         cautions: [],
         matchedSignals: {
           skinType: false,
+          skinTypes: [],
           concerns: [],
           budget: false,
           sensitivity: false,

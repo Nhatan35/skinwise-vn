@@ -95,7 +95,7 @@ describe("Product Detail UI", () => {
   it("renders Product Detail decision support sections", () => {
     for (const sectionHeading of [
       "Tổng quan sản phẩm",
-      "Phù hợp với",
+      "Sản phẩm này có phù hợp với bạn không?",
       "Thành phần / hoạt chất nổi bật",
       "Cần lưu ý",
       "Gợi ý dùng trong routine",
@@ -112,6 +112,7 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain(
       "Dữ liệu thành phần chưa đầy đủ.",
     );
+    expect(productDetailSource).toContain("Thông tin giáo dục");
   });
 
   it("renders a non-blocking personalized match explanation section", () => {
