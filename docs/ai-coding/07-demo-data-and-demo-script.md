@@ -1,6 +1,6 @@
 # Demo Data and Demo Script - SkinWise VN
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## 1. Current Release Context
 
@@ -9,9 +9,12 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package documentation: PREPARED
+Actual screenshots in repository: NOT VERIFIED
+Demo video in repository: NOT RECORDED
 Production URL: https://skinwise-vn.vercel.app
 ```
 
@@ -137,5 +140,6 @@ Use these phrases:
 ```txt
 Demo data readiness: READY after user-owned demo data is created or confirmed
 Portfolio demo readiness: READY at MVP level
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Portfolio Evidence Package documentation: PREPARED
+Portfolio media evidence tasks: screenshots and demo video remain optional until actual files are captured
 ```

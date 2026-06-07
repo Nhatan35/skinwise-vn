@@ -1,6 +1,6 @@
 # Release Plan - SkinWise VN Current MVP Status
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## 1. Current Release Chain
 
@@ -15,6 +15,7 @@ MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 ```
 
 The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP improvements. The active post-MVP backlog is `docs/post-mvp-backlog.md`.
@@ -83,6 +84,7 @@ The MVP product scope is complete. Current work is no longer core feature implem
 | MVP v1.13 | DONE | UX states polished without feature, schema, auth, or business-rule expansion. |
 | MVP v1.14 | DONE | Product and ingredient seed data expanded without schema or feature-scope changes. |
 | MVP v1.15 | DONE | Product Match and Product Detail explainability, caution wording, and profile guidance improved without schema or route changes. |
+| MVP v1.15.1 | DONE | npm audit/dependency-risk evidence reviewed and documentation synchronized without product behavior or dependency changes. |
 
 ## 4. Validation Evidence
 
@@ -105,9 +107,11 @@ Validation notes:
 
 ```txt
 v1.15 improved Product Match/Product Detail explainability and safety guidance.
-No database schema, route, auth, authorization, persistence, or AI-provider behavior changed.
+v1.15.1 synchronized audit/release evidence and did not change product behavior.
+No database schema, route, auth, authorization, persistence, or AI-provider behavior changed in v1.15.1.
 Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
+npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
 
 Production evidence:
@@ -130,8 +134,11 @@ Post-MVP planning decision: v1.12 backlog created
 Post-MVP UX polish decision: v1.13 complete
 Post-MVP data quality decision: v1.14 complete
 Post-MVP explainability and safety decision: v1.15 complete
+Audit cleanup and evidence sync decision: v1.15.1 complete
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package documentation: PREPARED
+Optional media evidence tasks: screenshots and demo video
 ```
 
 ## 6. Recommended Next Work
@@ -140,7 +147,7 @@ Do next:
 
 ```txt
 1. Keep the completed MVP baseline stable.
-2. Prepare Portfolio Evidence Package if the goal is interview/demo readiness.
+2. Use the prepared Portfolio Evidence Package for interview/demo readiness.
 3. Keep portfolio evidence tasks separate from product correctness.
 4. Avoid large feature expansion until data quality/release confidence work is deliberately scoped.
 ```
@@ -164,12 +171,12 @@ Do not expand scope before portfolio submission.
 - Stronger observability and error tracking.
 - More curated product/ingredient data.
 - Optional real AI provider integration with strict output validation and safety policy.
-- Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study.
+- Optional portfolio media evidence tasks such as screenshots and demo video.
 
 Recommended next task:
 
 ```txt
-Portfolio Evidence Package
+Portfolio Evidence Package media follow-up, if needed
 ```
 
-This is presentation/evidence work, not a product blocker.
+This is presentation/evidence work, not a product blocker. The central documentation package is prepared; actual screenshot and demo-video files are not claimed until captured.

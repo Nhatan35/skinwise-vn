@@ -1,13 +1,13 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
@@ -15,6 +15,8 @@ Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package documentation: PREPARED
+Optional media evidence tasks: screenshots and demo video
 ```
 
 ## Feature Matrix
@@ -41,10 +43,12 @@ Recommended next task: Portfolio Evidence Package
 | Insights | DONE | Progress story and safe next actions. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker. |
 | Data Export | DONE | User-owned app data export. |
-| Local validation evidence | PASS | 97 files / 899 tests, build, E2E, audit PASS. |
+| Local validation evidence | PASS | 97 files / 899 tests, build, E2E, production audit PASS. |
+| Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | PASS | User-reported production verification completed. |
 | Production monitoring evidence | PASS | User-reported checks completed. |
-| Portfolio demo docs | DONE | README, case study, demo script, checklists updated. |
+| Portfolio demo docs | DONE | README, portfolio evidence package, case study, demo script, and checklists updated. |
+| Portfolio media evidence | Partially completed | Screenshot checklist and demo-video plan are prepared; actual screenshot and video files are not claimed. |
 
 ## Out-of-Scope Matrix
 
@@ -64,7 +68,7 @@ Recommended next task: Portfolio Evidence Package
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
-Recommended next task: Portfolio Evidence Package
-Portfolio evidence tasks are optional and not product correctness blockers
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Portfolio Evidence Package documentation: PREPARED
+Portfolio media evidence tasks are optional and not product correctness blockers
 ```

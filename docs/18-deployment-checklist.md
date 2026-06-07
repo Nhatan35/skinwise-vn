@@ -12,7 +12,7 @@ Local validation evidence: MVP v1.9 PASS
 Production smoke/monitoring evidence: MVP v1.10 PASS, user-reported
 Portfolio demo readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 Deployment target: Vercel
@@ -25,7 +25,7 @@ Evidence boundary:
 
 - Local validation evidence is supported by terminal output.
 - Production smoke/monitoring PASS remains recorded from the previously user-reported stable MVP baseline.
-- Production smoke and monitoring were not rerun specifically for v1.15 because v1.15 was validated locally as a controlled Product Match/Product Detail explainability update.
+- Production smoke and monitoring were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch.
 - Keep deployment id, screenshots, and sanitized logs separately if formal evidence is required.
 - Do not expose secrets in docs or screenshots.
 
@@ -33,7 +33,7 @@ Evidence boundary:
 
 | Check | Status | Notes |
 |---|---|---|
-| `npm ci` | PASS | Completed in the v1.15 validation evidence. |
+| `npm ci` | PASS | Completed in the v1.15.1 validation evidence. |
 | `npm run lint` | PASS | `eslint .` completed with no reported errors. |
 | `npm run typecheck` | PASS | `tsc --noEmit` completed with no reported errors. |
 | `npm run test` | PASS | 97 test files passed; 899 tests passed. |
@@ -43,7 +43,7 @@ Evidence boundary:
 | `npm run test:e2e` | PASS | 29/29 Playwright tests passed. |
 | `npm audit --omit=dev --audit-level=moderate` | PASS | 0 vulnerabilities found. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.15 status, Portfolio Evidence Package next task, and portfolio evidence boundaries. |
+| README setup instructions accurate | PASS | Updated for v1.15.1 status, Portfolio Evidence Package next task, and portfolio evidence boundaries. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
@@ -144,6 +144,7 @@ MVP v1.12 - Post-MVP backlog planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package

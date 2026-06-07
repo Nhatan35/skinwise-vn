@@ -6,6 +6,97 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-07 - Portfolio Evidence Package Documentation
+
+### Task
+
+Prepare a docs-only Portfolio Evidence Package for README, portfolio, CV/resume, recruiter review, interview explanation, and 3-5 minute demo presentation.
+
+### Files Added
+
+- `docs/portfolio-evidence-package.md`
+
+### Files Updated
+
+- `README.md`
+- `docs/portfolio-case-study.md`
+- `docs/demo-script.md`
+- `docs/screenshots-checklist.md`
+- `docs/final-release-checklist.md`
+- `docs/post-mvp-backlog.md`
+- `docs/09-release-plan.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/ai-coding/07-demo-data-and-demo-script.md`
+
+### Outcome
+
+- Added a central portfolio package with product positioning, recruiter summary, CV/resume draft, interview narrative, 3-5 minute demo run of show, media capture plan, and evidence boundary.
+- Marked screenshots and demo video as optional media evidence that is not claimed unless actual files are captured.
+- Corrected the demo-script validation Q&A from an older 894-test count to the current historical v1.15.1 evidence of 97 files / 899 tests.
+- Preserved historical local validation and user-reported production smoke/monitoring evidence as dated historical evidence only.
+- Did not change product behavior, source logic, schema, routes, auth, authorization, persistence, dependencies, environment files, deployment config, or AI-provider behavior.
+
+### Validation
+
+```txt
+Docs-only task.
+git diff --check: PASS
+Trailing-space scan on edited docs: PASS
+Unsafe/stale evidence phrase scan: reviewed; matches were safety-boundary wording or explicit non-claim statements.
+Product validation commands: NOT RUN
+Production smoke test: NOT RUN
+Screenshot capture: NOT RUN
+Demo video recording: NOT RUN
+```
+
+### Next Evidence Follow-Up
+
+```txt
+Optional screenshot capture and short demo video recording, if needed for portfolio publishing.
+```
+
+## 2026-06-06 - MVP v1.15.1 Audit Cleanup & Evidence Sync
+
+### Task
+
+Review npm audit evidence, confirm the suspected `hono` dependency path, classify `shadcn` usage, avoid unsafe forced fixes, and synchronize release documentation without changing product behavior.
+
+### Files Updated
+
+- `AGENTS.md`
+- `README.md`
+- Release/status documentation under `docs/`
+
+### Outcome
+
+- Confirmed Node.js 24.x / npm 11.x runtime baseline.
+- Confirmed `npm audit --omit=dev --audit-level=moderate` returns 0 production vulnerabilities.
+- Confirmed the dependency path `shadcn -> @modelcontextprotocol/sdk -> @hono/node-server -> hono` exists.
+- Kept `shadcn` in dependencies because `src/app/globals.css` imports `shadcn/tailwind.css`.
+- Did not run `npm audit fix --force`.
+- Did not change Product Match, Product Detail, schema, routes, auth, persistence, or AI-provider behavior.
+- Portfolio Evidence Package remains the recommended next presentation/evidence task, not a product correctness blocker.
+
+### Validation
+
+```txt
+npm ci: PASS after sandbox EPERM rerun outside sandbox
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 97 files / 899 tests
+npm run build: PASS after sandbox EPERM rerun outside sandbox
+npm run test:e2e: PASS after sandbox EPERM rerun outside sandbox - 29/29 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Next Recommended Task
+
+```txt
+Portfolio Evidence Package
+```
+
 ## 2026-06-06 - MVP v1.15 Product Match Explainability & Safety Guardrails
 
 ### Task

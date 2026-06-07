@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## 1. Current Phase
 
@@ -21,9 +21,10 @@ MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, and v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, and v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes.
 
 Current status:
 
@@ -31,9 +32,11 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package documentation: PREPARED
+Optional media evidence tasks: screenshots and demo video
 ```
 
 Evidence boundary:
@@ -41,6 +44,7 @@ Evidence boundary:
 - Local validation is supported by terminal output.
 - Production PASS is based on user-reported manual verification with no blockers reported.
 - Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
+- The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
 
 ## 2. Implemented Product Scope
 
@@ -64,7 +68,7 @@ Evidence boundary:
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
 | Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
-| Portfolio docs | DONE | README, case study, demo script, checklists, runbooks. |
+| Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
 
 ## 3. Route Coverage
 
@@ -139,9 +143,11 @@ Validation notes:
 
 ```txt
 v1.15 changed Product Match/Product Detail explainability and safety guidance only.
-No database schema, route, auth, authorization, persistence, or AI-provider behavior changed.
+v1.15.1 changed audit/release evidence documentation only.
+No product behavior, package, database schema, route, auth, authorization, persistence, or AI-provider behavior changed in v1.15.1.
 Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
+npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
 
 Production evidence:
@@ -182,6 +188,7 @@ Completed post-MVP implementation:
 ```txt
 v1.14 - Data Quality Expansion
 v1.15 - Product Match Explainability & Safety Guardrails
+v1.15.1 - Audit Cleanup & Evidence Sync
 ```
 
 Completed v1.14 scope:
@@ -200,17 +207,26 @@ Completed v1.15 scope:
 - No-profile and unknown-profile states now guide users to complete or update their skin profile.
 - No schema, route, auth, persistence, or AI-provider changes.
 
+Completed v1.15.1 scope:
+
+- Verified Node.js 24.x / npm 11.x runtime baseline.
+- Verified `npm audit --omit=dev --audit-level=moderate` returns 0 production vulnerabilities.
+- Confirmed the `shadcn -> @modelcontextprotocol/sdk -> @hono/node-server -> hono` dependency path exists.
+- Kept `shadcn` in dependencies because app CSS imports `shadcn/tailwind.css`.
+- Synchronized audit and release evidence documentation without product behavior or package changes.
+
 Recommended next task:
 
 ```txt
-Portfolio Evidence Package
+Portfolio Evidence Package media follow-up, if needed
 ```
 
 Portfolio evidence tasks:
 
-- Portfolio screenshots.
-- Demo video.
-- CV/portfolio publishing polish.
+- Portfolio Evidence Package documentation: PREPARED.
+- Portfolio screenshots: optional; not verified in repository.
+- Demo video: optional; not recorded in repository.
+- CV/portfolio publishing polish: drafted in `docs/portfolio-evidence-package.md`.
 
 Optional later product scope:
 

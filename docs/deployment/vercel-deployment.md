@@ -13,7 +13,7 @@ Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
@@ -99,6 +99,7 @@ MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 Deployment readiness: READY at MVP level
 Current phase: Post-MVP controlled improvement
 ```

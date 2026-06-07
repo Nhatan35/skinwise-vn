@@ -1,12 +1,21 @@
 # Screenshots Checklist - SkinWise VN
 
-Last updated: 2026-06-05
+Last updated: 2026-06-07
 
 Status: **Optional portfolio evidence task**
 
 Screenshots are not required for product correctness, MVP completion, portfolio demo readiness, or post-MVP backlog planning. The project can be presented through the live demo, README, portfolio case study, release checklist, and demo script.
 
 However, screenshots are recommended if the project will be added to a CV, portfolio website, LinkedIn post, or slide deck.
+
+Current screenshot evidence boundary:
+
+```txt
+Screenshot checklist: PREPARED
+Actual screenshot files in repository: NOT VERIFIED
+Demo video file in repository: NOT RECORDED
+Current task screenshot capture: NOT RUN
+```
 
 Current release context:
 
@@ -16,6 +25,7 @@ MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.13 UX Polish & Empty State Improvement: DONE
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package
 ```
@@ -59,10 +69,29 @@ Do not include:
 Landing -> Dashboard -> Skin Profile -> Product Match -> Product Detail -> Routine Analysis -> Journal -> Insights -> Settings/Data Export
 ```
 
+## Suggested File Names
+
+Use clear, ordered names if screenshots are captured later:
+
+```txt
+portfolio-01-landing.png
+portfolio-02-dashboard.png
+portfolio-03-skin-profile.png
+portfolio-04-product-match.png
+portfolio-05-product-detail.png
+portfolio-06-routine-analysis.png
+portfolio-07-journal.png
+portfolio-08-insights.png
+portfolio-09-settings-export.png
+```
+
+Do not mark these files as captured until the actual image files exist and have been checked for secrets or private user data.
+
 ## Current Decision
 
 ```txt
 Screenshot capture: OPTIONAL
 Portfolio/demo readiness without screenshots: READY
-Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study
+Portfolio Evidence Package documentation: PREPARED
+Portfolio media evidence tasks: screenshots and demo video remain optional until actual files are captured
 ```

@@ -1,8 +1,8 @@
 # SkinWise VN
 
-SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users manage a skin profile, browse skincare products and ingredients, save products, build routines, track routine completion, write skin journal entries, and review dashboard/insights summaries.
+SkinWise VN is an educational skincare tracking MVP for Vietnamese users. It helps users understand their skin profile, track routines, compare products, browse skincare ingredients, save products, write skin journal entries, and review personal skincare patterns safely without making medical claims.
 
-The project was built for portfolio presentation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, modular full-stack implementation, validation discipline, CI/E2E coverage, production smoke-check discipline, and release closeout.
+The project was built for portfolio presentation, GitHub review, CV/resume support, recruiter review, interview explanation, BA internship preparation, and full-stack practice. It demonstrates MVP scoping, requirements thinking, safe product boundaries, modular full-stack implementation, validation discipline, CI/E2E coverage, production smoke-check discipline, and release closeout.
 
 SkinWise VN is **not** a medical diagnosis app. It does not diagnose diseases, prescribe medication, guarantee treatment outcomes, replace dermatologists or healthcare professionals, score attractiveness, or create appearance pressure.
 
@@ -18,11 +18,12 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.15 - Product Match Explainability & Safety Guardrails**.
+- Latest completed milestone: **MVP v1.15.1 - Audit Cleanup & Evidence Sync**.
 - Current phase: **Post-MVP controlled improvement**.
 - Recommended next task: **Portfolio Evidence Package**.
-- Portfolio evidence tasks: **screenshots, demo video, CV/portfolio case study**.
-- Local validation evidence: **PASS** for MVP v1.15 Product Match explainability and safety gate.
+- Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
+- Portfolio media evidence tasks: **screenshots and demo video are not claimed unless actual files are captured separately**.
+- Local validation evidence: **PASS** for MVP v1.15.1 audit cleanup/evidence sync.
 - Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
 - Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
@@ -32,6 +33,7 @@ Evidence boundary:
 
 - Automated local evidence is supported by terminal output.
 - Production PASS status is based on the user's reported completed manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
+- Current Portfolio Evidence Package task validation is documentation-only; it does not create new app validation, screenshot, video, production smoke, traffic, performance, or user-metric evidence.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
@@ -54,6 +56,7 @@ MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -68,7 +71,9 @@ MVP v1.14 is a post-MVP data quality milestone. It expands curated product and i
 
 MVP v1.15 is a controlled post-MVP product improvement milestone. It improves Product Match reasoning, matched-factor labels, caution notes for strong actives/fragrance signals, missing/unknown-profile guidance, and Product Detail decision support without changing database schema, routes, authentication, authorization, persistence behavior, or AI-provider behavior.
 
-The current phase remains post-MVP controlled improvement. The recommended next task is Portfolio Evidence Package for screenshots, demo video, and CV/portfolio case study polish.
+MVP v1.15.1 is an audit, dependency-risk, validation, and documentation evidence cleanup patch after v1.15. It does not add product features or change Product Match/Product Detail behavior.
+
+The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks.
 
 ## Key Features
 
@@ -163,6 +168,7 @@ Latest local validation evidence:
 Evidence date: 2026-06-06
 Environment: Local Windows / PowerShell
 Branch: main
+Runtime baseline: Node.js 24.x / npm 11.x
 npm ci: PASS
 npm run lint: PASS
 npm run typecheck: PASS
@@ -176,9 +182,11 @@ Validation note:
 
 ```txt
 v1.15 changed Product Match/Product Detail explainability and safety guidance only.
-No database schema, route, auth, authorization, persistence, or AI-provider behavior changed.
+v1.15.1 changed audit/release evidence documentation only.
+No product behavior, database schema, route, auth, authorization, persistence, or AI-provider behavior changed in v1.15.1.
 Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
+npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
 
 Production evidence:
@@ -186,7 +194,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.15 because v1.15 was validated locally as a controlled Product Match/Product Detail explainability update.
+Production smoke and monitoring were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch.
 Critical production blockers reported: None
 Evidence date: 2026-06-04
 Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
@@ -220,6 +228,7 @@ Landing page
 
 ## Portfolio Documents
 
+- Portfolio evidence package: `docs/portfolio-evidence-package.md`
 - Portfolio case study: `docs/portfolio-case-study.md`
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
@@ -302,8 +311,8 @@ These are intentional MVP boundaries, not release blockers:
 - Product and ingredient data is curated/demo-oriented.
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
-- Screenshots are optional; capture them only if needed for CV, portfolio page, or slide deck.
-- `npm ci` passed in the v1.15 validation evidence.
+- Screenshots and demo video are optional media evidence; capture them only if needed for CV, portfolio page, LinkedIn, or slide deck, and do not claim they exist until actual files are produced.
+- `npm ci` passed in the v1.15.1 validation evidence.
 
 ## Final Portfolio Decision
 
@@ -313,12 +322,13 @@ MVP v1.12 - Post-MVP Backlog Planning: DONE
 MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
+MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package: Documentation prepared; optional media capture remains separate
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.15 - Product Match Explainability & Safety Guardrails` is complete. The recommended next task is Portfolio Evidence Package; it is evidence/presentation work, not a product correctness blocker.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.15 - Product Match Explainability & Safety Guardrails` and `v1.15.1 - Audit Cleanup & Evidence Sync` are complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks.

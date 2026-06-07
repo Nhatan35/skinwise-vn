@@ -1,6 +1,6 @@
 # SkinWise VN - Portfolio Case Study
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## 1. Executive Summary
 
@@ -24,12 +24,39 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15 - Product Match Explainability & Safety Guardrails
+Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Portfolio Evidence Package: Documentation prepared
+Optional media evidence still separate: screenshots and demo video
 ```
 
-Evidence note: local validation is supported by command output. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.15. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+Evidence note: local validation is supported by command output from the historical v1.15.1 milestone. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch. This Portfolio Evidence Package task is docs-only; it does not claim new app validation, production smoke, screenshot, demo video, performance, traffic, or user-metric evidence. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+
+## 1A. Portfolio Evidence Package Snapshot
+
+Package document:
+
+```txt
+docs/portfolio-evidence-package.md
+```
+
+Current package status:
+
+| Item | Status | Notes |
+|---|---|---|
+| README presentation | Prepared | Includes positioning, feature summary, route surface, evidence boundary, and portfolio links. |
+| Case study | Prepared | This document is recruiter/interview friendly and keeps safety boundaries explicit. |
+| Demo script | Prepared | Supports a 3-5 minute walkthrough. |
+| Demo data checklist | Prepared | Separates seeded public data from user-owned demo account data. |
+| Screenshot checklist | Prepared | Recommended captures are listed, but actual screenshot files are not claimed. |
+| Demo video | Not recorded | No demo video file is claimed by repository docs. |
+| Current task product validation | Not run | Docs-only presentation task; product behavior was not changed. |
+
+Recruiter summary:
+
+```txt
+SkinWise VN is a full-stack educational skincare tracking MVP that demonstrates scoped product thinking, authenticated user-owned data flows, rule-based product comparison support, deterministic routine safety review before AI explanation, privacy-conscious journaling, dashboard/insights summaries, and release evidence discipline.
+```
 
 ## 2. Problem Statement
 
@@ -180,7 +207,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.15 because v1.15 was validated locally as a controlled Product Match/Product Detail explainability update.
+Production smoke and monitoring were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch.
 Critical blockers reported: None
 Evidence date: 2026-06-04
 ```
@@ -243,6 +270,7 @@ Screenshots are optional, but useful for a portfolio page or slide deck:
 
 ## 12. Strong Interview Talking Points
 
+- I built a complete educational tracking MVP, not a medical diagnosis or treatment tool.
 - I controlled MVP scope instead of building too many features.
 - I separated educational skincare guidance from medical claims.
 - I used deterministic rules before depending on external AI.
@@ -262,7 +290,7 @@ Intentional MVP limitations:
 
 Future improvements:
 
-- Portfolio Evidence Package for screenshots, demo video, and CV/portfolio case-study polish.
+- Optional portfolio media evidence such as screenshots and a short demo video.
 - Admin product/ingredient management.
 - Better analytics and structured progress review.
 - Optional real provider integration with strict safety controls.
