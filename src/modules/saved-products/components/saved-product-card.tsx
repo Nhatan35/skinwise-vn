@@ -1,3 +1,4 @@
+import { CheckCircle2, Plus } from "lucide-react";
 import Link from "next/link";
 
 import type { ProductCategory } from "@/modules/products/product.types";
@@ -11,9 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type SavedProductCardProps = {
+  comparisonDisabled?: boolean;
+  isSelectedForComparison?: boolean;
   item: SavedProductDto;
+  onComparisonToggle?: (productId: string) => void;
   onRemoved: (productId: string) => void;
 };
 
@@ -34,10 +39,17 @@ function formatSavedAt(value: string) {
   }).format(new Date(value));
 }
 
-export function SavedProductCard({ item, onRemoved }: SavedProductCardProps) {
+export function SavedProductCard({
+  comparisonDisabled = false,
+  isSelectedForComparison = false,
+  item,
+  onComparisonToggle,
+  onRemoved,
+}: SavedProductCardProps) {
   const product = item.product;
   const keyActives = product.keyActives.slice(0, 4);
   const hiddenKeyActiveCount = product.keyActives.length - keyActives.length;
+  const ComparisonIcon = isSelectedForComparison ? CheckCircle2 : Plus;
 
   return (
     <Card className="h-full" data-testid="saved-product-card">
@@ -84,8 +96,21 @@ export function SavedProductCard({ item, onRemoved }: SavedProductCardProps) {
         ) : null}
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
+          {onComparisonToggle ? (
+            <Button
+              aria-pressed={isSelectedForComparison}
+              data-testid="saved-product-comparison-toggle"
+              disabled={comparisonDisabled && !isSelectedForComparison}
+              onClick={() => onComparisonToggle(item.productId)}
+              type="button"
+              variant={isSelectedForComparison ? "secondary" : "outline"}
+            >
+              <ComparisonIcon aria-hidden="true" />
+              {isSelectedForComparison ? "Đã chọn so sánh" : "Thêm vào so sánh"}
+            </Button>
+          ) : null}
           <Button asChild aria-label="Xem chi tiết" variant="outline">
-            <Link href={`/products/${product.id}`}>Xem chi tiết</Link>
+            <Link href={`${routes.PRODUCTS}/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
             initialSaved

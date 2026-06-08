@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { SavedProductCard } from "@/modules/saved-products/components/saved-product-card";
+import { SavedProductsComparisonPanel } from "@/modules/saved-products/components/saved-products-comparison-panel";
 import {
   listSavedProducts,
   SavedProductClientError,
@@ -29,11 +30,28 @@ function getLoadErrorMessage(error: unknown) {
   return "Không thể tải sản phẩm đã lưu. Vui lòng thử lại hoặc làm mới trang.";
 }
 
+function pruneSelectedProductIds(
+  currentIds: Set<string>,
+  currentItems: SavedProductDto[],
+) {
+  const availableProductIds = new Set(
+    currentItems.map((item) => item.productId),
+  );
+  const nextIds = new Set(
+    [...currentIds].filter((productId) => availableProductIds.has(productId)),
+  );
+
+  return nextIds.size === currentIds.size ? currentIds : nextIds;
+}
+
 export function SavedProductsPage() {
   const [items, setItems] = useState<SavedProductDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [selectedProductIds, setSelectedProductIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -50,9 +68,15 @@ export function SavedProductsPage() {
         }
 
         setItems(savedProducts);
+        setSelectedProductIds((currentIds) =>
+          pruneSelectedProductIds(currentIds, savedProducts),
+        );
       } catch (error) {
         if (isMounted) {
           setItems([]);
+          setSelectedProductIds((currentIds) =>
+            currentIds.size === 0 ? currentIds : new Set(),
+          );
           setLoadError(getLoadErrorMessage(error));
         }
       } finally {
@@ -69,10 +93,45 @@ export function SavedProductsPage() {
     };
   }, [reloadKey]);
 
+  function handleComparisonToggle(productId: string) {
+    setSelectedProductIds((currentIds) => {
+      const nextIds = new Set(currentIds);
+
+      if (nextIds.has(productId)) {
+        nextIds.delete(productId);
+
+        return nextIds;
+      }
+
+      if (nextIds.size >= 3) {
+        return currentIds;
+      }
+
+      nextIds.add(productId);
+
+      return nextIds;
+    });
+  }
+
+  function handleClearComparison() {
+    setSelectedProductIds(new Set());
+  }
+
   function handleRemoved(productId: string) {
     setItems((currentItems) =>
       currentItems.filter((item) => item.productId !== productId),
     );
+    setSelectedProductIds((currentIds) => {
+      if (!currentIds.has(productId)) {
+        return currentIds;
+      }
+
+      const nextIds = new Set(currentIds);
+
+      nextIds.delete(productId);
+
+      return nextIds;
+    });
   }
 
   if (loadError) {
@@ -117,15 +176,41 @@ export function SavedProductsPage() {
     );
   }
 
+  const selectedItems = items.filter((item) =>
+    selectedProductIds.has(item.productId),
+  );
+  const canShowComparison = selectedItems.length >= 2;
+  const hasReachedComparisonLimit = selectedProductIds.size >= 3;
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {items.map((item) => (
-        <SavedProductCard
-          item={item}
-          key={item.id}
-          onRemoved={handleRemoved}
+    <div className="space-y-4">
+      {canShowComparison ? (
+        <SavedProductsComparisonPanel
+          items={selectedItems}
+          onClear={handleClearComparison}
         />
-      ))}
+      ) : null}
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {items.map((item) => {
+          const isSelectedForComparison = selectedProductIds.has(
+            item.productId,
+          );
+
+          return (
+            <SavedProductCard
+              comparisonDisabled={
+                hasReachedComparisonLimit && !isSelectedForComparison
+              }
+              isSelectedForComparison={isSelectedForComparison}
+              item={item}
+              key={item.id}
+              onComparisonToggle={handleComparisonToggle}
+              onRemoved={handleRemoved}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

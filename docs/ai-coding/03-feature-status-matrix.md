@@ -1,20 +1,20 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-07
+Last updated: 2026-06-08
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.16 - Saved Product Comparison & Decision Support
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: v1.17 Release Evidence & Observability Polish, if needed
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -33,6 +33,7 @@ Optional media evidence tasks: screenshots and demo video
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability and caution guardrails. |
 | Product and ingredient seed data | DONE | v1.14 expanded coverage to 58 products and 59 ingredients. |
 | Saved Products | DONE | Save/unsave flow. |
+| Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
 | Ingredient Library | DONE | Ingredient list/detail. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
 | Routine Builder | DONE | Morning/evening routine support. |
@@ -49,6 +50,12 @@ Optional media evidence tasks: screenshots and demo video
 | Production monitoring evidence | PASS | User-reported checks completed. |
 | Portfolio demo docs | DONE | README, portfolio evidence package, case study, demo script, and checklists updated. |
 | Portfolio media evidence | Partially completed | Screenshot checklist and demo-video plan are prepared; actual screenshot and video files are not claimed. |
+
+## Post-MVP Feature Milestones
+
+| Feature | Category | Version | Status |
+|---|---|---|---|
+| Saved Product Comparison | Post-MVP | v1.16 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -68,7 +75,7 @@ Optional media evidence tasks: screenshots and demo video
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.16 - Saved Product Comparison & Decision Support
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional and not product correctness blockers
 ```

@@ -23,6 +23,10 @@ const savedProductCardPath = join(
   projectRoot,
   "src/modules/saved-products/components/saved-product-card.tsx",
 );
+const savedProductsComparisonPanelPath = join(
+  projectRoot,
+  "src/modules/saved-products/components/saved-products-comparison-panel.tsx",
+);
 const savedProductToggleButtonPath = join(
   projectRoot,
   "src/modules/saved-products/components/saved-product-toggle-button.tsx",
@@ -39,13 +43,17 @@ const savedProductsComponentSource = readFileSync(
   "utf8",
 );
 const savedProductCardSource = readFileSync(savedProductCardPath, "utf8");
+const savedProductsComparisonPanelSource = readFileSync(
+  savedProductsComparisonPanelPath,
+  "utf8",
+);
 const savedProductToggleButtonSource = readFileSync(
   savedProductToggleButtonPath,
   "utf8",
 );
 const savedProductClientSource = readFileSync(savedProductClientPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
-const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}`;
+const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductsComparisonPanelSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}`;
 
 describe("Saved Products UI", () => {
   it("adds the protected /saved-products dashboard page and route constant", () => {
@@ -126,6 +134,71 @@ describe("Saved Products UI", () => {
     }
   });
 
+  it("adds saved product comparison selection with item.productId keys", () => {
+    expect(existsSync(savedProductsComparisonPanelPath)).toBe(true);
+
+    for (const requiredSource of [
+      "selectedProductIds",
+      "useState<Set<string>>",
+      "() => new Set()",
+      "item.productId",
+      "selectedItems",
+      "canShowComparison",
+      "hasReachedComparisonLimit",
+      "SavedProductsComparisonPanel",
+      "handleComparisonToggle",
+      "handleClearComparison",
+      "setSelectedProductIds",
+      "currentItems.filter((item) => item.productId !== productId)",
+    ]) {
+      expect(savedProductsComponentSource).toContain(requiredSource);
+    }
+
+    for (const mutableSetOperation of [
+      "selectedProductIds.add",
+      "selectedProductIds.delete",
+      "selectedProductIds.clear",
+    ]) {
+      expect(savedProductsComponentSource).not.toContain(mutableSetOperation);
+    }
+  });
+
+  it("renders comparison controls on saved product cards", () => {
+    for (const requiredSource of [
+      "isSelectedForComparison",
+      "comparisonDisabled",
+      "onComparisonToggle",
+      "data-testid=\"saved-product-comparison-toggle\"",
+      "Thêm vào so sánh",
+      "Đã chọn so sánh",
+      "aria-pressed={isSelectedForComparison}",
+      "onComparisonToggle(item.productId)",
+      "routes.PRODUCTS",
+    ]) {
+      expect(savedProductCardSource).toContain(requiredSource);
+    }
+  });
+
+  it("renders a safe educational comparison panel", () => {
+    for (const requiredSource of [
+      "SavedProductsComparisonPanel",
+      "data-testid=\"saved-products-comparison-panel\"",
+      "data-testid=\"clear-saved-products-comparison\"",
+      "So sánh sản phẩm đã lưu",
+      "Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y khoa.",
+      "Xóa lựa chọn so sánh",
+      "Chưa có dữ liệu",
+      "Cần cân nhắc nếu",
+      "Không phù hợp trong các trường hợp",
+      "item.product.notRecommendedFor",
+      "item.product.warnings",
+      "item.product.suitableFor",
+      "routes.PRODUCTS",
+    ]) {
+      expect(savedProductsComparisonPanelSource).toContain(requiredSource);
+    }
+  });
+
   it("keeps saved product client-side files free of server-only imports", () => {
     for (const forbiddenImport of [
       "server-only",
@@ -148,7 +221,6 @@ describe("Saved Products UI", () => {
       "checkout",
       "payment",
       "marketplace",
-      "compare",
       "recommendation",
       "review",
       "rating",
@@ -157,6 +229,26 @@ describe("Saved Products UI", () => {
     ]) {
       expect(combinedSavedProductClientSource).not.toMatch(
         new RegExp(`\\b${forbiddenScope}\\b`, "i"),
+      );
+    }
+  });
+
+  it("keeps comparison copy free of ranking, overclaim, and unsafe advice language", () => {
+    for (const unsafeCopy of [
+      "best",
+      "worst",
+      "rank",
+      "ranking",
+      "recommended product",
+      "we recommend",
+      "diagnose",
+      "diagnosis",
+      "medical advice",
+      "cure",
+      "guaranteed",
+    ]) {
+      expect(combinedSavedProductClientSource).not.toMatch(
+        new RegExp(`\\b${unsafeCopy}\\b`, "i"),
       );
     }
   });

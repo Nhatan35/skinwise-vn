@@ -105,6 +105,33 @@ async function getSeededProduct(page: Page) {
   return product;
 }
 
+async function getSeededProducts(page: Page, minimumCount: number) {
+  const response = await page.request.get("/api/products?limit=50");
+
+  expect(response.ok()).toBe(true);
+
+  const body = (await response.json()) as ProductsApiResponse;
+  const products = body.data?.items ?? [];
+
+  expect(products.length).toBeGreaterThanOrEqual(minimumCount);
+
+  return products.slice(0, minimumCount);
+}
+
+async function removeSavedProductIfPresent(page: Page, productId: string) {
+  const response = await page.request.delete(`/api/saved-products/${productId}`);
+
+  expect(response.status()).toBeLessThan(500);
+}
+
+async function saveProductForTest(page: Page, productId: string) {
+  const response = await page.request.post("/api/saved-products", {
+    data: { productId },
+  });
+
+  expect(response.ok()).toBe(true);
+}
+
 test.describe("SkinWise VN authenticated saved products", () => {
   test("authenticated user can save, view, and remove a product", async ({
     page,
@@ -202,5 +229,61 @@ test.describe("SkinWise VN authenticated saved products", () => {
         .getByTestId("saved-product-card")
         .filter({ hasText: deterministicProductName }),
     ).toHaveCount(0);
+  });
+
+  test("authenticated user can compare and clear two saved products", async ({
+    page,
+  }) => {
+    await loginAsE2EUser(page);
+
+    const products = await getSeededProducts(page, 2);
+
+    try {
+      for (const product of products) {
+        await removeSavedProductIfPresent(page, product.id);
+        await saveProductForTest(page, product.id);
+      }
+
+      const savedListResponsePromise = waitForSavedProductsResponse(page);
+
+      await page.goto("/saved-products");
+
+      expect((await savedListResponsePromise).ok()).toBe(true);
+      await expect(
+        page.getByRole("heading", { name: "Sản phẩm đã lưu" }),
+      ).toBeVisible();
+
+      for (const product of products) {
+        const savedCard = page
+          .getByTestId("saved-product-card")
+          .filter({ hasText: product.name })
+          .first();
+
+        await expect(savedCard).toBeVisible({ timeout: 15_000 });
+        await savedCard.getByTestId("saved-product-comparison-toggle").click();
+      }
+
+      await expect(
+        page.getByTestId("saved-products-comparison-panel"),
+      ).toBeVisible();
+      await expect(
+        page.getByText("So sánh sản phẩm đã lưu", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByText(
+          "Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y khoa.",
+        ),
+      ).toBeVisible();
+
+      await page.getByTestId("clear-saved-products-comparison").click();
+
+      await expect(
+        page.getByTestId("saved-products-comparison-panel"),
+      ).toHaveCount(0);
+    } finally {
+      for (const product of products) {
+        await removeSavedProductIfPresent(page, product.id);
+      }
+    }
   });
 });

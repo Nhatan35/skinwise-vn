@@ -6,6 +6,49 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-08 - MVP v1.16 Saved Product Comparison & Decision Support
+
+### Task
+
+Add a small educational comparison flow to the existing Saved Products experience so users can select 2-3 saved products and compare existing product fields side by side.
+
+### Files Added
+
+- `src/modules/saved-products/components/saved-products-comparison-panel.tsx`
+
+### Files Updated
+
+- `src/modules/saved-products/components/saved-products-page.tsx`
+- `src/modules/saved-products/components/saved-product-card.tsx`
+- `tests/unit/saved-products-ui.test.ts`
+- `tests/e2e/saved-products.authenticated.spec.ts`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added saved product comparison selection.
+- Added a comparison panel for 2-3 saved products.
+- Added safe educational comparison copy and a medical-safety disclaimer.
+- Updated source-level guardrail tests.
+- Added a stable authenticated E2E comparison flow using seeded products and API setup/cleanup.
+- Updated docs so v1.16 is Saved Product Comparison & Decision Support, with the prior release/observability candidate moved out of the v1.16 slot.
+
+### Validation
+
+```txt
+Node: v24.14.0
+npm: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 97 files / 903 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
 ## 2026-06-07 - Portfolio Evidence Package Documentation
 
 ### Task

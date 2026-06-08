@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-07
+Last updated: 2026-06-08
 
 ## 1. Current Stable Baseline
 
@@ -10,11 +10,11 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+Latest completed milestone: v1.16 - Saved Product Comparison & Decision Support: DONE
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: v1.17 Release Evidence & Observability Polish, if needed
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
@@ -71,7 +71,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Data quality expansion | DONE in v1.14 | Makes Product Match and Ingredient Library feel more realistic. |
 | P2 | Product Match explainability and safety guardrails | DONE in v1.15 | Makes matching and Product Detail decisions clearer without medical overclaiming. |
 | P2 | Audit cleanup and evidence sync | DONE in v1.15.1 | Keeps npm audit/dependency-risk evidence and release docs truthful without product behavior changes. |
-| P2 | Release/observability polish | Future post-v1.15.1 option | Improves production confidence and debugging when deliberately scoped. |
+| P2 | Saved Product Comparison & Decision Support | DONE in v1.16 | Lets users compare 2-3 saved products using existing educational product data without ranking or recommendations. |
+| P2 | Release/observability polish | Future v1.17 option | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -251,7 +252,7 @@ Improve confidence in production behavior and release handover.
 ### Suggested Version
 
 ```txt
-v1.16 - Release Evidence & Observability Polish
+v1.17 - Release Evidence & Observability Polish
 ```
 
 ### Current Note
@@ -294,6 +295,45 @@ v1.15 - Product Match Explainability & Safety Guardrails: DONE
 [x] Validation passed before marking DONE.
 ```
 
+## 7B. P2 - Saved Product Comparison & Decision Support
+
+### Goal
+
+Allow users to compare 2-3 saved products side by side using existing educational skincare product fields.
+
+### Status
+
+```txt
+v1.16 - Saved Product Comparison & Decision Support: DONE
+```
+
+### Scope
+
+- Saved product comparison selection.
+- Comparison panel for 2-3 saved products.
+- Safe educational disclaimer.
+- No schema/API expansion.
+- No recommendation engine.
+
+### Acceptance Criteria
+
+```txt
+[x] Users can select and deselect saved products for comparison.
+[x] Users can compare 2-3 saved products.
+[x] Users cannot select more than 3 saved products.
+[x] Removing a saved product removes it from comparison selection.
+[x] Comparison uses existing ProductDto fields only.
+[x] Copy remains educational and does not rank products.
+[x] No database schema, collection, API route, marketplace, cart, checkout, payment, review, rating, social, or AI recommendation scope is added.
+[x] Validation passes before marking DONE.
+```
+
+### Suggested Version
+
+```txt
+v1.16 - Saved Product Comparison & Decision Support
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -326,7 +366,7 @@ This is larger than UX polish because it touches access control and content-writ
 ### Suggested Version
 
 ```txt
-v1.17 - Admin Content Management Foundation
+v1.18 - Admin Content Management Foundation
 ```
 
 ## 9. P3 - Real AI Provider Integration
@@ -368,7 +408,7 @@ No raw unvalidated AI output displayed directly.
 ### Suggested Version
 
 ```txt
-v1.18 - Optional Real AI Provider Integration
+v1.19 - Optional Real AI Provider Integration
 ```
 
 ## 10. P4 - Portfolio Assets
@@ -422,16 +462,14 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-Portfolio Evidence Package media follow-up, if needed
+v1.17 Release Evidence & Observability Polish, if needed
 ```
 
 Reason:
 
-- v1.15 Product Match explainability and safety guardrails are complete.
-- v1.15.1 audit cleanup and evidence sync is complete.
-- The app is portfolio/demo ready at MVP level.
-- The central documentation package is prepared.
-- Screenshots and demo video are practical optional media evidence tasks, not product blockers.
+- v1.16 Saved Product Comparison & Decision Support is complete and locally validated.
+- The previous release/observability candidate has been moved out of the v1.16 slot.
+- v1.17 remains optional and should be scoped separately if selected.
 
 ## 13. v1.13 Completion Checklist
 
@@ -458,4 +496,5 @@ Reason:
 2026-06-06: Completed v1.15 Product Match Explainability & Safety Guardrails with local lint/typecheck/test/build/E2E/audit PASS; Portfolio Evidence Package remains the next presentation task.
 2026-06-06: Completed v1.15.1 Audit Cleanup & Evidence Sync with production npm audit PASS, confirmed shadcn/MCP/hono dependency path, no package changes, and synchronized evidence docs.
 2026-06-07: Prepared Portfolio Evidence Package documentation with recruiter summary, CV/resume copy, demo run of show, media capture plan, and explicit evidence boundaries; screenshots and demo video remain optional media tasks.
+2026-06-08: Completed v1.16 Saved Product Comparison & Decision Support with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Moved the prior release/observability candidate out of the v1.16 slot.
 ```

@@ -1,6 +1,6 @@
 # Current Sprint Plan - SkinWise VN MVP
 
-Last updated: 2026-06-07
+Last updated: 2026-06-08
 
 ## 1. Current Phase
 
@@ -18,164 +18,153 @@ UX polish implementation: DONE in v1.13
 Data quality expansion: DONE in v1.14
 Product Match explainability and safety guardrails: DONE in v1.15
 Audit cleanup and evidence sync: DONE in v1.15.1
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
-Recommended next task: Portfolio Evidence Package
+Saved Product Comparison & Decision Support: DONE in v1.16
+Latest completed milestone: MVP v1.16 - Saved Product Comparison & Decision Support
+Current active sprint: MVP v1.16 - Saved Product Comparison & Decision Support
+Current active sprint status: DONE
+Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
-Product behavior changes in v1.15.1: NONE
-Database/schema changes in v1.15.1: NONE
-Auth/authorization changes in v1.15.1: NONE
-Persistence changes in v1.15.1: NONE
-AI-provider changes in v1.15.1: NONE
 ```
 
-MVP v1.15 is the completed controlled product improvement milestone for Product Match/Product Detail explainability. MVP v1.15.1 is the completed audit/dependency-risk and documentation evidence cleanup patch; it did not add product features or change Product Match/Product Detail behavior.
-
-The current documentation task prepares the Portfolio Evidence Package for README, portfolio, CV/resume, recruiter review, interview explanation, and 3-5 minute demo presentation. It is documentation-only and does not claim screenshots, demo video, production smoke, or new app validation unless those actions are actually performed.
+This sprint intentionally switches active work back from portfolio-only evidence to a controlled product-improvement task. The change is limited to the existing Saved Products experience.
 
 ## 2. Objective
 
-Prepare a truthful portfolio presentation package while preserving:
+Allow users to select 2-3 saved products and compare existing skincare product fields side by side while preserving:
 
 ```txt
-Core MVP behavior
-Database persistence behavior
-Authentication and authorization behavior
-Existing Product Match API routes
-Product Match/Product Detail behavior
-Routine safety rules
-AI provider abstraction and fallback behavior
-Portfolio/demo readiness
-Historical validation evidence boundaries
-Secret-handling and privacy boundaries
+No medical diagnosis
+No treatment claims
+No product ranking
+No best/worst product conclusion
+No recommendation engine
+No real AI recommendation
+No marketplace/cart/checkout/payment/review/rating/social scope
+No database schema or collection change
+No unnecessary API route
+Existing save, unsave, and product detail behavior
 ```
 
-Deliverables:
+## 3. Files Touched
+
+Planned/active files:
 
 ```txt
-[x] Central Portfolio Evidence Package document
-[x] Recruiter summary
-[x] CV/resume draft
-[x] Interview narrative
-[x] 3-5 minute demo run of show
-[x] Screenshot and demo-video capture plan
-[x] Evidence boundary separating historical PASS records from current docs-only validation
-[ ] Actual screenshot files
-[ ] Demo video file
+src/modules/saved-products/components/saved-products-page.tsx
+src/modules/saved-products/components/saved-product-card.tsx
+src/modules/saved-products/components/saved-products-comparison-panel.tsx
+tests/unit/saved-products-ui.test.ts
+tests/e2e/saved-products.authenticated.spec.ts
+docs/post-mvp-backlog.md
+docs/ai-coding/03-feature-status-matrix.md
+docs/ai-coding/05-ai-change-log.md
+docs/ai-coding/06-current-sprint-plan.md
 ```
 
-## 3. Completed v1.15 Scope
+## 4. Acceptance Criteria
+
+Functional:
 
 ```txt
-[x] Audited existing Product Match scoring, explanation helpers, UI, Product Detail decision support, and tests.
-[x] Added matched skin type detail to generated Product Match DTOs as an additive optional client field.
-[x] Improved Product Match explanation copy for matched skin type, selected concerns, ingredient/attribute signals, usage, and uncertainty.
-[x] Improved Product Match caution notes for exfoliating acids, multiple exfoliating acids, retinoid/BPO-style strong actives, fragrance/essential oils, sensitive skin, and dry/barrier-prone caution signals.
-[x] Improved Product Detail decision support for good-fit, caution, routine usage, and data-quality/uncertainty guidance.
-[x] Improved no-profile and unknown-profile guidance without changing SkinProfile schema.
-[x] Added focused unit coverage for v1.15 explainability and safety behavior.
-[x] Ran required local validation before marking the milestone DONE.
+[x] User can select a saved product for comparison.
+[x] User can deselect a selected product.
+[x] User can select 2-3 products to compare.
+[x] User cannot select more than 3 products.
+[x] Comparison panel appears only when 2 or more products are selected.
+[x] Comparison panel disappears when fewer than 2 products are selected.
+[x] User can clear all selected comparison products.
+[x] User can still view product details.
+[x] User can still unsave products.
+[x] Removing a saved product removes it from comparison state.
+[x] Saved product reloads prune stale selected product ids.
 ```
 
-## 3A. Completed v1.15.1 Scope
+Content and safety:
 
 ```txt
-[x] Verified Node.js 24.x / npm 11.x runtime baseline.
-[x] Ran npm ci successfully outside the sandbox after sandbox EPERM.
-[x] Verified npm audit --omit=dev --audit-level=moderate returns 0 production vulnerabilities.
-[x] Confirmed shadcn -> @modelcontextprotocol/sdk -> @hono/node-server -> hono dependency path.
-[x] Confirmed shadcn is not CLI-only because src/app/globals.css imports shadcn/tailwind.css.
-[x] Kept package.json and package-lock.json unchanged.
-[x] Synchronized release/audit evidence documentation.
-[x] Did not run npm audit fix --force.
+[x] Panel title is "So sánh sản phẩm đã lưu".
+[x] Disclaimer is visible: "Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y khoa."
+[x] Empty fields show "Chưa có dữ liệu".
+[x] UI does not say which product is best or worst.
+[x] UI does not rank products.
+[x] UI does not make treatment claims.
+[x] UI does not give medical advice.
+[x] UI does not pretend to recommend a product.
+[x] Warnings and notRecommendedFor use cautious educational wording.
 ```
 
-## 4. Non-Goals
+Technical:
 
 ```txt
-No medical diagnosis.
-No clinical advice or clinician-level recommendation.
-No skin image upload.
-No skin score.
-No admin panel.
-No marketplace, payment, cart, checkout, notification, review, or rating flow.
-No database schema, collection, index, or persistence behavior change.
-No auth or authorization logic change.
-No route contract change beyond additive generated DTO explanation detail.
-No dependency reclassification unless a package is demonstrably tooling-only.
-No npm audit fix --force.
-No real AI provider integration.
-No large recommendation engine rewrite.
-No production smoke rerun claim for this sprint.
+[x] Comparison state uses item.productId.
+[x] Set state is updated immutably.
+[x] No database schema change.
+[x] No new MongoDB collection.
+[x] No unnecessary API route.
+[x] No recommendation engine.
+[x] No unrelated refactor.
+[x] Existing Saved Products behavior remains intact.
 ```
 
-## 5. Validation Evidence
-
-Local validation from v1.15.1:
+Documentation:
 
 ```txt
-Evidence date: 2026-06-06
+[x] Backlog updated.
+[x] Current sprint plan updated.
+[x] Change log updated.
+[x] Feature status matrix updated.
+[x] No conflicting active v1.16 item remains.
+[x] v1.16 is marked DONE only after validation passes.
+```
+
+## 5. Validation Checklist
+
+Required before marking DONE:
+
+```txt
+[x] npm run lint
+[x] npm run typecheck
+[x] npm run test
+[x] npm run build
+[x] npm run test:e2e
+[x] npm audit --omit=dev --audit-level=moderate
+```
+
+Current validation status:
+
+```txt
+Evidence date: 2026-06-08
 Environment: Local Windows / PowerShell
-Branch: main
-npm ci: PASS
+Node: v24.14.0
+npm: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 899 tests
-npm run build: PASS
-npm run test:e2e: PASS - 29/29 Playwright tests
+npm run test: PASS - 97 files / 903 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
-Validation notes:
+## 6. Non-Goals
 
 ```txt
-Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM.
-The same commands passed when rerun outside the sandbox.
-E2E global setup seeded the local test database with the expanded v1.14 seed data.
-npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
-Production smoke and monitoring were not rerun for v1.15.1 because it is an audit/documentation evidence cleanup patch.
+No medical diagnosis.
+No prescription or treatment guidance.
+No skin score.
+No image upload or image analysis.
+No marketplace, cart, checkout, or payment.
+No reviews, ratings, likes, or sharing.
+No admin CRUD.
+No database schema, collection, or index change.
+No real AI recommendation.
+No broad redesign of Saved Products.
+No unrelated refactor.
 ```
 
-Production verification from the stable baseline:
-
-```txt
-Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASS - user-reported manual verification completed for the stable MVP baseline
-Production monitoring: PASS - user-reported checks completed for the stable MVP baseline
-Critical blockers reported: None
-Evidence date: 2026-06-04
-```
-
-## 6. Post-MVP Priority Direction
-
-Recommended order after v1.15.1:
-
-```txt
-P2 - Product and ingredient data quality: DONE in v1.14
-P2 - Product Match explainability and safety guardrails: DONE in v1.15
-P2 - Audit cleanup and evidence sync: DONE in v1.15.1
-P4 - Portfolio assets: Documentation package prepared; optional media capture remains
-P2 - Production observability/release confidence: Future controlled task
-P3 - Admin/content management: Optional future task
-P3 - Optional real AI provider integration: Optional high-control future task
-```
-
-## 7. Next Recommended Task
-
-```txt
-Portfolio Evidence Package media follow-up, if needed
-```
-
-Reason:
-
-```txt
-The product is portfolio/demo ready at MVP level after v1.15, and v1.15.1 has synchronized audit evidence. The central documentation package is prepared. The remaining practical presentation evidence is optional media capture: screenshots and demo video. These are not product correctness blockers.
-```
-
-## 8. Suggested Commit
+## 7. Suggested Commit
 
 ```bash
 git add .
-git commit -m "docs: prepare portfolio evidence package"
-git push
+git commit -m "feat: add saved product comparison"
 ```
