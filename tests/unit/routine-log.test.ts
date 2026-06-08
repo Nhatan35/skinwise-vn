@@ -28,12 +28,14 @@ vi.mock("@/infrastructure/database/collections", () => ({
 import { toRoutineLogDto } from "@/modules/routine-logs/routine-log.mapper";
 import {
   routineLogDateQuerySchema,
+  routineLogQuerySchema,
   upsertRoutineLogSchema,
 } from "@/modules/routine-logs/routine-log.schema";
 import {
   deleteRoutineLogByIdAndUserId,
   findRoutineLogByRoutineAndDate,
   findRoutineLogsByDate,
+  findRoutineLogsByDateRange,
   upsertRoutineLog,
 } from "@/modules/routine-logs/routine-log.repository";
 import type { RoutineLog } from "@/modules/routine-logs/routine-log.types";
@@ -134,6 +136,46 @@ describe("RoutineLog schema", () => {
       }),
     ).toThrow(ZodError);
     expect(() => routineLogDateQuerySchema.parse({})).toThrow(ZodError);
+  });
+
+  it("accepts exactly one valid RoutineLog query mode", () => {
+    expect(routineLogQuerySchema.parse({ localDate: "2026-05-17" })).toEqual({
+      localDate: "2026-05-17",
+    });
+    expect(
+      routineLogQuerySchema.parse({
+        from: "2026-05-11",
+        to: "2026-05-17",
+      }),
+    ).toEqual({
+      from: "2026-05-11",
+      to: "2026-05-17",
+    });
+  });
+
+  it("rejects mixed or incomplete RoutineLog query modes", () => {
+    for (const query of [
+      {
+        localDate: "2026-05-17",
+        from: "2026-05-11",
+        to: "2026-05-17",
+      },
+      { from: "2026-05-11" },
+      { to: "2026-05-17" },
+      { localDate: "2026-05-17", unknown: "field" },
+    ]) {
+      expect(() => routineLogQuerySchema.parse(query)).toThrow(ZodError);
+    }
+  });
+
+  it("rejects invalid RoutineLog range queries", () => {
+    for (const query of [
+      { from: "2026-05-18", to: "2026-05-17" },
+      { from: "2026-05-10", to: "2026-05-17" },
+      { from: "2026/05/11", to: "2026-05-17" },
+    ]) {
+      expect(() => routineLogQuerySchema.parse(query)).toThrow(ZodError);
+    }
   });
 
   it("rejects unknown and server-owned fields", () => {
@@ -237,6 +279,24 @@ describe("RoutineLog repository", () => {
       localDate: "2026-05-17",
     });
     expect(sortMock).toHaveBeenCalledWith({ updatedAt: -1 });
+  });
+
+  it("finds logs by authenticated user and localDate range", async () => {
+    const routineLog = createRoutineLog();
+    toArrayMock.mockResolvedValue([routineLog]);
+
+    await expect(
+      findRoutineLogsByDateRange(userId, "2026-05-11", "2026-05-17"),
+    ).resolves.toEqual([routineLog]);
+
+    expect(collectionMock.find).toHaveBeenCalledWith({
+      userId,
+      localDate: {
+        $gte: "2026-05-11",
+        $lte: "2026-05-17",
+      },
+    });
+    expect(sortMock).toHaveBeenCalledWith({ localDate: -1, updatedAt: -1 });
   });
 
   it("finds one log by userId, routineId, and localDate", async () => {

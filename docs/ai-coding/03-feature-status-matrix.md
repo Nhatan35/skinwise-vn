@@ -7,14 +7,15 @@ Last updated: 2026-06-08
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.16 - Saved Product Comparison & Decision Support
+Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Current active milestone: None
 Product core: COMPLETE
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: v1.17 Release Evidence & Observability Polish, if needed
+Recommended next task: To be decided after v1.17 review
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -39,7 +40,7 @@ Optional media evidence tasks: screenshots and demo video
 | Routine Builder | DONE | Morning/evening routine support. |
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
 | Today Routine Checklist | DONE | Daily completion flow. |
-| Routine Logs | DONE | Tracking history. |
+| Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
 | Skin Journal | DONE | Create/edit/delete journal entries. |
 | Insights | DONE | Progress story and safe next actions. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker. |
@@ -56,12 +57,13 @@ Optional media evidence tasks: screenshots and demo video
 | Feature | Category | Version | Status |
 |---|---|---|---|
 | Saved Product Comparison | Post-MVP | v1.16 | DONE |
+| Routine Weekly Review | Post-MVP | v1.17 | DONE |
 
 ## Out-of-Scope Matrix
 
 | Area | Status | Reason |
 |---|---|---|
-| Medical diagnosis | OUT OF SCOPE | Unsafe and outside educational MVP boundary. |
+| Clinical assessment | OUT OF SCOPE | Unsafe and outside educational MVP boundary. |
 | Prescription/treatment guidance | OUT OF SCOPE | Requires clinical governance. |
 | Skin/face score | OUT OF SCOPE | Avoids appearance pressure and unsupported scoring. |
 | Image upload/skin analysis | OUT OF SCOPE | Requires privacy, safety, and ML governance. |
@@ -75,7 +77,8 @@ Optional media evidence tasks: screenshots and demo video
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.16 - Saved Product Comparison & Decision Support
+Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Current active milestone: None
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional and not product correctness blockers
 ```

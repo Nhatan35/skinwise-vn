@@ -8,18 +8,21 @@ vi.mock("@/modules/routines/routine.repository", () => ({
 vi.mock("@/modules/routine-logs/routine-log.repository", () => ({
   deleteRoutineLogByIdAndUserId: vi.fn(),
   findRoutineLogsByDate: vi.fn(),
+  findRoutineLogsByDateRange: vi.fn(),
   upsertRoutineLog: vi.fn(),
 }));
 
 import {
   deleteRoutineLogForUser,
   getRoutineLogsForDate,
+  getRoutineLogsForDateRange,
   RoutineLogValidationError,
   upsertRoutineLogForUser,
 } from "@/modules/routine-logs/routine-log.use-case";
 import {
   deleteRoutineLogByIdAndUserId,
   findRoutineLogsByDate,
+  findRoutineLogsByDateRange,
   upsertRoutineLog,
 } from "@/modules/routine-logs/routine-log.repository";
 import type { RoutineLog } from "@/modules/routine-logs/routine-log.types";
@@ -31,6 +34,7 @@ const mockedDeleteRoutineLogByIdAndUserId = vi.mocked(
   deleteRoutineLogByIdAndUserId,
 );
 const mockedFindRoutineLogsByDate = vi.mocked(findRoutineLogsByDate);
+const mockedFindRoutineLogsByDateRange = vi.mocked(findRoutineLogsByDateRange);
 const mockedUpsertRoutineLog = vi.mocked(upsertRoutineLog);
 
 const userId = "auth-user-id";
@@ -87,6 +91,7 @@ describe("RoutineLog use case", () => {
     mockedFindRoutineByIdAndUserId.mockReset();
     mockedDeleteRoutineLogByIdAndUserId.mockReset();
     mockedFindRoutineLogsByDate.mockReset();
+    mockedFindRoutineLogsByDateRange.mockReset();
     mockedUpsertRoutineLog.mockReset();
   });
 
@@ -107,6 +112,30 @@ describe("RoutineLog use case", () => {
     ]);
     expect(mockedFindRoutineLogsByDate).toHaveBeenCalledWith(
       userId,
+      "2026-05-17",
+    );
+  });
+
+  it("returns logs for the requested authenticated user and localDate range", async () => {
+    mockedFindRoutineLogsByDateRange.mockResolvedValue([createRoutineLog()]);
+
+    await expect(
+      getRoutineLogsForDateRange(userId, "2026-05-11", "2026-05-17"),
+    ).resolves.toEqual([
+      {
+        id: routineLogId,
+        routineId,
+        localDate: "2026-05-17",
+        timezone: "Asia/Ho_Chi_Minh",
+        status: "partial",
+        completedStepIds: ["step-1"],
+        createdAt: fixedDate.toISOString(),
+        updatedAt: fixedDate.toISOString(),
+      },
+    ]);
+    expect(mockedFindRoutineLogsByDateRange).toHaveBeenCalledWith(
+      userId,
+      "2026-05-11",
       "2026-05-17",
     );
   });

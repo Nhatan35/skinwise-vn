@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import {
@@ -8,8 +8,13 @@ import {
   getBrowserLocalDate,
   getBrowserTimezone,
   getCompletedStepCount,
+  getRoutineLogsEndpoint,
+  getRoutineLogsRangeEndpoint,
   getRoutineLogStatusLabel,
   groupRoutineLogsByRoutineId,
+  listRoutineLogsForDate,
+  listRoutineLogsForDateRange,
+  RoutineLogClientError,
   RoutineLogClientValidationError,
 } from "@/modules/routine-logs/routine-log.client";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
@@ -62,8 +67,21 @@ function createRoutineLog(overrides: Partial<RoutineLogDto> = {}): RoutineLogDto
 }
 
 describe("RoutineLog client helpers", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("formats browser local date with local date parts", () => {
     expect(getBrowserLocalDate(new Date(2026, 4, 7))).toBe("2026-05-07");
+  });
+
+  it("builds RoutineLog list endpoints for date and range modes", () => {
+    expect(getRoutineLogsEndpoint("2026-05-17")).toBe(
+      "/api/routine-logs?localDate=2026-05-17",
+    );
+    expect(getRoutineLogsRangeEndpoint("2026-05-11", "2026-05-17")).toBe(
+      "/api/routine-logs?from=2026-05-11&to=2026-05-17",
+    );
   });
 
   it("returns browser timezone when available", () => {
@@ -199,5 +217,101 @@ describe("RoutineLog client helpers", () => {
         createRoutineLog({ completedStepIds: ["step-1", "unknown"] }),
       ),
     ).toBe(1);
+  });
+
+  it("fetches routine logs for a single date through the existing response envelope", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: { routineLogs: [createRoutineLog()] },
+          error: null,
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(listRoutineLogsForDate("2026-05-17")).resolves.toEqual([
+      createRoutineLog(),
+    ]);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/routine-logs?localDate=2026-05-17",
+      {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "GET",
+      },
+    );
+  });
+
+  it("fetches routine logs for a 7-day range through the existing response envelope", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: { routineLogs: [createRoutineLog({ id: "log-2" })] },
+          error: null,
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      listRoutineLogsForDateRange("2026-05-11", "2026-05-17"),
+    ).resolves.toEqual([createRoutineLog({ id: "log-2" })]);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/routine-logs?from=2026-05-11&to=2026-05-17",
+      {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "GET",
+      },
+    );
+  });
+
+  it("throws a client error when the RoutineLog API returns an error envelope", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: null,
+            error: {
+              code: "VALIDATION_ERROR",
+              message: "Query parameters are invalid.",
+            },
+          }),
+          { status: 400 },
+        ),
+      ),
+    );
+
+    await expect(
+      listRoutineLogsForDateRange("2026-05-17", "2026-05-11"),
+    ).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      status: 400,
+    });
+  });
+
+  it("throws a client error when the RoutineLog API response is malformed", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: { routineLogs: [{ id: "log-without-required-fields" }] },
+            error: null,
+          }),
+          { status: 200 },
+        ),
+      ),
+    );
+
+    await expect(listRoutineLogsForDate("2026-05-17")).rejects.toBeInstanceOf(
+      RoutineLogClientError,
+    );
   });
 });

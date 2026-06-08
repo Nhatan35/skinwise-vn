@@ -10,11 +10,12 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.16 - Saved Product Comparison & Decision Support: DONE
+Latest completed milestone: v1.17 - Routine History & Weekly Progress Review: DONE
+Current active milestone: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: v1.17 Release Evidence & Observability Polish, if needed
+Recommended next task: To be decided after v1.17 review
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
@@ -44,7 +45,7 @@ Before starting any backlog item, follow these rules:
 1. Create a small branch or commit scope for one task only.
 2. Do not mix UX polish, data expansion, AI integration, and admin features in one task.
 3. Do not change database schema unless the selected task explicitly requires it.
-4. Do not add medical diagnosis, treatment claims, prescription advice, skin score, or face/image analysis.
+4. Do not add clinical assessment, treatment claims, prescription advice, skin/face scoring, or face/image analysis.
 5. Do not expose secrets, OAuth credentials, database URIs, tokens, or private user data.
 6. Keep mock/fallback behavior working even if a future real AI provider is added.
 7. Run validation before marking a task complete.
@@ -72,7 +73,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Product Match explainability and safety guardrails | DONE in v1.15 | Makes matching and Product Detail decisions clearer without medical overclaiming. |
 | P2 | Audit cleanup and evidence sync | DONE in v1.15.1 | Keeps npm audit/dependency-risk evidence and release docs truthful without product behavior changes. |
 | P2 | Saved Product Comparison & Decision Support | DONE in v1.16 | Lets users compare 2-3 saved products using existing educational product data without ranking or recommendations. |
-| P2 | Release/observability polish | Future v1.17 option | Improves production confidence and debugging when deliberately scoped. |
+| P2 | Routine History & Weekly Progress Review | DONE in v1.17 | Helps users review 7-day routine consistency using existing routine log data and habit-tracking copy. |
+| P2 | Release/observability polish | Future optional release evidence candidate | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -252,7 +254,7 @@ Improve confidence in production behavior and release handover.
 ### Suggested Version
 
 ```txt
-v1.17 - Release Evidence & Observability Polish
+Future optional release evidence candidate (unversioned)
 ```
 
 ### Current Note
@@ -260,6 +262,7 @@ v1.17 - Release Evidence & Observability Polish
 ```txt
 v1.15.1 completed audit/dependency-risk and documentation evidence sync only.
 This broader release/observability polish item remains a future optional task and is not started.
+v1.17 is now used for Routine History & Weekly Progress Review.
 ```
 
 ## 7A. P2 - Product Match Explainability & Safety Guardrails
@@ -324,7 +327,7 @@ v1.16 - Saved Product Comparison & Decision Support: DONE
 [x] Removing a saved product removes it from comparison selection.
 [x] Comparison uses existing ProductDto fields only.
 [x] Copy remains educational and does not rank products.
-[x] No database schema, collection, API route, marketplace, cart, checkout, payment, review, rating, social, or AI recommendation scope is added.
+[x] No database schema, collection, API route, marketplace, cart, checkout, payment, review, rating, social, or AI-driven advice scope is added.
 [x] Validation passes before marking DONE.
 ```
 
@@ -332,6 +335,49 @@ v1.16 - Saved Product Comparison & Decision Support: DONE
 
 ```txt
 v1.16 - Saved Product Comparison & Decision Support
+```
+
+## 7C. P2 - Routine History & Weekly Progress Review
+
+### Goal
+
+Help users review routine consistency over the last 7 days using existing routine log data.
+
+### Status
+
+```txt
+v1.17 - Routine History & Weekly Progress Review: DONE
+Validation for v1.17: PASS
+```
+
+### Scope
+
+- Weekly routine review card on `/routine-logs/today`.
+- 7-day routine summary using existing routine log data.
+- Logged-day count and routine-log completion percentage.
+- Completed, partial, skipped, and not-logged day states.
+- Safe habit-tracking disclaimer.
+- No schema or collection expansion.
+- No scoring, clinical assessment, treatment guidance, or AI-driven product advice.
+- No full analytics dashboard.
+
+### Acceptance Criteria
+
+```txt
+[x] Weekly review card appears on /routine-logs/today.
+[x] The existing today routine checklist still works.
+[x] The card shows the last 7 local dates including today.
+[x] The card shows logged-day count and completion percentage when data exists.
+[x] The card shows a calm empty state when no recent routine logs exist.
+[x] Copy frames the feature as habit tracking, not clinical evaluation.
+[x] No database collection, schema redesign, marketplace, checkout, payment, review, rating, notification, image, or AI provider scope is added.
+[x] Validation passes before marking DONE.
+```
+
+### Suggested Version
+
+```txt
+v1.17 - Routine History & Weekly Progress Review
 ```
 
 ## 8. P3 - Admin / Content Management
@@ -387,7 +433,7 @@ Optionally connect a real AI provider while preserving strict fallback and valid
 ### Safety Rules
 
 ```txt
-No diagnosis.
+No clinical assessment.
 No treatment guarantee.
 No prescription guidance.
 No skin scoring.
@@ -450,7 +496,7 @@ Public reviews/ratings
 Notifications
 Image upload
 Face/skin analysis
-Skin score
+Skin/face scoring
 Medical treatment recommendation
 Large architecture rewrite
 ```
@@ -462,14 +508,14 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-v1.17 Release Evidence & Observability Polish, if needed
+To be decided after v1.17 review
 ```
 
 Reason:
 
-- v1.16 Saved Product Comparison & Decision Support is complete and locally validated.
-- The previous release/observability candidate has been moved out of the v1.16 slot.
-- v1.17 remains optional and should be scoped separately if selected.
+- v1.17 Routine History & Weekly Progress Review is complete and locally validated.
+- The previous release/observability candidate remains a future optional evidence task, unversioned for now.
+- The next post-MVP task should be selected deliberately from the backlog.
 
 ## 13. v1.13 Completion Checklist
 
@@ -497,4 +543,6 @@ Reason:
 2026-06-06: Completed v1.15.1 Audit Cleanup & Evidence Sync with production npm audit PASS, confirmed shadcn/MCP/hono dependency path, no package changes, and synchronized evidence docs.
 2026-06-07: Prepared Portfolio Evidence Package documentation with recruiter summary, CV/resume copy, demo run of show, media capture plan, and explicit evidence boundaries; screenshots and demo video remain optional media tasks.
 2026-06-08: Completed v1.16 Saved Product Comparison & Decision Support with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Moved the prior release/observability candidate out of the v1.16 slot.
+2026-06-08: Started v1.17 Routine History & Weekly Progress Review as the active product-improvement sprint; release/observability polish remains a future optional evidence candidate.
+2026-06-08: Completed v1.17 Routine History & Weekly Progress Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
 ```

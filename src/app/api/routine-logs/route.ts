@@ -4,11 +4,12 @@ import { ZodError } from "zod";
 import { getCurrentUser } from "@/modules/auth/get-current-user";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import {
-  routineLogDateQuerySchema,
+  routineLogQuerySchema,
   upsertRoutineLogSchema,
 } from "@/modules/routine-logs/routine-log.schema";
 import {
   getRoutineLogsForDate,
+  getRoutineLogsForDateRange,
   RoutineLogValidationError,
   upsertRoutineLogForUser,
 } from "@/modules/routine-logs/routine-log.use-case";
@@ -105,11 +106,15 @@ export async function GET(request: Request) {
       return unauthorizedResponse();
     }
 
-    const input = routineLogDateQuerySchema.parse(getQueryParams(request));
-    const routineLogs = await getRoutineLogsForDate(
-      currentUser.id,
-      input.localDate,
-    );
+    const input = routineLogQuerySchema.parse(getQueryParams(request));
+    const routineLogs =
+      "localDate" in input
+        ? await getRoutineLogsForDate(currentUser.id, input.localDate)
+        : await getRoutineLogsForDateRange(
+            currentUser.id,
+            input.from,
+            input.to,
+          );
 
     return jsonResponse<{ routineLogs: RoutineLogDto[] }>({ routineLogs });
   } catch (error) {

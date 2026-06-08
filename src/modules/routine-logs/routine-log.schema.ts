@@ -14,6 +14,26 @@ export const routineLogDateQuerySchema = z
   })
   .strict();
 
+const routineLogDateRangeQuerySchema = z
+  .object({
+    from: routineLogLocalDateSchema,
+    to: routineLogLocalDateSchema,
+  })
+  .strict()
+  .refine((value) => value.from <= value.to, {
+    message: "from must be before or equal to to.",
+    path: ["from"],
+  })
+  .refine((value) => getDateRangeDayCount(value.from, value.to) <= 7, {
+    message: "Date range must be 7 days or less.",
+    path: ["to"],
+  });
+
+export const routineLogQuerySchema = z.union([
+  routineLogDateQuerySchema,
+  routineLogDateRangeQuerySchema,
+]);
+
 export const upsertRoutineLogSchema = z
   .object({
     routineId: z.string().trim().min(1),
@@ -28,4 +48,15 @@ export const upsertRoutineLogSchema = z
 export type RoutineLogDateQueryInput = z.infer<
   typeof routineLogDateQuerySchema
 >;
+export type RoutineLogQueryInput = z.infer<typeof routineLogQuerySchema>;
 export type UpsertRoutineLogInput = z.infer<typeof upsertRoutineLogSchema>;
+
+function getDateRangeDayCount(from: string, to: string) {
+  return getLocalDateDayNumber(to) - getLocalDateDayNumber(from) + 1;
+}
+
+function getLocalDateDayNumber(localDate: string) {
+  const [year, month, day] = localDate.split("-").map(Number);
+
+  return Date.UTC(year, month - 1, day) / 86_400_000;
+}

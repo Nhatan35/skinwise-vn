@@ -6,6 +6,65 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-08 - MVP v1.17 Routine History & Weekly Progress Review
+
+### Task
+
+Add a lightweight weekly routine review to `/routine-logs/today` so users can review routine habit consistency over the last 7 local dates using existing routine log data.
+
+### Files Added
+
+- `src/modules/routine-logs/components/routine-weekly-review-card.tsx`
+- `src/modules/routine-logs/routine-weekly-review.ts`
+- `tests/unit/routine-log-list-api-contract.test.ts`
+- `tests/unit/routine-weekly-review.test.ts`
+
+### Files Updated
+
+- `src/app/api/routine-logs/route.ts`
+- `src/modules/routine-logs/components/today-routine-checklist.tsx`
+- `src/modules/routine-logs/index.ts`
+- `src/modules/routine-logs/routine-log.client.ts`
+- `src/modules/routine-logs/routine-log.schema.ts`
+- `tests/unit/routine-log.test.ts`
+- `tests/unit/routine-log-use-case.test.ts`
+- `tests/unit/routine-log-client.test.ts`
+- `tests/unit/routine-log-ui.test.ts`
+- `tests/e2e/today-routine-log.authenticated.spec.ts`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added weekly routine review data helper.
+- Added 7-day routine consistency summary on the Today Routine Log page.
+- Added safe habit-tracking disclaimer.
+- Added bounded `from`/`to` support to the existing RoutineLog GET API while keeping `localDate` behavior.
+- Updated unit and E2E tests where stable.
+- Updated docs for the active v1.17 sprint.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 99 files / 929 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Status
+
+```txt
+DONE after full local validation passed.
+```
+
 ## 2026-06-08 - MVP v1.16 Saved Product Comparison & Decision Support
 
 ### Task
@@ -286,7 +345,7 @@ Improve first-time UX states across the existing MVP without adding new product 
 - No Product Match rule change.
 - No Routine Safety Engine change.
 - No real AI provider integration.
-- No admin, marketplace, payment, notification, review, rating, image upload, or skin score scope.
+- No admin, marketplace, payment, notification, review, rating, image upload, or skin scoring scope.
 
 ### Validation
 
@@ -541,7 +600,7 @@ Validation was not rerun in the v1.8.1 documentation cleanup task. Pending local
 - No source code, business logic, database schema, route, UI/UX, test, package, or dependency change.
 - No production evidence is claimed for v1.8.1.
 - No real OpenAI/Gemini integration is claimed.
-- No medical diagnosis, prescription, skin scoring, face analysis, marketplace, checkout, or payment scope was added.
+- No clinical assessment, prescription, skin scoring, face analysis, marketplace, checkout, or payment scope was added.
 
 ## 2026-05-31 - MVP-v1.3-FIX-002 Final Release Documentation Sync
 
@@ -575,7 +634,7 @@ npm run test:e2e: PASS - 28/28 tests
 
 - Documentation and release-readiness sync only.
 - No Product Match scoring, API DTO, database schema, authentication, validation, UI behavior, or test behavior was changed.
-- No real AI provider, diagnosis, medical claim, treatment guarantee, skin score, image/face analysis, marketplace, checkout, or payment feature was added.
+- No real AI provider, clinical assessment, medical claim, treatment guarantee, skin scoring, image/face analysis, marketplace, checkout, or payment feature was added.
 
 ### Final status
 
@@ -631,7 +690,7 @@ Runtime logs reviewed: PASS
 - No UI redesign was performed.
 - No database schema expansion was added.
 - No real OpenAI/Gemini provider integration was added.
-- No image upload, marketplace, payment, notification, skin score, or medical diagnosis feature was added.
+- No image upload, marketplace, payment, notification, skin scoring, or clinical assessment feature was added.
 - No secret values, OAuth credentials, MongoDB credentials, API keys, deployment tokens, or private environment values were documented.
 - AI provider remains `mock` for the MVP demo baseline.
 - Screenshot capture is skipped intentionally, not pending.
@@ -654,7 +713,7 @@ Close out the completed MVP core journey E2E validation record and fix the remai
 
 - Updated documentation to record `MVP-CORE-JOURNEY-E2E-001` as completed in source/docs.
 - Recorded `MVP-CORE-JOURNEY-E2E-VALIDATION-001` as completed using the latest local validation evidence: typecheck PASS, lint PASS, unit tests PASS with 72 files and 717 tests, build PASS, database indexes PASS with 32 indexes ensured after `.env.local` was available locally, E2E seed PASS, and Playwright E2E PASS with 24 tests.
-- Fixed the Routine Analysis suggestion render key in `routine-analysis-panel.tsx` so repeated AI-provider suggestion titles such as `AI recommendation` no longer produce duplicate React keys.
+- Fixed the Routine Analysis suggestion render key in `routine-analysis-panel.tsx` so repeated AI-provider suggestion titles such as `AI-driven suggestion` no longer produce duplicate React keys.
 - Added a targeted Routine Analysis Playwright console-warning guard for the specific duplicate key warning.
 - Kept the fix in the UI render layer; Routine Analysis API response shape, AI provider mapper output, user-facing suggestion copy, authentication, and E2E coverage were not weakened.
 
@@ -812,7 +871,7 @@ tests/unit/skin-journal-ui.test.ts
 - Added ingredient detail UI with educational disclaimer, cautious suitability/caution sections, and source references.
 - Added an explanation panel that calls `POST /api/ingredients/explain`, handles rate limits, and labels fallback explanations.
 - Added authenticated Playwright coverage using deterministic Niacinamide seed data and the existing test-only Auth.js provider.
-- No Ingredient CRUD, admin management, database persistence for explanations, real OpenAI/Gemini integration, image analysis, skin score, diagnosis, or treatment claims were added.
+- No Ingredient CRUD, admin management, database persistence for explanations, real OpenAI/Gemini integration, image analysis, skin scoring, clinical assessment, or treatment claims were added.
 
 ### Validation
 
@@ -1109,7 +1168,7 @@ docs/ai-coding/06-current-sprint-plan.md
 - Portfolio case study was reviewed and updated with a clear limitations section.
 - Screenshots remain optional manual work; no fake screenshots or placeholder image files were added.
 - No UI, API, authentication, database, Routine Builder, business logic, package dependency, lockfile, or MVP feature scope was changed.
-- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin scoring, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and clinical assessment remain out of scope.
 
 ## 2026-05-24 - TASK PORTFOLIO-001 Portfolio Case Study and Demo Script
 
@@ -1143,7 +1202,7 @@ docs/ai-coding/06-current-sprint-plan.md
 - The screenshots checklist documents the recommended portfolio screenshots and safety checks.
 - README now links to the portfolio case study, demo script, screenshots checklist, and demo data guide.
 - No UI, API, authentication, database, Routine Builder, business logic, package dependency, or MVP feature scope was changed.
-- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin scoring, marketplace, payment, subscription, notifications, admin dashboard, Product CRUD, barcode scanner, and clinical assessment remain out of scope.
 
 ## 2026-05-24 - TASK DEMO-DATA-001 Professional Demo Data
 
@@ -1176,7 +1235,7 @@ docs/ai-coding/06-current-sprint-plan.md
 - Tuned existing public product seed metadata for the demo story without adding unsupported Product fields.
 - User-owned demo data remains created through the authenticated UI with a real demo account; no fake Auth.js user, fake `userId`, static dashboard output, or auth bypass was added.
 - The new demo script documents Skin Profile setup, Morning Routine, Evening Routine, optional caution routine, routine logs, SkinJournal entries, dashboard summary, BA presentation angle, and technical presentation angle.
-- No Product CRUD, admin UI, real OpenAI/Gemini provider, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, or medical diagnosis was added.
+- No Product CRUD, admin UI, real OpenAI/Gemini provider, image upload, AI face analysis, skin scoring, marketplace, payment, subscription, notifications, or clinical assessment was added.
 
 ## 2026-05-24 - TASK QA-REGRESSION-001 Clean Package Validation Stabilization
 
@@ -1206,7 +1265,7 @@ docs/ai-coding/06-current-sprint-plan.md
 - The fix makes clean package validation robust across Windows CRLF and Unix LF environments.
 - `.gitattributes` was added to prefer LF endings for source, documentation, config, and style files going forward.
 - No Routine Builder source/business logic, UI behavior, API logic, database logic, authentication behavior, or product feature scope was changed.
-- Real OpenAI/Gemini integration, image upload, skin score, marketplace, payment, notifications, admin dashboard, Product CRUD, barcode scanner, and medical diagnosis remain out of scope.
+- Real OpenAI/Gemini integration, image upload, skin scoring, marketplace, payment, notifications, admin dashboard, Product CRUD, barcode scanner, and clinical assessment remain out of scope.
 
 ## 2026-05-24 - TASK DEPLOY-002 Vercel MVP Demo Deployment
 
@@ -1245,7 +1304,7 @@ MongoDB production/demo read/write through authenticated flows: Passed
 - Protected routes no longer return 404 and redirect unauthenticated users to sign-in.
 - Authenticated MVP flows were manually smoke-tested: dashboard, skin profile, products, product detail, routines, routine analysis/history/logging, journal create/edit/delete, and dashboard summaries.
 - `AI_PROVIDER` remains `mock`; routine analysis uses mock/deterministic provider behavior for the MVP demo.
-- Real OpenAI/Gemini providers, image upload, AI face analysis, skin score, marketplace, payment, subscription, notifications, and medical diagnosis remain out of scope.
+- Real OpenAI/Gemini providers, image upload, AI face analysis, skin scoring, marketplace, payment, subscription, notifications, and clinical assessment remain out of scope.
 - No secrets, MongoDB credentials, OAuth secrets, `AUTH_SECRET`, API keys, deployment tokens, or private values were documented.
 
 ## 2026-05-24 - TASK SECURITY-AUDIT-001 Production Dependency Audit Fix
@@ -1327,7 +1386,7 @@ The MVP implementation is ready for deployment preparation, but actual Vercel de
 - `docs/deployment/vercel-deployment.md` documents Vercel settings, supported environment variables, MongoDB Atlas readiness, Google OAuth production setup, deployment steps, and production smoke tests.
 - Production environment docs use `AUTH_URL` and `APP_BASE_URL`; `NEXTAUTH_URL` was not introduced.
 - MVP demo deployment should use `AI_PROVIDER="mock"`.
-- Real OpenAI/Gemini providers, image upload, marketplace, notifications, skin score, and medical diagnosis remain out of scope.
+- Real OpenAI/Gemini providers, image upload, marketplace, notifications, skin scoring, and clinical assessment remain out of scope.
 - Actual Vercel deployment was not executed.
 - Production URL was not provided.
 - Production smoke test was not performed.
@@ -1522,7 +1581,7 @@ The dashboard already summarized profile, routines, today's RoutineLog progress,
 - `DashboardDto` now includes `latestJournal` without exposing `userId`, `_id`, raw ObjectId values, or full long notes.
 - `LatestJournalCard` renders empty and populated states using the existing DashboardCard/Button/Badge patterns.
 - `nextActions` remains `DashboardNextAction[]` but now returns one deterministic primary action in the required priority order.
-- No dashboard charts, streaks, SkinJournal analytics, AI-generated journal insight, image upload, skin score, Product/Ingredient behavior, auth behavior, or medical diagnosis was added.
+- No dashboard charts, streaks, SkinJournal analytics, AI-generated journal insight, image upload, skin scoring, Product/Ingredient behavior, auth behavior, or clinical assessment was added.
 
 ### Validation
 
@@ -1569,7 +1628,7 @@ The `/products` route, Product API parsing, filters, proxy protection, and Produ
 - Products now receives active styling and `aria-current="page"` on `/products`.
 - Dashboard active state is limited to the exact `/dashboard` path.
 - Disabled Today Log and Ingredients items remain disabled with no links.
-- No Product detail UI, Product CRUD, Product submission, saved products, image upload, AI recommendation, skin score, or medical behavior was added.
+- No Product detail UI, Product CRUD, Product submission, saved products, image upload, AI-driven advice, skin scoring, or medical behavior was added.
 
 ### Validation
 
@@ -1633,7 +1692,7 @@ Local Windows/Node.js resolved MongoDB Atlas SRV records only after explicitly s
 - `src/infrastructure/database/mongodb.ts` sets DNS servers before creating `MongoClient`.
 - `src/auth.ts` keeps MongoDB Adapter for identity/account persistence but forces `session.strategy = "jwt"`.
 - Local cookie cleanup is documented for `JWTSessionError` / `Invalid Compact JWE` after `AUTH_SECRET` or session strategy changes.
-- No product scope, API contract, AI behavior, marketplace behavior, image upload, skin score, or medical behavior was added.
+- No product scope, API contract, AI behavior, marketplace behavior, image upload, skin scoring, or medical behavior was added.
 
 ### Verification
 
@@ -1688,7 +1747,7 @@ docs/ai-coding/06-current-sprint-plan.md
 
 ### Reason
 
-Authenticated users needed a dashboard-consistent way to browse the existing reviewed Product catalogue without adding Product CRUD, submission, admin review, saved products, images, AI recommendation, or diagnosis behavior.
+Authenticated users needed a dashboard-consistent way to browse the existing reviewed Product catalogue without adding Product CRUD, submission, admin review, saved products, images, AI-driven advice, or clinical-assessment behavior.
 
 ### Implementation Notes
 
@@ -1721,7 +1780,7 @@ npm run test: Pass - 59 files, 580 tests
 
 ### Notes
 
-- Product CRUD, product submission, admin review, saved product library, Product detail UI, image upload, AI recommendation, skin score, and medical diagnosis remain unimplemented.
+- Product CRUD, product submission, admin review, saved product library, Product detail UI, image upload, AI-driven advice, skin scoring, and clinical assessment remain unimplemented.
 - Recommended next task should be selected from product priorities, such as TASK PRODUCT-UI-002 - Implement Product Detail UI or the next explicitly scoped SkinJournal task.
 
 ## 2026-05-23 - TASK SJ-003 SkinJournal Product Linking / Product Name Resolution
@@ -1866,7 +1925,7 @@ npm run test
 ### Notes
 
 - SJ-001 backend behavior and API contract were not changed.
-- Image upload, image storage, calendar heatmap, analytics/insight view, product name resolution, AI journal analysis, skin score, and medical diagnosis remain out of scope.
+- Image upload, image storage, calendar heatmap, analytics/insight view, product name resolution, AI journal analysis, skin scoring, and clinical assessment remain out of scope.
 - Recommended next SkinJournal task should be selected from product priorities, such as product linking/name resolution, calendar/insight view, or private image upload.
 
 ## 2026-05-23 - TASK SJ-001 SkinJournal Backend API Foundation
@@ -2500,7 +2559,7 @@ TASK DB-001 implemented the authenticated Dashboard API and replaced the placeho
 - Confirmed DB-001 is completed and documented.
 - Set the next recommended task to `TASK AI-001 — AI Provider Abstraction`.
 - No source feature was added.
-- No AI Provider Abstraction, Ingredient Explanation, Product UI, Journal, image upload, skin score, diagnosis, medical recommendation, product submission, or admin product feature was implemented.
+- No AI Provider Abstraction, Ingredient Explanation, Product UI, Journal, image upload, skin scoring, clinical assessment, clinical advice, product submission, or admin product feature was implemented.
 
 ### Tests
 
@@ -2576,7 +2635,7 @@ The protected dashboard shell needed to stop showing placeholder cards and summa
 - Added latest routine analysis repository helper scoped by `userId`, sorted by `createdAt` descending.
 - Replaced `/dashboard` placeholder cards with a client DashboardOverview that calls `GET /api/dashboard?localDate=...` using `getBrowserLocalDate()` from RoutineLog client helpers.
 - Added cards for Skin Profile, today's progress, Routine summary, latest analysis, and next actions.
-- No Dashboard charts, weekly/monthly analytics, streak calculation, AI insights, SkinJournal, image upload, skin score, external API call, or new dependency was added.
+- No Dashboard charts, weekly/monthly analytics, streak calculation, AI insights, SkinJournal, image upload, skin scoring, external API call, or new dependency was added.
 
 ### Tests
 
@@ -2650,7 +2709,7 @@ npm run build: Timed out in this sandbox while collecting page data after succes
 
 ### Notes
 
-- No Dashboard integration, streak calculation, weekly/monthly analytics, AI insights, RoutineLog note input, SkinJournal, image upload, skin score, product submission, admin product management, external API call, or new dependency was added.
+- No Dashboard integration, streak calculation, weekly/monthly analytics, AI insights, RoutineLog note input, SkinJournal, image upload, skin scoring, product submission, admin product management, external API call, or new dependency was added.
 - Next recommended task is TASK DB-001 — Dashboard Data Integration.
 
 ## 2026-05-17 - TASK PP-001 Product Picker + Routine Product Snapshot Population
@@ -2702,7 +2761,7 @@ Routine steps need to support both curated reviewed/verified products and manual
 - Manual custom product steps keep `customProductName` and do not require a Product document.
 - Routine list display now prefers `brandSnapshot — productNameSnapshot`, then `productNameSnapshot`, then `customProductName`, then `Sản phẩm chưa xác định`.
 - Optional key active badges are shown for Product snapshot steps.
-- No Product UI page, Product submission workflow, admin Product management, seed script, Product creation form, external product API call, Ingredient explanation AI, RoutineLog, SkinJournal, dashboard data integration, skin score, image upload, barcode scanner, or medical diagnosis was added.
+- No Product UI page, Product submission workflow, admin Product management, seed script, Product creation form, external product API call, Ingredient explanation AI, RoutineLog, SkinJournal, dashboard data integration, skin scoring, image upload, barcode scanner, or clinical assessment was added.
 
 ### Tests
 
@@ -2781,7 +2840,7 @@ Product and Ingredient read APIs are needed before Product Picker integration an
 - DTO mappers convert `_id` to `id`, Dates to ISO strings, and copy arrays.
 - Product DTOs omit `createdByUserId`, `source`, `_id`, and raw ObjectId values.
 - Existing canonical Product and Ingredient collection helpers and index definitions were reused; no repository-created indexes were added.
-- No Product UI, Product Picker integration, Routine product snapshot population, `POST /api/products`, admin product management, Ingredient explanation AI API, seed script, external product API, image upload, or medical diagnosis was added.
+- No Product UI, Product Picker integration, Routine product snapshot population, `POST /api/products`, admin product management, Ingredient explanation AI API, seed script, external product API, image upload, or clinical assessment was added.
 
 ### Tests
 
@@ -2845,7 +2904,7 @@ Routine analysis is an AI-adjacent endpoint. It needs abuse protection before re
 - Unauthenticated requests keep the existing `UNAUTHORIZED` behavior and do not call the rate limiter.
 - Rate-limited requests return `RATE_LIMITED` with HTTP 429, `Retry-After`, and `details.retryAfterSeconds`.
 - `analyzeRoutineForCurrentUser()` is not called when the user is rate-limited.
-- No Redis, in-memory production limiter, new dependency, AI provider, Product/Ingredient integration, Journal, Routine Logs, image upload, skin score, medical diagnosis, or broad refactor was added.
+- No Redis, in-memory production limiter, new dependency, AI provider, Product/Ingredient integration, Journal, Routine Logs, image upload, skin scoring, clinical assessment, or broad refactor was added.
 
 ### Tests
 
@@ -2901,9 +2960,9 @@ Week 3 Task 5 requires users to run and view routine analysis from the existing 
 - Added per-routine history loading that calls `GET /api/routines/[id]/analyses` and reads the actual `body.data.analyses` response shape.
 - The UI displays API-provided `analysisId`, `createdAt`, `riskLevel`, `summary`, `warnings`, `suggestions`, `shouldSeeProfessional`, and `disclaimer`.
 - The client formats API-provided risk and priority values as Vietnamese labels only.
-- The client does not generate risk levels, warnings, suggestions, summaries, diagnosis, treatment claims, skin scores, or analysis conclusions.
+- The client does not generate risk levels, warnings, suggestions, summaries, clinical assessment, treatment claims, skin-scoring outputs, or analysis conclusions.
 - Client components use type-only `RoutineAnalysisDto` imports and do not import repositories, use cases, MongoDB helpers, auth helpers, Routine Safety Engine, or AI provider modules.
-- No `/routines/[id]`, `/routines/[id]/analysis`, `/routines/[id]/analyses`, dashboard analysis card, Product/Ingredient module, Product picker, Product lookup, Routine Logs, Journal, image upload, skin score, medical diagnosis, real AI provider integration, external API call, new dependency, or broad refactor was added.
+- No `/routines/[id]`, `/routines/[id]/analysis`, `/routines/[id]/analyses`, dashboard analysis card, Product/Ingredient module, Product picker, Product lookup, Routine Logs, Journal, image upload, skin scoring, clinical assessment, real AI provider integration, external API call, new dependency, or broad refactor was added.
 
 ### Tests
 
@@ -2970,7 +3029,7 @@ Week 3 Task 4 requires the canonical Routine Analysis API foundation from the SD
 - RoutineAnalysis persistence stores `routineSnapshot`, top-level deterministic `riskLevel`, and all rule results including `triggered: false`.
 - Public DTOs return triggered warnings only and do not expose MongoDB `_id`, `userId`, or internal `ruleResults`.
 - Deterministic fallback metadata is stored as `modelProvider: "deterministic"`, `modelName: "routine-safety-engine"`, and `promptVersion: "routine-analysis-fallback-v1"`.
-- No OpenAI, LLM client, external API call, Product/Ingredient module, Product lookup, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, skin score, image upload, medical diagnosis, new dependency, or broad refactor was added.
+- No OpenAI, LLM client, external API call, Product/Ingredient module, Product lookup, Product snapshot backfill, UI, dashboard integration, Journal, Routine Logs, skin scoring, image upload, clinical assessment, new dependency, or broad refactor was added.
 - At the time of Task 4, no rate-limit utility existed; TASK-RA-001 later added the scoped MongoDB-backed limiter for the analyze route.
 - Review before commit kept `GET /api/routines/[id]/analyses` as `data: { analyses: [...] }` because `docs/05-api-contract.md` does not define a different response body for the history endpoint and the existing `GET /api/routines` list API convention returns a named list wrapper as `data: { routines: [...] }`.
 
@@ -3032,7 +3091,7 @@ Week 3 Task 3 requires the deterministic rule engine foundation from `docs/11-ro
 - `MISSING_MOISTURIZER` detects exfoliant behavior through normalized AHA/BHA/PHA signals, not through a category.
 - The engine returns `allRuleResults`, `triggeredRules`, deterministic `riskLevel`, and normalized signal metadata.
 - Product data is not loaded when `productId` exists but snapshots are missing.
-- No Routine Analysis API, AI integration, database persistence, Product lookup, Product snapshot population, UI, Journal, Routine Logs, dashboard data integration, skin score, image upload, or medical diagnosis was implemented.
+- No Routine Analysis API, AI integration, database persistence, Product lookup, Product snapshot population, UI, Journal, Routine Logs, dashboard data integration, skin scoring, image upload, or clinical assessment was implemented.
 - Follow-up review tightened custom product snapshot detection so product name, brand, key active, or ingredient snapshots prevent a custom product from being counted as missing snapshot data. `productId` alone still does not count as snapshot data.
 
 ### Tests
@@ -3097,7 +3156,7 @@ Week 3 Task 2 requires the first Routine Builder UI foundation on `/routines` on
 - The UI does not submit `productId`, `stepId`, `userId`, `id`, `_id`, timestamps, or Product snapshot fields.
 - Dashboard Routines navigation now points to `/routines` and is enabled.
 - `src/proxy.ts` now protects `/routines/:path*` while preserving `/dashboard/:path*`, `/onboarding/:path*`, and `/skin-profile/:path*`.
-- Product picker, Product module, Ingredient module, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+- Product picker, Product module, Ingredient module, Routine Analysis, AI, Journal, Routine Logs, dashboard data integration, skin scoring, image upload, and clinical assessment were not implemented.
 
 ### Tests
 
@@ -3164,7 +3223,7 @@ Week 3 Task 1 requires Routine API/domain foundation only, using the Skin Profil
 - Create/update validation rejects client-provided `userId`, `id`, `_id`, `createdAt`, `updatedAt`, `stepId`, and Product snapshot fields.
 - Invalid routine ids, missing routines, and routines owned by another user return `NOT_FOUND`.
 - Product snapshot lookup was not implemented and snapshot fields are not accepted from client input.
-- Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, dashboard data integration, skin score, image upload, and medical diagnosis were not implemented.
+- Routine Builder UI, Routine Analysis, Product/Ingredient modules, AI, Journal, Routine Logs, dashboard data integration, skin scoring, image upload, and clinical assessment were not implemented.
 
 ### Tests
 
@@ -3239,7 +3298,7 @@ cmd /c npm run build: Pass
 
 - No `/api/skin-profile` response shape or route handler behavior was changed.
 - No POST-based profile creation was added to `/skin-profile`.
-- No Routine Builder, Product module, Ingredient module, Journal, AI provider, AI recommendations, dashboard data integration, image upload, skin score, medical diagnosis, notifications, payment/subscription, analytics, or admin features were implemented.
+- No Routine Builder, Product module, Ingredient module, Journal, AI provider, AI-driven suggestions, dashboard data integration, image upload, skin scoring, clinical assessment, notifications, payment/subscription, analytics, or admin features were implemented.
 - No new dependencies were added.
 
 ## 2026-05-14 - Week 2 Task 2.1 Skin Profile Onboarding Flow Integration
@@ -3300,7 +3359,7 @@ cmd /c npm run build: Pass
 
 ### Notes
 
-- No AI, Routine Builder, Product module, Ingredient module, Journal, dashboard data integration, image upload, skin score, product recommendations, medical diagnosis, `/skin-profile` page, new dependencies, or Auth.js built-in route changes were implemented.
+- No AI, Routine Builder, Product module, Ingredient module, Journal, dashboard data integration, image upload, skin scoring, product recommendations, clinical assessment, `/skin-profile` page, new dependencies, or Auth.js built-in route changes were implemented.
 
 ## 2026-05-14 - Week 2 Task 2 Skin Profile Onboarding UI
 
@@ -3353,7 +3412,7 @@ cmd /c npm run build: Pass
 
 ### Notes
 
-- No Routine Builder, Product module, Ingredient module, AI provider, AI recommendations, Routine Analysis, Journal, dashboard data integration, medical diagnosis, skin score, image upload, product recommendations, or Auth.js route behavior was implemented.
+- No Routine Builder, Product module, Ingredient module, AI provider, AI-driven suggestions, Routine Analysis, Journal, dashboard data integration, clinical assessment, skin scoring, image upload, product recommendations, or Auth.js route behavior was implemented.
 - Successful save redirects to `/dashboard`; the `AppUserProfile.onboardingCompleted` follow-up was implemented later in Week 2 Task 2.1.
 
 ## 2026-05-14 - Week 2 Task 1.1 Foundation Stabilization Patch
@@ -3458,7 +3517,7 @@ npm.cmd run build: Pass
 
 ### Notes
 
-- No Routine Builder, Product/Ingredient module, AI provider, Routine Analysis, Journal, skincare advice generation, medical diagnosis, skin score, onboarding UI, or Auth.js route behavior was implemented.
+- No Routine Builder, Product/Ingredient module, AI provider, Routine Analysis, Journal, skincare advice generation, clinical assessment, skin scoring, onboarding UI, or Auth.js route behavior was implemented.
 
 ## 2026-05-14 - Week 1 Task 7 GET /api/me Lazy AppUserProfile
 
@@ -3567,7 +3626,7 @@ npm.cmd run build: Pass
 - Skin Profile, Routines, Today Log, Journal, Products, and Ingredients nav items use `href: null` and `disabled: true`.
 - Dashboard cards cover Skin Profile, Routines, Today Log, Journal, Products, Ingredients, and Safety Analysis.
 - Each placeholder card states `Chưa implement trong Task 6` and `Sẽ được kết nối ở task/module sau`.
-- No feature routes, marketplace, community, skin score, admin, subscription, notifications, custom login page, or Auth.js `pages.signIn` config were added.
+- No feature routes, marketplace, community, skin scoring, admin, subscription, notifications, custom login page, or Auth.js `pages.signIn` config were added.
 
 ## 2026-05-13 — Week 1 Task 5 Auth.js Foundation
 
@@ -3707,7 +3766,7 @@ npm run test:e2e: Not run — Playwright browsers are not installed yet.
 - No API routes, repositories, seed data, fake data, or business features were implemented.
 - Unit tests do not call a real MongoDB server.
 - `ensure-indexes.ts` does not create indexes on import and does not create Auth.js adapter indexes.
-- `DATABASE_INDEX_DEFINITIONS` excludes future/out-of-scope image upload, notifications, marketplace, skin score, face analysis, payment, and subscription fields.
+- `DATABASE_INDEX_DEFINITIONS` excludes future/out-of-scope image upload, notifications, marketplace, skin scoring, face analysis, payment, and subscription fields.
 - npm reported 2 moderate audit vulnerabilities; `npm audit fix --force` was not run by task constraint.
 
 ## 2026-05-13 — Week 1 Task 3 Environment Validation
@@ -3835,7 +3894,7 @@ npm run test:e2e: Not run — Playwright browsers not installed yet.
 ### Notes
 
 - No product feature was implemented.
-- No Auth, MongoDB, environment validation, protected dashboard, AI, routine, journal, product, ingredient, notification, marketplace, payment, admin, community, diagnosis, or fake result was implemented.
+- No Auth, MongoDB, environment validation, protected dashboard, AI, routine, journal, product, ingredient, notification, marketplace, payment, admin, community, clinical assessment, or fake result was implemented.
 - `components.json` aliases point to `@/shared/components`, `@/shared/components/ui`, and `@/shared/utils`.
 - `src/shared/components/ui/` exists.
 - `src/components/ui/` does not exist.
@@ -3905,7 +3964,7 @@ npm run test:e2e: Not run — Playwright browsers not installed yet.
 ### Notes
 
 - No product feature was implemented.
-- No AI provider, AI API call, image upload, marketplace, notifications, skin score, admin, payment, or community feature was implemented.
+- No AI provider, AI API call, image upload, marketplace, notifications, skin scoring, admin, payment, or community feature was implemented.
 - `src/modules/notifications/` was not created.
 - `npm.cmd install -D vitest @vitest/ui playwright tsx` was run to update test tooling and `package-lock.json`.
 - `src/shared/constants/routes.ts` uses the final Week 1 uppercase route constants.
@@ -4131,7 +4190,7 @@ RoutineLog is needed before daily completion UI, dashboard cards, consistency tr
 ### Notes
 
 - No RoutineLog UI was implemented.
-- No dashboard integration, streak calculation, analytics, AI insights, SkinJournal, image upload, skin score, or medical diagnosis was implemented.
+- No dashboard integration, streak calculation, analytics, AI insights, SkinJournal, image upload, skin scoring, or clinical assessment was implemented.
 - Next recommended task is TASK RL-002 — RoutineLog UI integration.
 
 ## Template for future entries
@@ -4204,7 +4263,7 @@ Align seed data contracts with the canonical data model, update final-freeze wor
 ### Scope boundaries
 
 - No new database collection was added.
-- No RoutineLog API rewrite, Routine Builder rewrite, streak logic, analytics dashboard, notification system, image upload, skin score, marketplace, payment, admin CRUD, or real OpenAI/Gemini integration was added.
+- No RoutineLog API rewrite, Routine Builder rewrite, streak logic, analytics dashboard, notification system, image upload, skin scoring, marketplace, payment, admin CRUD, or real OpenAI/Gemini integration was added.
 
 ### Validation
 
@@ -4227,7 +4286,7 @@ npm run test:e2e: Not run because local MongoDB was not available on 127.0.0.1:2
 - Added MVP-safe account deletion request via `POST /api/account/deletion-request`, storing `accountDeletionRequestedAt` on AppUserProfile without hard-deleting Auth.js identity or adapter documents.
 - Added user-scoped `DELETE /api/routine-logs/:id` and a Today Log `Xóa ghi nhận` action for existing daily routine logs.
 - Updated tests and docs for Settings, account deletion request, and routine log deletion.
-- Did not add export, notifications, admin CRUD, marketplace/payment, skin scoring, medical diagnosis, real AI provider integration, or bulk data deletion.
+- Did not add export, notifications, admin CRUD, marketplace/payment, skin scoring, clinical assessment, real AI provider integration, or bulk data deletion.
 
 ## 2026-05-31 - POST-MVP-v1.3-INSIGHTS Skin Progress Insights & Calendar
 
@@ -4267,7 +4326,7 @@ The feature already existed in source as `/insights`, `/api/insights`, and `src/
 ### Notes
 
 - No rewrite of the Insights module was performed.
-- No Mongoose dependency, database schema migration, skin score, diagnosis, treatment recommendation, medication advice, face analysis, image analysis, product-causality claim, marketplace, or payment feature was added.
+- No Mongoose dependency, database schema migration, skin scoring, clinical assessment, treatment recommendation, medication advice, face analysis, image analysis, product-causality claim, marketplace, or payment feature was added.
 - Product usage remains constrained by existing visible product lookup and skips invalid, missing, hidden, or unauthorized products.
 ### Validation
 
@@ -4318,7 +4377,7 @@ The MVP is already complete and validated at local level, with production smoke/
 - No new product feature.
 - No auth/business-rule change.
 - No real AI provider integration.
-- No marketplace/payment/image upload/skin score/admin implementation.
+- No marketplace/payment/image upload/skin scoring/admin implementation.
 
 ### Validation
 

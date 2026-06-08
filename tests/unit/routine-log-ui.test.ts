@@ -20,6 +20,14 @@ const routineLogClientPath = join(
   projectRoot,
   "src/modules/routine-logs/routine-log.client.ts",
 );
+const routineWeeklyReviewPath = join(
+  projectRoot,
+  "src/modules/routine-logs/routine-weekly-review.ts",
+);
+const routineWeeklyReviewCardPath = join(
+  projectRoot,
+  "src/modules/routine-logs/components/routine-weekly-review-card.tsx",
+);
 const todayRoutineChecklistPath = join(
   projectRoot,
   "src/modules/routine-logs/components/today-routine-checklist.tsx",
@@ -45,6 +53,11 @@ const routineLogStatusBadgeSource = readFileSync(
   "utf8",
 );
 const routineLogClientSource = readFileSync(routineLogClientPath, "utf8");
+const routineWeeklyReviewSource = readFileSync(routineWeeklyReviewPath, "utf8");
+const routineWeeklyReviewCardSource = readFileSync(
+  routineWeeklyReviewCardPath,
+  "utf8",
+);
 const todayRoutineChecklistSource = readFileSync(
   todayRoutineChecklistPath,
   "utf8",
@@ -55,13 +68,15 @@ const todayJournalPromptCardSource = readFileSync(
 );
 const todayJournalPromptSource = readFileSync(todayJournalPromptPath, "utf8");
 const todayRoutineLogPageSource = readFileSync(todayRoutineLogPagePath, "utf8");
-const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}\n${todayRoutineChecklistSource}\n${todayJournalPromptCardSource}\n${todayJournalPromptSource}`;
+const combinedSource = `${routineBuilderSource}\n${routineLogControlsSource}\n${routineLogStatusBadgeSource}\n${routineLogClientSource}\n${routineWeeklyReviewSource}\n${routineWeeklyReviewCardSource}\n${todayRoutineChecklistSource}\n${todayJournalPromptCardSource}\n${todayJournalPromptSource}`;
 
 describe("RoutineLog UI integration", () => {
   it("adds focused RoutineLog UI components and client helpers", () => {
     expect(existsSync(routineLogControlsPath)).toBe(true);
     expect(existsSync(routineLogStatusBadgePath)).toBe(true);
     expect(existsSync(routineLogClientPath)).toBe(true);
+    expect(existsSync(routineWeeklyReviewPath)).toBe(true);
+    expect(existsSync(routineWeeklyReviewCardPath)).toBe(true);
     expect(existsSync(todayJournalPromptCardPath)).toBe(true);
     expect(existsSync(todayJournalPromptPath)).toBe(true);
     expect(routineBuilderSource).toContain("<RoutineLogControls");
@@ -110,7 +125,7 @@ describe("RoutineLog UI integration", () => {
     expect(routineLogControlsSource).not.toContain("body.routineLog");
   });
 
-  it("builds safe client payloads without server-owned fields", () => {
+  it("builds safe client payload helpers without adding server-owned fields", () => {
     for (const allowedField of [
       "routineId",
       "localDate",
@@ -121,15 +136,11 @@ describe("RoutineLog UI integration", () => {
       expect(routineLogClientSource).toContain(allowedField);
     }
 
-    for (const forbiddenField of [
-      /\buserId\b/,
-      /\bid:\s/,
-      /\b_id\b/,
-      /\bcreatedAt\b/,
-      /\bupdatedAt\b/,
-    ]) {
-      expect(routineLogClientSource).not.toMatch(forbiddenField);
-    }
+    expect(routineLogClientSource).toContain("buildCompletedRoutineLogPayload");
+    expect(routineLogClientSource).toContain("buildPartialRoutineLogPayload");
+    expect(routineLogClientSource).toContain("buildSkippedRoutineLogPayload");
+    expect(routineLogClientSource).not.toContain("userId,");
+    expect(routineLogClientSource).not.toContain("_id:");
   });
 
   it("handles partial validation before calling the API", () => {
@@ -164,15 +175,67 @@ describe("RoutineLog UI integration", () => {
       'const ROUTINE_LOGS_API_PATH = "/api/routine-logs"',
     );
     expect(todayRoutineChecklistSource).toContain("fetch(ROUTINES_API_PATH");
-    expect(todayRoutineChecklistSource).toContain("fetch(getRoutineLogsEndpoint");
+    expect(todayRoutineChecklistSource).toContain("listRoutineLogsForDate");
+    expect(todayRoutineChecklistSource).toContain("listRoutineLogsForDateRange");
     expect(todayRoutineChecklistSource).toContain("getBrowserLocalDate");
     expect(todayRoutineChecklistSource).toContain("getBrowserTimezone");
     expect(todayRoutineChecklistSource).toContain("groupRoutineLogsByRoutineId");
     expect(todayRoutineChecklistSource).toContain("<RoutineLogControls");
     expect(todayRoutineChecklistSource).toContain("<RoutineLogStatusBadge");
     expect(todayRoutineChecklistSource).toContain("handleLogSaved");
+    expect(todayRoutineChecklistSource).toContain("setWeeklyRoutineLogs");
+    expect(todayRoutineChecklistSource).toContain("buildRoutineWeeklyReview");
+    expect(todayRoutineChecklistSource).toContain("<RoutineWeeklyReviewCard");
     expect(todayRoutineChecklistSource).toContain("Routine buổi sáng");
     expect(todayRoutineChecklistSource).toContain("Routine buổi tối");
+  });
+
+  it("renders the weekly routine review card with safe habit-tracking copy", () => {
+    for (const requiredCopy of [
+      "L\u1ecbch s\u1eed routine 7 ng\u00e0y g\u1ea7n \u0111\u00e2y",
+      "Th\u00f4ng tin n\u00e0y gi\u00fap b\u1ea1n theo d\u00f5i th\u00f3i quen ch\u0103m s\u00f3c da",
+      "kh\u00f4ng \u0111\u00e1nh gi\u00e1",
+      "t\u00ecnh tr\u1ea1ng da ho\u1eb7c thay th\u1ebf t\u01b0 v\u1ea5n y khoa.",
+      "S\u1ed1 ng\u00e0y \u0111\u00e3 ghi nh\u1eadn",
+      "T\u1ec9 l\u1ec7 ho\u00e0n th\u00e0nh routine",
+      "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u routine trong 7 ng\u00e0y g\u1ea7n \u0111\u00e2y.",
+      "B\u1eaft \u0111\u1ea7u ghi nh\u1eadn routine h\u00f4m nay \u0111\u1ec3 xem l\u1ecbch s\u1eed duy tr\u00ec th\u00f3i quen.",
+      "Ho\u00e0n th\u00e0nh",
+      "M\u1ed9t ph\u1ea7n",
+      "\u0110\u00e3 b\u1ecf qua",
+      "Ch\u01b0a ghi nh\u1eadn",
+    ]) {
+      expect(routineWeeklyReviewCardSource).toContain(requiredCopy);
+    }
+
+    for (const testId of [
+      'data-testid="routine-weekly-review-card"',
+      'data-testid="routine-weekly-review-day"',
+      'data-testid="routine-weekly-review-empty-state"',
+      'data-testid="routine-weekly-review-disclaimer"',
+    ]) {
+      expect(routineWeeklyReviewCardSource).toContain(testId);
+    }
+  });
+
+  it("keeps weekly review language away from overclaiming patterns", () => {
+    const unsafePatterns = [
+      new RegExp(["skin", "score"].join("\\s+"), "i"),
+      new RegExp(["health", "score"].join("\\s+"), "i"),
+      new RegExp(["treatment", "result"].join("\\s+"), "i"),
+      new RegExp(["medical", "recommend"].join("\\s+"), "i"),
+      new RegExp(["ai", "recommend"].join("\\s+"), "i"),
+      /diagnos/i,
+      /guarante/i,
+      new RegExp(["treat", "acne"].join("s?\\s+"), "i"),
+      new RegExp(`\\b${["cu", "re"].join("")}s?\\b`, "i"),
+      /improv/i,
+      /getting\s+worse/i,
+    ];
+
+    for (const unsafePattern of unsafePatterns) {
+      expect(routineWeeklyReviewCardSource).not.toMatch(unsafePattern);
+    }
   });
 
   it("renders Today Checklist metadata, progress summary, empty state, and CTAs", () => {

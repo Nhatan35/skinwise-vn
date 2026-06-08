@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-07
+Last updated: 2026-06-08
 
 ## 1. Current Phase
 
@@ -22,9 +22,11 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.16 - Saved Product Comparison & Decision Support: DONE
+MVP v1.17 - Routine History & Weekly Progress Review: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, and v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, and v1.17 added weekly routine habit review.
 
 Current status:
 
@@ -32,9 +34,10 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Current active milestone: None
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: To be decided after v1.17 review
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -57,12 +60,12 @@ Evidence boundary:
 | Product Catalogue | DONE | Product list and detail flows. |
 | Product Match | DONE | Rule-based educational matching. |
 | Product Detail personalized match | DONE | Single-product match explanation with v1.15 decision-support and caution wording polish. |
-| Saved Products | DONE | Save/unsave user-owned products. |
+| Saved Products | DONE | Save/unsave user-owned products; v1.16 comparison decision support added. |
 | Ingredient Library | DONE | Ingredient list/detail/explanation. |
 | Routine Builder | DONE | Morning/evening routine management. |
 | Routine Safety Analysis | DONE | Deterministic analysis and safe fallback behavior. |
 | Today Routine Checklist | DONE | Daily completion flow. |
-| Routine Logs | DONE | Tracking history. |
+| Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
 | Skin Journal | DONE | Journal entry management. |
 | Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
@@ -127,27 +130,27 @@ API routes:
 Local evidence:
 
 ```txt
-Evidence date: 2026-06-06
+Evidence date: 2026-06-08
 Environment: Local Windows / PowerShell
 Branch: main
-npm ci: PASS
+node -v: v24.14.0
+npm -v: 11.14.1
+npm ci: NOT RUN for v1.17
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 899 tests
-npm run build: PASS
-npm run test:e2e: PASS - 29/29 Playwright tests
+npm run test: PASS - 99 files / 929 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-v1.15 changed Product Match/Product Detail explainability and safety guidance only.
-v1.15.1 changed audit/release evidence documentation only.
-No product behavior, package, database schema, route, auth, authorization, persistence, or AI-provider behavior changed in v1.15.1.
-Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+v1.17 validation passed after implementation.
+The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
+The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun passed.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
-npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
 
 Production evidence:
@@ -164,7 +167,7 @@ Evidence date: 2026-06-04
 
 The implemented MVP remains within these boundaries:
 
-- No medical diagnosis.
+- No clinical assessment.
 - No treatment/cure guarantee.
 - No prescription guidance.
 - No dermatologist replacement.
@@ -189,6 +192,8 @@ Completed post-MVP implementation:
 v1.14 - Data Quality Expansion
 v1.15 - Product Match Explainability & Safety Guardrails
 v1.15.1 - Audit Cleanup & Evidence Sync
+v1.16 - Saved Product Comparison & Decision Support
+v1.17 - Routine History & Weekly Progress Review
 ```
 
 Completed v1.14 scope:
@@ -215,10 +220,27 @@ Completed v1.15.1 scope:
 - Kept `shadcn` in dependencies because app CSS imports `shadcn/tailwind.css`.
 - Synchronized audit and release evidence documentation without product behavior or package changes.
 
+Completed v1.16 scope:
+
+- Added saved product comparison selection to the Saved Products page.
+- Added side-by-side comparison for 2-3 saved products using existing product fields.
+- Preserved save, unsave, and product detail behavior.
+- Avoided ranking, product conclusions, new API routes, schema changes, marketplace, cart, checkout, payment, review, rating, social, or AI-driven advice.
+
+Completed v1.17 scope:
+
+- Added a weekly routine review card to `/routine-logs/today`.
+- Added a 7-day local-date summary using existing routine log data.
+- Added logged-day count, routine-log completion percentage, and completed/partial/skipped/not-logged day states.
+- Added safe habit-tracking copy and empty state.
+- Added bounded date-range support to `GET /api/routine-logs` while preserving the existing `?localDate=` mode.
+- Preserved routine builder, routine analysis, today routine checklist, and routine-log delete behavior.
+- Avoided new collections, schema redesign, full analytics dashboard, scoring, clinical conclusions, treatment guidance, marketplace, cart, checkout, payment, review, rating, social, notification, image, or real AI provider scope.
+
 Recommended next task:
 
 ```txt
-Portfolio Evidence Package media follow-up, if needed
+To be decided after v1.17 review
 ```
 
 Portfolio evidence tasks:

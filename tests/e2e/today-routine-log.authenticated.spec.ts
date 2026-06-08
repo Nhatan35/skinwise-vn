@@ -75,6 +75,15 @@ test.describe("SkinWise VN authenticated today routine log", () => {
     await expect(page.getByTestId("today-routine-checklist")).toBeVisible({
       timeout: 15_000,
     });
+    await expect(page.getByTestId("routine-weekly-review-card")).toBeVisible();
+    await expect(page.getByTestId("routine-weekly-review-disclaimer")).toContainText(
+      "Th\u00f4ng tin n\u00e0y gi\u00fap b\u1ea1n theo d\u00f5i th\u00f3i quen ch\u0103m s\u00f3c da, kh\u00f4ng \u0111\u00e1nh gi\u00e1 t\u00ecnh tr\u1ea1ng da ho\u1eb7c thay th\u1ebf t\u01b0 v\u1ea5n y khoa.",
+    );
+    await expect(page.locator("body")).not.toContainText(
+      new RegExp(["skin", "score"].join("\\s+"), "i"),
+    );
+    await expect(page.locator("body")).not.toContainText(/diagnos/i);
+    await expect(page.locator("body")).not.toContainText(/guarante/i);
     await expect(page.getByText("Ngày hôm nay")).toBeVisible();
     await expect(page.getByText("Múi giờ", { exact: true })).toBeVisible();
 

@@ -6,12 +6,20 @@ import { useEffect, useMemo, useState } from "react";
 import { listSkinJournals } from "@/modules/journals/skin-journal.client";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import { TodayJournalPromptCard } from "@/modules/routine-logs/components/today-journal-prompt-card";
+import { RoutineWeeklyReviewCard } from "@/modules/routine-logs/components/routine-weekly-review-card";
 import {
+  listRoutineLogsForDate,
+  listRoutineLogsForDateRange,
+  RoutineLogClientError,
   getBrowserLocalDate,
   getBrowserTimezone,
   groupRoutineLogsByRoutineId,
 } from "@/modules/routine-logs/routine-log.client";
 import { getTodayJournalPromptState } from "@/modules/routine-logs/today-journal-prompt";
+import {
+  addLocalDateDays,
+  buildRoutineWeeklyReview,
+} from "@/modules/routine-logs/routine-weekly-review";
 import { RoutineLogControls } from "@/modules/routines/components/routine-log-controls";
 import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
@@ -36,6 +44,8 @@ import { routes } from "@/shared/constants/routes";
 
 const ROUTINES_API_PATH = "/api/routines";
 const ROUTINE_LOGS_API_PATH = "/api/routine-logs";
+const WEEKLY_REVIEW_LOAD_ERROR =
+  "Chưa thể tải lịch sử routine 7 ngày gần đây. Bạn vẫn có thể ghi nhận routine hôm nay.";
 
 const timeOfDayLabels: Record<RoutineTimeOfDay, string> = {
   morning: "Buổi sáng",
@@ -105,10 +115,6 @@ async function readApiResponse<TData>(
   }
 }
 
-function getRoutineLogsEndpoint(localDate: string) {
-  return `${ROUTINE_LOGS_API_PATH}?localDate=${encodeURIComponent(localDate)}`;
-}
-
 function getRoutineLogDeleteEndpoint(routineLogId: string) {
   return `${ROUTINE_LOGS_API_PATH}/${encodeURIComponent(routineLogId)}`;
 }
@@ -173,12 +179,23 @@ function getSummaryCounts(
 export function TodayRoutineChecklist() {
   const [localDate] = useState(() => getBrowserLocalDate());
   const [timezone] = useState(() => getBrowserTimezone());
+  const weeklyReviewFromDate = useMemo(
+    () => addLocalDateDays(localDate, -6),
+    [localDate],
+  );
   const [routines, setRoutines] = useState<RoutineDto[]>([]);
   const [logsByRoutineId, setLogsByRoutineId] = useState<
     Record<string, RoutineLogDto>
   >({});
+  const [weeklyRoutineLogs, setWeeklyRoutineLogs] = useState<RoutineLogDto[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
+  const [isWeeklyReviewLoading, setIsWeeklyReviewLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [weeklyReviewError, setWeeklyReviewError] = useState<string | null>(
+    null,
+  );
   const [deletingLogIds, setDeletingLogIds] = useState<Record<string, boolean>>(
     {},
   );
@@ -197,26 +214,20 @@ export function TodayRoutineChecklist() {
     async function loadTodayData() {
       setIsLoading(true);
       setLoadError(null);
+      setWeeklyReviewError(null);
 
       try {
-        const [routinesResponse, routineLogsResponse] = await Promise.all([
+        const [routinesResponse, todayRoutineLogs] = await Promise.all([
           fetch(ROUTINES_API_PATH, {
             headers: {
               Accept: "application/json",
             },
             method: "GET",
           }),
-          fetch(getRoutineLogsEndpoint(localDate), {
-            headers: {
-              Accept: "application/json",
-            },
-            method: "GET",
-          }),
+          listRoutineLogsForDate(localDate),
         ]);
-        const [routinesBody, routineLogsBody] = await Promise.all([
-          readApiResponse<{ routines: RoutineDto[] }>(routinesResponse),
-          readApiResponse<{ routineLogs: RoutineLogDto[] }>(routineLogsResponse),
-        ]);
+        const routinesBody =
+          await readApiResponse<{ routines: RoutineDto[] }>(routinesResponse);
 
         if (!isMounted) {
           return;
@@ -229,21 +240,40 @@ export function TodayRoutineChecklist() {
           return;
         }
 
-        if (!routineLogsResponse.ok || routineLogsBody.error) {
-          setRoutines(routinesBody.data.routines);
-          setLogsByRoutineId({});
-          setLoadError(getLoadErrorMessage(routineLogsBody.error));
-          return;
-        }
-
         setRoutines(routinesBody.data.routines);
-        setLogsByRoutineId(
-          groupRoutineLogsByRoutineId(routineLogsBody.data.routineLogs),
-        );
-      } catch {
+        setLogsByRoutineId(groupRoutineLogsByRoutineId(todayRoutineLogs));
+        setIsWeeklyReviewLoading(true);
+
+        try {
+          const recentRoutineLogs = await listRoutineLogsForDateRange(
+            weeklyReviewFromDate,
+            localDate,
+          );
+
+          if (isMounted) {
+            setWeeklyRoutineLogs(recentRoutineLogs);
+          }
+        } catch {
+          if (isMounted) {
+            setWeeklyRoutineLogs([]);
+            setWeeklyReviewError(WEEKLY_REVIEW_LOAD_ERROR);
+          }
+        }
+      } catch (error) {
         if (isMounted) {
           setRoutines([]);
           setLogsByRoutineId({});
+          setWeeklyRoutineLogs([]);
+          if (error instanceof RoutineLogClientError) {
+            setLoadError(
+              getLoadErrorMessage({
+                code: error.code,
+                message: error.message,
+              }),
+            );
+            return;
+          }
+
           setLoadError(
             "Không thể tải checklist routine hôm nay. Vui lòng thử lại hoặc làm mới trang.",
           );
@@ -251,6 +281,7 @@ export function TodayRoutineChecklist() {
       } finally {
         if (isMounted) {
           setIsLoading(false);
+          setIsWeeklyReviewLoading(false);
         }
       }
     }
@@ -260,7 +291,7 @@ export function TodayRoutineChecklist() {
     return () => {
       isMounted = false;
     };
-  }, [localDate]);
+  }, [localDate, weeklyReviewFromDate]);
 
   const summaryCounts = useMemo(
     () => getSummaryCounts(routines, logsByRoutineId),
@@ -282,6 +313,14 @@ export function TodayRoutineChecklist() {
     hasJournalToday: journalTodayStatus.hasJournalToday,
     isJournalStatusKnown: journalTodayStatus.isKnown,
   });
+  const weeklyReview = useMemo(
+    () =>
+      buildRoutineWeeklyReview({
+        referenceLocalDate: localDate,
+        routineLogs: weeklyRoutineLogs,
+      }),
+    [localDate, weeklyRoutineLogs],
+  );
 
   useEffect(() => {
     if (!hasRoutineLogToday) {
@@ -323,6 +362,25 @@ export function TodayRoutineChecklist() {
       ...current,
       [updatedLog.routineId]: updatedLog,
     }));
+    setWeeklyRoutineLogs((current) => {
+      const nextLogs = current.filter(
+        (routineLog) =>
+          !(
+            routineLog.routineId === updatedLog.routineId &&
+            routineLog.localDate === updatedLog.localDate
+          ),
+      );
+
+      if (
+        updatedLog.localDate < weeklyReviewFromDate ||
+        updatedLog.localDate > localDate
+      ) {
+        return nextLogs;
+      }
+
+      return [...nextLogs, updatedLog];
+    });
+    setWeeklyReviewError(null);
     setDeleteError(null);
     setDeleteSuccessMessage(null);
   }
@@ -361,6 +419,10 @@ export function TodayRoutineChecklist() {
         return nextLogsByRoutineId;
       });
       setDeleteSuccessMessage("Đã xóa ghi nhận routine.");
+      setWeeklyRoutineLogs((current) =>
+        current.filter((routineLog) => routineLog.id !== routineLogId),
+      );
+      setWeeklyReviewError(null);
     } catch {
       setDeleteError("Không thể xóa ghi nhận lúc này. Vui lòng thử lại.");
     } finally {
@@ -488,15 +550,22 @@ export function TodayRoutineChecklist() {
 
   if (routines.length === 0) {
     return (
-      <EmptyState
-        action={
-          <Button asChild>
-            <Link href={routes.ROUTINES}>Tạo routine</Link>
-          </Button>
-        }
-        description="Hãy tạo routine buổi sáng hoặc buổi tối trước khi theo dõi tiến độ hằng ngày."
-        title="Chưa có routine nào"
-      />
+      <div className="space-y-6">
+        <EmptyState
+          action={
+            <Button asChild>
+              <Link href={routes.ROUTINES}>Tạo routine</Link>
+            </Button>
+          }
+          description="Hãy tạo routine buổi sáng hoặc buổi tối trước khi theo dõi tiến độ hằng ngày."
+          title="Chưa có routine nào"
+        />
+        <RoutineWeeklyReviewCard
+          errorMessage={weeklyReviewError}
+          isLoading={isWeeklyReviewLoading}
+          review={weeklyReview}
+        />
+      </div>
     );
   }
 
@@ -530,6 +599,12 @@ export function TodayRoutineChecklist() {
           <SummaryItem label="Chưa ghi nhận" value={summaryCounts.notLogged} />
         </CardContent>
       </Card>
+
+      <RoutineWeeklyReviewCard
+        errorMessage={weeklyReviewError}
+        isLoading={isWeeklyReviewLoading}
+        review={weeklyReview}
+      />
 
       <TodayJournalPromptCard
         journalHref={routes.JOURNAL}
