@@ -24,9 +24,10 @@ MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 MVP v1.16 - Saved Product Comparison & Decision Support: DONE
 MVP v1.17 - Routine History & Weekly Progress Review: DONE
+MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, and v1.17 added weekly routine habit review.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, and v1.18 added Skin Journal Filters & Reflection Review.
 
 Current status:
 
@@ -34,10 +35,10 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
-Recommended next task: To be decided after v1.17 review
+Recommended next task: To be decided after v1.18 review
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -66,7 +67,7 @@ Evidence boundary:
 | Routine Safety Analysis | DONE | Deterministic analysis and safe fallback behavior. |
 | Today Routine Checklist | DONE | Daily completion flow. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
-| Skin Journal | DONE | Journal entry management. |
+| Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters and reflection review. |
 | Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
 | Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
@@ -135,10 +136,10 @@ Environment: Local Windows / PowerShell
 Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
-npm ci: NOT RUN for v1.17
+npm ci: NOT RUN for v1.18
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 99 files / 929 tests
+npm run test: PASS - 100 files / 942 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -147,7 +148,7 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation notes:
 
 ```txt
-v1.17 validation passed after implementation.
+v1.18 validation passed after implementation.
 The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
 The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun passed.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
@@ -194,6 +195,7 @@ v1.15 - Product Match Explainability & Safety Guardrails
 v1.15.1 - Audit Cleanup & Evidence Sync
 v1.16 - Saved Product Comparison & Decision Support
 v1.17 - Routine History & Weekly Progress Review
+v1.18 - Skin Journal Filters & Reflection Review
 ```
 
 Completed v1.14 scope:
@@ -237,10 +239,18 @@ Completed v1.17 scope:
 - Preserved routine builder, routine analysis, today routine checklist, and routine-log delete behavior.
 - Avoided new collections, schema redesign, full analytics dashboard, scoring, clinical conclusions, treatment guidance, marketplace, cart, checkout, payment, review, rating, social, notification, image, or real AI provider scope.
 
+Completed v1.18 scope:
+
+- Added a journal filter panel to `/journal`.
+- Filtered currently loaded journal entries by symptom, stress level, product usage, and recent local-date range.
+- Added loaded-entry result count, clear-filter action, and filter-specific empty state.
+- Preserved existing create, edit, delete, loading, error, and authenticated behavior.
+- Kept copy focused on self-tracked reflection without product causality conclusions, clinical assessment, scoring, treatment guidance, image analysis, or AI-driven advice.
+
 Recommended next task:
 
 ```txt
-To be decided after v1.17 review
+To be decided after v1.18 review
 ```
 
 Portfolio evidence tasks:

@@ -10,12 +10,12 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.17 - Routine History & Weekly Progress Review: DONE
+Latest completed milestone: v1.18 - Skin Journal Filters & Reflection Review: DONE
 Current active milestone: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: To be decided after v1.17 review
+Recommended next task: To be decided after v1.18 review
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
@@ -74,6 +74,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Audit cleanup and evidence sync | DONE in v1.15.1 | Keeps npm audit/dependency-risk evidence and release docs truthful without product behavior changes. |
 | P2 | Saved Product Comparison & Decision Support | DONE in v1.16 | Lets users compare 2-3 saved products using existing educational product data without ranking or recommendations. |
 | P2 | Routine History & Weekly Progress Review | DONE in v1.17 | Helps users review 7-day routine consistency using existing routine log data and habit-tracking copy. |
+| P2 | Skin Journal Filters & Reflection Review | DONE in v1.18 | Helps users review loaded journal notes by symptom, stress level, product usage, and recent time range with reflection-only copy. |
 | P2 | Release/observability polish | Future optional release evidence candidate | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
@@ -380,6 +381,53 @@ Validation for v1.17: PASS
 v1.17 - Routine History & Weekly Progress Review
 ```
 
+## 7D. P2 - Skin Journal Filters & Reflection Review
+
+### Goal
+
+Help users review self-tracked skin journal entries by symptom, stress level, product usage, and recent time range where existing loaded data supports it.
+
+### Status
+
+```txt
+v1.18 - Skin Journal Filters & Reflection Review: DONE
+Validation for v1.18: PASS
+```
+
+### Scope
+
+- Journal filter panel on `/journal`.
+- Client-side filter helper for currently loaded journal entries.
+- Result count and clear-filter action.
+- Filter-specific empty state separate from the original no-journal empty state.
+- Safe reflection disclaimer.
+- Product-used filter based on existing `productsUsed` ids and available product labels.
+- No schema expansion or API redesign.
+- No product causality conclusions.
+- No clinical assessment, skin/health scoring, treatment guidance, image analysis, or AI-driven advice.
+
+### Acceptance Criteria
+
+```txt
+[x] Filter panel appears on /journal.
+[x] Users can filter loaded journal entries by symptom, stress level, product usage, and recent local-date range.
+[x] Multiple filters use AND logic.
+[x] Users can clear all active filters.
+[x] Result count reflects matching loaded entries.
+[x] A filter-specific empty state appears when entries exist but none match the active filters.
+[x] Original no-journal empty state remains intact.
+[x] Existing create, edit, and delete flows remain unchanged.
+[x] Active filters remain stable after create, update, and delete actions.
+[x] Copy frames the feature as reflection over self-tracked notes.
+[x] Validation passes before marking DONE.
+```
+
+### Suggested Version
+
+```txt
+v1.18 - Skin Journal Filters & Reflection Review
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -412,7 +460,7 @@ This is larger than UX polish because it touches access control and content-writ
 ### Suggested Version
 
 ```txt
-v1.18 - Admin Content Management Foundation
+Future optional admin/content candidate (unversioned)
 ```
 
 ## 9. P3 - Real AI Provider Integration
@@ -508,13 +556,13 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-To be decided after v1.17 review
+To be decided after v1.18 review
 ```
 
 Reason:
 
-- v1.17 Routine History & Weekly Progress Review is complete and locally validated.
-- The previous release/observability candidate remains a future optional evidence task, unversioned for now.
+- v1.18 Skin Journal Filters & Reflection Review is complete and locally validated.
+- The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
 - The next post-MVP task should be selected deliberately from the backlog.
 
 ## 13. v1.13 Completion Checklist
@@ -545,4 +593,6 @@ Reason:
 2026-06-08: Completed v1.16 Saved Product Comparison & Decision Support with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Moved the prior release/observability candidate out of the v1.16 slot.
 2026-06-08: Started v1.17 Routine History & Weekly Progress Review as the active product-improvement sprint; release/observability polish remains a future optional evidence candidate.
 2026-06-08: Completed v1.17 Routine History & Weekly Progress Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
+2026-06-08: Started v1.18 Skin Journal Filters & Reflection Review as the active product-improvement sprint; the prior admin/content candidate is now future optional and unversioned.
+2026-06-08: Completed v1.18 Skin Journal Filters & Reflection Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
 ```

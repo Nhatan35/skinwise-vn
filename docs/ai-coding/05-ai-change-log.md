@@ -6,6 +6,58 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## 2026-06-08 - MVP v1.18 Skin Journal Filters & Reflection Review
+
+### Task
+
+Add lightweight filters to `/journal` so users can review loaded self-tracked journal entries by symptom, stress level, product usage, and recent local-date range.
+
+### Files Added
+
+- `src/modules/journals/components/skin-journal-filter-panel.tsx`
+- `src/modules/journals/skin-journal-filters.ts`
+- `tests/unit/skin-journal-filters.test.ts`
+
+### Files Updated
+
+- `src/modules/journals/components/skin-journal-timeline.tsx`
+- `tests/unit/skin-journal-ui.test.ts`
+- `tests/e2e/skin-journal.authenticated.spec.ts`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added a journal filter panel for currently loaded entries.
+- Added a pure filter helper for symptom, stress level, product usage, and recent local-date ranges.
+- Added result count and clear-filter action.
+- Added a filter-specific empty state while preserving the original no-journal empty state.
+- Added safe reflection copy and loaded-entry boundary wording.
+- Updated unit and E2E coverage where stable.
+- Updated docs for the active v1.18 sprint.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 100 files / 942 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Status
+
+```txt
+DONE after full local validation passed.
+```
+
 ## 2026-06-08 - MVP v1.17 Routine History & Weekly Progress Review
 
 ### Task

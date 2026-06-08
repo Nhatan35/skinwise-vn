@@ -39,6 +39,20 @@ test.describe("SkinWise VN authenticated skin journal", () => {
     await page.goto("/journal");
 
     expect((await loadResponsePromise).ok()).toBe(true);
+    await expect(page.getByTestId("skin-journal-filter-panel")).toBeVisible();
+    await expect(page.getByTestId("skin-journal-filter-disclaimer")).toContainText(
+      "B\u1ed9 l\u1ecdc n\u00e0y gi\u00fap b\u1ea1n xem l\u1ea1i ghi ch\u00fa ch\u0103m s\u00f3c da \u0111\u00e3 t\u1ef1 ghi nh\u1eadn.",
+    );
+    await expect(page.getByTestId("skin-journal-filter-result-count")).toBeVisible();
+    await expect(page.getByTestId("skin-journal-filter-clear-button")).toBeAttached();
+    await expect(page.locator("body")).not.toContainText(
+      new RegExp(["skin", "score"].join("\\s+"), "i"),
+    );
+    await expect(page.locator("body")).not.toContainText(
+      new RegExp(["health", "score"].join("\\s+"), "i"),
+    );
+    await expect(page.locator("body")).not.toContainText(/guarante/i);
+    await expect(page.locator("body")).not.toContainText(/\bcaused?\b/i);
     await expect(page.getByRole("heading", { name: "Nhật ký da" })).toBeVisible();
 
     await page.getByTestId("skin-journal-new-entry-button").first().click();

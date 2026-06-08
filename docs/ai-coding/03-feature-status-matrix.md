@@ -7,7 +7,7 @@ Last updated: 2026-06-08
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
 Current active milestone: None
 Product core: COMPLETE
 Local validation: PASS
@@ -15,7 +15,7 @@ Production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: To be decided after v1.17 review
+Recommended next task: To be decided after v1.18 review
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -41,7 +41,7 @@ Optional media evidence tasks: screenshots and demo video
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
 | Today Routine Checklist | DONE | Daily completion flow. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
-| Skin Journal | DONE | Create/edit/delete journal entries. |
+| Skin Journal | DONE | Create/edit/delete journal entries; v1.18 added loaded-entry filters and reflection review. |
 | Insights | DONE | Progress story and safe next actions. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker. |
 | Data Export | DONE | User-owned app data export. |
@@ -58,6 +58,7 @@ Optional media evidence tasks: screenshots and demo video
 |---|---|---|---|
 | Saved Product Comparison | Post-MVP | v1.16 | DONE |
 | Routine Weekly Review | Post-MVP | v1.17 | DONE |
+| Skin Journal Filters | Post-MVP | v1.18 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -77,7 +78,7 @@ Optional media evidence tasks: screenshots and demo video
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
 Current active milestone: None
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional and not product correctness blockers

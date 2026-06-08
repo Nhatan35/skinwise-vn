@@ -9,7 +9,14 @@ import {
   SkinJournalClientError,
 } from "@/modules/journals/skin-journal.client";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
+import {
+  filterSkinJournalEntries,
+  getSkinJournalFilterOptions,
+  hasActiveSkinJournalFilters,
+  type SkinJournalFilterState,
+} from "@/modules/journals/skin-journal-filters";
 import { buildProductLookup } from "@/modules/journals/skin-journal-product-display";
+import { SkinJournalFilterPanel } from "@/modules/journals/components/skin-journal-filter-panel";
 import { SkinJournalEntryCard } from "@/modules/journals/components/skin-journal-entry-card";
 import { SkinJournalEntryForm } from "@/modules/journals/components/skin-journal-entry-form";
 import { listProducts } from "@/modules/products/product.client";
@@ -31,6 +38,18 @@ type Feedback = {
 };
 
 type FormMode = "create" | "edit" | "none";
+
+function padDatePart(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function getBrowserLocalDate(date = new Date()) {
+  return [
+    date.getFullYear(),
+    padDatePart(date.getMonth() + 1),
+    padDatePart(date.getDate()),
+  ].join("-");
+}
 
 function sortSkinJournals(entries: SkinJournalDto[]) {
   return [...entries].sort((first, second) => {
@@ -65,7 +84,11 @@ function getDeleteErrorMessage(error: unknown) {
 }
 
 export function SkinJournalTimeline() {
+  const [currentLocalDate] = useState(() => getBrowserLocalDate());
   const [entries, setEntries] = useState<SkinJournalDto[]>([]);
+  const [filterState, setFilterState] = useState<SkinJournalFilterState>({
+    dateRange: "all",
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [products, setProducts] = useState<ProductDto[]>([]);
@@ -85,7 +108,7 @@ export function SkinJournalTimeline() {
       setLoadError(null);
 
       try {
-        const skinJournals = await listSkinJournals();
+        const skinJournals = await listSkinJournals({ limit: 50 });
 
         if (!isMounted) {
           return;
@@ -151,6 +174,22 @@ export function SkinJournalTimeline() {
 
   const sortedEntries = useMemo(() => sortSkinJournals(entries), [entries]);
   const productLookup = useMemo(() => buildProductLookup(products), [products]);
+  const filterOptions = useMemo(
+    () => getSkinJournalFilterOptions(sortedEntries),
+    [sortedEntries],
+  );
+  const hasActiveFilters = hasActiveSkinJournalFilters(filterState);
+  const filteredEntries = useMemo(
+    () =>
+      filterSkinJournalEntries(sortedEntries, filterState, {
+        currentLocalDate,
+      }),
+    [currentLocalDate, filterState, sortedEntries],
+  );
+  const showFilterEmptyState =
+    sortedEntries.length > 0 &&
+    hasActiveFilters &&
+    filteredEntries.length === 0;
 
   function startCreate() {
     setFormMode("create");
@@ -167,6 +206,10 @@ export function SkinJournalTimeline() {
   function cancelForm() {
     setFormMode("none");
     setEditingEntry(null);
+  }
+
+  function clearFilters() {
+    setFilterState({ dateRange: "all" });
   }
 
   function handleSaved(entry: SkinJournalDto) {
@@ -295,6 +338,17 @@ export function SkinJournalTimeline() {
         </Alert>
       ) : null}
 
+      <SkinJournalFilterPanel
+        filters={filterState}
+        hasActiveFilters={hasActiveFilters}
+        matchingCount={filteredEntries.length}
+        onChange={setFilterState}
+        onClear={clearFilters}
+        options={filterOptions}
+        productLookup={productLookup}
+        totalCount={sortedEntries.length}
+      />
+
       {sortedEntries.length === 0 && formMode !== "create" ? (
         <EmptyState
           action={
@@ -312,8 +366,22 @@ export function SkinJournalTimeline() {
         />
       ) : null}
 
+      {showFilterEmptyState ? (
+        <div data-testid="skin-journal-filter-empty-state">
+          <EmptyState
+            action={
+              <Button onClick={clearFilters} type="button" variant="outline">
+                Xóa bộ lọc
+              </Button>
+            }
+            description="Không có nhật ký nào khớp với bộ lọc hiện tại. Bạn có thể xóa bộ lọc để xem lại các nhật ký gần đây."
+            title="Không có nhật ký phù hợp"
+          />
+        </div>
+      ) : null}
+
       <div className="space-y-4">
-        {sortedEntries.map((entry) =>
+        {filteredEntries.map((entry) =>
           formMode === "edit" && editingEntry?.id === entry.id ? (
             <SkinJournalEntryForm
               entry={entry}

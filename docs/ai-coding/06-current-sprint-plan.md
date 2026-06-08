@@ -20,32 +20,34 @@ Product Match explainability and safety guardrails: DONE in v1.15
 Audit cleanup and evidence sync: DONE in v1.15.1
 Saved Product Comparison & Decision Support: DONE in v1.16
 Routine History & Weekly Progress Review: DONE in v1.17
-Latest completed milestone: MVP v1.17 - Routine History & Weekly Progress Review
+Skin Journal Filters & Reflection Review: DONE in v1.18
+Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
 Current active sprint: None
 Current active sprint status: None
-Recommended next sprint: To be decided after v1.17 review
+Recommended next sprint: To be decided after v1.18 review
 Current phase: Post-MVP controlled improvement
 ```
 
-v1.17 continued controlled product improvement. The change is limited to routine habit review on the existing `/routine-logs/today` page.
+v1.18 completed controlled product improvement. The change is limited to loaded-entry filtering and reflection support on the existing `/journal` page.
 
 ## 2. Objective
 
-Help users review routine consistency over the last 7 local dates, including today, using existing routine log data.
+Help users review self-tracked skin journal entries by symptom, stress level, product usage, and recent time range using existing loaded journal data.
 
 The feature must preserve:
 
 ```txt
 No clinical assessment
+No product causality conclusion
 No treatment guidance
 No skin or health scoring
-No AI-driven product advice
+No AI-driven advice
 No image analysis
 No full analytics dashboard
 No marketplace/cart/checkout/payment/review/rating/social scope
 No notification/reminder system
 No new database collection
-Existing routine builder, routine analysis, and today routine log behavior
+Existing journal create, edit, delete, loading, error, and authenticated behavior
 ```
 
 ## 3. Files Expected To Change
@@ -53,22 +55,12 @@ Existing routine builder, routine analysis, and today routine log behavior
 Active files:
 
 ```txt
-src/app/api/routine-logs/route.ts
-src/modules/routine-logs/components/today-routine-checklist.tsx
-src/modules/routine-logs/components/routine-weekly-review-card.tsx
-src/modules/routine-logs/routine-log.client.ts
-src/modules/routine-logs/routine-log.repository.ts
-src/modules/routine-logs/routine-log.schema.ts
-src/modules/routine-logs/routine-log.use-case.ts
-src/modules/routine-logs/routine-weekly-review.ts
-src/modules/routine-logs/index.ts
-tests/unit/routine-log.test.ts
-tests/unit/routine-log-use-case.test.ts
-tests/unit/routine-log-client.test.ts
-tests/unit/routine-log-ui.test.ts
-tests/unit/routine-log-list-api-contract.test.ts
-tests/unit/routine-weekly-review.test.ts
-tests/e2e/today-routine-log.authenticated.spec.ts
+src/modules/journals/components/skin-journal-timeline.tsx
+src/modules/journals/components/skin-journal-filter-panel.tsx
+src/modules/journals/skin-journal-filters.ts
+tests/unit/skin-journal-filters.test.ts
+tests/unit/skin-journal-ui.test.ts
+tests/e2e/skin-journal.authenticated.spec.ts
 docs/post-mvp-backlog.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
@@ -81,40 +73,45 @@ docs/ai-coding/06-current-sprint-plan.md
 Functional:
 
 ```txt
-[x] User can open /routine-logs/today successfully.
-[x] Existing today routine log behavior still works.
-[x] Weekly review card appears on the page.
-[x] Weekly review shows a 7-day routine summary.
-[x] Weekly review shows logged-day count.
-[x] Weekly review shows routine-log completion percentage when data exists.
-[x] Weekly review shows completed, partial, skipped, and not-logged statuses.
-[x] Weekly review has a safe empty state when no logs exist.
-[x] Weekly review updates after today's routine log is changed.
-[x] Weekly review does not block the today routine flow.
+[x] User can open /journal successfully.
+[x] Existing journal create, edit, and delete behavior remains unchanged.
+[x] Filter panel appears on /journal.
+[x] User can filter loaded entries by symptom.
+[x] User can filter loaded entries by stress level.
+[x] User can filter loaded entries by product usage when product ids exist.
+[x] User can filter loaded entries by all, last 7, last 14, and last 30 local dates.
+[x] Multiple filters use AND logic.
+[x] User can clear all filters.
+[x] UI shows matching loaded-entry count.
+[x] Filter-specific empty state appears when no loaded entries match.
+[x] Original no-journal empty state remains intact.
+[x] Active filters remain stable after create, update, and delete actions.
 ```
 
 Content and safety:
 
 ```txt
-[x] UI frames the feature as habit tracking.
-[x] Required safe disclaimer is visible.
+[x] UI frames filters as reflection over self-tracked notes.
+[x] Required safe reflection disclaimer is visible.
+[x] UI does not claim product causality.
 [x] UI does not claim skin improvement or worsening.
 [x] UI does not provide clinical conclusions.
 [x] UI does not recommend treatment.
 [x] UI does not show skin or health scoring.
 [x] UI does not use guaranteed-outcome language.
-[x] UI uses calm, non-judgmental copy.
+[x] UI uses calm, neutral copy.
 ```
 
 Technical:
 
 ```txt
-[x] Existing ?localDate routine log GET behavior remains backward-compatible.
-[x] Optional ?from=YYYY-MM-DD&to=YYYY-MM-DD mode is bounded and controlled.
+[x] Filters use existing SkinJournalDto fields only.
+[x] Filters apply to currently loaded entries only.
 [x] Client components use API/client helpers only.
 [x] No new database collection.
 [x] No schema redesign.
-[x] No unrelated API redesign.
+[x] No API redesign.
+[x] No duplicate skin-journal module.
 [x] Existing tests are not weakened.
 [x] Full validation passes before marking DONE.
 ```
@@ -122,12 +119,12 @@ Technical:
 Documentation:
 
 ```txt
-[x] Backlog records v1.17 as Routine History & Weekly Progress Review.
-[x] Prior release/observability candidate remains documented as a future optional evidence task.
-[x] Change log updated with real v1.17 validation evidence.
+[x] Backlog records v1.18 as Skin Journal Filters & Reflection Review.
+[x] Prior admin/content candidate is moved out of the v1.18 slot as future optional scope.
+[x] Change log updated with v1.18 implementation notes.
 [x] Feature status matrix updated.
-[x] Implementation status updated after validation.
-[x] v1.17 marked DONE only after validation passes.
+[x] Implementation status updated only with v1.18 evidence.
+[x] v1.18 marked DONE only after validation passes.
 ```
 
 ## 5. Validation Checklist
@@ -145,7 +142,7 @@ Required before marking DONE:
 [x] npm audit --omit=dev --audit-level=moderate
 ```
 
-Current v1.17 validation status:
+Current v1.18 validation status:
 
 ```txt
 Evidence date: 2026-06-08
@@ -154,7 +151,7 @@ node -v: v24.14.0
 npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 99 files / 929 tests
+npm run test: PASS - 100 files / 942 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -165,6 +162,7 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```txt
 No treatment guidance.
 No clinical conclusion.
+No product causality conclusion.
 No skin or health scoring.
 No image upload or image analysis.
 No marketplace, cart, checkout, or payment.
@@ -173,7 +171,7 @@ No notification/reminder system.
 No admin CRUD.
 No new database collection.
 No real AI provider change.
-No broad redesign of Routine Logs.
+No broad redesign of Skin Journal.
 No unrelated refactor.
 ```
 
@@ -181,5 +179,5 @@ No unrelated refactor.
 
 ```bash
 git add .
-git commit -m "feat: add routine weekly review"
+git commit -m "feat: add skin journal filters"
 ```
