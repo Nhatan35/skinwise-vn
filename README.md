@@ -18,12 +18,12 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.15.1 - Audit Cleanup & Evidence Sync**.
+- Latest completed milestone: **MVP v1.21 - Insight Explainability & Tracking Quality Checklist**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **Portfolio Evidence Package**.
+- Recommended next task: **Portfolio Evidence Package media capture**.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS** for MVP v1.15.1 audit cleanup/evidence sync.
+- Local validation evidence: **PASS** for MVP v1.21 insight explainability and tracking quality checklist.
 - Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
 - Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
@@ -57,6 +57,12 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.16 - Saved Product Comparison & Decision Support: DONE
+MVP v1.17 - Routine History & Weekly Progress Review: DONE
+MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
+MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
+MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -73,6 +79,8 @@ MVP v1.15 is a controlled post-MVP product improvement milestone. It improves Pr
 
 MVP v1.15.1 is an audit, dependency-risk, validation, and documentation evidence cleanup patch after v1.15. It does not add product features or change Product Match/Product Detail behavior.
 
+MVP v1.21 is the latest controlled post-MVP product improvement. It extends the existing Personal Insight Review with calculation metadata and a tracking data-availability checklist without adding diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI provider changes.
+
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks.
 
 ## Key Features
@@ -81,15 +89,15 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Skin profile onboarding, viewing, editing, and deletion.
 - Product catalogue with product detail pages and personalized match explanation on Product Detail.
 - Curated demo-safe catalogue with 58 fictional/demo-safe products and 59 educational ingredient records.
-- Saved products.
+- Saved products and saved product comparison.
 - Personalized Product Match: rule-based educational product matching with score, level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow and safe fallback behavior.
 - Routine builder with empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
 - Routine safety analysis with deterministic rule checks, scannable result sections, and safe AI-provider fallback behavior.
-- Today routine checklist and routine logs.
-- Skin journal.
-- Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, and calendar readability improvements.
+- Today routine checklist, routine logs, and weekly routine review.
+- Skin journal with loaded-entry filters.
+- Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, calendar readability improvements, Personal Insight Review cards, calculation explanations, and tracking quality checklist.
 - Dashboard summary based on user-owned data.
 - Settings and data control center.
 - Data export, app-data deletion, and MVP-safe account deletion request marker.
@@ -130,6 +138,7 @@ Implemented SkinWise API routes:
 - `/api/saved-products`
 - `/api/saved-products/[productId]`
 - `/api/insights`
+- `/api/insights/summary`
 - `/api/ingredients`
 - `/api/ingredients/[id]`
 - `/api/ingredients/explain`
@@ -165,26 +174,25 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
-Evidence date: 2026-06-06
+Evidence date: 2026-06-09
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: PASS
+npm ci: NOT RUN for v1.21
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 899 tests
-npm run build: PASS
-npm run test:e2e: PASS - 29/29 Playwright tests
+npm run test: PASS - 102 files / 987 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation note:
 
 ```txt
-v1.15 changed Product Match/Product Detail explainability and safety guidance only.
-v1.15.1 changed audit/release evidence documentation only.
-No product behavior, database schema, route, auth, authorization, persistence, or AI-provider behavior changed in v1.15.1.
-Sandboxed npm ci, build, and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox.
+v1.21 changed only Insight summary explainability and tracking data-availability checklist behavior.
+Existing v1.20 summary fields, `/api/insights`, database schema, auth, authorization, persistence, and AI-provider behavior remain unchanged.
+Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.21.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
@@ -194,7 +202,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch.
+Production smoke and monitoring were not rerun specifically for v1.21; local validation passed.
 Critical production blockers reported: None
 Evidence date: 2026-06-04
 Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
@@ -312,7 +320,7 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots and demo video are optional media evidence; capture them only if needed for CV, portfolio page, LinkedIn, or slide deck, and do not claim they exist until actual files are produced.
-- `npm ci` passed in the v1.15.1 validation evidence.
+- `npm ci` was not rerun for v1.21; latest required v1.21 validation commands passed.
 
 ## Final Portfolio Decision
 
@@ -323,6 +331,12 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.16 - Saved Product Comparison & Decision Support: DONE
+MVP v1.17 - Routine History & Weekly Progress Review: DONE
+MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
+MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
+MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate
@@ -331,4 +345,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.15 - Product Match Explainability & Safety Guardrails` and `v1.15.1 - Audit Cleanup & Evidence Sync` are complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.21 - Insight Explainability & Tracking Quality Checklist` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks.

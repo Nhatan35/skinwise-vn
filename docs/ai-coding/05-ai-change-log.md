@@ -6,6 +6,75 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## MVP v1.21 - Insight Explainability & Tracking Quality Checklist
+
+Date: 2026-06-09
+
+### Task
+
+Extend the existing v1.20 Personal Insight Review safely so users can understand how each insight card was calculated and what tracking data is available, limited, missing, or not configured.
+
+### Files Updated
+
+- `src/modules/insights/insight-summary.dto.ts`
+- `src/modules/insights/insight-summary.mapper.ts`
+- `src/modules/insights/components/insight-summary-section.tsx`
+- `tests/unit/insight-summary-use-case.test.ts`
+- `tests/unit/insight-summary-api-contract.test.ts`
+- `tests/unit/insights-client.test.ts`
+- `tests/unit/insights-ui.test.ts`
+- `tests/e2e/insights.authenticated.spec.ts`
+- `README.md`
+- `docs/00-source-of-truth.md`
+- `docs/final-release-checklist.md`
+- `docs/post-mvp-backlog.md`
+- `docs/portfolio-evidence-package.md`
+- `docs/demo-script.md`
+- `docs/screenshots-checklist.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added `calculationMeta` to routine consistency, symptom frequency, stress reflection, and product mention pattern summary cards.
+- Added `trackingQualityChecklist` to `GET /api/insights/summary`.
+- Added `/insights` UI sections for "How this was calculated" and "Tracking Quality Checklist".
+- Added safe data-availability statuses for routine logs, journal entries, symptom notes, stress notes, and product mentions.
+- Preserved existing v1.20 summary fields and existing `/api/insights` behavior.
+- Added unit, API contract, client, UI source, and authenticated E2E coverage.
+
+### Safety and Privacy Guardrails
+
+- No diagnosis, treatment advice, skin scoring, risk scoring, health grading, product causation, product effectiveness, product harm, stress causation, or routine causation claims.
+- No database identifiers, user IDs, routine IDs, journal IDs, product IDs, raw documents, session data, token data, or provider account fields in the new summary response.
+- Checklist thresholds are documented in code as tracking-data availability thresholds only, not medical thresholds or scores.
+- Product mention checklist counts resolved visible product mentions only and never returns product IDs.
+
+### Known Limitations
+
+- Routine `not_configured` is based on whether the authenticated user currently has any routine configured.
+- Product mention availability depends on journal `productsUsed` references resolving to visible products.
+- Production smoke was not rerun for v1.21; local validation passed.
+
+### Validation
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 102 files / 987 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Status
+
+```txt
+DONE after full local validation passed.
+```
+
 ## MVP v1.20 - Personal Insight Review & Safe Trend Cards
 
 Date: 2026-06-09

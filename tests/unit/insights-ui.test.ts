@@ -122,6 +122,8 @@ describe("Insights UI source", () => {
       "Journal Symptom Frequency",
       "Stress Reflection",
       "Product Mention Pattern",
+      "How this was calculated",
+      "Tracking Quality Checklist",
       "Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại",
       "không phải chẩn đoán y khoa",
     ]) {
@@ -129,6 +131,42 @@ describe("Insights UI source", () => {
     }
     expect(insightsPageSource).toContain("<InsightSummarySection");
     expect(insightsPageSource).toContain("to={dateRange.to}");
+  });
+
+  it("renders insight calculation notes and tracking quality checklist copy", () => {
+    for (const expectedCopy of [
+      "How this was calculated",
+      "Period reviewed",
+      "Data used",
+      "Calculation",
+      "Tracking Quality Checklist",
+      "Routine logs in the last 7 days",
+      "Journal entries in the last 30 days",
+      "Symptom notes in the last 30 days",
+      "Stress notes in the last 30 days",
+      "Product mentions in the last 30 days",
+      "Available",
+      "Limited",
+      "Not enough data",
+      "Not configured",
+      "not a skin score",
+      "medical assessment",
+    ]) {
+      expect(insightSummaryCopySource).toContain(expectedCopy);
+    }
+
+    for (const dangerousLabel of [
+      "Poor",
+      "Risky",
+      "Danger",
+      "Unhealthy",
+      "Needs treatment",
+      "High risk",
+      "Low score",
+      "Failed",
+    ]) {
+      expect(insightSummarySectionSource).not.toContain(dangerousLabel);
+    }
   });
 
   it("renders safe missing-data fallback and safety note copy for Personal Insight Review", () => {
@@ -161,7 +199,6 @@ describe("Insights UI source", () => {
     }
 
     for (const forbiddenCopy of [
-      "skin score",
       "skinscore",
       "diagnosis",
       "diagnose",

@@ -10,7 +10,7 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+Latest completed milestone: v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 Current active milestone: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
@@ -77,6 +77,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Skin Journal Filters & Reflection Review | DONE in v1.18 | Helps users review loaded journal notes by symptom, stress level, product usage, and recent time range with reflection-only copy. |
 | P2 | Account Data Summary & Privacy Control Review | DONE in v1.19 | Helps users understand user-owned skincare data counts before export/delete actions. |
 | P2 | Personal Insight Review & Safe Trend Cards | DONE in v1.20 | Adds strict count-only `/api/insights/summary` and safe reflection cards on `/insights` without medical or causal claims. |
+| P2 | Insight Explainability & Tracking Quality Checklist | DONE in v1.21 | Explains how each personal insight card is calculated and shows data-availability status without scores, grades, or medical assessment. |
 | P2 | Release/observability polish | Future optional release evidence candidate | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
@@ -530,6 +531,59 @@ Stress reflection uses the existing low/medium/high journal stress labels only.
 v1.20 - Personal Insight Review & Safe Trend Cards
 ```
 
+## 7G. P2 - Insight Explainability & Tracking Quality Checklist
+
+### Goal
+
+Help users understand how each Personal Insight Review card was calculated and whether recent tracking data is available, limited, missing, or not configured.
+
+### Status
+
+```txt
+v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+Validation for v1.21: PASS
+```
+
+### Scope
+
+- Extended `GET /api/insights/summary` with calculation metadata for routine consistency, symptom frequency, stress reflection, and product mention pattern cards.
+- Added a tracking quality checklist for routine logs, journal entries, symptom notes, stress notes, and product mentions.
+- Added checklist and calculation explanation UI on `/insights`.
+- Kept response data summary-only and count-based.
+- Preserved existing v1.20 summary fields and existing `/api/insights` behavior.
+- Added unit, API contract, client, UI source, and authenticated E2E coverage.
+- No schema change, AI provider change, diagnosis, treatment advice, causation claim, product effectiveness claim, product harm claim, risk score, skin score, health grade, or medical assessment.
+
+### Acceptance Criteria
+
+```txt
+[x] /insights shows calculation explanations for Personal Insight Review cards.
+[x] /insights shows Tracking Quality Checklist.
+[x] Checklist uses safe data-availability labels only.
+[x] GET /api/insights/summary returns calculation metadata.
+[x] GET /api/insights/summary returns tracking quality checklist data.
+[x] Existing v1.20 response fields remain present.
+[x] Summary response does not expose database IDs, user IDs, routine IDs, journal IDs, product IDs, raw documents, session fields, or token fields.
+[x] Summary response does not expose score-like fields such as score, grade, rating, riskLevel, healthRating, severity, or medicalStatus.
+[x] Copy avoids diagnosis, treatment, causation, product effectiveness, product harm, stress causation, routine causation, and skin scoring claims.
+[x] Validation passes before marking DONE.
+```
+
+### Known Limitations
+
+```txt
+Routine not_configured status is based on whether the user has any configured routine.
+Product mention checklist counts only resolved visible product mentions, not hidden or unresolved product identifiers.
+Checklist thresholds describe data availability only and are not medical thresholds or quality scores.
+Production smoke was not rerun for v1.21; local validation passed.
+```
+
+### Suggested Version
+
+```txt
+v1.21 - Insight Explainability & Tracking Quality Checklist
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -663,7 +717,7 @@ Portfolio Evidence Package media capture
 
 Reason:
 
-- v1.20 Personal Insight Review & Safe Trend Cards is complete and locally validated.
+- v1.21 Insight Explainability & Tracking Quality Checklist is complete and locally validated.
 - The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
 - The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
 - The next low-risk task should capture optional screenshots/demo evidence rather than adding another product feature immediately.
@@ -701,4 +755,5 @@ Reason:
 2026-06-08: Started v1.19 Account Data Summary & Privacy Control Review as the active privacy/data-control sprint; optional real-provider integration remains future optional and unversioned.
 2026-06-08: Completed v1.19 Account Data Summary & Privacy Control Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
 2026-06-09: Completed v1.20 Personal Insight Review & Safe Trend Cards with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a strict duplicate-disclaimer locator, which was fixed before final E2E PASS.
+2026-06-09: Completed v1.21 Insight Explainability & Tracking Quality Checklist with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a duplicate safe-disclaimer locator, which was fixed before final E2E PASS.
 ```

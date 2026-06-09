@@ -1,6 +1,6 @@
 # Portfolio Evidence Package - SkinWise VN
 
-Last updated: 2026-06-07
+Last updated: 2026-06-09
 
 ## 1. Purpose
 
@@ -43,15 +43,15 @@ Do not present the app as:
 | Actual screenshot files | Not verified | This package does not claim screenshots exist in the repository. |
 | Demo video file | Not recorded | This package does not claim a demo video exists. |
 | CV/resume summary | Drafted | See section 5. |
-| Historical local validation | PASS, historical | Recorded from MVP v1.15.1 on 2026-06-06. |
+| Latest local validation | PASS | Recorded from MVP v1.21 on 2026-06-09. |
 | Historical production smoke/monitoring | PASS, user-reported | Recorded from the stable MVP baseline on 2026-06-04. |
-| Current task app validation | Not run | This task is docs-only; no product behavior changed. |
+| Current task app validation | PASS | v1.21 lint, typecheck, test, build, E2E, and production audit passed locally. |
 
-No new test, build, E2E, production smoke, screenshot, video, traffic, performance, or user-metric evidence is claimed by this file.
+No new production smoke, screenshot, video, traffic, performance, or user-metric evidence is claimed by this file.
 
 ## 4. Recruiter Summary
 
-SkinWise VN is a portfolio-ready full-stack educational skincare tracking MVP built with Next.js App Router, TypeScript, MongoDB, Auth.js, Zod, Tailwind CSS, Vitest, and Playwright. It demonstrates BA-style scope control, authenticated user-owned data flows, rule-based product comparison support, deterministic routine safety review before AI explanation, privacy-conscious journaling, dashboard/insights summaries, and release evidence discipline.
+SkinWise VN is a portfolio-ready full-stack educational skincare tracking MVP built with Next.js App Router, TypeScript, MongoDB, Auth.js, Zod, Tailwind CSS, Vitest, and Playwright. It demonstrates BA-style scope control, authenticated user-owned data flows, rule-based product comparison support, deterministic routine safety review before AI explanation, privacy-conscious journaling, explainable dashboard/insights summaries, and release evidence discipline.
 
 The strongest presentation angle is not "AI skincare advice." The stronger and safer angle is: a scoped full-stack MVP with clear requirements, safe product boundaries, explainable rules, protected personal data, and a complete demo journey.
 
@@ -60,7 +60,7 @@ The strongest presentation angle is not "AI skincare advice." The stronger and s
 Short version:
 
 ```txt
-Built SkinWise VN, a full-stack educational skincare tracking MVP using Next.js, TypeScript, MongoDB, Auth.js, Zod, Tailwind CSS, Vitest, and Playwright. Implemented authenticated skin profile, product comparison, saved products, routine tracking, deterministic routine safety review, skin journal, insights, settings/data export, and portfolio-ready release documentation with non-medical safety boundaries.
+Built SkinWise VN, a full-stack educational skincare tracking MVP using Next.js, TypeScript, MongoDB, Auth.js, Zod, Tailwind CSS, Vitest, and Playwright. Implemented authenticated skin profile, product comparison, saved products, routine tracking, deterministic routine safety review, skin journal, explainable insights, settings/data export, and portfolio-ready release documentation with non-medical safety boundaries.
 ```
 
 Bullet version:
@@ -69,7 +69,7 @@ Bullet version:
 - Designed rule-based Product Match and deterministic Routine Safety Analysis so guidance stays explainable, testable, and non-medical.
 - Used an AI-provider abstraction as an explanation/fallback layer rather than a safety decision-maker.
 - Documented release evidence, demo flow, portfolio case study, safety boundaries, and post-MVP backlog for recruiter and interview review.
-- Historical validation evidence records lint, typecheck, 97 test files / 899 tests, production build, 29/29 Playwright E2E tests, and production dependency audit passing on 2026-06-06.
+- Latest validation evidence records lint, typecheck, 102 test files / 987 tests, production build, 31/31 Playwright E2E tests, and production dependency audit passing on 2026-06-09.
 
 ## 6. Interview Narrative
 
@@ -80,7 +80,7 @@ Use this order:
 3. Safety: no diagnosis, no treatment promises, no skin score, no face/image analysis, and no marketplace behavior.
 4. Architecture: modular monolith with App Router pages, thin API handlers, use cases, domain rules, repositories, MongoDB, DTO boundaries, and environment validation.
 5. Rules before AI: deterministic routine safety rules run first; AI only explains or falls back safely.
-6. Validation: historical local validation and user-reported production smoke evidence are preserved as dated evidence, not rerun evidence.
+6. Validation: v1.21 local validation and user-reported production smoke evidence are preserved as dated evidence.
 7. Limitation: demo data is curated and educational; real provider integration, admin workflows, and commercial monitoring remain post-MVP options.
 
 ## 7. 3-5 Minute Demo Run Of Show
@@ -93,7 +93,7 @@ Use this order:
 | 1:30-2:10 | Product Match, Product Detail, Saved Products | Rule-based product comparison and explainability. |
 | 2:10-2:40 | Ingredient Library | Beginner-friendly ingredient education. |
 | 2:40-3:25 | Routine Builder and Routine Safety Analysis | Deterministic caution review before AI explanation. |
-| 3:25-4:10 | Today Routine, Journal, Insights | Personal history and reflection over time. |
+| 3:25-4:10 | Today Routine, Journal, Insights | Personal history, safe reflection, calculation explanations, and tracking data availability over time. |
 | 4:10-4:40 | Settings and Data Export | Privacy and data-control thinking. |
 | 4:40-5:00 | Close | MVP scope, validation evidence, limitations, next steps. |
 
@@ -142,13 +142,13 @@ Before capturing screenshots or video:
 Historical validation evidence:
 
 ```txt
-Evidence date: 2026-06-06
-npm ci: PASS
+Evidence date: 2026-06-09
+npm ci: NOT RUN for v1.21
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 97 files / 899 tests
-npm run build: PASS
-npm run test:e2e: PASS - 29/29 Playwright tests
+npm run test: PASS - 102 files / 987 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
@@ -164,8 +164,8 @@ Strict audit artifacts such as screenshots, deployment ids, browser logs, and sa
 Current task validation:
 
 ```txt
-Docs-only presentation update.
-Product validation commands: Not run.
+MVP v1.21 product update.
+Product validation commands: PASS.
 Production smoke test: Not run.
 Screenshot capture: Not run.
 Demo video recording: Not run.

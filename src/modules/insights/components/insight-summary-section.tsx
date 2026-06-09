@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 
 import { getSymptomLabel } from "@/modules/insights/components/insights-overview-cards";
 import { getInsightSummary } from "@/modules/insights/insights.client";
-import type { InsightSummaryDto } from "@/modules/insights/insight-summary.dto";
+import type {
+  InsightCalculationMetaDto,
+  InsightSummaryDto,
+  TrackingQualityChecklistDto,
+  TrackingQualityStatus,
+} from "@/modules/insights/insight-summary.dto";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -27,6 +32,13 @@ type SymptomFrequencySummary = InsightSummaryDto["symptomFrequency"];
 type StressReflectionSummary = InsightSummaryDto["stressReflection"];
 type ProductMentionPatternSummary =
   InsightSummaryDto["productMentionPattern"];
+
+const trackingQualityStatusLabels: Record<TrackingQualityStatus, string> = {
+  available: "Available",
+  limited: "Limited",
+  not_enough_data: "Not enough data",
+  not_configured: "Not configured",
+};
 
 function hasStressData(stressReflection: StressReflectionSummary) {
   return (
@@ -53,6 +65,118 @@ function SummaryStat({
         {value}
       </dd>
     </div>
+  );
+}
+
+function InsightCalculationNote({
+  calculationMeta,
+}: {
+  calculationMeta?: InsightCalculationMetaDto;
+}) {
+  if (!calculationMeta) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-2xl border border-border/70 bg-secondary/30 px-4 py-3">
+      <p className="text-sm font-semibold text-foreground">
+        How this was calculated
+      </p>
+      <dl className="mt-3 space-y-2 text-sm leading-6">
+        <div>
+          <dt className="font-medium text-foreground">Period reviewed</dt>
+          <dd className="text-muted-foreground">
+            Last {calculationMeta.periodDays} days
+          </dd>
+        </div>
+        <div>
+          <dt className="font-medium text-foreground">Data used</dt>
+          <dd className="text-muted-foreground">
+            {calculationMeta.dataSourceLabel}
+          </dd>
+        </div>
+        <div>
+          <dt className="font-medium text-foreground">Calculation</dt>
+          <dd className="text-muted-foreground">
+            {calculationMeta.calculationLabel}
+          </dd>
+        </div>
+      </dl>
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">
+        {calculationMeta.safetyText}
+      </p>
+    </div>
+  );
+}
+
+function getTrackingStatusVariant(status: TrackingQualityStatus) {
+  if (status === "available") {
+    return "secondary" as const;
+  }
+
+  return "outline" as const;
+}
+
+function TrackingQualityChecklist({
+  checklist,
+}: {
+  checklist?: TrackingQualityChecklistDto;
+}) {
+  if (!checklist) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Tracking Quality Checklist</CardTitle>
+          <CardDescription>
+            Tracking quality details are not available yet. Continue logging
+            routines or journal entries to build a clearer personal record.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Tracking Quality Checklist</CardTitle>
+        <CardDescription>
+          This checklist reflects tracking data availability only. It is not a
+          skin score or medical assessment.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-sm font-medium text-foreground">
+          {checklist.summaryText}
+        </p>
+        <ul className="grid gap-3 lg:grid-cols-2">
+          {checklist.checklistItems.map((item) => (
+            <li
+              className="rounded-2xl border border-border/70 bg-secondary/30 px-4 py-3"
+              key={item.key}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-medium text-foreground">{item.label}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Count: {item.count} in {item.periodDays} days
+                  </p>
+                </div>
+                <Badge variant={getTrackingStatusVariant(item.status)}>
+                  {trackingQualityStatusLabels[item.status]}
+                </Badge>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                {item.helperText}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="rounded-2xl border border-border/70 bg-secondary/40 px-4 py-3 text-sm leading-6 text-muted-foreground">
+          {checklist.safetyNote}
+        </p>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -95,6 +219,9 @@ function RoutineConsistencyReviewCard({
             {routineConsistency.helperText}
           </p>
         </div>
+        <InsightCalculationNote
+          calculationMeta={routineConsistency.calculationMeta}
+        />
       </CardContent>
     </Card>
   );
@@ -152,6 +279,9 @@ function JournalSymptomFrequencyCard({
             {symptomFrequency.helperText}
           </p>
         </div>
+        <InsightCalculationNote
+          calculationMeta={symptomFrequency.calculationMeta}
+        />
       </CardContent>
     </Card>
   );
@@ -186,6 +316,9 @@ function StressReflectionCard({
             {stressReflection.helperText}
           </p>
         </div>
+        <InsightCalculationNote
+          calculationMeta={stressReflection.calculationMeta}
+        />
       </CardContent>
     </Card>
   );
@@ -240,6 +373,9 @@ function ProductMentionPatternCard({
             {productMentionPattern.helperText}
           </p>
         </div>
+        <InsightCalculationNote
+          calculationMeta={productMentionPattern.calculationMeta}
+        />
       </CardContent>
     </Card>
   );
@@ -267,6 +403,8 @@ function InsightSummaryCards({ summary }: { summary: InsightSummaryDto }) {
           productMentionPattern={summary.productMentionPattern}
         />
       </div>
+
+      <TrackingQualityChecklist checklist={summary.trackingQualityChecklist} />
 
       <p className="rounded-2xl border border-border/70 bg-secondary/40 px-4 py-3 text-sm leading-6 text-muted-foreground">
         {summary.safetyNote}

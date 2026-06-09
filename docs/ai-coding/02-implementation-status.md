@@ -27,9 +27,10 @@ MVP v1.17 - Routine History & Weekly Progress Review: DONE
 MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, and v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, and v1.21 added insight calculation metadata plus a tracking data-availability checklist.
 
 Current status:
 
@@ -37,7 +38,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Recommended next task: Portfolio Evidence Package media capture
@@ -139,10 +140,10 @@ Environment: Local Windows / PowerShell
 Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
-npm ci: NOT RUN for v1.20
+npm ci: NOT RUN for v1.21
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 977 tests
+npm run test: PASS - 102 files / 987 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -151,9 +152,9 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation notes:
 
 ```txt
-v1.20 validation passed after implementation.
+v1.21 validation passed after implementation.
 The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
-The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun exposed a duplicate-disclaimer strict locator in the updated Insights E2E test, which was fixed before the final outside-sandbox rerun passed.
+The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun exposed a duplicate safe-disclaimer strict locator in the updated Insights E2E test, which was fixed before the final outside-sandbox rerun passed.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
@@ -201,6 +202,7 @@ v1.17 - Routine History & Weekly Progress Review
 v1.18 - Skin Journal Filters & Reflection Review
 v1.19 - Account Data Summary & Privacy Control Review
 v1.20 - Personal Insight Review & Safe Trend Cards
+v1.21 - Insight Explainability & Tracking Quality Checklist
 ```
 
 Completed v1.14 scope:
@@ -269,6 +271,16 @@ Completed v1.20 scope:
 - Added recursive API contract coverage for forbidden fields including `_id`, `id`, `userId`, `routineId`, `journalId`, `productId`, session, token, and provider account fields.
 - Added safe loading, error, insufficient-data, and missing-data states.
 - Avoided diagnosis, treatment advice, causation claims, product effectiveness claims, product harm claims, stress causation claims, routine causation claims, skin scoring, schema changes, and AI provider changes.
+
+Completed v1.21 scope:
+
+- Extended `GET /api/insights/summary` with `calculationMeta` for each Personal Insight Review card.
+- Added `trackingQualityChecklist` for routine logs, journal entries, symptom notes, stress notes, and product mentions.
+- Added `/insights` UI explanations for period reviewed, data used, calculation method, and safety text.
+- Added safe checklist statuses: available, limited, not_enough_data, and not_configured.
+- Added recursive API contract checks for forbidden identifiers, raw documents, auth/session/token fields, and score-like fields.
+- Preserved existing v1.20 summary fields and existing `/api/insights` behavior.
+- Avoided diagnosis, treatment advice, causation claims, product effectiveness claims, product harm claims, stress causation claims, routine causation claims, skin scores, risk scores, health grades, medical status fields, schema changes, and AI provider changes.
 
 Recommended next task:
 

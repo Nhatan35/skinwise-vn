@@ -1,3 +1,40 @@
+export type InsightCalculationMetaDto = {
+  periodDays: number;
+  dataSourceLabel: string;
+  calculationLabel: string;
+  safetyText: string;
+};
+
+export type TrackingQualityStatus =
+  | "available"
+  | "limited"
+  | "not_enough_data"
+  | "not_configured";
+
+export type TrackingQualityChecklistItemKey =
+  | "routine_logs"
+  | "journal_entries"
+  | "symptom_notes"
+  | "stress_notes"
+  | "product_mentions";
+
+export type TrackingQualityChecklistItemDto = {
+  key: TrackingQualityChecklistItemKey;
+  label: string;
+  status: TrackingQualityStatus;
+  count: number;
+  periodDays: number;
+  helperText: string;
+};
+
+export type TrackingQualityChecklistDto = {
+  routinePeriodDays: 7;
+  journalPeriodDays: 30;
+  checklistItems: TrackingQualityChecklistItemDto[];
+  summaryText: string;
+  safetyNote: string;
+};
+
 export type InsightSummaryDto = {
   hasEnoughData: boolean;
   insufficientDataReasons: string[];
@@ -9,6 +46,7 @@ export type InsightSummaryDto = {
     noRoutineConfigured: boolean;
     summaryText: string;
     helperText: string;
+    calculationMeta: InsightCalculationMetaDto;
   };
   symptomFrequency: {
     periodDays: number;
@@ -18,6 +56,7 @@ export type InsightSummaryDto = {
     }>;
     summaryText: string;
     helperText: string;
+    calculationMeta: InsightCalculationMetaDto;
   };
   stressReflection: {
     periodDays: number;
@@ -26,6 +65,7 @@ export type InsightSummaryDto = {
     lowStressCount: number;
     summaryText: string;
     helperText: string;
+    calculationMeta: InsightCalculationMetaDto;
   };
   productMentionPattern: {
     periodDays: number;
@@ -36,6 +76,8 @@ export type InsightSummaryDto = {
     }>;
     summaryText: string;
     helperText: string;
+    calculationMeta: InsightCalculationMetaDto;
   };
+  trackingQualityChecklist: TrackingQualityChecklistDto;
   safetyNote: string;
 };

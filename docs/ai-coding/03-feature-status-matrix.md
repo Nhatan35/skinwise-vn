@@ -7,7 +7,7 @@ Last updated: 2026-06-09
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current active milestone: None
 Product core: COMPLETE
 Local validation: PASS
@@ -42,10 +42,10 @@ Optional media evidence tasks: screenshots and demo video
 | Today Routine Checklist | DONE | Daily completion flow. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
 | Skin Journal | DONE | Create/edit/delete journal entries; v1.18 added loaded-entry filters and reflection review. |
-| Insights | DONE | Progress story, safe next actions, and v1.20 Personal Insight Review with strict count-only trend cards. |
+| Insights | DONE | Progress story, safe next actions, v1.20 Personal Insight Review, and v1.21 calculation explanations plus tracking quality checklist. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete. |
 | Data Export | DONE | User-owned app data export. |
-| Local validation evidence | PASS | v1.20 validation passed with 102 files / 977 unit tests, 31/31 E2E tests, build, and production audit PASS. |
+| Local validation evidence | PASS | v1.21 validation passed with 102 files / 987 unit tests, 31/31 E2E tests, build, and production audit PASS. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | PASS | User-reported production verification completed. |
 | Production monitoring evidence | PASS | User-reported checks completed. |
@@ -61,6 +61,7 @@ Optional media evidence tasks: screenshots and demo video
 | Skin Journal Filters | Post-MVP | v1.18 | DONE |
 | Account Data Summary | Privacy/Data Control | v1.19 | DONE |
 | Personal Insight Review | Post-MVP Insights | v1.20 | DONE |
+| Insight Explainability & Tracking Quality Checklist | Post-MVP Insights | v1.21 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -80,7 +81,7 @@ Optional media evidence tasks: screenshots and demo video
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current active milestone: None
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional and not product correctness blockers

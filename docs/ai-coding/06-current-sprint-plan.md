@@ -23,18 +23,19 @@ Routine History & Weekly Progress Review: DONE in v1.17
 Skin Journal Filters & Reflection Review: DONE in v1.18
 Account Data Summary & Privacy Control Review: DONE in v1.19
 Personal Insight Review & Safe Trend Cards: DONE in v1.20
-Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
+Insight Explainability & Tracking Quality Checklist: DONE in v1.21
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current active sprint: None
 Current active sprint status: None
 Recommended next sprint: Portfolio Evidence Package media capture
 Current phase: Post-MVP controlled improvement
 ```
 
-v1.20 completed controlled product improvement. The change is limited to strict count-only personal reflection summaries on the existing `/insights` page.
+v1.21 completed controlled product improvement. The change is limited to insight calculation explainability and tracking data-availability checklist support on the existing `/insights` page and `GET /api/insights/summary`.
 
 ## 2. Objective
 
-Help users understand their own tracking patterns through safe routine-log and journal-count summaries.
+Help users understand how personal insight cards were calculated and whether recent tracking data is available, limited, missing, or not configured.
 
 The feature must preserve:
 
@@ -48,6 +49,9 @@ No product harm claim
 No stress causation claim
 No routine causation claim
 No skin score
+No risk score
+No health grade
+No medical status field
 No raw document response
 No database identifier, user ID, routine ID, journal ID, or product ID response
 No session, token, or provider account field response
@@ -65,13 +69,8 @@ Active files:
 ```txt
 src/app/api/insights/summary/route.ts
 src/modules/insights/insight-summary.dto.ts
-src/modules/insights/insight-summary.schema.ts
 src/modules/insights/insight-summary.mapper.ts
-src/modules/insights/insight-summary.use-case.ts
 src/modules/insights/components/insight-summary-section.tsx
-src/modules/insights/components/insights-page.tsx
-src/modules/insights/insights.client.ts
-src/modules/insights/index.ts
 tests/unit/insight-summary-use-case.test.ts
 tests/unit/insight-summary-api-contract.test.ts
 tests/unit/insights-client.test.ts
@@ -82,6 +81,12 @@ docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
+README.md
+docs/00-source-of-truth.md
+docs/final-release-checklist.md
+docs/portfolio-evidence-package.md
+docs/demo-script.md
+docs/screenshots-checklist.md
 ```
 
 ## 4. Acceptance Criteria
@@ -92,11 +97,14 @@ Functional:
 [x] User can open /insights successfully.
 [x] Existing /insights behavior remains unchanged.
 [x] Existing GET /api/insights behavior remains unchanged.
-[x] Personal Insight Review section appears on /insights.
-[x] Routine Consistency card summarizes the last 7 local dates.
-[x] Journal Symptom Frequency card summarizes recent symptoms without diagnosis.
-[x] Stress Reflection card summarizes recorded stress labels without causation claims.
-[x] Product Mention Pattern card summarizes product-name mentions without product IDs.
+[x] Personal Insight Review section remains visible on /insights.
+[x] Routine Consistency card shows how the summary was calculated.
+[x] Journal Symptom Frequency card shows how symptoms were counted.
+[x] Stress Reflection card shows how stress labels were counted.
+[x] Product Mention Pattern card shows how product names were counted.
+[x] Tracking Quality Checklist appears on /insights.
+[x] Checklist shows routine logs, journal entries, symptom notes, stress notes, and product mentions.
+[x] Checklist uses safe available/limited/not-enough-data/not-configured statuses.
 [x] Insufficient-data empty state appears when no recent routine logs or journal entries exist.
 [x] Partial data still shows available cards with section-level fallbacks.
 ```
@@ -115,12 +123,15 @@ Privacy and security:
 [x] Summary response does not include `productId`.
 [x] Summary response does not include session, token, accessToken, refreshToken, providerAccountId, emailVerified, password, rawDocument, createdBy, or updatedBy fields.
 [x] Product IDs are used only internally to resolve names/brands.
+[x] Summary response does not include score-like fields such as score, grade, rating, riskLevel, healthRating, severity, or medicalStatus.
 ```
 
 Technical:
 
 ```txt
 [x] GET /api/insights/summary returns only safe summary data.
+[x] GET /api/insights/summary includes `calculationMeta`.
+[x] GET /api/insights/summary includes `trackingQualityChecklist`.
 [x] Existing GET /api/insights behavior remains intact.
 [x] Client components use API/client helpers only.
 [x] No new database collection.
@@ -134,12 +145,12 @@ Technical:
 Documentation:
 
 ```txt
-[x] Backlog records v1.20 as Personal Insight Review & Safe Trend Cards.
-[x] Change log updated with v1.20 implementation notes.
+[x] Backlog records v1.21 as Insight Explainability & Tracking Quality Checklist.
+[x] Change log updated with v1.21 implementation notes.
 [x] Feature status matrix updated.
-[x] Historical v1.19 evidence preserved without overclaiming.
-[x] Implementation status updated with v1.20 evidence.
-[x] v1.20 marked DONE only after validation passes.
+[x] Historical production evidence preserved without overclaiming.
+[x] Implementation status updated with v1.21 evidence.
+[x] v1.21 marked DONE only after validation passes.
 ```
 
 ## 5. Validation Checklist
@@ -157,7 +168,7 @@ Required before marking DONE:
 [x] npm audit --omit=dev --audit-level=moderate
 ```
 
-Current v1.20 validation status:
+Current v1.21 validation status:
 
 ```txt
 Evidence date: 2026-06-09
@@ -166,7 +177,7 @@ node -v: v24.14.0
 npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 977 tests
+npm run test: PASS - 102 files / 987 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -179,6 +190,8 @@ No diagnosis.
 No treatment guidance.
 No clinical conclusion.
 No skin or health scoring.
+No risk scoring.
+No health grading.
 No product causation, product effectiveness, or product harm claim.
 No stress causation claim.
 No routine causation claim.
@@ -197,5 +210,5 @@ No unrelated refactor.
 
 ```bash
 git add .
-git commit -m "feat: add personal insight review"
+git commit -m "feat: explain personal insight tracking quality"
 ```

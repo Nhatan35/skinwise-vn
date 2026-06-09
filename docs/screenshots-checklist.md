@@ -1,6 +1,6 @@
 # Screenshots Checklist - SkinWise VN
 
-Last updated: 2026-06-07
+Last updated: 2026-06-09
 
 Status: **Optional portfolio evidence task**
 
@@ -25,9 +25,9 @@ MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.13 UX Polish & Empty State Improvement: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: Portfolio Evidence Package media capture
 ```
 
 ## Recommended Screenshot List
@@ -48,7 +48,7 @@ Recommended next task: Portfolio Evidence Package
 | Today Routine Checklist | Medium | Show daily completion flow. |
 | Routine Logs | Medium | Show tracking history. |
 | Skin Journal | High | Show reflection and observations. |
-| Insights | High | Show progress story and consistency view. |
+| Insights | High | Show progress story, Personal Insight Review, calculation explanations, and tracking quality checklist. |
 | Settings / Data Export | High | Show data control and privacy thinking. |
 
 ## Screenshot Safety Rules

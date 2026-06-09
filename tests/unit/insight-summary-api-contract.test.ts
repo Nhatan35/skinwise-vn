@@ -18,7 +18,7 @@ const mockedGetInsightSummaryForUser = vi.mocked(getInsightSummaryForUser);
 
 const authUserId = "auth-user-id";
 
-const forbiddenFields = [
+const forbiddenIdentifierFields = [
   "_id",
   "id",
   "userId",
@@ -37,6 +37,49 @@ const forbiddenFields = [
   "updatedBy",
 ];
 
+const forbiddenScoreLikeFields = [
+  "skinScore",
+  "score",
+  "grade",
+  "rating",
+  "riskLevel",
+  "healthRating",
+  "severity",
+  "medicalStatus",
+];
+
+const routineCalculationMeta = {
+  periodDays: 7,
+  dataSourceLabel: "Routine logs from your account only",
+  calculationLabel:
+    "Completed days, partial days, and no-log days were counted from your routine tracking records.",
+  safetyText:
+    "This only shows your tracking consistency. It does not indicate skin improvement or skin decline.",
+};
+
+const symptomCalculationMeta = {
+  periodDays: 30,
+  dataSourceLabel: "Symptoms recorded in your journal entries",
+  calculationLabel: "Repeated symptom labels were counted and sorted by frequency.",
+  safetyText:
+    "This only reflects what you recorded. It does not confirm a skin condition.",
+};
+
+const stressCalculationMeta = {
+  periodDays: 30,
+  dataSourceLabel: "Stress levels recorded in your journal entries",
+  calculationLabel: "Low, medium, and high stress labels were counted.",
+  safetyText:
+    "This does not identify stress as a cause of any skin change. It only summarizes your recorded notes.",
+};
+
+const productCalculationMeta = {
+  periodDays: 30,
+  dataSourceLabel: "Products mentioned in your journal entries",
+  calculationLabel: "Product names appearing in journal entries were counted.",
+  safetyText: "This does not confirm that a product helped or harmed your skin.",
+};
+
 const summaryDto: InsightSummaryDto = {
   hasEnoughData: true,
   insufficientDataReasons: [],
@@ -49,6 +92,7 @@ const summaryDto: InsightSummaryDto = {
     summaryText: "Bạn đã hoàn thành routine trong 5/7 ngày gần đây.",
     helperText:
       "Đây chỉ là mẫu theo dõi cá nhân để xem lại thói quen, không phải kết luận về thay đổi trên da.",
+    calculationMeta: routineCalculationMeta,
   },
   symptomFrequency: {
     periodDays: 30,
@@ -62,6 +106,7 @@ const summaryDto: InsightSummaryDto = {
       "khô da là triệu chứng được ghi nhiều nhất trong 30 ngày gần đây.",
     helperText:
       "Nội dung này chỉ phản ánh những gì bạn đã ghi trong nhật ký và không xác nhận tình trạng da.",
+    calculationMeta: symptomCalculationMeta,
   },
   stressReflection: {
     periodDays: 30,
@@ -71,6 +116,7 @@ const summaryDto: InsightSummaryDto = {
     summaryText: "Bạn đã ghi nhận mức căng thẳng cao trong 3 ngày nhật ký.",
     helperText:
       "Bạn có thể tiếp tục quan sát stress và ghi chú da cùng nhau, nhưng không nên xem đây là kết luận nguyên nhân.",
+    calculationMeta: stressCalculationMeta,
   },
   productMentionPattern: {
     periodDays: 30,
@@ -84,6 +130,59 @@ const summaryDto: InsightSummaryDto = {
     summaryText: "Gentle Cleanser xuất hiện trong 3 mục nhật ký.",
     helperText:
       "Hãy xem lại ghi chú của chính bạn trước khi thay đổi routine. Nội dung này không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm.",
+    calculationMeta: productCalculationMeta,
+  },
+  trackingQualityChecklist: {
+    routinePeriodDays: 7,
+    journalPeriodDays: 30,
+    checklistItems: [
+      {
+        key: "routine_logs",
+        label: "Routine logs in the last 7 days",
+        status: "available",
+        count: 5,
+        periodDays: 7,
+        helperText: "You have routine logs available for recent review.",
+      },
+      {
+        key: "journal_entries",
+        label: "Journal entries in the last 30 days",
+        status: "limited",
+        count: 3,
+        periodDays: 30,
+        helperText:
+          "A few journal entries are available. More entries may make future review clearer.",
+      },
+      {
+        key: "symptom_notes",
+        label: "Symptom notes in the last 30 days",
+        status: "limited",
+        count: 2,
+        periodDays: 30,
+        helperText: "Some symptom notes are available for personal reflection.",
+      },
+      {
+        key: "stress_notes",
+        label: "Stress notes in the last 30 days",
+        status: "available",
+        count: 5,
+        periodDays: 30,
+        helperText: "You have stress notes available for recent review.",
+      },
+      {
+        key: "product_mentions",
+        label: "Product mentions in the last 30 days",
+        status: "not_enough_data",
+        count: 0,
+        periodDays: 30,
+        helperText:
+          "No product mentions were found in recent journal entries.",
+      },
+    ],
+    summaryText:
+      "Your recent tracking data is available in some areas and limited in others.",
+    safetyNote:
+      "This checklist only reflects tracking data availability. It is not a skin score or medical assessment.",
   },
   safetyNote:
     "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không phải kết luận y khoa, không phải chẩn đoán và không xác nhận nguyên nhân.",
@@ -93,25 +192,29 @@ async function readJson(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
 }
 
-function collectForbiddenKeys(value: unknown, path = "$"): string[] {
+function collectForbiddenKeys(
+  value: unknown,
+  forbiddenKeys: string[],
+  path = "$",
+): string[] {
   if (!value || typeof value !== "object") {
     return [];
   }
 
   if (Array.isArray(value)) {
     return value.flatMap((item, index) =>
-      collectForbiddenKeys(item, `${path}[${index}]`),
+      collectForbiddenKeys(item, forbiddenKeys, `${path}[${index}]`),
     );
   }
 
   return Object.entries(value as Record<string, unknown>).flatMap(
     ([key, nestedValue]) => {
       const currentPath = `${path}.${key}`;
-      const currentMatch = forbiddenFields.includes(key) ? [currentPath] : [];
+      const currentMatch = forbiddenKeys.includes(key) ? [currentPath] : [];
 
       return [
         ...currentMatch,
-        ...collectForbiddenKeys(nestedValue, currentPath),
+        ...collectForbiddenKeys(nestedValue, forbiddenKeys, currentPath),
       ];
     },
   );
@@ -178,6 +281,46 @@ describe("/api/insights/summary contract", () => {
     });
   });
 
+  it("preserves existing v1.20 fields and includes v1.21 explainability additions", async () => {
+    mockAuthenticatedUser();
+
+    const response = await insightSummaryRoute.GET(
+      new Request("http://localhost/api/insights/summary"),
+    );
+    const body = await readJson(response);
+    const summary = (body.data as { summary: InsightSummaryDto }).summary;
+
+    expect(response.status).toBe(200);
+    expect(summary).toMatchObject({
+      hasEnoughData: true,
+      insufficientDataReasons: [],
+      routineConsistency: expect.objectContaining({
+        periodDays: 7,
+        completedDays: 5,
+        partialDays: 1,
+        missingDays: 1,
+        noRoutineConfigured: false,
+        calculationMeta: routineCalculationMeta,
+      }),
+      symptomFrequency: expect.objectContaining({
+        periodDays: 30,
+        calculationMeta: symptomCalculationMeta,
+      }),
+      stressReflection: expect.objectContaining({
+        periodDays: 30,
+        calculationMeta: stressCalculationMeta,
+      }),
+      productMentionPattern: expect.objectContaining({
+        periodDays: 30,
+        calculationMeta: productCalculationMeta,
+      }),
+      trackingQualityChecklist: expect.objectContaining({
+        routinePeriodDays: 7,
+        journalPeriodDays: 30,
+      }),
+    });
+  });
+
   it("does not expose forbidden identifiers or auth/session/provider fields at any nested level", async () => {
     mockAuthenticatedUser();
 
@@ -188,10 +331,40 @@ describe("/api/insights/summary contract", () => {
     const serializedBody = JSON.stringify(body);
 
     expect(response.status).toBe(200);
-    expect(collectForbiddenKeys(body)).toEqual([]);
-    for (const forbiddenField of forbiddenFields) {
+    expect(collectForbiddenKeys(body, forbiddenIdentifierFields)).toEqual([]);
+    for (const forbiddenField of forbiddenIdentifierFields) {
       expect(serializedBody).not.toContain(`"${forbiddenField}"`);
     }
+  });
+
+  it("does not expose score-like fields at any nested level", async () => {
+    mockAuthenticatedUser();
+
+    const response = await insightSummaryRoute.GET(
+      new Request("http://localhost/api/insights/summary"),
+    );
+    const body = await readJson(response);
+    const serializedBody = JSON.stringify(body);
+
+    expect(response.status).toBe(200);
+    expect(collectForbiddenKeys(body, forbiddenScoreLikeFields)).toEqual([]);
+    for (const forbiddenField of forbiddenScoreLikeFields) {
+      expect(serializedBody).not.toContain(`"${forbiddenField}"`);
+    }
+  });
+
+  it("allows safe score and medical negation disclaimers without adding score keys", async () => {
+    mockAuthenticatedUser();
+
+    const response = await insightSummaryRoute.GET(
+      new Request("http://localhost/api/insights/summary"),
+    );
+    const serializedBody = JSON.stringify(await readJson(response)).toLowerCase();
+
+    expect(serializedBody).toContain("not a skin score");
+    expect(serializedBody).toContain("medical assessment");
+    expect(serializedBody).not.toContain('"score"');
+    expect(serializedBody).not.toContain('"risklevel"');
   });
 
   it("does not return product identifiers in nested product arrays", async () => {

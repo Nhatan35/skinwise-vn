@@ -49,6 +49,14 @@ const insightSummaryDto: InsightSummaryDto = {
     summaryText: "Bạn đã hoàn thành routine trong 5/7 ngày gần đây.",
     helperText:
       "Đây chỉ là mẫu theo dõi cá nhân để xem lại thói quen, không phải kết luận về thay đổi trên da.",
+    calculationMeta: {
+      periodDays: 7,
+      dataSourceLabel: "Routine logs from your account only",
+      calculationLabel:
+        "Completed days, partial days, and no-log days were counted from your routine tracking records.",
+      safetyText:
+        "This only shows your tracking consistency. It does not indicate skin improvement or skin decline.",
+    },
   },
   symptomFrequency: {
     periodDays: 30,
@@ -62,6 +70,14 @@ const insightSummaryDto: InsightSummaryDto = {
       "khô da là triệu chứng được ghi nhiều nhất trong 30 ngày gần đây.",
     helperText:
       "Nội dung này chỉ phản ánh những gì bạn đã ghi trong nhật ký và không xác nhận tình trạng da.",
+    calculationMeta: {
+      periodDays: 30,
+      dataSourceLabel: "Symptoms recorded in your journal entries",
+      calculationLabel:
+        "Repeated symptom labels were counted and sorted by frequency.",
+      safetyText:
+        "This only reflects what you recorded. It does not confirm a skin condition.",
+    },
   },
   stressReflection: {
     periodDays: 30,
@@ -71,6 +87,13 @@ const insightSummaryDto: InsightSummaryDto = {
     summaryText: "Bạn đã ghi nhận mức căng thẳng cao trong 3 ngày nhật ký.",
     helperText:
       "Bạn có thể tiếp tục quan sát stress và ghi chú da cùng nhau, nhưng không nên xem đây là kết luận nguyên nhân.",
+    calculationMeta: {
+      periodDays: 30,
+      dataSourceLabel: "Stress levels recorded in your journal entries",
+      calculationLabel: "Low, medium, and high stress labels were counted.",
+      safetyText:
+        "This does not identify stress as a cause of any skin change. It only summarizes your recorded notes.",
+    },
   },
   productMentionPattern: {
     periodDays: 30,
@@ -84,6 +107,65 @@ const insightSummaryDto: InsightSummaryDto = {
     summaryText: "Gentle Cleanser xuất hiện trong 3 mục nhật ký.",
     helperText:
       "Hãy xem lại ghi chú của chính bạn trước khi thay đổi routine. Nội dung này không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm.",
+    calculationMeta: {
+      periodDays: 30,
+      dataSourceLabel: "Products mentioned in your journal entries",
+      calculationLabel: "Product names appearing in journal entries were counted.",
+      safetyText:
+        "This does not confirm that a product helped or harmed your skin.",
+    },
+  },
+  trackingQualityChecklist: {
+    routinePeriodDays: 7,
+    journalPeriodDays: 30,
+    checklistItems: [
+      {
+        key: "routine_logs",
+        label: "Routine logs in the last 7 days",
+        status: "available",
+        count: 5,
+        periodDays: 7,
+        helperText: "You have routine logs available for recent review.",
+      },
+      {
+        key: "journal_entries",
+        label: "Journal entries in the last 30 days",
+        status: "limited",
+        count: 3,
+        periodDays: 30,
+        helperText:
+          "A few journal entries are available. More entries may make future review clearer.",
+      },
+      {
+        key: "symptom_notes",
+        label: "Symptom notes in the last 30 days",
+        status: "limited",
+        count: 2,
+        periodDays: 30,
+        helperText: "Some symptom notes are available for personal reflection.",
+      },
+      {
+        key: "stress_notes",
+        label: "Stress notes in the last 30 days",
+        status: "available",
+        count: 5,
+        periodDays: 30,
+        helperText: "You have stress notes available for recent review.",
+      },
+      {
+        key: "product_mentions",
+        label: "Product mentions in the last 30 days",
+        status: "not_enough_data",
+        count: 0,
+        periodDays: 30,
+        helperText:
+          "No product mentions were found in recent journal entries.",
+      },
+    ],
+    summaryText:
+      "Your recent tracking data is available in some areas and limited in others.",
+    safetyNote:
+      "This checklist only reflects tracking data availability. It is not a skin score or medical assessment.",
   },
   safetyNote:
     "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không phải kết luận y khoa, không phải chẩn đoán và không xác nhận nguyên nhân.",

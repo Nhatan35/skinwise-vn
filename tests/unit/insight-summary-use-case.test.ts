@@ -181,6 +181,49 @@ function createFullSevenDayLogs() {
   ]);
 }
 
+function getChecklistItem(
+  summary: ReturnType<typeof toInsightSummaryDto>,
+  key: string,
+) {
+  const item = summary.trackingQualityChecklist.checklistItems.find(
+    (checklistItem) => checklistItem.key === key,
+  );
+
+  if (!item) {
+    throw new Error(`Missing checklist item: ${key}`);
+  }
+
+  return item;
+}
+
+function collectForbiddenKeys(
+  value: unknown,
+  forbiddenKeys: string[],
+  path = "$",
+): string[] {
+  if (!value || typeof value !== "object") {
+    return [];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) =>
+      collectForbiddenKeys(item, forbiddenKeys, `${path}[${index}]`),
+    );
+  }
+
+  return Object.entries(value as Record<string, unknown>).flatMap(
+    ([key, nestedValue]) => {
+      const currentPath = `${path}.${key}`;
+      const currentMatch = forbiddenKeys.includes(key) ? [currentPath] : [];
+
+      return [
+        ...currentMatch,
+        ...collectForbiddenKeys(nestedValue, forbiddenKeys, currentPath),
+      ];
+    },
+  );
+}
+
 describe("Insight summary mapper", () => {
   it("classifies routine consistency with 0 logs", () => {
     const summary = toInsightSummaryDto(createDefaultSummaryInput());
@@ -227,6 +270,207 @@ describe("Insight summary mapper", () => {
       partialDays: 0,
       missingDays: 0,
     });
+  });
+
+  it("adds calculation metadata to every personal insight card", () => {
+    const summary = toInsightSummaryDto(
+      createDefaultSummaryInput({
+        journals: [
+          createJournal("2026-06-01", {
+            productsUsed: [productAId],
+            stressLevel: "medium",
+            symptoms: ["dryness"],
+          }),
+        ],
+        products: [createProduct(productAId, "Gentle Cleanser", "Example")],
+        routineLogs: [createRoutineLog(morningRoutineId, "2026-06-01", "partial")],
+      }),
+    );
+
+    expect(summary.routineConsistency.calculationMeta).toMatchObject({
+      periodDays: 7,
+      dataSourceLabel: "Routine logs from your account only",
+    });
+    expect(summary.routineConsistency.calculationMeta.calculationLabel).toContain(
+      "partial days",
+    );
+    expect(summary.symptomFrequency.calculationMeta).toMatchObject({
+      periodDays: 30,
+      dataSourceLabel: "Symptoms recorded in your journal entries",
+    });
+    expect(summary.stressReflection.calculationMeta).toMatchObject({
+      periodDays: 30,
+      dataSourceLabel: "Stress levels recorded in your journal entries",
+    });
+    expect(summary.productMentionPattern.calculationMeta).toMatchObject({
+      periodDays: 30,
+      dataSourceLabel: "Products mentioned in your journal entries",
+    });
+  });
+
+  it("builds a tracking quality checklist with available data states", () => {
+    const journalDates = [
+      "2026-06-01",
+      "2026-06-02",
+      "2026-06-03",
+      "2026-06-04",
+      "2026-06-05",
+    ];
+    const summary = toInsightSummaryDto(
+      createDefaultSummaryInput({
+        routineLogs: createFullSevenDayLogs(),
+        journals: journalDates.map((localDate) =>
+          createJournal(localDate, {
+            productsUsed: [productAId],
+            stressLevel: "high",
+            symptoms: ["dryness"],
+          }),
+        ),
+        products: [createProduct(productAId, "Gentle Cleanser", "Example")],
+      }),
+    );
+
+    expect(getChecklistItem(summary, "routine_logs")).toMatchObject({
+      status: "available",
+      count: 7,
+      periodDays: 7,
+    });
+    expect(getChecklistItem(summary, "journal_entries")).toMatchObject({
+      status: "available",
+      count: 5,
+      periodDays: 30,
+    });
+    expect(getChecklistItem(summary, "symptom_notes")).toMatchObject({
+      status: "available",
+      count: 5,
+    });
+    expect(getChecklistItem(summary, "stress_notes")).toMatchObject({
+      status: "available",
+      count: 5,
+    });
+    expect(getChecklistItem(summary, "product_mentions")).toMatchObject({
+      status: "available",
+      count: 5,
+    });
+    expect(summary.trackingQualityChecklist.safetyNote.toLowerCase()).toContain(
+      "not a skin score",
+    );
+    expect(summary.trackingQualityChecklist.safetyNote.toLowerCase()).toContain(
+      "medical assessment",
+    );
+  });
+
+  it("builds a tracking quality checklist with partial data states", () => {
+    const summary = toInsightSummaryDto(
+      createDefaultSummaryInput({
+        routineLogs: [createRoutineLog(morningRoutineId, "2026-06-01", "partial")],
+        journals: [
+          createJournal("2026-06-01", {
+            productsUsed: [productAId],
+            stressLevel: "medium",
+            symptoms: ["dryness"],
+          }),
+          createJournal("2026-06-02", {
+            productsUsed: [productAId],
+            symptoms: ["redness"],
+          }),
+        ],
+        products: [createProduct(productAId, "Gentle Cleanser", "Example")],
+      }),
+    );
+
+    expect(getChecklistItem(summary, "routine_logs")).toMatchObject({
+      status: "limited",
+      count: 1,
+    });
+    expect(getChecklistItem(summary, "journal_entries")).toMatchObject({
+      status: "limited",
+      count: 2,
+    });
+    expect(getChecklistItem(summary, "symptom_notes")).toMatchObject({
+      status: "limited",
+      count: 2,
+    });
+    expect(getChecklistItem(summary, "stress_notes")).toMatchObject({
+      status: "limited",
+      count: 1,
+    });
+    expect(getChecklistItem(summary, "product_mentions")).toMatchObject({
+      status: "limited",
+      count: 2,
+    });
+  });
+
+  it("marks routine tracking as not configured when no routine exists", () => {
+    const summary = toInsightSummaryDto(
+      createDefaultSummaryInput({
+        routines: [],
+        routineLogs: [],
+      }),
+    );
+
+    expect(getChecklistItem(summary, "routine_logs")).toMatchObject({
+      status: "not_configured",
+      count: 0,
+    });
+  });
+
+  it("marks journal-derived tracking as not enough data when no journal entries exist", () => {
+    const summary = toInsightSummaryDto(createDefaultSummaryInput());
+
+    expect(getChecklistItem(summary, "journal_entries")).toMatchObject({
+      status: "not_enough_data",
+      count: 0,
+    });
+    expect(getChecklistItem(summary, "symptom_notes")).toMatchObject({
+      status: "not_enough_data",
+      count: 0,
+    });
+    expect(getChecklistItem(summary, "stress_notes")).toMatchObject({
+      status: "not_enough_data",
+      count: 0,
+    });
+    expect(getChecklistItem(summary, "product_mentions")).toMatchObject({
+      status: "not_enough_data",
+      count: 0,
+    });
+  });
+
+  it("uses safe checklist statuses and no score-like fields", () => {
+    const summary = toInsightSummaryDto(
+      createDefaultSummaryInput({
+        routineLogs: [createRoutineLog(morningRoutineId, "2026-06-01", "partial")],
+        journals: [
+          createJournal("2026-06-01", {
+            productsUsed: [productAId],
+            stressLevel: "low",
+            symptoms: ["dryness"],
+          }),
+        ],
+        products: [createProduct(productAId, "Gentle Cleanser", "Example")],
+      }),
+    );
+    const allowedStatuses = [
+      "available",
+      "limited",
+      "not_enough_data",
+      "not_configured",
+    ];
+    const forbiddenScoreLikeFields = [
+      "skinScore",
+      "score",
+      "grade",
+      "rating",
+      "riskLevel",
+      "healthRating",
+      "severity",
+      "medicalStatus",
+    ];
+
+    for (const item of summary.trackingQualityChecklist.checklistItems) {
+      expect(allowedStatuses).toContain(item.status);
+    }
+    expect(collectForbiddenKeys(summary, forbiddenScoreLikeFields)).toEqual([]);
   });
 
   it("does not count all days as missed when no routine is configured", () => {

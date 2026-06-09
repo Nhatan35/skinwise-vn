@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-06
+Last updated: 2026-06-09
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -18,12 +18,18 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.16 - Saved Product Comparison & Decision Support: DONE
+MVP v1.17 - Routine History & Weekly Progress Review: DONE
+MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
+MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
+MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: Portfolio Evidence Package media capture
 ```
 
 Primary current documents:
@@ -51,4 +57,5 @@ Evidence boundary:
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
+- v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

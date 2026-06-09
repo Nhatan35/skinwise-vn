@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-06-07
+Last updated: 2026-06-09
 
 ## 1. Demo Objective
 
@@ -16,9 +16,9 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Recommended next task: Portfolio Evidence Package media capture
 Portfolio Evidence Package documentation: PREPARED
 Actual screenshots in repository: NOT VERIFIED
 Demo video in repository: NOT RECORDED
@@ -42,6 +42,7 @@ Before the demo:
 - confirm routine analysis can be shown safely;
 - confirm routine logs and journal entries exist;
 - confirm Insights is not empty, or explain the empty state if intentionally clean;
+- confirm Personal Insight Review shows calculation explanations and the tracking quality checklist;
 - confirm no private secrets, tokens, database URIs, or sensitive personal data are visible on screen.
 
 ## 4. Recommended Demo Data
@@ -62,7 +63,7 @@ User-owned demo data should be created through the authenticated UI:
 - 1 Routine Safety Analysis result.
 - 3-5 Routine Logs.
 - 5-7 Skin Journal entries.
-- Insights with visible activity.
+- Insights with visible activity, calculation explanations, and tracking quality checklist statuses.
 - Data Export checked once.
 
 ## 5. 3-5 Minute Demo Flow
@@ -165,7 +166,7 @@ Show:
 Say:
 
 ```txt
-The journal and insights flow helps users reflect on consistency and observations over time. The app avoids claiming product causality or medical improvement.
+The journal and insights flow helps users reflect on consistency and observations over time. The Personal Insight Review explains what data was used and whether tracking data is available or limited. The app avoids claiming product causality, medical improvement, skin scores, or risk scores.
 ```
 
 ### 4:10-4:40 - Settings and Data Control
