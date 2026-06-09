@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/modules/account-data/account-data.repository", () => ({
+  countAccountAppDataByUserId: vi.fn(),
   deleteAccountAppDataByUserId: vi.fn(),
   getAccountDataExportSnapshot: vi.fn(),
 }));
@@ -9,8 +10,10 @@ vi.mock("@/modules/account-data/account-data.repository", () => ({
 import {
   deleteAccountAppDataForUser,
   exportAccountDataForUser,
+  getAccountAppDataSummaryForUser,
 } from "@/modules/account-data/account-data-export.use-case";
 import {
+  countAccountAppDataByUserId,
   deleteAccountAppDataByUserId,
   getAccountDataExportSnapshot,
   type AccountDataExportSnapshot,
@@ -19,6 +22,7 @@ import type { CurrentUser } from "@/modules/auth/types";
 
 const mockedGetAccountDataExportSnapshot = vi.mocked(getAccountDataExportSnapshot);
 const mockedDeleteAccountAppDataByUserId = vi.mocked(deleteAccountAppDataByUserId);
+const mockedCountAccountAppDataByUserId = vi.mocked(countAccountAppDataByUserId);
 
 const authUserId = "auth-user-id";
 const exportedAt = new Date("2026-06-01T00:00:00.000Z");
@@ -166,6 +170,7 @@ describe("account data export/delete use cases", () => {
   beforeEach(() => {
     mockedGetAccountDataExportSnapshot.mockReset();
     mockedDeleteAccountAppDataByUserId.mockReset();
+    mockedCountAccountAppDataByUserId.mockReset();
   });
 
   it("exports only explicit safe DTO fields for the authenticated user", async () => {
@@ -281,5 +286,37 @@ describe("account data export/delete use cases", () => {
       authUserId,
       exportedAt,
     );
+  });
+
+  it("builds a count-only account app data summary without export snapshots", async () => {
+    mockedCountAccountAppDataByUserId.mockResolvedValue({
+      skinProfiles: 1,
+      savedProducts: 2,
+      routines: 3,
+      routineLogs: 4,
+      routineAnalyses: 5,
+      skinJournals: 6,
+    });
+
+    await expect(
+      getAccountAppDataSummaryForUser(authUserId, exportedAt),
+    ).resolves.toEqual({
+      generatedAt: exportedAt.toISOString(),
+      counts: {
+        skinProfiles: 1,
+        savedProducts: 2,
+        routines: 3,
+        routineLogs: 4,
+        routineAnalyses: 5,
+        skinJournals: 6,
+      },
+      sharedCatalogueData: {
+        productsPreserved: true,
+        ingredientsPreserved: true,
+      },
+    });
+    expect(mockedCountAccountAppDataByUserId).toHaveBeenCalledWith(authUserId);
+    expect(mockedGetAccountDataExportSnapshot).not.toHaveBeenCalled();
+    expect(mockedDeleteAccountAppDataByUserId).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { deleteAccountAppDataForUser } from "@/modules/account-data/account-data-export.use-case";
+import {
+  deleteAccountAppDataForUser,
+  getAccountAppDataSummaryForUser,
+} from "@/modules/account-data/account-data-export.use-case";
+import type { AccountAppDataSummaryDto } from "@/modules/account-data/account-app-data-summary.dto";
 import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 import { getCurrentUser } from "@/modules/auth/get-current-user";
 
@@ -62,6 +66,22 @@ function unauthorizedResponse() {
 
 function internalErrorResponse() {
   return errorResponse("INTERNAL_ERROR", "Something went wrong.", 500);
+}
+
+export async function GET() {
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return unauthorizedResponse();
+    }
+
+    const summary = await getAccountAppDataSummaryForUser(currentUser.id);
+
+    return jsonResponse<{ summary: AccountAppDataSummaryDto }>({ summary });
+  } catch {
+    return internalErrorResponse();
+  }
 }
 
 export async function DELETE() {

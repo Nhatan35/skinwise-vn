@@ -1,5 +1,6 @@
 import type { MeUserDto } from "@/modules/users/app-user-profile.types";
 import type { AccountDataExportDto } from "@/modules/account-data/account-data-export.dto";
+import type { AccountAppDataSummaryDto } from "@/modules/account-data/account-app-data-summary.dto";
 import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 
 export type ApiError = {
@@ -123,6 +124,29 @@ export async function exportAccountData(): Promise<AccountDataExportDto> {
   }
 
   return body.data.export;
+}
+
+export async function getAccountAppDataSummary(): Promise<AccountAppDataSummaryDto> {
+  const response = await fetch("/api/account/app-data", {
+    headers: {
+      Accept: "application/json",
+    },
+    method: "GET",
+  });
+  const body = await readApiResponse<{
+    summary: AccountAppDataSummaryDto;
+  }>(response);
+
+  if (!response.ok || !hasApiData(body)) {
+    throw new SettingsClientError(
+      body.error?.code === "UNAUTHORIZED"
+        ? "Bạn cần đăng nhập để xem tóm tắt dữ liệu ứng dụng."
+        : "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Vui lòng thử lại.",
+      body.error?.code,
+    );
+  }
+
+  return body.data.summary;
 }
 
 export async function deleteAccountAppData(): Promise<DeleteAccountAppDataDto> {

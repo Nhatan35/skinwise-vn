@@ -8,10 +8,13 @@ import {
   deleteAccountAppData,
   exportAccountData,
   fetchCurrentUser,
+  getAccountAppDataSummary,
   requestAccountDeletion,
   SettingsClientError,
 } from "@/modules/settings/settings.client";
+import type { AccountAppDataSummaryDto } from "@/modules/account-data/account-app-data-summary.dto";
 import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
+import { AccountDataSummaryCard } from "@/modules/settings/components/account-data-summary-card";
 import type { MeUserDto } from "@/modules/users/app-user-profile.types";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
@@ -159,11 +162,38 @@ function formatDeletedCounts(
   return `${total} bản ghi đã được xóa khỏi dữ liệu skincare app cá nhân.`;
 }
 
+function createEmptyAccountDataSummary(
+  generatedAt: string,
+): AccountAppDataSummaryDto {
+  return {
+    generatedAt,
+    counts: {
+      skinProfiles: 0,
+      savedProducts: 0,
+      routines: 0,
+      routineLogs: 0,
+      routineAnalyses: 0,
+      skinJournals: 0,
+    },
+    sharedCatalogueData: {
+      productsPreserved: true,
+      ingredientsPreserved: true,
+    },
+  };
+}
+
 export function SettingsDataControlCenter() {
   const router = useRouter();
   const [user, setUser] = useState<MeUserDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [accountDataSummary, setAccountDataSummary] =
+    useState<AccountAppDataSummaryDto | null>(null);
+  const [isAccountDataSummaryLoading, setIsAccountDataSummaryLoading] =
+    useState(true);
+  const [accountDataSummaryError, setAccountDataSummaryError] = useState<
+    string | null
+  >(null);
   const [isExporting, setIsExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
   const [exportSuccessMessage, setExportSuccessMessage] = useState<string | null>(
@@ -181,6 +211,32 @@ export function SettingsDataControlCenter() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  async function loadAccountDataSummary({
+    showLoading = true,
+  }: { showLoading?: boolean } = {}) {
+    if (showLoading) {
+      setIsAccountDataSummaryLoading(true);
+    }
+    setAccountDataSummaryError(null);
+
+    try {
+      const summary = await getAccountAppDataSummary();
+
+      setAccountDataSummary(summary);
+    } catch (error) {
+      setAccountDataSummary(null);
+      setAccountDataSummaryError(
+        error instanceof SettingsClientError
+          ? error.message
+          : "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+      );
+    } finally {
+      if (showLoading) {
+        setIsAccountDataSummaryLoading(false);
+      }
+    }
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -211,6 +267,40 @@ export function SettingsDataControlCenter() {
     }
 
     void loadSettingsData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadInitialAccountDataSummary() {
+      try {
+        const summary = await getAccountAppDataSummary();
+
+        if (isMounted) {
+          setAccountDataSummary(summary);
+          setAccountDataSummaryError(null);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setAccountDataSummary(null);
+          setAccountDataSummaryError(
+            error instanceof SettingsClientError
+              ? error.message
+              : "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setIsAccountDataSummaryLoading(false);
+        }
+      }
+    }
+
+    void loadInitialAccountDataSummary();
 
     return () => {
       isMounted = false;
@@ -293,8 +383,10 @@ export function SettingsDataControlCenter() {
 
     try {
       const result = await deleteAccountAppData();
+      const emptySummary = createEmptyAccountDataSummary(result.deletedAt);
 
       setIsAppDataDeleteConfirmed(false);
+      setAccountDataSummary(emptySummary);
       setUser((currentUser) =>
         currentUser
           ? {
@@ -305,6 +397,7 @@ export function SettingsDataControlCenter() {
       );
       router.refresh();
       setAppDataDeleteSuccessMessage(formatDeletedCounts(result.deletedCounts));
+      await loadAccountDataSummary({ showLoading: false });
     } catch (error) {
       setAppDataDeleteError(
         error instanceof SettingsClientError
@@ -347,7 +440,7 @@ export function SettingsDataControlCenter() {
           <CardTitle>Thông tin tài khoản</CardTitle>
           <CardDescription>
             Chỉ hiển thị các trường an toàn phục vụ trải nghiệm app. Cài đặt
-            không hiển thị token, phiên đăng nhập hoặc dữ liệu xác thực nội bộ.
+            không hiển thị dữ liệu xác thực nội bộ hoặc thông tin kỹ thuật nhạy cảm.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
@@ -427,13 +520,20 @@ export function SettingsDataControlCenter() {
         </CardContent>
       </Card>
 
+      <AccountDataSummaryCard
+        error={accountDataSummaryError}
+        isLoading={isAccountDataSummaryLoading}
+        onRetry={loadAccountDataSummary}
+        summary={accountDataSummary}
+      />
+
       <Card className="border-border bg-card" data-testid="settings-export-data">
         <CardHeader>
           <CardTitle>Xuất dữ liệu</CardTitle>
           <CardDescription>
-            Tải xuống dữ liệu skincare app cá nhân của bạn dưới dạng JSON. File
-            xuất chỉ chứa dữ liệu skincare cá nhân, không chứa token, phiên
-            đăng nhập hoặc dữ liệu xác thực nội bộ.
+            Tải xuống dữ liệu skincare app cá nhân của bạn dưới dạng JSON, gồm
+            các nhóm dữ liệu người dùng tự tạo trong ứng dụng. File xuất không
+            bao gồm dữ liệu danh mục chung như sản phẩm và thành phần.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -469,8 +569,8 @@ export function SettingsDataControlCenter() {
           <CardDescription>
             Xóa dữ liệu skincare trong app chỉ xóa dữ liệu cá nhân như hồ sơ da,
             sản phẩm đã lưu, routine, ghi nhận routine, phân tích routine và
-            nhật ký da. Thao tác này không xóa tài khoản đăng nhập, tài khoản
-            OAuth, phiên đăng nhập hoặc danh mục dùng chung.
+            nhật ký da. Thao tác này không xóa tài khoản đăng nhập hoặc danh mục
+            dùng chung như sản phẩm và thành phần.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

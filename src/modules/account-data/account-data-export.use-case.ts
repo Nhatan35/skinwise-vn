@@ -1,7 +1,9 @@
 import type { CurrentUser } from "@/modules/auth/types";
 import type { AccountDataExportDto } from "@/modules/account-data/account-data-export.dto";
+import type { AccountAppDataSummaryDto } from "@/modules/account-data/account-app-data-summary.dto";
 import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 import {
+  countAccountAppDataByUserId,
   deleteAccountAppDataByUserId,
   getAccountDataExportSnapshot,
 } from "@/modules/account-data/account-data.repository";
@@ -21,6 +23,22 @@ export async function exportAccountDataForUser(
     exportedAt,
     snapshot,
   });
+}
+
+export async function getAccountAppDataSummaryForUser(
+  userId: string,
+  generatedAt = new Date(),
+): Promise<AccountAppDataSummaryDto> {
+  const counts = await countAccountAppDataByUserId(userId);
+
+  return {
+    generatedAt: generatedAt.toISOString(),
+    counts,
+    sharedCatalogueData: {
+      productsPreserved: true,
+      ingredientsPreserved: true,
+    },
+  };
 }
 
 export async function deleteAccountAppDataForUser(

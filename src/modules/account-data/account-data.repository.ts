@@ -63,6 +63,8 @@ export type AccountAppDataDeletedCounts = {
   skinJournals: number;
 };
 
+export type AccountAppDataSummaryCounts = AccountAppDataDeletedCounts;
+
 export type DeleteAccountAppDataRepositoryResult = {
   deletedCounts: AccountAppDataDeletedCounts;
   appUserProfileMatched: boolean;
@@ -157,6 +159,51 @@ export async function getAccountDataExportSnapshot(
       savedProduct,
       product: productsById.get(savedProduct.productId.toString()) ?? null,
     })),
+    routines,
+    routineLogs,
+    routineAnalyses,
+    skinJournals,
+  };
+}
+
+export async function countAccountAppDataByUserId(
+  userId: string,
+): Promise<AccountAppDataSummaryCounts> {
+  const [
+    skinProfilesCollection,
+    savedProductsCollection,
+    routinesCollection,
+    routineLogsCollection,
+    routineAnalysesCollection,
+    skinJournalsCollection,
+  ] = await Promise.all([
+    getSkinProfilesCollection<SkinProfileDocument>(),
+    getSavedProductsCollection<SavedProductDocument>(),
+    getRoutinesCollection<RoutineDocument>(),
+    getRoutineLogsCollection<RoutineLogDocument>(),
+    getRoutineAnalysesCollection<RoutineAnalysisDocument>(),
+    getSkinJournalsCollection<SkinJournalDocument>(),
+  ]);
+
+  const [
+    skinProfiles,
+    savedProducts,
+    routines,
+    routineLogs,
+    routineAnalyses,
+    skinJournals,
+  ] = await Promise.all([
+    skinProfilesCollection.countDocuments({ userId }),
+    savedProductsCollection.countDocuments({ userId }),
+    routinesCollection.countDocuments({ userId }),
+    routineLogsCollection.countDocuments({ userId }),
+    routineAnalysesCollection.countDocuments({ userId }),
+    skinJournalsCollection.countDocuments({ userId }),
+  ]);
+
+  return {
+    skinProfiles,
+    savedProducts,
     routines,
     routineLogs,
     routineAnalyses,

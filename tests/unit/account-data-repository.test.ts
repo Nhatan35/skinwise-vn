@@ -8,10 +8,12 @@ const appUserProfilesCollection = {
   updateOne: vi.fn(),
 };
 const skinProfilesCollection = {
+  countDocuments: vi.fn(),
   findOne: vi.fn(),
   deleteMany: vi.fn(),
 };
 const savedProductsCollection = {
+  countDocuments: vi.fn(),
   find: vi.fn(),
   deleteMany: vi.fn(),
 };
@@ -19,18 +21,22 @@ const productsCollection = {
   find: vi.fn(),
 };
 const routinesCollection = {
+  countDocuments: vi.fn(),
   find: vi.fn(),
   deleteMany: vi.fn(),
 };
 const routineLogsCollection = {
+  countDocuments: vi.fn(),
   find: vi.fn(),
   deleteMany: vi.fn(),
 };
 const routineAnalysesCollection = {
+  countDocuments: vi.fn(),
   find: vi.fn(),
   deleteMany: vi.fn(),
 };
 const skinJournalsCollection = {
+  countDocuments: vi.fn(),
   find: vi.fn(),
   deleteMany: vi.fn(),
 };
@@ -52,6 +58,7 @@ import {
   getProductsCollection,
 } from "@/infrastructure/database/collections";
 import {
+  countAccountAppDataByUserId,
   deleteAccountAppDataByUserId,
   getAccountDataExportSnapshot,
 } from "@/modules/account-data/account-data.repository";
@@ -98,17 +105,23 @@ describe("account data repository", () => {
       matchedCount: 1,
       modifiedCount: 1,
     });
+    skinProfilesCollection.countDocuments.mockResolvedValue(0);
     skinProfilesCollection.findOne.mockResolvedValue(null);
     skinProfilesCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
+    savedProductsCollection.countDocuments.mockResolvedValue(0);
     savedProductsCollection.find.mockReturnValue(findSortToArray([]));
     savedProductsCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
     productsCollection.find.mockReturnValue(findToArray([]));
+    routinesCollection.countDocuments.mockResolvedValue(0);
     routinesCollection.find.mockReturnValue(findSortToArray([]));
     routinesCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
+    routineLogsCollection.countDocuments.mockResolvedValue(0);
     routineLogsCollection.find.mockReturnValue(findSortToArray([]));
     routineLogsCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
+    routineAnalysesCollection.countDocuments.mockResolvedValue(0);
     routineAnalysesCollection.find.mockReturnValue(findSortToArray([]));
     routineAnalysesCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
+    skinJournalsCollection.countDocuments.mockResolvedValue(0);
     skinJournalsCollection.find.mockReturnValue(findSortToArray([]));
     skinJournalsCollection.deleteMany.mockResolvedValue({ deletedCount: 0 });
   });
@@ -178,6 +191,41 @@ describe("account data repository", () => {
     expect(snapshot.savedProducts[0]?.product?._id.toString()).toBe(
       productId.toString(),
     );
+  });
+
+  it("counts only current-user app data and does not query shared catalogue data", async () => {
+    skinProfilesCollection.countDocuments.mockResolvedValue(1);
+    savedProductsCollection.countDocuments.mockResolvedValue(2);
+    routinesCollection.countDocuments.mockResolvedValue(3);
+    routineLogsCollection.countDocuments.mockResolvedValue(4);
+    routineAnalysesCollection.countDocuments.mockResolvedValue(5);
+    skinJournalsCollection.countDocuments.mockResolvedValue(6);
+
+    await expect(countAccountAppDataByUserId(authUserId)).resolves.toEqual({
+      skinProfiles: 1,
+      savedProducts: 2,
+      routines: 3,
+      routineLogs: 4,
+      routineAnalyses: 5,
+      skinJournals: 6,
+    });
+
+    for (const collection of [
+      skinProfilesCollection,
+      savedProductsCollection,
+      routinesCollection,
+      routineLogsCollection,
+      routineAnalysesCollection,
+      skinJournalsCollection,
+    ]) {
+      expect(collection.countDocuments).toHaveBeenCalledWith({
+        userId: authUserId,
+      });
+      expect(collection.countDocuments).not.toHaveBeenCalledWith({});
+    }
+
+    expect(getProductsCollection).not.toHaveBeenCalled();
+    expect(getIngredientsCollection).not.toHaveBeenCalled();
   });
 
   it("deletes only user-owned skincare app data and preserves catalogue/auth collections", async () => {

@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AccountDataExportDto } from "@/modules/account-data/account-data-export.dto";
+import type { AccountAppDataSummaryDto } from "@/modules/account-data/account-app-data-summary.dto";
 import type { DeleteAccountAppDataDto } from "@/modules/account-data/delete-account-app-data.dto";
 import {
   deleteAccountAppData,
   exportAccountData,
+  getAccountAppDataSummary,
   SettingsClientError,
 } from "@/modules/settings/settings.client";
 
@@ -41,6 +43,22 @@ const deleteResult: DeleteAccountAppDataDto = {
   appUserProfile: {
     preserved: true,
     onboardingCompletedReset: false,
+  },
+};
+
+const summaryResult: AccountAppDataSummaryDto = {
+  generatedAt: "2026-06-01T00:00:00.000Z",
+  counts: {
+    skinProfiles: 1,
+    savedProducts: 2,
+    routines: 3,
+    routineLogs: 4,
+    routineAnalyses: 5,
+    skinJournals: 6,
+  },
+  sharedCatalogueData: {
+    productsPreserved: true,
+    ingredientsPreserved: true,
   },
 };
 
@@ -90,6 +108,41 @@ describe("Settings client data control helpers", () => {
     );
 
     await expect(exportAccountData()).rejects.toBeInstanceOf(SettingsClientError);
+  });
+
+  it("fetches only body.data.summary from the app data summary response", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: {
+          summary: summaryResult,
+        },
+        error: null,
+      }),
+    );
+
+    await expect(getAccountAppDataSummary()).resolves.toEqual(summaryResult);
+    expect(mockedFetch).toHaveBeenCalledWith(
+      "/api/account/app-data",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+        }),
+        method: "GET",
+      }),
+    );
+  });
+
+  it("treats malformed app data summary responses as errors", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: null,
+        error: null,
+      }),
+    );
+
+    await expect(getAccountAppDataSummary()).rejects.toBeInstanceOf(
+      SettingsClientError,
+    );
   });
 
   it("deletes app data through DELETE /api/account/app-data", async () => {

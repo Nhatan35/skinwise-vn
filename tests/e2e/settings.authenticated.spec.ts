@@ -41,15 +41,32 @@ function waitForAccountExportResponse(page: Page) {
   );
 }
 
+function waitForAccountAppDataSummaryResponse(page: Page) {
+  return page.waitForResponse(
+    (response) => {
+      const url = new URL(response.url());
+
+      return (
+        url.pathname === "/api/account/app-data" &&
+        response.request().method() === "GET"
+      );
+    },
+    { timeout: 15_000 },
+  );
+}
+
 test.describe("SkinWise VN authenticated settings", () => {
   test("authenticated user can view Settings/Data Control page", async ({ page }) => {
     await loginAsE2EUser(page);
 
     const currentUserResponsePromise = waitForCurrentUserResponse(page);
+    const accountSummaryResponsePromise =
+      waitForAccountAppDataSummaryResponse(page);
 
     await page.goto("/settings");
 
     expect((await currentUserResponsePromise).ok()).toBe(true);
+    expect((await accountSummaryResponsePromise).ok()).toBe(true);
     await expect(
       page.getByRole("heading", { name: "Cài đặt và quản lý dữ liệu" }),
     ).toBeVisible();
@@ -57,6 +74,25 @@ test.describe("SkinWise VN authenticated settings", () => {
       timeout: 15_000,
     });
     await expect(page.getByTestId("settings-account-overview")).toBeVisible();
+    const summaryCard = page.getByTestId("account-data-summary-card");
+
+    await expect(summaryCard).toBeVisible();
+    await expect(
+      summaryCard.getByText("Tóm tắt dữ liệu ứng dụng của bạn"),
+    ).toBeVisible();
+    await expect(
+      page.getByTestId("account-data-summary-shared-catalogue-note"),
+    ).toBeVisible();
+    for (const testId of [
+      "account-data-summary-count-skin-profiles",
+      "account-data-summary-count-saved-products",
+      "account-data-summary-count-routines",
+      "account-data-summary-count-routine-logs",
+      "account-data-summary-count-routine-analyses",
+      "account-data-summary-count-skin-journals",
+    ]) {
+      await expect(page.getByTestId(testId)).toBeVisible();
+    }
     await expect(page.getByTestId("settings-export-data")).toBeVisible();
     await expect(page.getByTestId("settings-delete-app-data")).toBeVisible();
     await expect(page.getByTestId("settings-export-data-button")).toBeVisible();
@@ -78,7 +114,7 @@ test.describe("SkinWise VN authenticated settings", () => {
     }
 
     await expect(page.getByTestId("settings-data-control-center")).not.toContainText(
-      /AUTH_SECRET|access_token|refresh_token/i,
+      /AUTH_SECRET|access_token|refresh_token|providerAccountId|sessionToken/i,
     );
   });
 

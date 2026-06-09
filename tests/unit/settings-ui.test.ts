@@ -12,6 +12,10 @@ const settingsComponentPath = join(
   projectRoot,
   "src/modules/settings/components/settings-data-control-center.tsx",
 );
+const accountDataSummaryCardPath = join(
+  projectRoot,
+  "src/modules/settings/components/account-data-summary-card.tsx",
+);
 const settingsClientPath = join(
   projectRoot,
   "src/modules/settings/settings.client.ts",
@@ -19,12 +23,17 @@ const settingsClientPath = join(
 
 const settingsPageSource = readFileSync(settingsPagePath, "utf8");
 const settingsComponentSource = readFileSync(settingsComponentPath, "utf8");
+const accountDataSummaryCardSource = readFileSync(
+  accountDataSummaryCardPath,
+  "utf8",
+);
 const settingsClientSource = readFileSync(settingsClientPath, "utf8");
-const combinedSource = `${settingsComponentSource}\n${settingsClientSource}`;
+const combinedSource = `${settingsComponentSource}\n${accountDataSummaryCardSource}\n${settingsClientSource}`;
 
 describe("Settings data control UI", () => {
   it("adds the protected Settings dashboard page and renders the data control center", () => {
     expect(existsSync(settingsPagePath)).toBe(true);
+    expect(existsSync(accountDataSummaryCardPath)).toBe(true);
     expect(settingsPageSource).toContain("SettingsDataControlCenter");
     expect(settingsPageSource).toContain("routes.SETTINGS");
     expect(settingsPageSource).toContain("data-route={routes.SETTINGS}");
@@ -74,11 +83,69 @@ describe("Settings data control UI", () => {
     expect(settingsComponentSource).toContain("window.confirm");
     expect(settingsComponentSource).toContain("useRouter");
     expect(settingsComponentSource).toContain("router.refresh()");
+    expect(settingsComponentSource).toContain("loadAccountDataSummary");
+    expect(settingsComponentSource).toContain("createEmptyAccountDataSummary");
     expect(settingsComponentSource).toContain("onboardingCompleted: false");
     expect(settingsClientSource).toContain('fetch("/api/account/app-data"');
     expect(settingsClientSource).toContain('method: "DELETE"');
     expect(settingsComponentSource).not.toContain("Delete my account permanently");
     expect(settingsClientSource).not.toContain("/api/auth");
+  });
+
+  it("adds a privacy-safe account app data summary card", () => {
+    expect(settingsComponentSource).toContain("AccountDataSummaryCard");
+    expect(settingsComponentSource).toContain("getAccountAppDataSummary");
+    expect(settingsClientSource).toContain(
+      "getAccountAppDataSummary",
+    );
+    expect(settingsClientSource).toContain('fetch("/api/account/app-data"');
+    expect(settingsClientSource).toContain('method: "GET"');
+    expect(settingsClientSource).toContain("body.data.summary");
+
+    for (const copy of [
+      "T\u00f3m t\u1eaft d\u1eef li\u1ec7u \u1ee9ng d\u1ee5ng c\u1ee7a b\u1ea1n",
+      "Ph\u1ea7n n\u00e0y gi\u00fap b\u1ea1n hi\u1ec3u nh\u1eefng d\u1eef li\u1ec7u ch\u0103m s\u00f3c da c\u00e1 nh\u00e2n",
+      "D\u1eef li\u1ec7u c\u00e1 nh\u00e2n trong \u1ee9ng d\u1ee5ng bao g\u1ed3m h\u1ed3 s\u01a1 da",
+      "D\u1eef li\u1ec7u danh m\u1ee5c chung nh\u01b0 s\u1ea3n ph\u1ea9m v\u00e0 th\u00e0nh ph\u1ea7n \u0111\u01b0\u1ee3c gi\u1eef l\u1ea1i",
+      "H\u1ed3 s\u01a1 da",
+      "S\u1ea3n ph\u1ea9m \u0111\u00e3 l\u01b0u",
+      "Routine",
+      "L\u1ecbch s\u1eed routine",
+      "Ph\u00e2n t\u00edch routine",
+      "Nh\u1eadt k\u00fd da",
+      "\u0110ang t\u1ea3i t\u00f3m t\u1eaft d\u1eef li\u1ec7u \u1ee9ng d\u1ee5ng",
+      "Th\u1eed l\u1ea1i",
+    ]) {
+      expect(accountDataSummaryCardSource).toContain(copy);
+    }
+
+    for (const testId of [
+      'data-testid="account-data-summary-card"',
+      'data-testid="account-data-summary-loading"',
+      'data-testid="account-data-summary-error"',
+      "account-data-summary-count-skin-profiles",
+      "account-data-summary-count-saved-products",
+      "account-data-summary-count-routines",
+      "account-data-summary-count-routine-logs",
+      "account-data-summary-count-routine-analyses",
+      "account-data-summary-count-skin-journals",
+      'data-testid="account-data-summary-shared-catalogue-note"',
+    ]) {
+      expect(accountDataSummaryCardSource).toContain(testId);
+    }
+
+    for (const forbiddenKey of [
+      "userId",
+      "ObjectId",
+      "providerAccountId",
+      "accessToken",
+      "refreshToken",
+      "sessionToken",
+      "AUTH_SECRET",
+      "DATABASE_URL",
+    ]) {
+      expect(accountDataSummaryCardSource).not.toContain(forbiddenKey);
+    }
   });
 
   it("links to every user-owned data management area", () => {
