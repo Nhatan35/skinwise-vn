@@ -1,7 +1,9 @@
 import type { InsightsDto } from "@/modules/insights/insights.dto";
+import type { InsightSummaryDto } from "@/modules/insights/insight-summary.dto";
 import { getBrowserLocalDate } from "@/modules/routine-logs/routine-log.client";
 
 const INSIGHTS_API_PATH = "/api/insights";
+const INSIGHT_SUMMARY_API_PATH = "/api/insights/summary";
 
 type ApiError = {
   code: string;
@@ -21,6 +23,10 @@ type ApiResponse<TData> =
 
 export type InsightsDateRangeParams = {
   from?: string;
+  to?: string;
+};
+
+export type InsightSummaryParams = {
   to?: string;
 };
 
@@ -93,6 +99,18 @@ function buildInsightsUrl(params?: InsightsDateRangeParams) {
   return `${INSIGHTS_API_PATH}?${searchParams.toString()}`;
 }
 
+function buildInsightSummaryUrl(params?: InsightSummaryParams) {
+  const searchParams = new URLSearchParams();
+
+  if (params?.to) {
+    searchParams.set("to", params.to);
+  }
+
+  const query = searchParams.toString();
+
+  return query ? `${INSIGHT_SUMMARY_API_PATH}?${query}` : INSIGHT_SUMMARY_API_PATH;
+}
+
 export async function getInsights(
   params?: InsightsDateRangeParams,
 ): Promise<InsightsDto> {
@@ -122,4 +140,35 @@ export async function getInsights(
   }
 
   return body.data.insights;
+}
+
+export async function getInsightSummary(
+  params?: InsightSummaryParams,
+): Promise<InsightSummaryDto> {
+  let response: Response;
+
+  try {
+    response = await fetch(buildInsightSummaryUrl(params), {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+  } catch {
+    throw new InsightsClientError(getSafeErrorMessage());
+  }
+
+  const body = await readApiResponse<{ summary: InsightSummaryDto }>(response);
+
+  if (!response.ok || body.error !== null || body.data === null) {
+    const error = body.error;
+
+    throw new InsightsClientError(
+      getSafeErrorMessage(error, response.status),
+      error?.code,
+      response.status,
+    );
+  }
+
+  return body.data.summary;
 }

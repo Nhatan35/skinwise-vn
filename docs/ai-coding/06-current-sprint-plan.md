@@ -1,6 +1,6 @@
 # Current Sprint Plan - SkinWise VN MVP
 
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 ## 1. Current Phase
 
@@ -21,46 +21,62 @@ Audit cleanup and evidence sync: DONE in v1.15.1
 Saved Product Comparison & Decision Support: DONE in v1.16
 Routine History & Weekly Progress Review: DONE in v1.17
 Skin Journal Filters & Reflection Review: DONE in v1.18
-Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
+Account Data Summary & Privacy Control Review: DONE in v1.19
+Personal Insight Review & Safe Trend Cards: DONE in v1.20
+Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
 Current active sprint: None
 Current active sprint status: None
-Recommended next sprint: To be decided after v1.18 review
+Recommended next sprint: Portfolio Evidence Package media capture
 Current phase: Post-MVP controlled improvement
 ```
 
-v1.18 completed controlled product improvement. The change is limited to loaded-entry filtering and reflection support on the existing `/journal` page.
+v1.20 completed controlled product improvement. The change is limited to strict count-only personal reflection summaries on the existing `/insights` page.
 
 ## 2. Objective
 
-Help users review self-tracked skin journal entries by symptom, stress level, product usage, and recent time range using existing loaded journal data.
+Help users understand their own tracking patterns through safe routine-log and journal-count summaries.
 
 The feature must preserve:
 
 ```txt
-No clinical assessment
-No product causality conclusion
-No treatment guidance
-No skin or health scoring
-No AI-driven advice
-No image analysis
-No full analytics dashboard
-No marketplace/cart/checkout/payment/review/rating/social scope
-No notification/reminder system
+No diagnosis
+No treatment advice
+No clinical conclusion
+No product causation claim
+No product effectiveness claim
+No product harm claim
+No stress causation claim
+No routine causation claim
+No skin score
+No raw document response
+No database identifier, user ID, routine ID, journal ID, or product ID response
+No session, token, or provider account field response
 No new database collection
-Existing journal create, edit, delete, loading, error, and authenticated behavior
+No schema redesign
+No external AI provider change
+Existing /api/insights behavior
+Existing /insights overview, calendar, trend, product usage, and next-action cards
 ```
 
-## 3. Files Expected To Change
+## 3. Files Changed
 
 Active files:
 
 ```txt
-src/modules/journals/components/skin-journal-timeline.tsx
-src/modules/journals/components/skin-journal-filter-panel.tsx
-src/modules/journals/skin-journal-filters.ts
-tests/unit/skin-journal-filters.test.ts
-tests/unit/skin-journal-ui.test.ts
-tests/e2e/skin-journal.authenticated.spec.ts
+src/app/api/insights/summary/route.ts
+src/modules/insights/insight-summary.dto.ts
+src/modules/insights/insight-summary.schema.ts
+src/modules/insights/insight-summary.mapper.ts
+src/modules/insights/insight-summary.use-case.ts
+src/modules/insights/components/insight-summary-section.tsx
+src/modules/insights/components/insights-page.tsx
+src/modules/insights/insights.client.ts
+src/modules/insights/index.ts
+tests/unit/insight-summary-use-case.test.ts
+tests/unit/insight-summary-api-contract.test.ts
+tests/unit/insights-client.test.ts
+tests/unit/insights-ui.test.ts
+tests/e2e/insights.authenticated.spec.ts
 docs/post-mvp-backlog.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
@@ -73,45 +89,44 @@ docs/ai-coding/06-current-sprint-plan.md
 Functional:
 
 ```txt
-[x] User can open /journal successfully.
-[x] Existing journal create, edit, and delete behavior remains unchanged.
-[x] Filter panel appears on /journal.
-[x] User can filter loaded entries by symptom.
-[x] User can filter loaded entries by stress level.
-[x] User can filter loaded entries by product usage when product ids exist.
-[x] User can filter loaded entries by all, last 7, last 14, and last 30 local dates.
-[x] Multiple filters use AND logic.
-[x] User can clear all filters.
-[x] UI shows matching loaded-entry count.
-[x] Filter-specific empty state appears when no loaded entries match.
-[x] Original no-journal empty state remains intact.
-[x] Active filters remain stable after create, update, and delete actions.
+[x] User can open /insights successfully.
+[x] Existing /insights behavior remains unchanged.
+[x] Existing GET /api/insights behavior remains unchanged.
+[x] Personal Insight Review section appears on /insights.
+[x] Routine Consistency card summarizes the last 7 local dates.
+[x] Journal Symptom Frequency card summarizes recent symptoms without diagnosis.
+[x] Stress Reflection card summarizes recorded stress labels without causation claims.
+[x] Product Mention Pattern card summarizes product-name mentions without product IDs.
+[x] Insufficient-data empty state appears when no recent routine logs or journal entries exist.
+[x] Partial data still shows available cards with section-level fallbacks.
 ```
 
-Content and safety:
+Privacy and security:
 
 ```txt
-[x] UI frames filters as reflection over self-tracked notes.
-[x] Required safe reflection disclaimer is visible.
-[x] UI does not claim product causality.
-[x] UI does not claim skin improvement or worsening.
-[x] UI does not provide clinical conclusions.
-[x] UI does not recommend treatment.
-[x] UI does not show skin or health scoring.
-[x] UI does not use guaranteed-outcome language.
-[x] UI uses calm, neutral copy.
+[x] GET /api/insights/summary requires authentication.
+[x] Summary data is scoped to the authenticated user.
+[x] Summary response is count-only.
+[x] Summary response does not include `_id`.
+[x] Summary response does not include `id`.
+[x] Summary response does not include `userId`.
+[x] Summary response does not include `routineId`.
+[x] Summary response does not include `journalId`.
+[x] Summary response does not include `productId`.
+[x] Summary response does not include session, token, accessToken, refreshToken, providerAccountId, emailVerified, password, rawDocument, createdBy, or updatedBy fields.
+[x] Product IDs are used only internally to resolve names/brands.
 ```
 
 Technical:
 
 ```txt
-[x] Filters use existing SkinJournalDto fields only.
-[x] Filters apply to currently loaded entries only.
+[x] GET /api/insights/summary returns only safe summary data.
+[x] Existing GET /api/insights behavior remains intact.
 [x] Client components use API/client helpers only.
 [x] No new database collection.
 [x] No schema redesign.
-[x] No API redesign.
-[x] No duplicate skin-journal module.
+[x] No duplicate insights module or page.
+[x] No AI provider change.
 [x] Existing tests are not weakened.
 [x] Full validation passes before marking DONE.
 ```
@@ -119,12 +134,12 @@ Technical:
 Documentation:
 
 ```txt
-[x] Backlog records v1.18 as Skin Journal Filters & Reflection Review.
-[x] Prior admin/content candidate is moved out of the v1.18 slot as future optional scope.
-[x] Change log updated with v1.18 implementation notes.
+[x] Backlog records v1.20 as Personal Insight Review & Safe Trend Cards.
+[x] Change log updated with v1.20 implementation notes.
 [x] Feature status matrix updated.
-[x] Implementation status updated only with v1.18 evidence.
-[x] v1.18 marked DONE only after validation passes.
+[x] Historical v1.19 evidence preserved without overclaiming.
+[x] Implementation status updated with v1.20 evidence.
+[x] v1.20 marked DONE only after validation passes.
 ```
 
 ## 5. Validation Checklist
@@ -142,36 +157,39 @@ Required before marking DONE:
 [x] npm audit --omit=dev --audit-level=moderate
 ```
 
-Current v1.18 validation status:
+Current v1.20 validation status:
 
 ```txt
-Evidence date: 2026-06-08
+Evidence date: 2026-06-09
 Environment: Local Windows / PowerShell
 node -v: v24.14.0
 npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 100 files / 942 tests
+npm run test: PASS - 102 files / 977 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 ## 6. Non-Goals
 
 ```txt
+No diagnosis.
 No treatment guidance.
 No clinical conclusion.
-No product causality conclusion.
 No skin or health scoring.
+No product causation, product effectiveness, or product harm claim.
+No stress causation claim.
+No routine causation claim.
 No image upload or image analysis.
 No marketplace, cart, checkout, or payment.
 No reviews, ratings, likes, or sharing.
 No notification/reminder system.
-No admin CRUD.
+No admin dashboard.
 No new database collection.
-No real AI provider change.
-No broad redesign of Skin Journal.
+No external AI provider change.
+No broad redesign of Insights.
 No unrelated refactor.
 ```
 
@@ -179,5 +197,5 @@ No unrelated refactor.
 
 ```bash
 git add .
-git commit -m "feat: add skin journal filters"
+git commit -m "feat: add personal insight review"
 ```

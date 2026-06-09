@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 ## 1. Current Phase
 
@@ -25,9 +25,11 @@ MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 MVP v1.16 - Saved Product Comparison & Decision Support: DONE
 MVP v1.17 - Routine History & Weekly Progress Review: DONE
 MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
+MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
+MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, and v1.18 added Skin Journal Filters & Reflection Review.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, and v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights.
 
 Current status:
 
@@ -35,10 +37,10 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.18 - Skin Journal Filters & Reflection Review
+Latest completed milestone: MVP v1.20 - Personal Insight Review & Safe Trend Cards
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
-Recommended next task: To be decided after v1.18 review
+Recommended next task: Portfolio Evidence Package media capture
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -68,8 +70,8 @@ Evidence boundary:
 | Today Routine Checklist | DONE | Daily completion flow. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
 | Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters and reflection review. |
-| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions. |
-| Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker. |
+| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions; v1.20 added strict count-only Personal Insight Review cards. |
+| Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker; v1.19 account data summary is complete. |
 | Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
@@ -112,6 +114,7 @@ API routes:
 /api/saved-products
 /api/saved-products/[productId]
 /api/insights
+/api/insights/summary
 /api/ingredients
 /api/ingredients/[id]
 /api/ingredients/explain
@@ -131,26 +134,26 @@ API routes:
 Local evidence:
 
 ```txt
-Evidence date: 2026-06-08
+Evidence date: 2026-06-09
 Environment: Local Windows / PowerShell
 Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
-npm ci: NOT RUN for v1.18
+npm ci: NOT RUN for v1.20
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 100 files / 942 tests
+npm run test: PASS - 102 files / 977 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-v1.18 validation passed after implementation.
+v1.20 validation passed after implementation.
 The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
-The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun passed.
+The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun exposed a duplicate-disclaimer strict locator in the updated Insights E2E test, which was fixed before the final outside-sandbox rerun passed.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
@@ -196,6 +199,8 @@ v1.15.1 - Audit Cleanup & Evidence Sync
 v1.16 - Saved Product Comparison & Decision Support
 v1.17 - Routine History & Weekly Progress Review
 v1.18 - Skin Journal Filters & Reflection Review
+v1.19 - Account Data Summary & Privacy Control Review
+v1.20 - Personal Insight Review & Safe Trend Cards
 ```
 
 Completed v1.14 scope:
@@ -247,10 +252,28 @@ Completed v1.18 scope:
 - Preserved existing create, edit, delete, loading, error, and authenticated behavior.
 - Kept copy focused on self-tracked reflection without product causality conclusions, clinical assessment, scoring, treatment guidance, image analysis, or AI-driven advice.
 
+Completed v1.19 scope:
+
+- Added a count-only account app-data summary to `/settings`.
+- Counted user-owned skin profiles, saved products, routines, routine logs, routine analyses, and skin journals.
+- Explained that shared product and ingredient catalogue data is preserved.
+- Kept the summary endpoint separate from the raw export payload.
+- Preserved existing export, app-data deletion, and account deletion request behavior.
+- Avoided displaying secret values, token values, session values, provider account identifiers, database identifiers, or raw export snapshots.
+
+Completed v1.20 scope:
+
+- Added authenticated `GET /api/insights/summary`.
+- Added strict count-only `InsightSummaryDto` data for routine consistency, symptom frequency, stress reflection, and product mention patterns.
+- Added Personal Insight Review on `/insights` without replacing existing Insights overview, calendar, trend, product usage, or next-action cards.
+- Added recursive API contract coverage for forbidden fields including `_id`, `id`, `userId`, `routineId`, `journalId`, `productId`, session, token, and provider account fields.
+- Added safe loading, error, insufficient-data, and missing-data states.
+- Avoided diagnosis, treatment advice, causation claims, product effectiveness claims, product harm claims, stress causation claims, routine causation claims, skin scoring, schema changes, and AI provider changes.
+
 Recommended next task:
 
 ```txt
-To be decided after v1.18 review
+Portfolio Evidence Package media capture
 ```
 
 Portfolio evidence tasks:

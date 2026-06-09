@@ -9,8 +9,20 @@ const insightsPageRoutePath = join(
   "src/app/(dashboard)/insights/page.tsx",
 );
 const insightsComponentsDir = join(projectRoot, "src/modules/insights/components");
+const insightSummaryMapperPath = join(
+  projectRoot,
+  "src/modules/insights/insight-summary.mapper.ts",
+);
 const insightsPageSource = readFileSync(
   join(insightsComponentsDir, "insights-page.tsx"),
+  "utf8",
+);
+const insightSummaryMapperSource = readFileSync(
+  insightSummaryMapperPath,
+  "utf8",
+);
+const insightSummarySectionSource = readFileSync(
+  join(insightsComponentsDir, "insight-summary-section.tsx"),
   "utf8",
 );
 const overviewCardsSource = readFileSync(
@@ -37,11 +49,16 @@ const routePageSource = readFileSync(insightsPageRoutePath, "utf8");
 const combinedInsightsSource = [
   routePageSource,
   insightsPageSource,
+  insightSummarySectionSource,
   overviewCardsSource,
   calendarSource,
   symptomTrendSource,
   productUsageSource,
   nextActionsSource,
+].join("\n");
+const insightSummaryCopySource = [
+  insightSummarySectionSource,
+  insightSummaryMapperSource,
 ].join("\n");
 
 describe("Insights UI source", () => {
@@ -69,6 +86,18 @@ describe("Insights UI source", () => {
     expect(insightsPageSource).toContain(
       "Đi tới routine hôm nay",
     );
+    expect(insightSummarySectionSource).toContain("LoadingState");
+    expect(insightSummarySectionSource).toContain(
+      "Đang tải phần tự quan sát cá nhân",
+    );
+    expect(insightSummarySectionSource).toContain("ErrorState");
+    expect(insightSummarySectionSource).toContain(
+      "Không thể tải phần tự quan sát cá nhân",
+    );
+    expect(insightSummarySectionSource).toContain("EmptyState");
+    expect(insightSummarySectionSource).toContain(
+      "Chưa đủ dữ liệu cho phần tự quan sát cá nhân",
+    );
   });
 
   it("renders the required overview, calendar, trend, product usage, and next-action sections", () => {
@@ -88,8 +117,31 @@ describe("Insights UI source", () => {
       "không kết luận sản phẩm gây ra hay",
       "Gợi ý tiếp theo",
       "dựa trên trạng thái",
+      "Personal Insight Review",
+      "Routine Consistency",
+      "Journal Symptom Frequency",
+      "Stress Reflection",
+      "Product Mention Pattern",
+      "Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại",
+      "không phải chẩn đoán y khoa",
     ]) {
       expect(combinedInsightsSource).toContain(expectedCopy);
+    }
+    expect(insightsPageSource).toContain("<InsightSummarySection");
+    expect(insightsPageSource).toContain("to={dateRange.to}");
+  });
+
+  it("renders safe missing-data fallback and safety note copy for Personal Insight Review", () => {
+    for (const expectedCopy of [
+      "Bạn chưa có routine nào được thiết lập.",
+      "Chưa có ghi chú triệu chứng gần đây.",
+      "Chưa có ghi chú mức độ stress gần đây.",
+      "Chưa tìm thấy sản phẩm nào được nhắc đến trong nhật ký gần đây.",
+      "không phải kết luận y khoa",
+      "không xác nhận nguyên nhân",
+      "không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm",
+    ]) {
+      expect(insightSummaryCopySource).toContain(expectedCopy);
     }
   });
 
@@ -121,8 +173,46 @@ describe("Insights UI source", () => {
       "attractiveness",
       "face analysis",
       "medication",
+      "caused your acne",
+      "this product caused",
+      "you have acne because",
+      "confirmed condition",
+      "you should use this treatment",
+      "your skin score is",
+      "diagnosed with",
+      "cure your",
+      "this confirms acne",
+      "this confirms irritation",
+      "this product is harmful",
+      "this product is effective",
+      "stress caused",
+      "routine caused",
+      "skipping your routine caused",
+      "improved your skin",
+      "made your skin worse",
     ]) {
       expect(lowerSource).not.toContain(forbiddenCopy);
+    }
+  });
+
+  it("keeps the new summary UI privacy-safe and distinct from existing insight cards", () => {
+    expect(insightSummarySectionSource).toContain("getInsightSummary");
+    expect(insightSummarySectionSource).toContain(
+      'const safeKey = `${product.name}-${product.brand ?? "unknown"}-${index}`',
+    );
+    expect(insightSummarySectionSource).not.toContain("productId");
+    expect(insightSummarySectionSource).not.toContain("routineId");
+    expect(insightSummarySectionSource).not.toContain("journalId");
+    expect(insightSummarySectionSource).not.toContain("userId");
+
+    for (const existingInsightTitle of [
+      "Tỷ lệ hoàn thành routine",
+      "Lịch độ đều đặn routine",
+      "Xu hướng nhật ký da",
+      "Sản phẩm xuất hiện trong nhật ký",
+      "Gợi ý tiếp theo",
+    ]) {
+      expect(insightSummarySectionSource).not.toContain(existingInsightTitle);
     }
   });
 });

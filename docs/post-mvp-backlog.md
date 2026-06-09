@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 ## 1. Current Stable Baseline
 
@@ -10,12 +10,12 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.18 - Skin Journal Filters & Reflection Review: DONE
+Latest completed milestone: v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 Current active milestone: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: To be decided after v1.18 review
+Recommended next task: Portfolio Evidence Package media capture
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
@@ -75,6 +75,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Saved Product Comparison & Decision Support | DONE in v1.16 | Lets users compare 2-3 saved products using existing educational product data without ranking or recommendations. |
 | P2 | Routine History & Weekly Progress Review | DONE in v1.17 | Helps users review 7-day routine consistency using existing routine log data and habit-tracking copy. |
 | P2 | Skin Journal Filters & Reflection Review | DONE in v1.18 | Helps users review loaded journal notes by symptom, stress level, product usage, and recent time range with reflection-only copy. |
+| P2 | Account Data Summary & Privacy Control Review | DONE in v1.19 | Helps users understand user-owned skincare data counts before export/delete actions. |
+| P2 | Personal Insight Review & Safe Trend Cards | DONE in v1.20 | Adds strict count-only `/api/insights/summary` and safe reflection cards on `/insights` without medical or causal claims. |
 | P2 | Release/observability polish | Future optional release evidence candidate | Improves production confidence and debugging when deliberately scoped. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
@@ -428,6 +430,106 @@ Validation for v1.18: PASS
 v1.18 - Skin Journal Filters & Reflection Review
 ```
 
+## 7E. P2 - Account Data Summary & Privacy Control Review
+
+### Goal
+
+Help users understand what user-owned skincare data is stored before export/delete actions.
+
+### Status
+
+```txt
+v1.19 - Account Data Summary & Privacy Control Review: DONE
+Validation for v1.19: PASS
+```
+
+### Scope
+
+- Account app-data summary card on `/settings`.
+- User-owned skincare data counts for skin profiles, saved products, routines, routine logs, routine analyses, and skin journals.
+- Shared catalogue preservation copy for products and ingredients.
+- Privacy-safe export/delete copy.
+- GET `/api/account/app-data` count-only summary response.
+- Existing DELETE `/api/account/app-data` behavior preserved.
+- Tests and docs.
+- No secrets, token values, session values, provider account identifiers, database identifiers, or raw export snapshots displayed.
+- No OAuth account deletion claim.
+- No shared catalogue deletion.
+- No new database collection or schema redesign.
+
+### Acceptance Criteria
+
+```txt
+[x] Summary card appears on /settings.
+[x] Summary counts use authenticated user-owned app data.
+[x] Shared catalogue preservation is explained.
+[x] Export/delete copy clarifies user-owned app-data scope.
+[x] Summary loading/error is isolated to the card.
+[x] Loading the summary does not trigger destructive actions.
+[x] Summary refreshes after successful app-data deletion.
+[x] Existing export, app-data deletion, and account deletion request flows remain intact.
+[x] GET /api/account/app-data returns only summary data.
+[x] DELETE /api/account/app-data behavior remains intact.
+[x] Validation passes before marking DONE.
+```
+
+### Suggested Version
+
+```txt
+v1.19 - Account Data Summary & Privacy Control Review
+```
+
+## 7F. P2 - Personal Insight Review & Safe Trend Cards
+
+### Goal
+
+Help users review their own routine-log and skin-journal tracking patterns through strict count-based reflection cards on `/insights`.
+
+### Status
+
+```txt
+v1.20 - Personal Insight Review & Safe Trend Cards: DONE
+Validation for v1.20: PASS
+```
+
+### Scope
+
+- Added authenticated `GET /api/insights/summary`.
+- Added a strict summary DTO with no database IDs, user IDs, routine IDs, journal IDs, product IDs, raw documents, session data, token data, or provider account data.
+- Added Personal Insight Review on `/insights`.
+- Added routine consistency, journal symptom frequency, stress reflection, and product mention pattern cards.
+- Added insufficient-data and partial-data fallbacks.
+- Added focused unit, API contract, client, UI source, and authenticated E2E coverage.
+- No schema change, AI provider change, medical interpretation, diagnosis, causation claim, product effectiveness claim, product harm claim, or skin score.
+
+### Acceptance Criteria
+
+```txt
+[x] /api/insights/summary requires authentication.
+[x] Summary data is scoped to the authenticated user.
+[x] Summary response is count-only and does not expose forbidden identifiers or auth/session/provider fields.
+[x] /insights shows Personal Insight Review without replacing existing insights cards.
+[x] Routine consistency uses the last 7 local dates.
+[x] Journal symptom, stress, and product summaries use the last 30 local dates.
+[x] Empty and missing-data states are safe and helpful.
+[x] Copy remains reflection-only and non-medical.
+[x] Validation passes before marking DONE.
+```
+
+### Known Limitations
+
+```txt
+Routine configuration uses currently configured routines; there is no active/archive routine flag.
+Product mention cards depend on existing journal productsUsed data and visible product lookup.
+Stress reflection uses the existing low/medium/high journal stress labels only.
+```
+
+### Suggested Version
+
+```txt
+v1.20 - Personal Insight Review & Safe Trend Cards
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -502,7 +604,7 @@ No raw unvalidated AI output displayed directly.
 ### Suggested Version
 
 ```txt
-v1.19 - Optional Real AI Provider Integration
+Future optional real provider integration candidate (unversioned)
 ```
 
 ## 10. P4 - Portfolio Assets
@@ -556,14 +658,15 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-To be decided after v1.18 review
+Portfolio Evidence Package media capture
 ```
 
 Reason:
 
-- v1.18 Skin Journal Filters & Reflection Review is complete and locally validated.
+- v1.20 Personal Insight Review & Safe Trend Cards is complete and locally validated.
 - The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
-- The next post-MVP task should be selected deliberately from the backlog.
+- The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
+- The next low-risk task should capture optional screenshots/demo evidence rather than adding another product feature immediately.
 
 ## 13. v1.13 Completion Checklist
 
@@ -595,4 +698,7 @@ Reason:
 2026-06-08: Completed v1.17 Routine History & Weekly Progress Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
 2026-06-08: Started v1.18 Skin Journal Filters & Reflection Review as the active product-improvement sprint; the prior admin/content candidate is now future optional and unversioned.
 2026-06-08: Completed v1.18 Skin Journal Filters & Reflection Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
+2026-06-08: Started v1.19 Account Data Summary & Privacy Control Review as the active privacy/data-control sprint; optional real-provider integration remains future optional and unversioned.
+2026-06-08: Completed v1.19 Account Data Summary & Privacy Control Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
+2026-06-09: Completed v1.20 Personal Insight Review & Safe Trend Cards with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a strict duplicate-disclaimer locator, which was fixed before final E2E PASS.
 ```

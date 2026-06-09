@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+import { InsightSummarySection } from "@/modules/insights/components/insight-summary-section";
 import { InsightsNextActionsCard } from "@/modules/insights/components/insights-next-actions-card";
 import { InsightsOverviewCards } from "@/modules/insights/components/insights-overview-cards";
 import { ProductUsageCard } from "@/modules/insights/components/product-usage-card";
@@ -137,6 +138,8 @@ export function InsightsPage() {
           title="Chưa đủ dữ liệu để xem insights"
         />
       ) : null}
+
+      <InsightSummarySection to={dateRange.to} />
 
       <InsightsOverviewCards insights={insights} />
       <RoutineConsistencyCalendar calendarDays={insights.calendarDays} />

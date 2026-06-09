@@ -6,6 +6,139 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## MVP v1.20 - Personal Insight Review & Safe Trend Cards
+
+Date: 2026-06-09
+
+### Task
+
+Add a strict privacy-safe Personal Insight Review section to `/insights` using only authenticated user-owned routine log and journal data.
+
+### Files Added
+
+- `src/app/api/insights/summary/route.ts`
+- `src/modules/insights/insight-summary.dto.ts`
+- `src/modules/insights/insight-summary.schema.ts`
+- `src/modules/insights/insight-summary.mapper.ts`
+- `src/modules/insights/insight-summary.use-case.ts`
+- `src/modules/insights/components/insight-summary-section.tsx`
+- `tests/unit/insight-summary-use-case.test.ts`
+- `tests/unit/insight-summary-api-contract.test.ts`
+
+### Files Updated
+
+- `src/modules/insights/components/insights-page.tsx`
+- `src/modules/insights/insights.client.ts`
+- `src/modules/insights/index.ts`
+- `tests/unit/insights-client.test.ts`
+- `tests/unit/insights-ui.test.ts`
+- `tests/e2e/insights.authenticated.spec.ts`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added authenticated `GET /api/insights/summary`.
+- Added a strict count-only summary DTO for routine consistency, symptom frequency, stress reflection, and product mention patterns.
+- Added Personal Insight Review on `/insights` while preserving existing Insights cards and `/api/insights`.
+- Added safe loading, error, insufficient-data, and per-card missing-data states.
+- Added recursive privacy contract coverage for forbidden fields at nested levels.
+- Added UI and E2E coverage for the new section and safety wording.
+
+### Safety and Privacy Guardrails
+
+- No diagnosis, treatment advice, skin scoring, product causation, product effectiveness, product harm, stress causation, or routine causation claims.
+- No database identifiers, user IDs, routine IDs, journal IDs, product IDs, raw documents, session data, token data, or provider account fields in the new summary DTO.
+- Product IDs are used only internally to resolve safe product names and brands.
+
+### Known Limitations
+
+- Routine configuration is inferred from currently configured routines because the app has no active/archive routine flag.
+- Product mention cards depend on existing `productsUsed` journal data and visible product lookup.
+- Stress reflection uses the existing `low`, `medium`, and `high` journal stress labels.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 102 files / 977 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Status
+
+```txt
+DONE after full local validation passed.
+```
+
+## MVP v1.19 - Account Data Summary & Privacy Control Review
+
+Date: 2026-06-08
+
+### Task
+
+Add a privacy-focused app-data summary to `/settings` so users can understand their user-owned skincare data footprint before export/delete actions.
+
+### Files Added
+
+- `src/modules/account-data/account-app-data-summary.dto.ts`
+- `src/modules/settings/components/account-data-summary-card.tsx`
+
+### Files Updated
+
+- `src/app/api/account/app-data/route.ts`
+- `src/modules/account-data/account-data-export.use-case.ts`
+- `src/modules/account-data/account-data.repository.ts`
+- `src/modules/settings/components/settings-data-control-center.tsx`
+- `src/modules/settings/settings.client.ts`
+- `tests/unit/account-data-export-use-case.test.ts`
+- `tests/unit/account-data-repository.test.ts`
+- `tests/unit/delete-account-app-data-api-contract.test.ts`
+- `tests/unit/settings-client.test.ts`
+- `tests/unit/settings-ui.test.ts`
+- `tests/e2e/settings.authenticated.spec.ts`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+
+### Outcome
+
+- Added account app-data summary.
+- Added user-owned skincare data counts.
+- Added shared catalogue preservation copy.
+- Improved privacy copy around export/delete actions.
+- Updated tests.
+- Updated docs for the active v1.19 sprint.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 100 files / 950 tests
+npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
+npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 30/30 Playwright tests
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+### Status
+
+```txt
+DONE after full local validation passed.
+```
+
 ## 2026-06-08 - MVP v1.18 Skin Journal Filters & Reflection Review
 
 ### Task

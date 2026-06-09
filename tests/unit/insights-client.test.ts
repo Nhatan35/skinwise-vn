@@ -2,8 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   getDefaultInsightsRange,
+  getInsightSummary,
   getInsights,
 } from "@/modules/insights/insights.client";
+import type { InsightSummaryDto } from "@/modules/insights/insight-summary.dto";
 import type { InsightsDto } from "@/modules/insights/insights.dto";
 
 const insightsDto: InsightsDto = {
@@ -33,6 +35,58 @@ const insightsDto: InsightsDto = {
   },
   calendarDays: [],
   nextActions: [],
+};
+
+const insightSummaryDto: InsightSummaryDto = {
+  hasEnoughData: true,
+  insufficientDataReasons: [],
+  routineConsistency: {
+    periodDays: 7,
+    completedDays: 5,
+    partialDays: 1,
+    missingDays: 1,
+    noRoutineConfigured: false,
+    summaryText: "Bạn đã hoàn thành routine trong 5/7 ngày gần đây.",
+    helperText:
+      "Đây chỉ là mẫu theo dõi cá nhân để xem lại thói quen, không phải kết luận về thay đổi trên da.",
+  },
+  symptomFrequency: {
+    periodDays: 30,
+    topSymptoms: [
+      {
+        label: "dryness",
+        count: 4,
+      },
+    ],
+    summaryText:
+      "khô da là triệu chứng được ghi nhiều nhất trong 30 ngày gần đây.",
+    helperText:
+      "Nội dung này chỉ phản ánh những gì bạn đã ghi trong nhật ký và không xác nhận tình trạng da.",
+  },
+  stressReflection: {
+    periodDays: 30,
+    highStressCount: 3,
+    mediumStressCount: 4,
+    lowStressCount: 2,
+    summaryText: "Bạn đã ghi nhận mức căng thẳng cao trong 3 ngày nhật ký.",
+    helperText:
+      "Bạn có thể tiếp tục quan sát stress và ghi chú da cùng nhau, nhưng không nên xem đây là kết luận nguyên nhân.",
+  },
+  productMentionPattern: {
+    periodDays: 30,
+    topProducts: [
+      {
+        name: "Gentle Cleanser",
+        brand: "Example",
+        count: 3,
+      },
+    ],
+    summaryText: "Gentle Cleanser xuất hiện trong 3 mục nhật ký.",
+    helperText:
+      "Hãy xem lại ghi chú của chính bạn trước khi thay đổi routine. Nội dung này không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm.",
+  },
+  safetyNote:
+    "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không phải kết luận y khoa, không phải chẩn đoán và không xác nhận nguyên nhân.",
 };
 
 function jsonResponse(body: unknown, status = 200) {
@@ -147,6 +201,50 @@ describe("Insights client", () => {
     await expect(getInsights()).rejects.toMatchObject({
       name: "InsightsClientError",
       message: expect.stringContaining("Chưa thể tải Insights"),
+    });
+  });
+
+  it("fetches the strict personal insight summary endpoint with an explicit to date", async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: {
+          summary: insightSummaryDto,
+        },
+        error: null,
+      }),
+    );
+
+    await expect(getInsightSummary({ to: "2026-06-07" })).resolves.toEqual(
+      insightSummaryDto,
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/insights/summary?to=2026-06-07",
+      {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "GET",
+      },
+    );
+  });
+
+  it("fetches the personal insight summary endpoint without a query when no to date is provided", async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        data: {
+          summary: insightSummaryDto,
+        },
+        error: null,
+      }),
+    );
+
+    await getInsightSummary();
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/insights/summary", {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
     });
   });
 });
