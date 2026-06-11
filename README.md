@@ -18,14 +18,14 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.21 - Insight Explainability & Tracking Quality Checklist**.
+- Latest completed milestone: **MVP v1.22 - Production Observability & Release Confidence**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **Portfolio Evidence Package media capture**.
+- Recommended next task: **Deploy v1.22 and perform production smoke verification, including `/api/health`**.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
-- Portfolio media evidence tasks: **screenshots and demo video are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS** for MVP v1.21 insight explainability and tracking quality checklist.
+- Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
+- Local validation evidence: **PASS** for MVP v1.22 production observability and release confidence.
 - Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
-- Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed; no critical blockers reported.**
+- Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed previously; no critical blockers reported. v1.22 production smoke was not performed.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
 - Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
 
@@ -33,7 +33,7 @@ Evidence boundary:
 
 - Automated local evidence is supported by terminal output.
 - Production PASS status is based on the user's reported completed manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
-- Current Portfolio Evidence Package task validation is documentation-only; it does not create new app validation, screenshot, video, production smoke, traffic, performance, or user-metric evidence.
+- Current v1.22 validation is local/tool validation only; it does not create screenshot, demo-video, traffic, performance, user-metric, or production smoke evidence.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
@@ -63,6 +63,7 @@ MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+MVP v1.22 - Production Observability & Release Confidence: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -79,9 +80,11 @@ MVP v1.15 is a controlled post-MVP product improvement milestone. It improves Pr
 
 MVP v1.15.1 is an audit, dependency-risk, validation, and documentation evidence cleanup patch after v1.15. It does not add product features or change Product Match/Product Detail behavior.
 
-MVP v1.21 is the latest controlled post-MVP product improvement. It extends the existing Personal Insight Review with calculation metadata and a tracking data-availability checklist without adding diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI provider changes.
+MVP v1.21 extends the existing Personal Insight Review with calculation metadata and a tracking data-availability checklist without adding diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI provider changes.
 
-The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks.
+MVP v1.22 is the latest controlled post-MVP release-confidence milestone. It improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates. It does not add product features, database schema changes, real AI provider integration, external observability vendors, diagnosis logic, treatment advice, skin scoring, image upload, admin CRUD, marketplace, payment, checkout, or order workflow.
+
+The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
 ## Key Features
 
@@ -130,6 +133,7 @@ Implemented SkinWise API routes:
 - `/api/account/deletion-request`
 - `/api/account/export`
 - `/api/dashboard`
+- `/api/health`
 - `/api/skin-profile`
 - `/api/products`
 - `/api/products/[id]`
@@ -174,14 +178,14 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
-Evidence date: 2026-06-09
+Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: NOT RUN for v1.21
+npm ci: NOT RUN for v1.22
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 987 tests
+npm run test: PASS - 103 files / 991 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -190,9 +194,9 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation note:
 
 ```txt
-v1.21 changed only Insight summary explainability and tracking data-availability checklist behavior.
-Existing v1.20 summary fields, `/api/insights`, database schema, auth, authorization, persistence, and AI-provider behavior remain unchanged.
-Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.21.
+v1.22 added only the public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
+Existing product features, database schema, auth, authorization, persistence, AI-provider behavior, and existing API behavior remain unchanged.
+Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.22.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
@@ -202,7 +206,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.21; local validation passed.
+Production smoke and monitoring were not rerun specifically for v1.22; local validation passed.
 Critical production blockers reported: None
 Evidence date: 2026-06-04
 Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
@@ -240,6 +244,8 @@ Landing page
 - Portfolio case study: `docs/portfolio-case-study.md`
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
+- v1.22 release evidence: `docs/release-evidence-v1.22.md`
+- Production incident note template: `docs/production-incident-note-template.md`
 - Deployment checklist: `docs/18-deployment-checklist.md`
 - Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
 - Production smoke test checklist: `docs/production-smoke-test-v1.9.md`
@@ -320,7 +326,8 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots and demo video are optional media evidence; capture them only if needed for CV, portfolio page, LinkedIn, or slide deck, and do not claim they exist until actual files are produced.
-- `npm ci` was not rerun for v1.21; latest required v1.21 validation commands passed.
+- v1.22 `/api/health` only verifies that the app route is reachable. It does not verify database connectivity, OAuth connectivity, AI provider connectivity, or external service health by design.
+- `npm ci` was not rerun for v1.22; latest required v1.22 validation commands passed.
 
 ## Final Portfolio Decision
 
@@ -337,12 +344,13 @@ MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+MVP v1.22 - Production Observability & Release Confidence: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
-Portfolio Evidence Package: Documentation prepared; optional media capture remains separate
+Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped for v1.22
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.21 - Insight Explainability & Tracking Quality Checklist` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.22 - Production Observability & Release Confidence` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped for v1.22.

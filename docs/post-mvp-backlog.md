@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-09
+Last updated: 2026-06-11
 
 ## 1. Current Stable Baseline
 
@@ -10,16 +10,17 @@ Post-MVP backlog planning: v1.12 - DONE
 Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: DONE
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
-Latest completed milestone: v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+Previous completed milestone: v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+Latest completed milestone: v1.22 - Production Observability & Release Confidence: DONE
 Current active milestone: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package media capture
+Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
 Local validation: PASS
 Production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
-Optional media evidence tasks: screenshots and demo video
+Optional media evidence tasks: screenshots and demo video intentionally skipped for this milestone
 ```
 
 This backlog starts **after** the stable MVP. It must not rewrite history or turn optional future ideas into MVP blockers.
@@ -78,7 +79,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Account Data Summary & Privacy Control Review | DONE in v1.19 | Helps users understand user-owned skincare data counts before export/delete actions. |
 | P2 | Personal Insight Review & Safe Trend Cards | DONE in v1.20 | Adds strict count-only `/api/insights/summary` and safe reflection cards on `/insights` without medical or causal claims. |
 | P2 | Insight Explainability & Tracking Quality Checklist | DONE in v1.21 | Explains how each personal insight card is calculated and shows data-availability status without scores, grades, or medical assessment. |
-| P2 | Release/observability polish | Future optional release evidence candidate | Improves production confidence and debugging when deliberately scoped. |
+| P2 | Production Observability & Release Confidence | DONE in v1.22 | Adds safe `/api/health`, health API contract coverage, release evidence, incident note template, and monitoring/checklist updates. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -237,36 +238,47 @@ git commit -m "data: expand skincare product and ingredient seed data"
 
 Improve confidence in production behavior and release handover.
 
-### Candidate Tasks
+### Status
 
-- Add a simple production smoke-test result template.
-- Record deployment id, commit hash, and test date in docs after each release.
-- Add manual browser Console/Network checklist.
-- Add Vercel function-log checklist.
-- Add MongoDB Atlas monitoring checklist.
-- Add a standard incident note template.
+```txt
+v1.22 - Production Observability & Release Confidence: DONE
+Validation for v1.22: PASS
+Production smoke for v1.22: NOT CHECKED
+```
+
+### Completed Tasks
+
+- Added safe public `GET /api/health` endpoint.
+- Added health API contract test.
+- Added repeatable release evidence document at `docs/release-evidence-v1.22.md`.
+- Added production incident note template at `docs/production-incident-note-template.md`.
+- Updated the production monitoring runbook with the health endpoint check and limitation.
+- Updated final release/status documentation.
 
 ### Acceptance Criteria
 
 ```txt
-[ ] Release evidence is repeatable.
-[ ] Production issues can be recorded consistently.
-[ ] No secrets are copied into docs.
-[ ] User-reported evidence and tool/log evidence are clearly separated.
+[x] Release evidence is repeatable.
+[x] Production issues can be recorded consistently.
+[x] No secrets are copied into docs.
+[x] User-reported evidence and tool/log evidence are clearly separated.
+[x] Health endpoint is public, stable, and dependency-light.
+[x] Health endpoint does not require auth, database, AI provider, OAuth, or environment variables.
+[x] Required validation passed before marking DONE.
 ```
 
 ### Suggested Version
 
 ```txt
-Future optional release evidence candidate (unversioned)
+v1.22 - Production Observability & Release Confidence
 ```
 
 ### Current Note
 
 ```txt
-v1.15.1 completed audit/dependency-risk and documentation evidence sync only.
-This broader release/observability polish item remains a future optional task and is not started.
-v1.17 is now used for Routine History & Weekly Progress Review.
+v1.22 improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
+The health endpoint only verifies that the app route is reachable; it intentionally does not check database, OAuth, AI provider, or external service health.
+Production smoke was not performed as part of this local repository update.
 ```
 
 ## 7A. P2 - Product Match Explainability & Safety Guardrails
@@ -712,15 +724,16 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-Portfolio Evidence Package media capture
+Deploy v1.22 and perform production smoke verification, including /api/health
 ```
 
 Reason:
 
-- v1.21 Insight Explainability & Tracking Quality Checklist is complete and locally validated.
+- v1.22 Production Observability & Release Confidence is complete and locally validated.
+- Production smoke for v1.22 has not been performed.
 - The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
 - The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
-- The next low-risk task should capture optional screenshots/demo evidence rather than adding another product feature immediately.
+- Portfolio screenshots and demo video are intentionally skipped and remain optional media evidence.
 
 ## 13. v1.13 Completion Checklist
 
@@ -756,4 +769,5 @@ Reason:
 2026-06-08: Completed v1.19 Account Data Summary & Privacy Control Review with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox.
 2026-06-09: Completed v1.20 Personal Insight Review & Safe Trend Cards with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a strict duplicate-disclaimer locator, which was fixed before final E2E PASS.
 2026-06-09: Completed v1.21 Insight Explainability & Tracking Quality Checklist with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a duplicate safe-disclaimer locator, which was fixed before final E2E PASS.
+2026-06-11: Completed v1.22 Production Observability & Release Confidence with safe public /api/health, health API contract test, release evidence, production incident note template, and monitoring/checklist updates. Required local validation passed; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Production smoke was not performed.
 ```

@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-09
+Last updated: 2026-06-11
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -24,12 +24,14 @@ MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+MVP v1.22 - Production Observability & Release Confidence: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package media capture
+Current active milestone: None
+Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
 ```
 
 Primary current documents:
@@ -37,6 +39,7 @@ Primary current documents:
 - `README.md`
 - `AGENTS.md`
 - `docs/final-release-checklist.md`
+- `docs/release-evidence-v1.22.md`
 - `docs/post-mvp-backlog.md`
 - `docs/ai-coding/02-implementation-status.md`
 - `docs/ai-coding/06-current-sprint-plan.md`
@@ -44,6 +47,7 @@ Primary current documents:
 - `docs/demo-script.md`
 - `docs/production-smoke-test-v1.9.md`
 - `docs/production-monitoring-runbook.md`
+- `docs/production-incident-note-template.md`
 - `docs/18-deployment-checklist.md`
 
 Historical planning documents remain useful for context, but they should not override the implemented codebase, current release evidence, or the post-MVP backlog.
@@ -58,4 +62,6 @@ Evidence boundary:
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
+- v1.22 added a safe public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates without database, auth, AI-provider, or product-feature changes.
+- v1.22 production smoke testing was not performed in this repository update.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

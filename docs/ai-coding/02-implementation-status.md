@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-09
+Last updated: 2026-06-11
 
 ## 1. Current Phase
 
@@ -28,9 +28,10 @@ MVP v1.18 - Skin Journal Filters & Reflection Review: DONE
 MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
+MVP v1.22 - Production Observability & Release Confidence: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, and v1.21 added insight calculation metadata plus a tracking data-availability checklist.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, and v1.22 added production observability/release-confidence documentation plus a safe public health endpoint.
 
 Current status:
 
@@ -38,12 +39,12 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package media capture
+Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
 Portfolio Evidence Package documentation: PREPARED
-Optional media evidence tasks: screenshots and demo video
+Optional media evidence tasks: screenshots and demo video intentionally skipped for v1.22
 ```
 
 Evidence boundary:
@@ -52,6 +53,7 @@ Evidence boundary:
 - Production PASS is based on user-reported manual verification with no blockers reported.
 - Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
+- v1.22 production smoke was not performed in this repository update.
 
 ## 2. Implemented Product Scope
 
@@ -76,6 +78,7 @@ Evidence boundary:
 | Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
+| Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, release evidence, incident note template, and monitoring/checklist updates. |
 
 ## 3. Route Coverage
 
@@ -107,6 +110,7 @@ API routes:
 /api/account/deletion-request
 /api/account/export
 /api/dashboard
+/api/health
 /api/skin-profile
 /api/products
 /api/products/[id]
@@ -135,15 +139,15 @@ API routes:
 Local evidence:
 
 ```txt
-Evidence date: 2026-06-09
+Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
 Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
-npm ci: NOT RUN for v1.21
+npm ci: NOT RUN for v1.22
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 987 tests
+npm run test: PASS - 103 files / 991 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -152,9 +156,9 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation notes:
 
 ```txt
-v1.21 validation passed after implementation.
+v1.22 validation passed after implementation.
 The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
-The first sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun exposed a duplicate safe-disclaimer strict locator in the updated Insights E2E test, which was fixed before the final outside-sandbox rerun passed.
+The sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun passed.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 ```
 
@@ -166,6 +170,7 @@ Production smoke test: PASS - user-reported manual verification completed
 Production monitoring: PASS - user-reported checks completed
 Critical blockers reported: None
 Evidence date: 2026-06-04
+Production smoke for v1.22: NOT CHECKED
 ```
 
 ## 5. Safety Boundary
@@ -203,6 +208,7 @@ v1.18 - Skin Journal Filters & Reflection Review
 v1.19 - Account Data Summary & Privacy Control Review
 v1.20 - Personal Insight Review & Safe Trend Cards
 v1.21 - Insight Explainability & Tracking Quality Checklist
+v1.22 - Production Observability & Release Confidence
 ```
 
 Completed v1.14 scope:
@@ -282,17 +288,28 @@ Completed v1.21 scope:
 - Preserved existing v1.20 summary fields and existing `/api/insights` behavior.
 - Avoided diagnosis, treatment advice, causation claims, product effectiveness claims, product harm claims, stress causation claims, routine causation claims, skin scores, risk scores, health grades, medical status fields, schema changes, and AI provider changes.
 
+Completed v1.22 scope:
+
+- Added public `GET /api/health`.
+- Returned a stable health response with `status`, `app`, `version`, `timestamp`, and `checks.app`.
+- Kept the health endpoint dependency-light: no auth, database, AI provider, OAuth, environment config, external service, or current-user lookup.
+- Added direct route-module health API contract coverage for method export, unsupported methods, response shape, ISO timestamp, and sensitive-string absence.
+- Added `docs/release-evidence-v1.22.md`.
+- Added `docs/production-incident-note-template.md`.
+- Updated monitoring, release checklist, source-of-truth, backlog, implementation status, feature matrix, current sprint plan, and README status references.
+- Avoided new product features, package changes, schema changes, vendor integrations, admin scope, AI-provider changes, image upload, skin scoring, diagnosis logic, and treatment advice.
+
 Recommended next task:
 
 ```txt
-Portfolio Evidence Package media capture
+Deploy v1.22 and perform production smoke verification, including /api/health
 ```
 
 Portfolio evidence tasks:
 
 - Portfolio Evidence Package documentation: PREPARED.
-- Portfolio screenshots: optional; not verified in repository.
-- Demo video: optional; not recorded in repository.
+- Portfolio screenshots: intentionally skipped for v1.22; optional and not verified in repository.
+- Demo video: intentionally skipped for v1.22; optional and not recorded in repository.
 - CV/portfolio publishing polish: drafted in `docs/portfolio-evidence-package.md`.
 
 Optional later product scope:

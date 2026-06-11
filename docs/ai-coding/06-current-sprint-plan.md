@@ -1,6 +1,6 @@
 # Current Sprint Plan - SkinWise VN MVP
 
-Last updated: 2026-06-09
+Last updated: 2026-06-11
 
 ## 1. Current Phase
 
@@ -24,42 +24,36 @@ Skin Journal Filters & Reflection Review: DONE in v1.18
 Account Data Summary & Privacy Control Review: DONE in v1.19
 Personal Insight Review & Safe Trend Cards: DONE in v1.20
 Insight Explainability & Tracking Quality Checklist: DONE in v1.21
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
-Current active sprint: None
-Current active sprint status: None
-Recommended next sprint: Portfolio Evidence Package media capture
+Production Observability & Release Confidence: DONE in v1.22
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
+Current active milestone: None
+Current active milestone status: None
+Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
 Current phase: Post-MVP controlled improvement
 ```
 
-v1.21 completed controlled product improvement. The change is limited to insight calculation explainability and tracking data-availability checklist support on the existing `/insights` page and `GET /api/insights/summary`.
+v1.22 improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
 
 ## 2. Objective
 
-Help users understand how personal insight cards were calculated and whether recent tracking data is available, limited, missing, or not configured.
+Make the app easier to verify in production, easier to monitor, and easier to debug if an incident happens without adding product features or expanding MVP scope.
 
-The feature must preserve:
+The milestone preserves:
 
 ```txt
 No diagnosis
 No treatment advice
 No clinical conclusion
-No product causation claim
-No product effectiveness claim
-No product harm claim
-No stress causation claim
-No routine causation claim
 No skin score
-No risk score
-No health grade
-No medical status field
-No raw document response
-No database identifier, user ID, routine ID, journal ID, or product ID response
-No session, token, or provider account field response
-No new database collection
-No schema redesign
-No external AI provider change
-Existing /api/insights behavior
-Existing /insights overview, calendar, trend, product usage, and next-action cards
+No image upload or image analysis
+No marketplace, payment, cart, checkout, or order workflow
+No admin CRUD
+No real AI provider integration
+No database schema change
+No new dependency
+No external observability vendor or SDK
+No health-check dependency on auth, database, AI, OAuth, env vars, or external services
+No secret, token, database URI, OAuth credential, private user data, userId, email, password, or raw document exposure
 ```
 
 ## 3. Files Changed
@@ -67,26 +61,18 @@ Existing /insights overview, calendar, trend, product usage, and next-action car
 Active files:
 
 ```txt
-src/app/api/insights/summary/route.ts
-src/modules/insights/insight-summary.dto.ts
-src/modules/insights/insight-summary.mapper.ts
-src/modules/insights/components/insight-summary-section.tsx
-tests/unit/insight-summary-use-case.test.ts
-tests/unit/insight-summary-api-contract.test.ts
-tests/unit/insights-client.test.ts
-tests/unit/insights-ui.test.ts
-tests/e2e/insights.authenticated.spec.ts
+src/app/api/health/route.ts
+tests/unit/health-api-contract.test.ts
+docs/release-evidence-v1.22.md
+docs/production-incident-note-template.md
 docs/post-mvp-backlog.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
-docs/ai-coding/05-ai-change-log.md
 docs/ai-coding/06-current-sprint-plan.md
-README.md
-docs/00-source-of-truth.md
 docs/final-release-checklist.md
-docs/portfolio-evidence-package.md
-docs/demo-script.md
-docs/screenshots-checklist.md
+docs/production-monitoring-runbook.md
+docs/00-source-of-truth.md
+README.md
 ```
 
 ## 4. Acceptance Criteria
@@ -94,63 +80,45 @@ docs/screenshots-checklist.md
 Functional:
 
 ```txt
-[x] User can open /insights successfully.
-[x] Existing /insights behavior remains unchanged.
-[x] Existing GET /api/insights behavior remains unchanged.
-[x] Personal Insight Review section remains visible on /insights.
-[x] Routine Consistency card shows how the summary was calculated.
-[x] Journal Symptom Frequency card shows how symptoms were counted.
-[x] Stress Reflection card shows how stress labels were counted.
-[x] Product Mention Pattern card shows how product names were counted.
-[x] Tracking Quality Checklist appears on /insights.
-[x] Checklist shows routine logs, journal entries, symptom notes, stress notes, and product mentions.
-[x] Checklist uses safe available/limited/not-enough-data/not-configured statuses.
-[x] Insufficient-data empty state appears when no recent routine logs or journal entries exist.
-[x] Partial data still shows available cards with section-level fallbacks.
+[x] Public GET /api/health exists.
+[x] GET /api/health returns HTTP 200.
+[x] Health response includes status, app, version, timestamp, and checks.app.
+[x] Health response version is v1.22.
+[x] Health timestamp is generated with new Date().toISOString().
+[x] Health endpoint is request-time dynamic.
+[x] Health endpoint does not use SkinWise { data, error } wrapper.
 ```
 
 Privacy and security:
 
 ```txt
-[x] GET /api/insights/summary requires authentication.
-[x] Summary data is scoped to the authenticated user.
-[x] Summary response is count-only.
-[x] Summary response does not include `_id`.
-[x] Summary response does not include `id`.
-[x] Summary response does not include `userId`.
-[x] Summary response does not include `routineId`.
-[x] Summary response does not include `journalId`.
-[x] Summary response does not include `productId`.
-[x] Summary response does not include session, token, accessToken, refreshToken, providerAccountId, emailVerified, password, rawDocument, createdBy, or updatedBy fields.
-[x] Product IDs are used only internally to resolve names/brands.
-[x] Summary response does not include score-like fields such as score, grade, rating, riskLevel, healthRating, severity, or medicalStatus.
+[x] Health endpoint does not require authentication.
+[x] Health endpoint does not import auth, database, AI provider, user, env config, or secret helper modules.
+[x] Health endpoint does not query the database.
+[x] Health endpoint does not call external services.
+[x] Health response does not expose secrets, tokens, OAuth credentials, database URI, userId, email, password, raw documents, or process.env.
+[x] Production evidence documentation keeps production smoke as NOT CHECKED.
 ```
 
 Technical:
 
 ```txt
-[x] GET /api/insights/summary returns only safe summary data.
-[x] GET /api/insights/summary includes `calculationMeta`.
-[x] GET /api/insights/summary includes `trackingQualityChecklist`.
-[x] Existing GET /api/insights behavior remains intact.
-[x] Client components use API/client helpers only.
-[x] No new database collection.
-[x] No schema redesign.
-[x] No duplicate insights module or page.
-[x] No AI provider change.
-[x] Existing tests are not weakened.
-[x] Full validation passes before marking DONE.
+[x] Health API contract test imports the route module directly.
+[x] Health API contract test verifies GET export, unsupported method absence, response shape, ISO timestamp, and sensitive-string absence.
+[x] No new test framework, dependency, package script, or package lock change.
+[x] No product feature, schema, route-auth, persistence, AI-provider, or business-rule expansion.
+[x] Required validation passes before marking DONE.
 ```
 
 Documentation:
 
 ```txt
-[x] Backlog records v1.21 as Insight Explainability & Tracking Quality Checklist.
-[x] Change log updated with v1.21 implementation notes.
-[x] Feature status matrix updated.
-[x] Historical production evidence preserved without overclaiming.
-[x] Implementation status updated with v1.21 evidence.
-[x] v1.21 marked DONE only after validation passes.
+[x] Release evidence file added for v1.22.
+[x] Production incident note template added.
+[x] Production monitoring runbook documents /api/health check and its intentional limits.
+[x] Final release checklist includes v1.22 and required validation commands.
+[x] Status docs identify v1.22 as the latest completed milestone after validation passed.
+[x] README release/status and health endpoint references are synchronized.
 ```
 
 ## 5. Validation Checklist
@@ -158,8 +126,6 @@ Documentation:
 Required before marking DONE:
 
 ```txt
-[x] node -v
-[x] npm -v
 [x] npm run lint
 [x] npm run typecheck
 [x] npm run test
@@ -168,19 +134,27 @@ Required before marking DONE:
 [x] npm audit --omit=dev --audit-level=moderate
 ```
 
-Current v1.21 validation status:
+Current v1.22 validation status:
 
 ```txt
-Evidence date: 2026-06-09
+Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
+Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 987 tests
+npm run test: PASS - 103 files / 991 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+Production smoke status:
+
+```txt
+Production smoke for v1.22: NOT CHECKED
+Production /api/health on deployed URL: NOT CHECKED
 ```
 
 ## 6. Non-Goals
@@ -192,17 +166,15 @@ No clinical conclusion.
 No skin or health scoring.
 No risk scoring.
 No health grading.
-No product causation, product effectiveness, or product harm claim.
-No stress causation claim.
-No routine causation claim.
 No image upload or image analysis.
-No marketplace, cart, checkout, or payment.
+No marketplace, cart, checkout, order workflow, or payment.
 No reviews, ratings, likes, or sharing.
 No notification/reminder system.
 No admin dashboard.
-No new database collection.
+No database schema change.
 No external AI provider change.
-No broad redesign of Insights.
+No external monitoring SDK.
+No broad redesign.
 No unrelated refactor.
 ```
 
@@ -210,5 +182,5 @@ No unrelated refactor.
 
 ```bash
 git add .
-git commit -m "feat: explain personal insight tracking quality"
+git commit -m "chore: add production observability release confidence"
 ```

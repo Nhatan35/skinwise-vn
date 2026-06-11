@@ -1,13 +1,13 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-09
+Last updated: 2026-06-11
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current active milestone: None
 Product core: COMPLETE
 Local validation: PASS
@@ -15,9 +15,9 @@ Production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package media capture
+Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
 Portfolio Evidence Package documentation: PREPARED
-Optional media evidence tasks: screenshots and demo video
+Optional media evidence tasks: screenshots and demo video intentionally skipped for v1.22
 ```
 
 ## Feature Matrix
@@ -45,10 +45,11 @@ Optional media evidence tasks: screenshots and demo video
 | Insights | DONE | Progress story, safe next actions, v1.20 Personal Insight Review, and v1.21 calculation explanations plus tracking quality checklist. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete. |
 | Data Export | DONE | User-owned app data export. |
-| Local validation evidence | PASS | v1.21 validation passed with 102 files / 987 unit tests, 31/31 E2E tests, build, and production audit PASS. |
+| Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
+| Local validation evidence | PASS | v1.22 validation passed with 103 files / 991 unit tests, 31/31 E2E tests, build, and production audit PASS. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | PASS | User-reported production verification completed. |
-| Production monitoring evidence | PASS | User-reported checks completed. |
+| Production monitoring evidence | PASS | User-reported checks completed previously; v1.22 production smoke was not performed. |
 | Portfolio demo docs | DONE | README, portfolio evidence package, case study, demo script, and checklists updated. |
 | Portfolio media evidence | Partially completed | Screenshot checklist and demo-video plan are prepared; actual screenshot and video files are not claimed. |
 
@@ -62,6 +63,7 @@ Optional media evidence tasks: screenshots and demo video
 | Account Data Summary | Privacy/Data Control | v1.19 | DONE |
 | Personal Insight Review | Post-MVP Insights | v1.20 | DONE |
 | Insight Explainability & Tracking Quality Checklist | Post-MVP Insights | v1.21 | DONE |
+| Production Observability & Release Confidence | Release/Ops | v1.22 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -81,8 +83,8 @@ Optional media evidence tasks: screenshots and demo video
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current active milestone: None
 Portfolio Evidence Package documentation: PREPARED
-Portfolio media evidence tasks are optional and not product correctness blockers
+Portfolio media evidence tasks are optional, intentionally skipped for v1.22, and not product correctness blockers
 ```

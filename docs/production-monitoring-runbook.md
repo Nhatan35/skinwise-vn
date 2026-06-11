@@ -1,6 +1,6 @@
 # Production Monitoring and Demo Recovery Runbook
 
-Last updated: 2026-06-06
+Last updated: 2026-06-11
 
 ## 1. Purpose
 
@@ -14,17 +14,19 @@ MVP v1.10 production smoke test evidence: PASS, user-reported
 MVP v1.10 production monitoring evidence: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+MVP v1.22 production observability/release confidence: DONE
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current phase: Post-MVP controlled improvement
 Critical blockers reported: None
 ```
 
-Production monitoring PASS is based on the user's reported completed checks. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
+Production monitoring PASS is based on the user's previously reported completed checks. Production smoke for v1.22 was not performed in the repository update. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
 
 ## 2. Where to Check Production Errors
 
 During every demo or post-deployment check, review:
 
+- `/api/health`.
 - Vercel deployment logs.
 - Vercel function/runtime logs.
 - Browser console.
@@ -32,7 +34,29 @@ During every demo or post-deployment check, review:
 - MongoDB Atlas monitoring/logs.
 - NextAuth/OAuth provider configuration.
 
-## 3. Vercel Logs Checklist
+## 3. Health Endpoint Check
+
+Open:
+
+```txt
+/api/health
+```
+
+Confirm:
+
+- HTTP `200`.
+- `status = "ok"`.
+- `version = "v1.22"`.
+- `timestamp` is present and uses an ISO date string.
+- No secret, token, database URI, OAuth credential, private user data, user id, email, password, or raw database document is exposed.
+
+Intentional limitation:
+
+- The v1.22 health endpoint only verifies that the app route is reachable.
+- It does not verify database connectivity, OAuth connectivity, AI provider connectivity, or external service health.
+- This limitation is intentional for safety and simplicity.
+
+## 4. Vercel Logs Checklist
 
 | Check | Expected Result |
 |---|---|
@@ -42,7 +66,7 @@ During every demo or post-deployment check, review:
 | API route logs | No repeated failure for authenticated flows. |
 | Environment variables | Present in Vercel settings; values not exposed in docs/screenshots. |
 
-## 4. Browser Console and Network Checklist
+## 5. Browser Console and Network Checklist
 
 | Check | Expected Result |
 |---|---|
@@ -52,7 +76,7 @@ During every demo or post-deployment check, review:
 | API response shape | UI handles success/empty/error states cleanly. |
 | Data export | Response downloads/returns expected export behavior without exposing secrets. |
 
-## 5. MongoDB Connection Troubleshooting
+## 6. MongoDB Connection Troubleshooting
 
 Check these if the app works locally but fails on production:
 
@@ -63,7 +87,7 @@ Check these if the app works locally but fails on production:
 - Connection timeout behavior is checked in function logs and MongoDB Atlas metrics.
 - Authenticated read/write flows work through the UI.
 
-## 6. NextAuth/OAuth Troubleshooting
+## 7. NextAuth/OAuth Troubleshooting
 
 The source environment schema uses `AUTH_URL` and `AUTH_SECRET`. Some Auth.js references may call these `NEXTAUTH_URL` and `NEXTAUTH_SECRET`; keep configured names aligned with the actual project schema unless the code is deliberately changed.
 
@@ -81,7 +105,7 @@ https://skinwise-vn.vercel.app/api/auth/callback/google
 - `AUTH_URL` matches the production URL.
 - `AUTH_SECRET` is set and not exposed.
 
-## 7. Demo Recovery Playbook
+## 8. Demo Recovery Playbook
 
 If the production app fails during demo:
 
@@ -90,7 +114,7 @@ If the production app fails during demo:
 3. Show validation evidence from `docs/final-release-checklist.md`.
 4. Show the demo flow from `docs/demo-script.md`.
 5. Use screenshots if available.
-6. Record the issue in a follow-up bug note instead of hiding it.
+6. Record the issue using `docs/production-incident-note-template.md` instead of hiding it.
 
 If Google OAuth fails:
 
@@ -106,19 +130,20 @@ If MongoDB fails:
 - Check database user permissions.
 - Check the target database name.
 
-## 8. Current Production Evidence Summary
+## 9. Current Production Evidence Summary
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke test: PASS - user-reported manual verification completed
 Production monitoring: PASS - user-reported checks completed
+Production smoke for v1.22: NOT CHECKED
 Critical blockers reported: None
 Evidence date: 2026-06-04
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
+Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
 Current phase: Post-MVP controlled improvement
 ```
 
-## 9. Safety and Privacy Rules
+## 10. Safety and Privacy Rules
 
 Never place these in documentation, screenshots, commits, or chat logs:
 
