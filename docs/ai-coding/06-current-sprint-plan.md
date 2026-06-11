@@ -26,17 +26,25 @@ Personal Insight Review & Safe Trend Cards: DONE in v1.20
 Insight Explainability & Tracking Quality Checklist: DONE in v1.21
 Production Observability & Release Confidence: DONE in v1.22
 Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
-Current active milestone: None
-Current active milestone status: None
-Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
+Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
+Current active milestone status: NOT DONE
+Production URL public reachability: PASS
+Production /api/health: PASS
+Authenticated MVP production smoke: NOT CHECKED
+Production signals: NOT CHECKED
+Recommended next task: Complete manual authenticated production smoke and production signal checks
 Current phase: Post-MVP controlled improvement
 ```
 
 v1.22 improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
 
+v1.22.1 is a production verification task. It has completed local validation and direct public checks for the production URL and `/api/health`, but it is not done because authenticated MVP flows and production platform signals were not checked.
+
 ## 2. Objective
 
 Make the app easier to verify in production, easier to monitor, and easier to debug if an incident happens without adding product features or expanding MVP scope.
+
+For v1.22.1, verify the deployed production environment and update evidence truthfully without treating local validation or historical/user-reported production evidence as current production smoke proof.
 
 The milestone preserves:
 
@@ -87,6 +95,12 @@ Functional:
 [x] Health timestamp is generated with new Date().toISOString().
 [x] Health endpoint is request-time dynamic.
 [x] Health endpoint does not use SkinWise { data, error } wrapper.
+[x] Production URL public reachability was checked directly.
+[x] Production `/api/health` was checked directly.
+[ ] Google OAuth login was checked in production.
+[ ] Dashboard after login was checked in production.
+[ ] Main authenticated MVP flows were checked in production.
+[ ] Production browser/platform signals were checked.
 ```
 
 Privacy and security:
@@ -98,6 +112,7 @@ Privacy and security:
 [x] Health endpoint does not call external services.
 [x] Health response does not expose secrets, tokens, OAuth credentials, database URI, userId, email, password, raw documents, or process.env.
 [x] Production evidence documentation keeps production smoke as NOT CHECKED.
+[x] Historical/user-reported production evidence remains separate from v1.22.1 direct verification.
 ```
 
 Technical:
@@ -108,6 +123,7 @@ Technical:
 [x] No new test framework, dependency, package script, or package lock change.
 [x] No product feature, schema, route-auth, persistence, AI-provider, or business-rule expansion.
 [x] Required validation passes before marking DONE.
+[x] v1.22.1 remains NOT DONE because full production smoke and production signal checks are incomplete.
 ```
 
 Documentation:
@@ -134,7 +150,7 @@ Required before marking DONE:
 [x] npm audit --omit=dev --audit-level=moderate
 ```
 
-Current v1.22 validation status:
+Current v1.22.1 validation status:
 
 ```txt
 Evidence date: 2026-06-11
@@ -153,8 +169,11 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Production smoke status:
 
 ```txt
-Production smoke for v1.22: NOT CHECKED
-Production /api/health on deployed URL: NOT CHECKED
+Production URL public reachability: PASS - direct unauthenticated HTTP 200
+Production /api/health on deployed URL: PASS - direct unauthenticated HTTP 200 with expected v1.22 JSON contract
+Authenticated MVP production smoke: NOT CHECKED
+Production signals: NOT CHECKED
+v1.22.1 final status: NOT DONE
 ```
 
 ## 6. Non-Goals

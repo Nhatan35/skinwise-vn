@@ -29,6 +29,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 ```
 
 SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, and v1.22 added production observability/release-confidence documentation plus a safe public health endpoint.
@@ -40,9 +41,10 @@ Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
-Current active milestone: None
+Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
 Current phase: Post-MVP controlled improvement
-Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
+Production status: v1.22 production smoke verification: NOT CHECKED - partial public checks only
+Recommended next task: Complete manual authenticated production smoke and production signal checks
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped for v1.22
 ```
@@ -53,7 +55,7 @@ Evidence boundary:
 - Production PASS is based on user-reported manual verification with no blockers reported.
 - Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
-- v1.22 production smoke was not performed in this repository update.
+- v1.22.1 directly checked only the public production URL and `/api/health`; authenticated MVP flows and production platform signals remain NOT CHECKED.
 
 ## 2. Implemented Product Scope
 
@@ -144,7 +146,7 @@ Environment: Local Windows / PowerShell
 Branch: main
 node -v: v24.14.0
 npm -v: 11.14.1
-npm ci: NOT RUN for v1.22
+npm ci: NOT RUN for v1.22.1
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 103 files / 991 tests
@@ -166,11 +168,12 @@ Production evidence:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASS - user-reported manual verification completed
-Production monitoring: PASS - user-reported checks completed
-Critical blockers reported: None
-Evidence date: 2026-06-04
-Production smoke for v1.22: NOT CHECKED
+Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
+Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
+Production smoke/monitoring for v1.22.1: NOT CHECKED - authenticated MVP flows and production platform signals were not checked
+Historical production smoke test: PASS - user-reported manual verification completed on 2026-06-04
+Historical production monitoring: PASS - user-reported checks completed on 2026-06-04
+Critical blockers found in direct v1.22.1 public checks: None
 ```
 
 ## 5. Safety Boundary
@@ -209,6 +212,7 @@ v1.19 - Account Data Summary & Privacy Control Review
 v1.20 - Personal Insight Review & Safe Trend Cards
 v1.21 - Insight Explainability & Tracking Quality Checklist
 v1.22 - Production Observability & Release Confidence
+v1.22.1 - Production Deployment & Smoke Verification: active / not done
 ```
 
 Completed v1.14 scope:
@@ -302,7 +306,7 @@ Completed v1.22 scope:
 Recommended next task:
 
 ```txt
-Deploy v1.22 and perform production smoke verification, including /api/health
+Complete manual authenticated production smoke and production signal checks
 ```
 
 Portfolio evidence tasks:

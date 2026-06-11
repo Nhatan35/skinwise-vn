@@ -12,13 +12,17 @@ Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
 Previous completed milestone: v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 Latest completed milestone: v1.22 - Production Observability & Release Confidence: DONE
-Current active milestone: None
+Current active milestone: v1.22.1 - Production Deployment & Smoke Verification
+Current active milestone status: NOT DONE
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Deploy v1.22 and perform production smoke verification, including /api/health
+Recommended next task: Complete manual authenticated production smoke and production signal checks
 Local validation: PASS
-Production smoke/monitoring: PASS, user-reported
+Production URL public reachability: PASS
+Production health endpoint: PASS
+Full production smoke/monitoring for v1.22.1: NOT CHECKED
+Historical production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped for this milestone
 ```
@@ -80,6 +84,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Personal Insight Review & Safe Trend Cards | DONE in v1.20 | Adds strict count-only `/api/insights/summary` and safe reflection cards on `/insights` without medical or causal claims. |
 | P2 | Insight Explainability & Tracking Quality Checklist | DONE in v1.21 | Explains how each personal insight card is calculated and shows data-availability status without scores, grades, or medical assessment. |
 | P2 | Production Observability & Release Confidence | DONE in v1.22 | Adds safe `/api/health`, health API contract coverage, release evidence, incident note template, and monitoring/checklist updates. |
+| P2 | Production Deployment & Smoke Verification | IN PROGRESS / NOT DONE in v1.22.1 | Public URL and `/api/health` passed direct checks; authenticated MVP flows and production signals remain unchecked. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -243,7 +248,7 @@ Improve confidence in production behavior and release handover.
 ```txt
 v1.22 - Production Observability & Release Confidence: DONE
 Validation for v1.22: PASS
-Production smoke for v1.22: NOT CHECKED
+Production smoke at v1.22 closeout: NOT CHECKED
 ```
 
 ### Completed Tasks
@@ -278,7 +283,7 @@ v1.22 - Production Observability & Release Confidence
 ```txt
 v1.22 improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
 The health endpoint only verifies that the app route is reachable; it intentionally does not check database, OAuth, AI provider, or external service health.
-Production smoke was not performed as part of this local repository update.
+Production smoke was not performed as part of the v1.22 local repository update. v1.22.1 later checked the public production URL and `/api/health`, but full authenticated smoke remains incomplete.
 ```
 
 ## 7A. P2 - Product Match Explainability & Safety Guardrails
@@ -596,6 +601,61 @@ Production smoke was not rerun for v1.21; local validation passed.
 v1.21 - Insight Explainability & Tracking Quality Checklist
 ```
 
+## 7H. P2 - Production Deployment & Smoke Verification
+
+### Goal
+
+Verify that the v1.22 release actually works in the deployed production environment.
+
+### Status
+
+```txt
+v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
+Local validation for v1.22.1: PASS
+Production URL public reachability: PASS
+Production /api/health: PASS
+Authenticated MVP production smoke: NOT CHECKED
+Production signals: NOT CHECKED
+```
+
+### Scope
+
+- Verify production URL reachability.
+- Verify production `/api/health`.
+- Record local validation rerun.
+- Record production smoke result truthfully.
+- Record production signal checks truthfully.
+- Keep historical/user-reported production evidence separate from v1.22.1 direct verification.
+
+### Current Result
+
+```txt
+Direct public production checks passed for the landing URL and /api/health.
+Full production smoke remains incomplete because browser/OAuth/Vercel/MongoDB Atlas access was unavailable to the coding assistant.
+```
+
+### Acceptance Criteria
+
+```txt
+[x] Local validation rerun is recorded.
+[x] Production URL public reachability is recorded.
+[x] Production /api/health result is recorded.
+[x] Authenticated production flows are not marked PASS without being checked.
+[x] Production signals are not marked PASS without being checked.
+[ ] Google OAuth login checked in production.
+[ ] Dashboard after login checked in production.
+[ ] Main authenticated MVP flows checked in production.
+[ ] Browser console/network checked in production.
+[ ] Vercel build/function logs checked.
+[ ] MongoDB Atlas signal checked.
+```
+
+### Suggested Version
+
+```txt
+v1.22.1 - Production Deployment & Smoke Verification
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -724,13 +784,14 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-Deploy v1.22 and perform production smoke verification, including /api/health
+Complete manual authenticated production smoke and production signal checks
 ```
 
 Reason:
 
 - v1.22 Production Observability & Release Confidence is complete and locally validated.
-- Production smoke for v1.22 has not been performed.
+- v1.22.1 public production URL and `/api/health` checks passed.
+- Full v1.22.1 production smoke is not complete because authenticated browser/OAuth and production platform signal checks remain NOT CHECKED.
 - The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
 - The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
 - Portfolio screenshots and demo video are intentionally skipped and remain optional media evidence.
@@ -770,4 +831,5 @@ Reason:
 2026-06-09: Completed v1.20 Personal Insight Review & Safe Trend Cards with node/npm/lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a strict duplicate-disclaimer locator, which was fixed before final E2E PASS.
 2026-06-09: Completed v1.21 Insight Explainability & Tracking Quality Checklist with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a duplicate safe-disclaimer locator, which was fixed before final E2E PASS.
 2026-06-11: Completed v1.22 Production Observability & Release Confidence with safe public /api/health, health API contract test, release evidence, production incident note template, and monitoring/checklist updates. Required local validation passed; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Production smoke was not performed.
+2026-06-11: Started v1.22.1 Production Deployment & Smoke Verification. Local validation passed, public production URL returned HTTP 200, and production /api/health returned HTTP 200 with the expected v1.22 contract. Full production smoke remains NOT DONE because authenticated browser/OAuth checks and Vercel/MongoDB Atlas production signal checks were unavailable.
 ```

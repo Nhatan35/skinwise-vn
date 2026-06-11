@@ -36,11 +36,14 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
 
 Current phase: Post-MVP controlled improvement.
+Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification.
+Production status: v1.22 production smoke verification: NOT CHECKED - partial public checks only.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -58,9 +61,13 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented. |
-| Local validation | PASS | MVP v1.22 local validation evidence: lint PASS, typecheck PASS, 103 test files / 991 tests PASS, build PASS after sandbox rerun, 31/31 E2E tests PASS after sandbox rerun, production audit PASS with 0 vulnerabilities. |
-| Production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it was not rerun specifically for v1.22. |
-| Production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they were not rerun specifically for v1.22. |
+| Local validation | PASS | MVP v1.22.1 local validation rerun: lint PASS, typecheck PASS, 103 test files / 991 tests PASS, build PASS after sandbox rerun, 31/31 E2E tests PASS after sandbox rerun, production audit PASS with 0 vulnerabilities. |
+| Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
+| Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
+| v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
+| v1.22.1 production signals | NOT CHECKED | Browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior were not checked because platform/browser access was unavailable. |
+| Historical production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it is historical and not v1.22.1 direct verification. |
+| Historical production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they are historical and not v1.22.1 direct verification. |
 | Portfolio Evidence Package | PASS | `docs/portfolio-evidence-package.md` prepares recruiter summary, CV/resume copy, interview narrative, demo run of show, media capture plan, and evidence boundaries. |
 | Portfolio case study | PASS | `docs/portfolio-case-study.md` is updated for portfolio/demo readiness and current post-MVP status. |
 | Demo script | PASS | `docs/demo-script.md` contains a 3-5 minute demo flow and backup plan. |
@@ -81,7 +88,7 @@ Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: NOT RUN for v1.22
+npm ci: NOT RUN for v1.22.1
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 103 files / 991 tests
@@ -94,18 +101,20 @@ Production evidence:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.22; local validation passed.
-Critical production blockers reported: None
-Evidence date: 2026-06-04
-Evidence strength: user-reported production verification; no screenshot/log snippets included in repository
+Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
+Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
+Production smoke/monitoring evidence for v1.22.1: NOT CHECKED - authenticated MVP flows and production platform signals were not checked
+Historical production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline from 2026-06-04
+Critical production blockers found in direct v1.22.1 public checks: None
+Evidence strength: partial direct public verification only; no browser/OAuth/Vercel/Atlas verification included
 ```
 
 Evidence boundary:
 
 - Local validation is supported by terminal output.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence, incident note template, and monitoring/checklist updates; no package, database schema, auth model, authorization, persistence, AI-provider behavior, or product feature scope changed.
-- Production PASS is based on the previously user-reported stable MVP baseline and was not rerun specifically for v1.22.
+- v1.22.1 direct verification checked only the public production URL and `/api/health`.
+- Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
 - Do not commit or document real secrets.
@@ -144,7 +153,7 @@ Evidence boundary:
 | `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
 | `docs/final-release-checklist.md` | PASS | Final release status reflects local PASS, historical production PASS boundary, portfolio readiness, backlog planning, and v1.22 observability completion. |
-| `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records actual local validation and keeps production smoke as NOT CHECKED. |
+| `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
 | `docs/production-incident-note-template.md` | PASS | Incident note template provides safe fields and evidence boundary for future production issues. |
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
@@ -175,7 +184,8 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots are optional unless needed for portfolio/slides.
-- `npm ci` was not rerun for v1.22; the required v1.22 validation commands passed.
+- `npm ci` was not rerun for v1.22.1; the required v1.22.1 validation commands passed.
+- v1.22.1 is not complete because authenticated production flows and production platform signals were not checked.
 
 ## 8. Final Decision
 
@@ -193,6 +203,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED

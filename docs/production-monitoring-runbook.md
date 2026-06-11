@@ -15,12 +15,14 @@ MVP v1.10 production monitoring evidence: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.22 production observability/release confidence: DONE
+MVP v1.22.1 production deployment/smoke verification: IN PROGRESS / NOT DONE
 Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
+Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
 Current phase: Post-MVP controlled improvement
 Critical blockers reported: None
 ```
 
-Production monitoring PASS is based on the user's previously reported completed checks. Production smoke for v1.22 was not performed in the repository update. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
+Production monitoring PASS is based on the user's previously reported completed checks. v1.22.1 direct verification checked the public production URL and `/api/health` only; authenticated MVP flows, browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
 
 ## 2. Where to Check Production Errors
 
@@ -134,12 +136,16 @@ If MongoDB fails:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke test: PASS - user-reported manual verification completed
-Production monitoring: PASS - user-reported checks completed
-Production smoke for v1.22: NOT CHECKED
+Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
+Production /api/health: PASS - direct unauthenticated HTTP 200 with expected v1.22 JSON contract on 2026-06-11
+Authenticated MVP production smoke for v1.22.1: NOT CHECKED
+Production signals for v1.22.1: NOT CHECKED
+Historical production smoke test: PASS - user-reported manual verification completed
+Historical production monitoring: PASS - user-reported checks completed
 Critical blockers reported: None
-Evidence date: 2026-06-04
+Evidence dates: historical user-reported baseline 2026-06-04; partial direct public checks 2026-06-11
 Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
+Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
 Current phase: Post-MVP controlled improvement
 ```
 

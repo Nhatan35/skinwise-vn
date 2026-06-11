@@ -19,13 +19,15 @@ Current evidence status:
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
 - Latest completed milestone: **MVP v1.22 - Production Observability & Release Confidence**.
+- Current active milestone: **MVP v1.22.1 - Production Deployment & Smoke Verification**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **Deploy v1.22 and perform production smoke verification, including `/api/health`**.
+- Recommended next task: **Complete manual authenticated production smoke and production signal checks**.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS** for MVP v1.22 production observability and release confidence.
-- Production smoke test evidence: **PASS - user-reported manual verification completed; no blockers reported.**
-- Production monitoring evidence: **PASS - user-reported Vercel/browser/OAuth/MongoDB checks completed previously; no critical blockers reported. v1.22 production smoke was not performed.**
+- Local validation evidence: **PASS** for MVP v1.22.1 verification rerun.
+- Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
+- Production smoke test evidence: **NOT CHECKED for full v1.22.1 smoke - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
+- Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
 - Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
 
@@ -33,7 +35,7 @@ Evidence boundary:
 
 - Automated local evidence is supported by terminal output.
 - Production PASS status is based on the user's reported completed manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
-- Current v1.22 validation is local/tool validation only; it does not create screenshot, demo-video, traffic, performance, user-metric, or production smoke evidence.
+- Current v1.22.1 verification is partial direct public verification only; it does not create screenshot, demo-video, authenticated MVP flow, browser console, Vercel log, Atlas, traffic, performance, or user-metric evidence.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
@@ -205,11 +207,12 @@ Production evidence:
 
 ```txt
 Production URL: https://skinwise-vn.vercel.app
-Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.22; local validation passed.
-Critical production blockers reported: None
-Evidence date: 2026-06-04
-Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required
+Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
+Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
+Production smoke/monitoring evidence for v1.22.1: NOT CHECKED - authenticated MVP flows and production platform signals were not checked
+Historical production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline from 2026-06-04
+Critical production blockers reported from direct v1.22.1 public checks: None
+Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required; do not treat historical/user-reported evidence as v1.22.1 direct verification
 ```
 
 ## Demo Flow
@@ -345,6 +348,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped for v1.22
