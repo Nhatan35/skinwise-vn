@@ -211,6 +211,24 @@ describe("Routine Builder UI foundation", () => {
     );
   });
 
+  it("guides saved products into routine decisions with safe reference copy", () => {
+    for (const requiredSource of [
+      "CardDescription",
+      "Xem sản phẩm đã lưu",
+      "routes.SAVED_PRODUCTS",
+      'data-testid="routine-saved-products-guidance"',
+      "Thông tin tham khảo trước khi thêm vào routine",
+      "Không nên thêm quá nhiều sản phẩm mới cùng lúc",
+      "cần đưa tất cả vào routine",
+      "đã đọc kỹ chi tiết",
+      "Lưu ý sản phẩm",
+      "option.warnings.slice(0, 2).join",
+      'actionClassName="flex justify-center"',
+    ]) {
+      expect(routineBuilderSource).toContain(requiredSource);
+    }
+  });
+
   it("uses combined saved/catalogue options when selecting a routine product", () => {
     expect(routineBuilderSource).toContain("findRoutineProductOption");
     expect(routineBuilderSource).toContain("applyRoutineProductSelection");

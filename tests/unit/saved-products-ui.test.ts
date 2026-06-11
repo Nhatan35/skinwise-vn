@@ -111,6 +111,32 @@ describe("Saved Products UI", () => {
     expect(savedProductsComponentSource).toContain("routes.PRODUCT_MATCH");
   });
 
+  it("explains how saved products support routine decisions", () => {
+    for (const requiredSource of [
+      'data-testid="saved-products-routine-guidance"',
+      "Bước tiếp theo",
+      "Xem lại sản phẩm đã lưu trước khi xây dựng routine",
+      "Thông tin tham khảo",
+      "Lưu ý an toàn",
+      "Không nên thêm quá nhiều sản phẩm mới cùng lúc",
+      "Hãy bắt đầu chậm",
+      "Xây dựng routine",
+      "routes.ROUTINES",
+    ]) {
+      expect(savedProductsComponentSource).toContain(requiredSource);
+    }
+
+    for (const requiredCardSource of [
+      'data-testid="saved-product-routine-reference"',
+      "Trước khi thêm vào routine",
+      "Xem chi tiết sản phẩm",
+      "chỉ thêm từng sản phẩm",
+      "mới để dễ theo dõi cảm nhận của da",
+    ]) {
+      expect(savedProductCardSource).toContain(requiredCardSource);
+    }
+  });
+
   it("renders saved product cards with safe ProductDto fields and remove action", () => {
     for (const requiredSource of [
       "product.name",

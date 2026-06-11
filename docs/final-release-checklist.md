@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.27 - Product Detail to Saved Products Decision Support Polish
+MVP v1.28 - Saved Products to Routine Decision Support Polish
 ```
 
 Completed closeout milestones:
@@ -43,6 +43,7 @@ MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
+MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -55,6 +56,7 @@ v1.25 status: DONE within scoped local validation - lint, typecheck, and unit te
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
 v1.26 status: DONE within scoped local validation - Product Match explanation clarity and safe decision-support copy polished. Build, E2E, manual browser verification, and production verification were not run for v1.26.
 v1.27 status: DONE within scoped local validation - Product Detail save-decision guidance and Saved Products empty-state clarity polished. Build, E2E, manual browser verification, and production verification were not run for v1.27.
+v1.28 status: DONE within scoped local validation - Saved Products to Routine decision-support guidance polished. Build, E2E, manual browser verification, and production verification were not run for v1.28.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -72,7 +74,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | MIXED BY MILESTONE | MVP v1.27 scoped validation passed with lint, typecheck, and unit tests. MVP v1.26, v1.25.1, and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
+| Local validation | MIXED BY MILESTONE | MVP v1.28 scoped validation passed with lint, typecheck, and unit tests. MVP v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -86,7 +88,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.27 Product Detail to Saved Products Decision Support Polish is complete within scoped validation. MVP v1.26 Product Match polish, v1.25 First-Session Guided Experience Polish, and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
+| Latest post-MVP implementation | PASS | MVP v1.28 Saved Products to Routine Decision Support Polish is complete within scoped validation. MVP v1.27 Product Detail to Saved Products polish, v1.26 Product Match polish, v1.25 First-Session Guided Experience Polish, and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -95,6 +97,16 @@ Optional remaining media evidence tasks: screenshots and demo video.
 Local validation evidence:
 
 ```txt
+MVP v1.28 scoped local validation:
+Evidence date: 2026-06-12
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1003 tests
+npm run build: NOT RUN for v1.28
+npm run test:e2e: NOT RUN for v1.28
+Manual browser verification: NOT CHECKED for v1.28
+Production verification: NOT CHECKED for v1.28
+
 MVP v1.27 scoped local validation:
 Evidence date: 2026-06-11
 npm run lint: PASS
@@ -170,6 +182,7 @@ Evidence boundary:
 - v1.24 synchronized seed docs/evidence/status with the current 70-product / 70-ingredient seed implementation, but required build and E2E validation did not pass.
 - v1.26 polished Product Match explanation clarity and safe decision-support copy using the existing v1.15 explainability system; build, E2E, manual browser verification, and production verification were not run.
 - v1.27 polished Product Detail to Saved Products decision-support copy and next actions; build, E2E, manual browser verification, and production verification were not run.
+- v1.28 polished Saved Products to Routine decision-support copy and next actions; build, E2E, manual browser verification, and production verification were not run.
 - Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
@@ -183,10 +196,10 @@ Evidence boundary:
 - Product Catalogue and Product Detail.
 - Personalized Product Match result cards with v1.26 explanation-label, product-fit wording, caution, no-profile, and next-action clarity polish.
 - Product Detail personalized match explanation plus v1.27 save-decision guidance.
-- Saved Products with v1.27 empty-state and save-context clarity polish.
+- Saved Products with v1.27 empty-state/save-context clarity polish and v1.28 routine decision-support guidance.
 - Ingredient Library and Ingredient Detail.
 - Ingredient Explanation API with mock/fallback-safe provider behavior.
-- Routine Builder.
+- Routine Builder with v1.28 saved-product-to-routine empty-state and reference guidance.
 - Routine Safety Analysis.
 - Today Routine Checklist and Routine Logs.
 - Skin Journal.
@@ -250,12 +263,46 @@ These are intentional MVP boundaries, not release blockers:
 - v1.25.1 build and E2E validation were not run by task scope.
 - v1.26 build and E2E validation were not run by task scope.
 - v1.27 build and E2E validation were not run by task scope.
+- v1.28 build and E2E validation were not run by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
 - Manual browser and production verification were not performed for v1.25.1.
 - Manual browser and production verification were not performed for v1.26.
 - Manual browser and production verification were not performed for v1.27.
+- Manual browser and production verification were not performed for v1.28.
+
+## 8G. MVP v1.28 - Saved Products to Routine Decision Support Polish
+
+Validation required before DONE:
+
+```txt
+[x] Saved Products explains that saved products are for review before routine building.
+[x] Saved Products links to the existing Routine route using route constants.
+[x] Saved Products cautions users not to add too many new products at once.
+[x] Saved product cards include concise reference copy before adding a product to routine.
+[x] Routine empty state links to Saved Products and preserves create behavior.
+[x] Routine form includes safe reference copy for adding saved products gradually.
+[x] Existing Product Match scoring/ranking behavior preserved.
+[x] Existing Product Detail behavior preserved.
+[x] Existing Saved Products persistence behavior preserved.
+[x] Existing Routine logic preserved.
+[x] Seed data, schema, auth behavior, API contracts, and AI provider behavior preserved.
+[x] v1.25 dashboard/onboarding guidance preserved.
+[x] v1.25.1 seed baseline consistency preserved.
+[x] v1.26 Product Match polish preserved.
+[x] v1.27 Product Detail to Saved Products polish preserved.
+[x] v1.24 remains NOT DONE / VALIDATION BLOCKED.
+[x] npm run lint passes.
+[x] npm run typecheck passes.
+[x] npm run test passes.
+[ ] npm run build was not run for v1.28 by task scope.
+[ ] npm run test:e2e was not run for v1.28 by task scope.
+[ ] Manual browser verification was not performed.
+[ ] Production verification was not performed.
+```
+
+v1.28 is done only within the scoped local validation boundary of lint, typecheck, and unit tests. Do not treat it as build, E2E, manual browser, or production readiness evidence.
 
 ## 8F. MVP v1.27 - Product Detail to Saved Products Decision Support Polish
 
@@ -462,6 +509,7 @@ MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
+MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED

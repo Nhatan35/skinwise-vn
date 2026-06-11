@@ -32,10 +32,11 @@ MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
+MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.27 - Product Detail to Saved Products Decision Support Polish
+Latest completed scoped task: MVP v1.28 - Saved Products to Routine Decision Support Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
@@ -44,6 +45,7 @@ v1.25 status: DONE within scoped local validation - `npm run lint`, `npm run typ
 v1.25.1 status: DONE within scoped local validation - restored v1.24 70/70 seed baseline consistency and missing v1.24 release evidence; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.26 status: DONE within scoped local validation - Product Match explanation clarity, safe caution visibility, no-profile guidance, and next-action copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.27 status: DONE within scoped local validation - Product Detail save-decision guidance, Saved Products empty-state clarity, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
+v1.28 status: DONE within scoped local validation - Saved Products to Routine context, CTA clarity, routine empty-state guidance, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 Recommended next task: TBD / Backlog grooming
 ```
 
@@ -81,6 +83,7 @@ Evidence boundary:
 - v1.25.1 restored repository consistency after a seed baseline regression: `scripts/seed.ts` and `tests/unit/seed-data-quality.test.ts` again use the v1.24 70/70 baseline, `docs/release-evidence-v1.24.md` exists again, and docs keep v1.24 validation-blocked.
 - v1.26 polished the existing Product Match explainability UI as a follow-up to v1.15, improving product-fit labels, safe caution wording, no-profile guidance, and next-action copy without changing scoring/ranking, seed data, schema, auth, AI-provider behavior, or Product Detail/Product Match API contracts.
 - v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, improving product-detail summary labels, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference copy without changing Product Match scoring/ranking, Routine logic, schema, seed data, auth, AI-provider behavior, or API contracts.
+- v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, improving saved-product review context, Routine CTA clarity, routine empty-state guidance, and safe gradual-addition reference copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
@@ -92,4 +95,5 @@ Evidence boundary:
 - Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
 - Build, E2E, manual browser verification, and production verification were not run for v1.26.
 - Build, E2E, manual browser verification, and production verification were not run for v1.27.
+- Build, E2E, manual browser verification, and production verification were not run for v1.28.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

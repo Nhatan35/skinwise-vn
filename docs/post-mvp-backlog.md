@@ -19,14 +19,15 @@ First-session guided experience polish: v1.25 - First-Session Guided Experience 
 Seed baseline consistency hotfix: v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 Product Match clarity polish: v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 Product Detail to Saved Products decision-support polish: v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
-Latest completed scoped task: v1.27 - Product Detail to Saved Products Decision Support Polish
+Saved Products to Routine decision-support polish: v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
+Latest completed scoped task: v1.28 - Saved Products to Routine Decision Support Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: TBD / Backlog grooming
-Local validation: PASS for v1.27 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.28 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -99,6 +100,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Seed Baseline Regression & Documentation Consistency Hotfix | DONE in v1.25.1 | Restores v1.24 seed baseline/test/evidence consistency without marking v1.24 DONE or resolving deferred build/E2E blockers. |
 | P2 | Product Match Explanation Clarity & Safe Decision Support Polish | DONE in v1.26 | Follow-up polish to v1.15 Product Match explainability; improves explanation labels, caution visibility, no-profile guidance, and next-action clarity without changing scoring, seed data, schema, or API contracts. |
 | P2 | Product Detail to Saved Products Decision Support Polish | DONE in v1.27 | Follow-up polish after v1.26; improves Product Detail save-decision guidance and Saved Products empty-state clarity without changing Product Match scoring/ranking, Routine logic, seed data, schema, or API contracts. |
+| P2 | Saved Products to Routine Decision Support Polish | DONE in v1.28 | Follow-up polish after v1.26 and v1.27; improves Saved Products review context, Routine CTA clarity, routine empty-state guidance, and safe gradual-addition copy without changing Product Match, Product Detail, Saved Products persistence, Routine logic, seed data, schema, or API contracts. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -864,8 +866,10 @@ Reason:
 - v1.25 first-session guided experience polish remains preserved.
 - v1.26 Product Match clarity polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.27 Product Detail to Saved Products decision-support polish passed scoped local validation with lint, typecheck, and unit tests.
+- v1.28 Saved Products to Routine decision-support polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.26 is a follow-up polish pass; historical v1.15 Product Match Explainability & Safety Guardrails remains the original explainability implementation milestone.
 - v1.27 is a follow-up polish pass after v1.26; it improves Product Detail save-decision guidance and Saved Products empty-state clarity without adding product scope.
+- v1.28 is a follow-up polish pass after v1.26 and v1.27; it improves Saved Products to Routine decision-support clarity without adding product scope.
 - v1.25 improved dashboard onboarding guidance without adding new product scope.
 - v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
@@ -917,4 +921,5 @@ Reason:
 2026-06-11: Completed v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix. Restored `scripts/seed.ts` and `tests/unit/seed-data-quality.test.ts` to the v1.24 70/70 baseline, restored missing `docs/release-evidence-v1.24.md`, preserved v1.25 dashboard/onboarding UX polish, and kept v1.24 NOT DONE / VALIDATION BLOCKED. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.1.
 2026-06-11: Completed v1.26 Product Match Explanation Clarity & Safe Decision Support Polish as a follow-up to v1.15. Improved Product Match explanation labels, product-fit score wording, safety note visibility, no-profile guidance, and result-card next-action copy without changing matching score/ranking, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.26. v1.24 remains deferred and validation-blocked.
 2026-06-11: Completed v1.27 Product Detail to Saved Products Decision Support Polish as a follow-up to v1.26. Improved Product Detail summary and safety labels, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference wording without changing Product Match scoring/ranking, Routine logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.27. v1.24 remains deferred and validation-blocked.
+2026-06-12: Completed v1.28 Saved Products to Routine Decision Support Polish as a follow-up to v1.26 and v1.27. Improved Saved Products review context, Routine CTA clarity, routine empty-state guidance, and safe reference copy about adding products gradually without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.28. v1.24 remains deferred and validation-blocked.
 ```

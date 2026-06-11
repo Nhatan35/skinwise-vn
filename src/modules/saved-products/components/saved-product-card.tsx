@@ -97,6 +97,19 @@ export function SavedProductCard({
           </div>
         ) : null}
 
+        <div
+          className="rounded-lg border border-border bg-secondary/40 p-3"
+          data-testid="saved-product-routine-reference"
+        >
+          <h3 className="text-sm font-semibold text-foreground">
+            Trước khi thêm vào routine
+          </h3>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            Xem chi tiết sản phẩm, đọc lưu ý nếu có và chỉ thêm từng sản phẩm
+            mới để dễ theo dõi cảm nhận của da.
+          </p>
+        </div>
+
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
           {onComparisonToggle ? (
             <Button

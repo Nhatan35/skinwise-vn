@@ -55,6 +55,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
@@ -1119,16 +1120,22 @@ export function RoutineBuilder() {
       {routines.length === 0 && formMode === "none" ? (
         <EmptyState
           action={
-            <Button
-              data-testid="routine-create-button"
-              onClick={startCreate}
-              type="button"
-            >
-              <Plus aria-hidden="true" />
-              Tạo routine
-            </Button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                data-testid="routine-create-button"
+                onClick={startCreate}
+                type="button"
+              >
+                <Plus aria-hidden="true" />
+                Tạo routine
+              </Button>
+              <Button asChild variant="outline">
+                <Link href={routes.SAVED_PRODUCTS}>Xem sản phẩm đã lưu</Link>
+              </Button>
+            </div>
           }
-          description="Hãy tạo routine buổi sáng hoặc buổi tối để bắt đầu theo dõi thói quen chăm sóc da của bạn."
+          actionClassName="flex justify-center"
+          description="Bạn chưa có routine nào. Hãy bắt đầu từ sản phẩm đã lưu hoặc thêm thủ công một routine đơn giản, sau đó thêm từng sản phẩm một để theo dõi cảm nhận của da."
           title="Chưa có routine nào"
         />
       ) : (
@@ -1208,6 +1215,10 @@ function RoutineForm({
         <CardTitle>
           {formMode === "create" ? "Tạo routine" : "Chỉnh sửa routine"}
         </CardTitle>
+        <CardDescription>
+          Ưu tiên xem lại sản phẩm đã lưu và đọc thông tin tham khảo trước khi
+          thêm vào routine. Không nên thêm quá nhiều sản phẩm mới cùng lúc.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-6" data-testid="routine-form" onSubmit={onSubmit}>
@@ -1305,6 +1316,15 @@ function RoutineForm({
                 Đang tải sản phẩm đã lưu...
               </p>
             ) : null}
+
+            <Alert data-testid="routine-saved-products-guidance">
+              <AlertTitle>Thông tin tham khảo trước khi thêm vào routine</AlertTitle>
+              <AlertDescription>
+                Sản phẩm đã lưu giúp bạn xem lại lựa chọn dễ hơn, nhưng không
+                cần đưa tất cả vào routine. Hãy chọn sản phẩm đã đọc kỹ chi tiết
+                và bắt đầu chậm để theo dõi cảm nhận của da.
+              </AlertDescription>
+            </Alert>
 
             {!isSavedProductLoading &&
             !savedProductLoadError &&
@@ -1680,6 +1700,12 @@ function SelectedProductContext({
                 .map((skinType) => skinTypeLabels[skinType])
                 .join(", ")}
             </dd>
+          </div>
+        ) : null}
+        {option.warnings.length > 0 ? (
+          <div className="sm:col-span-2">
+            <dt className="font-medium text-foreground">Lưu ý sản phẩm</dt>
+            <dd>{option.warnings.slice(0, 2).join("; ")}</dd>
           </div>
         ) : null}
       </dl>
