@@ -26,7 +26,7 @@ const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
   moisturizer: "Dưỡng ẩm",
   sunscreen: "Chống nắng",
-  treatment: "Treatment",
+  treatment: "Sản phẩm hoạt chất",
   toner: "Toner",
   serum: "Serum",
   mask: "Mặt nạ",
@@ -62,7 +62,7 @@ export function SavedProductCard({
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline">{categoryLabels[product.category]}</Badge>
             <Badge variant="secondary">
-              Saved {formatSavedAt(item.createdAt)}
+              Đã lưu {formatSavedAt(item.createdAt)}
             </Badge>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function SavedProductCard({
         {keyActives.length > 0 ? (
           <div className="space-y-2">
             <h3 className="text-sm font-semibold text-foreground">
-              Key ingredients
+              Thành phần nổi bật
             </h3>
             <div className="flex flex-wrap gap-2">
               {keyActives.map((ingredient) => (
@@ -80,7 +80,9 @@ export function SavedProductCard({
                 </Badge>
               ))}
               {hiddenKeyActiveCount > 0 ? (
-                <Badge variant="outline">+{hiddenKeyActiveCount} more</Badge>
+                <Badge variant="outline">
+                  +{hiddenKeyActiveCount} mục khác
+                </Badge>
               ) : null}
             </div>
           </div>

@@ -36,7 +36,7 @@ const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
   moisturizer: "Dưỡng ẩm",
   sunscreen: "Chống nắng",
-  treatment: "Treatment",
+  treatment: "Sản phẩm hoạt chất",
   toner: "Toner",
   serum: "Serum",
   mask: "Mặt nạ",

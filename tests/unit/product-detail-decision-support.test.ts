@@ -22,6 +22,15 @@ const unsafeClaims = [
   "perfectly safe",
   "will treat acne",
   "medical diagnosis",
+  "diagnosis",
+  "prescription",
+  "skin score",
+  "chẩn đoán",
+  "kê đơn",
+  "bệnh da",
+  "điểm da",
+  "chấm điểm da",
+  "cam kết cải thiện",
 ];
 
 function createProduct(overrides: Partial<ProductDto> = {}): ProductDto {
@@ -110,7 +119,7 @@ describe("Product Detail decision support", () => {
     );
   });
 
-  it("adds low-frequency and patch-test cautions for treatment products", () => {
+  it("adds low-frequency and small-area cautions for active products", () => {
     const decisionSupport = buildProductDetailDecisionSupport(
       createProduct({
         category: "treatment",
@@ -121,7 +130,13 @@ describe("Product Detail decision support", () => {
     expect(decisionSupport.cautions.join(" ")).toContain(
       "nên bắt đầu với tần suất thấp",
     );
-    expect(decisionSupport.cautions.join(" ")).toContain("Nên patch test");
+    expect(decisionSupport.cautions.join(" ")).toContain(
+      "Nên thử trên một vùng da nhỏ",
+    );
+    expect(decisionSupport.routineUsageTips.join(" ")).toContain(
+      "sản phẩm hoạt chất",
+    );
+    expect(decisionSupport.cautions.join(" ")).not.toContain("treatment");
   });
 
   it("adds educational caution notes for active-heavy or fragranced products", () => {

@@ -24,8 +24,8 @@ function getErrorMessage(error: unknown, nextSaved: boolean) {
   }
 
   return nextSaved
-    ? "Could not save this product."
-    : "Could not remove this saved product.";
+    ? "Chưa thể lưu sản phẩm."
+    : "Chưa thể bỏ lưu sản phẩm.";
 }
 
 export function SavedProductToggleButton({

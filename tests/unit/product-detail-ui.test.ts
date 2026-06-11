@@ -94,11 +94,12 @@ describe("Product Detail UI", () => {
 
   it("renders Product Detail decision support sections", () => {
     for (const sectionHeading of [
-      "Tổng quan sản phẩm",
-      "Sản phẩm này có phù hợp với bạn không?",
+      "Tóm tắt sản phẩm",
+      "Vì sao nên xem xét sản phẩm này",
       "Thành phần / hoạt chất nổi bật",
-      "Cần lưu ý",
+      "Lưu ý an toàn",
       "Gợi ý dùng trong routine",
+      "Bước tiếp theo",
     ]) {
       expect(productDetailSource).toContain(sectionHeading);
     }
@@ -112,7 +113,10 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain(
       "Dữ liệu thành phần chưa đầy đủ.",
     );
-    expect(productDetailSource).toContain("Thông tin giáo dục");
+    expect(productDetailSource).toContain("Thông tin tham khảo");
+    expect(productDetailSource).toContain("SaveDecisionSupportSection");
+    expect(productDetailSource).toContain("Lưu sản phẩm để xem lại");
+    expect(productDetailSource).toContain("Xem sản phẩm đã lưu");
   });
 
   it("renders a non-blocking personalized match explanation section", () => {
@@ -185,8 +189,10 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain("@/shared/constants/routes");
     expect(productDetailSource).toContain("routes.PRODUCTS");
     expect(productDetailSource).toContain("routes.PRODUCT_MATCH");
+    expect(productDetailSource).toContain("routes.SAVED_PRODUCTS");
     expect(productDetailSource).not.toContain('href="/products"');
     expect(productDetailSource).not.toContain('href="/product-match"');
+    expect(productDetailSource).not.toContain('href="/saved-products"');
 
     expect(productCardSource).toContain("@/shared/constants/routes");
     expect(productCardSource).toContain(
@@ -234,6 +240,16 @@ describe("Product Detail UI", () => {
       "perfectly safe",
       "will treat acne",
       "medical diagnosis",
+      "diagnosis",
+      "prescription",
+      "skin score",
+      "chẩn đoán",
+      "kê đơn",
+      "bệnh da",
+      "điểm da",
+      "chấm điểm da",
+      "chữa khỏi",
+      "cam kết cải thiện",
     ]) {
       expect(lowerSource).not.toContain(forbiddenCopy);
     }

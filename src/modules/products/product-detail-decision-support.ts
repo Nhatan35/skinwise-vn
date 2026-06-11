@@ -21,7 +21,7 @@ const MAX_INGREDIENT_HIGHLIGHTS = 8;
 const MAX_CAUTIONS = 6;
 const MAX_ROUTINE_USAGE_TIPS = 3;
 const MEDICAL_DISCLAIMER =
-  "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục, không phải lời khuyên y tế hoặc chẩn đoán.";
+  "Thông tin này chỉ mang tính tham khảo và không thay thế tư vấn chuyên môn.";
 const INGREDIENTS_MISSING_NOTE =
   "Dữ liệu thành phần chưa đầy đủ. Bạn nên kiểm tra bảng thành phần trên bao bì hoặc website chính thức của sản phẩm.";
 const FIT_DATA_MISSING_NOTE =
@@ -31,7 +31,7 @@ const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "sữa rửa mặt",
   moisturizer: "dưỡng ẩm",
   sunscreen: "chống nắng",
-  treatment: "treatment",
+  treatment: "sản phẩm hoạt chất",
   toner: "toner",
   serum: "serum",
   mask: "mặt nạ",
@@ -170,7 +170,7 @@ function buildCautions(product: ProductDto) {
 
   if (product.category === "treatment") {
     cautions.push(
-      "Nếu đây là sản phẩm treatment, nên bắt đầu với tần suất thấp và theo dõi phản ứng da.",
+      "Nếu đây là sản phẩm hoạt chất, nên bắt đầu với tần suất thấp và theo dõi cảm nhận của da.",
     );
   }
 
@@ -197,7 +197,7 @@ function buildCautions(product: ProductDto) {
 
   if (safetySignals.hasFragranceOrEssentialOilSignal) {
     cautions.push(
-      "Có hương liệu hoặc tinh dầu; nên patch test nếu da bạn nhạy cảm, dễ đỏ hoặc đang kích ứng.",
+      "Có hương liệu hoặc tinh dầu; nên thử trên một vùng da nhỏ nếu da bạn nhạy cảm, dễ đỏ hoặc đang kích ứng.",
     );
   }
 
@@ -212,7 +212,7 @@ function buildCautions(product: ProductDto) {
     hasKeyActives(product)
   ) {
     cautions.push(
-      "Nên patch test trước khi dùng toàn mặt, đặc biệt khi sản phẩm có hoạt chất nổi bật.",
+      "Nên thử trên một vùng da nhỏ trước khi dùng toàn mặt, đặc biệt khi sản phẩm có hoạt chất nổi bật.",
     );
   }
 
@@ -245,19 +245,19 @@ function buildRoutineUsageTips(product: ProductDto) {
     toner: "Có thể cân nhắc dùng sau bước làm sạch.",
     serum: "Có thể cân nhắc dùng sau toner và trước kem dưỡng.",
     treatment:
-      "Có thể cân nhắc dùng ở bước treatment, nên bắt đầu với tần suất thấp.",
+      "Có thể cân nhắc dùng ở bước sản phẩm hoạt chất, nên bắt đầu với tần suất thấp.",
     moisturizer: "Có thể dùng ở bước dưỡng ẩm.",
     sunscreen: "Thường dùng buổi sáng, ở bước cuối routine ban ngày.",
     mask: "Có thể dùng như bước bổ sung, không nhất thiết dùng hằng ngày.",
     other:
-      "Nên kiểm tra hướng dẫn sử dụng của sản phẩm và theo dõi phản ứng da.",
+      "Nên kiểm tra hướng dẫn sử dụng của sản phẩm và theo dõi cảm nhận của da.",
   };
 
   return uniqueLimited(
     [
       categoryTip[product.category],
       "Nên kiểm tra hướng dẫn sử dụng trên bao bì trước khi dùng.",
-      "Nên thêm sản phẩm mới từ từ và theo dõi phản ứng da.",
+      "Nên thêm sản phẩm mới từ từ và theo dõi cảm nhận của da.",
     ],
     MAX_ROUTINE_USAGE_TIPS,
   );

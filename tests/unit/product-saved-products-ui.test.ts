@@ -60,6 +60,10 @@ describe("Product UI saved product integration", () => {
     expect(productDetailSource).toContain("setIsSaved");
     expect(savedProductToggleButtonSource).toContain("Lưu sản phẩm");
     expect(savedProductToggleButtonSource).toContain("Bỏ lưu sản phẩm");
+    expect(savedProductToggleButtonSource).toContain("Chưa thể lưu sản phẩm");
+    expect(savedProductToggleButtonSource).toContain(
+      "Chưa thể bỏ lưu sản phẩm",
+    );
     expect(productDetailSource).toContain("Chưa tải được trạng thái đã lưu");
   });
 

@@ -101,12 +101,14 @@ describe("Saved Products UI", () => {
       "Đang tải sản phẩm đã lưu",
       "Không thể tải sản phẩm đã lưu",
       "Chưa có sản phẩm đã lưu",
-      "Xem sản phẩm",
+      "Xem gợi ý sản phẩm",
       "Thử lại",
       "saved-product-card",
     ]) {
       expect(combinedSavedProductClientSource).toContain(requiredCopy);
     }
+
+    expect(savedProductsComponentSource).toContain("routes.PRODUCT_MATCH");
   });
 
   it("renders saved product cards with safe ProductDto fields and remove action", () => {
@@ -115,6 +117,8 @@ describe("Saved Products UI", () => {
       "product.brand",
       "product.category",
       "product.keyActives",
+      "Thành phần nổi bật",
+      "Đã lưu",
       "Xem chi tiết",
       "Bỏ lưu sản phẩm",
       "data-testid=\"saved-product-card\"",

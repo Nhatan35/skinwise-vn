@@ -62,7 +62,7 @@ const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
   moisturizer: "Dưỡng ẩm",
   sunscreen: "Chống nắng",
-  treatment: "Treatment",
+  treatment: "Sản phẩm hoạt chất",
   toner: "Toner",
   serum: "Serum",
   mask: "Mặt nạ",
@@ -283,11 +283,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 
       <Alert>
         <Info aria-hidden="true" />
-        <AlertTitle>Thông tin giáo dục</AlertTitle>
+        <AlertTitle>Thông tin tham khảo</AlertTitle>
         <AlertDescription>
           Nội dung dưới đây dựa trên dữ liệu sản phẩm hiện có, giúp bạn cân nhắc
-          trước khi thêm sản phẩm mới vào routine. Đây không phải chẩn đoán hoặc
-          lời khuyên y tế.
+          trước khi thêm sản phẩm mới vào routine. Thông tin này không thay thế
+          tư vấn chuyên môn.
         </AlertDescription>
       </Alert>
 
@@ -323,6 +323,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           <DataQualitySection notes={decisionSupport.dataQualityNotes} />
         </div>
       </div>
+
+      <SaveDecisionSupportSection isSaved={isSaved} />
 
       <Card>
         <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center">
@@ -452,7 +454,7 @@ function ProductDetailPersonalizedMatchSection({
             cautionReasons: [],
             ingredientHighlights: [],
             usageNote:
-              "Hãy patch test trước và đưa sản phẩm vào routine từ từ.",
+              "Hãy thử trên một vùng da nhỏ trước và đưa sản phẩm vào routine từ từ.",
             dataQualityNotes: [
               "Chưa tải được dữ liệu giải thích chi tiết cho sản phẩm này.",
             ],
@@ -478,7 +480,7 @@ function OverviewSection({ overview }: { overview: string }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tổng quan sản phẩm</CardTitle>
+        <CardTitle>Tóm tắt sản phẩm</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-sm leading-6 text-muted-foreground">{overview}</p>
@@ -495,7 +497,7 @@ function SuitableForSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sản phẩm này có phù hợp với bạn không?</CardTitle>
+        <CardTitle>Vì sao nên xem xét sản phẩm này</CardTitle>
       </CardHeader>
       <CardContent>
         {decisionSupport.suitableFor.length > 0 ? (
@@ -559,7 +561,7 @@ function CautionSection({ cautions }: { cautions: string[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Cần lưu ý</CardTitle>
+        <CardTitle>Lưu ý an toàn</CardTitle>
       </CardHeader>
       <CardContent>
         <IconTextList items={cautions} tone="caution" />
@@ -593,6 +595,35 @@ function DataQualitySection({ notes }: { notes: string[] }) {
       </CardHeader>
       <CardContent>
         <IconTextList items={notes} tone="info" />
+      </CardContent>
+    </Card>
+  );
+}
+
+function SaveDecisionSupportSection({ isSaved }: { isSaved: boolean }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Bước tiếp theo</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2 text-sm leading-6 text-muted-foreground">
+          <p>
+            {isSaved
+              ? "Sản phẩm đã lưu có thể được xem lại trong danh sách sản phẩm đã lưu."
+              : "Lưu sản phẩm để xem lại khi bạn xây dựng routine chăm sóc da."}
+          </p>
+          <p>
+            Việc lưu sản phẩm chỉ giúp bạn theo dõi và cân nhắc sau; bạn vẫn nên
+            kiểm tra kỹ thông tin sản phẩm trước khi thêm vào routine.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button asChild>
+            <Link href={routes.SAVED_PRODUCTS}>Xem sản phẩm đã lưu</Link>
+          </Button>
+          <ProductMatchLinkButton />
+        </div>
       </CardContent>
     </Card>
   );

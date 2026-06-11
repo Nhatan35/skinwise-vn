@@ -166,11 +166,11 @@ export function SavedProductsPage() {
     return (
       <EmptyState
         action={
-          <Button asChild aria-label="Xem sản phẩm">
-            <Link href={routes.PRODUCTS}>Xem sản phẩm</Link>
+          <Button asChild aria-label="Xem gợi ý sản phẩm">
+            <Link href={routes.PRODUCT_MATCH}>Xem gợi ý sản phẩm</Link>
           </Button>
         }
-        description="Hãy khám phá danh mục sản phẩm và lưu những sản phẩm bạn muốn xem lại hoặc so sánh sau."
+        description="Hãy lưu sản phẩm để dễ xem lại khi xây dựng routine chăm sóc da. Bạn có thể bắt đầu từ trang gợi ý sản phẩm hoặc danh mục sản phẩm."
         title="Chưa có sản phẩm đã lưu"
       />
     );
