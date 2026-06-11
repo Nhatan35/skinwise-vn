@@ -370,7 +370,7 @@ export function SettingsDataControlCenter() {
     }
 
     const confirmed = window.confirm(
-      "Thao tác này sẽ xóa dữ liệu skincare app cá nhân của bạn, nhưng không xóa tài khoản đăng nhập Auth.js. Bạn muốn tiếp tục?",
+      "Thao tác này sẽ xóa dữ liệu SkinWise VN app của bạn, bao gồm hồ sơ da, sản phẩm đã lưu, routine, ghi nhận routine, phân tích routine và nhật ký da. Thao tác này không thể hoàn tác. Tài khoản Google/OAuth, dữ liệu danh mục sản phẩm/thành phần dùng chung và dữ liệu người dùng khác sẽ không bị xóa. Bạn muốn tiếp tục xóa dữ liệu app của mình?",
     );
 
     if (!confirmed) {
@@ -567,10 +567,11 @@ export function SettingsDataControlCenter() {
         <CardHeader>
           <CardTitle>Khu vực cần thận trọng</CardTitle>
           <CardDescription>
-            Xóa dữ liệu skincare trong app chỉ xóa dữ liệu cá nhân như hồ sơ da,
+            Xóa dữ liệu app chỉ xóa dữ liệu SkinWise VN cá nhân như hồ sơ da,
             sản phẩm đã lưu, routine, ghi nhận routine, phân tích routine và
-            nhật ký da. Thao tác này không xóa tài khoản đăng nhập hoặc danh mục
-            dùng chung như sản phẩm và thành phần.
+            nhật ký da. Thao tác này không thể hoàn tác, không xóa tài khoản
+            Google/OAuth, không xóa danh mục sản phẩm hoặc thành phần dùng chung,
+            và không xóa dữ liệu của người dùng khác.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -585,7 +586,7 @@ export function SettingsDataControlCenter() {
               type="checkbox"
             />
             <span>
-              Tôi hiểu thao tác này sẽ xóa dữ liệu skincare cá nhân của tôi trong SkinWise VN.
+              Tôi hiểu thao tác này sẽ xóa vĩnh viễn dữ liệu SkinWise VN app của tôi và không thể hoàn tác.
             </span>
           </Label>
 
@@ -609,8 +610,8 @@ export function SettingsDataControlCenter() {
             variant="destructive"
           >
             {isDeletingAppData
-              ? "Đang xóa dữ liệu..."
-              : "Xóa dữ liệu skincare trong app"}
+              ? "Đang xóa dữ liệu app..."
+              : "Xóa dữ liệu app của tôi"}
           </Button>
         </CardContent>
       </Card>

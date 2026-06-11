@@ -163,6 +163,12 @@ describe("Settings client data control helpers", () => {
         method: "DELETE",
       }),
     );
+    const [, requestInit] = mockedFetch.mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
+
+    expect(requestInit).not.toHaveProperty("body");
   });
 
   it("treats malformed app data deletion responses as errors", async () => {

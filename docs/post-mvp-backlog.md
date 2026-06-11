@@ -11,17 +11,20 @@ Previous post-MVP implementation: v1.13 - UX Polish & Empty State Improvement: D
 Data quality implementation: v1.14 - Data Quality Expansion: DONE
 Product explainability implementation: v1.15 - Product Match Explainability & Safety Guardrails: DONE
 Previous completed milestone: v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
-Latest completed milestone: v1.22 - Production Observability & Release Confidence: DONE
-Current active milestone: v1.22.1 - Production Deployment & Smoke Verification
-Current active milestone status: NOT DONE
+Production observability implementation: v1.22 - Production Observability & Release Confidence: DONE
+Production smoke verification: v1.22.1 - Production Deployment & Smoke Verification: PARTIAL / DEFERRED
+Account data deletion hardening: v1.23 - Account Data Deletion Workflow Hardening: DONE
+Latest completed milestone: v1.23 - Account Data Deletion Workflow Hardening
+Current active milestone: None
+Current active milestone status: NONE
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Complete manual authenticated production smoke and production signal checks
+Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
 Local validation: PASS
 Production URL public reachability: PASS
 Production health endpoint: PASS
-Full production smoke/monitoring for v1.22.1: NOT CHECKED
+Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
 Historical production smoke/monitoring: PASS, user-reported
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped for this milestone
@@ -85,6 +88,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Insight Explainability & Tracking Quality Checklist | DONE in v1.21 | Explains how each personal insight card is calculated and shows data-availability status without scores, grades, or medical assessment. |
 | P2 | Production Observability & Release Confidence | DONE in v1.22 | Adds safe `/api/health`, health API contract coverage, release evidence, incident note template, and monitoring/checklist updates. |
 | P2 | Production Deployment & Smoke Verification | IN PROGRESS / NOT DONE in v1.22.1 | Public URL and `/api/health` passed direct checks; authenticated MVP flows and production signals remain unchecked. |
+| P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -656,6 +660,63 @@ Full production smoke remains incomplete because browser/OAuth/Vercel/MongoDB At
 v1.22.1 - Production Deployment & Smoke Verification
 ```
 
+## 7I. P2 - Account Data Deletion Workflow Hardening
+
+### Goal
+
+Harden the existing user app-data deletion workflow so it is safer, clearer, better tested, and better documented without expanding MVP scope.
+
+### Status
+
+```txt
+v1.23 - Account Data Deletion Workflow Hardening: DONE
+Validation for v1.23: PASS
+Manual browser deletion smoke: NOT CHECKED
+Production deletion verification: NOT CHECKED
+```
+
+### Scope
+
+- Reviewed existing Settings delete app data UI.
+- Reviewed `DELETE /api/account/app-data`.
+- Confirmed the API requires authentication and resolves the current user server-side.
+- Confirmed the deletion use case receives only the server-resolved current user id.
+- Confirmed repository deletion filters target only current-user app data.
+- Hardened destructive confirmation copy and action labels.
+- Added tests for malicious client-provided `userId` values, user isolation, sensitive response boundaries, and no client deletion body.
+- Added data control/deletion documentation and v1.23 release evidence.
+
+### Acceptance Criteria
+
+```txt
+[x] Delete app data confirmation UX reviewed and clarified.
+[x] Delete API requires authentication.
+[x] Delete API scopes deletion to the current authenticated user.
+[x] Delete API ignores client-provided userId values.
+[x] User cannot delete another user's data.
+[x] Shared product and ingredient catalogue data are not deleted.
+[x] Delete response does not expose sensitive data.
+[x] Error response does not expose stack trace or database internals.
+[x] Unit/API contract tests pass.
+[x] Repository deletion tests pass.
+[x] Settings UI/client tests pass.
+[x] Required local validation passes before marking DONE.
+```
+
+### Known Limitations
+
+```txt
+Manual browser deletion smoke was not performed.
+Production deletion verification was not performed.
+v1.22.1 authenticated production smoke and production signal checks remain PARTIAL / DEFERRED.
+```
+
+### Suggested Version
+
+```txt
+v1.23 - Account Data Deletion Workflow Hardening
+```
+
 ## 8. P3 - Admin / Content Management
 
 ### Goal
@@ -784,14 +845,14 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-Complete manual authenticated production smoke and production signal checks
+v1.24 - Seed Data Quality Expansion Round 2
 ```
 
 Reason:
 
-- v1.22 Production Observability & Release Confidence is complete and locally validated.
-- v1.22.1 public production URL and `/api/health` checks passed.
-- Full v1.22.1 production smoke is not complete because authenticated browser/OAuth and production platform signal checks remain NOT CHECKED.
+- v1.23 Account Data Deletion Workflow Hardening is complete and locally validated.
+- v1.22.1 full production smoke remains partial/deferred and should not be claimed as PASS.
+- A controlled seed data quality follow-up can improve catalogue coverage without adding product features or schema changes.
 - The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
 - The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
 - Portfolio screenshots and demo video are intentionally skipped and remain optional media evidence.
@@ -832,4 +893,5 @@ Reason:
 2026-06-09: Completed v1.21 Insight Explainability & Tracking Quality Checklist with lint/typecheck/test/build/E2E/audit PASS; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. The first outside-sandbox E2E rerun exposed a duplicate safe-disclaimer locator, which was fixed before final E2E PASS.
 2026-06-11: Completed v1.22 Production Observability & Release Confidence with safe public /api/health, health API contract test, release evidence, production incident note template, and monitoring/checklist updates. Required local validation passed; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Production smoke was not performed.
 2026-06-11: Started v1.22.1 Production Deployment & Smoke Verification. Local validation passed, public production URL returned HTTP 200, and production /api/health returned HTTP 200 with the expected v1.22 contract. Full production smoke remains NOT DONE because authenticated browser/OAuth checks and Vercel/MongoDB Atlas production signal checks were unavailable.
+2026-06-11: Completed v1.23 Account Data Deletion Workflow Hardening with clearer destructive confirmation copy, user-isolation API/repository tests, sensitive-response checks, data-control documentation, and required local validation PASS. Manual browser deletion smoke and production deletion verification were not performed.
 ```

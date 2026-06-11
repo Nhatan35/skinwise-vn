@@ -73,12 +73,17 @@ describe("Settings data control UI", () => {
 
   it("adds a separate danger zone for deleting only skincare app data", () => {
     expect(settingsComponentSource).toContain("Khu vực cần thận trọng");
-    expect(settingsComponentSource).toContain("Xóa dữ liệu skincare trong app");
+    expect(settingsComponentSource).toContain("Xóa dữ liệu app chỉ xóa");
+    expect(settingsComponentSource).toContain("không thể hoàn tác");
+    expect(settingsComponentSource).toContain("Google/OAuth");
+    expect(settingsComponentSource).toContain("dữ liệu của người dùng khác");
     expect(settingsComponentSource).toContain(
-      "Tôi hiểu thao tác này sẽ xóa dữ liệu skincare cá nhân của tôi trong SkinWise VN.",
+      "Tôi hiểu thao tác này sẽ xóa vĩnh viễn dữ liệu SkinWise VN app của tôi và không thể hoàn tác.",
     );
     expect(settingsComponentSource).toContain("app-data-delete-confirm-checkbox");
     expect(settingsComponentSource).toContain("app-data-delete-button");
+    expect(settingsComponentSource).toContain("Xóa dữ liệu app của tôi");
+    expect(settingsComponentSource).toContain("Đang xóa dữ liệu app...");
     expect(settingsComponentSource).toContain("isAppDataDeleteConfirmed");
     expect(settingsComponentSource).toContain("window.confirm");
     expect(settingsComponentSource).toContain("useRouter");

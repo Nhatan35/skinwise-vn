@@ -7,20 +7,20 @@ Last updated: 2026-06-11
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
-Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
+Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Current active milestone: None
 Product core: COMPLETE
 Local validation: PASS
 Production URL public reachability: PASS
 Production health endpoint: PASS
-Full production smoke/monitoring for v1.22.1: NOT CHECKED
+Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
 Historical production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Complete manual authenticated production smoke and production signal checks
+Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
 Portfolio Evidence Package documentation: PREPARED
-Optional media evidence tasks: screenshots and demo video intentionally skipped for v1.22
+Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
 
 ## Feature Matrix
@@ -46,11 +46,11 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped 
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
 | Skin Journal | DONE | Create/edit/delete journal entries; v1.18 added loaded-entry filters and reflection review. |
 | Insights | DONE | Progress story, safe next actions, v1.20 Personal Insight Review, and v1.21 calculation explanations plus tracking quality checklist. |
-| Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete. |
+| Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
-| Local validation evidence | PASS | v1.22.1 validation rerun passed with 103 files / 991 unit tests, 31/31 E2E tests, build, and production audit PASS. |
+| Local validation evidence | PASS | v1.23 validation passed with 103 files / 992 unit tests, 31/31 E2E tests, build, and production audit PASS. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -69,6 +69,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped 
 | Insight Explainability & Tracking Quality Checklist | Post-MVP Insights | v1.21 | DONE |
 | Production Observability & Release Confidence | Release/Ops | v1.22 | DONE |
 | Production Deployment & Smoke Verification | Release/Ops | v1.22.1 | IN PROGRESS / NOT DONE |
+| Account Data Deletion Workflow Hardening | Privacy/Data Control | v1.23 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -88,9 +89,9 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped 
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
-Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
-Production status: v1.22 production smoke verification NOT CHECKED - partial public checks only
+Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Current active milestone: None
+Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
-Portfolio media evidence tasks are optional, intentionally skipped for v1.22, and not product correctness blockers
+Portfolio media evidence tasks are optional, intentionally skipped, and not product correctness blockers
 ```

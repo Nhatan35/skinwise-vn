@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.22 - Production Observability & Release Confidence
+MVP v1.23 - Account Data Deletion Workflow Hardening
 ```
 
 Completed closeout milestones:
@@ -37,13 +37,14 @@ MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
+MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
 
 Current phase: Post-MVP controlled improvement.
-Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification.
-Production status: v1.22 production smoke verification: NOT CHECKED - partial public checks only.
+Current active milestone: None.
+Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -60,8 +61,8 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Today Routine and Routine Logs | PASS | Completion and log flows are implemented and covered by tests. |
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
-| Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented. |
-| Local validation | PASS | MVP v1.22.1 local validation rerun: lint PASS, typecheck PASS, 103 test files / 991 tests PASS, build PASS after sandbox rerun, 31/31 E2E tests PASS after sandbox rerun, production audit PASS with 0 vulnerabilities. |
+| Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
+| Local validation | PASS | MVP v1.23 local validation: lint PASS, typecheck PASS, 103 test files / 992 tests PASS, build PASS after sandbox rerun, 31/31 E2E tests PASS after sandbox rerun, production audit PASS with 0 vulnerabilities. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -75,7 +76,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.22 Production Observability & Release Confidence is complete. |
+| Latest post-MVP implementation | PASS | MVP v1.23 Account Data Deletion Workflow Hardening is complete. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -88,10 +89,10 @@ Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: NOT RUN for v1.22.1
+npm ci: NOT RUN for v1.23
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 991 tests
+npm run test: PASS - 103 files / 992 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -103,7 +104,7 @@ Production evidence:
 Production URL: https://skinwise-vn.vercel.app
 Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
 Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
-Production smoke/monitoring evidence for v1.22.1: NOT CHECKED - authenticated MVP flows and production platform signals were not checked
+Production smoke/monitoring evidence for v1.22.1: PARTIAL / DEFERRED - public URL and /api/health were checked; authenticated MVP flows and production platform signals were not checked
 Historical production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline from 2026-06-04
 Critical production blockers found in direct v1.22.1 public checks: None
 Evidence strength: partial direct public verification only; no browser/OAuth/Vercel/Atlas verification included
@@ -114,6 +115,7 @@ Evidence boundary:
 - Local validation is supported by terminal output.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence, incident note template, and monitoring/checklist updates; no package, database schema, auth model, authorization, persistence, AI-provider behavior, or product feature scope changed.
 - v1.22.1 direct verification checked only the public production URL and `/api/health`.
+- v1.23 hardened the existing app-data deletion workflow; manual browser deletion smoke and production deletion verification were not performed.
 - Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
@@ -154,6 +156,8 @@ Evidence boundary:
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
 | `docs/final-release-checklist.md` | PASS | Final release status reflects local PASS, historical production PASS boundary, portfolio readiness, backlog planning, and v1.22 observability completion. |
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
+| `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
+| `docs/data-control-and-deletion.md` | PASS | Data deletion boundary, ownership rules, post-deletion expectations, and privacy limits are documented. |
 | `docs/production-incident-note-template.md` | PASS | Incident note template provides safe fields and evidence boundary for future production issues. |
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
@@ -184,10 +188,46 @@ These are intentional MVP boundaries, not release blockers:
 - Full Auth.js hard-delete account automation is not implemented.
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots are optional unless needed for portfolio/slides.
-- `npm ci` was not rerun for v1.22.1; the required v1.22.1 validation commands passed.
+- `npm ci` was not rerun for v1.23; the required v1.23 validation commands passed.
 - v1.22.1 is not complete because authenticated production flows and production platform signals were not checked.
+- Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 
-## 8. Final Decision
+## 8A. MVP v1.23 - Account Data Deletion Workflow Hardening
+
+Validation required before DONE:
+
+```txt
+[x] Delete app data confirmation UX reviewed.
+[x] Delete API requires authentication.
+[x] Delete API scopes deletion to the current authenticated user.
+[x] Delete API ignores client-provided userId.
+[x] User cannot delete another user's data.
+[x] Other users' records remain intact.
+[x] Delete response does not expose sensitive data.
+[x] Error response does not expose stack trace or database internals.
+[x] Post-deletion empty-state source review found existing empty/onboarding handling; manual browser deletion smoke remains NOT CHECKED.
+[x] Unit/API contract tests pass.
+[x] Repository/use-case deletion tests pass.
+[x] Settings UI tests pass.
+[x] npm run lint passes.
+[x] npm run typecheck passes.
+[x] npm run test passes.
+[x] npm run build passes.
+[x] npm run test:e2e passes.
+[x] npm audit --omit=dev --audit-level=moderate passes.
+```
+
+Manual browser deletion checks:
+
+```txt
+Delete confirmation experience: NOT CHECKED
+Cancel deletion: NOT CHECKED
+Confirm deletion: NOT CHECKED
+Post-deletion dashboard/profile/saved-products/routine/journal/insights: NOT CHECKED
+Production deletion smoke: NOT CHECKED
+```
+
+## 9. Final Decision
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
@@ -204,8 +244,9 @@ MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
+MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED
-Optional media evidence tasks: screenshots and demo video intentionally skipped for v1.22
+Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```

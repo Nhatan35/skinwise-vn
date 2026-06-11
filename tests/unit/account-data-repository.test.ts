@@ -64,6 +64,7 @@ import {
 } from "@/modules/account-data/account-data.repository";
 
 const authUserId = "auth-user-id";
+const otherUserId = "other-user-id";
 const productId = new ObjectId("665000000000000000000201");
 const fixedDate = new Date("2026-06-01T00:00:00.000Z");
 const originalAccountDeletionRequestedAt = new Date(
@@ -261,6 +262,9 @@ describe("account data repository", () => {
       skinJournalsCollection,
     ]) {
       expect(collection.deleteMany).toHaveBeenCalledWith({ userId: authUserId });
+      expect(collection.deleteMany).not.toHaveBeenCalledWith({
+        userId: otherUserId,
+      });
       expect(collection.deleteMany).not.toHaveBeenCalledWith({});
     }
 
@@ -272,6 +276,10 @@ describe("account data repository", () => {
           updatedAt: fixedDate,
         },
       },
+    );
+    expect(appUserProfilesCollection.updateOne).not.toHaveBeenCalledWith(
+      { userId: otherUserId },
+      expect.anything(),
     );
     const appProfileUpdate = appUserProfilesCollection.updateOne.mock
       .calls[0]?.[1] as Record<string, Record<string, unknown>>;

@@ -18,23 +18,24 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.22 - Production Observability & Release Confidence**.
-- Current active milestone: **MVP v1.22.1 - Production Deployment & Smoke Verification**.
+- Latest completed milestone: **MVP v1.23 - Account Data Deletion Workflow Hardening**.
+- Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **Complete manual authenticated production smoke and production signal checks**.
+- Recommended next task: **v1.24 - Seed Data Quality Expansion Round 2**.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS** for MVP v1.22.1 verification rerun.
+- Local validation evidence: **PASS** for MVP v1.23 implementation validation.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
-- Production smoke test evidence: **NOT CHECKED for full v1.22.1 smoke - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
+- Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
+- v1.23 deletion smoke evidence: **NOT CHECKED for manual browser and production deletion flows.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
 - Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
 
 Evidence boundary:
 
 - Automated local evidence is supported by terminal output.
-- Production PASS status is based on the user's reported completed manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
+- Historical production PASS status is based on the user's previously reported manual verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
 - Current v1.22.1 verification is partial direct public verification only; it does not create screenshot, demo-video, authenticated MVP flow, browser console, Vercel log, Atlas, traffic, performance, or user-metric evidence.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
@@ -66,6 +67,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
+MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -84,7 +86,9 @@ MVP v1.15.1 is an audit, dependency-risk, validation, and documentation evidence
 
 MVP v1.21 extends the existing Personal Insight Review with calculation metadata and a tracking data-availability checklist without adding diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI provider changes.
 
-MVP v1.22 is the latest controlled post-MVP release-confidence milestone. It improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates. It does not add product features, database schema changes, real AI provider integration, external observability vendors, diagnosis logic, treatment advice, skin scoring, image upload, admin CRUD, marketplace, payment, checkout, or order workflow.
+MVP v1.22 is a completed controlled post-MVP release-confidence milestone. It improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates. It does not add product features, database schema changes, real AI provider integration, external observability vendors, diagnosis logic, treatment advice, skin scoring, image upload, admin CRUD, marketplace, payment, checkout, or order workflow.
+
+MVP v1.23 is the latest controlled post-MVP privacy and data-control hardening milestone. It hardens the existing account app-data deletion workflow with clearer destructive confirmation copy, user-isolation tests, sensitive-response checks, and data-control documentation. It does not delete Google/OAuth accounts, shared product catalogue data, shared ingredient library data, other users' data, production configuration, or release documentation.
 
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
@@ -105,7 +109,7 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, calendar readability improvements, Personal Insight Review cards, calculation explanations, and tracking quality checklist.
 - Dashboard summary based on user-owned data.
 - Settings and data control center.
-- Data export, app-data deletion, and MVP-safe account deletion request marker.
+- Data export, hardened app-data deletion, and MVP-safe account deletion request marker.
 - Demo seed data, demo walkthrough documentation, and portfolio case study.
 
 ## Implemented Routes
@@ -184,10 +188,10 @@ Evidence date: 2026-06-11
 Environment: Local Windows / PowerShell
 Branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: NOT RUN for v1.22
+npm ci: NOT RUN for v1.23
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 991 tests
+npm run test: PASS - 103 files / 992 tests
 npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
 npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
@@ -196,9 +200,9 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 Validation note:
 
 ```txt
-v1.22 added only the public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates.
-Existing product features, database schema, auth, authorization, persistence, AI-provider behavior, and existing API behavior remain unchanged.
-Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.22.
+v1.23 hardened only the existing account app-data deletion workflow, tests, and documentation.
+Existing product features, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, and shared catalogue behavior remain unchanged.
+Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.23.
 E2E global setup seeded the local test database with the expanded v1.14 seed data.
 npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
 ```
@@ -209,7 +213,7 @@ Production evidence:
 Production URL: https://skinwise-vn.vercel.app
 Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
 Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
-Production smoke/monitoring evidence for v1.22.1: NOT CHECKED - authenticated MVP flows and production platform signals were not checked
+Production smoke/monitoring evidence for v1.22.1: PARTIAL / DEFERRED - public URL and /api/health were checked; authenticated MVP flows and production platform signals were not checked
 Historical production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline from 2026-06-04
 Critical production blockers reported from direct v1.22.1 public checks: None
 Evidence note: preserve screenshots/log snippets separately if strict audit traceability is required; do not treat historical/user-reported evidence as v1.22.1 direct verification
@@ -248,6 +252,8 @@ Landing page
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
 - v1.22 release evidence: `docs/release-evidence-v1.22.md`
+- v1.23 release evidence: `docs/release-evidence-v1.23.md`
+- Data control and deletion boundary: `docs/data-control-and-deletion.md`
 - Production incident note template: `docs/production-incident-note-template.md`
 - Deployment checklist: `docs/18-deployment-checklist.md`
 - Vercel deployment runbook: `docs/deployment/vercel-deployment.md`
@@ -330,7 +336,8 @@ These are intentional MVP boundaries, not release blockers:
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots and demo video are optional media evidence; capture them only if needed for CV, portfolio page, LinkedIn, or slide deck, and do not claim they exist until actual files are produced.
 - v1.22 `/api/health` only verifies that the app route is reachable. It does not verify database connectivity, OAuth connectivity, AI provider connectivity, or external service health by design.
-- `npm ci` was not rerun for v1.22; latest required v1.22 validation commands passed.
+- `npm ci` was not rerun for v1.23; latest required v1.23 validation commands passed.
+- Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 
 ## Final Portfolio Decision
 
@@ -349,12 +356,13 @@ MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
+MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
-Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped for v1.22
+Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.22 - Production Observability & Release Confidence` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped for v1.22.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.23 - Account Data Deletion Workflow Hardening` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

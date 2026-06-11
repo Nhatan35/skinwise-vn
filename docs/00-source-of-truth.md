@@ -26,14 +26,15 @@ MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
+MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.22 - Production Observability & Release Confidence
+Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
 Current phase: Post-MVP controlled improvement
-Current active milestone: MVP v1.22.1 - Production Deployment & Smoke Verification
-Production status: v1.22 production smoke verification: NOT CHECKED - partial public checks only
-Recommended next task: Complete manual authenticated production smoke and production signal checks
+Current active milestone: None
+Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
+Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
 ```
 
 Primary current documents:
@@ -42,6 +43,8 @@ Primary current documents:
 - `AGENTS.md`
 - `docs/final-release-checklist.md`
 - `docs/release-evidence-v1.22.md`
+- `docs/release-evidence-v1.23.md`
+- `docs/data-control-and-deletion.md`
 - `docs/post-mvp-backlog.md`
 - `docs/ai-coding/02-implementation-status.md`
 - `docs/ai-coding/06-current-sprint-plan.md`
@@ -67,4 +70,5 @@ Evidence boundary:
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates without database, auth, AI-provider, or product-feature changes.
 - v1.22.1 is not complete because browser/OAuth/Vercel/MongoDB Atlas verification was unavailable in this run.
+- v1.23 hardened the existing account app-data deletion workflow with clearer destructive confirmation copy, explicit user-isolation tests, sensitive-response checks, and data-control documentation without schema, auth architecture, product-scope, or shared-catalogue deletion changes.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

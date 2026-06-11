@@ -67,6 +67,34 @@ async function readJson(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
 }
 
+const forbiddenSensitiveSubstrings = [
+  "secret",
+  "auth_secret",
+  "mongodb_uri",
+  "auth_google_secret",
+  "google_client_secret",
+  "ai_api_key",
+  "openai_api_key",
+  "token",
+  "accesstoken",
+  "refreshtoken",
+  "userid",
+  "email",
+  "password",
+  "rawdocument",
+  "process.env",
+  "stack",
+  "mongoservererror",
+];
+
+function expectNoSensitiveExposure(body: unknown) {
+  const serializedBody = JSON.stringify(body).toLowerCase();
+
+  for (const forbidden of forbiddenSensitiveSubstrings) {
+    expect(serializedBody).not.toContain(forbidden);
+  }
+}
+
 describe("/api/account/app-data contract", () => {
   beforeEach(() => {
     mockedGetCurrentUser.mockReset();
@@ -79,6 +107,8 @@ describe("/api/account/app-data contract", () => {
     expect(appDataRoute.GET).toBeTypeOf("function");
     expect(appDataRoute.DELETE).toBeTypeOf("function");
     expect((appDataRoute as Record<string, unknown>).POST).toBeUndefined();
+    expect((appDataRoute as Record<string, unknown>).PUT).toBeUndefined();
+    expect((appDataRoute as Record<string, unknown>).PATCH).toBeUndefined();
   });
 
   it("rejects unauthenticated app data summary requests", async () => {
@@ -179,8 +209,9 @@ describe("/api/account/app-data contract", () => {
     mockedGetCurrentUser.mockResolvedValue(null);
 
     const response = await appDataRoute.DELETE();
+    const body = await readJson(response);
 
-    await expect(readJson(response)).resolves.toEqual({
+    expect(body).toEqual({
       data: null,
       error: {
         code: "UNAUTHORIZED",
@@ -190,6 +221,7 @@ describe("/api/account/app-data contract", () => {
     });
     expect(response.status).toBe(401);
     expect(mockedDeleteAccountAppDataForUser).not.toHaveBeenCalled();
+    expectNoSensitiveExposure(body);
   });
 
   it("deletes only for the authenticated user and returns counts", async () => {
@@ -214,6 +246,39 @@ describe("/api/account/app-data contract", () => {
     expect(serializedBody).not.toContain("products");
     expect(serializedBody).not.toContain("ingredients");
     expect(serializedBody).not.toContain("refreshToken");
+    expectNoSensitiveExposure(body);
+  });
+
+  it("ignores malicious client-provided userId values and uses the authenticated user", async () => {
+    mockedGetCurrentUser.mockResolvedValue(authUser);
+    mockedDeleteAccountAppDataForUser.mockResolvedValue(deleteResult);
+
+    const hostileRequest = new Request(
+      "https://skinwise.vn/api/account/app-data?userId=other-user-id",
+      {
+        body: JSON.stringify({
+          userId: "other-user-id",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      },
+    );
+    const deleteHandler = appDataRoute.DELETE as unknown as (
+      request: Request,
+    ) => Promise<Response>;
+
+    const response = await deleteHandler(hostileRequest);
+    const body = await readJson(response);
+
+    expect(response.status).toBe(200);
+    expect(mockedDeleteAccountAppDataForUser).toHaveBeenCalledTimes(1);
+    expect(mockedDeleteAccountAppDataForUser).toHaveBeenCalledWith(authUser.id);
+    expect(mockedDeleteAccountAppDataForUser).not.toHaveBeenCalledWith(
+      "other-user-id",
+    );
+    expectNoSensitiveExposure(body);
   });
 
   it("is idempotent when no app data exists", async () => {
@@ -276,5 +341,6 @@ describe("/api/account/app-data contract", () => {
     expect(serializedBody).not.toContain("MongoServerError");
     expect(serializedBody).not.toContain("provider token");
     expect(serializedBody).not.toContain("stack");
+    expectNoSensitiveExposure(body);
   });
 });
