@@ -18,13 +18,13 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.25 - First-Session Guided Experience Polish**.
+- Latest completed scoped task: **MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
 - Recommended next task: **TBD / Backlog grooming**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.25 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.25. v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.25.1 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.25.1. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
@@ -70,6 +70,7 @@ MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -95,6 +96,8 @@ MVP v1.23 is the latest completed controlled post-MVP privacy and data-control h
 MVP v1.24 remains deferred and validation-blocked. The implementation appears to have reached 70 products and 70 ingredients with v1.24 seed quality tests, but v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
 
 MVP v1.25 is a focused first-session guided experience polish milestone. It improves dashboard onboarding copy, highlights the next incomplete onboarding step with "Bước nên làm tiếp theo", and keeps the existing five-step first-session journey without changing database schema, authentication, Product Match scoring, Routine Safety logic, or seed data. Scoped v1.25 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.25.
+
+MVP v1.25.1 is a repository consistency hotfix. It restores the v1.24 70-product / 70-ingredient seed baseline in code/tests, restores `docs/release-evidence-v1.24.md`, and keeps v1.24 validation-blocked rather than marking it DONE. It does not add product features or resolve the deferred v1.24 build/E2E blockers.
 
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
@@ -190,6 +193,16 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.25.1 scoped local validation:
+Evidence date: 2026-06-11
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.25.1
+npm run test:e2e: NOT RUN for v1.25.1
+Manual browser verification: NOT CHECKED for v1.25.1
+Production verification: NOT CHECKED for v1.25.1
+
 MVP v1.25 scoped local validation:
 Evidence date: 2026-06-11
 npm run lint: PASS
@@ -359,6 +372,8 @@ These are intentional MVP boundaries, not release blockers:
 - v1.24 build and E2E validation timed out in the current environment, so v1.24 is NOT DONE.
 - v1.25 scoped local validation passed with lint, typecheck, and unit tests.
 - Build and E2E were not run for v1.25 by task scope.
+- v1.25.1 restored v1.24 seed baseline/documentation consistency and passed scoped lint/typecheck/unit test validation.
+- Build and E2E were not run for v1.25.1 by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -383,6 +398,7 @@ MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -391,4 +407,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.25 - First-Session Guided Experience Polish` is complete within the scoped validation boundary of lint, typecheck, and unit tests. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix` restored seed/docs consistency within the scoped validation boundary of lint, typecheck, and unit tests. `v1.25 - First-Session Guided Experience Polish` remains preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

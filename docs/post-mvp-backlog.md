@@ -16,7 +16,8 @@ Production smoke verification: v1.22.1 - Production Deployment & Smoke Verificat
 Account data deletion hardening: v1.23 - Account Data Deletion Workflow Hardening: DONE
 Seed data quality closeout: v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 First-session guided experience polish: v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
-Latest completed milestone: v1.25 - First-Session Guided Experience Polish
+Seed baseline consistency hotfix: v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+Latest completed scoped task: v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
@@ -93,6 +94,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
+| P2 | Seed Baseline Regression & Documentation Consistency Hotfix | DONE in v1.25.1 | Restores v1.24 seed baseline/test/evidence consistency without marking v1.24 DONE or resolving deferred build/E2E blockers. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -854,7 +856,8 @@ TBD / Backlog grooming
 
 Reason:
 
-- v1.25 first-session guided experience polish passed scoped local validation with lint, typecheck, and unit tests.
+- v1.25.1 seed baseline consistency hotfix passed scoped local validation with lint, typecheck, and unit tests.
+- v1.25 first-session guided experience polish remains preserved.
 - v1.25 improved dashboard onboarding guidance without adding new product scope.
 - v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
@@ -903,4 +906,5 @@ Reason:
 2026-06-11: Completed v1.23 Account Data Deletion Workflow Hardening with clearer destructive confirmation copy, user-isolation API/repository tests, sensitive-response checks, data-control documentation, and required local validation PASS. Manual browser deletion smoke and production deletion verification were not performed.
 2026-06-11: Attempted v1.24 Seed Data Quality Expansion Round 2 closeout. Confirmed 70 products and 70 ingredients, created v1.24 release evidence, updated seed data/status docs, and stabilized one slow UI foundation import test timeout. `npm run lint`, `npm run typecheck`, `npm run test`, and `npm audit --omit=dev --audit-level=moderate` passed. `npm run build` and `npm run test:e2e` timed out in the current Node 22/npm 10 environment, so v1.24 remains NOT DONE.
 2026-06-11: Completed v1.25 First-Session Guided Experience Polish with clearer dashboard onboarding step guidance, a first-incomplete-step "Bước nên làm tiếp theo" block, onboarding helper tests, and scoped local validation PASS for `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25. v1.24 remains deferred and validation-blocked.
+2026-06-11: Completed v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix. Restored `scripts/seed.ts` and `tests/unit/seed-data-quality.test.ts` to the v1.24 70/70 baseline, restored missing `docs/release-evidence-v1.24.md`, preserved v1.25 dashboard/onboarding UX polish, and kept v1.24 NOT DONE / VALIDATION BLOCKED. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.1.
 ```

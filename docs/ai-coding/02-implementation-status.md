@@ -33,9 +33,10 @@ MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, and v1.25 improved the first-session guided dashboard/onboarding experience. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, and v1.25.1 restored seed baseline/documentation consistency. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
 
 Current status:
 
@@ -43,13 +44,14 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
+Latest completed scoped task: MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` timed out
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
+v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored
 Recommended next task: TBD / Backlog grooming
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
@@ -65,6 +67,7 @@ Evidence boundary:
 - v1.23 local implementation and validation passed; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 seed data implementation reached 70 products and 70 ingredients; lint, typecheck, unit tests, and audit passed, but build/E2E validation timed out.
 - v1.25 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.
+- v1.25.1 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
 
 ## 2. Implemented Product Scope
 
@@ -90,6 +93,7 @@ Evidence boundary:
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, release evidence, incident note template, and monitoring/checklist updates. |
+| Seed baseline consistency hotfix | DONE, scoped validation only | v1.25.1 restored the v1.24 70/70 seed baseline in code/tests, restored missing v1.24 release evidence, and kept v1.24 validation-blocked. |
 
 ## 3. Route Coverage
 
@@ -396,3 +400,26 @@ npm run test: PASS - 103 files / 1001 tests
 ```
 
 Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.
+
+## v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+
+Status: DONE within scoped local validation.
+
+Completed v1.25.1 scope:
+
+- Confirmed the repository had regressed to v1.14 seed constants and v1.14 seed-quality test naming while docs referenced the v1.24 70/70 baseline.
+- Restored `scripts/seed.ts` to v1.24 seed validation constants and 70 products / 70 ingredients.
+- Restored `tests/unit/seed-data-quality.test.ts` to v1.24 70/70 baseline expectations and quality checks.
+- Restored `docs/release-evidence-v1.24.md`, which was referenced by docs but missing from the repository.
+- Preserved v1.25 dashboard/onboarding UX polish, including the "Bước nên làm tiếp theo" next-step block.
+- Kept v1.24 as NOT DONE / VALIDATION BLOCKED.
+
+Scoped validation result:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+```
+
+Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.1. v1.24 build/E2E blockers remain deferred.

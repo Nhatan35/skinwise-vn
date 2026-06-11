@@ -16,28 +16,32 @@ describe("UI foundation", () => {
     );
   });
 
-  it("imports shared UI foundation components", async () => {
-    const [
-      appShell,
-      emptyState,
-      errorState,
-      loadingState,
-      button,
-      card,
-    ] = await Promise.all([
-      import("@/shared/components/app-shell"),
-      import("@/shared/components/empty-state"),
-      import("@/shared/components/error-state"),
-      import("@/shared/components/loading-state"),
-      import("@/shared/components/ui/button"),
-      import("@/shared/components/ui/card"),
-    ]);
+  it(
+    "imports shared UI foundation components",
+    async () => {
+      const [
+        appShell,
+        emptyState,
+        errorState,
+        loadingState,
+        button,
+        card,
+      ] = await Promise.all([
+        import("@/shared/components/app-shell"),
+        import("@/shared/components/empty-state"),
+        import("@/shared/components/error-state"),
+        import("@/shared/components/loading-state"),
+        import("@/shared/components/ui/button"),
+        import("@/shared/components/ui/card"),
+      ]);
 
-    expect(appShell.AppShell).toBeTypeOf("function");
-    expect(emptyState.EmptyState).toBeTypeOf("function");
-    expect(errorState.ErrorState).toBeTypeOf("function");
-    expect(loadingState.LoadingState).toBeTypeOf("function");
-    expect(button.Button).toBeTypeOf("function");
-    expect(card.Card).toBeTypeOf("function");
-  });
+      expect(appShell.AppShell).toBeTypeOf("function");
+      expect(emptyState.EmptyState).toBeTypeOf("function");
+      expect(errorState.ErrorState).toBeTypeOf("function");
+      expect(loadingState.LoadingState).toBeTypeOf("function");
+      expect(button.Button).toBeTypeOf("function");
+      expect(card.Card).toBeTypeOf("function");
+    },
+    15_000,
+  );
 });

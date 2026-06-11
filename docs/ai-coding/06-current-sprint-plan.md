@@ -19,7 +19,8 @@ Production Deployment & Smoke Verification: PARTIAL / DEFERRED in v1.22.1
 Account Data Deletion Workflow Hardening: DONE in v1.23
 Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED in v1.24
 First-Session Guided Experience Polish: DONE in v1.25, scoped validation only
-Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
+Seed Baseline Regression & Documentation Consistency Hotfix: DONE in v1.25.1, scoped validation only
+Latest completed scoped task: MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
 Current active milestone: None
 Current active milestone status: None
 Production URL public reachability: PASS for v1.22.1 public check
@@ -32,13 +33,13 @@ Current phase: Post-MVP controlled improvement
 
 v1.22.1 remains partial/deferred because only the public production URL and `/api/health` were checked directly. Authenticated MVP flows and production platform signals were not checked.
 
-v1.25 is the latest completed milestone within the scoped validation boundary of lint, typecheck, and unit tests.
+v1.25.1 is the latest completed scoped task within the validation boundary of lint, typecheck, and unit tests.
 
 v1.24 seed implementation and closeout documentation are mostly complete, but v1.24 is NOT DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
 
 ## 2. Objective
 
-Complete `v1.25 - First-Session Guided Experience Polish` by improving dashboard onboarding guidance so first-time users understand what to do next, why it matters, what they get after completing it, and where to go.
+Complete `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix` by restoring alignment between seed data, seed quality tests, release evidence, and status documentation while preserving the v1.25 dashboard/onboarding UX polish.
 
 This sprint does not add new product features. It preserves:
 
@@ -48,7 +49,8 @@ No payment, checkout, marketplace, or order workflow
 No real AI provider integration
 No image upload, skin image analysis, diagnosis, treatment advice, or skin scoring
 No database schema change
-No seed data change
+No seed data expansion beyond restoring the existing v1.24 baseline
+No new seed schema field
 No Product Match rewrite
 No Routine Safety Analysis rewrite
 No secret, token, OAuth credential, database URI, raw environment variable, password, cookie, session token, or raw production database document exposure
@@ -60,33 +62,34 @@ Active files:
 
 ```txt
 docs/00-source-of-truth.md
+docs/release-evidence-v1.24.md
+docs/14-seed-data-spec.md
 docs/post-mvp-backlog.md
 docs/final-release-checklist.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/06-current-sprint-plan.md
 README.md
-src/modules/dashboard/components/dashboard-overview.tsx
-src/modules/dashboard/components/onboarding-progress-card.tsx
-tests/unit/dashboard-ui.test.ts
-tests/unit/onboarding-progress-card.test.ts
+scripts/seed.ts
+tests/unit/seed-data-quality.test.ts
+tests/unit/ui-foundation.test.ts
 ```
 
-Existing v1.24 seed changes remain deferred/validation-blocked and were not advanced in v1.25.
+v1.25 dashboard/onboarding files remain preserved from the previous scoped UX polish.
 
 ## 4. Acceptance Criteria
 
-First-session guided experience polish:
+Seed baseline consistency hotfix:
 
 ```txt
-[x] Preserve the existing five-step onboarding journey.
-[x] Use buildOnboardingSteps() as the onboarding step source of truth.
-[x] Add clearer step description, outcome, CTA label, route, and completion state.
-[x] Show Bước nên làm tiếp theo from the first incomplete onboarding step.
-[x] Avoid duplicate conflicting dashboard next-step guidance during onboarding.
+[x] Restore scripts/seed.ts to the v1.24 70/70 seed baseline.
+[x] Restore tests/unit/seed-data-quality.test.ts to v1.24 seed quality expectations.
+[x] Restore docs/release-evidence-v1.24.md so documentation references resolve.
+[x] Preserve the existing v1.25 five-step onboarding journey.
+[x] Preserve Bước nên làm tiếp theo from the first incomplete onboarding step.
 [x] Keep v1.24 NOT DONE / VALIDATION BLOCKED.
 [x] Keep v1.22.1 production smoke verification PARTIAL / DEFERRED.
-[x] Do not claim build, E2E, manual browser, or production verification for v1.25.
+[x] Do not claim build, E2E, manual browser, or production verification for v1.25.1.
 ```
 
 Validation:
@@ -95,34 +98,34 @@ Validation:
 [x] npm run lint
 [x] npm run typecheck
 [x] npm run test
-[ ] npm run build - not run for v1.25 by task scope
-[ ] npm run test:e2e - not run for v1.25 by task scope
+[ ] npm run build - not run for v1.25.1 by task scope
+[ ] npm run test:e2e - not run for v1.25.1 by task scope
 ```
 
 ## 5. Validation Status
 
-Current v1.25 validation status:
+Current v1.25.1 validation status:
 
 ```txt
 Evidence date: 2026-06-11
 npm run lint: PASS
 npm run typecheck: PASS
 npm run test: PASS - 103 files / 1001 tests
-npm run build: NOT RUN for v1.25
-npm run test:e2e: NOT RUN for v1.25
+npm run build: NOT RUN for v1.25.1
+npm run test:e2e: NOT RUN for v1.25.1
 Manual browser verification: NOT CHECKED
 Production verification: NOT CHECKED
 ```
 
-v1.25 is done only within this scoped local validation boundary. Do not use this as full release readiness evidence.
+v1.25.1 is done only within this scoped local validation boundary. Do not use this as full release readiness evidence.
 
 ## 6. Known Limitations
 
 ```txt
 Manual browser verification: NOT CHECKED
 Production verification: NOT CHECKED
-Build validation: NOT RUN for v1.25 by task scope
-E2E validation: NOT RUN for v1.25 by task scope
+Build validation: NOT RUN for v1.25.1 by task scope
+E2E validation: NOT RUN for v1.25.1 by task scope
 Screenshots/video: NOT CREATED
 v1.24 closeout: DEFERRED / VALIDATION BLOCKED
 ```
@@ -140,11 +143,10 @@ If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E valid
 
 ## 8. Suggested Commit
 
-For the v1.25 scoped UX polish changes, use:
+For the v1.25.1 consistency hotfix changes, use:
 
 ```bash
-git add .
-git commit -m "chore: polish first-session guided experience"
+git commit -m "chore: restore seed baseline consistency"
 ```
 
-Do not claim a commit was created unless it was actually created.
+Stage only reviewed v1.25.1 files before committing. Do not use `git add .`, and do not claim a commit was created unless it was actually created.

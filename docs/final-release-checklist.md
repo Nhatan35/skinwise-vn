@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.25 - First-Session Guided Experience Polish
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
 ```
 
 Completed closeout milestones:
@@ -40,6 +40,7 @@ MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -49,6 +50,7 @@ Current active milestone: None.
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED.
 v1.24 status: Implementation complete, validation blocked - build and E2E did not pass in the current environment.
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed. Build, E2E, manual browser verification, and production verification were not run for v1.25.
+v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -66,7 +68,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | MIXED BY MILESTONE | MVP v1.25 scoped validation passed with lint, typecheck, and unit tests. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
+| Local validation | MIXED BY MILESTONE | MVP v1.25.1 scoped validation passed with lint, typecheck, and unit tests. MVP v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -80,7 +82,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.25 First-Session Guided Experience Polish is complete within scoped validation. v1.24 seed data closeout remains deferred and NOT DONE. |
+| Latest post-MVP implementation | PASS | MVP v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix is complete within scoped validation. MVP v1.25 First-Session Guided Experience Polish remains preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -89,6 +91,16 @@ Optional remaining media evidence tasks: screenshots and demo video.
 Local validation evidence:
 
 ```txt
+MVP v1.25.1 scoped local validation:
+Evidence date: 2026-06-11
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.25.1
+npm run test:e2e: NOT RUN for v1.25.1
+Manual browser verification: NOT CHECKED for v1.25.1
+Production verification: NOT CHECKED for v1.25.1
+
 MVP v1.25 scoped local validation:
 Evidence date: 2026-06-11
 npm run lint: PASS
@@ -173,7 +185,7 @@ Evidence boundary:
 | `docs/final-release-checklist.md` | PASS | Final release status reflects v1.25 scoped validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and backlog planning. |
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
-| `docs/release-evidence-v1.24.md` | FAIL | v1.24 release evidence records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
+| `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
 | `docs/data-control-and-deletion.md` | PASS | Data deletion boundary, ownership rules, post-deletion expectations, and privacy limits are documented. |
 | `docs/production-incident-note-template.md` | PASS | Incident note template provides safe fields and evidence boundary for future production issues. |
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
@@ -209,9 +221,38 @@ These are intentional MVP boundaries, not release blockers:
 - v1.22.1 is not complete because authenticated production flows and production platform signals were not checked.
 - v1.24 is not complete because build and E2E validation timed out in the current environment.
 - v1.25 build and E2E validation were not run by task scope.
+- v1.25.1 build and E2E validation were not run by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
+- Manual browser and production verification were not performed for v1.25.1.
+
+## 8D. MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+
+Validation required before DONE:
+
+```txt
+[x] scripts/seed.ts uses v1.24 70/70 seed baseline constants.
+[x] Product seed count is at least 70.
+[x] Ingredient seed count is at least 70.
+[x] No duplicate product names.
+[x] No duplicate ingredient names.
+[x] tests/unit/seed-data-quality.test.ts uses v1.24 seed baseline expectations.
+[x] docs/release-evidence-v1.24.md exists and records v1.24 as NOT DONE.
+[x] v1.24 remains validation-blocked/deferred.
+[x] v1.25 dashboard/onboarding UX polish remains preserved.
+[x] Bước nên làm tiếp theo remains present.
+[x] No database schema, auth, Product Match scoring, or Routine Safety logic changed.
+[x] npm run lint passes.
+[x] npm run typecheck passes.
+[x] npm run test passes.
+[ ] npm run build was not run for v1.25.1 by task scope.
+[ ] npm run test:e2e was not run for v1.25.1 by task scope.
+[ ] Manual browser verification was not performed.
+[ ] Production verification was not performed.
+```
+
+v1.25.1 restores repository consistency only. It does not complete v1.24 full closeout and does not resolve v1.24 build/E2E blockers.
 
 ## 8C. MVP v1.25 - First-Session Guided Experience Polish
 
@@ -330,6 +371,7 @@ MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED
