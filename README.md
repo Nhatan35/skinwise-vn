@@ -18,13 +18,13 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix**.
+- Latest completed scoped task: **MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
 - Recommended next task: **TBD / Backlog grooming**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.25.1 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.25.1. v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.26 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.26. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
@@ -71,6 +71,7 @@ MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -99,6 +100,8 @@ MVP v1.25 is a focused first-session guided experience polish milestone. It impr
 
 MVP v1.25.1 is a repository consistency hotfix. It restores the v1.24 70-product / 70-ingredient seed baseline in code/tests, restores `docs/release-evidence-v1.24.md`, and keeps v1.24 validation-blocked rather than marking it DONE. It does not add product features or resolve the deferred v1.24 build/E2E blockers.
 
+MVP v1.26 is a focused Product Match follow-up polish milestone. It improves explanation labels, product-fit score wording, safety-note visibility, no-profile guidance, and next-action copy using the existing v1.15 Product Match explainability system. It does not add AI, image analysis, medical diagnosis, treatment advice, skin scoring, payment, checkout, cart, marketplace, admin features, seed data changes, schema changes, API contract changes, or Product Match score/ranking rewrites. Scoped v1.26 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.26.
+
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
 ## Key Features
@@ -108,7 +111,7 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Product catalogue with product detail pages and personalized match explanation on Product Detail.
 - Curated demo-safe catalogue with 70 fictional/demo-safe products and 70 educational ingredient records in the current v1.24 seed implementation.
 - Saved products and saved product comparison.
-- Personalized Product Match: rule-based educational product matching with score, level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, and Product Detail single-product matching based on existing product/profile metadata.
+- Personalized Product Match: rule-based educational product matching with product-fit level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, clearer v1.26 next-action copy, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow and safe fallback behavior.
 - Routine builder with empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
@@ -193,6 +196,16 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.26 scoped local validation:
+Evidence date: 2026-06-11
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.26
+npm run test:e2e: NOT RUN for v1.26
+Manual browser verification: NOT CHECKED for v1.26
+Production verification: NOT CHECKED for v1.26
+
 MVP v1.25.1 scoped local validation:
 Evidence date: 2026-06-11
 npm run lint: PASS
@@ -231,10 +244,10 @@ Validation note:
 
 ```txt
 v1.24 synchronized seed documentation, release evidence, and status docs with the current 70-product / 70-ingredient seed implementation.
-Existing product features, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, Product Match logic, Routine Safety Analysis logic, and shared catalogue behavior remain unchanged.
+v1.26 polished Product Match explanation labels, product-fit score wording, safety-note visibility, no-profile guidance, and next-action copy without changing matching score/ranking, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, Routine Safety Analysis logic, seed data, or shared catalogue behavior.
 v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
 Keep v1.22.1 production smoke as PARTIAL / DEFERRED.
-Do not claim manual browser or production verification for v1.24.
+Do not claim manual browser or production verification for v1.24 or v1.26.
 ```
 
 Production evidence:
@@ -374,9 +387,12 @@ These are intentional MVP boundaries, not release blockers:
 - Build and E2E were not run for v1.25 by task scope.
 - v1.25.1 restored v1.24 seed baseline/documentation consistency and passed scoped lint/typecheck/unit test validation.
 - Build and E2E were not run for v1.25.1 by task scope.
+- v1.26 Product Match clarity polish passed scoped lint/typecheck/unit test validation.
+- Build and E2E were not run for v1.26 by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
+- Manual browser and production verification were not performed for v1.26.
 
 ## Final Portfolio Decision
 
@@ -399,6 +415,7 @@ MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -407,4 +424,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix` restored seed/docs consistency within the scoped validation boundary of lint, typecheck, and unit tests. `v1.25 - First-Session Guided Experience Polish` remains preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish` improves the existing Product Match explainability UI/copy as a follow-up polish pass within the scoped validation boundary of lint, typecheck, and unit tests. `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix` and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

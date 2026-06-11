@@ -179,7 +179,7 @@ describe("Product Match scoring", () => {
 
     expect(result.cautions).toEqual(
       expect.arrayContaining([
-        "Nên thêm sản phẩm treatment từ từ, đặc biệt khi bạn mới bắt đầu.",
+        "Nên thêm sản phẩm hoạt chất từ từ, đặc biệt khi bạn mới bắt đầu.",
       ]),
     );
     expect(result.matchScore).toBeLessThan(100);

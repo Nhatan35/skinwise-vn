@@ -136,9 +136,9 @@ describe("Product Detail UI", () => {
       'data-testid="product-match-reasons"',
       'data-testid="product-match-cautions"',
       'data-testid="product-match-ingredient-highlights"',
-      "Điểm phù hợp",
-      "Tín hiệu phù hợp:",
-      "Cần lưu ý:",
+      "Mức độ phù hợp",
+      "Tín hiệu phù hợp",
+      "Lưu ý an toàn",
       "Thành phần liên quan",
     ]) {
       expect(productMatchExplanationCardSource).toContain(requiredSource);

@@ -7,10 +7,10 @@ Last updated: 2026-06-11
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+Latest completed scoped task: MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.25.1 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.26 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -34,7 +34,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Skin Profile management | DONE | View/edit/delete supported. |
 | Product Catalogue | DONE | Seeded demo products. |
 | Product Detail | DONE | Product detail, personalized match section, and v1.15 decision-support safety wording. |
-| Product Match | DONE | Rule-based educational matching with v1.15 explainability and caution guardrails. |
+| Product Match | DONE | Rule-based educational matching with v1.15 explainability/caution guardrails and v1.26 clarity polish for product-fit labels, safety notes, no-profile guidance, and next actions. |
 | Product and ingredient seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation contains 70 products and 70 ingredients with v1.24 seed quality tests, but the milestone is not DONE until build/E2E validation passes. |
 | Saved Products | DONE | Save/unsave flow. |
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
@@ -50,7 +50,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
-| Local validation evidence | MIXED BY MILESTONE | v1.25.1 scoped validation passed with lint, typecheck, and unit tests. v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
+| Local validation evidence | MIXED BY MILESTONE | v1.26 scoped validation passed with lint, typecheck, and unit tests. v1.25.1 and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -73,6 +73,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Seed Data Quality Expansion Round 2 | Data Quality | v1.24 | NOT DONE / VALIDATION BLOCKED |
 | First-Session Guided Experience Polish | UX Polish | v1.25 | DONE, scoped validation only |
 | Seed Baseline Regression & Documentation Consistency Hotfix | Repository Consistency | v1.25.1 | DONE, scoped validation only |
+| Product Match Explanation Clarity & Safe Decision Support Polish | UX / Explainability Polish | v1.26 | DONE, scoped validation only |
 
 ## Out-of-Scope Matrix
 
@@ -92,7 +93,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+Latest completed scoped task: MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
@@ -100,4 +101,5 @@ Portfolio media evidence tasks are optional, intentionally skipped, and not prod
 v1.24 status: NOT DONE / VALIDATION BLOCKED until build and E2E validation pass
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored
+v1.26 status: DONE within scoped local validation - Product Match explanation clarity and safe decision-support copy polished; lint, typecheck, and unit tests passed
 ```

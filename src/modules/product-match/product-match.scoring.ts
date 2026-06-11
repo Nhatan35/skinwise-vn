@@ -311,7 +311,7 @@ export function scoreProductMatch(input: {
   if (skinProfile.experienceLevel === "beginner" && treatmentOrActiveHeavy) {
     score -= 10;
     cautions.push(
-      "Nên thêm sản phẩm treatment từ từ, đặc biệt khi bạn mới bắt đầu.",
+      "Nên thêm sản phẩm hoạt chất từ từ, đặc biệt khi bạn mới bắt đầu.",
     );
   }
 

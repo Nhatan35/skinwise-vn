@@ -9,11 +9,11 @@ export function ProductMatchNoProfileEmptyState() {
     <EmptyState
       action={
         <Button asChild>
-          <Link href={routes.ONBOARDING_SKIN_PROFILE}>Hoàn thiện hồ sơ da</Link>
+          <Link href={routes.ONBOARDING_SKIN_PROFILE}>Cập nhật hồ sơ da</Link>
         </Button>
       }
-      description="SkinWise cần thêm thông tin hồ sơ da để gợi ý sản phẩm phù hợp hơn. Hãy cập nhật loại da, mối quan tâm và độ nhạy cảm trước khi xem Product Match."
-      title="SkinWise cần thêm thông tin hồ sơ da"
+      description="SkinWise cần thêm thông tin hồ sơ da để có thêm ngữ cảnh gợi ý sản phẩm. Hồ sơ da càng rõ, phần giải thích càng dễ hiểu hơn dựa trên dữ liệu bạn đã nhập."
+      title="Cập nhật hồ sơ da để xem Product Match"
     />
   );
 }

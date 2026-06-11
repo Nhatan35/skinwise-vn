@@ -37,7 +37,7 @@ const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
   moisturizer: "Dưỡng ẩm",
   sunscreen: "Chống nắng",
-  treatment: "Treatment",
+  treatment: "Sản phẩm hoạt chất",
   toner: "Toner",
   serum: "Serum",
   mask: "Mặt nạ",
@@ -102,8 +102,8 @@ function getMatchedSignalItems(item: ProductMatchDto) {
 
     signals.push({
       label: matchedSkinTypeLabels
-        ? `Loại da khớp: ${matchedSkinTypeLabels}`
-        : "Loại da có tín hiệu khớp",
+        ? `Phù hợp với hồ sơ da: ${matchedSkinTypeLabels}`
+        : "Phù hợp với dữ liệu hồ sơ da",
       tone: "positive",
     });
   }
@@ -114,21 +114,21 @@ function getMatchedSignalItems(item: ProductMatchDto) {
       .join(", ");
 
     signals.push({
-      label: `Mối quan tâm khớp: ${matchedConcernLabels}`,
+      label: `Liên quan đến mối quan tâm: ${matchedConcernLabels}`,
       tone: "positive",
     });
   }
 
   if (matchedSignals.budget) {
     signals.push({
-      label: "Ngân sách có tín hiệu khớp",
+      label: "Phù hợp với ngân sách đã nhập",
       tone: "positive",
     });
   }
 
   if (matchedSignals.sensitivity) {
     signals.push({
-      label: "Độ nhạy cảm cần xem kỹ",
+      label: "Cần xem kỹ nếu da dễ kích ứng",
       tone: "caution",
     });
   }
@@ -173,7 +173,7 @@ export function ProductMatchCard({
               {matchLevelLabels[item.matchLevel]}
             </Badge>
             <Badge data-testid="product-match-score" variant="outline">
-              Điểm phù hợp: {item.matchScore}/100
+              Mức độ phù hợp: {item.matchScore}/100
             </Badge>
           </div>
         </div>
@@ -200,10 +200,21 @@ export function ProductMatchCard({
               headingId={explanationHeadingId}
               match={item}
               showMatchBadges={false}
-              title="Vì sao được gợi ý"
+              title="Lý do gợi ý"
             />
           </div>
         ) : null}
+
+        <div
+          className="rounded-2xl border border-border bg-muted/30 p-3"
+          data-testid="product-match-next-action"
+        >
+          <p className="text-sm font-semibold text-foreground">Bước tiếp theo</p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            Xem chi tiết để kiểm tra thông tin sản phẩm, rồi lưu sản phẩm nếu phù
+            hợp với routine chăm sóc da của bạn.
+          </p>
+        </div>
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
           <Button asChild variant="outline">
@@ -211,7 +222,7 @@ export function ProductMatchCard({
               data-testid="product-match-view-details-link"
               href={`${routes.PRODUCTS}/${product.id}`}
             >
-              Xem chi tiết
+              Xem chi tiết sản phẩm
             </Link>
           </Button>
           <SavedProductToggleButton

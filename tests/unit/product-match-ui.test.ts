@@ -86,9 +86,9 @@ describe("Product Match UI source", () => {
       "href={routes.ONBOARDING_SKIN_PROFILE}",
     );
     expect(productMatchEmptyStateSource).toContain(
-      "SkinWise cần thêm thông tin hồ sơ da",
+      "Cập nhật hồ sơ da để xem Product Match",
     );
-    expect(productMatchEmptyStateSource).toContain("Hoàn thiện hồ sơ da");
+    expect(productMatchEmptyStateSource).toContain("Cập nhật hồ sơ da");
     expect(productMatchSummarySource).toContain("Cập nhật hồ sơ da");
   });
 
@@ -100,7 +100,11 @@ describe("Product Match UI source", () => {
       'data-testid="product-match-reasons"',
       'data-testid="product-match-cautions"',
       'data-testid="product-match-view-details-link"',
-      "Vì sao",
+      'data-testid="product-match-next-action"',
+      "Lý do gợi ý",
+      "Bước tiếp theo",
+      "Xem chi tiết sản phẩm",
+      "Mức độ phù hợp",
       "product-match-explanation",
       "product-match-explanation-summary",
       "product-match-ingredient-highlights",
@@ -112,8 +116,10 @@ describe("Product Match UI source", () => {
       "ingredientHighlights",
       "usageNote",
       "matchedSignals",
-      "Loại da khớp",
-      "Mối quan tâm khớp",
+      "Phù hợp với hồ sơ da",
+      "Liên quan đến mối quan tâm",
+      "Phù hợp với ngân sách đã nhập",
+      "Cần xem kỹ nếu da dễ kích ứng",
       "SavedProductToggleButton",
       "initialSaved={item.isSaved}",
       "productId={product.id}",
@@ -139,7 +145,7 @@ describe("Product Match UI source", () => {
       "matchedSignals",
       "dataQualityNotes",
       "Sản phẩm này có thể phù hợp với loại da bạn đã chọn",
-      "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục",
+      "Thông tin này chỉ mang tính tham khảo",
     ]) {
       expect(productMatchExplanationSource).toContain(expectedSource);
     }
@@ -171,6 +177,13 @@ describe("Product Match UI source", () => {
       "hiệu quả 100%",
       "trị mụn",
       "chữa mụn",
+      "chẩn đoán",
+      "kê đơn",
+      "bệnh da",
+      "chữa khỏi",
+      "cam kết cải thiện",
+      "điểm da",
+      "chấm điểm da",
       "skin score",
       "skinscore",
       "diagnosis",

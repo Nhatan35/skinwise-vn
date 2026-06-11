@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
 ```
 
 Completed closeout milestones:
@@ -41,6 +41,7 @@ MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -51,6 +52,7 @@ Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED.
 v1.24 status: Implementation complete, validation blocked - build and E2E did not pass in the current environment.
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed. Build, E2E, manual browser verification, and production verification were not run for v1.25.
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
+v1.26 status: DONE within scoped local validation - Product Match explanation clarity and safe decision-support copy polished. Build, E2E, manual browser verification, and production verification were not run for v1.26.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -60,7 +62,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 |---|---|---|
 | Core MVP | PASS | MVP core scope is complete and ready for portfolio/demo/interview use as an MVP. |
 | Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs, Product Detail personalized match section, and v1.15 decision-support wording. |
-| Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, and improved with v1.15 explainability/caution guardrails. |
+| Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, improved with v1.15 explainability/caution guardrails, and polished in v1.26 for clearer explanation labels, product-fit wording, no-profile guidance, and next-action copy. |
 | Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded metadata. |
 | Routine Builder | PASS | Empty state, morning/evening guidance, selected-product context, and Today Checklist CTA are implemented. |
 | Routine Safety Analysis | PASS | Deterministic rules and safe fallback behavior are implemented. |
@@ -68,7 +70,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | MIXED BY MILESTONE | MVP v1.25.1 scoped validation passed with lint, typecheck, and unit tests. MVP v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
+| Local validation | MIXED BY MILESTONE | MVP v1.26 scoped validation passed with lint, typecheck, and unit tests. MVP v1.25.1 and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -82,7 +84,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix is complete within scoped validation. MVP v1.25 First-Session Guided Experience Polish remains preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
+| Latest post-MVP implementation | PASS | MVP v1.26 Product Match Explanation Clarity & Safe Decision Support Polish is complete within scoped validation. MVP v1.25 First-Session Guided Experience Polish and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -100,6 +102,16 @@ npm run build: NOT RUN for v1.25.1
 npm run test:e2e: NOT RUN for v1.25.1
 Manual browser verification: NOT CHECKED for v1.25.1
 Production verification: NOT CHECKED for v1.25.1
+
+MVP v1.26 scoped local validation:
+Evidence date: 2026-06-11
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.26
+npm run test:e2e: NOT RUN for v1.26
+Manual browser verification: NOT CHECKED for v1.26
+Production verification: NOT CHECKED for v1.26
 
 MVP v1.25 scoped local validation:
 Evidence date: 2026-06-11
@@ -144,6 +156,7 @@ Evidence boundary:
 - v1.22.1 direct verification checked only the public production URL and `/api/health`.
 - v1.23 hardened the existing app-data deletion workflow; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 synchronized seed docs/evidence/status with the current 70-product / 70-ingredient seed implementation, but required build and E2E validation did not pass.
+- v1.26 polished Product Match explanation clarity and safe decision-support copy using the existing v1.15 explainability system; build, E2E, manual browser verification, and production verification were not run.
 - Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
@@ -155,7 +168,7 @@ Evidence boundary:
 - Protected dashboard and private app routes.
 - Skin Profile onboarding, view, edit, and delete.
 - Product Catalogue and Product Detail.
-- Personalized Product Match result cards.
+- Personalized Product Match result cards with v1.26 explanation-label, product-fit wording, caution, no-profile, and next-action clarity polish.
 - Product Detail personalized match explanation.
 - Saved Products.
 - Ingredient Library and Ingredient Detail.
@@ -179,10 +192,10 @@ Evidence boundary:
 | Document | Status | Notes |
 |---|---|---|
 | `docs/portfolio-evidence-package.md` | PASS | Central portfolio package with recruiter summary, CV/resume draft, demo run of show, media plan, and evidence boundary. |
-| `README.md` | PASS | Current v1.25 scoped status, v1.24 validation blocker, health endpoint, release evidence references, and evidence boundaries are documented. |
+| `README.md` | PASS | Current v1.26 scoped status, v1.24 validation blocker, health endpoint, release evidence references, and evidence boundaries are documented. |
 | `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
-| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.25 scoped validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and backlog planning. |
+| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.26 scoped validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and backlog planning. |
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
 | `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
@@ -191,8 +204,8 @@ Evidence boundary:
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes `/api/health` check, its intentional limitations, current evidence boundary, and recovery plan. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.25 scoped status, and recommended next task are synchronized. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase and v1.25 scoped sprint status are synchronized. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.26 scoped status, and recommended next task are synchronized. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase and v1.26 scoped sprint status are synchronized. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
 | `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |
 
@@ -222,10 +235,41 @@ These are intentional MVP boundaries, not release blockers:
 - v1.24 is not complete because build and E2E validation timed out in the current environment.
 - v1.25 build and E2E validation were not run by task scope.
 - v1.25.1 build and E2E validation were not run by task scope.
+- v1.26 build and E2E validation were not run by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
 - Manual browser and production verification were not performed for v1.25.1.
+- Manual browser and production verification were not performed for v1.26.
+
+## 8E. MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
+
+Validation required before DONE:
+
+```txt
+[x] Existing Product Match explainability mapper/component reused.
+[x] No duplicate Product Match explainability system added.
+[x] Product Match result cards show clearer explanation labels.
+[x] Product-fit score wording is not presented as skin evaluation.
+[x] Match-signal badges are clearer for profile, concern, budget, and caution signals.
+[x] Safe caution section label is visible.
+[x] No-profile Product Match state guides the user to update the skin profile.
+[x] Result-card next action copy is visible.
+[x] Product Match scoring/ranking behavior preserved.
+[x] Seed data, schema, auth behavior, API contracts, AI provider behavior, and Routine Safety logic preserved.
+[x] v1.25 dashboard/onboarding guidance preserved.
+[x] v1.25.1 seed baseline consistency preserved.
+[x] v1.24 remains NOT DONE / VALIDATION BLOCKED.
+[x] npm run lint passes.
+[x] npm run typecheck passes.
+[x] npm run test passes.
+[ ] npm run build was not run for v1.26 by task scope.
+[ ] npm run test:e2e was not run for v1.26 by task scope.
+[ ] Manual browser verification was not performed.
+[ ] Production verification was not performed.
+```
+
+v1.26 is done only within the scoped local validation boundary of lint, typecheck, and unit tests. Do not treat it as build, E2E, manual browser, or production readiness evidence.
 
 ## 8D. MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
 
@@ -372,6 +416,7 @@ MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED

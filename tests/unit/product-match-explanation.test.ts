@@ -165,7 +165,7 @@ describe("Product Match explanation generator", () => {
         }),
       ]),
     );
-    expect(explanation.usageNote).toContain("patch test");
+    expect(explanation.usageNote).toContain("thử trên một vùng da nhỏ");
     expectNoForbiddenClaims(explanation);
   });
 

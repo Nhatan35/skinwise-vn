@@ -17,14 +17,15 @@ Account data deletion hardening: v1.23 - Account Data Deletion Workflow Hardenin
 Seed data quality closeout: v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 First-session guided experience polish: v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 Seed baseline consistency hotfix: v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
-Latest completed scoped task: v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+Product Match clarity polish: v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
+Latest completed scoped task: v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: TBD / Backlog grooming
-Local validation: PASS for v1.25 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.26 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -95,6 +96,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
 | P2 | Seed Baseline Regression & Documentation Consistency Hotfix | DONE in v1.25.1 | Restores v1.24 seed baseline/test/evidence consistency without marking v1.24 DONE or resolving deferred build/E2E blockers. |
+| P2 | Product Match Explanation Clarity & Safe Decision Support Polish | DONE in v1.26 | Follow-up polish to v1.15 Product Match explainability; improves explanation labels, caution visibility, no-profile guidance, and next-action clarity without changing scoring, seed data, schema, or API contracts. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -858,6 +860,8 @@ Reason:
 
 - v1.25.1 seed baseline consistency hotfix passed scoped local validation with lint, typecheck, and unit tests.
 - v1.25 first-session guided experience polish remains preserved.
+- v1.26 Product Match clarity polish passed scoped local validation with lint, typecheck, and unit tests.
+- v1.26 is a follow-up polish pass; historical v1.15 Product Match Explainability & Safety Guardrails remains the original explainability implementation milestone.
 - v1.25 improved dashboard onboarding guidance without adding new product scope.
 - v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
@@ -907,4 +911,5 @@ Reason:
 2026-06-11: Attempted v1.24 Seed Data Quality Expansion Round 2 closeout. Confirmed 70 products and 70 ingredients, created v1.24 release evidence, updated seed data/status docs, and stabilized one slow UI foundation import test timeout. `npm run lint`, `npm run typecheck`, `npm run test`, and `npm audit --omit=dev --audit-level=moderate` passed. `npm run build` and `npm run test:e2e` timed out in the current Node 22/npm 10 environment, so v1.24 remains NOT DONE.
 2026-06-11: Completed v1.25 First-Session Guided Experience Polish with clearer dashboard onboarding step guidance, a first-incomplete-step "Bước nên làm tiếp theo" block, onboarding helper tests, and scoped local validation PASS for `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25. v1.24 remains deferred and validation-blocked.
 2026-06-11: Completed v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix. Restored `scripts/seed.ts` and `tests/unit/seed-data-quality.test.ts` to the v1.24 70/70 baseline, restored missing `docs/release-evidence-v1.24.md`, preserved v1.25 dashboard/onboarding UX polish, and kept v1.24 NOT DONE / VALIDATION BLOCKED. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.1.
+2026-06-11: Completed v1.26 Product Match Explanation Clarity & Safe Decision Support Polish as a follow-up to v1.15. Improved Product Match explanation labels, product-fit score wording, safety note visibility, no-profile guidance, and result-card next-action copy without changing matching score/ranking, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.26. v1.24 remains deferred and validation-blocked.
 ```

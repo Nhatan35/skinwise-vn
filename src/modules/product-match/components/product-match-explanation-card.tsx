@@ -84,7 +84,7 @@ export function ProductMatchExplanationCard({
               {matchLevelLabels[match.matchLevel]}
             </Badge>
             <Badge data-testid="product-match-score" variant="outline">
-              Điểm phù hợp: {match.matchScore}/100
+              Mức độ phù hợp: {match.matchScore}/100
             </Badge>
           </div>
         ) : null}
@@ -102,7 +102,7 @@ export function ProductMatchExplanationCard({
       <div className="space-y-3" data-testid="product-match-reasons">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <CheckCircle2 aria-hidden="true" className="size-4" />
-          Tín hiệu phù hợp:
+          Tín hiệu phù hợp
         </h4>
         <IconTextList icon="positive" items={positiveReasons} />
       </div>
@@ -110,7 +110,7 @@ export function ProductMatchExplanationCard({
       <div className="space-y-3" data-testid="product-match-cautions">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <AlertTriangle aria-hidden="true" className="size-4" />
-          Cần lưu ý:
+          Lưu ý an toàn
         </h4>
         <IconTextList icon="caution" items={cautionReasons} />
       </div>

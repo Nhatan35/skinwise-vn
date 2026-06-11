@@ -25,7 +25,7 @@ const LIMITED_DATA_NOTE =
 const INGREDIENTS_MISSING_NOTE =
   "Chưa đủ dữ liệu thành phần để giải thích chi tiết mức độ phù hợp của sản phẩm này.";
 const DEFAULT_USAGE_NOTE =
-  "Thông tin chỉ nhằm hỗ trợ chăm sóc da ở mức giáo dục, không phải lời khuyên y tế. Hãy patch test trước và đưa sản phẩm vào routine từ từ, đặc biệt nếu da bạn nhạy cảm hoặc đang kích ứng.";
+  "Thông tin này chỉ mang tính tham khảo và không thay thế tư vấn chuyên môn. Hãy thử trên một vùng da nhỏ trước và đưa sản phẩm vào routine từ từ, đặc biệt nếu da bạn nhạy cảm hoặc đang kích ứng.";
 
 const skinTypeLabels: Record<SkinType, string> = {
   oily: "da dầu",
@@ -93,14 +93,14 @@ function parseIngredientNames(input: ProductMatchDto) {
 
 function buildSummary(input: ProductMatchDto) {
   if (input.matchLevel === "strong" || input.matchLevel === "good") {
-    return `Sản phẩm này có thể phù hợp với hồ sơ da của bạn dựa trên dữ liệu sản phẩm hiện có và điểm phù hợp ${input.matchScore}/100.`;
+    return `Sản phẩm này có thể phù hợp với hồ sơ da của bạn dựa trên dữ liệu sản phẩm hiện có. Mức độ phù hợp sản phẩm: ${input.matchScore}/100.`;
   }
 
   if (input.matchLevel === "cautious") {
-    return `Sản phẩm này có một số tín hiệu phù hợp nhưng cần xem kỹ trước khi dùng, dựa trên điểm phù hợp ${input.matchScore}/100.`;
+    return `Sản phẩm này có một số tín hiệu phù hợp nhưng cần xem kỹ trước khi dùng. Mức độ phù hợp sản phẩm: ${input.matchScore}/100.`;
   }
 
-  return `Sản phẩm này có ít tín hiệu khớp với hồ sơ da đã lưu của bạn, dựa trên điểm phù hợp ${input.matchScore}/100.`;
+  return `Sản phẩm này có ít tín hiệu khớp với hồ sơ da đã lưu của bạn. Mức độ phù hợp sản phẩm: ${input.matchScore}/100.`;
 }
 
 function toReason(
@@ -346,7 +346,7 @@ export function buildUnavailableProductMatchExplanation(
       positiveReasons: [],
       cautionReasons: [],
       ingredientHighlights: [],
-      usageNote: "Hãy kiểm tra nhãn sản phẩm và patch test trước khi sử dụng.",
+      usageNote: "Hãy kiểm tra nhãn sản phẩm và thử trên một vùng da nhỏ trước khi sử dụng.",
       dataQualityNotes: [
         "Dữ liệu thành phần hiện chưa đủ để tạo giải thích chi tiết.",
       ],

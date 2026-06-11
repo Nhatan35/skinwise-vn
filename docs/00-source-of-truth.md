@@ -30,16 +30,18 @@ MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE, scoped validation only
+MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix
+Latest completed scoped task: MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` did not pass in the current environment
 v1.25 status: DONE within scoped local validation - `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.25.1 status: DONE within scoped local validation - restored v1.24 70/70 seed baseline consistency and missing v1.24 release evidence; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
+v1.26 status: DONE within scoped local validation - Product Match explanation clarity, safe caution visibility, no-profile guidance, and next-action copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 Recommended next task: TBD / Backlog grooming
 ```
 
@@ -75,6 +77,7 @@ Evidence boundary:
 - v1.24 seed data implementation currently contains 70 products and 70 ingredients with v1.24 seed quality tests, but v1.24 is NOT DONE because build/E2E validation did not pass.
 - v1.25 improved dashboard first-session onboarding guidance and next-step copy without seed data, schema, auth, Product Match scoring, or Routine Safety logic changes. Scoped validation passed with lint, typecheck, and unit tests only.
 - v1.25.1 restored repository consistency after a seed baseline regression: `scripts/seed.ts` and `tests/unit/seed-data-quality.test.ts` again use the v1.24 70/70 baseline, `docs/release-evidence-v1.24.md` exists again, and docs keep v1.24 validation-blocked.
+- v1.26 polished the existing Product Match explainability UI as a follow-up to v1.15, improving product-fit labels, safe caution wording, no-profile guidance, and next-action copy without changing scoring/ranking, seed data, schema, auth, AI-provider behavior, or Product Detail/Product Match API contracts.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
@@ -84,4 +87,5 @@ Evidence boundary:
 - v1.24 closeout created/updated seed data documentation and release evidence, but required validation is blocked in the current environment; do not mark v1.24 DONE until all required commands pass.
 - Build, E2E, manual browser verification, and production verification were not run for v1.25.
 - Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
+- Build, E2E, manual browser verification, and production verification were not run for v1.26.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.
