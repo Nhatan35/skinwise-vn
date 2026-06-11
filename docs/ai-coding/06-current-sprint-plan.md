@@ -17,40 +17,40 @@ Post-MVP backlog: CREATED in v1.12
 Production Observability & Release Confidence: DONE in v1.22
 Production Deployment & Smoke Verification: PARTIAL / DEFERRED in v1.22.1
 Account Data Deletion Workflow Hardening: DONE in v1.23
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED in v1.24
+First-Session Guided Experience Polish: DONE in v1.25, scoped validation only
+Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
 Current active milestone: None
-Current active milestone status: NONE
+Current active milestone status: None
 Production URL public reachability: PASS for v1.22.1 public check
 Production /api/health: PASS for v1.22.1 public check
 Authenticated MVP production smoke: NOT CHECKED / DEFERRED
 Production signals: NOT CHECKED / DEFERRED
-Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
+Recommended next task: TBD / Backlog grooming
 Current phase: Post-MVP controlled improvement
 ```
 
 v1.22.1 remains partial/deferred because only the public production URL and `/api/health` were checked directly. Authenticated MVP flows and production platform signals were not checked.
 
-v1.23 hardened the existing account app-data deletion workflow by improving destructive confirmation copy, proving server-side ownership boundaries, extending sensitive-response checks, and documenting the data deletion boundary.
+v1.25 is the latest completed milestone within the scoped validation boundary of lint, typecheck, and unit tests.
+
+v1.24 seed implementation and closeout documentation are mostly complete, but v1.24 is NOT DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
 
 ## 2. Objective
 
-Harden the existing user app-data deletion workflow so it is safer, clearer, better tested, and better documented without expanding MVP scope.
+Complete `v1.25 - First-Session Guided Experience Polish` by improving dashboard onboarding guidance so first-time users understand what to do next, why it matters, what they get after completing it, and where to go.
 
-The milestone preserves:
+This sprint does not add new product features. It preserves:
 
 ```txt
-No Google account deletion
-No OAuth provider account deletion
-No shared product catalogue deletion
-No shared ingredient library deletion
-No other-user data deletion
-No database schema change
-No new collection
-No new dependency
 No admin CRUD
 No payment, checkout, marketplace, or order workflow
 No real AI provider integration
 No image upload, skin image analysis, diagnosis, treatment advice, or skin scoring
+No database schema change
+No seed data change
+No Product Match rewrite
+No Routine Safety Analysis rewrite
 No secret, token, OAuth credential, database URI, raw environment variable, password, cookie, session token, or raw production database document exposure
 ```
 
@@ -59,114 +59,92 @@ No secret, token, OAuth credential, database URI, raw environment variable, pass
 Active files:
 
 ```txt
-src/modules/settings/components/settings-data-control-center.tsx
-tests/unit/delete-account-app-data-api-contract.test.ts
-tests/unit/account-data-repository.test.ts
-tests/unit/settings-ui.test.ts
-tests/unit/settings-client.test.ts
-docs/data-control-and-deletion.md
-docs/release-evidence-v1.23.md
+docs/00-source-of-truth.md
 docs/post-mvp-backlog.md
+docs/final-release-checklist.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/06-current-sprint-plan.md
-docs/final-release-checklist.md
-docs/00-source-of-truth.md
 README.md
+src/modules/dashboard/components/dashboard-overview.tsx
+src/modules/dashboard/components/onboarding-progress-card.tsx
+tests/unit/dashboard-ui.test.ts
+tests/unit/onboarding-progress-card.test.ts
 ```
+
+Existing v1.24 seed changes remain deferred/validation-blocked and were not advanced in v1.25.
 
 ## 4. Acceptance Criteria
 
-Functional and privacy:
+First-session guided experience polish:
 
 ```txt
-[x] Existing delete app data UI reviewed.
-[x] Existing DELETE /api/account/app-data route reviewed.
-[x] Delete API requires authentication.
-[x] Delete API resolves the current user server-side.
-[x] Delete API uses only the server-resolved current user id.
-[x] Delete API ignores malicious client-provided userId values.
-[x] Repository deletion filters target only current-user records.
-[x] Other users' records are not targeted by deletion filters.
-[x] Shared product catalogue data is not deleted.
-[x] Shared ingredient library data is not deleted.
-[x] Google/OAuth account deletion remains out of scope.
-[x] Delete response does not expose sensitive data.
-[x] Error response does not expose stack traces or database internals.
-[x] Confirmation copy explains irreversibility and non-deletion boundaries.
+[x] Preserve the existing five-step onboarding journey.
+[x] Use buildOnboardingSteps() as the onboarding step source of truth.
+[x] Add clearer step description, outcome, CTA label, route, and completion state.
+[x] Show Bước nên làm tiếp theo from the first incomplete onboarding step.
+[x] Avoid duplicate conflicting dashboard next-step guidance during onboarding.
+[x] Keep v1.24 NOT DONE / VALIDATION BLOCKED.
+[x] Keep v1.22.1 production smoke verification PARTIAL / DEFERRED.
+[x] Do not claim build, E2E, manual browser, or production verification for v1.25.
 ```
 
-Documentation:
-
-```txt
-[x] Data control/deletion documentation added.
-[x] v1.23 release evidence added.
-[x] Status docs keep v1.22.1 production smoke as PARTIAL / DEFERRED.
-[x] Status docs mark v1.23 as latest completed only after validation passed.
-```
-
-Manual/browser:
-
-```txt
-[ ] Manual browser deletion confirmation check.
-[ ] Manual browser cancel deletion check.
-[ ] Manual browser confirm deletion check.
-[ ] Manual browser post-deletion empty-state check.
-[ ] Production deletion smoke check.
-```
-
-Manual/browser and production checks remain NOT CHECKED for v1.23. Local tests and validation do not count as production verification.
-
-## 5. Validation Checklist
-
-Required before marking DONE:
+Validation:
 
 ```txt
 [x] npm run lint
 [x] npm run typecheck
 [x] npm run test
-[x] npm run build
-[x] npm run test:e2e
-[x] npm audit --omit=dev --audit-level=moderate
+[ ] npm run build - not run for v1.25 by task scope
+[ ] npm run test:e2e - not run for v1.25 by task scope
 ```
 
-Current v1.23 validation status:
+## 5. Validation Status
+
+Current v1.25 validation status:
 
 ```txt
 Evidence date: 2026-06-11
-Environment: Local Windows / PowerShell
-Branch: main
-node -v: v24.14.0
-npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 992 tests
-npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
-npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.25
+npm run test:e2e: NOT RUN for v1.25
+Manual browser verification: NOT CHECKED
+Production verification: NOT CHECKED
 ```
 
-## 6. Non-Goals
+v1.25 is done only within this scoped local validation boundary. Do not use this as full release readiness evidence.
+
+## 6. Known Limitations
 
 ```txt
-No diagnosis.
-No treatment guidance.
-No clinical conclusion.
-No skin or health scoring.
-No image upload or image analysis.
-No marketplace, cart, checkout, order workflow, or payment.
-No reviews, ratings, likes, or sharing.
-No notification/reminder system.
-No admin dashboard.
-No database schema change.
-No external AI provider change.
-No broad redesign.
-No unrelated refactor.
+Manual browser verification: NOT CHECKED
+Production verification: NOT CHECKED
+Build validation: NOT RUN for v1.25 by task scope
+E2E validation: NOT RUN for v1.25 by task scope
+Screenshots/video: NOT CREATED
+v1.24 closeout: DEFERRED / VALIDATION BLOCKED
 ```
 
-## 7. Suggested Commit
+## 7. Suggested Next Action
+
+Recommended next task:
+
+```txt
+TBD / Backlog grooming
+```
+
+If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E validation in a suitable environment before marking v1.24 DONE.
+
+
+## 8. Suggested Commit
+
+For the v1.25 scoped UX polish changes, use:
 
 ```bash
 git add .
-git commit -m "chore: harden account data deletion workflow"
+git commit -m "chore: polish first-session guided experience"
 ```
+
+Do not claim a commit was created unless it was actually created.

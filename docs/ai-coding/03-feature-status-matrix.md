@@ -7,10 +7,10 @@ Last updated: 2026-06-11
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS
+Local validation: PASS for v1.25 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -18,7 +18,7 @@ Historical production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
+Recommended next task: TBD / Backlog grooming
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -29,13 +29,13 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 |---|---|---|
 | Landing page | DONE | Public app entry. |
 | Google OAuth / Auth.js | DONE | Protected app routes. |
-| Dashboard | DONE | User-owned summary. |
+| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish. |
 | Skin Profile onboarding | DONE | Create/update/view profile. |
 | Skin Profile management | DONE | View/edit/delete supported. |
 | Product Catalogue | DONE | Seeded demo products. |
 | Product Detail | DONE | Product detail, personalized match section, and v1.15 decision-support safety wording. |
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability and caution guardrails. |
-| Product and ingredient seed data | DONE | v1.14 expanded coverage to 58 products and 59 ingredients. |
+| Product and ingredient seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation contains 70 products and 70 ingredients with v1.24 seed quality tests, but the milestone is not DONE until build/E2E validation passes. |
 | Saved Products | DONE | Save/unsave flow. |
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
 | Ingredient Library | DONE | Ingredient list/detail. |
@@ -50,7 +50,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
-| Local validation evidence | PASS | v1.23 validation passed with 103 files / 992 unit tests, 31/31 E2E tests, build, and production audit PASS. |
+| Local validation evidence | MIXED BY MILESTONE | v1.25 scoped validation passed with lint, typecheck, and unit tests. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -70,6 +70,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Production Observability & Release Confidence | Release/Ops | v1.22 | DONE |
 | Production Deployment & Smoke Verification | Release/Ops | v1.22.1 | IN PROGRESS / NOT DONE |
 | Account Data Deletion Workflow Hardening | Privacy/Data Control | v1.23 | DONE |
+| Seed Data Quality Expansion Round 2 | Data Quality | v1.24 | NOT DONE / VALIDATION BLOCKED |
+| First-Session Guided Experience Polish | UX Polish | v1.25 | DONE, scoped validation only |
 
 ## Out-of-Scope Matrix
 
@@ -89,9 +91,11 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional, intentionally skipped, and not product correctness blockers
+v1.24 status: NOT DONE / VALIDATION BLOCKED until build and E2E validation pass
+v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
 ```

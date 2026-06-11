@@ -27,14 +27,18 @@ MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
+MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
+MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
-Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
+v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` did not pass in the current environment
+v1.25 status: DONE within scoped local validation - `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
+Recommended next task: TBD / Backlog grooming
 ```
 
 Primary current documents:
@@ -44,6 +48,7 @@ Primary current documents:
 - `docs/final-release-checklist.md`
 - `docs/release-evidence-v1.22.md`
 - `docs/release-evidence-v1.23.md`
+- `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
 - `docs/post-mvp-backlog.md`
 - `docs/ai-coding/02-implementation-status.md`
@@ -65,10 +70,14 @@ Evidence boundary:
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
+- v1.24 seed data implementation currently contains 70 products and 70 ingredients with v1.24 seed quality tests, but v1.24 is NOT DONE because build/E2E validation did not pass.
+- v1.25 improved dashboard first-session onboarding guidance and next-step copy without seed data, schema, auth, Product Match scoring, or Routine Safety logic changes. Scoped validation passed with lint, typecheck, and unit tests only.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates without database, auth, AI-provider, or product-feature changes.
 - v1.22.1 is not complete because browser/OAuth/Vercel/MongoDB Atlas verification was unavailable in this run.
 - v1.23 hardened the existing account app-data deletion workflow with clearer destructive confirmation copy, explicit user-isolation tests, sensitive-response checks, and data-control documentation without schema, auth architecture, product-scope, or shared-catalogue deletion changes.
+- v1.24 closeout created/updated seed data documentation and release evidence, but required validation is blocked in the current environment; do not mark v1.24 DONE until all required commands pass.
+- Build, E2E, manual browser verification, and production verification were not run for v1.25.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

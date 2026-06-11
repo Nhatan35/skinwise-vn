@@ -14,14 +14,16 @@ Previous completed milestone: v1.21 - Insight Explainability & Tracking Quality 
 Production observability implementation: v1.22 - Production Observability & Release Confidence: DONE
 Production smoke verification: v1.22.1 - Production Deployment & Smoke Verification: PARTIAL / DEFERRED
 Account data deletion hardening: v1.23 - Account Data Deletion Workflow Hardening: DONE
-Latest completed milestone: v1.23 - Account Data Deletion Workflow Hardening
+Seed data quality closeout: v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
+First-session guided experience polish: v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
+Latest completed milestone: v1.25 - First-Session Guided Experience Polish
 Current active milestone: None
-Current active milestone status: NONE
+Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
-Local validation: PASS
+Recommended next task: TBD / Backlog grooming
+Local validation: PASS for v1.25 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -89,6 +91,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Production Observability & Release Confidence | DONE in v1.22 | Adds safe `/api/health`, health API contract coverage, release evidence, incident note template, and monitoring/checklist updates. |
 | P2 | Production Deployment & Smoke Verification | IN PROGRESS / NOT DONE in v1.22.1 | Public URL and `/api/health` passed direct checks; authenticated MVP flows and production signals remain unchecked. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
+| P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
+| P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -845,16 +849,19 @@ These items either increase product risk, safety risk, or implementation complex
 The recommended next task is:
 
 ```txt
-v1.24 - Seed Data Quality Expansion Round 2
+TBD / Backlog grooming
 ```
 
 Reason:
 
-- v1.23 Account Data Deletion Workflow Hardening is complete and locally validated.
+- v1.25 first-session guided experience polish passed scoped local validation with lint, typecheck, and unit tests.
+- v1.25 improved dashboard onboarding guidance without adding new product scope.
+- v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
+- v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
+- v1.24 remains deferred and cannot be closed as DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
 - v1.22.1 full production smoke remains partial/deferred and should not be claimed as PASS.
-- A controlled seed data quality follow-up can improve catalogue coverage without adding product features or schema changes.
-- The previous admin/content candidate has been moved out of the v1.18 slot and remains future optional scope.
-- The previous optional real-provider candidate has been moved out of the v1.19 slot and remains future optional scope.
+- The previous admin/content candidate remains future optional backlog scope.
+- The previous optional real-provider candidate remains future optional backlog scope.
 - Portfolio screenshots and demo video are intentionally skipped and remain optional media evidence.
 
 ## 13. v1.13 Completion Checklist
@@ -894,4 +901,6 @@ Reason:
 2026-06-11: Completed v1.22 Production Observability & Release Confidence with safe public /api/health, health API contract test, release evidence, production incident note template, and monitoring/checklist updates. Required local validation passed; sandboxed build and E2E hit spawn EPERM, then passed outside the sandbox. Production smoke was not performed.
 2026-06-11: Started v1.22.1 Production Deployment & Smoke Verification. Local validation passed, public production URL returned HTTP 200, and production /api/health returned HTTP 200 with the expected v1.22 contract. Full production smoke remains NOT DONE because authenticated browser/OAuth checks and Vercel/MongoDB Atlas production signal checks were unavailable.
 2026-06-11: Completed v1.23 Account Data Deletion Workflow Hardening with clearer destructive confirmation copy, user-isolation API/repository tests, sensitive-response checks, data-control documentation, and required local validation PASS. Manual browser deletion smoke and production deletion verification were not performed.
+2026-06-11: Attempted v1.24 Seed Data Quality Expansion Round 2 closeout. Confirmed 70 products and 70 ingredients, created v1.24 release evidence, updated seed data/status docs, and stabilized one slow UI foundation import test timeout. `npm run lint`, `npm run typecheck`, `npm run test`, and `npm audit --omit=dev --audit-level=moderate` passed. `npm run build` and `npm run test:e2e` timed out in the current Node 22/npm 10 environment, so v1.24 remains NOT DONE.
+2026-06-11: Completed v1.25 First-Session Guided Experience Polish with clearer dashboard onboarding step guidance, a first-incomplete-step "Bước nên làm tiếp theo" block, onboarding helper tests, and scoped local validation PASS for `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25. v1.24 remains deferred and validation-blocked.
 ```

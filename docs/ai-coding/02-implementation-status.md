@@ -31,9 +31,11 @@ MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
+MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
+MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, local validation has passed, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, and v1.23 hardened the existing account app-data deletion workflow.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, and v1.25 improved the first-session guided dashboard/onboarding experience. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
 
 Current status:
 
@@ -41,11 +43,14 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Latest completed milestone: MVP v1.25 - First-Session Guided Experience Polish
+v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
-Recommended next task: v1.24 - Seed Data Quality Expansion Round 2
+v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` timed out
+v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
+Recommended next task: TBD / Backlog grooming
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -58,6 +63,8 @@ Evidence boundary:
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
 - v1.22.1 directly checked only the public production URL and `/api/health`; authenticated MVP flows and production platform signals remain NOT CHECKED.
 - v1.23 local implementation and validation passed; manual browser deletion smoke and production deletion verification were not performed.
+- v1.24 seed data implementation reached 70 products and 70 ingredients; lint, typecheck, unit tests, and audit passed, but build/E2E validation timed out.
+- v1.25 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.
 
 ## 2. Implemented Product Scope
 
@@ -65,7 +72,7 @@ Evidence boundary:
 |---|---|---|
 | Landing page | DONE | Public product entry. |
 | Google OAuth / Auth.js | DONE | Protected app routes use authenticated user context. |
-| Dashboard | DONE | User-owned summary. |
+| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish. |
 | Skin Profile | DONE | Onboarding/view/edit/delete flows. |
 | Product Catalogue | DONE | Product list and detail flows. |
 | Product Match | DONE | Rule-based educational matching. |
@@ -79,7 +86,7 @@ Evidence boundary:
 | Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters and reflection review. |
 | Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions; v1.20 added strict count-only Personal Insight Review cards. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion copy, ownership tests, and documentation. |
-| Seed data | DONE | v1.14 expanded coverage to 59 ingredients and 58 products. |
+| Seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation now contains 70 ingredients and 70 products with v1.24 seed quality tests, but v1.24 is not DONE until build/E2E validation passes. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, release evidence, incident note template, and monitoring/checklist updates. |
@@ -144,26 +151,26 @@ Local evidence:
 
 ```txt
 Evidence date: 2026-06-11
-Environment: Local Windows / PowerShell
-Branch: main
-node -v: v24.14.0
-npm -v: 11.14.1
-npm ci: NOT RUN for v1.23
+Environment: current archive/container workspace
+Required runtime baseline: Node.js 24.x / npm 11.x
+Observed node -v: v22.16.0
+Observed npm -v: 10.9.2
+npm ci: PASS with EBADENGINE warnings
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 992 tests
-npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
+npm run test: PASS - 103 files / 997 tests after UI foundation timeout stabilization
+npm run build: FAIL / TIMED OUT after compiling successfully and reaching Running TypeScript
+npm run test:e2e: FAIL / TIMED OUT while starting Playwright web server
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation notes:
 
 ```txt
-v1.23 validation passed after implementation.
-The first sandboxed build attempt compiled successfully, then failed with spawn EPERM; the outside-sandbox rerun passed.
-The sandboxed E2E attempt failed immediately with spawn EPERM; the outside-sandbox rerun passed.
-E2E global setup seeded the local test database with the expanded v1.14 seed data.
+v1.24 validation did not fully pass: lint/typecheck/unit tests/audit passed, but build and E2E timed out in the current environment. v1.23 remains the latest completed milestone.
+The current environment does not match the package.json engine requirement of Node 24.x / npm 11.x.
+No production verification or manual browser verification was performed for v1.24.
+E2E global setup was not proven PASS in this v1.24 run because npm run test:e2e timed out.
 ```
 
 Production evidence:
@@ -216,6 +223,7 @@ v1.21 - Insight Explainability & Tracking Quality Checklist
 v1.22 - Production Observability & Release Confidence
 v1.22.1 - Production Deployment & Smoke Verification: PARTIAL / DEFERRED
 v1.23 - Account Data Deletion Workflow Hardening
+v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 ```
 
 Completed v1.14 scope:
@@ -320,7 +328,7 @@ Completed v1.23 scope:
 Recommended next task:
 
 ```txt
-v1.24 - Seed Data Quality Expansion Round 2
+TBD / Backlog grooming
 ```
 
 Portfolio evidence tasks:
@@ -337,3 +345,54 @@ Optional later product scope:
 - Better production observability.
 - Optional real provider integration with strict safety controls.
 - More curated product/ingredient data coverage.
+
+
+## v1.24 Closeout Attempt - Seed Data Quality Expansion Round 2
+
+Status: NOT DONE / VALIDATION BLOCKED.
+
+Completed / attempted v1.24 scope:
+
+- Confirmed current seed data contains 70 products and 70 ingredients.
+- Confirmed seed validation constants use v1.24 70/70 naming and minimum values.
+- Confirmed `tests/unit/seed-data-quality.test.ts` enforces v1.24 minimum count, uniqueness, coverage, Product Match demos, Routine Safety demos, and non-medical claims boundaries.
+- Updated `docs/14-seed-data-spec.md` from historical v1.14 baseline to current v1.24 baseline.
+- Created `docs/release-evidence-v1.24.md`.
+- Updated status/release/checklist docs without marking v1.24 DONE.
+- Stabilized `tests/unit/ui-foundation.test.ts` timeout for the slow dynamic import check in the current environment.
+
+Validation result:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 997 tests after timeout stabilization
+npm run build: FAIL / TIMED OUT
+npm run test:e2e: FAIL / TIMED OUT
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+Do not mark v1.24 DONE until required build and E2E validation pass. Keep v1.22.1 production smoke verification as PARTIAL / DEFERRED.
+
+## v1.25 - First-Session Guided Experience Polish
+
+Status: DONE within scoped local validation.
+
+Completed v1.25 scope:
+
+- Improved dashboard first-session guidance without adding new product features.
+- Kept the onboarding journey to exactly five steps: skin profile, saved product, first routine, today's routine log, and first journal entry.
+- Extended onboarding step data with clearer reason, outcome, CTA label, route, and completion state.
+- Added the visible "Bước nên làm tiếp theo" block based on the first incomplete onboarding step.
+- Kept onboarding step data sourced from `buildOnboardingSteps()` and avoided a second hard-coded onboarding list.
+- Preserved v1.24 as NOT DONE / VALIDATION BLOCKED.
+
+Scoped validation result:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1001 tests
+```
+
+Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.25.

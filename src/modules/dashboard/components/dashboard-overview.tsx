@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analysis-card";
@@ -16,9 +15,13 @@ import { getBrowserLocalDate } from "@/modules/routine-logs/routine-log.client";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
-import { routes } from "@/shared/constants/routes";
 
-import { OnboardingProgressCard } from "./onboarding-progress-card";
+import {
+  buildOnboardingSteps,
+  getNextIncompleteOnboardingStep,
+  OnboardingNextStepCard,
+  OnboardingProgressCard,
+} from "./onboarding-progress-card";
 
 const DASHBOARD_API_PATH = "/api/dashboard";
 
@@ -185,16 +188,21 @@ export function DashboardOverview() {
     );
   }
 
-  const primaryNextAction = dashboard.nextActions[0];
-  const isFirstTimeDashboard =
-    !dashboard.skinProfile.exists &&
-    !dashboard.routines.hasAnyRoutine &&
-    !dashboard.latestJournal.exists;
+  const onboardingSteps = buildOnboardingSteps(dashboard);
+  const nextOnboardingStep = getNextIncompleteOnboardingStep(onboardingSteps);
+  const nextActions = nextOnboardingStep
+    ? dashboard.nextActions.filter(
+        (action) => action.href !== nextOnboardingStep.href,
+      )
+    : dashboard.nextActions;
+  const primaryNextAction = nextOnboardingStep
+    ? undefined
+    : dashboard.nextActions[0];
 
   return (
     <div className="space-y-5">
-      {isFirstTimeDashboard ? (
-        <FirstTimeDashboardGuidance />
+      {nextOnboardingStep ? (
+        <OnboardingNextStepCard step={nextOnboardingStep} />
       ) : primaryNextAction ? (
         <PrimaryNextActionCard nextAction={primaryNextAction} />
       ) : null}
@@ -220,37 +228,10 @@ export function DashboardOverview() {
           latestJournal={dashboard.latestJournal}
         />
         <LatestAnalysisCard latestAnalysis={dashboard.latestRoutineAnalysis} />
-        <NextActionsCard nextActions={dashboard.nextActions} />
+        {nextActions.length > 0 ? (
+          <NextActionsCard nextActions={nextActions} />
+        ) : null}
       </div>
     </div>
-  );
-}
-
-function FirstTimeDashboardGuidance() {
-  return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm shadow-stone-950/5 sm:p-6">
-      <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
-        <div>
-          <h3 className="text-2xl font-semibold tracking-tight text-foreground">
-            Bắt đầu hành trình chăm sóc da của bạn
-          </h3>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Hoàn thiện hồ sơ da, tạo routine và ghi nhật ký để dashboard có
-            thêm dữ liệu hiển thị tiến trình.
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
-          <Button asChild>
-            <Link href={routes.ONBOARDING_SKIN_PROFILE}>Tạo hồ sơ da</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href={routes.TODAY_LOG}>Đi tới routine hôm nay</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href={routes.JOURNAL}>Thêm nhật ký</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
   );
 }

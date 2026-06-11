@@ -68,11 +68,6 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(dashboardOverviewSource).toContain("dashboard.latestJournal");
     expect(dashboardOverviewSource).toContain("Đang tải dashboard chăm sóc da");
     expect(dashboardOverviewSource).toContain("Không thể tải tổng quan dashboard");
-    expect(dashboardOverviewSource).toContain(
-      "Bắt đầu hành trình chăm sóc da của bạn",
-    );
-    expect(dashboardOverviewSource).toContain("Tạo hồ sơ da");
-    expect(dashboardOverviewSource).toContain("Đi tới routine hôm nay");
 
     for (const forbiddenImport of [
       "repository",
@@ -85,6 +80,19 @@ describe("Dashboard DB-001 UI integration", () => {
     ]) {
       expect(dashboardOverviewSource).not.toContain(forbiddenImport);
     }
+  });
+
+  it("derives first-session next-step guidance from onboarding steps", () => {
+    expect(dashboardOverviewSource).toContain("buildOnboardingSteps");
+    expect(dashboardOverviewSource).toContain("getNextIncompleteOnboardingStep");
+    expect(dashboardOverviewSource).toContain("OnboardingNextStepCard");
+    expect(dashboardOverviewSource).toContain(
+      "action.href !== nextOnboardingStep.href",
+    );
+    expect(dashboardOverviewSource).not.toContain("FirstTimeDashboardGuidance");
+    expect(dashboardOverviewSource).not.toContain("routes.ONBOARDING_SKIN_PROFILE");
+    expect(dashboardOverviewSource).not.toContain("routes.TODAY_LOG");
+    expect(dashboardOverviewSource).not.toContain("routes.JOURNAL");
   });
 
   it("reuses the browser local date helper introduced by RoutineLog UI", () => {
@@ -107,21 +115,19 @@ describe("Dashboard DB-001 UI integration", () => {
       "<OnboardingProgressCard dashboard={dashboard} />",
     );
 
+    expect(onboardingProgressCardSource).toContain("Thiết lập SkinWise của bạn");
+    expect(onboardingProgressCardSource).toContain("Bước nên làm tiếp theo");
+    expect(onboardingProgressCardSource).toContain("Kết quả bạn nhận được");
+    expect(onboardingProgressCardSource).toContain("Bạn đã hoàn thành các bước khởi đầu.");
     expect(onboardingProgressCardSource).toContain(
-      "Thiết lập SkinWise của bạn",
-    );
-    expect(onboardingProgressCardSource).toContain(
-      "Bạn đã hoàn tất các bước thiết lập chính. Tiếp tục duy trì routine",
-    );
-    expect(onboardingProgressCardSource).toContain(
-      "và nhật ký để SkinWise theo dõi tiến triển chính xác hơn.",
+      "Tiếp tục duy trì routine, ghi nhận journal và xem lại dữ liệu cá",
     );
     expect(onboardingProgressCardSource).toContain(
       'from "@/shared/constants/routes"',
     );
 
     for (const routeConstant of [
-      "routes.SKIN_PROFILE",
+      "routes.ONBOARDING_SKIN_PROFILE",
       "routes.PRODUCT_MATCH",
       "routes.ROUTINES",
       "routes.TODAY_LOG",
@@ -130,7 +136,10 @@ describe("Dashboard DB-001 UI integration", () => {
       expect(onboardingProgressCardSource).toContain(routeConstant);
     }
 
+    expect(onboardingProgressCardSource).not.toContain("routes.SKIN_PROFILE");
+
     for (const hardCodedRoute of [
+      '"/onboarding/skin-profile"',
       '"/skin-profile"',
       '"/product-match"',
       '"/routines"',
@@ -144,6 +153,38 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(onboardingProgressCardSource).toContain("aria-valuemin");
     expect(onboardingProgressCardSource).toContain("aria-valuemax");
     expect(onboardingProgressCardSource).toContain("aria-valuenow");
+  });
+
+  it("keeps first-session dashboard copy inside the safety boundary", () => {
+    const guidedDashboardCopySource = [
+      dashboardOverviewSource,
+      onboardingProgressCardSource,
+    ]
+      .join("\n")
+      .toLowerCase();
+    const forbiddenTerms = [
+      "diagnosis",
+      "diagnose",
+      "treatment",
+      "treat",
+      "prescription",
+      "skinscore",
+      "skin score",
+      "medical diagnosis",
+      "disease",
+      "chẩn đoán",
+      "điều trị",
+      "kê đơn",
+      "bệnh da",
+      "điểm da",
+      "chấm điểm da",
+      "chữa khỏi",
+      "cam kết cải thiện",
+    ];
+
+    for (const forbiddenTerm of forbiddenTerms) {
+      expect(guidedDashboardCopySource).not.toContain(forbiddenTerm);
+    }
   });
 
   it("renders the required non-placeholder dashboard card labels", () => {

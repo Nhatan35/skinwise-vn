@@ -18,13 +18,13 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed milestone: **MVP v1.23 - Account Data Deletion Workflow Hardening**.
+- Latest completed milestone: **MVP v1.25 - First-Session Guided Experience Polish**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **v1.24 - Seed Data Quality Expansion Round 2**.
+- Recommended next task: **TBD / Backlog grooming**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS** for MVP v1.23 implementation validation.
+- Local validation evidence: **PASS for MVP v1.25 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.25. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
@@ -68,6 +68,8 @@ MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
+MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
+MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -88,7 +90,11 @@ MVP v1.21 extends the existing Personal Insight Review with calculation metadata
 
 MVP v1.22 is a completed controlled post-MVP release-confidence milestone. It improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates. It does not add product features, database schema changes, real AI provider integration, external observability vendors, diagnosis logic, treatment advice, skin scoring, image upload, admin CRUD, marketplace, payment, checkout, or order workflow.
 
-MVP v1.23 is the latest controlled post-MVP privacy and data-control hardening milestone. It hardens the existing account app-data deletion workflow with clearer destructive confirmation copy, user-isolation tests, sensitive-response checks, and data-control documentation. It does not delete Google/OAuth accounts, shared product catalogue data, shared ingredient library data, other users' data, production configuration, or release documentation.
+MVP v1.23 is the latest completed controlled post-MVP privacy and data-control hardening milestone. It hardens the existing account app-data deletion workflow with clearer destructive confirmation copy, user-isolation tests, sensitive-response checks, and data-control documentation. It does not delete Google/OAuth accounts, shared product catalogue data, shared ingredient library data, other users' data, production configuration, or release documentation.
+
+MVP v1.24 remains deferred and validation-blocked. The implementation appears to have reached 70 products and 70 ingredients with v1.24 seed quality tests, but v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
+
+MVP v1.25 is a focused first-session guided experience polish milestone. It improves dashboard onboarding copy, highlights the next incomplete onboarding step with "Bước nên làm tiếp theo", and keeps the existing five-step first-session journey without changing database schema, authentication, Product Match scoring, Routine Safety logic, or seed data. Scoped v1.25 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.25.
 
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
@@ -97,7 +103,7 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Google OAuth authentication with protected app routes.
 - Skin profile onboarding, viewing, editing, and deletion.
 - Product catalogue with product detail pages and personalized match explanation on Product Detail.
-- Curated demo-safe catalogue with 58 fictional/demo-safe products and 59 educational ingredient records.
+- Curated demo-safe catalogue with 70 fictional/demo-safe products and 70 educational ingredient records in the current v1.24 seed implementation.
 - Saved products and saved product comparison.
 - Personalized Product Match: rule-based educational product matching with score, level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
@@ -107,7 +113,7 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Today routine checklist, routine logs, and weekly routine review.
 - Skin journal with loaded-entry filters.
 - Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, calendar readability improvements, Personal Insight Review cards, calculation explanations, and tracking quality checklist.
-- Dashboard summary based on user-owned data.
+- Dashboard summary based on user-owned data, including clearer first-session guidance for the next onboarding step.
 - Settings and data control center.
 - Data export, hardened app-data deletion, and MVP-safe account deletion request marker.
 - Demo seed data, demo walkthrough documentation, and portfolio case study.
@@ -184,27 +190,38 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.25 scoped local validation:
 Evidence date: 2026-06-11
-Environment: Local Windows / PowerShell
-Branch: main
-Runtime baseline: Node.js 24.x / npm 11.x
-npm ci: NOT RUN for v1.23
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 992 tests
-npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
+npm run test: PASS - 103 files / 1001 tests
+npm run build: NOT RUN for v1.25
+npm run test:e2e: NOT RUN for v1.25
+Manual browser verification: NOT CHECKED for v1.25
+Production verification: NOT CHECKED for v1.25
+
+MVP v1.24 closeout validation:
+Evidence date: 2026-06-11
+Environment: current archive/container workspace
+Required runtime baseline: Node.js 24.x / npm 11.x
+Observed validation runtime: Node v22.16.0 / npm 10.9.2
+npm ci: PASS with EBADENGINE warnings
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 997 tests after UI foundation timeout stabilization
+npm run build: FAIL / TIMED OUT after compiling successfully and reaching Running TypeScript
+npm run test:e2e: FAIL / TIMED OUT while starting Playwright web server
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 Validation note:
 
 ```txt
-v1.23 hardened only the existing account app-data deletion workflow, tests, and documentation.
-Existing product features, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, and shared catalogue behavior remain unchanged.
-Sandboxed build and E2E attempts failed with spawn EPERM; the same commands passed when rerun outside the sandbox. `npm ci` was not run for v1.23.
-E2E global setup seeded the local test database with the expanded v1.14 seed data.
-npm audit --omit=dev --audit-level=moderate was verified clean for production dependencies.
+v1.24 synchronized seed documentation, release evidence, and status docs with the current 70-product / 70-ingredient seed implementation.
+Existing product features, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, Product Match logic, Routine Safety Analysis logic, and shared catalogue behavior remain unchanged.
+v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
+Keep v1.22.1 production smoke as PARTIAL / DEFERRED.
+Do not claim manual browser or production verification for v1.24.
 ```
 
 Production evidence:
@@ -253,6 +270,7 @@ Landing page
 - Final release checklist: `docs/final-release-checklist.md`
 - v1.22 release evidence: `docs/release-evidence-v1.22.md`
 - v1.23 release evidence: `docs/release-evidence-v1.23.md`
+- v1.24 release evidence: `docs/release-evidence-v1.24.md`
 - Data control and deletion boundary: `docs/data-control-and-deletion.md`
 - Production incident note template: `docs/production-incident-note-template.md`
 - Deployment checklist: `docs/18-deployment-checklist.md`
@@ -336,8 +354,14 @@ These are intentional MVP boundaries, not release blockers:
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots and demo video are optional media evidence; capture them only if needed for CV, portfolio page, LinkedIn, or slide deck, and do not claim they exist until actual files are produced.
 - v1.22 `/api/health` only verifies that the app route is reachable. It does not verify database connectivity, OAuth connectivity, AI provider connectivity, or external service health by design.
-- `npm ci` was not rerun for v1.23; latest required v1.23 validation commands passed.
+- `npm ci` completed for v1.24 with EBADENGINE warnings because the current environment used Node v22.16.0 / npm 10.9.2 while the project requires Node 24.x / npm 11.x.
+- v1.24 lint, typecheck, unit tests, and production audit passed after stabilizing a slow UI foundation import test timeout.
+- v1.24 build and E2E validation timed out in the current environment, so v1.24 is NOT DONE.
+- v1.25 scoped local validation passed with lint, typecheck, and unit tests.
+- Build and E2E were not run for v1.25 by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
+- Manual browser and production verification were not performed for v1.24.
+- Manual browser and production verification were not performed for v1.25.
 
 ## Final Portfolio Decision
 
@@ -357,6 +381,8 @@ MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
 MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
+MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
+MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -365,4 +391,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.23 - Account Data Deletion Workflow Hardening` is complete. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.25 - First-Session Guided Experience Polish` is complete within the scoped validation boundary of lint, typecheck, and unit tests. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
