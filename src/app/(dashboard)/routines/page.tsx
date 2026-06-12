@@ -13,7 +13,9 @@ export default function RoutinesPage() {
           Tạo routine sáng hoặc tối theo thứ tự dễ theo dõi, sau đó dùng phân
           tích routine để xem các điểm cần lưu ý như thiếu kem chống nắng,
           nhiều hoạt chất mạnh hoặc sản phẩm cần thận trọng với da nhạy cảm.
-          Thông tin này chỉ mang tính giáo dục.
+          Sau khi dùng routine, hãy ghi nhận hôm nay và viết nhật ký khi có cảm
+          nhận đáng chú ý để dễ xem lại thói quen theo thời gian. Thông tin này
+          chỉ mang tính giáo dục.
         </p>
       </div>
 

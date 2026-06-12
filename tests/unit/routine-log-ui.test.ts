@@ -195,7 +195,8 @@ describe("RoutineLog UI integration", () => {
       "L\u1ecbch s\u1eed routine 7 ng\u00e0y g\u1ea7n \u0111\u00e2y",
       "Th\u00f4ng tin n\u00e0y gi\u00fap b\u1ea1n theo d\u00f5i th\u00f3i quen ch\u0103m s\u00f3c da",
       "kh\u00f4ng \u0111\u00e1nh gi\u00e1",
-      "t\u00ecnh tr\u1ea1ng da ho\u1eb7c thay th\u1ebf t\u01b0 v\u1ea5n y khoa.",
+      "t\u00ecnh tr\u1ea1ng da ho\u1eb7c thay th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n",
+      "Kh\u00f4ng c\u1ea7n k\u1ebft lu\u1eadn qu\u00e1",
       "S\u1ed1 ng\u00e0y \u0111\u00e3 ghi nh\u1eadn",
       "T\u1ec9 l\u1ec7 ho\u00e0n th\u00e0nh routine",
       "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u routine trong 7 ng\u00e0y g\u1ea7n \u0111\u00e2y.",
@@ -265,6 +266,20 @@ describe("RoutineLog UI integration", () => {
     expect(todayRoutineChecklistSource).not.toContain("server-only");
   });
 
+  it("explains routine logging and after-log next actions", () => {
+    for (const requiredCopy of [
+      "Ghi nhận routine hôm nay",
+      "Chọn trạng thái sau khi dùng routine để theo dõi thói quen đều đặn",
+      "cảm nhận da đáng chú ý",
+      "Viết nhật ký",
+      "Xem insights",
+      "routes.JOURNAL",
+      "routes.INSIGHTS",
+    ]) {
+      expect(routineLogControlsSource).toContain(requiredCopy);
+    }
+  });
+
   it("connects Today Routine Log to Journal after a routine log exists", () => {
     expect(todayRoutineChecklistSource).toContain(
       "@/modules/routine-logs/components/today-journal-prompt-card",
@@ -294,9 +309,9 @@ describe("RoutineLog UI integration", () => {
       "Viết nhật ký da hôm nay",
       "Bạn đã ghi nhật ký da hôm nay",
       "Đi đến Journal",
-      "theo dõi phản ứng da",
-      "ghi lại phản ứng da và thay đổi nổi bật",
-      "không thay thế tư vấn y tế",
+      "ghi lại cảm nhận của da",
+      "Không cần kết luận quá sớm",
+      "tư vấn chuyên môn",
     ]) {
       expect(todayJournalPromptCardSource).toContain(requiredCopy);
     }

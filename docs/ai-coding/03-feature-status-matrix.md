@@ -1,16 +1,16 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-11
+Last updated: 2026-06-12
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.28 - Saved Products to Routine Decision Support Polish
+Latest completed scoped task: MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.28 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.29 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -40,17 +40,17 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
 | Ingredient Library | DONE | Ingredient list/detail. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
-| Routine Builder | DONE | Morning/evening routine support with v1.28 saved-product-to-routine empty-state and reference guidance. |
+| Routine Builder | DONE | Morning/evening routine support with v1.28 saved-product-to-routine guidance and v1.29 Routine to Log/Journal next-action clarity. |
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
 | Today Routine Checklist | DONE | Daily completion flow. |
-| Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
-| Skin Journal | DONE | Create/edit/delete journal entries; v1.18 added loaded-entry filters and reflection review. |
-| Insights | DONE | Progress story, safe next actions, v1.20 Personal Insight Review, and v1.21 calculation explanations plus tracking quality checklist. |
+| Routine Logs | DONE | Tracking history with v1.17 weekly habit review and v1.29 safer log-to-journal guidance. |
+| Skin Journal | DONE | Create/edit/delete journal entries; v1.18 added loaded-entry filters/reflection review and v1.29 routine-reflection empty/after-save guidance. |
+| Insights | DONE | Progress story, safe next actions, v1.20 Personal Insight Review, v1.21 calculation explanations plus tracking quality checklist, and v1.29 short-term interpretation caution. |
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
-| Local validation evidence | MIXED BY MILESTONE | v1.28 scoped validation passed with lint, typecheck, and unit tests. v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
+| Local validation evidence | MIXED BY MILESTONE | v1.29 scoped validation passed with lint, typecheck, and unit tests. v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -76,6 +76,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Product Match Explanation Clarity & Safe Decision Support Polish | UX / Explainability Polish | v1.26 | DONE, scoped validation only |
 | Product Detail to Saved Products Decision Support Polish | UX / Decision-Support Polish | v1.27 | DONE, scoped validation only |
 | Saved Products to Routine Decision Support Polish | UX / Decision-Support Polish | v1.28 | DONE, scoped validation only |
+| Routine to Routine Log / Journal Decision Support Polish | UX / Decision-Support Polish | v1.29 | DONE, scoped validation only |
 
 ## Out-of-Scope Matrix
 
@@ -95,7 +96,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.28 - Saved Products to Routine Decision Support Polish
+Latest completed scoped task: MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
@@ -106,4 +107,5 @@ v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and re
 v1.26 status: DONE within scoped local validation - Product Match explanation clarity and safe decision-support copy polished; lint, typecheck, and unit tests passed
 v1.27 status: DONE within scoped local validation - Product Detail to Saved Products decision-support copy polished; lint, typecheck, and unit tests passed
 v1.28 status: DONE within scoped local validation - Saved Products to Routine decision-support copy polished; lint, typecheck, and unit tests passed
+v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal decision-support copy polished; lint, typecheck, and unit tests passed
 ```

@@ -10,8 +10,10 @@ export default function JournalPage() {
           Nhật ký da
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
-          Ghi lại quan sát hằng ngày, triệu chứng, sản phẩm đã dùng, giấc ngủ,
-          stress và ghi chú riêng tư để dễ nhìn lại thói quen skincare.
+          Ghi lại cảm nhận hằng ngày, dấu hiệu bạn tự quan sát, sản phẩm đã
+          dùng, giấc ngủ, stress và ghi chú riêng tư để dễ nhìn lại thói quen
+          skincare. Nhật ký chỉ hỗ trợ theo dõi cá nhân và không thay thế tư
+          vấn chuyên môn.
         </p>
       </div>
 

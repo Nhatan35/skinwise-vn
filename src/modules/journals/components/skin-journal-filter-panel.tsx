@@ -89,7 +89,7 @@ export function SkinJournalFilterPanel({
         >
           Bộ lọc này giúp bạn xem lại ghi chú chăm sóc da đã tự ghi nhận. Thông
           tin chỉ hỗ trợ phản ánh thói quen và quan sát cá nhân, không dùng để
-          chẩn đoán, kết luận nguyên nhân, hoặc thay thế tư vấn y khoa.
+          kết luận nguyên nhân chắc chắn hoặc thay thế tư vấn chuyên môn.
         </p>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

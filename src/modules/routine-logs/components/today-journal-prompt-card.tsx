@@ -18,26 +18,26 @@ const promptCopy = {
   journal_done: {
     title: "Bạn đã ghi nhật ký da hôm nay",
     description:
-      "Bạn đã có dữ liệu routine và journal cho hôm nay. Hãy tiếp tục theo dõi đều đặn để Insights phản ánh xu hướng chính xác hơn.",
+      "Bạn đã có dữ liệu routine và nhật ký cho hôm nay. Hãy tiếp tục theo dõi đều đặn để dễ xem lại thói quen và cảm nhận của da theo thời gian.",
     cta: "Đi đến Journal",
     secondary:
-      "Nhật ký giúp bạn quan sát xu hướng theo thời gian, không thay thế tư vấn y tế.",
+      "Nhật ký giúp bạn quan sát thói quen cá nhân, không thay thế tư vấn chuyên môn.",
   },
   journal_unknown: {
     title: "Bạn đã ghi nhận routine hôm nay",
     description:
-      "Bạn có thể viết nhật ký da hôm nay để ghi lại phản ứng da và thay đổi nổi bật.",
+      "Bạn có thể viết nhật ký da hôm nay để ghi lại cảm nhận của da, sản phẩm đã dùng hoặc thay đổi nổi bật.",
     cta: "Đi đến Journal",
     secondary:
-      "Nếu kích ứng kéo dài hoặc nghiêm trọng, nên tham khảo chuyên gia.",
+      "Không cần kết luận quá sớm sau một vài lần dùng. Nếu cảm giác bất thường kéo dài, hãy tìm tư vấn chuyên môn.",
   },
   write_journal: {
     title: "Bạn đã ghi nhận routine hôm nay",
     description:
-      "Tiếp theo, hãy viết nhật ký da hôm nay để theo dõi phản ứng da, cảm giác da hoặc thay đổi nổi bật.",
+      "Tiếp theo, hãy viết nhật ký da hôm nay để ghi lại cảm nhận của da, thói quen liên quan hoặc thay đổi bạn tự quan sát.",
     cta: "Viết nhật ký da hôm nay",
     secondary:
-      "Nhật ký giúp bạn quan sát xu hướng theo thời gian, không thay thế tư vấn y tế.",
+      "Nhật ký giúp bạn theo dõi cá nhân, không thay thế tư vấn chuyên môn.",
   },
 } as const satisfies Record<
   Exclude<TodayJournalPromptState, "hidden">,

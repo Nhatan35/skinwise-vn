@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-11
+Last updated: 2026-06-12
 
 ## 1. Current Phase
 
@@ -37,9 +37,10 @@ MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE,
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
+MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, and v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, and v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
 
 Current status:
 
@@ -47,7 +48,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.28 - Saved Products to Routine Decision Support Polish
+Latest completed scoped task: MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
@@ -58,6 +59,7 @@ v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and re
 v1.26 status: DONE within scoped local validation - Product Match explanation labels, safe caution visibility, no-profile guidance, and next-action copy polished; lint, typecheck, and unit tests passed
 v1.27 status: DONE within scoped local validation - Product Detail summary labels, save/unsave guidance, after-save next action, Saved Products empty state, and safe reference copy polished; lint, typecheck, and unit tests passed
 v1.28 status: DONE within scoped local validation - Saved Products to Routine context, CTA clarity, routine empty-state guidance, and safe reference copy polished; lint, typecheck, and unit tests passed
+v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal CTA clarity, routine log guidance, journal empty-state/after-save next actions, and safe reference copy polished; lint, typecheck, and unit tests passed
 Recommended next task: TBD / Backlog grooming
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
@@ -77,6 +79,7 @@ Evidence boundary:
 - v1.26 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.26.
 - v1.27 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.27.
 - v1.28 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.28.
+- v1.29 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.29.
 
 ## 2. Implemented Product Scope
 
@@ -91,12 +94,12 @@ Evidence boundary:
 | Product Detail personalized match | DONE | Single-product match explanation with v1.15 decision-support, v1.26 Product Match context, and v1.27 save-decision support polish. |
 | Saved Products | DONE | Save/unsave user-owned products; v1.16 comparison decision support, v1.27 empty-state/save-context polish, and v1.28 routine decision-support guidance added. |
 | Ingredient Library | DONE | Ingredient list/detail/explanation. |
-| Routine Builder | DONE | Morning/evening routine management with v1.28 saved-product-to-routine empty-state and reference guidance. |
+| Routine Builder | DONE | Morning/evening routine management with v1.28 saved-product-to-routine empty-state/reference guidance and v1.29 Routine to Log/Journal next-action clarity. |
 | Routine Safety Analysis | DONE | Deterministic analysis and safe fallback behavior. |
 | Today Routine Checklist | DONE | Daily completion flow. |
-| Routine Logs | DONE | Tracking history with v1.17 weekly habit review. |
-| Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters and reflection review. |
-| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions; v1.20 added strict count-only Personal Insight Review cards. |
+| Routine Logs | DONE | Tracking history with v1.17 weekly habit review and v1.29 safer log-to-journal next-action guidance. |
+| Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters/reflection review and v1.29 routine-reflection empty/after-save guidance. |
+| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions, and v1.29 short-term interpretation caution; v1.20 added strict count-only Personal Insight Review cards. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion copy, ownership tests, and documentation. |
 | Seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation now contains 70 ingredients and 70 products with v1.24 seed quality tests, but v1.24 is not DONE until build/E2E validation passes. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
@@ -106,6 +109,7 @@ Evidence boundary:
 | Product Match explanation clarity polish | DONE, scoped validation only | v1.26 polished existing Product Match explanation UI/copy without changing scoring/ranking, seed data, schema, auth, AI provider behavior, or API contracts. |
 | Product Detail to Saved Products decision support polish | DONE, scoped validation only | v1.27 polished Product Detail summary, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference copy without changing Product Match scoring/ranking, Routine logic, seed data, schema, auth, AI provider behavior, or API contracts. |
 | Saved Products to Routine decision support polish | DONE, scoped validation only | v1.28 polished Saved Products review context, Routine CTA clarity, routine empty-state guidance, and safe gradual-addition copy without changing Product Match, Product Detail, Saved Products persistence, Routine logic, seed data, schema, auth, AI provider behavior, or API contracts. |
+| Routine to Routine Log / Journal decision support polish | DONE, scoped validation only | v1.29 polished Routine next-action clarity, Today Routine Log guidance, Journal empty-state/after-save next actions, and safe short-term interpretation copy without changing Product Match, Product Detail, Saved Products, Routine, Journal, or Insights logic, seed data, schema, auth, AI provider behavior, or API contracts. |
 
 ## 3. Route Coverage
 
@@ -506,3 +510,28 @@ npm run test: PASS - 103 files / 1003 tests
 ```
 
 Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.28. v1.24 build/E2E blockers remain deferred.
+
+## v1.29 - Routine to Routine Log / Journal Decision Support Polish
+
+Status: DONE within scoped local validation.
+
+Completed v1.29 scope:
+
+- Improved Routine page and Routine list copy so users understand the next action after creating or reviewing a routine is to record today's routine and use Journal for notable skin-feel notes.
+- Clarified Today Routine Log page guidance and RoutineLog controls around completed/partial/skipped status, consistency tracking, and Journal handoff.
+- Added after-log next actions to Journal and Insights using existing route constants.
+- Improved Journal page, Journal form guidance, empty state, and after-save next actions so users can move back to Routine or forward to Insights using existing supported routes.
+- Polished directly relevant Insights limitation copy to emphasize personal tracking, short-term data limits, and professional-advice boundaries.
+- Reused existing Routine, RoutineLog, Journal, and Insights components/data; no duplicate explanation, safety, logging, or insight system was added.
+- Preserved Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Journal logic, Insights logic, API contracts, seed data, schema, auth behavior, AI provider behavior, v1.25 onboarding guidance, v1.25.1 seed baseline consistency, v1.26 Product Match polish, v1.27 Product Detail to Saved Products polish, and v1.28 Saved Products to Routine polish.
+- Kept v1.24 as NOT DONE / VALIDATION BLOCKED.
+
+Scoped validation result:
+
+```txt
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1006 tests
+```
+
+Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.29. v1.24 build/E2E blockers remain deferred.

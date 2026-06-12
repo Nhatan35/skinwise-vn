@@ -50,7 +50,8 @@ export function RoutineWeeklyReviewCard({
           data-testid="routine-weekly-review-disclaimer"
         >
           Thông tin này giúp bạn theo dõi thói quen chăm sóc da, không đánh giá
-          tình trạng da hoặc thay thế tư vấn y khoa.
+          tình trạng da hoặc thay thế tư vấn chuyên môn. Không cần kết luận quá
+          sớm từ một vài ngày ghi nhận.
         </p>
 
         {isLoading ? (

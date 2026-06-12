@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, ListChecks, XCircle } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
@@ -17,6 +18,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
+import { routes } from "@/shared/constants/routes";
 
 const ROUTINE_LOGS_API_PATH = "/api/routine-logs";
 
@@ -207,9 +209,16 @@ export function RoutineLogControls({
     <div className="mt-4 space-y-3 border-t border-border pt-4" data-testid="routine-log-controls">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">Nhật ký hôm nay</p>
+          <p className="text-sm font-medium text-foreground">
+            Ghi nhận routine hôm nay
+          </p>
           <p className="text-xs text-muted-foreground">
             Ngày {localDate} · Múi giờ {timezone}
+          </p>
+          <p className="text-xs leading-5 text-muted-foreground">
+            Chọn trạng thái sau khi dùng routine để theo dõi thói quen đều đặn.
+            Nếu có cảm nhận da đáng chú ý, hãy viết thêm trong nhật ký chăm sóc
+            da.
           </p>
           {log?.status === "partial" ? (
             <p className="text-xs text-muted-foreground">
@@ -323,7 +332,17 @@ export function RoutineLogControls({
 
       {successMessage ? (
         <Alert>
-          <AlertDescription>{successMessage}</AlertDescription>
+          <AlertDescription className="space-y-3">
+            <p>{successMessage}</p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.JOURNAL}>Viết nhật ký</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.INSIGHTS}>Xem insights</Link>
+              </Button>
+            </div>
+          </AlertDescription>
         </Alert>
       ) : null}
     </div>

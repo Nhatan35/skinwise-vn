@@ -18,13 +18,13 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.28 - Saved Products to Routine Decision Support Polish**.
+- Latest completed scoped task: **MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
 - Recommended next task: **TBD / Backlog grooming**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.28 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.28. v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.29 scoped validation** - lint, typecheck, and unit tests passed. Build and E2E were not run for v1.29. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
@@ -74,6 +74,7 @@ MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE,
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
+MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -108,6 +109,8 @@ MVP v1.27 is a focused Product Detail to Saved Products follow-up polish milesto
 
 MVP v1.28 is a focused Saved Products to Routine follow-up polish milestone after v1.26 and v1.27. It improves Saved Products context, Routine CTA clarity, Routine empty-state guidance, and safe reference copy around adding saved products gradually without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, schema, seed data, AI, image analysis, payment, checkout, cart, marketplace, or admin scope. Scoped v1.28 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.28.
 
+MVP v1.29 is a focused Routine to Routine Log / Journal follow-up polish milestone after v1.26, v1.27, and v1.28. It improves Routine next-action clarity, Today Routine Log guidance, Journal empty-state and after-save next actions, and safe reference copy for interpreting routine logs/journal notes without changing Product Match, Product Detail, Saved Products, Routine, Journal, or Insights logic; schema; seed data; AI; image analysis; diagnosis; medical treatment; skin scoring; payment; checkout; cart; marketplace; or admin scope. Scoped v1.29 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.29.
+
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
 ## Key Features
@@ -120,11 +123,11 @@ The current phase remains post-MVP controlled improvement. The Portfolio Evidenc
 - Personalized Product Match: rule-based educational product matching with product-fit level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, clearer v1.26 next-action copy, and Product Detail single-product matching based on existing product/profile metadata.
 - Ingredient library with ingredient detail pages.
 - Ingredient explanation API using the validated provider flow and safe fallback behavior.
-- Routine builder with v1.28 saved-product-to-routine guidance, empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
+- Routine builder with v1.28 saved-product-to-routine guidance plus v1.29 Routine to Log/Journal next-action clarity, empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
 - Routine safety analysis with deterministic rule checks, scannable result sections, and safe AI-provider fallback behavior.
-- Today routine checklist, routine logs, and weekly routine review.
-- Skin journal with loaded-entry filters.
-- Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, calendar readability improvements, Personal Insight Review cards, calculation explanations, and tracking quality checklist.
+- Today routine checklist, routine logs, v1.29 after-log Journal/Insights next actions, and weekly routine review.
+- Skin journal with loaded-entry filters, v1.29 routine-reflection guidance, and clearer empty/after-save next actions.
+- Skin Progress Insights with routine consistency, journal activity, reflective product usage, safe next actions, calendar readability improvements, Personal Insight Review cards, calculation explanations, tracking quality checklist, and v1.29 short-term interpretation caution.
 - Dashboard summary based on user-owned data, including clearer first-session guidance for the next onboarding step.
 - Settings and data control center.
 - Data export, hardened app-data deletion, and MVP-safe account deletion request marker.
@@ -202,6 +205,16 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.29 scoped local validation:
+Evidence date: 2026-06-12
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1006 tests
+npm run build: NOT RUN for v1.29
+npm run test:e2e: NOT RUN for v1.29
+Manual browser verification: NOT CHECKED for v1.29
+Production verification: NOT CHECKED for v1.29
+
 MVP v1.28 scoped local validation:
 Evidence date: 2026-06-12
 npm run lint: PASS
@@ -273,9 +286,10 @@ v1.24 synchronized seed documentation, release evidence, and status docs with th
 v1.26 polished Product Match explanation labels, product-fit score wording, safety-note visibility, no-profile guidance, and next-action copy without changing matching score/ranking, database schema, auth architecture, authorization model, persistence scope, AI-provider behavior, Routine Safety Analysis logic, seed data, or shared catalogue behavior.
 v1.27 polished Product Detail and Saved Products decision-support copy without changing Product Match scoring/ranking, Routine logic, database schema, auth architecture, persistence scope, AI-provider behavior, seed data, or shared catalogue behavior.
 v1.28 polished Saved Products to Routine decision-support copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, database schema, auth architecture, persistence scope, AI-provider behavior, seed data, or shared catalogue behavior.
+v1.29 polished Routine to Routine Log / Journal decision-support copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Journal logic, Insights logic, database schema, auth architecture, persistence scope, AI-provider behavior, seed data, or shared catalogue behavior.
 v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
 Keep v1.22.1 production smoke as PARTIAL / DEFERRED.
-Do not claim manual browser or production verification for v1.24, v1.26, v1.27, or v1.28.
+Do not claim manual browser or production verification for v1.24, v1.26, v1.27, v1.28, or v1.29.
 ```
 
 Production evidence:
@@ -419,11 +433,17 @@ These are intentional MVP boundaries, not release blockers:
 - Build and E2E were not run for v1.26 by task scope.
 - v1.27 Product Detail to Saved Products decision-support polish passed scoped lint/typecheck/unit test validation.
 - Build and E2E were not run for v1.27 by task scope.
+- v1.28 Saved Products to Routine decision-support polish passed scoped lint/typecheck/unit test validation.
+- Build and E2E were not run for v1.28 by task scope.
+- v1.29 Routine to Routine Log / Journal decision-support polish passed scoped lint/typecheck/unit test validation.
+- Build and E2E were not run for v1.29 by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
 - Manual browser and production verification were not performed for v1.26.
 - Manual browser and production verification were not performed for v1.27.
+- Manual browser and production verification were not performed for v1.28.
+- Manual browser and production verification were not performed for v1.29.
 
 ## Final Portfolio Decision
 
@@ -449,6 +469,7 @@ MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE,
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
+MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -457,4 +478,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.28 - Saved Products to Routine Decision Support Polish` improves Saved Products context, Routine CTA clarity, routine empty-state guidance, and safe reference copy as a follow-up to v1.26 and v1.27 within the scoped validation boundary of lint, typecheck, and unit tests. `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.29 - Routine to Routine Log / Journal Decision Support Polish` improves Routine next-action clarity, Today Routine Log guidance, Journal empty-state clarity, after-log/after-journal next actions, and safe reference copy as a follow-up to v1.26, v1.27, and v1.28 within the scoped validation boundary of lint, typecheck, and unit tests. `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

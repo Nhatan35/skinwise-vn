@@ -242,10 +242,26 @@ describe("Routine Builder UI foundation", () => {
 
   it("links Routine Builder to the existing Today Checklist route", () => {
     expect(routes.TODAY_LOG).toBe("/routine-logs/today");
+    expect(routes.JOURNAL).toBe("/journal");
     expect(routineBuilderSource).toContain("routes.TODAY_LOG");
+    expect(routineBuilderSource).toContain("routes.JOURNAL");
     expect(routineBuilderSource).toContain("routine-today-log-link");
-    expect(routineBuilderSource).toContain("Theo dõi routine hôm nay");
+    expect(routineBuilderSource).toContain("Ghi nhận routine hôm nay");
+    expect(routineBuilderSource).toContain("Xem nhật ký");
     expect(routineBuilderSource).not.toContain('href="/today"');
+  });
+
+  it("guides Routine users toward log and journal decision support", () => {
+    for (const requiredCopy of [
+      'data-testid="routine-log-journal-guidance"',
+      "Bước tiếp theo sau routine",
+      "Ghi nhận routine để theo dõi độ đều đặn",
+      "nhật ký chăm sóc",
+      "Không cần kết luận quá sớm sau một vài lần dùng",
+      "tìm tư vấn chuyên môn",
+    ]) {
+      expect(routineBuilderSource).toContain(requiredCopy);
+    }
   });
 
   it("keeps Product imports client-safe", () => {

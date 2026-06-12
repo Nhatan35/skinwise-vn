@@ -479,7 +479,7 @@ export function InsightSummarySection({ to }: InsightSummarySectionProps) {
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
           Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại. Nội dung dùng để
-          tự quan sát, không phải chẩn đoán y khoa.
+          tự quan sát và không thay thế tư vấn chuyên môn.
         </p>
       </div>
 

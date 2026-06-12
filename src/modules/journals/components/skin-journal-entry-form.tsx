@@ -39,6 +39,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
@@ -211,6 +212,10 @@ export function SkinJournalEntryForm({
         <CardTitle>
           {mode === "create" ? "Thêm nhật ký da" : "Sửa nhật ký da"}
         </CardTitle>
+        <CardDescription>
+          Ghi lại routine hoặc sản phẩm đã dùng, cảm nhận của da và thói quen
+          liên quan. Không cần kết luận quá sớm sau một vài lần dùng.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -409,8 +414,8 @@ export function SkinJournalEntryForm({
 
           <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm leading-6 text-muted-foreground">
-              Nhật ký da dùng để theo dõi quan sát cá nhân, không phải chẩn đoán
-              hoặc lời khuyên điều trị.
+              Nhật ký da dùng để theo dõi quan sát cá nhân và không thay thế tư
+              vấn chuyên môn.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button

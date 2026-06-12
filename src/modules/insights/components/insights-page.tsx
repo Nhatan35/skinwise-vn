@@ -117,8 +117,9 @@ export function InsightsPage() {
         </p>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           Insights giúp bạn nhìn lại thói quen chăm sóc da dựa trên routine log
-          và nhật ký da đã ghi nhận. Các số liệu này hỗ trợ tự theo dõi và điều
-          chỉnh thói quen, không phải chẩn đoán y khoa.
+          và nhật ký da đã ghi nhận. Các số liệu này chỉ hỗ trợ tự theo dõi;
+          dữ liệu ngắn hạn có thể chưa đủ để rút ra kết luận chắc chắn và không
+          thay thế tư vấn chuyên môn.
         </p>
       </div>
 

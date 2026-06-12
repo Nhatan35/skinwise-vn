@@ -1767,15 +1767,18 @@ function RoutineList({
           <div>
             <CardTitle>Danh sách routines</CardTitle>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              Sau khi tạo routine, bạn có thể phân tích độ an toàn và ghi nhận
-              tiến độ trong Checklist hôm nay.
+              Sau khi tạo hoặc xem lại routine, bước tiếp theo là ghi nhận
+              routine hôm nay rồi viết nhật ký nếu có cảm nhận đáng chú ý.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button asChild variant="outline">
               <Link data-testid="routine-today-log-link" href={routes.TODAY_LOG}>
-                Theo dõi routine hôm nay
+                Ghi nhận routine hôm nay
               </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={routes.JOURNAL}>Xem nhật ký</Link>
             </Button>
             <Button data-testid="routine-create-button" onClick={onCreate} type="button">
               <Plus aria-hidden="true" />
@@ -1785,6 +1788,16 @@ function RoutineList({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Alert data-testid="routine-log-journal-guidance">
+          <AlertTitle>Bước tiếp theo sau routine</AlertTitle>
+          <AlertDescription>
+            Ghi nhận routine để theo dõi độ đều đặn, rồi dùng nhật ký chăm sóc
+            da để ghi lại cảm nhận, thói quen và thay đổi bạn tự quan sát.
+            Không cần kết luận quá sớm sau một vài lần dùng. Nếu có cảm giác
+            bất thường kéo dài, hãy dừng bước liên quan và tìm tư vấn chuyên môn.
+          </AlertDescription>
+        </Alert>
+
         {isRoutineLogLoading ? (
           <p className="text-sm text-muted-foreground">
             Đang tải nhật ký routine hôm nay...

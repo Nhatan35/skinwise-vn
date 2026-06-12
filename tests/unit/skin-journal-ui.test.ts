@@ -203,8 +203,8 @@ describe("SkinJournal Timeline UI", () => {
       "Th\u00f4ng",
       "tin ch\u1ec9 h\u1ed7 tr\u1ee3 ph\u1ea3n \u00e1nh th\u00f3i quen v\u00e0 quan s\u00e1t c\u00e1 nh\u00e2n",
       "kh\u00f4ng d\u00f9ng \u0111\u1ec3",
-      "k\u1ebft lu\u1eadn nguy\u00ean nh\u00e2n",
-      "thay th\u1ebf t\u01b0 v\u1ea5n y khoa",
+      "k\u1ebft lu\u1eadn nguy\u00ean nh\u00e2n ch\u1eafc ch\u1eafn",
+      "thay th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n",
       "Tri\u1ec7u ch\u1ee9ng/ghi nh\u1eadn",
       "M\u1ee9c \u0111\u1ed9 c\u0103ng th\u1eb3ng",
       "S\u1ea3n ph\u1ea9m \u0111\u00e3 d\u00f9ng",
@@ -228,6 +228,23 @@ describe("SkinJournal Timeline UI", () => {
       'data-testid={dataTestId}',
     ]) {
       expect(filterPanelSource).toContain(testId);
+    }
+  });
+
+  it("guides journal users from routine records to reflection and next actions", () => {
+    for (const requiredCopy of [
+      "Bạn chưa có ghi nhận nào",
+      "sau khi dùng routine",
+      "Xem routine",
+      "Xem lại routine",
+      "Xem insights",
+      "Ghi lại routine hoặc sản phẩm đã dùng",
+      "Không cần kết luận quá sớm sau một vài lần dùng",
+      "tư vấn chuyên môn",
+      "routes.ROUTINES",
+      "routes.INSIGHTS",
+    ]) {
+      expect(combinedUiSource).toContain(requiredCopy);
     }
   });
 

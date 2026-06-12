@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Plus, RotateCcw } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -31,6 +32,7 @@ import {
 } from "@/shared/components/ui/alert";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type Feedback = {
   message: string;
@@ -316,7 +318,19 @@ export function SkinJournalTimeline() {
           <AlertTitle>
             {feedback.type === "success" ? "Đã lưu" : "Thao tác thất bại"}
           </AlertTitle>
-          <AlertDescription>{feedback.message}</AlertDescription>
+          <AlertDescription className="space-y-3">
+            <p>{feedback.message}</p>
+            {feedback.type === "success" ? (
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button asChild size="sm" variant="outline">
+                  <Link href={routes.ROUTINES}>Xem lại routine</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href={routes.INSIGHTS}>Xem insights</Link>
+                </Button>
+              </div>
+            ) : null}
+          </AlertDescription>
         </Alert>
       ) : null}
 
@@ -352,16 +366,21 @@ export function SkinJournalTimeline() {
       {sortedEntries.length === 0 && formMode !== "create" ? (
         <EmptyState
           action={
-            <Button
-              data-testid="skin-journal-new-entry-button"
-              onClick={startCreate}
-              type="button"
-            >
-              <Plus aria-hidden="true" />
-              Thêm nhật ký
-            </Button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                data-testid="skin-journal-new-entry-button"
+                onClick={startCreate}
+                type="button"
+              >
+                <Plus aria-hidden="true" />
+                Thêm nhật ký
+              </Button>
+              <Button asChild variant="outline">
+                <Link href={routes.ROUTINES}>Xem routine</Link>
+              </Button>
+            </div>
           }
-          description="Hãy thêm nhật ký đầu tiên để theo dõi cảm nhận của làn da theo thời gian."
+          description="Bạn chưa có ghi nhận nào. Hãy thêm nhật ký đầu tiên sau khi dùng routine để theo dõi cảm nhận của da và thói quen chăm sóc theo thời gian."
           title="Chưa có nhật ký da"
         />
       ) : null}

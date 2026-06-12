@@ -10,8 +10,10 @@ export default function TodayRoutineLogPage() {
           Checklist routine hôm nay
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
-          Ghi nhận routine hôm nay như một checklist nhanh để dashboard phản ánh
-          tiến độ thật của bạn.
+          Ghi nhận routine hôm nay như một checklist nhanh: hoàn thành, một
+          phần hoặc bỏ qua. Sau đó bạn có thể viết nhật ký da để ghi lại cảm
+          nhận, sản phẩm đã dùng và thói quen liên quan mà không cần kết luận
+          quá sớm sau một vài lần dùng.
         </p>
       </div>
 

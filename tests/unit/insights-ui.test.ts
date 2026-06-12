@@ -69,8 +69,9 @@ describe("Insights UI source", () => {
       "Nhìn lại độ đều đặn của routine, nhật ký da, hoạt động theo dõi gần",
     );
     expect(insightsPageSource).toContain(
-      "không phải chẩn đoán y khoa",
+      "dữ liệu ngắn hạn có thể chưa đủ để rút ra kết luận chắc chắn",
     );
+    expect(insightsPageSource).toContain("thay thế tư vấn chuyên môn");
     expect(routePageSource).toContain("data-route={insightsRoute}");
     expect(routePageSource).toContain("<InsightsPage />");
   });
@@ -125,7 +126,7 @@ describe("Insights UI source", () => {
       "How this was calculated",
       "Tracking Quality Checklist",
       "Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại",
-      "không phải chẩn đoán y khoa",
+      "tư vấn chuyên môn",
     ]) {
       expect(combinedInsightsSource).toContain(expectedCopy);
     }
