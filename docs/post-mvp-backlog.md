@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
 ## 1. Current Stable Baseline
 
@@ -27,14 +27,15 @@ Core form submission and action feedback polish: v1.32 - Core Form Submission & 
 Core accessibility and keyboard interaction polish: v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
 Product and ingredient discovery confidence polish: v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 E2E failure triage and extended validation cleanup: v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
-Latest completed scoped task: v1.35 - E2E Failure Triage & Extended Validation Cleanup
+Product ↔ Ingredient learning path polish: v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
+Latest completed scoped task: v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: Manual Browser & Production Smoke Verification
-Local validation: PASS for v1.35 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -115,6 +116,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE in v1.33 | Follow-up accessibility polish after v1.32; improves selected accessible names, semantics, invalid-submit focus, validation relationships, action-group keyboard semantics, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | P2 | Product & Ingredient Discovery Confidence Polish | DONE in v1.34 | Follow-up discovery polish after v1.33; improves result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | P2 | E2E Failure Triage & Extended Validation Cleanup | DONE in v1.35 | Follow-up validation cleanup after v1.34; fixes stale dashboard, insights, saved-products, and today routine log Playwright selectors/copy expectations without changing app product behavior. |
+| P2 | Product ↔ Ingredient Learning Path Polish | DONE in v1.37 | Adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight catalogue/library cross-links without recommendations, ranking, scoring, schema, seed, auth, AI, CRUD, or broad API changes. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -876,6 +878,10 @@ Manual Browser & Production Smoke Verification
 
 Reason:
 
+- v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
+- v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.
+- v1.37 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
+- Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not performed or created for v1.37.
 - v1.35 E2E Failure Triage & Extended Validation Cleanup fixed the remaining dashboard, insights, saved-products, and today routine log E2E failures left after v1.34 extended validation.
 - v1.35 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
 - Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not performed for v1.35.
@@ -906,6 +912,7 @@ Reason:
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
 - v1.24 remains deferred and cannot be closed as DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
 - v1.22.1 full production smoke remains partial/deferred and should not be claimed as PASS.
+- Production `/api/health` remains on the v1.22 health endpoint contract version; v1.37 did not change it.
 - The previous admin/content candidate remains future optional backlog scope.
 - The previous optional real-provider candidate remains future optional backlog scope.
 - Portfolio screenshots and demo video are intentionally skipped and remain optional media evidence.
@@ -960,4 +967,5 @@ Reason:
 2026-06-12: Completed v1.33 Core Accessibility, Focus Management & Keyboard Interaction Polish as a follow-up to v1.32. Improved selected Product Card/Product Match/Saved Product accessible names, Saved Product save/unsave state semantics, Routine Log action-group labels and expanded-state semantics, Routine invalid-submit focus recovery, Journal invalid-submit focus recovery, Journal helper/error associations, and polite success status feedback using existing Button, Label, Alert, local React state, client API, and route patterns. No new accessibility framework, component library, keyboard-navigation framework, global focus-management system, business rule, schema, seed data, auth, AI, or broad API contract change was added. Scoped validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check`. Build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, production verification, screenshots, and demo video were not run or created for v1.33. This is not a full WCAG compliance or certification claim. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.34 Product & Ingredient Discovery Confidence Polish as a follow-up to v1.33. Improved Product Catalogue result counts, active filter summaries, and no-result recovery copy; added Ingredient Library function filtering through the existing API query, result counts, active filter summaries, search/function reset behavior, and contextual Ingredient Card detail labels. No Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contract change was added. Scoped validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check`. `npm run build` passed after an elevated rerun; the sandboxed build attempt failed with `spawn EPERM`. `npm run test:e2e` failed after an elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows; the ingredient authenticated E2E flow passed. `npm audit --omit=dev --audit-level=moderate` passed with 0 vulnerabilities. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.34. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.35 E2E Failure Triage & Extended Validation Cleanup as a follow-up to v1.34. Reproduced and classified six E2E failures: dashboard selector/test expectation drift, insights selector/copy drift, saved-products accessibility query drift, and today routine log copy drift. Updated Playwright assertions to match current intentional UI without app-code changes, without weakening coverage, and without changing product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.35. v1.24 remains deferred and validation-blocked.
+2026-06-13: Completed v1.37 Product ↔ Ingredient Learning Path Polish as a follow-up to v1.35. Added Product Detail links into Ingredient Library searches, Ingredient Detail links into Product Catalogue searches by INCI/display name, URL `q` initialization for both catalogue pages, and lightweight Product Catalogue / Ingredient Library cross-links. Copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, broad API contract change, or `/api/health` contract-version change was added. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.37. v1.24 remains deferred and validation-blocked.
 ```

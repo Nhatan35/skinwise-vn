@@ -46,7 +46,12 @@ describe("Product Catalogue UI", () => {
     expect(productsPageSource).toContain(
       "@/modules/products/components/product-catalogue",
     );
-    expect(productsPageSource).toContain("<ProductCatalogue />");
+    expect(productsPageSource).toContain("searchParams?: Promise");
+    expect(productsPageSource).toContain("getInitialQuery");
+    expect(productsPageSource).toContain("const initialQuery = getInitialQuery");
+    expect(productsPageSource).toContain(
+      "<ProductCatalogue initialQuery={initialQuery} />",
+    );
     expect(productsPageSource).toContain("routes.PRODUCTS");
     expect(productsPageSource).toContain("data-route={routes.PRODUCTS}");
   });
@@ -119,6 +124,8 @@ describe("Product Catalogue UI", () => {
       "skinType",
       "concern",
       "limit: 50",
+      "initialQuery",
+      "buildInitialProductFilters",
       "getProductsApiPath",
       'params.set("q", q)',
       'params.set("category", input.category)',
@@ -140,6 +147,18 @@ describe("Product Catalogue UI", () => {
       "image upload",
       "AI recommendation",
       "skin score",
+      "risk score",
+      "recommendProducts",
+      "relatedProducts",
+      "rankProducts",
+      "recommendTreatment",
+      "treatmentPlan",
+      "diagnoseSkin",
+      "marketplace",
+      "addToCart",
+      "checkout",
+      "payment",
+      "camera",
     ]) {
       expect(combinedProductUiSource).not.toContain(forbiddenScope);
     }
@@ -162,6 +181,9 @@ describe("Product Catalogue UI", () => {
       '"BHA"',
       "Xóa bộ lọc",
       "handleClearFilters",
+      "Muốn hiểu thêm về thành phần?",
+      "Mở thư viện thành phần",
+      "routes.INGREDIENTS",
     ]) {
       expect(productCatalogueSource).toContain(requiredSource);
     }

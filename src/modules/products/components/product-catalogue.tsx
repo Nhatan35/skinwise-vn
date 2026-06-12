@@ -1,6 +1,7 @@
 "use client";
 
 import { RotateCcw, Search, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 
 import { ProductCard } from "@/modules/products/components/product-card";
@@ -43,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { routes } from "@/shared/constants/routes";
 
 const ALL_FILTER_VALUE = "all";
 // Legacy test copy: Product browsing still works.
@@ -62,6 +64,17 @@ const initialFilters: ProductFilterState = {
   q: "",
   skinType: "",
 };
+
+type ProductCatalogueProps = {
+  initialQuery?: string;
+};
+
+function buildInitialProductFilters(initialQuery = ""): ProductFilterState {
+  return {
+    ...initialFilters,
+    q: initialQuery.trim(),
+  };
+}
 
 const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
@@ -171,11 +184,12 @@ function getSavedStateErrorMessage(error: unknown) {
   return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
 }
 
-export function ProductCatalogue() {
+export function ProductCatalogue({ initialQuery = "" }: ProductCatalogueProps) {
+  const initialProductFilters = buildInitialProductFilters(initialQuery);
   const [draftFilters, setDraftFilters] =
-    useState<ProductFilterState>(initialFilters);
+    useState<ProductFilterState>(initialProductFilters);
   const [activeFilters, setActiveFilters] =
-    useState<ProductFilterState>(initialFilters);
+    useState<ProductFilterState>(initialProductFilters);
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [savedProductIds, setSavedProductIds] = useState<Set<string>>(
     () => new Set(),
@@ -416,6 +430,16 @@ export function ProductCatalogue() {
               Bộ lọc đang áp dụng: {activeProductFilterLabels.join(" · ")}
             </p>
           ) : null}
+          <p>
+            Muốn hiểu thêm về thành phần?{" "}
+            <Link
+              className="font-medium text-primary underline-offset-4 hover:underline"
+              href={routes.INGREDIENTS}
+            >
+              Mở thư viện thành phần
+            </Link>
+            .
+          </p>
         </div>
       ) : null}
 

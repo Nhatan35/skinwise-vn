@@ -120,6 +120,10 @@ function getProductMatchError(error: unknown) {
   return "Không thể tải giải thích phù hợp cá nhân hóa.";
 }
 
+function getIngredientSearchHref(ingredientName: string) {
+  return `${routes.INGREDIENTS}?q=${encodeURIComponent(ingredientName)}`;
+}
+
 export function ProductDetail({ productId }: ProductDetailProps) {
   const [product, setProduct] = useState<ProductDto | null>(null);
   const [productMatch, setProductMatch] =
@@ -574,6 +578,39 @@ function IngredientSection({
             </p>
           </div>
         ) : null}
+        <div className="space-y-3 rounded-2xl border border-border bg-secondary/40 p-4">
+          <div className="space-y-1">
+            <h3 className="text-sm font-semibold text-foreground">
+              Tìm hiểu thành phần nổi bật
+            </h3>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Các thông tin trong thư viện thành phần chỉ mang tính giáo dục,
+              giúp bạn hiểu vai trò thường gặp của thành phần trong mỹ phẩm.
+              Nội dung này không thay thế tư vấn chuyên môn hoặc hướng dẫn điều
+              trị.
+            </p>
+          </div>
+          {decisionSupport.ingredientHighlights.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {decisionSupport.ingredientHighlights.map((ingredientName) => (
+                <Button
+                  asChild
+                  key={ingredientName}
+                  size="sm"
+                  variant="outline"
+                >
+                  <Link href={getIngredientSearchHref(ingredientName)}>
+                    Tra cứu {ingredientName} trong thư viện
+                  </Link>
+                </Button>
+              ))}
+            </div>
+          ) : (
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.INGREDIENTS}>Mở thư viện thành phần</Link>
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

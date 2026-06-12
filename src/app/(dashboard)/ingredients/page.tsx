@@ -1,7 +1,28 @@
 import { IngredientLibrary } from "@/modules/ingredients/components/ingredient-library";
 import { routes } from "@/shared/constants/routes";
 
-export default function IngredientsPage() {
+type IngredientsPageProps = {
+  searchParams?: Promise<{
+    q?: string | string[];
+  }>;
+};
+
+function getInitialQuery(searchParams?: { q?: string | string[] }) {
+  const q = searchParams?.q;
+
+  if (Array.isArray(q)) {
+    return q[0] ?? "";
+  }
+
+  return q ?? "";
+}
+
+export default async function IngredientsPage({
+  searchParams,
+}: IngredientsPageProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const initialQuery = getInitialQuery(resolvedSearchParams);
+
   return (
     <section className="space-y-6" data-route={routes.INGREDIENTS}>
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-stone-950/5">
@@ -16,7 +37,7 @@ export default function IngredientsPage() {
         </p>
       </div>
 
-      <IngredientLibrary />
+      <IngredientLibrary initialQuery={initialQuery} />
     </section>
   );
 }

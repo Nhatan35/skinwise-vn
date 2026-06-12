@@ -86,6 +86,24 @@ describe("Ingredient Detail UI", () => {
     }
   });
 
+  it("adds an educational Product Catalogue discovery path by ingredient query", () => {
+    for (const requiredSource of [
+      "Khám phá sản phẩm liên quan",
+      "getIngredientDisplayName",
+      "getProductCatalogueSearchHref",
+      "routes.PRODUCTS",
+      "encodeURIComponent(q)",
+      "Tìm sản phẩm có",
+      "catalogue",
+      "phải xếp hạng hoặc lựa chọn sản phẩm thay bạn",
+    ]) {
+      expect(ingredientDetailSource).toContain(requiredSource);
+    }
+
+    expect(ingredientDetailSource).not.toContain("sản phẩm được khuyên dùng");
+    expect(ingredientDetailSource).not.toContain("recommended products");
+  });
+
   it("displays only safe public IngredientDto fields in IngredientDetail", () => {
     for (const publicField of [
       "ingredient.id",
@@ -136,7 +154,19 @@ describe("Ingredient Detail UI", () => {
       "admin",
       "image upload",
       "skin score",
+      "risk score",
       "diagnose skin conditions for the user",
+      "recommendProducts",
+      "relatedProducts",
+      "rankProducts",
+      "recommendTreatment",
+      "treatmentPlan",
+      "diagnoseSkin",
+      "marketplace",
+      "addToCart",
+      "checkout",
+      "payment",
+      "camera",
     ]) {
       expect(combinedDetailSource).not.toContain(forbiddenScope);
     }

@@ -1,16 +1,16 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
+Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.35 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -32,13 +32,13 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish, v1.30 next-action reason copy, and v1.31 recoverable-error fallback actions. |
 | Skin Profile onboarding | DONE | Create/update/view profile. |
 | Skin Profile management | DONE | View/edit/delete supported. |
-| Product Catalogue | DONE | Seeded demo products with v1.34 result count, active filter summary, and clearer no-result recovery copy. |
-| Product Detail | DONE | Product detail, personalized match section, v1.15 decision-support safety wording, v1.27 save-decision polish, and v1.31 missing-resource fallback navigation. |
+| Product Catalogue | DONE | Seeded demo products with v1.34 result count, active filter summary, clearer no-result recovery copy, and v1.37 cross-link to Ingredient Library. |
+| Product Detail | DONE | Product detail, personalized match section, v1.15 decision-support safety wording, v1.27 save-decision polish, v1.31 missing-resource fallback navigation, and v1.37 ingredient-learning search links. |
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability/caution guardrails, v1.26 clarity polish for product-fit labels, safety notes, no-profile guidance, and v1.31 no-result/error recovery actions. |
 | Product and ingredient seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation contains 70 products and 70 ingredients with v1.24 seed quality tests, but the milestone is not DONE until build/E2E validation passes. |
 | Saved Products | DONE | Save/unsave flow with v1.27 save-context and empty-state clarity polish, v1.28 routine decision-support guidance, and v1.31 load-error fallback navigation. |
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
-| Ingredient Library | DONE | Ingredient list/detail with v1.34 function filtering, result count, active filter summary, search/function reset, and contextual detail action labels. |
+| Ingredient Library | DONE | Ingredient list/detail with v1.34 function filtering, result count, active filter summary, search/function reset, contextual detail action labels, and v1.37 Product Catalogue discovery links by INCI query. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
 | Routine Builder | DONE | Morning/evening routine support with v1.28 saved-product-to-routine guidance and v1.29 Routine to Log/Journal next-action clarity. |
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
@@ -54,7 +54,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | E2E Failure Triage & Extended Validation Cleanup | DONE | v1.35 fixes stale E2E selectors/copy expectations in dashboard, insights, saved-products, and today routine log flows. Full local validation passed, including build, audit, and `npm run test:e2e`. |
-| Local validation evidence | MIXED BY MILESTONE | v1.35 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. v1.34 scoped validation passed but its extended E2E run failed with 25 passed / 6 failed before v1.35 cleanup. v1.33, v1.32, v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
+| Product ↔ Ingredient Learning Path Polish | DONE | v1.37 adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight Product Catalogue / Ingredient Library cross-links without recommendation or ranking behavior. |
+| Local validation evidence | MIXED BY MILESTONE | v1.37 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. v1.35 remains DONE with full E2E PASS. v1.34 remains DONE within scoped validation only. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -87,6 +88,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | Accessibility / Keyboard / Focus Polish | v1.33 | DONE, scoped validation only |
 | Product & Ingredient Discovery Confidence Polish | Discovery UX Polish | v1.34 | DONE, scoped validation only |
 | E2E Failure Triage & Extended Validation Cleanup | Validation / E2E Cleanup | v1.35 | DONE |
+| Product ↔ Ingredient Learning Path Polish | Educational Discovery UX Polish | v1.37 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -106,7 +108,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
+Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
@@ -124,4 +126,8 @@ v1.32 status: DONE within scoped local validation - selected form submission and
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished; lint, typecheck, unit tests, and diff check passed
 v1.34 status: DONE within scoped local validation - Product and Ingredient discovery confidence polish passed lint, typecheck, unit tests, and diff check; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed
 v1.35 status: DONE - E2E failure triage fixed dashboard, insights, saved-products, and today routine log Playwright selector/copy drift; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
+v1.37 status: DONE - Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library learning paths were connected with educational query links; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
+v1.37 exclusions: no recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change
+v1.37 manual evidence: manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created
+Production /api/health version: remains the v1.22 health endpoint contract version
 ```

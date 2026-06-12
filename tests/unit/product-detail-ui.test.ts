@@ -117,6 +117,14 @@ describe("Product Detail UI", () => {
     );
     expect(productDetailSource).toContain("Thông tin tham khảo");
     expect(productDetailSource).toContain("SaveDecisionSupportSection");
+    expect(productDetailSource).toContain("Tìm hiểu thành phần nổi bật");
+    expect(productDetailSource).toContain("getIngredientSearchHref");
+    expect(productDetailSource).toContain("routes.INGREDIENTS");
+    expect(productDetailSource).toContain("encodeURIComponent(ingredientName)");
+    expect(productDetailSource).toContain("Tra cứu {ingredientName} trong thư viện");
+    expect(productDetailSource).toContain("Mở thư viện thành phần");
+    expect(productDetailSource).toContain("chỉ mang tính giáo dục");
+    expect(productDetailSource).toContain("không thay thế tư vấn chuyên môn");
     expect(productDetailSource).toContain("Lưu sản phẩm để xem lại");
     expect(productDetailSource).toContain("Xem sản phẩm đã lưu");
   });
@@ -192,6 +200,7 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain("routes.PRODUCTS");
     expect(productDetailSource).toContain("routes.PRODUCT_MATCH");
     expect(productDetailSource).toContain("routes.SAVED_PRODUCTS");
+    expect(productDetailSource).toContain("routes.INGREDIENTS");
     expect(productDetailSource).not.toContain('href="/products"');
     expect(productDetailSource).not.toContain('href="/product-match"');
     expect(productDetailSource).not.toContain('href="/saved-products"');
@@ -267,6 +276,19 @@ describe("Product Detail UI", () => {
       "deleteProduct",
       "AI recommendation",
       "add-to-routine",
+      "recommendProducts",
+      "relatedProducts",
+      "rankProducts",
+      "recommendTreatment",
+      "treatmentPlan",
+      "diagnoseSkin",
+      "risk score",
+      "marketplace",
+      "addToCart",
+      "checkout",
+      "payment",
+      "image upload",
+      "camera",
     ]) {
       expect(combinedProductDetailUiSource).not.toContain(forbiddenScope);
     }

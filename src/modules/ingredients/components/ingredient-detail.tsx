@@ -27,6 +27,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type IngredientDetailProps = {
   ingredientId: string;
@@ -59,6 +60,20 @@ function getLoadError(error: unknown) {
       "Không thể tải thông tin thành phần này. Vui lòng quay lại thư viện thành phần hoặc thử lại sau.",
     status: 500,
   };
+}
+
+function getIngredientDisplayName(ingredient: IngredientDto) {
+  return ingredient.inciName.trim() || ingredient.aliases[0]?.trim() || "";
+}
+
+function getProductCatalogueSearchHref(ingredientName: string) {
+  const q = ingredientName.trim();
+
+  if (!q) {
+    return routes.PRODUCTS;
+  }
+
+  return `${routes.PRODUCTS}?q=${encodeURIComponent(q)}`;
 }
 
 export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
@@ -155,6 +170,10 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
     );
   }
 
+  const ingredientDisplayName = getIngredientDisplayName(ingredient);
+  const productCatalogueSearchHref =
+    getProductCatalogueSearchHref(ingredientDisplayName);
+
   return (
     <article className="space-y-4">
       <Card className="border-border bg-card">
@@ -197,6 +216,24 @@ export function IngredientDetail({ ingredientId }: IngredientDetailProps) {
           không cam kết thành phần phù hợp với mọi người.
         </AlertDescription>
       </Alert>
+
+      <Card className="border-border bg-card">
+        <CardHeader>
+          <CardTitle>Khám phá sản phẩm liên quan</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm leading-6 text-muted-foreground">
+            Bạn có thể dùng tên INCI này để tìm các sản phẩm trong catalogue
+            demo có nhắc đến thành phần tương ứng. Đây là bước tra cứu, không
+            phải xếp hạng hoặc lựa chọn sản phẩm thay bạn.
+          </p>
+          <Button asChild variant="outline">
+            <Link href={productCatalogueSearchHref}>
+              Tìm sản phẩm có {ingredientDisplayName || ingredient.inciName}
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card className="border-border bg-card">
         <CardHeader>

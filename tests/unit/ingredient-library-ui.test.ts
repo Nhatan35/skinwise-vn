@@ -44,7 +44,12 @@ describe("Ingredient Library UI", () => {
     expect(ingredientsPageSource).toContain(
       "@/modules/ingredients/components/ingredient-library",
     );
-    expect(ingredientsPageSource).toContain("<IngredientLibrary />");
+    expect(ingredientsPageSource).toContain("searchParams?: Promise");
+    expect(ingredientsPageSource).toContain("getInitialQuery");
+    expect(ingredientsPageSource).toContain("const initialQuery = getInitialQuery");
+    expect(ingredientsPageSource).toContain(
+      "<IngredientLibrary initialQuery={initialQuery} />",
+    );
     expect(ingredientsPageSource).toContain("routes.INGREDIENTS");
     expect(ingredientsPageSource).toContain("data-route={routes.INGREDIENTS}");
   });
@@ -95,6 +100,8 @@ describe("Ingredient Library UI", () => {
       "draftFilters",
       "activeFilters",
       "initialIngredientFilters",
+      "initialQuery",
+      "buildInitialIngredientFilters",
       "hasActiveIngredientFilters",
       "getActiveIngredientFilterLabels",
       "limit: 50",
@@ -118,6 +125,18 @@ describe("Ingredient Library UI", () => {
       "admin",
       "image upload",
       "skin score",
+      "risk score",
+      "recommendProducts",
+      "relatedProducts",
+      "rankProducts",
+      "recommendTreatment",
+      "treatmentPlan",
+      "diagnoseSkin",
+      "marketplace",
+      "addToCart",
+      "checkout",
+      "payment",
+      "camera",
     ]) {
       expect(combinedIngredientUiSource).not.toContain(forbiddenScope);
     }
@@ -137,6 +156,10 @@ describe("Ingredient Library UI", () => {
     ]) {
       expect(ingredientLibrarySource).toContain(requiredSource);
     }
+
+    expect(ingredientLibrarySource).toContain("Muốn xem sản phẩm liên quan?");
+    expect(ingredientLibrarySource).toContain("Tìm trong catalogue sản phẩm");
+    expect(ingredientLibrarySource).toContain("routes.PRODUCTS");
   });
 
   it("renders loading, error, empty, educational, and card states", () => {

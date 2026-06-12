@@ -1,6 +1,7 @@
 "use client";
 
 import { RotateCcw, Search, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 
 import { IngredientCard } from "@/modules/ingredients/components/ingredient-card";
@@ -29,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { routes } from "@/shared/constants/routes";
 
 const ALL_FILTER_VALUE = "all";
 
@@ -41,6 +43,19 @@ const initialIngredientFilters: IngredientFilterState = {
   function: "",
   q: "",
 };
+
+type IngredientLibraryProps = {
+  initialQuery?: string;
+};
+
+function buildInitialIngredientFilters(
+  initialQuery = "",
+): IngredientFilterState {
+  return {
+    ...initialIngredientFilters,
+    q: initialQuery.trim(),
+  };
+}
 
 const ingredientFunctionLabels: Record<string, string> = {
   active: "Hoạt chất",
@@ -116,12 +131,15 @@ function getLoadErrorMessage(error: unknown) {
   return "Không thể tải thư viện thành phần. Vui lòng thử lại hoặc làm mới trang.";
 }
 
-export function IngredientLibrary() {
+export function IngredientLibrary({
+  initialQuery = "",
+}: IngredientLibraryProps) {
+  const initialFilters = buildInitialIngredientFilters(initialQuery);
   const [draftFilters, setDraftFilters] = useState<IngredientFilterState>(
-    initialIngredientFilters,
+    initialFilters,
   );
   const [activeFilters, setActiveFilters] = useState<IngredientFilterState>(
-    initialIngredientFilters,
+    initialFilters,
   );
   const [ingredients, setIngredients] = useState<IngredientDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -316,6 +334,16 @@ export function IngredientLibrary() {
               thường gặp.
             </p>
           )}
+          <p>
+            Muốn xem sản phẩm liên quan?{" "}
+            <Link
+              className="font-medium text-primary underline-offset-4 hover:underline"
+              href={routes.PRODUCTS}
+            >
+              Tìm trong catalogue sản phẩm
+            </Link>
+            .
+          </p>
         </div>
       ) : null}
 

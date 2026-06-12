@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
 ## 1. Release Summary
 
@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
+MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 ```
 
 Completed closeout milestones:
@@ -51,6 +51,7 @@ MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, sco
 MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
+MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -71,6 +72,7 @@ v1.32 status: DONE within scoped local validation - selected core form submissio
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished. Lint, typecheck, unit tests, and diff check passed; build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, and production verification were not run for v1.33.
 v1.34 status: DONE within scoped local validation - Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail action labels polished. Lint, typecheck, unit tests, and diff check passed; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed; manual browser, screen-reader, and production verification were not run for v1.34.
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; manual browser, screen-reader, and production verification were not run for v1.35.
+v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created for v1.37.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -79,16 +81,16 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Area | Status | Notes |
 |---|---|---|
 | Core MVP | PASS | MVP core scope is complete and ready for portfolio/demo/interview use as an MVP. |
-| Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs, Product Detail personalized match section, v1.15 decision-support wording, v1.27 save-decision guidance polish, and v1.34 Product Catalogue result-count/filter-summary confidence polish. |
+| Product Catalogue and Product Detail | PASS | Implemented with visible-product APIs, Product Detail personalized match section, v1.15 decision-support wording, v1.27 save-decision guidance polish, v1.34 result-count/filter-summary confidence polish, and v1.37 educational links into Ingredient Library searches. |
 | Product Match | PASS | `/product-match`, `GET /api/product-match`, and `GET /api/products/[id]/match` are implemented, tested, documented, improved with v1.15 explainability/caution guardrails, and polished in v1.26 for clearer explanation labels, product-fit wording, no-profile guidance, and next-action copy. |
-| Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded metadata, v1.34 function filtering, result-count/filter-summary confidence polish, search/function reset behavior, and contextual detail action labels. |
+| Ingredient Library | PASS | Ingredient list/detail/explanation flow is implemented with expanded metadata, v1.34 function filtering/result-confidence polish, and v1.37 Product Catalogue discovery links by INCI/display-name query plus lightweight catalogue cross-links. |
 | Routine Builder | PASS | Empty state, morning/evening guidance, selected-product context, and Today Checklist CTA are implemented. |
 | Routine Safety Analysis | PASS | Deterministic rules and safe fallback behavior are implemented. |
 | Today Routine and Routine Logs | PASS | Completion and log flows are implemented and covered by tests. |
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | MIXED BY MILESTONE | MVP v1.35 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. MVP v1.34 scoped validation passed, but its extended E2E run failed before v1.35 cleanup. MVP v1.33, v1.32, v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the prior closeout environment. |
+| Local validation | MIXED BY MILESTONE | MVP v1.37 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. MVP v1.35 remains DONE with full E2E PASS. MVP v1.34 remains DONE within scoped validation only. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -102,7 +104,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.35 E2E Failure Triage & Extended Validation Cleanup is complete and preserves product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, and broad API contracts. MVP v1.34 discovery polish, v1.33 accessibility polish, v1.32 form/action feedback polish, v1.31 Core Flow Recovery polish, v1.30 Insights/Dashboard polish, v1.29 Routine to Routine Log / Journal polish, v1.28 Saved Products to Routine polish, v1.27 Product Detail to Saved Products polish, v1.26 Product Match polish, v1.25 First-Session Guided Experience Polish, and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
+| Latest post-MVP implementation | PASS | MVP v1.37 Product ↔ Ingredient Learning Path Polish is complete. It adds educational search links and lightweight cross-links without a recommendation engine, related-products ranking, Product Match scoring/ranking changes, Routine Safety changes, schema or seed baseline changes, auth or AI-provider changes, CRUD scope changes, or broad API contract changes. MVP v1.35 remains DONE with full E2E PASS; v1.34 remains DONE within scoped validation only; v1.24 remains NOT DONE / VALIDATION BLOCKED. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -111,6 +113,22 @@ Optional remaining media evidence tasks: screenshots and demo video.
 Local validation evidence:
 
 ```txt
+MVP v1.37 Product ↔ Ingredient Learning Path Polish:
+Evidence date: 2026-06-13
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1021 tests
+git diff --check: PASS
+npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
+Manual browser verification: NOT CHECKED for v1.37
+Screen-reader verification: NOT CHECKED for v1.37
+Production verification: NOT CHECKED for v1.37
+Screenshots/demo video: NOT CREATED for v1.37
+
 MVP v1.35 extended validation cleanup:
 Evidence date: 2026-06-12
 node -v: v24.14.0
@@ -281,6 +299,8 @@ Evidence boundary:
 - v1.26 polished Product Match explanation clarity and safe decision-support copy using the existing v1.15 explainability system; build, E2E, manual browser verification, and production verification were not run.
 - v1.27 polished Product Detail to Saved Products decision-support copy and next actions; build, E2E, manual browser verification, and production verification were not run.
 - v1.28 polished Saved Products to Routine decision-support copy and next actions; build, E2E, manual browser verification, and production verification were not run.
+- v1.37 added Product Detail ingredient-learning links, Ingredient Detail Product Catalogue search links by INCI/display-name query, and lightweight catalogue/library cross-links while preserving educational, non-medical copy and all existing scoring, safety, schema, seed, auth, AI, CRUD, and API boundaries.
+- Production `/api/health` continues to use the v1.22 endpoint contract version; v1.37 did not change it.
 - Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
@@ -316,10 +336,10 @@ Evidence boundary:
 | Document | Status | Notes |
 |---|---|---|
 | `docs/portfolio-evidence-package.md` | PASS | Central portfolio package with recruiter summary, CV/resume draft, demo run of show, media plan, and evidence boundary. |
-| `README.md` | PASS | Current v1.35 validation status, v1.24 validation blocker, health endpoint, release evidence references, and evidence boundaries are documented. |
+| `README.md` | PASS | Current v1.37 validation status, v1.24 validation blocker, v1.22 health endpoint contract boundary, release evidence references, and evidence boundaries are documented. |
 | `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
-| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.35 validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and the recommended manual/production verification task. |
+| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.37 validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and the recommended manual/production verification task. |
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
 | `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
@@ -328,8 +348,8 @@ Evidence boundary:
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes `/api/health` check, its intentional limitations, current evidence boundary, and recovery plan. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.35 validation status, and recommended next task are synchronized. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase, v1.35 sprint status, validation boundary, and recommended next task are synchronized. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.37 validation status, and recommended next task are synchronized. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase, v1.37 sprint status, validation boundary, and recommended next task are synchronized. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
 | `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |
 
@@ -362,6 +382,7 @@ These are intentional MVP boundaries, not release blockers:
 - v1.26 build and E2E validation were not run by task scope.
 - v1.27 build and E2E validation were not run by task scope.
 - v1.28 build and E2E validation were not run by task scope.
+- v1.37 manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -615,6 +636,7 @@ MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, sco
 MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
+MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED
