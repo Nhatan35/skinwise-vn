@@ -2,7 +2,7 @@
 
 import { Check, ListChecks, XCircle } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import {
@@ -10,6 +10,7 @@ import {
   buildPartialRoutineLogPayload,
   buildSkippedRoutineLogPayload,
   getCompletedStepCount,
+  getRoutineLogStatusLabel,
   RoutineLogClientValidationError,
   type RoutineLogUpsertPayload,
 } from "@/modules/routine-logs/routine-log.client";
@@ -109,6 +110,7 @@ export function RoutineLogControls({
   routine,
   timezone,
 }: RoutineLogControlsProps) {
+  const idPrefix = useId();
   const activeLogId = log?.id ?? "new-routine-log";
   const initialSelectedStepIds = getInitialPartialStepIds(log);
   const [isPartialOpen, setIsPartialOpen] = useState(false);
@@ -129,6 +131,14 @@ export function RoutineLogControls({
   const completedStepCount = getCompletedStepCount(routine, log);
   const canPartiallyComplete = routine.steps.length >= 2;
   const controlsDisabled = disabled || pendingAction !== null;
+  const titleId = `${idPrefix}-routine-log-title`;
+  const descriptionId = `${idPrefix}-routine-log-description`;
+  const currentStatusId = `${idPrefix}-routine-log-current-status`;
+  const partialPanelId = `${idPrefix}-routine-log-partial-panel`;
+  const partialPanelTitleId = `${idPrefix}-routine-log-partial-title`;
+  const currentStatusLabel = log
+    ? getRoutineLogStatusLabel(log.status)
+    : "Chưa ghi nhận";
 
   async function saveRoutineLog(
     payload: RoutineLogUpsertPayload,
@@ -228,23 +238,31 @@ export function RoutineLogControls({
   }
 
   return (
-    <div
+    <section
       aria-busy={isSaving}
+      aria-describedby={`${descriptionId} ${currentStatusId}`}
+      aria-labelledby={titleId}
       className="mt-4 space-y-3 border-t border-border pt-4"
       data-testid="routine-log-controls"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">
+          <p className="text-sm font-medium text-foreground" id={titleId}>
             Ghi nhận routine hôm nay
           </p>
           <p className="text-xs text-muted-foreground">
             Ngày {localDate} · Múi giờ {timezone}
           </p>
-          <p className="text-xs leading-5 text-muted-foreground">
+          <p
+            className="text-xs leading-5 text-muted-foreground"
+            id={descriptionId}
+          >
             Chọn trạng thái sau khi dùng routine để theo dõi thói quen đều đặn.
             Nếu có cảm nhận da đáng chú ý, hãy viết thêm trong nhật ký chăm sóc
             da.
+          </p>
+          <p className="text-xs text-muted-foreground" id={currentStatusId}>
+            Trạng thái hiện tại: {currentStatusLabel}.
           </p>
           {log?.status === "partial" ? (
             <p className="text-xs text-muted-foreground">
@@ -253,8 +271,13 @@ export function RoutineLogControls({
           ) : null}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div
+          aria-label={`Chọn trạng thái routine ${routine.name}`}
+          className="flex flex-wrap gap-2"
+          role="group"
+        >
           <Button
+            aria-label={`Ghi nhận ${routine.name} là hoàn thành`}
             data-testid="routine-log-completed-button"
             disabled={controlsDisabled}
             onClick={saveCompletedLog}
@@ -265,6 +288,13 @@ export function RoutineLogControls({
             {pendingAction === "completed" ? "Đang ghi nhận..." : "Hoàn thành"}
           </Button>
           <Button
+            aria-controls={partialPanelId}
+            aria-expanded={isPartialOpen}
+            aria-label={
+              isPartialOpen
+                ? `Đóng lựa chọn một phần cho ${routine.name}`
+                : `Chọn ghi nhận một phần cho ${routine.name}`
+            }
             data-testid="routine-log-partial-button"
             disabled={controlsDisabled || !canPartiallyComplete}
             onClick={() => {
@@ -280,6 +310,7 @@ export function RoutineLogControls({
             {pendingAction === "partial" ? "Đang ghi nhận..." : "Một phần"}
           </Button>
           <Button
+            aria-label={`Ghi nhận ${routine.name} là bỏ qua`}
             data-testid="routine-log-skipped-button"
             disabled={controlsDisabled}
             onClick={saveSkippedLog}
@@ -300,9 +331,17 @@ export function RoutineLogControls({
       ) : null}
 
       {isPartialOpen ? (
-        <div className="space-y-3 rounded-lg border border-border bg-card p-3">
+        <div
+          aria-labelledby={partialPanelTitleId}
+          className="space-y-3 rounded-lg border border-border bg-card p-3"
+          id={partialPanelId}
+          role="group"
+        >
           <div>
-            <p className="text-sm font-medium text-foreground">
+            <p
+              className="text-sm font-medium text-foreground"
+              id={partialPanelTitleId}
+            >
               Chọn các bước đã hoàn thành
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -322,6 +361,7 @@ export function RoutineLogControls({
                   className="mt-1"
                   disabled={controlsDisabled}
                   id={`routine-log-${routine.id}-${step.stepId}`}
+                  name={`routine-log-${routine.id}-completed-step`}
                   onChange={() => toggleSelectedStepId(step.stepId)}
                   type="checkbox"
                 />
@@ -334,6 +374,7 @@ export function RoutineLogControls({
 
           <div className="flex flex-wrap items-center gap-2">
             <Button
+              aria-label={`Lưu ghi nhận một phần cho ${routine.name}`}
               data-testid="routine-log-save-partial-button"
               disabled={controlsDisabled}
               onClick={savePartialLog}
@@ -357,7 +398,7 @@ export function RoutineLogControls({
       ) : null}
 
       {successMessage ? (
-        <Alert>
+        <Alert role="status">
           <AlertDescription className="space-y-3">
             <p>{successMessage}</p>
             <div className="flex flex-col gap-2 sm:flex-row">
@@ -371,7 +412,7 @@ export function RoutineLogControls({
           </AlertDescription>
         </Alert>
       ) : null}
-    </div>
+    </section>
   );
 }
 

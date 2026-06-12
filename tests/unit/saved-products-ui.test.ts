@@ -196,6 +196,31 @@ describe("Saved Products UI", () => {
     expect(savedProductToggleButtonSource).not.toContain("setIsSaved(!nextSaved)");
   });
 
+  it("adds accessible names and state to saved-product actions", () => {
+    expect(savedProductToggleButtonSource).toContain("productName?: string");
+    expect(savedProductToggleButtonSource).toContain("getProductActionLabel");
+    expect(savedProductToggleButtonSource).toContain(
+      "aria-label={accessibleLabel}",
+    );
+    expect(savedProductToggleButtonSource).toContain("aria-pressed={isSaved}");
+    expect(savedProductToggleButtonSource).toContain(
+      "aria-describedby={describedBy}",
+    );
+    expect(savedProductToggleButtonSource).toContain("id={errorId}");
+    expect(savedProductToggleButtonSource).toContain("id={statusId}");
+    expect(savedProductCardSource).toContain(
+      "Bỏ chọn sản phẩm ${product.name} khỏi so sánh",
+    );
+    expect(savedProductCardSource).toContain(
+      "Thêm sản phẩm ${product.name} vào so sánh",
+    );
+    expect(savedProductCardSource).toContain(
+      "Xem chi tiết sản phẩm ${product.name}",
+    );
+    expect(savedProductCardSource).toContain("productName={product.name}");
+    expect(combinedSavedProductClientSource).not.toContain("tabIndex={1");
+  });
+
   it("adds saved product comparison selection with item.productId keys", () => {
     expect(existsSync(savedProductsComparisonPanelPath)).toBe(true);
 

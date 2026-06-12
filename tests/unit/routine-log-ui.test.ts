@@ -306,6 +306,34 @@ describe("RoutineLog UI integration", () => {
     );
   });
 
+  it("labels Routine Log action groups and exposes expanded/status semantics", () => {
+    expect(routineLogControlsSource).toContain("useId");
+    expect(routineLogControlsSource).toContain("getRoutineLogStatusLabel");
+    expect(routineLogControlsSource).toContain('role="group"');
+    expect(routineLogControlsSource).toContain(
+      "aria-label={`Chọn trạng thái routine ${routine.name}`}",
+    );
+    expect(routineLogControlsSource).toContain("aria-labelledby={titleId}");
+    expect(routineLogControlsSource).toContain("aria-describedby={`${descriptionId} ${currentStatusId}`}");
+    expect(routineLogControlsSource).toContain("Trạng thái hiện tại:");
+    expect(routineLogControlsSource).toContain("aria-controls={partialPanelId}");
+    expect(routineLogControlsSource).toContain("aria-expanded={isPartialOpen}");
+    expect(routineLogControlsSource).toContain(
+      "aria-label={`Ghi nhận ${routine.name} là hoàn thành`}",
+    );
+    expect(routineLogControlsSource).toContain(
+      "aria-label={`Ghi nhận ${routine.name} là bỏ qua`}",
+    );
+    expect(routineLogControlsSource).toContain(
+      "aria-label={`Lưu ghi nhận một phần cho ${routine.name}`}",
+    );
+    expect(routineLogControlsSource).toContain(
+      'name={`routine-log-${routine.id}-completed-step`}',
+    );
+    expect(routineLogControlsSource).toContain('<Alert role="status">');
+    expect(routineLogControlsSource).not.toContain("tabIndex={1");
+  });
+
   it("connects Today Routine Log to Journal after a routine log exists", () => {
     expect(todayRoutineChecklistSource).toContain(
       "@/modules/routine-logs/components/today-journal-prompt-card",

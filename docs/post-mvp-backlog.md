@@ -24,14 +24,15 @@ Routine to Routine Log / Journal decision-support polish: v1.29 - Routine to Rou
 Insights interpretation and Dashboard next-action polish: v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 Core flow recovery and navigation consistency polish: v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
 Core form submission and action feedback polish: v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
-Latest completed scoped task: v1.32 - Core Form Submission & Action Feedback Consistency Polish
+Core accessibility and keyboard interaction polish: v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
+Latest completed scoped task: v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: TBD / Backlog grooming
-Local validation: PASS for v1.32 scoped lint/typecheck/unit tests and diff check; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.33 scoped lint/typecheck/unit tests and diff check; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -109,6 +110,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Insights Interpretation & Dashboard Next Action Polish | DONE in v1.30 | Follow-up polish after v1.29; improves Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy without changing Product Match, Product Detail, Saved Products, Routine, Routine Log, Journal, Insights calculations, Dashboard state model, seed data, schema, or API contracts. |
 | P2 | Core Flow Recovery, Empty State & Navigation Consistency Polish | DONE in v1.31 | Follow-up resilience polish after v1.30; improves selected core-flow empty states, recoverable errors, missing-resource guidance, retry clarity, and route consistency without adding a new global error framework, changing business logic, seed data, schema, or API contracts. |
 | P2 | Core Form Submission & Action Feedback Consistency Polish | DONE in v1.32 | Follow-up interaction polish after v1.31; improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
+| P2 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE in v1.33 | Follow-up accessibility polish after v1.32; improves selected accessible names, semantics, invalid-submit focus, validation relationships, action-group keyboard semantics, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -879,6 +881,7 @@ Reason:
 - v1.30 Insights Interpretation & Dashboard Next Action polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.31 Core Flow Recovery, Empty State & Navigation Consistency polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.32 Core Form Submission & Action Feedback Consistency polish passed scoped local validation with lint, typecheck, unit tests, and diff check.
+- v1.33 Core Accessibility, Focus Management & Keyboard Interaction polish passed scoped local validation with lint, typecheck, unit tests, and diff check.
 - v1.26 is a follow-up polish pass; historical v1.15 Product Match Explainability & Safety Guardrails remains the original explainability implementation milestone.
 - v1.27 is a follow-up polish pass after v1.26; it improves Product Detail save-decision guidance and Saved Products empty-state clarity without adding product scope.
 - v1.28 is a follow-up polish pass after v1.26 and v1.27; it improves Saved Products to Routine decision-support clarity without adding product scope.
@@ -886,6 +889,7 @@ Reason:
 - v1.30 is a follow-up polish pass after v1.29; it improves Insights interpretation and Dashboard next-action clarity without adding product scope.
 - v1.31 is a follow-up resilience polish pass after v1.30; it improves selected core-flow recovery, empty-state, retry, missing-resource, and route-consistency states without adding product scope.
 - v1.32 is a follow-up interaction polish pass after v1.31; it improves selected form submission and mutation feedback states without adding product scope or a new form/toast/mutation/state framework.
+- v1.33 is a follow-up accessibility polish pass after v1.32; it improves selected semantics, focus, keyboard, validation relationship, and status feedback states without adding product scope or claiming full accessibility certification.
 - v1.25 improved dashboard onboarding guidance without adding new product scope.
 - v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
@@ -942,4 +946,5 @@ Reason:
 2026-06-12: Completed v1.30 Insights Interpretation & Dashboard Next Action Polish as a follow-up to v1.29. Improved Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Routine Log logic, Journal logic, Insights calculations, Dashboard state model, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.30. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.31 Core Flow Recovery, Empty State & Navigation Consistency Polish as a follow-up to v1.30. Improved selected Product Match, Product Detail, Saved Products, Routine, Today Routine Log, Insights, and Dashboard recovery/fallback states using existing shared state components and route constants without adding a new global error framework, changing business logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.31. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.32 Core Form Submission & Action Feedback Consistency Polish as a follow-up to v1.31. Improved selected Saved Product save/unsave, Product Detail save controls, Routine save, Routine Log status, and Journal save interactions with clearer pending labels, duplicate-submission prevention, safe failure copy, input/state preservation, confirmed success feedback, and supported next actions using existing local state, Button, Alert, client API, and route patterns. No new form, toast, mutation, or state-management framework was added; business rules, schema, seed data, auth, AI, and broad API contracts were unchanged. Scoped validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.32. v1.24 remains deferred and validation-blocked.
+2026-06-12: Completed v1.33 Core Accessibility, Focus Management & Keyboard Interaction Polish as a follow-up to v1.32. Improved selected Product Card/Product Match/Saved Product accessible names, Saved Product save/unsave state semantics, Routine Log action-group labels and expanded-state semantics, Routine invalid-submit focus recovery, Journal invalid-submit focus recovery, Journal helper/error associations, and polite success status feedback using existing Button, Label, Alert, local React state, client API, and route patterns. No new accessibility framework, component library, keyboard-navigation framework, global focus-management system, business rule, schema, seed data, auth, AI, or broad API contract change was added. Scoped validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check`. Build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, production verification, screenshots, and demo video were not run or created for v1.33. This is not a full WCAG compliance or certification claim. v1.24 remains deferred and validation-blocked.
 ```

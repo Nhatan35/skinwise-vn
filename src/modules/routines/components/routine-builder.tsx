@@ -82,6 +82,7 @@ const MANUAL_PRODUCT_VALUE = "__manual_product__";
 const ANALYZE_ROUTE_SEGMENT = "analyze";
 const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
 const ROUTINE_STEP_LIMIT = 15;
+const ROUTINE_SAVE_ERROR_ID = "routine-save-error";
 
 type ApiError = {
   code: string;
@@ -376,6 +377,66 @@ function mapValidationIssues(issues: ZodIssue[]): FieldErrors {
     }),
     {},
   );
+}
+
+function getRoutineErrorFieldId(errorKey: string) {
+  if (errorKey === "name") {
+    return "routine-name";
+  }
+
+  if (errorKey === "timeOfDay") {
+    return "routine-time-of-day";
+  }
+
+  const stepErrorMatch = errorKey.match(/^steps\.(\d+)\.(.+)$/);
+
+  if (!stepErrorMatch) {
+    return undefined;
+  }
+
+  const [, stepIndex, field] = stepErrorMatch;
+
+  if (field === "productId") {
+    return `step-product-${stepIndex}`;
+  }
+
+  if (field === "customProductName") {
+    return `step-name-${stepIndex}`;
+  }
+
+  if (field === "category") {
+    return `step-category-${stepIndex}`;
+  }
+
+  if (field === "frequency") {
+    return `step-frequency-${stepIndex}`;
+  }
+
+  if (field === "instructions") {
+    return `step-instructions-${stepIndex}`;
+  }
+
+  return undefined;
+}
+
+function focusElementById(elementId?: string) {
+  if (!elementId) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    document.getElementById(elementId)?.focus();
+  }, 0);
+}
+
+function focusFirstRoutineError(errors: FieldErrors) {
+  const firstErrorKey = Object.keys(errors)[0];
+
+  if (!firstErrorKey) {
+    return;
+  }
+
+  focusElementById(getRoutineErrorFieldId(firstErrorKey));
 }
 
 function formatUpdatedAt(value: string) {
@@ -833,7 +894,10 @@ export function RoutineBuilder() {
         : updateRoutineSchema.safeParse(routinePayload);
 
     if (!validation.success) {
-      setFieldErrors(mapValidationIssues(validation.error.issues));
+      const validationErrors = mapValidationIssues(validation.error.issues);
+
+      setFieldErrors(validationErrors);
+      focusFirstRoutineError(validationErrors);
       return;
     }
 
@@ -859,6 +923,7 @@ export function RoutineBuilder() {
 
       if (!response.ok || body.error) {
         setApiError(getRoutineSaveErrorMessage(body.error));
+        focusElementById(ROUTINE_SAVE_ERROR_ID);
         return;
       }
 
@@ -885,6 +950,7 @@ export function RoutineBuilder() {
       setApiError(
         "Chưa thể lưu routine. Nội dung bạn đã nhập vẫn được giữ lại. Vui lòng thử lại.",
       );
+      focusElementById(ROUTINE_SAVE_ERROR_ID);
     } finally {
       submitLockRef.current = false;
       setIsSaving(false);
@@ -1118,14 +1184,14 @@ export function RoutineBuilder() {
   return (
     <div className="space-y-6">
       {apiError ? (
-        <Alert variant="destructive">
+        <Alert id={ROUTINE_SAVE_ERROR_ID} tabIndex={-1} variant="destructive">
           <AlertTitle>Chưa xử lý được routine</AlertTitle>
           <AlertDescription>{apiError}</AlertDescription>
         </Alert>
       ) : null}
 
       {successMessage ? (
-        <Alert>
+        <Alert role="status">
           <Check aria-hidden="true" />
           <AlertTitle>Đã lưu</AlertTitle>
           <AlertDescription className="space-y-3">

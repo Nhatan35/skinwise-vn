@@ -1,7 +1,7 @@
 "use client";
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import {
   removeSavedProduct,
@@ -18,6 +18,7 @@ type SavedProductToggleButtonProps = {
   onPendingChange?: (isPending: boolean) => void;
   onSuccess?: (isSaved: boolean) => void;
   productId: string;
+  productName?: string;
 };
 
 type PendingAction = "remove" | "save" | null;
@@ -34,6 +35,22 @@ function getErrorMessage(error: unknown, nextSaved: boolean) {
     : "Chưa thể bỏ lưu sản phẩm lúc này. Vui lòng thử lại.";
 }
 
+function getProductActionLabel(action: "pending-remove" | "pending-save" | "remove" | "save", productName?: string) {
+  const target = productName ? ` ${productName}` : "";
+
+  if (action === "pending-save") {
+    return `Đang lưu sản phẩm${target}`;
+  }
+
+  if (action === "pending-remove") {
+    return `Đang bỏ lưu sản phẩm${target}`;
+  }
+
+  return action === "save"
+    ? `Lưu sản phẩm${target}`
+    : `Bỏ lưu sản phẩm${target}`;
+}
+
 export function SavedProductToggleButton({
   disabled = false,
   initialSaved,
@@ -42,12 +59,16 @@ export function SavedProductToggleButton({
   onPendingChange,
   onSuccess,
   productId,
+  productName,
 }: SavedProductToggleButtonProps) {
+  const messageId = useId();
   const [pendingAction, setPendingAction] = useState<PendingAction>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const isPending = pendingAction !== null;
   const isSaved = initialSaved;
+  const errorId = `${messageId}-saved-product-error`;
+  const statusId = `${messageId}-saved-product-status`;
 
   async function handleToggle() {
     if (disabled || pendingAction !== null) {
@@ -93,6 +114,17 @@ export function SavedProductToggleButton({
         ? "Đã lưu"
         : "Lưu";
   const Icon = isSaved ? BookmarkCheck : Bookmark;
+  const accessibleLabel = isPending
+    ? getProductActionLabel(
+        pendingAction === "save" ? "pending-save" : "pending-remove",
+        productName,
+      )
+    : getProductActionLabel(isSaved ? "remove" : "save", productName);
+  const describedBy = errorMessage
+    ? errorId
+    : successMessage
+      ? statusId
+      : undefined;
 
   return (
     <div className="space-y-2">
@@ -100,7 +132,10 @@ export function SavedProductToggleButton({
         data-testid={
           isSaved ? "remove-saved-product-button" : "save-product-button"
         }
+        aria-describedby={describedBy}
         aria-busy={isPending}
+        aria-label={accessibleLabel}
+        aria-pressed={isSaved}
         disabled={disabled || isPending}
         onClick={handleToggle}
         type="button"
@@ -110,12 +145,12 @@ export function SavedProductToggleButton({
         {label}
       </Button>
       {errorMessage ? (
-        <p className="text-xs text-red-700" role="alert">
+        <p className="text-xs text-red-700" id={errorId} role="alert">
           {errorMessage}
         </p>
       ) : null}
       {successMessage ? (
-        <p className="text-xs text-muted-foreground" role="status">
+        <p className="text-xs text-muted-foreground" id={statusId} role="status">
           {successMessage}
         </p>
       ) : null}

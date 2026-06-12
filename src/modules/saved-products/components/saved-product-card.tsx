@@ -113,6 +113,11 @@ export function SavedProductCard({
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
           {onComparisonToggle ? (
             <Button
+              aria-label={
+                isSelectedForComparison
+                  ? `Bỏ chọn sản phẩm ${product.name} khỏi so sánh`
+                  : `Thêm sản phẩm ${product.name} vào so sánh`
+              }
               aria-pressed={isSelectedForComparison}
               data-testid="saved-product-comparison-toggle"
               disabled={comparisonDisabled && !isSelectedForComparison}
@@ -124,7 +129,11 @@ export function SavedProductCard({
               {isSelectedForComparison ? "Đã chọn so sánh" : "Thêm vào so sánh"}
             </Button>
           ) : null}
-          <Button asChild aria-label="Xem chi tiết" variant="outline">
+          <Button
+            asChild
+            aria-label={`Xem chi tiết sản phẩm ${product.name}`}
+            variant="outline"
+          >
             <Link href={`${routes.PRODUCTS}/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
@@ -136,6 +145,7 @@ export function SavedProductCard({
               }
             }}
             productId={product.id}
+            productName={product.name}
           />
         </div>
       </CardContent>

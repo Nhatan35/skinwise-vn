@@ -313,7 +313,10 @@ export function SkinJournalTimeline() {
       </div>
 
       {feedback ? (
-        <Alert variant={feedback.type === "error" ? "destructive" : "default"}>
+        <Alert
+          role={feedback.type === "success" ? "status" : "alert"}
+          variant={feedback.type === "error" ? "destructive" : "default"}
+        >
           {feedback.type === "success" ? <Check aria-hidden="true" /> : null}
           <AlertTitle>
             {feedback.type === "success" ? "Đã lưu" : "Thao tác thất bại"}

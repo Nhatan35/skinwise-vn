@@ -349,6 +349,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
             onChange={setIsSaved}
             onPendingChange={setIsSaveActionPending}
             productId={product.id}
+            productName={product.name}
           />
           <ProductMatchLinkButton />
           <ProductsLinkButton label="Xem sản phẩm" />
@@ -402,6 +403,7 @@ function ProductHero({
               onChange={onSavedChange}
               onPendingChange={onSaveActionPendingChange}
               productId={product.id}
+              productName={product.name}
             />
           </div>
         </div>

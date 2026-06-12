@@ -160,6 +160,18 @@ describe("Routine Builder UI foundation", () => {
     );
   });
 
+  it("focuses routine validation feedback without changing submit guards", () => {
+    expect(routineBuilderSource).toContain("getRoutineErrorFieldId");
+    expect(routineBuilderSource).toContain("focusFirstRoutineError");
+    expect(routineBuilderSource).toContain("document.getElementById(elementId)?.focus()");
+    expect(routineBuilderSource).toContain("focusFirstRoutineError(validationErrors)");
+    expect(routineBuilderSource).toContain('const ROUTINE_SAVE_ERROR_ID = "routine-save-error"');
+    expect(routineBuilderSource).toContain("id={ROUTINE_SAVE_ERROR_ID}");
+    expect(routineBuilderSource).toContain("tabIndex={-1}");
+    expect(routineBuilderSource).toContain('<Alert role="status">');
+    expect(routineBuilderSource).not.toContain("tabIndex={1");
+  });
+
   it("builds a safe payload with productId or custom product fields only", () => {
     const payloadSource = getPayloadSource();
 

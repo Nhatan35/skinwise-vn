@@ -80,6 +80,60 @@ const stressLabels: Record<SkinJournalStressLevel, string> = {
   medium: "Vừa",
   high: "Cao",
 };
+const SKIN_JOURNAL_FORM_ERROR_ID = "skin-journal-form-error";
+const skinJournalFieldOrder: SkinJournalFormField[] = [
+  "localDate",
+  "timezone",
+  "productsUsed",
+  "observationsText",
+  "symptoms",
+  "sleepHours",
+  "stressLevel",
+  "notes",
+  "form",
+];
+const skinJournalFocusTargets: Record<
+  SkinJournalFormField,
+  { id?: string; selector?: string }
+> = {
+  form: { id: SKIN_JOURNAL_FORM_ERROR_ID },
+  localDate: { id: "skin-journal-local-date" },
+  notes: { id: "skin-journal-notes" },
+  observationsText: { id: "skin-journal-observations" },
+  productsUsed: { selector: '[name="skin-journal-products-used"]' },
+  sleepHours: { id: "skin-journal-sleep-hours" },
+  stressLevel: { id: "skin-journal-stress-level" },
+  symptoms: { selector: '[name="skin-journal-symptom"]' },
+  timezone: { id: "skin-journal-timezone" },
+};
+
+function focusElementById(elementId?: string) {
+  if (!elementId) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    document.getElementById(elementId)?.focus();
+  }, 0);
+}
+
+function focusFirstJournalError(errors: SkinJournalFieldErrors) {
+  const firstErrorField = skinJournalFieldOrder.find((field) => errors[field]);
+
+  if (!firstErrorField) {
+    return;
+  }
+
+  const target = skinJournalFocusTargets[firstErrorField];
+
+  window.setTimeout(() => {
+    const targetElement = target.selector
+      ? document.querySelector<HTMLElement>(target.selector)
+      : document.getElementById(target.id ?? "");
+
+    targetElement?.focus();
+  }, 0);
+}
 
 function entryToFormState(entry?: SkinJournalDto): SkinJournalFormState {
   if (!entry) {
@@ -185,6 +239,7 @@ export function SkinJournalEntryForm({
 
       if (!validation.success) {
         setFieldErrors(validation.errors);
+        focusFirstJournalError(validation.errors);
         return;
       }
 
@@ -196,6 +251,7 @@ export function SkinJournalEntryForm({
         onSaved(savedEntry);
       } catch (error) {
         setFormError(getFormErrorMessage(error));
+        focusElementById(SKIN_JOURNAL_FORM_ERROR_ID);
       } finally {
         submitLockRef.current = false;
         setIsSaving(false);
@@ -208,6 +264,7 @@ export function SkinJournalEntryForm({
 
     if (!validation.success) {
       setFieldErrors(validation.errors);
+      focusFirstJournalError(validation.errors);
       return;
     }
 
@@ -219,6 +276,7 @@ export function SkinJournalEntryForm({
       onSaved(savedEntry);
     } catch (error) {
       setFormError(getFormErrorMessage(error));
+      focusElementById(SKIN_JOURNAL_FORM_ERROR_ID);
     } finally {
       submitLockRef.current = false;
       setIsSaving(false);
@@ -244,7 +302,11 @@ export function SkinJournalEntryForm({
           onSubmit={handleSubmit}
         >
           {formError ? (
-            <Alert variant="destructive">
+            <Alert
+              id={SKIN_JOURNAL_FORM_ERROR_ID}
+              tabIndex={-1}
+              variant="destructive"
+            >
               <AlertTitle>Chưa lưu được nhật ký</AlertTitle>
               <AlertDescription>{formError}</AlertDescription>
             </Alert>
@@ -317,6 +379,7 @@ export function SkinJournalEntryForm({
             aria-describedby={
               fieldErrors.symptoms ? "skin-journal-symptoms-error" : undefined
             }
+            aria-invalid={fieldErrors.symptoms ? true : undefined}
             className="space-y-3"
           >
             <legend className="text-sm font-medium text-foreground">
@@ -336,6 +399,7 @@ export function SkinJournalEntryForm({
                       checked={checked}
                       className="mt-1 size-4 accent-emerald-700"
                       id={inputId}
+                      name="skin-journal-symptom"
                       onChange={(event) =>
                         toggleSymptom(symptom, event.target.checked)
                       }
@@ -491,6 +555,7 @@ function ProductSelectionField({
   return (
     <fieldset
       aria-describedby={error ? "skin-journal-products-used-error" : undefined}
+      aria-invalid={error ? true : undefined}
       className="space-y-3"
     >
       <legend className="text-sm font-medium text-foreground">
@@ -530,6 +595,7 @@ function ProductSelectionField({
                   checked={checked}
                   className="mt-1 size-4 accent-emerald-700"
                   id={inputId}
+                  name="skin-journal-products-used"
                   onChange={(event) =>
                     onToggle(product.id, event.target.checked)
                   }
@@ -550,6 +616,7 @@ function ProductSelectionField({
                   checked
                   className="mt-1 size-4 accent-emerald-700"
                   id={inputId}
+                  name="skin-journal-products-used"
                   onChange={(event) =>
                     onToggle(productId, event.target.checked)
                   }
@@ -667,12 +734,16 @@ function TextareaField({
   value,
 }: TextareaFieldProps) {
   const errorId = `${id}-error`;
+  const descriptionId = description ? `${id}-description` : undefined;
+  const describedBy =
+    [descriptionId, error ? errorId : undefined].filter(Boolean).join(" ") ||
+    undefined;
 
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       <Textarea
-        aria-describedby={error ? errorId : undefined}
+        aria-describedby={describedBy}
         aria-invalid={error ? true : undefined}
         className={cn(error ? "border-red-400" : "")}
         data-testid={dataTestId}
@@ -683,7 +754,9 @@ function TextareaField({
         value={value}
       />
       {description ? (
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground" id={descriptionId}>
+          {description}
+        </p>
       ) : null}
       {error ? (
         <p className="text-sm text-red-700" id={errorId}>

@@ -89,6 +89,21 @@ describe("Product UI saved product integration", () => {
     );
   });
 
+  it("uses contextual accessible names for repeated product actions", () => {
+    expect(productCardSource).toContain(
+      "Xem chi tiết sản phẩm ${product.name}",
+    );
+    expect(productCardSource).toContain("productName={product.name}");
+    expect(productMatchCardSource).toContain(
+      "Xem chi tiết sản phẩm ${product.name}",
+    );
+    expect(productMatchCardSource).toContain("productName={product.name}");
+    expect(productDetailSource).toContain("productName={product.name}");
+    expect(savedProductToggleButtonSource).toContain(
+      "aria-label={accessibleLabel}",
+    );
+  });
+
   it("uses the saved product client helper without importing server modules into product UI", () => {
     for (const forbiddenImport of [
       "server-only",

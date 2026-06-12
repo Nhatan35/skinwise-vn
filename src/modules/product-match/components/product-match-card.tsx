@@ -217,7 +217,11 @@ export function ProductMatchCard({
         </div>
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
-          <Button asChild variant="outline">
+          <Button
+            asChild
+            aria-label={`Xem chi tiết sản phẩm ${product.name}`}
+            variant="outline"
+          >
             <Link
               data-testid="product-match-view-details-link"
               href={`${routes.PRODUCTS}/${product.id}`}
@@ -229,6 +233,7 @@ export function ProductMatchCard({
             initialSaved={item.isSaved}
             onChange={(isSaved) => onSavedChange?.(product.id, isSaved)}
             productId={product.id}
+            productName={product.name}
           />
         </div>
       </CardContent>

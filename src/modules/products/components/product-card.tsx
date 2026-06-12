@@ -154,13 +154,18 @@ export function ProductCard({
         </p>
 
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
-          <Button asChild aria-label="Xem chi tiết" variant="outline">
+          <Button
+            asChild
+            aria-label={`Xem chi tiết sản phẩm ${product.name}`}
+            variant="outline"
+          >
             <Link href={`${routes.PRODUCTS}/${product.id}`}>Xem chi tiết</Link>
           </Button>
           <SavedProductToggleButton
             initialSaved={initialSaved}
             onChange={onSavedChange}
             productId={product.id}
+            productName={product.name}
           />
         </div>
       </CardContent>

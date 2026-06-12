@@ -333,6 +333,27 @@ describe("SkinJournal Timeline UI", () => {
     expect(formSource).toContain("setFormError(null)");
   });
 
+  it("adds journal validation focus and accessible field relationships", () => {
+    expect(formSource).toContain("focusFirstJournalError");
+    expect(formSource).toContain("skinJournalFocusTargets");
+    expect(formSource).toContain("document.querySelector<HTMLElement>");
+    expect(formSource).toContain("id={SKIN_JOURNAL_FORM_ERROR_ID}");
+    expect(formSource).toContain("tabIndex={-1}");
+    expect(formSource).toContain('name="skin-journal-products-used"');
+    expect(formSource).toContain('name="skin-journal-symptom"');
+    expect(formSource).toContain(
+      "aria-invalid={fieldErrors.symptoms ? true : undefined}",
+    );
+    expect(formSource).toContain("aria-invalid={error ? true : undefined}");
+    expect(formSource).toContain("const descriptionId = description");
+    expect(formSource).toContain("aria-describedby={describedBy}");
+    expect(formSource).toContain("id={descriptionId}");
+    expect(timelineSource).toContain(
+      'role={feedback.type === "success" ? "status" : "alert"}',
+    );
+    expect(combinedUiSource).not.toContain("tabIndex={1");
+  });
+
   it("uses only canonical SkinJournal UI fields", () => {
     for (const allowedField of [
       "localDate",
