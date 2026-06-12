@@ -58,7 +58,7 @@ test.describe("SkinWise VN authenticated dashboard summary", () => {
     await expect(page.getByTestId("dashboard-routine-summary-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-latest-journal-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-latest-analysis-card")).toBeVisible();
-    await expect(page.getByTestId("dashboard-next-actions-card")).toBeVisible();
+    await expect(page.getByTestId("dashboard-onboarding-progress-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-routine-progress-card")).toContainText(
       "Hoàn thành",
     );

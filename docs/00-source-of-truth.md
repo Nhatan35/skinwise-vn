@@ -39,10 +39,11 @@ MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DON
 MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
+MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
+Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
@@ -58,7 +59,8 @@ v1.31 status: DONE within scoped local validation - selected core-flow empty sta
 v1.32 status: DONE within scoped local validation - selected core form submission and mutation feedback states polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; build/E2E/manual/production verification were not run
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; build/E2E/browser keyboard/screen-reader/manual accessibility/production verification were not run
 v1.34 status: DONE within scoped local validation - product and ingredient discovery result counts, active filter summaries, ingredient function filtering, clearer no-result recovery copy, and contextual ingredient detail action labels polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; `npm run build` passed after an elevated rerun; `npm run test:e2e` failed after an elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows; audit passed
-Recommended next task: E2E Failure Triage & Extended Validation Cleanup
+v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was triaged and fixed; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
+Recommended next task: Manual Browser & Production Smoke Verification
 ```
 
 Primary current documents:
@@ -102,6 +104,7 @@ Evidence boundary:
 - v1.32 polished selected core form submission and mutation feedback states after v1.31, improving pending labels, disabled states, duplicate-submission prevention, safe failure copy, input/state preservation, confirmed success feedback, and supported next actions without adding a new form, toast, mutation, or state-management framework and without changing business rules, schema, seed data, auth, AI-provider behavior, or broad API contracts.
 - v1.33 polished selected core accessibility semantics after v1.32, improving contextual accessible names, Routine Log action-group state, invalid-submit focus recovery, helper/error associations, and polite status semantics without adding an accessibility framework, component-library replacement, global keyboard system, full accessibility audit, or WCAG certification claim.
 - v1.34 polished Product Catalogue and Ingredient Library discovery confidence after v1.33, adding result counts, active filter summaries, ingredient function filtering through the existing API query, clearer no-result recovery copy, search/function reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI-provider behavior, CRUD scope, or broad API contracts.
+- v1.35 fixed stale E2E assertions after v1.34 by updating Dashboard onboarding/next-action expectations, Insights Vietnamese section/copy expectations, Saved Products exact heading matching, and Today Routine Log safety-copy expectations without changing product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI-provider behavior, CRUD scope, or broad API contracts.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
@@ -122,4 +125,7 @@ Evidence boundary:
 - v1.34 build passed after an elevated rerun; the sandboxed build attempt failed with `spawn EPERM`.
 - v1.34 E2E did not pass: sandboxed E2E failed with `spawn EPERM`, and the elevated E2E run completed with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows.
 - Manual browser, screen-reader, and production verification were not run for v1.34.
+- v1.35 full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E.
+- v1.35 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.35.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

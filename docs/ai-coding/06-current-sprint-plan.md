@@ -29,28 +29,27 @@ Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE in v1.31, 
 Core Form Submission & Action Feedback Consistency Polish: DONE in v1.32, scoped validation only
 Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE in v1.33, scoped validation only
 Product & Ingredient Discovery Confidence Polish: DONE in v1.34, scoped validation only
-Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
+E2E Failure Triage & Extended Validation Cleanup: DONE in v1.35
+Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
 Current active milestone: None
 Current active milestone status: None
 Production URL public reachability: PASS for v1.22.1 public check
 Production /api/health: PASS for v1.22.1 public check
 Authenticated MVP production smoke: NOT CHECKED / DEFERRED
 Production signals: NOT CHECKED / DEFERRED
-Recommended next task: E2E Failure Triage & Extended Validation Cleanup
+Recommended next task: Manual Browser & Production Smoke Verification
 Current phase: Post-MVP controlled improvement
 ```
 
-v1.22.1 remains partial/deferred because only the public production URL and `/api/health` were checked directly. Authenticated MVP flows and production platform signals were not checked.
+v1.35 is complete. It resolved the six extended-validation E2E failures left after v1.34 by updating stale Playwright assertions for current intentional UI copy and accessible structure. No app product behavior, seed data, schema, auth model, Product Match scoring/ranking, Routine Safety logic, AI provider behavior, or CRUD scope changed.
 
-v1.24 seed implementation and closeout documentation are mostly complete, but v1.24 is NOT DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
-
-v1.34 is the latest completed scoped task within the validation boundary of lint, typecheck, unit tests, and diff check. Build passed after an elevated rerun; E2E was attempted and failed in existing dashboard, insights, saved-products, and today routine log flows.
+v1.34 remains DONE within its scoped validation boundary. v1.24 seed implementation and closeout documentation are mostly complete, but v1.24 remains NOT DONE / VALIDATION BLOCKED because its own required build and E2E closeout criteria were not met during the v1.24 attempt.
 
 ## 2. Objective
 
-Complete `v1.34 - Product & Ingredient Discovery Confidence Polish` by improving the existing `/products` and `/ingredients` discovery experience so users can understand result counts, active filters, recovery paths when no results are found, and the educational non-medical boundary.
+Complete `v1.35 - E2E Failure Triage & Extended Validation Cleanup` by reproducing, classifying, and fixing the remaining extended-validation E2E failures from dashboard, insights, saved-products, and today routine log flows using the smallest safe test changes.
 
-This sprint does not add new product features. It preserves:
+This sprint is validation/debt cleanup, not product feature scope. It preserves:
 
 ```txt
 No admin CRUD
@@ -61,12 +60,12 @@ No database schema change
 No seed data change
 No Product Match scoring/ranking rewrite
 No Product Detail route rewrite
-No Saved Products rewrite
+No Saved Products behavior rewrite
 No Routine logic rewrite
 No Routine Log logic rewrite
 No Journal logic rewrite
 No Insights calculation rewrite
-No Dashboard next-action engine rewrite
+No Dashboard state-model rewrite
 No new global error framework
 No monitoring or analytics integration
 No Routine Safety Analysis rewrite
@@ -92,42 +91,60 @@ docs/final-release-checklist.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/06-current-sprint-plan.md
-src/modules/products/components/product-catalogue.tsx
-src/modules/ingredients/components/ingredient-library.tsx
-src/modules/ingredients/components/ingredient-card.tsx
-src/modules/ingredients/ingredient.client.ts
-tests/unit/product-catalogue-ui.test.ts
-tests/unit/ingredient-client.test.ts
-tests/unit/ingredient-library-ui.test.ts
+tests/e2e/dashboard-summary.authenticated.spec.ts
+tests/e2e/insights.authenticated.spec.ts
+tests/e2e/saved-products.authenticated.spec.ts
+tests/e2e/today-routine-log.authenticated.spec.ts
 ```
 
-v1.25 dashboard/onboarding files remain preserved. v1.25.1 seed baseline files remain preserved. v1.26 Product Match polish files remain preserved. v1.27 Product Detail to Saved Products polish files remain preserved. v1.28 Saved Products to Routine polish files remain preserved. v1.29 Routine to Routine Log / Journal polish files remain preserved. v1.30 Insights/Dashboard polish remains preserved. v1.31 recovery and navigation polish remains preserved. v1.32 form/action feedback polish remains preserved. v1.33 accessibility polish remains preserved.
+v1.34 discovery implementation files remain unchanged in v1.35. v1.25 dashboard/onboarding files, v1.25.1 seed baseline files, and v1.26 through v1.34 product polish work remain preserved.
 
-## 4. Acceptance Criteria
+## 4. Failure Triage
 
-Product and ingredient discovery confidence polish:
+Reproduced E2E failures before fixes:
 
 ```txt
-[x] Reuse existing Button, Card, Alert, Input, Label, Select, EmptyState, ErrorState, LoadingState, local React state, and client API helper patterns.
-[x] Product Catalogue shows result count after successful load.
-[x] Product Catalogue shows active filter summary for q, category, priceRange, skinType, and concern.
-[x] Product Catalogue has clearer active-filter no-result recovery copy and keeps the clear-filter action.
-[x] Ingredient client supports the existing ingredient function query parameter.
-[x] Ingredient Library uses draft/active object filter state.
-[x] Ingredient Library exposes a single-select function filter.
-[x] Ingredient Library shows result count after successful load.
-[x] Ingredient Library shows active search/function filter summary and no-filter discovery guidance.
-[x] Ingredient Library no-result recovery copy is clearer.
-[x] Ingredient reset clears both search and function filters.
-[x] IngredientCard detail action label is contextual.
+tests/e2e/dashboard-summary.authenticated.spec.ts
+- dashboard reflects user-owned activity from the core journey
+- Classification: selector/test expectation drift
+- Cause: test expected a secondary next-actions card, while current intentional UI shows the onboarding progress card for this state.
+
+tests/e2e/insights.authenticated.spec.ts
+- authenticated user can review Skin Progress Insights
+- Personal Insight Review shows the insufficient-data empty state safely
+- Classification: selector/copy drift
+- Cause: tests used older English section and label names while current Insights UI uses Vietnamese copy and exact card titles.
+
+tests/e2e/saved-products.authenticated.spec.ts
+- authenticated user can save, view, and remove a product
+- authenticated user can compare and clear two saved products
+- Classification: accessibility query drift
+- Cause: heading query matched both the exact page heading and a longer heading; the test needed exact matching.
+
+tests/e2e/today-routine-log.authenticated.spec.ts
+- authenticated user can mark a routine as completed for today
+- Classification: copy drift
+- Cause: test expected older medical-advice wording while current safer copy uses professional-guidance wording.
+```
+
+No reproduced failure required an app-code fix. No reproduced failure was caused by the v1.34 Product Catalogue or Ingredient Library changes.
+
+## 5. Acceptance Criteria
+
+E2E cleanup:
+
+```txt
+[x] Reproduce the remaining dashboard, insights, saved-products, and today routine log E2E failures.
+[x] Classify each failure before editing.
+[x] Fix selector/copy drift without weakening coverage or skipping tests.
+[x] Avoid app-code changes where the app behavior is already correct.
+[x] Keep v1.34 discovery files unchanged unless a direct regression is proven.
 [x] Preserve Product Match scoring/ranking behavior.
-[x] Preserve Product Detail route behavior.
-[x] Preserve Saved Products persistence behavior.
-[x] Preserve Routine, Routine Log, Journal, Insights, and Dashboard behavior.
-[x] Preserve seed data, schema, auth, AI provider behavior, broad API contracts, v1.25 onboarding polish, v1.25.1 seed baseline consistency, and v1.26 through v1.33 polish work.
+[x] Preserve Routine Safety logic.
+[x] Preserve seed data, schema, auth, AI provider behavior, broad API contracts, and CRUD boundaries.
 [x] Keep v1.24 NOT DONE / VALIDATION BLOCKED.
 [x] Keep v1.22.1 production smoke verification PARTIAL / DEFERRED.
-[x] Do not claim E2E, manual browser, screen-reader, production, screenshot, or video verification for v1.34.
+[x] Do not claim manual browser, screen-reader, production, screenshot, or video verification for v1.35.
 ```
 
 Validation:
@@ -138,13 +155,13 @@ Validation:
 [x] npm run test
 [x] git diff --check
 [x] npm run build - PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
-[ ] npm run test:e2e - FAIL after elevated rerun; sandboxed attempt failed with spawn EPERM
 [x] npm audit --omit=dev --audit-level=moderate
+[x] npm run test:e2e - PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
 ```
 
-## 5. Validation Status
+## 6. Validation Status
 
-Current v1.34 validation status:
+Current v1.35 validation status:
 
 ```txt
 Evidence date: 2026-06-12
@@ -155,43 +172,42 @@ npm run typecheck: PASS
 npm run test: PASS - 103 files / 1020 tests
 git diff --check: PASS
 npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
-npm run test:e2e: FAIL after elevated rerun - 25 passed / 6 failed; sandboxed attempt failed with spawn EPERM
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 Manual browser verification: NOT CHECKED
 Screen-reader verification: NOT CHECKED
 Production verification: NOT CHECKED
+Screenshots/demo video: NOT CREATED
 ```
 
-v1.34 is done only within this scoped local validation boundary. Do not use this as full E2E, manual browser, screen-reader, production, screenshot, or video evidence.
+v1.35 is DONE with full local validation, including complete E2E PASS. Do not use this as manual browser, screen-reader, production, screenshot, or demo-video evidence.
 
-## 6. Known Limitations
+## 7. Known Limitations
 
 ```txt
 Manual browser verification: NOT CHECKED
 Screen-reader verification: NOT CHECKED
 Production verification: NOT CHECKED
-Build validation: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
-E2E validation: FAIL after elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows
 Screenshots/video: NOT CREATED
 v1.24 closeout: DEFERRED / VALIDATION BLOCKED
 ```
 
-## 7. Suggested Next Action
+## 8. Suggested Next Action
 
 Recommended next task:
 
 ```txt
-E2E Failure Triage & Extended Validation Cleanup
+Manual Browser & Production Smoke Verification
 ```
 
-Treat the existing dashboard, insights, saved-products, and today routine log E2E failures as extended-validation debt outside v1.34 scope. If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E validation in a suitable environment before marking v1.24 DONE.
+Run a controlled manual browser smoke pass and production smoke verification now that automated local validation, build, audit, and the full E2E suite pass for v1.35. If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E validation against that milestone's closeout criteria before marking v1.24 DONE.
 
-## 8. Suggested Commit
+## 9. Suggested Commit
 
-For the v1.34 Product & Ingredient Discovery Confidence polish changes, use:
+For the v1.35 E2E cleanup and documentation sync, use:
 
 ```bash
-git commit -m "feat(discovery): polish product and ingredient filtering"
+git commit -m "test(e2e): align extended validation selectors"
 ```
 
-Stage only reviewed v1.34 files before committing. Do not use `git add .`, and do not claim a commit was created unless it was actually created.
+Stage only reviewed v1.35 files before committing. Do not use `git add .`, and do not claim a commit was created unless it was actually created.

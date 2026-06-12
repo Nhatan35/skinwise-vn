@@ -172,36 +172,48 @@ test.describe("SkinWise VN authenticated insights", () => {
     await expect(
       page.getByRole("heading", { name: "Insights tiến trình chăm sóc da" }),
     ).toBeVisible();
-    await expect(page.getByText("Tỷ lệ hoàn thành routine")).toBeVisible({
+    await expect(page.getByText("Tỷ lệ hoàn thành routine", { exact: true })).toBeVisible({
       timeout: 15_000,
     });
-    await expect(page.getByText("Lịch độ đều đặn routine")).toBeVisible();
-    await expect(page.getByText("Xu hướng nhật ký da")).toBeVisible();
-    await expect(page.getByText("Sản phẩm xuất hiện trong nhật ký")).toBeVisible();
-    await expect(page.getByText("Gợi ý tiếp theo")).toBeVisible();
+    await expect(page.getByText("Lịch độ đều đặn routine", { exact: true })).toBeVisible();
+    await expect(page.getByText("Xu hướng nhật ký da", { exact: true })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Personal Insight Review" }),
+      page.getByText("Sản phẩm xuất hiện trong nhật ký", { exact: true }),
     ).toBeVisible();
-    await expect(page.getByText("Routine Consistency")).toBeVisible();
-    await expect(page.getByText("Journal Symptom Frequency")).toBeVisible();
-    await expect(page.getByText("Stress Reflection")).toBeVisible();
-    await expect(page.getByText("Product Mention Pattern")).toBeVisible();
-    await expect(page.getByText("How this was calculated").first()).toBeVisible();
-    await expect(page.getByText("Tracking Quality Checklist")).toBeVisible();
-    await expect(page.getByText("Routine logs in the last 7 days")).toBeVisible();
-    await expect(page.getByText("Journal entries in the last 30 days")).toBeVisible();
-    await expect(page.getByText("Symptom notes in the last 30 days")).toBeVisible();
-    await expect(page.getByText("Stress notes in the last 30 days")).toBeVisible();
-    await expect(page.getByText("Product mentions in the last 30 days")).toBeVisible();
+    await expect(page.getByText("Gợi ý tiếp theo", { exact: true })).toBeVisible();
     await expect(
-      page.getByText(/Available|Limited|Not enough data|Not configured/).first(),
+      page.getByRole("heading", { name: "Tự quan sát cá nhân" }),
     ).toBeVisible();
-    await expect(page.getByText("not a skin score").first()).toBeVisible();
-    await expect(page.getByText("không phải chẩn đoán y khoa").first()).toBeVisible();
+    await expect(page.getByText("Độ đều đặn routine", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("Tần suất dấu hiệu trong journal", { exact: true }),
+    ).toBeVisible();
+    await expect(page.getByText("Ghi nhận stress", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("Sản phẩm được nhắc trong journal", { exact: true }).first(),
+    ).toBeVisible();
+    await expect(page.getByText("Cách tính").first()).toBeVisible();
+    await expect(page.getByText("Checklist dữ liệu theo dõi")).toBeVisible();
+    await expect(page.getByText("Routine log trong 7 ngày gần đây")).toBeVisible();
+    await expect(page.getByText("Journal trong 30 ngày gần đây")).toBeVisible();
+    await expect(
+      page.getByText("Ghi nhận dấu hiệu trong 30 ngày gần đây"),
+    ).toBeVisible();
+    await expect(page.getByText("Ghi nhận stress trong 30 ngày gần đây")).toBeVisible();
+    await expect(
+      page.getByText("Sản phẩm được nhắc trong 30 ngày gần đây"),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByText(/Đủ dữ liệu theo dõi|Còn hạn chế|Cần thêm dữ liệu|Chưa thiết lập/)
+        .first(),
+    ).toBeVisible();
+    await expect(page.getByText("không phải đánh giá làn da").first()).toBeVisible();
+    await expect(page.getByText("không thay thế tư vấn chuyên môn").first()).toBeVisible();
     await expectNoHarmfulInsightClaims(page);
   });
 
-  test("Personal Insight Review shows the insufficient-data empty state safely", async ({
+  test("personal insight review shows the insufficient-data empty state safely", async ({
     page,
   }) => {
     await loginAsE2EUser(page);
@@ -272,20 +284,20 @@ test.describe("SkinWise VN authenticated insights", () => {
     expect((await insightsResponsePromise).ok()).toBe(true);
     expect((await insightSummaryResponsePromise).ok()).toBe(true);
     await expect(
-      page.getByRole("heading", { name: "Personal Insight Review" }),
+      page.getByRole("heading", { name: "Tự quan sát cá nhân" }),
     ).toBeVisible();
     await expect(
-      page.getByText("Chưa đủ dữ liệu cho phần tự quan sát cá nhân"),
+      page.getByText("Cần thêm dữ liệu cho phần tự quan sát cá nhân"),
     ).toBeVisible();
     await expect(page.getByText("Chưa có ghi chú triệu chứng gần đây.")).toBeVisible();
     await expect(page.getByText("Chưa có ghi chú mức độ stress gần đây.")).toBeVisible();
     await expect(
       page.getByText("Chưa tìm thấy sản phẩm nào được nhắc đến trong nhật ký gần đây."),
     ).toBeVisible();
-    await expect(page.getByText("Tracking Quality Checklist")).toBeVisible();
-    await expect(page.getByText("Not enough data").first()).toBeVisible();
+    await expect(page.getByText("Checklist dữ liệu theo dõi")).toBeVisible();
+    await expect(page.getByText("Cần thêm dữ liệu").first()).toBeVisible();
     await expect(page.getByText("not a skin score").first()).toBeVisible();
-    await expect(page.getByText("How this was calculated").first()).toBeVisible();
+    await expect(page.getByText("Cách tính").first()).toBeVisible();
     await expectNoHarmfulInsightClaims(page);
   });
 });

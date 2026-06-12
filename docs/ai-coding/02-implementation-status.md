@@ -43,9 +43,10 @@ MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DON
 MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
+MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28, v1.30 polished Insights interpretation and Dashboard next-action clarity as a follow-up to v1.29, v1.31 polished selected core-flow recovery, empty-state, retry, missing-resource, and navigation consistency states as a follow-up to v1.30, v1.32 polished selected core form submission and mutation feedback states as a follow-up to v1.31, v1.33 polished selected accessibility semantics, focus recovery, keyboard interaction, validation relationship, and status feedback states as a follow-up to v1.32, and v1.34 polished Product Catalogue and Ingredient Library discovery confidence with result counts, active filter summaries, ingredient function filtering, clearer no-result recovery, and contextual ingredient detail action labels. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28, v1.30 polished Insights interpretation and Dashboard next-action clarity as a follow-up to v1.29, v1.31 polished selected core-flow recovery, empty-state, retry, missing-resource, and navigation consistency states as a follow-up to v1.30, v1.32 polished selected core form submission and mutation feedback states as a follow-up to v1.31, v1.33 polished selected accessibility semantics, focus recovery, keyboard interaction, validation relationship, and status feedback states as a follow-up to v1.32, v1.34 polished Product Catalogue and Ingredient Library discovery confidence with result counts, active filter summaries, ingredient function filtering, clearer no-result recovery, and contextual ingredient detail action labels, and v1.35 fixed stale E2E selector/copy assertions so the full Playwright suite passes. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
 
 Current status:
 
@@ -53,7 +54,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
+Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
@@ -70,7 +71,8 @@ v1.31 status: DONE within scoped local validation - selected core-flow empty sta
 v1.32 status: DONE within scoped local validation - selected core form submission and mutation feedback states polished; lint, typecheck, unit tests, and diff check passed
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished; lint, typecheck, unit tests, and diff check passed
 v1.34 status: DONE within scoped local validation - Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail action labels polished; lint, typecheck, unit tests, and diff check passed; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed
-Recommended next task: E2E Failure Triage & Extended Validation Cleanup
+v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
+Recommended next task: Manual Browser & Production Smoke Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -95,6 +97,7 @@ Evidence boundary:
 - v1.32 scoped local validation passed: lint, typecheck, unit tests, and diff check. Build, E2E, manual browser verification, and production verification were not run for v1.32.
 - v1.33 scoped local validation passed: lint, typecheck, unit tests, and diff check. Build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, and production verification were not run for v1.33.
 - v1.34 scoped local validation passed: lint, typecheck, unit tests, and diff check. Build passed after an elevated rerun; E2E failed after an elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows. Manual browser, screen-reader, and production verification were not run for v1.34.
+- v1.35 extended validation cleanup passed: lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. Manual browser, screen-reader, production verification, screenshots, and demo video were not run for v1.35.
 
 ## 2. Implemented Product Scope
 
@@ -129,6 +132,7 @@ Evidence boundary:
 | Core form submission and action feedback consistency polish | DONE, scoped validation only | v1.32 polished selected Saved Product save/unsave, Product Detail save controls, Routine save, Routine Log status, and Journal save interactions with clearer pending labels, duplicate-submission prevention, safe failure copy, input/state preservation, confirmed success feedback, and supported next actions without adding a new form, toast, mutation, or state-management framework. |
 | Core accessibility, focus management, and keyboard interaction polish | DONE, scoped validation only | v1.33 polished selected product action accessible names, Routine Log action-group semantics, Routine and Journal invalid-submit focus recovery, Journal helper/error associations, and polite status feedback without adding a new accessibility framework or claiming full WCAG compliance. |
 | Product and ingredient discovery confidence polish | DONE, scoped validation only | v1.34 polished Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, clearer no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI provider behavior, CRUD scope, or broad API contracts. |
+| E2E failure triage and extended validation cleanup | DONE | v1.35 fixed stale Playwright selectors/copy expectations for Dashboard, Insights, Saved Products, and Today Routine Log. It changed E2E tests only and full validation passed, including `npm run test:e2e`. |
 
 ## 3. Route Coverage
 
@@ -367,7 +371,7 @@ Completed v1.23 scope:
 Recommended next task:
 
 ```txt
-E2E Failure Triage & Extended Validation Cleanup
+Manual Browser & Production Smoke Verification
 ```
 
 Portfolio evidence tasks:
@@ -686,3 +690,35 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
 E2E failed in existing dashboard, insights, saved-products, and today routine log flows. The ingredient authenticated E2E flow passed. Manual browser verification, screen-reader verification, production/authenticated smoke, screenshots, and demo video were not run or created for v1.34. v1.24 build/E2E blockers remain deferred.
+
+## v1.35 - E2E Failure Triage & Extended Validation Cleanup
+
+Status: DONE.
+
+Completed v1.35 scope:
+
+- Reproduced the six remaining E2E failures from v1.34 extended validation before editing.
+- Classified all reproduced failures as selector/copy/test expectation drift, not app-code regressions.
+- Updated the Dashboard E2E assertion to match the current onboarding-progress card shown in that authenticated core-journey state.
+- Updated Insights E2E assertions to use current Vietnamese section labels, exact card-title matching, and current safe professional-guidance copy.
+- Updated Saved Products E2E assertions to use exact heading matching and avoid a strict-mode duplicate heading match.
+- Updated Today Routine Log E2E assertion to expect the current safer professional-guidance wording.
+- Left v1.34 discovery implementation files unchanged because no product or ingredient E2E regression was reproduced.
+- Preserved app product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, database schema, auth behavior, AI provider behavior, product/ingredient CRUD boundaries, and broad API contracts.
+- Kept v1.24 as NOT DONE / VALIDATION BLOCKED.
+
+Validation result:
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1020 tests
+git diff --check: PASS
+npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
+```
+
+Manual browser verification, screen-reader verification, production/authenticated smoke, screenshots, and demo video were not run or created for v1.35. v1.24 build/E2E blockers remain deferred.

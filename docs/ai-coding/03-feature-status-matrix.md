@@ -7,10 +7,10 @@ Last updated: 2026-06-12
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
+Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.34 scoped lint/typecheck/unit tests and diff check; build passed after elevated rerun; E2E failed after elevated rerun; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.35 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -18,7 +18,7 @@ Historical production smoke/monitoring: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: E2E Failure Triage & Extended Validation Cleanup
+Recommended next task: Manual Browser & Production Smoke Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -53,7 +53,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
-| Local validation evidence | MIXED BY MILESTONE | v1.34 scoped validation passed with lint, typecheck, unit tests, and diff check; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows. v1.33, v1.32, v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
+| E2E Failure Triage & Extended Validation Cleanup | DONE | v1.35 fixes stale E2E selectors/copy expectations in dashboard, insights, saved-products, and today routine log flows. Full local validation passed, including build, audit, and `npm run test:e2e`. |
+| Local validation evidence | MIXED BY MILESTONE | v1.35 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. v1.34 scoped validation passed but its extended E2E run failed with 25 passed / 6 failed before v1.35 cleanup. v1.33, v1.32, v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -85,6 +86,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Core Form Submission & Action Feedback Consistency Polish | UX Interaction / Form-State Polish | v1.32 | DONE, scoped validation only |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | Accessibility / Keyboard / Focus Polish | v1.33 | DONE, scoped validation only |
 | Product & Ingredient Discovery Confidence Polish | Discovery UX Polish | v1.34 | DONE, scoped validation only |
+| E2E Failure Triage & Extended Validation Cleanup | Validation / E2E Cleanup | v1.35 | DONE |
 
 ## Out-of-Scope Matrix
 
@@ -104,7 +106,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
+Latest completed scoped task: MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
@@ -121,4 +123,5 @@ v1.31 status: DONE within scoped local validation - selected core-flow empty sta
 v1.32 status: DONE within scoped local validation - selected form submission and action feedback states polished; lint, typecheck, unit tests, and diff check passed
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished; lint, typecheck, unit tests, and diff check passed
 v1.34 status: DONE within scoped local validation - Product and Ingredient discovery confidence polish passed lint, typecheck, unit tests, and diff check; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed
+v1.35 status: DONE - E2E failure triage fixed dashboard, insights, saved-products, and today routine log Playwright selector/copy drift; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 ```
