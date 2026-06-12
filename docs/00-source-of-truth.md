@@ -25,7 +25,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
-MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: DONE / PASS, user-reported manual verification
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
@@ -47,7 +47,7 @@ Post-MVP backlog planning: COMPLETE
 Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
-Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
+Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` did not pass in the current environment
 v1.25 status: DONE within scoped local validation - `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.25.1 status: DONE within scoped local validation - restored v1.24 70/70 seed baseline consistency and missing v1.24 release evidence; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
@@ -62,7 +62,8 @@ v1.33 status: DONE within scoped local validation - selected accessibility seman
 v1.34 status: DONE within scoped local validation - product and ingredient discovery result counts, active filter summaries, ingredient function filtering, clearer no-result recovery copy, and contextual ingredient detail action labels polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; `npm run build` passed after an elevated rerun; `npm run test:e2e` failed after an elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows; audit passed
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was triaged and fixed; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
 v1.37 status: DONE - Product Detail now guides users to Ingredient Library searches, Ingredient Detail guides users to Product Catalogue searches by INCI/display-name query, and Product Catalogue / Ingredient Library include lightweight cross-links; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
-Recommended next task: Manual Browser & Production Smoke Verification
+Manual Browser & Production Smoke Verification: DONE / PASS
+Recommended next task: Screen-Reader Assistive Technology Verification
 ```
 
 Primary current documents:
@@ -89,8 +90,9 @@ Historical planning documents remain useful for context, but they should not ove
 Evidence boundary:
 
 - Local validation is supported by terminal output.
-- Production PASS is based on user-reported manual verification with no blockers reported.
-- v1.22.1 direct verification checked the public production URL and `/api/health` only; authenticated MVP flows and production platform signals remain NOT CHECKED.
+- Production PASS is based on user-reported manual verification with no critical blockers reported.
+- Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, `/api/health`, browser console/network, Vercel runtime logs, MongoDB read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed.
+- Unknown production smoke evidence fields are recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
@@ -112,7 +114,7 @@ Evidence boundary:
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates without database, auth, AI-provider, or product-feature changes.
-- v1.22.1 is not complete because browser/OAuth/Vercel/MongoDB Atlas verification was unavailable in this run.
+- v1.22.1 production smoke verification is complete based on user-reported manual production verification. No critical production blockers, runtime blockers, console critical errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers were reported.
 - v1.23 hardened the existing account app-data deletion workflow with clearer destructive confirmation copy, explicit user-isolation tests, sensitive-response checks, and data-control documentation without schema, auth architecture, product-scope, or shared-catalogue deletion changes.
 - v1.24 closeout created/updated seed data documentation and release evidence, but required validation is blocked in the current environment; do not mark v1.24 DONE until all required commands pass.
 - Build, E2E, manual browser verification, and production verification were not run for v1.25.
@@ -134,5 +136,6 @@ Evidence boundary:
 - v1.37 full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E.
 - v1.37 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
 - Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.37.
+- Manual Browser & Production Smoke Verification later passed in production; screen-reader verification, screenshots, and demo video remain not provided.
 - Production `/api/health` continues to expose the v1.22 health endpoint contract version; v1.37 did not change that API contract.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

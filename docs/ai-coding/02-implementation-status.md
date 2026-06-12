@@ -29,7 +29,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
-MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: DONE / PASS, user-reported manual verification
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
@@ -59,7 +59,7 @@ Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path P
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
-Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
+Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` timed out
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored
@@ -74,7 +74,8 @@ v1.33 status: DONE within scoped local validation - selected accessibility seman
 v1.34 status: DONE within scoped local validation - Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail action labels polished; lint, typecheck, unit tests, and diff check passed; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 status: DONE - Product Detail ingredient-learning links, Ingredient Detail product-discovery links by INCI/display-name query, URL-initialized Product Catalogue / Ingredient Library searches, and lightweight cross-links were added; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
-Recommended next task: Manual Browser & Production Smoke Verification
+Manual Browser & Production Smoke Verification: DONE / PASS
+Recommended next task: Screen-Reader Assistive Technology Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -82,10 +83,11 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 Evidence boundary:
 
 - Local validation is supported by terminal output.
-- Production PASS is based on user-reported manual verification with no blockers reported.
+- Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
-- v1.22.1 directly checked only the public production URL and `/api/health`; authenticated MVP flows and production platform signals remain NOT CHECKED.
+- Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow were reported as checked with no critical blockers observed.
+- Unknown production smoke metadata is recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.
 - v1.23 local implementation and validation passed; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 seed data implementation reached 70 products and 70 ingredients; lint, typecheck, unit tests, and audit passed, but build/E2E validation timed out.
 - v1.25 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.
@@ -244,7 +246,7 @@ Production evidence:
 Production URL: https://skinwise-vn.vercel.app
 Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
 Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
-Production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED - public URL and /api/health were checked; authenticated MVP flows and production platform signals were not checked
+Manual Browser & Production Smoke Verification: DONE / PASS - user-reported manual production verification completed with no critical blockers observed
 Historical production smoke test: PASS - user-reported manual verification completed on 2026-06-04
 Historical production monitoring: PASS - user-reported checks completed on 2026-06-04
 Critical blockers found in direct v1.22.1 public checks: None
@@ -286,7 +288,7 @@ v1.19 - Account Data Summary & Privacy Control Review
 v1.20 - Personal Insight Review & Safe Trend Cards
 v1.21 - Insight Explainability & Tracking Quality Checklist
 v1.22 - Production Observability & Release Confidence
-v1.22.1 - Production Deployment & Smoke Verification: PARTIAL / DEFERRED
+v1.22.1 - Production Deployment & Smoke Verification: DONE / PASS, user-reported manual verification
 v1.23 - Account Data Deletion Workflow Hardening
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 v1.25 - First-Session Guided Experience Polish
@@ -400,13 +402,13 @@ Completed v1.23 scope:
 - Confirmed repository deletion filters target current-user app data only.
 - Added tests for malicious client-provided `userId` values, other-user isolation, sensitive-response boundaries, and the client sending no delete body.
 - Added `docs/data-control-and-deletion.md` and `docs/release-evidence-v1.23.md`.
-- Kept v1.22.1 production smoke verification partial/deferred; manual browser deletion smoke and production deletion verification were not performed.
+- Manual Browser & Production Smoke Verification is now DONE / PASS based on user-reported production checks; manual browser deletion smoke for v1.23 remains separate and was not performed in v1.23.
 - Avoided schema changes, shared catalogue deletion, OAuth/Google account deletion, new collections, new dependencies, admin scope, AI-provider changes, image upload, skin scoring, diagnosis logic, and treatment advice.
 
 Recommended next task:
 
 ```txt
-Manual Browser & Production Smoke Verification
+Screen-Reader Assistive Technology Verification
 ```
 
 Portfolio evidence tasks:
@@ -450,7 +452,7 @@ npm run test:e2e: FAIL / TIMED OUT
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 ```
 
-Do not mark v1.24 DONE until required build and E2E validation pass. Keep v1.22.1 production smoke verification as PARTIAL / DEFERRED.
+Do not mark v1.24 DONE until required build and E2E validation pass. Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production checks.
 
 ## v1.25 - First-Session Guided Experience Polish
 
@@ -787,4 +789,64 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 ```
 
-Manual browser verification, screen-reader verification, production/authenticated smoke, screenshots, and demo video were not run or created for v1.37. v1.24 build/E2E blockers remain deferred.
+Manual Browser & Production Smoke Verification later passed in production based on user-reported production checks. Screen-reader verification, screenshots, and demo video were not run or created. v1.24 build/E2E blockers remain deferred.
+
+## Manual Browser & Production Smoke Verification
+
+Status: DONE / PASS.
+
+Evidence source: user-reported manual production verification.
+
+Known metadata:
+
+```txt
+Task: Manual Browser & Production Smoke Verification
+Status: DONE / PASS
+Environment: Production
+Date: Not provided
+Tester: Not provided
+Production URL: https://skinwise-vn.vercel.app
+Deployment ID: Not provided
+Browser: Not provided
+Device/OS: Not provided
+Result: PASS
+Critical blockers: None
+Production runtime blockers: None observed
+Console critical errors: None observed
+Unexpected Network 4xx/5xx errors: None observed
+Vercel critical runtime errors: None observed
+MongoDB read/write issue: None observed
+OAuth callback flow: PASS
+```
+
+Manually verified production flows:
+
+```txt
+[x] Landing page loads successfully.
+[x] Protected routes redirect correctly when unauthenticated.
+[x] Google OAuth login works.
+[x] Dashboard loads after login.
+[x] Skin Profile create/edit/view flow works.
+[x] Product Catalogue loads correctly.
+[x] Product Detail page loads correctly.
+[x] Product Detail -> Ingredient Library learning path link works.
+[x] Ingredient Detail page loads correctly.
+[x] Ingredient Detail -> Product Catalogue learning path link works.
+[x] Product Match flow works.
+[x] Saved Products save/unsave flow works.
+[x] Routine Builder flow works.
+[x] Today Routine Log flow works.
+[x] Journal create/edit/delete flow works.
+[x] Insights page loads correctly.
+[x] Settings page loads correctly.
+[x] Export data flow is reachable/works as expected.
+[x] Deletion request flow is reachable/works as expected.
+[x] /api/health returns HTTP 200.
+[x] Browser console has no critical errors.
+[x] Network tab has no unexpected API 4xx/5xx errors.
+[x] Vercel logs show no critical runtime errors.
+[x] MongoDB Atlas read/write behavior appears normal during tested flows.
+[x] OAuth callback flow works correctly.
+```
+
+No source code, business logic, schema, environment variables, package files, dependency versions, auth behavior, AI-provider behavior, Product Match scoring, Routine Safety logic, or API contracts changed for this documentation update.

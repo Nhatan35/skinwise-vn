@@ -8,15 +8,17 @@
 | Verification task | v1.22.1 - Production Deployment & Smoke Verification |
 | Release type | Post-MVP production verification |
 | Date | 2026-06-11 |
+| Manual smoke update date | Not provided |
 | Branch | main |
 | Commit hash | 3d194a9 |
 | Production URL | https://skinwise-vn.vercel.app |
-| Deployment URL | NOT AVAILABLE |
-| Release owner | TODO |
+| Deployment URL | Not provided |
+| Deployment ID | Not provided |
+| Release owner | Not provided |
 
 Production URL source: README candidate production demo URL.
 
-Deployment URL note: no Vercel deployment-specific URL was available from repository files or safe public checks.
+Deployment metadata note: no Vercel deployment-specific URL or deployment id was provided for the manual production smoke update.
 
 ## 2. Scope
 
@@ -43,7 +45,7 @@ Deployment URL note: no Vercel deployment-specific URL was available from reposi
 * Diagnosis logic.
 * Medical or treatment advice.
 * Marketplace/order workflow.
-* Browser/OAuth/Vercel/Atlas verification without access.
+* Secrets, tokens, private database URLs, private production data, raw Vercel logs, or raw MongoDB records.
 
 ## 3. Local Validation
 
@@ -98,72 +100,79 @@ No secret, auth_secret, mongodb_uri, auth_google_secret, google_client_secret, a
 |---|---|---|---|
 | Production URL | PASS | Direct unauthenticated public HTTPS request to `https://skinwise-vn.vercel.app/`. | Returned HTTP 200 with Vercel headers. |
 | `/api/health` | PASS | Direct unauthenticated public HTTPS request to `https://skinwise-vn.vercel.app/api/health`. | Returned HTTP 200 and expected v1.22 JSON contract. |
-| Landing page | PASS | Public landing page reachability by HTTP status. | Returned HTTP 200. Browser rendering and visual review were not checked. |
-| Google OAuth login | NOT CHECKED | No browser/OAuth test account access available to the coding assistant. | Do not treat historical OAuth evidence as v1.22.1 verification. |
-| Dashboard after login | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Skin Profile | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Product catalogue | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Product detail | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Product match | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Saved products | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Routine builder | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Today routine checklist | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Journal | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Insights | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Settings | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Data export | NOT CHECKED | Requires authenticated production browser session. | Not checked. |
-| Critical blocker | NOT CHECKED | Full authenticated production smoke was not completed. | No blocker was found in public URL or health checks, but auth-dependent MVP flows remain unchecked. |
+| Landing page | PASS | Manual browser production check. | User-reported PASS. |
+| Protected routes | PASS | Unauthenticated redirect behavior. | User-reported PASS. |
+| Google OAuth login | PASS | OAuth sign-in and callback flow. | User-reported PASS. |
+| Dashboard after login | PASS | Authenticated dashboard load. | User-reported PASS. |
+| Skin Profile | PASS | Create/edit/view flow. | User-reported PASS. |
+| Product catalogue | PASS | Catalogue load. | User-reported PASS. |
+| Product detail | PASS | Product Detail page load. | User-reported PASS. |
+| Product Detail -> Ingredient Library | PASS | v1.37 learning path link. | User-reported PASS. |
+| Ingredient detail | PASS | Ingredient Detail page load. | User-reported PASS. |
+| Ingredient Detail -> Product Catalogue | PASS | v1.37 learning path link. | User-reported PASS. |
+| Product match | PASS | Product Match flow. | User-reported PASS. |
+| Saved products | PASS | Save/unsave flow. | User-reported PASS. |
+| Routine builder | PASS | Routine Builder flow. | User-reported PASS. |
+| Today routine log | PASS | Today Routine Log flow. | User-reported PASS. |
+| Journal | PASS | Create/edit/delete flow. | User-reported PASS. |
+| Insights | PASS | Insights page load. | User-reported PASS. |
+| Settings | PASS | Settings page load. | User-reported PASS. |
+| Data export | PASS | Export data flow reachable/works as expected. | User-reported PASS. |
+| Deletion request | PASS | Deletion request flow reachable/works as expected. | User-reported PASS. |
+| Critical blocker | PASS | Critical blocker review. | None reported. |
 
 ## 6. Production Signals
 
 | Signal | Result | Evidence source | Notes |
 |---|---|---|---|
-| Browser console | NOT CHECKED | Browser access not available in this verification run. | No claim made. |
-| Browser network tab | NOT CHECKED | Browser access not available in this verification run. | Public HTTP checks were done with `curl.exe`; this is not a browser network-tab check. |
-| Vercel build logs | NOT CHECKED | Vercel dashboard/log access not available. | No claim made. |
-| Vercel function logs | NOT CHECKED | Vercel dashboard/log access not available. | No claim made. |
-| MongoDB Atlas signal | NOT CHECKED | MongoDB Atlas access not available. | No claim made. |
-| OAuth callback behavior | NOT CHECKED | OAuth/browser test access not available. | No claim made. |
+| Browser console | PASS | User-reported manual production verification. | No critical errors observed. |
+| Browser network tab | PASS | User-reported manual production verification. | No unexpected API 4xx/5xx errors observed. |
+| Vercel build/runtime logs | PASS | User-reported manual production verification. | No critical runtime errors observed. |
+| MongoDB Atlas signal | PASS | User-reported manual production verification. | Read/write behavior appeared normal during tested flows. |
+| OAuth callback behavior | PASS | User-reported manual production verification. | Callback flow worked correctly. |
 
 ## 7. Manual Production Verification Checklist
 
 ### Public checks
 
-- [ ] Open production URL.
-- [ ] Confirm landing page loads.
-- [ ] Open `/api/health`.
-- [ ] Confirm HTTP 200.
-- [ ] Confirm `status = "ok"`.
-- [ ] Confirm `version = "v1.22"`.
-- [ ] Confirm `timestamp` is present.
-- [ ] Confirm no sensitive data is exposed.
+- [x] Open production URL.
+- [x] Confirm landing page loads.
+- [x] Open `/api/health`.
+- [x] Confirm HTTP 200.
+- [x] Confirm `status = "ok"`.
+- [x] Confirm `version = "v1.22"`.
+- [x] Confirm `timestamp` is present.
+- [x] Confirm no sensitive data is exposed.
 
 ### Authenticated MVP checks
 
-- [ ] Sign in with Google OAuth.
-- [ ] Confirm dashboard loads after login.
-- [ ] Open Skin Profile.
-- [ ] Open Product Catalogue.
-- [ ] Open Product Detail.
-- [ ] Run Product Match.
-- [ ] Open Saved Products.
-- [ ] Open Routine Builder.
-- [ ] Check Today Routine Checklist.
-- [ ] Create or view Skin Journal entry.
-- [ ] Open Insights.
-- [ ] Open Settings.
-- [ ] Check Data Export if available.
+- [x] Sign in with Google OAuth.
+- [x] Confirm dashboard loads after login.
+- [x] Open Skin Profile and verify create/edit/view.
+- [x] Open Product Catalogue.
+- [x] Open Product Detail.
+- [x] Check Product Detail -> Ingredient Library learning path.
+- [x] Open Ingredient Detail.
+- [x] Check Ingredient Detail -> Product Catalogue learning path.
+- [x] Run Product Match.
+- [x] Save/unsave Saved Products.
+- [x] Open Routine Builder.
+- [x] Check Today Routine Log.
+- [x] Create/edit/delete Skin Journal entry.
+- [x] Open Insights.
+- [x] Open Settings.
+- [x] Check Data Export.
+- [x] Check Deletion Request.
 
 ### Production signal checks
 
-- [ ] Browser console has no critical blocking error.
-- [ ] Browser network tab has no repeated HTTP 500 errors.
-- [ ] Vercel latest deployment is successful.
-- [ ] Vercel function logs show no critical repeated runtime errors.
-- [ ] MongoDB Atlas monitoring shows no critical connection issue.
-- [ ] OAuth callback works without critical error.
+- [x] Browser console has no critical blocking error.
+- [x] Browser network tab has no unexpected API 4xx/5xx errors.
+- [x] Vercel logs show no critical runtime errors.
+- [x] MongoDB Atlas read/write behavior appears normal during tested flows.
+- [x] OAuth callback works without critical error.
 
-The direct public HTTP checks for the production URL and `/api/health` are recorded in Sections 4 and 5. Checklist items above remain unchecked because this checklist is for follow-up manual browser/platform verification.
+The direct public HTTP checks for the production URL and `/api/health` are recorded in Sections 4 and 5. Authenticated smoke and production signal checks are recorded as user-reported manual verification.
 
 ## 8. Evidence Boundary
 
@@ -181,30 +190,34 @@ Do not paste:
 * Access tokens.
 * Refresh tokens.
 
-Separate user-reported checks from direct verification evidence.
+Separate user-reported checks from direct tool evidence.
 
-Historical production evidence remains historical/user-reported unless explicitly rechecked for v1.22.1.
+The manual browser, authenticated smoke, Vercel, MongoDB, and OAuth signal checks are user-reported. Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided.
 
 Use redaction when documenting sensitive operational context.
 
-Unchecked items must remain marked `NOT CHECKED`.
+Unknown fields must remain marked `Not provided`.
 
 ## 9. Final Decision
 
 | Field | Value |
 |---|---|
 | v1.22 status | DONE |
-| v1.22.1 status | NOT DONE |
-| Production verification result | NOT CHECKED - partial public checks only |
+| v1.22.1 status | DONE / PASS |
+| Production verification result | PASS - user-reported manual production verification |
 | Public production URL | PASS |
 | Production `/api/health` | PASS |
-| Authenticated MVP smoke flows | NOT CHECKED |
-| Production signals | NOT CHECKED |
-| Known blockers | No blocker found in public URL or health checks. Full production smoke remains incomplete because browser/OAuth/Vercel/Atlas access was unavailable. |
-| Next recommended task | Complete manual authenticated production smoke and production signal checks using the checklist above. |
+| Authenticated MVP smoke flows | PASS |
+| Production signals | PASS |
+| Known blockers | None reported. |
+| Date | Not provided |
+| Tester | Not provided |
+| Deployment ID | Not provided |
+| Browser | Not provided |
+| Device/OS | Not provided |
+| Next recommended task | Screen-Reader Assistive Technology Verification. |
 
 Status rule:
 
-* v1.22.1 can be marked DONE only after production health, main production smoke flows, and available production signals are checked with no critical blocker.
-* Partial public checks do not prove authenticated MVP production flows.
+* v1.22.1 is marked DONE / PASS because production health, main production smoke flows, and available production signals were reported as checked with no critical blocker.
 * Do not hide failed or unchecked validation.

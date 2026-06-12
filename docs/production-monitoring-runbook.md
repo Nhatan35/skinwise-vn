@@ -1,6 +1,6 @@
 # Production Monitoring and Demo Recovery Runbook
 
-Last updated: 2026-06-11
+Last updated: 2026-06-13
 
 ## 1. Purpose
 
@@ -15,15 +15,16 @@ MVP v1.10 production monitoring evidence: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.22 production observability/release confidence: DONE
-MVP v1.22.1 production deployment/smoke verification: PARTIAL / DEFERRED
+MVP v1.22.1 production deployment/smoke verification: DONE / PASS, user-reported manual verification
 MVP v1.23 account data deletion workflow hardening: DONE
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed verification task: Manual Browser & Production Smoke Verification
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Critical blockers reported: None
 ```
 
-Production monitoring PASS is based on the user's previously reported completed checks. v1.22.1 direct verification checked the public production URL and `/api/health` only; authenticated MVP flows, browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED / DEFERRED. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
+Production monitoring PASS is based on user-reported manual production verification. Authenticated MVP flows, browser console/network, Vercel logs, MongoDB Atlas read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed. Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
 
 ## 2. Where to Check Production Errors
 
@@ -139,13 +140,24 @@ If MongoDB fails:
 Production URL: https://skinwise-vn.vercel.app
 Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
 Production /api/health: PASS - direct unauthenticated HTTP 200 with expected v1.22 JSON contract on 2026-06-11
-Authenticated MVP production smoke for v1.22.1: NOT CHECKED
-Production signals for v1.22.1: NOT CHECKED
-Historical production smoke test: PASS - user-reported manual verification completed
-Historical production monitoring: PASS - user-reported checks completed
+Manual Browser & Production Smoke Verification: DONE / PASS
+Evidence source: User-reported manual production verification
+Evidence date: Not provided
+Tester: Not provided
+Deployment ID: Not provided
+Browser: Not provided
+Device/OS: Not provided
+Authenticated MVP production smoke: PASS
+Production signals: PASS
+Browser console critical errors: None observed
+Unexpected Network 4xx/5xx errors: None observed
+Vercel critical runtime errors: None observed
+MongoDB read/write issue: None observed
+OAuth callback flow: PASS
 Critical blockers reported: None
-Evidence dates: historical user-reported baseline 2026-06-04; partial direct public checks 2026-06-11
-Latest completed milestone: MVP v1.23 - Account Data Deletion Workflow Hardening
+Evidence dates: historical user-reported baseline 2026-06-04; direct public checks 2026-06-11; manual production smoke date not provided
+Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed verification task: Manual Browser & Production Smoke Verification
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 ```

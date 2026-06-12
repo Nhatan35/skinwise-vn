@@ -36,7 +36,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
-MVP v1.22.1 - Production Deployment & Smoke Verification: IN PROGRESS / NOT DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: DONE / PASS, user-reported manual verification
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only
@@ -58,7 +58,7 @@ MVP v1.11 is a documentation and presentation-readiness milestone. It does not a
 
 Current phase: Post-MVP controlled improvement.
 Current active milestone: None.
-Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED.
+Production status: Manual Browser & Production Smoke Verification: DONE / PASS.
 v1.24 status: Implementation complete, validation blocked - build and E2E did not pass in the current environment.
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed. Build, E2E, manual browser verification, and production verification were not run for v1.25.
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
@@ -72,7 +72,7 @@ v1.32 status: DONE within scoped local validation - selected core form submissio
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished. Lint, typecheck, unit tests, and diff check passed; build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, and production verification were not run for v1.33.
 v1.34 status: DONE within scoped local validation - Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail action labels polished. Lint, typecheck, unit tests, and diff check passed; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed; manual browser, screen-reader, and production verification were not run for v1.34.
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; manual browser, screen-reader, and production verification were not run for v1.35.
-v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created for v1.37.
+v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; production smoke later passed through Manual Browser & Production Smoke Verification. Screen-reader verification, screenshots, and demo video were not performed or created.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -93,8 +93,8 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Local validation | MIXED BY MILESTONE | MVP v1.37 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. MVP v1.35 remains DONE with full E2E PASS. MVP v1.34 remains DONE within scoped validation only. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
-| v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
-| v1.22.1 production signals | NOT CHECKED | Browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior were not checked because platform/browser access was unavailable. |
+| Manual Browser & Production Smoke Verification | PASS | User-reported manual production verification completed: public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow passed with no critical blockers observed. |
+| Production signals | PASS | User-reported manual checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
 | Historical production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it is historical and not v1.22.1 direct verification. |
 | Historical production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they are historical and not v1.22.1 direct verification. |
 | Portfolio Evidence Package | PASS | `docs/portfolio-evidence-package.md` prepares recruiter summary, CV/resume copy, interview narrative, demo run of show, media capture plan, and evidence boundaries. |
@@ -126,7 +126,7 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 Manual browser verification: NOT CHECKED for v1.37
 Screen-reader verification: NOT CHECKED for v1.37
-Production verification: NOT CHECKED for v1.37
+Production verification: PASS through later Manual Browser & Production Smoke Verification
 Screenshots/demo video: NOT CREATED for v1.37
 
 MVP v1.35 extended validation cleanup:
@@ -283,17 +283,36 @@ Production evidence:
 Production URL: https://skinwise-vn.vercel.app
 Production URL public reachability: PASS - direct unauthenticated HTTP 200 on 2026-06-11
 Production /api/health: PASS - direct unauthenticated HTTP 200 and expected v1.22 JSON contract on 2026-06-11
-Production smoke/monitoring evidence for v1.22.1: PARTIAL / DEFERRED - public URL and /api/health were checked; authenticated MVP flows and production platform signals were not checked
-Historical production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline from 2026-06-04
-Critical production blockers found in direct v1.22.1 public checks: None
-Evidence strength: partial direct public verification only; no browser/OAuth/Vercel/Atlas verification included
+Manual Browser & Production Smoke Verification: DONE / PASS
+Evidence source: User-reported manual production verification
+Evidence date: Not provided
+Tester: Not provided
+Environment: Production
+Production URL: https://skinwise-vn.vercel.app
+Deployment ID: Not provided
+Browser: Not provided
+Device/OS: Not provided
+Landing page: PASS
+Protected route redirects: PASS
+Google OAuth login: PASS
+Authenticated MVP flows: PASS
+Product Detail -> Ingredient Library learning path: PASS
+Ingredient Detail -> Product Catalogue learning path: PASS
+Production /api/health: PASS - HTTP 200
+Browser console critical errors: None observed
+Unexpected Network 4xx/5xx errors: None observed
+Vercel critical runtime errors: None observed
+MongoDB read/write issue: None observed
+OAuth callback flow: PASS
+Critical production blockers: None
+Production runtime blockers: None observed
 ```
 
 Evidence boundary:
 
 - Local validation is supported by terminal output.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence, incident note template, and monitoring/checklist updates; no package, database schema, auth model, authorization, persistence, AI-provider behavior, or product feature scope changed.
-- v1.22.1 direct verification checked only the public production URL and `/api/health`.
+- v1.22.1 / Manual Browser & Production Smoke Verification passed based on user-reported manual production verification.
 - v1.23 hardened the existing app-data deletion workflow; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 synchronized seed docs/evidence/status with the current 70-product / 70-ingredient seed implementation, but required build and E2E validation did not pass.
 - v1.26 polished Product Match explanation clarity and safe decision-support copy using the existing v1.15 explainability system; build, E2E, manual browser verification, and production verification were not run.
@@ -301,7 +320,7 @@ Evidence boundary:
 - v1.28 polished Saved Products to Routine decision-support copy and next actions; build, E2E, manual browser verification, and production verification were not run.
 - v1.37 added Product Detail ingredient-learning links, Ingredient Detail Product Catalogue search links by INCI/display-name query, and lightweight catalogue/library cross-links while preserving educational, non-medical copy and all existing scoring, safety, schema, seed, auth, AI, CRUD, and API boundaries.
 - Production `/api/health` continues to use the v1.22 endpoint contract version; v1.37 did not change it.
-- Historical production PASS is based on the previously user-reported stable MVP baseline and must not be treated as v1.22.1 direct verification.
+- Production PASS is based on user-reported manual production verification. Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided.
 - Keep screenshots, browser/network notes, Vercel deployment id, and sanitized log snippets separately if formal audit evidence is required.
 - The 2026-06-07 Portfolio Evidence Package task is documentation-only; screenshot capture and demo video recording remain intentionally skipped for v1.22 and are not newly claimed by this checklist.
 - Do not commit or document real secrets.
@@ -339,8 +358,8 @@ Evidence boundary:
 | `README.md` | PASS | Current v1.37 validation status, v1.24 validation blocker, v1.22 health endpoint contract boundary, release evidence references, and evidence boundaries are documented. |
 | `docs/portfolio-case-study.md` | PASS | Case study explains problem, scope, architecture, evidence, demo flow, and future improvements. |
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
-| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.37 validation PASS, v1.24 validation blocker, historical production PASS boundary, portfolio readiness, and the recommended manual/production verification task. |
-| `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and full smoke/signals as NOT CHECKED. |
+| `docs/final-release-checklist.md` | PASS | Final release status reflects v1.37 validation PASS, v1.24 validation blocker, Manual Browser & Production Smoke Verification PASS, portfolio readiness, and remaining evidence boundaries. |
+| `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and later user-reported Manual Browser & Production Smoke Verification PASS. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
 | `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
 | `docs/data-control-and-deletion.md` | PASS | Data deletion boundary, ownership rules, post-deletion expectations, and privacy limits are documented. |
@@ -375,14 +394,14 @@ These are intentional MVP boundaries, not release blockers:
 - Full commercial monitoring/error tracking is outside the MVP.
 - Screenshots are optional unless needed for portfolio/slides.
 - `npm ci` was not rerun for v1.23; the required v1.23 validation commands passed.
-- v1.22.1 is not complete because authenticated production flows and production platform signals were not checked.
+- Manual Browser & Production Smoke Verification is complete based on user-reported production checks. Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided.
 - v1.24 is not complete because build and E2E validation timed out in the current environment.
 - v1.25 build and E2E validation were not run by task scope.
 - v1.25.1 build and E2E validation were not run by task scope.
 - v1.26 build and E2E validation were not run by task scope.
 - v1.27 build and E2E validation were not run by task scope.
 - v1.28 build and E2E validation were not run by task scope.
-- v1.37 manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created.
+- Screen-reader verification, screenshots, and demo video were not performed or created for this production smoke update.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -621,7 +640,7 @@ MVP v1.19 - Account Data Summary & Privacy Control Review: DONE
 MVP v1.20 - Personal Insight Review & Safe Trend Cards: DONE
 MVP v1.21 - Insight Explainability & Tracking Quality Checklist: DONE
 MVP v1.22 - Production Observability & Release Confidence: DONE
-MVP v1.22.1 - Production Deployment & Smoke Verification: NOT DONE
+MVP v1.22.1 - Production Deployment & Smoke Verification: DONE / PASS, user-reported manual verification
 MVP v1.23 - Account Data Deletion Workflow Hardening: DONE
 MVP v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 MVP v1.25 - First-Session Guided Experience Polish: DONE, scoped validation only

@@ -13,12 +13,12 @@ Product core: COMPLETE
 Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
-Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
-Historical production smoke/monitoring: PASS, user-reported
+Full production smoke/monitoring: PASS, user-reported
+Manual Browser & Production Smoke Verification: DONE / PASS
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Manual Browser & Production Smoke Verification
+Recommended next task: Screen-Reader Assistive Technology Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -49,7 +49,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Settings / Data Control | DONE | Export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
-| Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
+| Manual Browser & Production Smoke Verification | DONE | User-reported production checks passed for public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow. No critical production blockers observed. |
 | Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
@@ -57,8 +57,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Product ↔ Ingredient Learning Path Polish | DONE | v1.37 adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight Product Catalogue / Ingredient Library cross-links without recommendation or ranking behavior. |
 | Local validation evidence | MIXED BY MILESTONE | v1.37 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. v1.35 remains DONE with full E2E PASS. v1.34 remains DONE within scoped validation only. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
-| Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
-| Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
+| Production smoke evidence | DONE | Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported manual production verification. Exact date, tester, deployment id, browser/version, and device/OS were not provided. |
+| Production monitoring evidence | DONE | User-reported production signal checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
 | Portfolio demo docs | DONE | README, portfolio evidence package, case study, demo script, and checklists updated. |
 | Portfolio media evidence | Partially completed | Screenshot checklist and demo-video plan are prepared; actual screenshot and video files are not claimed. |
 
@@ -73,7 +73,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Personal Insight Review | Post-MVP Insights | v1.20 | DONE |
 | Insight Explainability & Tracking Quality Checklist | Post-MVP Insights | v1.21 | DONE |
 | Production Observability & Release Confidence | Release/Ops | v1.22 | DONE |
-| Production Deployment & Smoke Verification | Release/Ops | v1.22.1 | IN PROGRESS / NOT DONE |
+| Production Deployment & Smoke Verification | Release/Ops | v1.22.1 | DONE / PASS, user-reported manual verification |
 | Account Data Deletion Workflow Hardening | Privacy/Data Control | v1.23 | DONE |
 | Seed Data Quality Expansion Round 2 | Data Quality | v1.24 | NOT DONE / VALIDATION BLOCKED |
 | First-Session Guided Experience Polish | UX Polish | v1.25 | DONE, scoped validation only |
@@ -110,7 +110,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 Core MVP features: COMPLETE
 Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
-Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
+Production status: Manual Browser & Production Smoke Verification DONE / PASS
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional, intentionally skipped, and not product correctness blockers
 v1.24 status: NOT DONE / VALIDATION BLOCKED until build and E2E validation pass
@@ -128,6 +128,6 @@ v1.34 status: DONE within scoped local validation - Product and Ingredient disco
 v1.35 status: DONE - E2E failure triage fixed dashboard, insights, saved-products, and today routine log Playwright selector/copy drift; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 status: DONE - Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library learning paths were connected with educational query links; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 exclusions: no recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change
-v1.37 manual evidence: manual browser, screen-reader, production verification, screenshots, and demo video were not performed or created
+Manual Browser & Production Smoke Verification: DONE / PASS, user-reported manual production verification; screen-reader verification, screenshots, and demo video were not provided
 Production /api/health version: remains the v1.22 health endpoint contract version
 ```
