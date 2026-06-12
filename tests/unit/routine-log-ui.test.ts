@@ -242,8 +242,11 @@ describe("RoutineLog UI integration", () => {
   it("renders Today Checklist metadata, progress summary, empty state, and CTAs", () => {
     for (const requiredCopy of [
       "Chưa có routine nào",
+      "Không thể tải checklist routine hôm nay",
       "Hãy tạo routine buổi sáng hoặc buổi tối trước khi theo dõi tiến độ hằng ngày.",
       "Tạo routine",
+      "Thử lại",
+      "Xem routine",
       "Đã ghi nhận tất cả routine hôm nay",
       "Bạn có thể quay lại dashboard để xem tiến độ hôm nay.",
       "Xem dashboard",
@@ -260,6 +263,7 @@ describe("RoutineLog UI integration", () => {
 
     expect(todayRoutineChecklistSource).toContain("routes.ROUTINES");
     expect(todayRoutineChecklistSource).toContain("routes.DASHBOARD");
+    expect(todayRoutineChecklistSource).toContain("reloadKey");
     expect(todayRoutineChecklistSource).not.toContain("routine-log.repository");
     expect(todayRoutineChecklistSource).not.toContain("routine-log.use-case");
     expect(todayRoutineChecklistSource).not.toContain("mongodb");

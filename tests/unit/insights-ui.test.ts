@@ -88,11 +88,15 @@ describe("Insights UI source", () => {
     expect(insightsPageSource).toContain("Đang chuẩn bị insights tiến trình");
     expect(insightsPageSource).toContain("ErrorState");
     expect(insightsPageSource).toContain("Chưa thể chuẩn bị insights tiến trình");
+    expect(insightsPageSource).toContain("Thử lại");
     expect(insightsPageSource).toContain("EmptyState");
     expect(insightsPageSource).toContain("Cần thêm dữ liệu để xem rõ hơn");
     expect(insightsPageSource).toContain("Ghi nhận routine");
     expect(insightsPageSource).toContain("Viết journal");
     expect(insightsPageSource).toContain("Xem lại routine");
+    expect(insightsPageSource).toContain("routes.TODAY_LOG");
+    expect(insightsPageSource).toContain("routes.JOURNAL");
+    expect(insightsPageSource).toContain("routes.ROUTINES");
     expect(insightSummarySectionSource).toContain("LoadingState");
     expect(insightSummarySectionSource).toContain(
       "Đang tải phần tự quan sát cá nhân",

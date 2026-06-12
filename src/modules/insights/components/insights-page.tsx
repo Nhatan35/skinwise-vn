@@ -90,9 +90,17 @@ export function InsightsPage() {
     return (
       <ErrorState
         action={
-          <Button onClick={() => void loadInsights()} size="sm" variant="outline">
-            Thử lại
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button onClick={() => void loadInsights()} size="sm" variant="outline">
+              Thử lại
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.JOURNAL}>Viết journal</Link>
+            </Button>
+          </div>
         }
         description={loadError}
         title="Chưa thể chuẩn bị insights"

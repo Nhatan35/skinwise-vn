@@ -232,7 +232,12 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (loadError?.status === 404) {
     return (
       <EmptyState
-        action={<ProductsLinkButton label="Xem sản phẩm" />}
+        action={
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <ProductsLinkButton label="Xem sản phẩm" />
+            <ProductMatchLinkButton />
+          </div>
+        }
         description="Sản phẩm này có thể không còn khả dụng trong danh mục. Hãy quay lại danh mục để chọn sản phẩm khác."
         title="Không tìm thấy sản phẩm"
       />
@@ -263,7 +268,12 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   if (!product) {
     return (
       <EmptyState
-        action={<ProductsLinkButton label="Xem sản phẩm" />}
+        action={
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <ProductsLinkButton label="Xem sản phẩm" />
+            <ProductMatchLinkButton />
+          </div>
+        }
         description="Hãy quay lại catalogue và mở lại sản phẩm."
         title="Không tìm thấy sản phẩm"
       />

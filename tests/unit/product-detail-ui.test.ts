@@ -85,6 +85,8 @@ describe("Product Detail UI", () => {
       "Không tìm thấy sản phẩm",
       "Vui lòng quay lại danh mục sản phẩm hoặc thử lại sau.",
       "Thử lại",
+      "Xem sản phẩm",
+      "Quay lại Product Match",
       "product.name",
       "Product ID: {product.id}",
     ]) {

@@ -85,10 +85,14 @@ describe("Product Match UI source", () => {
     expect(productMatchEmptyStateSource).toContain(
       "href={routes.ONBOARDING_SKIN_PROFILE}",
     );
+    expect(productMatchComponentSource).toContain("routes.SKIN_PROFILE");
     expect(productMatchEmptyStateSource).toContain(
       "Cập nhật hồ sơ da để xem Product Match",
     );
     expect(productMatchEmptyStateSource).toContain("Cập nhật hồ sơ da");
+    expect(productMatchEmptyStateSource).toContain("routes.PRODUCTS");
+    expect(productMatchEmptyStateSource).toContain("routes.SKIN_PROFILE");
+    expect(productMatchEmptyStateSource).toContain("Xem sản phẩm");
     expect(productMatchSummarySource).toContain("Cập nhật hồ sơ da");
   });
 

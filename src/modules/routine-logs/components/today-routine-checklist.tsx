@@ -1,5 +1,6 @@
 "use client";
 
+import { RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -203,6 +204,7 @@ export function TodayRoutineChecklist() {
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState<
     string | null
   >(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [journalTodayStatus, setJournalTodayStatus] =
     useState<JournalTodayStatus>({
       isKnown: false,
@@ -291,7 +293,7 @@ export function TodayRoutineChecklist() {
     return () => {
       isMounted = false;
     };
-  }, [localDate, weeklyReviewFromDate]);
+  }, [localDate, weeklyReviewFromDate, reloadKey]);
 
   const summaryCounts = useMemo(
     () => getSummaryCounts(routines, logsByRoutineId),
@@ -542,6 +544,20 @@ export function TodayRoutineChecklist() {
   if (loadError) {
     return (
       <ErrorState
+        action={
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={() => setReloadKey((current) => current + 1)}
+              type="button"
+            >
+              <RotateCcw aria-hidden="true" />
+              Thử lại
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={routes.ROUTINES}>Xem routine</Link>
+            </Button>
+          </div>
+        }
         description={loadError}
         title="Không thể tải checklist routine hôm nay"
       />

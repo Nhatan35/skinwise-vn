@@ -138,13 +138,18 @@ export function SavedProductsPage() {
     return (
       <ErrorState
         action={
-          <Button
-            onClick={() => setReloadKey((current) => current + 1)}
-            type="button"
-          >
-            <RotateCcw aria-hidden="true" />
-            Thử lại
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={() => setReloadKey((current) => current + 1)}
+              type="button"
+            >
+              <RotateCcw aria-hidden="true" />
+              Thử lại
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={routes.PRODUCT_MATCH}>Quay lại Product Match</Link>
+            </Button>
+          </div>
         }
         description={loadError}
         title="Không thể tải sản phẩm đã lưu"

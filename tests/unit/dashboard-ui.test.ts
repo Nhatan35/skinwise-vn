@@ -76,6 +76,10 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(dashboardOverviewSource).toContain("dashboard.latestJournal");
     expect(dashboardOverviewSource).toContain("Đang tải dashboard chăm sóc da");
     expect(dashboardOverviewSource).toContain("Không thể tải tổng quan dashboard");
+    expect(dashboardOverviewSource).toContain("Cập nhật hồ sơ da");
+    expect(dashboardOverviewSource).toContain("Ghi nhận routine");
+    expect(dashboardOverviewSource).toContain("routes.SKIN_PROFILE");
+    expect(dashboardOverviewSource).toContain("routes.TODAY_LOG");
 
     for (const forbiddenImport of [
       "repository",
@@ -99,7 +103,6 @@ describe("Dashboard DB-001 UI integration", () => {
     );
     expect(dashboardOverviewSource).not.toContain("FirstTimeDashboardGuidance");
     expect(dashboardOverviewSource).not.toContain("routes.ONBOARDING_SKIN_PROFILE");
-    expect(dashboardOverviewSource).not.toContain("routes.TODAY_LOG");
     expect(dashboardOverviewSource).not.toContain("routes.JOURNAL");
   });
 

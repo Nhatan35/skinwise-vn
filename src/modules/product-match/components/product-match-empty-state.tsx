@@ -21,6 +21,17 @@ export function ProductMatchNoProfileEmptyState() {
 export function ProductMatchNoProductsEmptyState() {
   return (
     <EmptyState
+      action={
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button asChild variant="outline">
+            <Link href={routes.PRODUCTS}>Xem sản phẩm</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={routes.SKIN_PROFILE}>Cập nhật hồ sơ da</Link>
+          </Button>
+        </div>
+      }
+      actionClassName="flex justify-center"
       description="Hiện chưa có sản phẩm phù hợp để hiển thị. Bạn có thể quay lại sau khi danh mục có thêm sản phẩm đã được kiểm duyệt."
       title="Chưa có sản phẩm để gợi ý"
     />

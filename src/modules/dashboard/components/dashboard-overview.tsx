@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analysis-card";
@@ -15,6 +16,7 @@ import { getBrowserLocalDate } from "@/modules/routine-logs/routine-log.client";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
+import { routes } from "@/shared/constants/routes";
 
 import {
   buildOnboardingSteps,
@@ -169,9 +171,17 @@ export function DashboardOverview() {
     return (
       <ErrorState
         action={
-          <Button onClick={() => void loadDashboard()} size="sm" variant="outline">
-            Thử lại
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button onClick={() => void loadDashboard()} size="sm" variant="outline">
+              Thử lại
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.SKIN_PROFILE}>Cập nhật hồ sơ da</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
+            </Button>
+          </div>
         }
         description={dashboardLoadError}
         title="Không thể tải tổng quan dashboard"

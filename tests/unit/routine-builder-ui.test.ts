@@ -120,9 +120,12 @@ describe("Routine Builder UI foundation", () => {
     for (const stateCopy of [
       "Đang chuẩn bị routine builder",
       "Chưa có routine nào",
+      "Không thể tải routine của bạn",
       "Danh sách routines",
       "Tạo routine",
       "Chỉnh sửa routine",
+      "Xem sản phẩm đã lưu",
+      "Thử lại",
       "Một vài thông tin chưa hợp lệ",
       "Hiện chưa thể xử lý routine",
       "Đang lưu...",

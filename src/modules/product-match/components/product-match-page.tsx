@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { ProductMatchCard } from "@/modules/product-match/components/product-match-card";
@@ -16,6 +17,7 @@ import type { ProductMatchResponseDto } from "@/modules/product-match/product-ma
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
+import { routes } from "@/shared/constants/routes";
 
 function getProductMatchLoadErrorMessage(error: unknown) {
   if (error instanceof ProductMatchClientError) {
@@ -87,9 +89,14 @@ export function ProductMatchPage() {
     return (
       <ErrorState
         action={
-          <Button onClick={() => void loadProductMatches()} size="sm" variant="outline">
-            Thử lại
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button onClick={() => void loadProductMatches()} size="sm" variant="outline">
+              Thử lại
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={routes.SKIN_PROFILE}>Cập nhật hồ sơ da</Link>
+            </Button>
+          </div>
         }
         description={loadError}
         title="Không thể chuẩn bị Product Match"

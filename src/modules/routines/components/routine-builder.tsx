@@ -1065,13 +1065,18 @@ export function RoutineBuilder() {
     return (
       <ErrorState
         action={
-          <Button
-            onClick={() => setReloadKey((current) => current + 1)}
-            type="button"
-          >
-            <RotateCcw aria-hidden="true" />
-            Thử lại
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={() => setReloadKey((current) => current + 1)}
+              type="button"
+            >
+              <RotateCcw aria-hidden="true" />
+              Thử lại
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={routes.SAVED_PRODUCTS}>Xem sản phẩm đã lưu</Link>
+            </Button>
+          </div>
         }
         description={loadError}
         title="Không thể tải routine của bạn"
