@@ -51,11 +51,11 @@ const insightSummaryDto: InsightSummaryDto = {
       "Đây chỉ là mẫu theo dõi cá nhân để xem lại thói quen, không phải kết luận về thay đổi trên da.",
     calculationMeta: {
       periodDays: 7,
-      dataSourceLabel: "Routine logs from your account only",
+      dataSourceLabel: "Routine log trong tài khoản của bạn",
       calculationLabel:
-        "Completed days, partial days, and no-log days were counted from your routine tracking records.",
+        "Đếm số ngày hoàn thành, một phần và chưa có log từ ghi nhận routine.",
       safetyText:
-        "This only shows your tracking consistency. It does not indicate skin improvement or skin decline.",
+        "Thông tin này chỉ cho thấy mức độ ghi nhận thói quen, không kết luận da tốt hơn hay xấu đi.",
     },
   },
   symptomFrequency: {
@@ -72,11 +72,11 @@ const insightSummaryDto: InsightSummaryDto = {
       "Nội dung này chỉ phản ánh những gì bạn đã ghi trong nhật ký và không xác nhận tình trạng da.",
     calculationMeta: {
       periodDays: 30,
-      dataSourceLabel: "Symptoms recorded in your journal entries",
+      dataSourceLabel: "Dấu hiệu hoặc cảm nhận trong journal của bạn",
       calculationLabel:
-        "Repeated symptom labels were counted and sorted by frequency.",
+        "Các nhãn được ghi lặp lại được đếm và sắp xếp theo tần suất.",
       safetyText:
-        "This only reflects what you recorded. It does not confirm a skin condition.",
+        "Thông tin này chỉ phản ánh những gì bạn đã ghi, không xác nhận tình trạng da.",
     },
   },
   stressReflection: {
@@ -89,10 +89,10 @@ const insightSummaryDto: InsightSummaryDto = {
       "Bạn có thể tiếp tục quan sát stress và ghi chú da cùng nhau, nhưng không nên xem đây là kết luận nguyên nhân.",
     calculationMeta: {
       periodDays: 30,
-      dataSourceLabel: "Stress levels recorded in your journal entries",
-      calculationLabel: "Low, medium, and high stress labels were counted.",
+      dataSourceLabel: "Mức stress được ghi trong journal",
+      calculationLabel: "Đếm số lần bạn chọn mức stress thấp, vừa hoặc cao.",
       safetyText:
-        "This does not identify stress as a cause of any skin change. It only summarizes your recorded notes.",
+        "Thông tin này không xác định stress là nguyên nhân của thay đổi trên da; chỉ tóm tắt ghi chú đã nhập.",
     },
   },
   productMentionPattern: {
@@ -109,10 +109,11 @@ const insightSummaryDto: InsightSummaryDto = {
       "Hãy xem lại ghi chú của chính bạn trước khi thay đổi routine. Nội dung này không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm.",
     calculationMeta: {
       periodDays: 30,
-      dataSourceLabel: "Products mentioned in your journal entries",
-      calculationLabel: "Product names appearing in journal entries were counted.",
+      dataSourceLabel: "Sản phẩm được nhắc trong journal",
+      calculationLabel:
+        "Đếm số lần tên sản phẩm xuất hiện trong các mục journal gần đây.",
       safetyText:
-        "This does not confirm that a product helped or harmed your skin.",
+        "Thông tin này không xác nhận sản phẩm có lợi hay gây khó chịu cho da.",
     },
   },
   trackingQualityChecklist: {
@@ -121,54 +122,54 @@ const insightSummaryDto: InsightSummaryDto = {
     checklistItems: [
       {
         key: "routine_logs",
-        label: "Routine logs in the last 7 days",
+        label: "Routine log trong 7 ngày gần đây",
         status: "available",
         count: 5,
         periodDays: 7,
-        helperText: "You have routine logs available for recent review.",
+        helperText: "Bạn đã có routine log gần đây để xem lại.",
       },
       {
         key: "journal_entries",
-        label: "Journal entries in the last 30 days",
+        label: "Journal trong 30 ngày gần đây",
         status: "limited",
         count: 3,
         periodDays: 30,
         helperText:
-          "A few journal entries are available. More entries may make future review clearer.",
+          "Đã có một vài journal. Thêm ghi nhận sẽ giúp phần xem lại rõ hơn.",
       },
       {
         key: "symptom_notes",
-        label: "Symptom notes in the last 30 days",
+        label: "Ghi nhận dấu hiệu trong 30 ngày gần đây",
         status: "limited",
         count: 2,
         periodDays: 30,
-        helperText: "Some symptom notes are available for personal reflection.",
+        helperText: "Đã có một số ghi nhận dấu hiệu để tự quan sát.",
       },
       {
         key: "stress_notes",
-        label: "Stress notes in the last 30 days",
+        label: "Ghi nhận stress trong 30 ngày gần đây",
         status: "available",
         count: 5,
         periodDays: 30,
-        helperText: "You have stress notes available for recent review.",
+        helperText: "Bạn đã có ghi nhận stress để xem lại.",
       },
       {
         key: "product_mentions",
-        label: "Product mentions in the last 30 days",
+        label: "Sản phẩm được nhắc trong 30 ngày gần đây",
         status: "not_enough_data",
         count: 0,
         periodDays: 30,
         helperText:
-          "No product mentions were found in recent journal entries.",
+          "Chưa tìm thấy sản phẩm được nhắc trong journal gần đây.",
       },
     ],
     summaryText:
-      "Your recent tracking data is available in some areas and limited in others.",
+      "Một số mục đã có dữ liệu, một số mục vẫn cần thêm ghi nhận.",
     safetyNote:
-      "This checklist only reflects tracking data availability. It is not a skin score or medical assessment.",
+      "Checklist này chỉ phản ánh mức độ có dữ liệu theo dõi, không phải đánh giá làn da hay tư vấn chuyên môn.",
   },
   safetyNote:
-    "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không phải kết luận y khoa, không phải chẩn đoán và không xác nhận nguyên nhân.",
+    "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không thay thế tư vấn chuyên môn và không xác nhận nguyên nhân.",
 };
 
 function jsonResponse(body: unknown, status = 200) {

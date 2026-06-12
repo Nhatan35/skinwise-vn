@@ -38,9 +38,10 @@ MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DO
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
+MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, and v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, portfolio/demo documentation has been refreshed, the post-MVP backlog has been created, v1.13 improved first-time UX states, v1.14 expanded curated seed data, v1.15 improved Product Match/Product Detail explainability and safety guidance without expanding product scope, v1.15.1 synchronized audit/dependency-risk evidence without product behavior changes, v1.16 added saved product comparison, v1.17 added weekly routine habit review, v1.18 added Skin Journal Filters & Reflection Review, v1.19 added account app-data summary and privacy-control review support on Settings, v1.20 added a strict personal insight summary endpoint plus safe reflection cards on Insights, v1.21 added insight calculation metadata plus a tracking data-availability checklist, v1.22 added production observability/release-confidence documentation plus a safe public health endpoint, v1.23 hardened the existing account app-data deletion workflow, v1.25 improved the first-session guided dashboard/onboarding experience, v1.25.1 restored seed baseline/documentation consistency, v1.26 polished Product Match explanation clarity and safe decision-support copy as a follow-up to v1.15, v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28, and v1.30 polished Insights interpretation and Dashboard next-action clarity as a follow-up to v1.29. v1.24 seed data closeout remains deferred and not done because build/E2E validation timed out in the current environment.
 
 Current status:
 
@@ -48,7 +49,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish
+Latest completed scoped task: MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
@@ -60,6 +61,7 @@ v1.26 status: DONE within scoped local validation - Product Match explanation la
 v1.27 status: DONE within scoped local validation - Product Detail summary labels, save/unsave guidance, after-save next action, Saved Products empty state, and safe reference copy polished; lint, typecheck, and unit tests passed
 v1.28 status: DONE within scoped local validation - Saved Products to Routine context, CTA clarity, routine empty-state guidance, and safe reference copy polished; lint, typecheck, and unit tests passed
 v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal CTA clarity, routine log guidance, journal empty-state/after-save next actions, and safe reference copy polished; lint, typecheck, and unit tests passed
+v1.30 status: DONE within scoped local validation - Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy polished; lint, typecheck, and unit tests passed
 Recommended next task: TBD / Backlog grooming
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
@@ -80,6 +82,7 @@ Evidence boundary:
 - v1.27 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.27.
 - v1.28 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.28.
 - v1.29 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.29.
+- v1.30 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.30.
 
 ## 2. Implemented Product Scope
 
@@ -87,7 +90,7 @@ Evidence boundary:
 |---|---|---|
 | Landing page | DONE | Public product entry. |
 | Google OAuth / Auth.js | DONE | Protected app routes use authenticated user context. |
-| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish. |
+| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish and v1.30 next-action reason copy. |
 | Skin Profile | DONE | Onboarding/view/edit/delete flows. |
 | Product Catalogue | DONE | Product list and detail flows. |
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability and v1.26 explanation-label, caution, no-profile, and next-action clarity polish. |
@@ -99,7 +102,7 @@ Evidence boundary:
 | Today Routine Checklist | DONE | Daily completion flow. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review and v1.29 safer log-to-journal next-action guidance. |
 | Skin Journal | DONE | Journal entry management with v1.18 loaded-entry filters/reflection review and v1.29 routine-reflection empty/after-save guidance. |
-| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions, and v1.29 short-term interpretation caution; v1.20 added strict count-only Personal Insight Review cards. |
+| Insights | DONE | Routine consistency, journal activity, reflective usage, safe next actions, v1.29 short-term interpretation caution, and v1.30 clearer personal-tracking interpretation/insufficient-data guidance; v1.20 added strict count-only Personal Insight Review cards. |
 | Settings/Data Control | DONE | Data export, app data deletion, account deletion request marker; v1.19 account data summary is complete; v1.23 hardened app-data deletion copy, ownership tests, and documentation. |
 | Seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation now contains 70 ingredients and 70 products with v1.24 seed quality tests, but v1.24 is not DONE until build/E2E validation passes. |
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |

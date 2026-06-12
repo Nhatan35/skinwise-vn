@@ -54,11 +54,11 @@ function buildRoutineCalculationMeta(
 ): InsightCalculationMetaDto {
   return {
     periodDays,
-    dataSourceLabel: "Routine logs from your account only",
+    dataSourceLabel: "Routine log trong tài khoản của bạn",
     calculationLabel:
-      "Completed days, partial days, and no-log days were counted from your routine tracking records.",
+      "Đếm số ngày hoàn thành, một phần và chưa có log từ ghi nhận routine.",
     safetyText:
-      "This only shows your tracking consistency. It does not indicate skin improvement or skin decline.",
+      "Thông tin này chỉ cho thấy mức độ ghi nhận thói quen, không kết luận da tốt hơn hay xấu đi.",
   };
 }
 
@@ -67,11 +67,11 @@ function buildSymptomCalculationMeta(
 ): InsightCalculationMetaDto {
   return {
     periodDays,
-    dataSourceLabel: "Symptoms recorded in your journal entries",
+    dataSourceLabel: "Dấu hiệu hoặc cảm nhận trong journal của bạn",
     calculationLabel:
-      "Repeated symptom labels were counted and sorted by frequency.",
+      "Các nhãn được ghi lặp lại được đếm và sắp xếp theo tần suất.",
     safetyText:
-      "This only reflects what you recorded. It does not confirm a skin condition.",
+      "Thông tin này chỉ phản ánh những gì bạn đã ghi, không xác nhận tình trạng da.",
   };
 }
 
@@ -80,10 +80,10 @@ function buildStressCalculationMeta(
 ): InsightCalculationMetaDto {
   return {
     periodDays,
-    dataSourceLabel: "Stress levels recorded in your journal entries",
-    calculationLabel: "Low, medium, and high stress labels were counted.",
+    dataSourceLabel: "Mức stress được ghi trong journal",
+    calculationLabel: "Đếm số lần bạn chọn mức stress thấp, vừa hoặc cao.",
     safetyText:
-      "This does not identify stress as a cause of any skin change. It only summarizes your recorded notes.",
+      "Thông tin này không xác định stress là nguyên nhân của thay đổi trên da; chỉ tóm tắt ghi chú đã nhập.",
   };
 }
 
@@ -92,11 +92,11 @@ function buildProductCalculationMeta(
 ): InsightCalculationMetaDto {
   return {
     periodDays,
-    dataSourceLabel: "Products mentioned in your journal entries",
+    dataSourceLabel: "Sản phẩm được nhắc trong journal",
     calculationLabel:
-      "Product names appearing in journal entries were counted.",
+      "Đếm số lần tên sản phẩm xuất hiện trong các mục journal gần đây.",
     safetyText:
-      "This does not confirm that a product helped or harmed your skin.",
+      "Thông tin này không xác nhận sản phẩm có lợi hay gây khó chịu cho da.",
   };
 }
 
@@ -383,66 +383,66 @@ function getTrackingQualityStatus(input: {
 
 function getRoutineTrackingHelperText(status: TrackingQualityStatus) {
   if (status === "not_configured") {
-    return "No routine is configured yet. Create a routine when you want routine-log tracking to appear here.";
+    return "Chưa có routine nào. Hãy tạo routine khi bạn muốn phần theo dõi routine log xuất hiện ở đây.";
   }
 
   if (status === "available") {
-    return "You have routine logs available for recent review.";
+    return "Bạn đã có routine log gần đây để xem lại.";
   }
 
   if (status === "limited") {
-    return "A few routine log days are available. More consistent logging may make future reviews clearer.";
+    return "Đã có một vài ngày ghi nhận routine. Ghi đều hơn sẽ giúp lần xem lại sau rõ hơn.";
   }
 
-  return "No routine logs were found in the last 7 days.";
+  return "Chưa tìm thấy routine log trong 7 ngày gần đây.";
 }
 
 function getJournalTrackingHelperText(status: TrackingQualityStatus) {
   if (status === "available") {
-    return "You have journal entries available for recent review.";
+    return "Bạn đã có journal gần đây để xem lại.";
   }
 
   if (status === "limited") {
-    return "A few journal entries are available. More entries may make future review clearer.";
+    return "Đã có một vài journal. Thêm ghi nhận sẽ giúp phần xem lại rõ hơn.";
   }
 
-  return "No journal entries were found in the last 30 days.";
+  return "Chưa tìm thấy journal trong 30 ngày gần đây.";
 }
 
 function getSymptomTrackingHelperText(status: TrackingQualityStatus) {
   if (status === "available") {
-    return "You have symptom notes available for personal reflection.";
+    return "Bạn đã có ghi nhận dấu hiệu để tự quan sát.";
   }
 
   if (status === "limited") {
-    return "Some symptom notes are available for personal reflection.";
+    return "Đã có một số ghi nhận dấu hiệu để tự quan sát.";
   }
 
-  return "No symptom notes were found in recent journal entries.";
+  return "Chưa tìm thấy ghi nhận dấu hiệu trong journal gần đây.";
 }
 
 function getStressTrackingHelperText(status: TrackingQualityStatus) {
   if (status === "available") {
-    return "You have stress notes available for recent review.";
+    return "Bạn đã có ghi nhận stress để xem lại.";
   }
 
   if (status === "limited") {
-    return "Some stress notes are available. More entries may make future review clearer.";
+    return "Đã có một số ghi nhận stress. Thêm journal sẽ giúp phần xem lại rõ hơn.";
   }
 
-  return "No stress notes were found in recent journal entries.";
+  return "Chưa tìm thấy ghi nhận stress trong journal gần đây.";
 }
 
 function getProductMentionTrackingHelperText(status: TrackingQualityStatus) {
   if (status === "available") {
-    return "You have product mentions available for recent review.";
+    return "Bạn đã có sản phẩm được nhắc trong journal để xem lại.";
   }
 
   if (status === "limited") {
-    return "A few product mentions are available for personal reflection.";
+    return "Đã có một vài sản phẩm được nhắc để tự quan sát.";
   }
 
-  return "No product mentions were found in recent journal entries.";
+  return "Chưa tìm thấy sản phẩm được nhắc trong journal gần đây.";
 }
 
 function buildChecklistSummaryText(items: TrackingQualityChecklistItem[]) {
@@ -453,14 +453,14 @@ function buildChecklistSummaryText(items: TrackingQualityChecklistItem[]) {
   ).length;
 
   if (availableCount === items.length) {
-    return "Your recent tracking data is available across the checklist.";
+    return "Dữ liệu theo dõi gần đây đã có ở các mục chính trong checklist.";
   }
 
   if (unavailableCount === items.length) {
-    return "Your recent tracking data is still limited. Continue logging routines or journal entries to build a clearer personal record.";
+    return "Dữ liệu theo dõi gần đây còn hạn chế. Hãy tiếp tục ghi nhận routine hoặc journal để có bối cảnh cá nhân rõ hơn.";
   }
 
-  return "Your recent tracking data is available in some areas and limited in others.";
+  return "Một số mục đã có dữ liệu, một số mục vẫn cần thêm ghi nhận.";
 }
 
 function buildTrackingQualityChecklist(input: {
@@ -507,7 +507,7 @@ function buildTrackingQualityChecklist(input: {
   const checklistItems: TrackingQualityChecklistItem[] = [
     {
       key: "routine_logs",
-      label: "Routine logs in the last 7 days",
+      label: "Routine log trong 7 ngày gần đây",
       status: routineStatus,
       count: routineLoggedDays,
       periodDays: ROUTINE_TRACKING_PERIOD_DAYS,
@@ -515,7 +515,7 @@ function buildTrackingQualityChecklist(input: {
     },
     {
       key: "journal_entries",
-      label: "Journal entries in the last 30 days",
+      label: "Journal trong 30 ngày gần đây",
       status: journalStatus,
       count: journalEntryCount,
       periodDays: JOURNAL_TRACKING_PERIOD_DAYS,
@@ -523,7 +523,7 @@ function buildTrackingQualityChecklist(input: {
     },
     {
       key: "symptom_notes",
-      label: "Symptom notes in the last 30 days",
+      label: "Ghi nhận dấu hiệu trong 30 ngày gần đây",
       status: symptomStatus,
       count: symptomMentionCount,
       periodDays: JOURNAL_TRACKING_PERIOD_DAYS,
@@ -531,7 +531,7 @@ function buildTrackingQualityChecklist(input: {
     },
     {
       key: "stress_notes",
-      label: "Stress notes in the last 30 days",
+      label: "Ghi nhận stress trong 30 ngày gần đây",
       status: stressStatus,
       count: stressNoteCount,
       periodDays: JOURNAL_TRACKING_PERIOD_DAYS,
@@ -539,7 +539,7 @@ function buildTrackingQualityChecklist(input: {
     },
     {
       key: "product_mentions",
-      label: "Product mentions in the last 30 days",
+      label: "Sản phẩm được nhắc trong 30 ngày gần đây",
       status: productStatus,
       count: productMentionCount,
       periodDays: JOURNAL_TRACKING_PERIOD_DAYS,
@@ -553,7 +553,7 @@ function buildTrackingQualityChecklist(input: {
     checklistItems,
     summaryText: buildChecklistSummaryText(checklistItems),
     safetyNote:
-      "This checklist only reflects tracking data availability. It is not a skin score or medical assessment.",
+      "Checklist này chỉ phản ánh mức độ có dữ liệu theo dõi, không phải đánh giá làn da hay tư vấn chuyên môn.",
   };
 }
 
@@ -565,15 +565,15 @@ function buildInsufficientDataReasons(input: {
   const reasons: string[] = [];
 
   if (input.routineLogs.length === 0) {
-    reasons.push("No routine logs were found for the last 7 days.");
+    reasons.push("Chưa có routine log trong 7 ngày gần đây.");
   }
 
   if (input.journals.length === 0) {
-    reasons.push("No recent journal entries were found.");
+    reasons.push("Chưa có journal gần đây.");
   }
 
   if (input.topProducts.length === 0) {
-    reasons.push("No product mentions were found in recent journal entries.");
+    reasons.push("Chưa có sản phẩm được nhắc trong journal gần đây.");
   }
 
   return reasons;
@@ -637,6 +637,6 @@ export function toInsightSummaryDto(input: {
     productMentionPattern,
     trackingQualityChecklist,
     safetyNote:
-      "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không phải kết luận y khoa, không phải chẩn đoán và không xác nhận nguyên nhân.",
+      "Các thẻ này chỉ dựa trên dữ liệu bạn đã tự ghi lại, không thay thế tư vấn chuyên môn và không xác nhận nguyên nhân.",
   };
 }

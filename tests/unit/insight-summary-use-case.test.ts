@@ -289,22 +289,22 @@ describe("Insight summary mapper", () => {
 
     expect(summary.routineConsistency.calculationMeta).toMatchObject({
       periodDays: 7,
-      dataSourceLabel: "Routine logs from your account only",
+      dataSourceLabel: "Routine log trong tài khoản của bạn",
     });
     expect(summary.routineConsistency.calculationMeta.calculationLabel).toContain(
-      "partial days",
+      "một phần",
     );
     expect(summary.symptomFrequency.calculationMeta).toMatchObject({
       periodDays: 30,
-      dataSourceLabel: "Symptoms recorded in your journal entries",
+      dataSourceLabel: "Dấu hiệu hoặc cảm nhận trong journal của bạn",
     });
     expect(summary.stressReflection.calculationMeta).toMatchObject({
       periodDays: 30,
-      dataSourceLabel: "Stress levels recorded in your journal entries",
+      dataSourceLabel: "Mức stress được ghi trong journal",
     });
     expect(summary.productMentionPattern.calculationMeta).toMatchObject({
       periodDays: 30,
-      dataSourceLabel: "Products mentioned in your journal entries",
+      dataSourceLabel: "Sản phẩm được nhắc trong journal",
     });
   });
 
@@ -352,11 +352,11 @@ describe("Insight summary mapper", () => {
       status: "available",
       count: 5,
     });
-    expect(summary.trackingQualityChecklist.safetyNote.toLowerCase()).toContain(
-      "not a skin score",
+    expect(summary.trackingQualityChecklist.safetyNote).toContain(
+      "không phải đánh giá làn da",
     );
-    expect(summary.trackingQualityChecklist.safetyNote.toLowerCase()).toContain(
-      "medical assessment",
+    expect(summary.trackingQualityChecklist.safetyNote).toContain(
+      "tư vấn chuyên môn",
     );
   });
 
@@ -635,10 +635,10 @@ describe("Insight summary mapper", () => {
 
     expect(insufficientSummary.hasEnoughData).toBe(false);
     expect(insufficientSummary.insufficientDataReasons).toContain(
-      "No routine logs were found for the last 7 days.",
+      "Chưa có routine log trong 7 ngày gần đây.",
     );
     expect(insufficientSummary.insufficientDataReasons).toContain(
-      "No recent journal entries were found.",
+      "Chưa có journal gần đây.",
     );
     expect(partialSummary.hasEnoughData).toBe(true);
   });
@@ -681,7 +681,7 @@ describe("Insight summary mapper", () => {
       expect(serializedSummary).not.toContain(forbiddenPhrase);
     }
 
-    expect(serializedSummary).toContain("không phải chẩn đoán");
+    expect(serializedSummary).toContain("không thay thế tư vấn chuyên môn");
     expect(serializedSummary).toContain("không xác nhận nguyên nhân");
   });
 });

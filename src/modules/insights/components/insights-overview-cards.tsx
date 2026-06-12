@@ -89,7 +89,7 @@ export function InsightsOverviewCards({ insights }: InsightsOverviewCardsProps) 
 
       <Card>
         <CardHeader>
-          <CardTitle>Triệu chứng thường gặp</CardTitle>
+          <CardTitle>Dấu hiệu thường ghi</CardTitle>
           <CardDescription>
             Dựa trên các mục bạn tự ghi nhận trong nhật ký da.
           </CardDescription>
@@ -102,11 +102,11 @@ export function InsightsOverviewCards({ insights }: InsightsOverviewCardsProps) 
                 Xuất hiện {mostCommonSymptom.count} lần trong giai đoạn này.
               </p>
             </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Chưa có triệu chứng tự ghi nhận trong nhật ký.
-            </p>
-          )}
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Chưa có dấu hiệu tự ghi nhận trong nhật ký.
+          </p>
+        )}
         </CardContent>
       </Card>
     </div>

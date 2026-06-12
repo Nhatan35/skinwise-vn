@@ -21,14 +21,15 @@ Product Match clarity polish: v1.26 - Product Match Explanation Clarity & Safe D
 Product Detail to Saved Products decision-support polish: v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 Saved Products to Routine decision-support polish: v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 Routine to Routine Log / Journal decision-support polish: v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
-Latest completed scoped task: v1.29 - Routine to Routine Log / Journal Decision Support Polish
+Insights interpretation and Dashboard next-action polish: v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
+Latest completed scoped task: v1.30 - Insights Interpretation & Dashboard Next Action Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
 Recommended next task: TBD / Backlog grooming
-Local validation: PASS for v1.29 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.30 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -103,6 +104,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Product Detail to Saved Products Decision Support Polish | DONE in v1.27 | Follow-up polish after v1.26; improves Product Detail save-decision guidance and Saved Products empty-state clarity without changing Product Match scoring/ranking, Routine logic, seed data, schema, or API contracts. |
 | P2 | Saved Products to Routine Decision Support Polish | DONE in v1.28 | Follow-up polish after v1.26 and v1.27; improves Saved Products review context, Routine CTA clarity, routine empty-state guidance, and safe gradual-addition copy without changing Product Match, Product Detail, Saved Products persistence, Routine logic, seed data, schema, or API contracts. |
 | P2 | Routine to Routine Log / Journal Decision Support Polish | DONE in v1.29 | Follow-up polish after v1.26, v1.27, and v1.28; improves Routine next-action clarity, Today Routine Log guidance, Journal empty-state/after-save next actions, and safe reference copy without changing Product Match, Product Detail, Saved Products, Routine, Journal, or Insights logic. |
+| P2 | Insights Interpretation & Dashboard Next Action Polish | DONE in v1.30 | Follow-up polish after v1.29; improves Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy without changing Product Match, Product Detail, Saved Products, Routine, Routine Log, Journal, Insights calculations, Dashboard state model, seed data, schema, or API contracts. |
 | P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
@@ -870,10 +872,12 @@ Reason:
 - v1.27 Product Detail to Saved Products decision-support polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.28 Saved Products to Routine decision-support polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.29 Routine to Routine Log / Journal decision-support polish passed scoped local validation with lint, typecheck, and unit tests.
+- v1.30 Insights Interpretation & Dashboard Next Action polish passed scoped local validation with lint, typecheck, and unit tests.
 - v1.26 is a follow-up polish pass; historical v1.15 Product Match Explainability & Safety Guardrails remains the original explainability implementation milestone.
 - v1.27 is a follow-up polish pass after v1.26; it improves Product Detail save-decision guidance and Saved Products empty-state clarity without adding product scope.
 - v1.28 is a follow-up polish pass after v1.26 and v1.27; it improves Saved Products to Routine decision-support clarity without adding product scope.
 - v1.29 is a follow-up polish pass after v1.26, v1.27, and v1.28; it improves Routine to Routine Log / Journal decision-support clarity without adding product scope.
+- v1.30 is a follow-up polish pass after v1.29; it improves Insights interpretation and Dashboard next-action clarity without adding product scope.
 - v1.25 improved dashboard onboarding guidance without adding new product scope.
 - v1.24 seed implementation and closeout documentation now reflect 70 products and 70 ingredients.
 - v1.24 seed quality tests enforce the 70/70 baseline and passed after a test-timeout stabilization.
@@ -927,4 +931,5 @@ Reason:
 2026-06-11: Completed v1.27 Product Detail to Saved Products Decision Support Polish as a follow-up to v1.26. Improved Product Detail summary and safety labels, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference wording without changing Product Match scoring/ranking, Routine logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.27. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.28 Saved Products to Routine Decision Support Polish as a follow-up to v1.26 and v1.27. Improved Saved Products review context, Routine CTA clarity, routine empty-state guidance, and safe reference copy about adding products gradually without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.28. v1.24 remains deferred and validation-blocked.
 2026-06-12: Completed v1.29 Routine to Routine Log / Journal Decision Support Polish as a follow-up to v1.26, v1.27, and v1.28. Improved Routine next-action clarity, Today Routine Log guidance, Journal empty-state and after-save next actions, and safe short-term interpretation copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Journal logic, Insights logic, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.29. v1.24 remains deferred and validation-blocked.
+2026-06-12: Completed v1.30 Insights Interpretation & Dashboard Next Action Polish as a follow-up to v1.29. Improved Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Routine Log logic, Journal logic, Insights calculations, Dashboard state model, seed data, schema, auth, AI, or API contracts. Scoped validation PASS: `npm run lint`, `npm run typecheck`, and `npm run test`. Build, E2E, manual browser verification, production verification, screenshots, and demo video were not run or created for v1.30. v1.24 remains deferred and validation-blocked.
 ```

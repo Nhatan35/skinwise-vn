@@ -68,10 +68,16 @@ describe("Insights UI source", () => {
     expect(routePageSource).toContain(
       "Nhìn lại độ đều đặn của routine, nhật ký da, hoạt động theo dõi gần",
     );
+    expect(insightsPageSource).toContain("Insights cá nhân");
+    expect(insightsPageSource).toContain("Dựa trên ghi nhận của bạn");
     expect(insightsPageSource).toContain(
-      "dữ liệu ngắn hạn có thể chưa đủ để rút ra kết luận chắc chắn",
+      "không nên",
     );
-    expect(insightsPageSource).toContain("thay thế tư vấn chuyên môn");
+    expect(insightsPageSource).toContain(
+      "kết luận quá sớm từ dữ liệu ngắn hạn",
+    );
+    expect(insightsPageSource).toContain("tư vấn chuyên");
+    expect(insightsPageSource).toContain("môn");
     expect(routePageSource).toContain("data-route={insightsRoute}");
     expect(routePageSource).toContain("<InsightsPage />");
   });
@@ -83,10 +89,10 @@ describe("Insights UI source", () => {
     expect(insightsPageSource).toContain("ErrorState");
     expect(insightsPageSource).toContain("Chưa thể chuẩn bị insights tiến trình");
     expect(insightsPageSource).toContain("EmptyState");
-    expect(insightsPageSource).toContain("Chưa đủ dữ liệu để xem insights");
-    expect(insightsPageSource).toContain(
-      "Đi tới routine hôm nay",
-    );
+    expect(insightsPageSource).toContain("Cần thêm dữ liệu để xem rõ hơn");
+    expect(insightsPageSource).toContain("Ghi nhận routine");
+    expect(insightsPageSource).toContain("Viết journal");
+    expect(insightsPageSource).toContain("Xem lại routine");
     expect(insightSummarySectionSource).toContain("LoadingState");
     expect(insightSummarySectionSource).toContain(
       "Đang tải phần tự quan sát cá nhân",
@@ -97,7 +103,7 @@ describe("Insights UI source", () => {
     );
     expect(insightSummarySectionSource).toContain("EmptyState");
     expect(insightSummarySectionSource).toContain(
-      "Chưa đủ dữ liệu cho phần tự quan sát cá nhân",
+      "Cần thêm dữ liệu cho phần tự quan sát cá nhân",
     );
   });
 
@@ -107,7 +113,7 @@ describe("Insights UI source", () => {
       "Chuỗi ngày gần đây",
       "Chuỗi dài nhất",
       "Nhật ký da",
-      "Triệu chứng thường gặp",
+      "Dấu hiệu thường ghi",
       "Lịch độ đều đặn routine",
       "Hoàn thành",
       "Hoàn thành một phần",
@@ -115,16 +121,16 @@ describe("Insights UI source", () => {
       "Chưa có log",
       "Xu hướng nhật ký da",
       "Sản phẩm xuất hiện trong nhật ký",
-      "không kết luận sản phẩm gây ra hay",
+      "không kết luận nguyên nhân hoặc hiệu",
       "Gợi ý tiếp theo",
       "dựa trên trạng thái",
-      "Personal Insight Review",
-      "Routine Consistency",
-      "Journal Symptom Frequency",
-      "Stress Reflection",
-      "Product Mention Pattern",
-      "How this was calculated",
-      "Tracking Quality Checklist",
+      "Tự quan sát cá nhân",
+      "Độ đều đặn routine",
+      "Tần suất dấu hiệu trong journal",
+      "Ghi nhận stress",
+      "Sản phẩm được nhắc trong journal",
+      "Cách tính",
+      "Checklist dữ liệu theo dõi",
       "Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại",
       "tư vấn chuyên môn",
     ]) {
@@ -136,22 +142,22 @@ describe("Insights UI source", () => {
 
   it("renders insight calculation notes and tracking quality checklist copy", () => {
     for (const expectedCopy of [
-      "How this was calculated",
-      "Period reviewed",
-      "Data used",
-      "Calculation",
-      "Tracking Quality Checklist",
-      "Routine logs in the last 7 days",
-      "Journal entries in the last 30 days",
-      "Symptom notes in the last 30 days",
-      "Stress notes in the last 30 days",
-      "Product mentions in the last 30 days",
-      "Available",
-      "Limited",
-      "Not enough data",
-      "Not configured",
-      "not a skin score",
-      "medical assessment",
+      "Cách tính",
+      "Giai đoạn xem lại",
+      "Dữ liệu sử dụng",
+      "Cách tổng hợp",
+      "Checklist dữ liệu theo dõi",
+      "Routine log trong 7 ngày gần đây",
+      "Journal trong 30 ngày gần đây",
+      "Ghi nhận dấu hiệu trong 30 ngày gần đây",
+      "Ghi nhận stress trong 30 ngày gần đây",
+      "Sản phẩm được nhắc trong 30 ngày gần đây",
+      "Đủ dữ liệu theo dõi",
+      "Còn hạn chế",
+      "Cần thêm dữ liệu",
+      "Chưa thiết lập",
+      "không phải đánh giá làn da",
+      "tư vấn chuyên môn",
     ]) {
       expect(insightSummaryCopySource).toContain(expectedCopy);
     }
@@ -170,13 +176,13 @@ describe("Insights UI source", () => {
     }
   });
 
-  it("renders safe missing-data fallback and safety note copy for Personal Insight Review", () => {
+  it("renders safe missing-data fallback and safety note copy for personal insight review", () => {
     for (const expectedCopy of [
       "Bạn chưa có routine nào được thiết lập.",
       "Chưa có ghi chú triệu chứng gần đây.",
       "Chưa có ghi chú mức độ stress gần đây.",
       "Chưa tìm thấy sản phẩm nào được nhắc đến trong nhật ký gần đây.",
-      "không phải kết luận y khoa",
+      "không thay thế tư vấn chuyên môn",
       "không xác nhận nguyên nhân",
       "không xác nhận hiệu quả, tác hại hoặc nguyên nhân từ sản phẩm",
     ]) {

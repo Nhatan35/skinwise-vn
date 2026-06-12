@@ -269,7 +269,7 @@ describe("Dashboard use case", () => {
         message: "Cần thêm nhật ký để xem xu hướng rõ hơn.",
         nextAction: "Hãy ghi nhật ký da thêm vài lần trong tuần này.",
         disclaimer:
-          "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
+          "Thông tin này chỉ giúp theo dõi cá nhân và không thay thế tư vấn chuyên môn.",
       },
       nextActions: [
         {
@@ -390,7 +390,7 @@ describe("Dashboard use case", () => {
       message: "Dữ liệu gần đây cho thấy bạn thường ghi nhận: Đỏ da.",
       nextAction: "Tiếp tục ghi nhận để theo dõi thay đổi theo thời gian.",
       disclaimer:
-        "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
+        "Thông tin này chỉ giúp theo dõi cá nhân và không thay thế tư vấn chuyên môn.",
     });
     expect(dashboard.latestRoutineAnalysis).toEqual({
       exists: true,
@@ -644,8 +644,8 @@ describe("Dashboard use case", () => {
 
     expect(dashboard.nextActions).toEqual([
       {
-        label: "Hôm nay bạn đã cập nhật đủ theo dõi skincare",
-        href: "/dashboard",
+        label: "Xem insights cá nhân",
+        href: "/insights",
         priority: "low",
       },
     ]);

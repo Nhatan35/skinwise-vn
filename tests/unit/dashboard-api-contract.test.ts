@@ -87,7 +87,7 @@ const dashboardDto: DashboardDto = {
     message: "Cần thêm nhật ký để xem xu hướng rõ hơn.",
     nextAction: "Hãy ghi nhật ký da thêm vài lần trong tuần này.",
     disclaimer:
-      "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
+      "Thông tin này chỉ giúp theo dõi cá nhân và không thay thế tư vấn chuyên môn.",
   },
   nextActions: [
     {

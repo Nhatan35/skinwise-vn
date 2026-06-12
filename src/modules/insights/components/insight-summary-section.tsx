@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { getSymptomLabel } from "@/modules/insights/components/insights-overview-cards";
 import { getInsightSummary } from "@/modules/insights/insights.client";
@@ -22,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { routes } from "@/shared/constants/routes";
 
 type InsightSummarySectionProps = {
   to: string;
@@ -34,10 +36,10 @@ type ProductMentionPatternSummary =
   InsightSummaryDto["productMentionPattern"];
 
 const trackingQualityStatusLabels: Record<TrackingQualityStatus, string> = {
-  available: "Available",
-  limited: "Limited",
-  not_enough_data: "Not enough data",
-  not_configured: "Not configured",
+  available: "Đủ dữ liệu theo dõi",
+  limited: "Còn hạn chế",
+  not_enough_data: "Cần thêm dữ liệu",
+  not_configured: "Chưa thiết lập",
 };
 
 function hasStressData(stressReflection: StressReflectionSummary) {
@@ -80,23 +82,23 @@ function InsightCalculationNote({
   return (
     <div className="rounded-2xl border border-border/70 bg-secondary/30 px-4 py-3">
       <p className="text-sm font-semibold text-foreground">
-        How this was calculated
+        Cách tính
       </p>
       <dl className="mt-3 space-y-2 text-sm leading-6">
         <div>
-          <dt className="font-medium text-foreground">Period reviewed</dt>
+          <dt className="font-medium text-foreground">Giai đoạn xem lại</dt>
           <dd className="text-muted-foreground">
-            Last {calculationMeta.periodDays} days
+            {calculationMeta.periodDays} ngày gần đây
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-foreground">Data used</dt>
+          <dt className="font-medium text-foreground">Dữ liệu sử dụng</dt>
           <dd className="text-muted-foreground">
             {calculationMeta.dataSourceLabel}
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-foreground">Calculation</dt>
+          <dt className="font-medium text-foreground">Cách tổng hợp</dt>
           <dd className="text-muted-foreground">
             {calculationMeta.calculationLabel}
           </dd>
@@ -126,10 +128,10 @@ function TrackingQualityChecklist({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Tracking Quality Checklist</CardTitle>
+          <CardTitle>Checklist dữ liệu theo dõi</CardTitle>
           <CardDescription>
-            Tracking quality details are not available yet. Continue logging
-            routines or journal entries to build a clearer personal record.
+            Chưa có đủ chi tiết về dữ liệu theo dõi. Hãy tiếp tục ghi nhận
+            routine hoặc journal để tạo bối cảnh cá nhân rõ hơn.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -139,10 +141,10 @@ function TrackingQualityChecklist({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tracking Quality Checklist</CardTitle>
+        <CardTitle>Checklist dữ liệu theo dõi</CardTitle>
         <CardDescription>
-          This checklist reflects tracking data availability only. It is not a
-          skin score or medical assessment.
+          Checklist này chỉ phản ánh mức độ có dữ liệu theo dõi, không phải
+          đánh giá làn da hay tư vấn chuyên môn.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -159,7 +161,7 @@ function TrackingQualityChecklist({
                 <div className="min-w-0">
                   <p className="font-medium text-foreground">{item.label}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Count: {item.count} in {item.periodDays} days
+                    Số lần: {item.count} trong {item.periodDays} ngày
                   </p>
                 </div>
                 <Badge variant={getTrackingStatusVariant(item.status)}>
@@ -188,7 +190,7 @@ function RoutineConsistencyReviewCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Routine Consistency</CardTitle>
+        <CardTitle>Độ đều đặn routine</CardTitle>
         <CardDescription>
           Tóm tắt hoàn thành routine trong 7 ngày gần đây, chỉ dựa trên log bạn
           đã ghi.
@@ -237,9 +239,10 @@ function JournalSymptomFrequencyCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Journal Symptom Frequency</CardTitle>
+        <CardTitle>Tần suất dấu hiệu trong journal</CardTitle>
         <CardDescription>
-          Đếm các triệu chứng bạn tự ghi trong nhật ký 30 ngày gần đây.
+          Đếm các dấu hiệu hoặc cảm nhận bạn tự ghi trong journal 30 ngày gần
+          đây.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -295,7 +298,7 @@ function StressReflectionCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Stress Reflection</CardTitle>
+        <CardTitle>Ghi nhận stress</CardTitle>
         <CardDescription>
           Tóm tắt số lần bạn ghi mức stress trong nhật ký 30 ngày gần đây.
         </CardDescription>
@@ -332,7 +335,7 @@ function ProductMentionPatternCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Product Mention Pattern</CardTitle>
+        <CardTitle>Sản phẩm được nhắc trong journal</CardTitle>
         <CardDescription>
           Đếm sản phẩm xuất hiện trong nhật ký gần đây mà không kết luận hiệu
           quả, tác hại hay nguyên nhân.
@@ -386,8 +389,18 @@ function InsightSummaryCards({ summary }: { summary: InsightSummaryDto }) {
     <div className="space-y-4">
       {!summary.hasEnoughData ? (
         <EmptyState
-          description="Chưa có đủ dữ liệu theo dõi. Hãy thêm một vài nhật ký da hoặc hoàn thành routine hôm nay để xem các thẻ tự quan sát cá nhân."
-          title="Chưa đủ dữ liệu cho phần tự quan sát cá nhân"
+          action={
+            <div className="flex flex-col justify-center gap-2 sm:flex-row">
+              <Button asChild size="sm">
+                <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.JOURNAL}>Viết journal</Link>
+              </Button>
+            </div>
+          }
+          description="Chưa có đủ dữ liệu theo dõi. Hãy thêm một vài journal hoặc hoàn thành routine hôm nay để xem các thẻ tự quan sát cá nhân rõ hơn."
+          title="Cần thêm dữ liệu cho phần tự quan sát cá nhân"
         />
       ) : null}
 
@@ -475,11 +488,12 @@ export function InsightSummarySection({ to }: InsightSummarySectionProps) {
           className="text-xl font-semibold tracking-tight text-foreground"
           id="personal-insight-review"
         >
-          Personal Insight Review
+          Tự quan sát cá nhân
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
           Các thẻ này chỉ tóm tắt dữ liệu bạn đã tự ghi lại. Nội dung dùng để
-          tự quan sát và không thay thế tư vấn chuyên môn.
+          tự quan sát, cần thêm ngữ cảnh theo thời gian và không thay thế tư
+          vấn chuyên môn.
         </p>
       </div>
 
@@ -495,7 +509,7 @@ export function InsightSummarySection({ to }: InsightSummarySectionProps) {
             </Button>
           }
           description={loadError}
-          title="Chưa thể tải Personal Insight Review"
+          title="Chưa thể tải phần tự quan sát cá nhân"
         />
       ) : null}
 

@@ -19,8 +19,8 @@ export function ProductUsageCard({ products }: ProductUsageCardProps) {
         <CardTitle>Sản phẩm xuất hiện trong nhật ký</CardTitle>
         <CardDescription>
           Dựa trên các lần bạn ghi nhận sản phẩm trong nhật ký. Thông tin này
-          giúp nhìn lại thói quen sử dụng, không kết luận sản phẩm gây ra hay
-          cải thiện tình trạng da.
+          giúp nhìn lại thói quen sử dụng, không kết luận nguyên nhân hoặc hiệu
+          quả từ sản phẩm.
         </CardDescription>
       </CardHeader>
       <CardContent>

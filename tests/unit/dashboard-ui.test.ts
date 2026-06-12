@@ -17,6 +17,10 @@ const onboardingProgressCardPath = join(
   projectRoot,
   "src/modules/dashboard/components/onboarding-progress-card.tsx",
 );
+const dashboardNextActionCopyPath = join(
+  projectRoot,
+  "src/modules/dashboard/dashboard-next-action-copy.ts",
+);
 const dashboardClientHelperPath = join(
   projectRoot,
   "src/modules/routine-logs/routine-log.client.ts",
@@ -42,6 +46,10 @@ const componentSources = [
   "primary-next-action-card.tsx",
   "saved-products-summary-card.tsx",
 ].map((fileName) => readFileSync(join(dashboardComponentsDir, fileName), "utf8"));
+const dashboardNextActionCopySource = readFileSync(
+  dashboardNextActionCopyPath,
+  "utf8",
+);
 
 describe("Dashboard DB-001 UI integration", () => {
   it("uses the existing protected dashboard route and renders DashboardOverview", () => {
@@ -188,7 +196,10 @@ describe("Dashboard DB-001 UI integration", () => {
   });
 
   it("renders the required non-placeholder dashboard card labels", () => {
-    const combinedComponentSource = componentSources.join("\n");
+    const combinedComponentSource = [
+      ...componentSources,
+      dashboardNextActionCopySource,
+    ].join("\n");
 
     for (const label of [
       "Hồ sơ da",
@@ -224,6 +235,10 @@ describe("Dashboard DB-001 UI integration", () => {
       "Thêm nhật ký hôm nay",
       "Xem nhật ký",
       "Gợi ý tiếp theo",
+      "Vì sao SkinWise gợi ý bước này",
+      "Lý do:",
+      "Xem insights cá nhân",
+      "Dashboard và Insights phản ánh thói quen hiện tại",
     ]) {
       expect(combinedComponentSource).toContain(label);
     }

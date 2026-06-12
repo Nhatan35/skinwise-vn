@@ -115,11 +115,14 @@ export function InsightsPage() {
         <p className="text-sm font-semibold text-primary">
           Giai đoạn {insights.dateRange.from} đến {insights.dateRange.to}
         </p>
+        <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+          Insights cá nhân
+        </h3>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Insights giúp bạn nhìn lại thói quen chăm sóc da dựa trên routine log
-          và nhật ký da đã ghi nhận. Các số liệu này chỉ hỗ trợ tự theo dõi;
-          dữ liệu ngắn hạn có thể chưa đủ để rút ra kết luận chắc chắn và không
-          thay thế tư vấn chuyên môn.
+          Dựa trên ghi nhận của bạn: routine log, journal và sản phẩm được nhắc
+          trong journal. Insights giúp nhìn lại thói quen cá nhân, không nên
+          kết luận quá sớm từ dữ liệu ngắn hạn và không thay thế tư vấn chuyên
+          môn.
         </p>
       </div>
 
@@ -128,15 +131,18 @@ export function InsightsPage() {
           action={
             <div className="flex flex-col justify-center gap-2 sm:flex-row">
               <Button asChild size="sm">
-                <Link href={routes.TODAY_LOG}>Đi tới routine hôm nay</Link>
+                <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
               </Button>
               <Button asChild size="sm" variant="outline">
-                <Link href={routes.JOURNAL}>Thêm nhật ký</Link>
+                <Link href={routes.JOURNAL}>Viết journal</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.ROUTINES}>Xem lại routine</Link>
               </Button>
             </div>
           }
-          description="Hãy hoàn thành routine và thêm nhật ký trong vài ngày để SkinWise có thêm dữ liệu hiển thị xu hướng."
-          title="Chưa đủ dữ liệu để xem insights"
+          description="Chưa có đủ ghi nhận để xem insight rõ ràng. Hãy tiếp tục ghi nhận routine hoặc viết journal để SkinWise có thêm ngữ cảnh cá nhân."
+          title="Cần thêm dữ liệu để xem rõ hơn"
         />
       ) : null}
 

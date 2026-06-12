@@ -34,10 +34,11 @@ MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DO
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
+MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish
+Latest completed scoped task: MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
@@ -48,6 +49,7 @@ v1.26 status: DONE within scoped local validation - Product Match explanation cl
 v1.27 status: DONE within scoped local validation - Product Detail save-decision guidance, Saved Products empty-state clarity, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.28 status: DONE within scoped local validation - Saved Products to Routine context, CTA clarity, routine empty-state guidance, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal CTA clarity, routine log guidance, journal empty-state/after-save next actions, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
+v1.30 status: DONE within scoped local validation - Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 Recommended next task: TBD / Backlog grooming
 ```
 
@@ -87,6 +89,7 @@ Evidence boundary:
 - v1.27 polished Product Detail to Saved Products decision support as a follow-up to v1.26, improving product-detail summary labels, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference copy without changing Product Match scoring/ranking, Routine logic, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.28 polished Saved Products to Routine decision support as a follow-up to v1.26 and v1.27, improving saved-product review context, Routine CTA clarity, routine empty-state guidance, and safe gradual-addition reference copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28, improving Routine next-action clarity, Today Routine Log guidance, Journal empty-state/after-save next actions, and safe short-term interpretation copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Journal logic, Insights logic, schema, seed data, auth, AI-provider behavior, or API contracts.
+- v1.30 polished Insights interpretation and Dashboard next-action clarity as a follow-up to v1.29, improving personal-tracking interpretation copy, insufficient-data guidance, Dashboard next-action reason copy, and CTA clarity without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Routine Log logic, Journal logic, Insights calculations, Dashboard state model, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
@@ -100,4 +103,5 @@ Evidence boundary:
 - Build, E2E, manual browser verification, and production verification were not run for v1.27.
 - Build, E2E, manual browser verification, and production verification were not run for v1.28.
 - Build, E2E, manual browser verification, and production verification were not run for v1.29.
+- Build, E2E, manual browser verification, and production verification were not run for v1.30.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

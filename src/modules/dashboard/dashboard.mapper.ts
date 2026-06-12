@@ -439,7 +439,7 @@ export function mapJournalTrendSummary(
     message: getJournalTrendMessage(messageInput),
     nextAction: getJournalTrendNextAction(messageInput),
     disclaimer:
-      "Thông tin này chỉ mang tính theo dõi cá nhân, không thay thế tư vấn y khoa.",
+      "Thông tin này chỉ giúp theo dõi cá nhân và không thay thế tư vấn chuyên môn.",
   };
 }
 
@@ -513,8 +513,8 @@ export function buildDashboardNextActions(input: {
 
   return [
     {
-      label: "Hôm nay bạn đã cập nhật đủ theo dõi skincare",
-      href: routes.DASHBOARD,
+      label: "Xem insights cá nhân",
+      href: routes.INSIGHTS,
       priority: "low",
     },
   ];

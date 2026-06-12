@@ -19,8 +19,9 @@ export function SymptomTrendCard({ symptoms }: SymptomTrendCardProps) {
       <CardHeader>
         <CardTitle>Xu hướng nhật ký da</CardTitle>
         <CardDescription>
-          Dựa trên triệu chứng bạn tự ghi nhận trong nhật ký. Khi dữ liệu còn
-          ít, hãy xem đây là gợi ý để quan sát thêm thay vì kết luận chắc chắn.
+          Dựa trên dấu hiệu hoặc cảm nhận bạn tự ghi trong nhật ký. Khi dữ liệu
+          còn ít, hãy xem đây là gợi ý để quan sát thêm thay vì kết luận chắc
+          chắn.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -38,7 +39,7 @@ export function SymptomTrendCard({ symptoms }: SymptomTrendCardProps) {
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Chưa có dữ liệu triệu chứng trong nhật ký. Thêm một ghi chú ngắn để
+            Chưa có dữ liệu dấu hiệu trong nhật ký. Thêm một ghi chú ngắn để
             theo dõi cảm nhận của da theo thời gian.
           </p>
         )}
