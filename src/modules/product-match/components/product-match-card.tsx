@@ -227,7 +227,6 @@ export function ProductMatchCard({
           </Button>
           <SavedProductToggleButton
             initialSaved={item.isSaved}
-            key={`${product.id}-${item.isSaved ? "saved" : "unsaved"}`}
             onChange={(isSaved) => onSavedChange?.(product.id, isSaved)}
             productId={product.id}
           />

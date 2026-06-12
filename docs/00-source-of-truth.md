@@ -36,10 +36,11 @@ MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped vali
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish
+Latest completed scoped task: MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: v1.22.1 production smoke verification: PARTIAL / DEFERRED
@@ -52,6 +53,7 @@ v1.28 status: DONE within scoped local validation - Saved Products to Routine co
 v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal CTA clarity, routine log guidance, journal empty-state/after-save next actions, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.30 status: DONE within scoped local validation - Insights interpretation, insufficient-data guidance, Dashboard next-action reason copy, CTA clarity, and safe reference copy polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
 v1.31 status: DONE within scoped local validation - selected core-flow empty states, recoverable errors, missing-resource fallbacks, retry clarity, and route consistency polished; `npm run lint`, `npm run typecheck`, and `npm run test` passed; build/E2E/manual/production verification were not run
+v1.32 status: DONE within scoped local validation - selected core form submission and mutation feedback states polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; build/E2E/manual/production verification were not run
 Recommended next task: TBD / Backlog grooming
 ```
 
@@ -93,6 +95,7 @@ Evidence boundary:
 - v1.29 polished Routine to Routine Log / Journal decision support as a follow-up to v1.26, v1.27, and v1.28, improving Routine next-action clarity, Today Routine Log guidance, Journal empty-state/after-save next actions, and safe short-term interpretation copy without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Journal logic, Insights logic, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.30 polished Insights interpretation and Dashboard next-action clarity as a follow-up to v1.29, improving personal-tracking interpretation copy, insufficient-data guidance, Dashboard next-action reason copy, and CTA clarity without changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Routine Log logic, Journal logic, Insights calculations, Dashboard state model, schema, seed data, auth, AI-provider behavior, or API contracts.
 - v1.31 polished core-flow recovery, empty-state, retry, missing-resource, and navigation consistency states after v1.30 without adding a new global error framework, changing Product Match scoring/ranking, Product Detail behavior, Saved Products persistence, Routine logic, Routine Log logic, Journal logic, Insights calculations, Dashboard state model, schema, seed data, auth, AI-provider behavior, or API contracts.
+- v1.32 polished selected core form submission and mutation feedback states after v1.31, improving pending labels, disabled states, duplicate-submission prevention, safe failure copy, input/state preservation, confirmed success feedback, and supported next actions without adding a new form, toast, mutation, or state-management framework and without changing business rules, schema, seed data, auth, AI-provider behavior, or broad API contracts.
 - v1.15 improved Product Match/Product Detail explainability, matched-factor labels, caution wording, and profile guidance without schema, route, auth, persistence, or AI-provider changes.
 - v1.15.1 synchronized audit/dependency-risk and validation documentation without product behavior, package, schema, route, auth, persistence, or AI-provider changes.
 - v1.21 added Personal Insight Review calculation metadata and a tracking data-availability checklist without diagnosis, treatment advice, causation claims, skin scoring, risk scoring, health grading, schema changes, or AI-provider changes.
@@ -108,4 +111,5 @@ Evidence boundary:
 - Build, E2E, manual browser verification, and production verification were not run for v1.29.
 - Build, E2E, manual browser verification, and production verification were not run for v1.30.
 - Build, E2E, manual browser verification, and production verification were not run for v1.31.
+- Build, E2E, manual browser verification, and production verification were not run for v1.32.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

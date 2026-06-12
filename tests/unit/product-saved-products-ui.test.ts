@@ -16,6 +16,10 @@ const productDetailPath = join(
   projectRoot,
   "src/modules/products/components/product-detail.tsx",
 );
+const productMatchCardPath = join(
+  projectRoot,
+  "src/modules/product-match/components/product-match-card.tsx",
+);
 const savedProductToggleButtonPath = join(
   projectRoot,
   "src/modules/saved-products/components/saved-product-toggle-button.tsx",
@@ -24,11 +28,12 @@ const savedProductToggleButtonPath = join(
 const productCatalogueSource = readFileSync(productCataloguePath, "utf8");
 const productCardSource = readFileSync(productCardPath, "utf8");
 const productDetailSource = readFileSync(productDetailPath, "utf8");
+const productMatchCardSource = readFileSync(productMatchCardPath, "utf8");
 const savedProductToggleButtonSource = readFileSync(
   savedProductToggleButtonPath,
   "utf8",
 );
-const combinedProductSavedUiSource = `${productCatalogueSource}\n${productCardSource}\n${productDetailSource}\n${savedProductToggleButtonSource}`;
+const combinedProductSavedUiSource = `${productCatalogueSource}\n${productCardSource}\n${productDetailSource}\n${productMatchCardSource}\n${savedProductToggleButtonSource}`;
 
 describe("Product UI saved product integration", () => {
   it("loads saved state once in ProductCatalogue and passes it to ProductCard", () => {
@@ -65,6 +70,23 @@ describe("Product UI saved product integration", () => {
       "Chưa thể bỏ lưu sản phẩm",
     );
     expect(productDetailSource).toContain("Chưa tải được trạng thái đã lưu");
+  });
+
+  it("prevents overlapping Product Detail save and unsave actions", () => {
+    expect(productDetailSource).toContain("isSaveActionPending");
+    expect(productDetailSource).toContain(
+      "onSaveActionPendingChange={setIsSaveActionPending}",
+    );
+    expect(productDetailSource).toContain(
+      "onPendingChange={setIsSaveActionPending}",
+    );
+    expect(productDetailSource).toContain("disabled={isSaveActionPending}");
+    expect(productCardSource).not.toContain(
+      'key={`${product.id}-${initialSaved ? "saved" : "unsaved"}`}',
+    );
+    expect(productMatchCardSource).not.toContain(
+      'key={`${product.id}-${item.isSaved ? "saved" : "unsaved"}`}',
+    );
   });
 
   it("uses the saved product client helper without importing server modules into product UI", () => {

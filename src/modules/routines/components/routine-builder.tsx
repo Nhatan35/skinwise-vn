@@ -2,7 +2,7 @@
 
 import { Check, Pencil, Plus, RotateCcw, Save, Trash2, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { ZodIssue } from "zod";
 
 import type { RoutineAnalysisDto } from "@/modules/ai-analysis/routine-analysis.dto";
@@ -264,6 +264,22 @@ function getApiErrorMessage(error?: ApiError | null) {
   return "Hiện chưa thể xử lý routine. Vui lòng thử lại sau.";
 }
 
+function getRoutineSaveErrorMessage(error?: ApiError | null) {
+  if (error?.code === "UNAUTHORIZED") {
+    return "Bạn cần đăng nhập để lưu routine.";
+  }
+
+  if (error?.code === "VALIDATION_ERROR") {
+    return "Một vài thông tin routine chưa hợp lệ. Nội dung bạn đã nhập vẫn được giữ lại.";
+  }
+
+  if (error?.code === "NOT_FOUND") {
+    return "Không tìm thấy routine này để cập nhật. Nội dung bạn đã nhập vẫn được giữ lại.";
+  }
+
+  return "Chưa thể lưu routine. Nội dung bạn đã nhập vẫn được giữ lại. Vui lòng thử lại.";
+}
+
 function getAnalysisApiErrorMessage(error?: ApiError | null) {
   if (error?.code === "UNAUTHORIZED") {
     return "Bạn cần đăng nhập để tiếp tục.";
@@ -411,6 +427,7 @@ export function RoutineBuilder() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const submitLockRef = useRef(false);
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [productLoadError, setProductLoadError] = useState<string | null>(null);
   const [isProductLoading, setIsProductLoading] = useState(false);
@@ -695,6 +712,8 @@ export function RoutineBuilder() {
       [field]: value,
     }));
     clearFieldError(field);
+    setApiError(null);
+    setSuccessMessage(null);
   }
 
   function updateStepField<Field extends keyof RoutineFormStepState>(
@@ -714,6 +733,8 @@ export function RoutineBuilder() {
       ),
     }));
     clearFieldError(`steps.${index}.${field}`);
+    setApiError(null);
+    setSuccessMessage(null);
   }
 
   function clearStepProductErrors(index: number) {
@@ -766,6 +787,8 @@ export function RoutineBuilder() {
       }),
     }));
     clearStepProductErrors(index);
+    setApiError(null);
+    setSuccessMessage(null);
   }
 
   function addStep() {
@@ -776,6 +799,8 @@ export function RoutineBuilder() {
           ? current.steps
           : [...current.steps, createBlankStep()],
     }));
+    setApiError(null);
+    setSuccessMessage(null);
   }
 
   function removeStep(index: number) {
@@ -786,12 +811,14 @@ export function RoutineBuilder() {
           ? current.steps
           : current.steps.filter((_, stepIndex) => stepIndex !== index),
     }));
+    setApiError(null);
+    setSuccessMessage(null);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (isSaving) {
+    if (isSaving || submitLockRef.current) {
       return;
     }
 
@@ -816,6 +843,7 @@ export function RoutineBuilder() {
         : `${ROUTINES_API_PATH}/${editingRoutineId}`;
     const method = formMode === "create" ? "POST" : "PATCH";
 
+    submitLockRef.current = true;
     setIsSaving(true);
 
     try {
@@ -830,7 +858,7 @@ export function RoutineBuilder() {
       const body = await readApiResponse<{ routine: RoutineDto }>(response);
 
       if (!response.ok || body.error) {
-        setApiError(getApiErrorMessage(body.error));
+        setApiError(getRoutineSaveErrorMessage(body.error));
         return;
       }
 
@@ -854,8 +882,11 @@ export function RoutineBuilder() {
       setEditingRoutineId(null);
       setFormState(createBlankFormState());
     } catch {
-      setApiError("Hiện chưa thể lưu routine. Vui lòng thử lại sau.");
+      setApiError(
+        "Chưa thể lưu routine. Nội dung bạn đã nhập vẫn được giữ lại. Vui lòng thử lại.",
+      );
     } finally {
+      submitLockRef.current = false;
       setIsSaving(false);
     }
   }
@@ -1096,8 +1127,18 @@ export function RoutineBuilder() {
       {successMessage ? (
         <Alert>
           <Check aria-hidden="true" />
-          <AlertTitle>Thành công</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
+          <AlertTitle>Đã lưu</AlertTitle>
+          <AlertDescription className="space-y-3">
+            <p>{successMessage}</p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href={routes.JOURNAL}>Xem nhật ký</Link>
+              </Button>
+            </div>
+          </AlertDescription>
         </Alert>
       ) : null}
 
@@ -1226,7 +1267,12 @@ function RoutineForm({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6" data-testid="routine-form" onSubmit={onSubmit}>
+        <form
+          aria-busy={isSaving}
+          className="space-y-6"
+          data-testid="routine-form"
+          onSubmit={onSubmit}
+        >
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="routine-name">Tên routine</Label>
@@ -1289,7 +1335,7 @@ function RoutineForm({
               </div>
               <Button
                 data-testid="routine-add-step-button"
-                disabled={formState.steps.length >= ROUTINE_STEP_LIMIT}
+                disabled={isSaving || formState.steps.length >= ROUTINE_STEP_LIMIT}
                 onClick={onAddStep}
                 type="button"
                 variant="outline"
@@ -1367,7 +1413,7 @@ function RoutineForm({
                       </p>
                     </div>
                     <Button
-                      disabled={formState.steps.length <= 1}
+                      disabled={isSaving || formState.steps.length <= 1}
                       onClick={() => onRemoveStep(index)}
                       type="button"
                       variant="ghost"

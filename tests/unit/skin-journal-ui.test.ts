@@ -323,6 +323,16 @@ describe("SkinJournal Timeline UI", () => {
     }
   });
 
+  it("guards journal submission while preserving recoverable failure input", () => {
+    expect(formSource).toContain("submitLockRef");
+    expect(formSource).toContain("aria-busy={isSaving}");
+    expect(formSource).toContain("disabled={isSaving}");
+    expect(formSource).toContain("Nội dung bạn đã nhập vẫn được giữ lại");
+    expect(formSource).toContain("Chưa thể lưu ghi nhận");
+    expect(formSource).toContain("Bạn đã có nhật ký cho ngày này");
+    expect(formSource).toContain("setFormError(null)");
+  });
+
   it("uses only canonical SkinJournal UI fields", () => {
     for (const allowedField of [
       "localDate",

@@ -165,6 +165,37 @@ describe("Saved Products UI", () => {
     }
   });
 
+  it("keeps save and unsave feedback tied to confirmed request completion", () => {
+    expect(savedProductToggleButtonSource).toContain(
+      'type PendingAction = "remove" | "save" | null',
+    );
+    expect(savedProductToggleButtonSource).toContain("pendingAction !== null");
+    expect(savedProductToggleButtonSource).toContain("onPendingChange?.(true)");
+    expect(savedProductToggleButtonSource).toContain("onPendingChange?.(false)");
+    expect(savedProductToggleButtonSource).toContain("aria-busy={isPending}");
+    expect(savedProductToggleButtonSource).toContain("Đã lưu sản phẩm.");
+    expect(savedProductToggleButtonSource).toContain("Đã bỏ lưu sản phẩm.");
+    expect(savedProductToggleButtonSource).toContain(
+      "Chưa thể lưu sản phẩm lúc này. Vui lòng thử lại.",
+    );
+    expect(savedProductToggleButtonSource).toContain(
+      "Chưa thể bỏ lưu sản phẩm lúc này. Vui lòng thử lại.",
+    );
+    expect(savedProductToggleButtonSource).toContain('role="status"');
+
+    const saveRequestIndex = savedProductToggleButtonSource.indexOf(
+      "await saveProduct(productId)",
+    );
+    const parentChangeIndex = savedProductToggleButtonSource.indexOf(
+      "onChange?.(nextSaved)",
+    );
+
+    expect(saveRequestIndex).toBeGreaterThan(-1);
+    expect(parentChangeIndex).toBeGreaterThan(saveRequestIndex);
+    expect(savedProductToggleButtonSource).not.toContain("setIsSaved(nextSaved)");
+    expect(savedProductToggleButtonSource).not.toContain("setIsSaved(!nextSaved)");
+  });
+
   it("adds saved product comparison selection with item.productId keys", () => {
     expect(existsSync(savedProductsComparisonPanelPath)).toBe(true);
 

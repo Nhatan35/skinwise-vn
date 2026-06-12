@@ -11,40 +11,56 @@ import {
 import { Button } from "@/shared/components/ui/button";
 
 type SavedProductToggleButtonProps = {
+  disabled?: boolean;
   initialSaved: boolean;
   mode?: "compact" | "full";
   onChange?: (isSaved: boolean) => void;
+  onPendingChange?: (isPending: boolean) => void;
   onSuccess?: (isSaved: boolean) => void;
   productId: string;
 };
 
+type PendingAction = "remove" | "save" | null;
+
 function getErrorMessage(error: unknown, nextSaved: boolean) {
   if (error instanceof SavedProductClientError) {
-    return error.message;
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "Bạn cần đăng nhập để thay đổi trạng thái lưu sản phẩm.";
+    }
   }
 
   return nextSaved
-    ? "Chưa thể lưu sản phẩm."
-    : "Chưa thể bỏ lưu sản phẩm.";
+    ? "Chưa thể lưu sản phẩm lúc này. Vui lòng thử lại."
+    : "Chưa thể bỏ lưu sản phẩm lúc này. Vui lòng thử lại.";
 }
 
 export function SavedProductToggleButton({
+  disabled = false,
   initialSaved,
   mode = "compact",
   onChange,
+  onPendingChange,
   onSuccess,
   productId,
 }: SavedProductToggleButtonProps) {
-  const [isSaved, setIsSaved] = useState(initialSaved);
-  const [isPending, setIsPending] = useState(false);
+  const [pendingAction, setPendingAction] = useState<PendingAction>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const isPending = pendingAction !== null;
+  const isSaved = initialSaved;
 
   async function handleToggle() {
-    const nextSaved = !isSaved;
+    if (disabled || pendingAction !== null) {
+      return;
+    }
 
-    setIsPending(true);
+    const nextSaved = !isSaved;
+    const nextPendingAction = nextSaved ? "save" : "remove";
+
+    setPendingAction(nextPendingAction);
+    onPendingChange?.(true);
     setErrorMessage(null);
-    setIsSaved(nextSaved);
+    setSuccessMessage(null);
 
     try {
       if (nextSaved) {
@@ -52,20 +68,23 @@ export function SavedProductToggleButton({
       } else {
         await removeSavedProduct(productId);
       }
+      setSuccessMessage(
+        nextSaved ? "Đã lưu sản phẩm." : "Đã bỏ lưu sản phẩm.",
+      );
       onChange?.(nextSaved);
       onSuccess?.(nextSaved);
     } catch (error) {
-      setIsSaved(!nextSaved);
       setErrorMessage(getErrorMessage(error, nextSaved));
     } finally {
-      setIsPending(false);
+      setPendingAction(null);
+      onPendingChange?.(false);
     }
   }
 
   const label = isPending
-    ? isSaved
-      ? "Đang lưu"
-      : "Đang bỏ lưu"
+    ? pendingAction === "save"
+      ? "Đang lưu..."
+      : "Đang bỏ lưu..."
     : mode === "full"
       ? isSaved
         ? "Bỏ lưu sản phẩm"
@@ -81,7 +100,8 @@ export function SavedProductToggleButton({
         data-testid={
           isSaved ? "remove-saved-product-button" : "save-product-button"
         }
-        disabled={isPending}
+        aria-busy={isPending}
+        disabled={disabled || isPending}
         onClick={handleToggle}
         type="button"
         variant={isSaved ? "secondary" : "outline"}
@@ -92,6 +112,11 @@ export function SavedProductToggleButton({
       {errorMessage ? (
         <p className="text-xs text-red-700" role="alert">
           {errorMessage}
+        </p>
+      ) : null}
+      {successMessage ? (
+        <p className="text-xs text-muted-foreground" role="status">
+          {successMessage}
         </p>
       ) : null}
     </div>

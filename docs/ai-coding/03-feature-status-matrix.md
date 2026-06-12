@@ -7,10 +7,10 @@ Last updated: 2026-06-12
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish
+Latest completed scoped task: MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.31 scoped lint/typecheck/unit tests; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.32 scoped lint/typecheck/unit tests and diff check; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring for v1.22.1: PARTIAL / DEFERRED
@@ -50,7 +50,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Production deployment smoke verification | Partially completed | v1.22.1 direct public URL and `/api/health` checks passed; authenticated MVP flows and production signals remain NOT CHECKED. |
-| Local validation evidence | MIXED BY MILESTONE | v1.31 scoped validation passed with lint, typecheck, and unit tests. v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
+| Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
+| Local validation evidence | MIXED BY MILESTONE | v1.32 scoped validation passed with lint, typecheck, unit tests, and diff check. v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. v1.24 closeout remains NOT DONE because build and E2E timed out in the current environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | Partially completed | Public URL and `/api/health` checked directly on 2026-06-11; authenticated flows not checked. Historical user-reported production verification remains historical only. |
 | Production monitoring evidence | Partially completed | Public health endpoint checked directly; browser console/network, Vercel logs, MongoDB Atlas, and OAuth callback behavior remain NOT CHECKED for v1.22.1. |
@@ -79,6 +80,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Routine to Routine Log / Journal Decision Support Polish | UX / Decision-Support Polish | v1.29 | DONE, scoped validation only |
 | Insights Interpretation & Dashboard Next Action Polish | UX / Decision-Support Polish | v1.30 | DONE, scoped validation only |
 | Core Flow Recovery, Empty State & Navigation Consistency Polish | UX Resilience / Recovery Polish | v1.31 | DONE, scoped validation only |
+| Core Form Submission & Action Feedback Consistency Polish | UX Interaction / Form-State Polish | v1.32 | DONE, scoped validation only |
 
 ## Out-of-Scope Matrix
 
@@ -98,7 +100,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish
+Latest completed scoped task: MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish
 Current active milestone: None
 Production status: v1.22.1 production smoke verification PARTIAL / DEFERRED
 Portfolio Evidence Package documentation: PREPARED
@@ -112,4 +114,5 @@ v1.28 status: DONE within scoped local validation - Saved Products to Routine de
 v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal decision-support copy polished; lint, typecheck, and unit tests passed
 v1.30 status: DONE within scoped local validation - Insights interpretation and Dashboard next-action copy polished; lint, typecheck, and unit tests passed
 v1.31 status: DONE within scoped local validation - selected core-flow empty states, recoverable errors, missing-resource fallbacks, retry clarity, and route consistency polished; lint, typecheck, and unit tests passed
+v1.32 status: DONE within scoped local validation - selected form submission and action feedback states polished; lint, typecheck, unit tests, and diff check passed
 ```

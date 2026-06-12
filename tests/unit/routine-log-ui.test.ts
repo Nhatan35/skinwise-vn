@@ -284,6 +284,28 @@ describe("RoutineLog UI integration", () => {
     }
   });
 
+  it("shows action-specific pending state and blocks overlapping log updates", () => {
+    expect(routineLogControlsSource).toContain(
+      'type RoutineLogPendingAction = "completed" | "partial" | "skipped" | null',
+    );
+    expect(routineLogControlsSource).toContain("pendingActionRef");
+    expect(routineLogControlsSource).toContain("pendingAction !== null");
+    expect(routineLogControlsSource).toContain("aria-busy={isSaving}");
+    expect(routineLogControlsSource).toContain(
+      'pendingAction === "completed" ? "Đang ghi nhận..." : "Hoàn thành"',
+    );
+    expect(routineLogControlsSource).toContain(
+      'pendingAction === "partial" ? "Đang ghi nhận..." : "Một phần"',
+    );
+    expect(routineLogControlsSource).toContain(
+      'pendingAction === "skipped" ? "Đang ghi nhận..." : "Bỏ qua"',
+    );
+    expect(routineLogControlsSource).toContain("Đã lưu ghi nhận hôm nay.");
+    expect(routineLogControlsSource).toContain(
+      "Chưa thể cập nhật trạng thái hôm nay. Vui lòng thử lại.",
+    );
+  });
+
   it("connects Today Routine Log to Journal after a routine log exists", () => {
     expect(todayRoutineChecklistSource).toContain(
       "@/modules/routine-logs/components/today-journal-prompt-card",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Save, X } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 
 import {
   createSkinJournal,
@@ -101,10 +101,14 @@ function entryToFormState(entry?: SkinJournalDto): SkinJournalFormState {
 
 function getFormErrorMessage(error: unknown) {
   if (error instanceof SkinJournalClientError) {
-    return error.message;
+    if (error.status === 409 || error.code === "CONFLICT") {
+      return "Bạn đã có nhật ký cho ngày này. Nội dung bạn đã nhập vẫn được giữ lại để chỉnh ngày hoặc cập nhật mục hiện có.";
+    }
+
+    return `${error.message} Nội dung bạn đã nhập vẫn được giữ lại.`;
   }
 
-  return "Không thể lưu nhật ký da. Vui lòng thử lại.";
+  return "Chưa thể lưu ghi nhận. Nội dung bạn đã nhập vẫn được giữ lại. Vui lòng thử lại.";
 }
 
 export function SkinJournalEntryForm({
@@ -122,6 +126,7 @@ export function SkinJournalEntryForm({
   const [fieldErrors, setFieldErrors] = useState<SkinJournalFieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const submitLockRef = useRef(false);
 
   function clearFieldError(field: SkinJournalFormField) {
     setFieldErrors((current) => {
@@ -140,6 +145,7 @@ export function SkinJournalEntryForm({
       [field]: value,
     }));
     clearFieldError(field);
+    setFormError(null);
   }
 
   function toggleSymptom(symptom: SkinJournalSymptom, checked: boolean) {
@@ -150,6 +156,7 @@ export function SkinJournalEntryForm({
         : current.symptoms.filter((item) => item !== symptom),
     }));
     clearFieldError("symptoms");
+    setFormError(null);
   }
 
   function toggleProduct(productId: string, checked: boolean) {
@@ -160,48 +167,60 @@ export function SkinJournalEntryForm({
         : current.productsUsed.filter((item) => item !== productId),
     }));
     clearFieldError("productsUsed");
+    setFormError(null);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (isSaving) {
+    if (isSaving || submitLockRef.current) {
       return;
     }
 
     setFieldErrors({});
     setFormError(null);
 
-    setIsSaving(true);
-
-    try {
-      if (mode === "create") {
-        const validation = validateCreateSkinJournalForm(formState);
-
-        if (!validation.success) {
-          setFieldErrors(validation.errors);
-          return;
-        }
-
-        const savedEntry = await createSkinJournal(validation.data);
-
-        onSaved(savedEntry);
-        return;
-      }
-
-      const validation = validateUpdateSkinJournalForm(formState);
+    if (mode === "create") {
+      const validation = validateCreateSkinJournalForm(formState);
 
       if (!validation.success) {
         setFieldErrors(validation.errors);
         return;
       }
 
-      const savedEntry = await updateSkinJournal(entry?.id ?? "", validation.data);
+      submitLockRef.current = true;
+      setIsSaving(true);
 
+      try {
+        const savedEntry = await createSkinJournal(validation.data);
+        onSaved(savedEntry);
+      } catch (error) {
+        setFormError(getFormErrorMessage(error));
+      } finally {
+        submitLockRef.current = false;
+        setIsSaving(false);
+      }
+
+      return;
+    }
+
+    const validation = validateUpdateSkinJournalForm(formState);
+
+    if (!validation.success) {
+      setFieldErrors(validation.errors);
+      return;
+    }
+
+    submitLockRef.current = true;
+    setIsSaving(true);
+
+    try {
+      const savedEntry = await updateSkinJournal(entry?.id ?? "", validation.data);
       onSaved(savedEntry);
     } catch (error) {
       setFormError(getFormErrorMessage(error));
     } finally {
+      submitLockRef.current = false;
       setIsSaving(false);
     }
   }
@@ -219,6 +238,7 @@ export function SkinJournalEntryForm({
       </CardHeader>
       <CardContent>
         <form
+          aria-busy={isSaving}
           className="space-y-6"
           data-testid="skin-journal-form"
           onSubmit={handleSubmit}

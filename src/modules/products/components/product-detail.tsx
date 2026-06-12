@@ -125,6 +125,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   const [productMatch, setProductMatch] =
     useState<ProductDetailMatchResponseDto | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaveActionPending, setIsSaveActionPending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductMatchLoading, setIsProductMatchLoading] = useState(false);
   const [loadError, setLoadError] = useState<{
@@ -160,6 +161,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       setProduct(null);
       setProductMatch(null);
       setIsSaved(false);
+      setIsSaveActionPending(false);
       setSavedStateError(null);
       setProductMatchError(null);
       setIsProductMatchLoading(false);
@@ -287,7 +289,9 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       <ProductHero
         decisionSupport={decisionSupport}
         isSaved={isSaved}
+        isSaveActionPending={isSaveActionPending}
         onSavedChange={setIsSaved}
+        onSaveActionPendingChange={setIsSaveActionPending}
         product={product}
       />
 
@@ -339,10 +343,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       <Card>
         <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center">
           <SavedProductToggleButton
+            disabled={isSaveActionPending}
             initialSaved={isSaved}
-            key={`${product.id}-${isSaved ? "saved" : "unsaved"}-footer`}
             mode="full"
             onChange={setIsSaved}
+            onPendingChange={setIsSaveActionPending}
             productId={product.id}
           />
           <ProductMatchLinkButton />
@@ -356,14 +361,18 @@ export function ProductDetail({ productId }: ProductDetailProps) {
 type ProductHeroProps = {
   decisionSupport: ProductDetailDecisionSupport;
   isSaved: boolean;
+  isSaveActionPending: boolean;
   onSavedChange: (isSaved: boolean) => void;
+  onSaveActionPendingChange: (isPending: boolean) => void;
   product: ProductDto;
 };
 
 function ProductHero({
   decisionSupport,
   isSaved,
+  isSaveActionPending,
   onSavedChange,
+  onSaveActionPendingChange,
   product,
 }: ProductHeroProps) {
   return (
@@ -387,10 +396,11 @@ function ProductHero({
             <ProductsLinkButton label="Xem sản phẩm" />
             <ProductMatchLinkButton />
             <SavedProductToggleButton
+              disabled={isSaveActionPending}
               initialSaved={isSaved}
-              key={`${product.id}-${isSaved ? "saved" : "unsaved"}-hero`}
               mode="full"
               onChange={onSavedChange}
+              onPendingChange={onSaveActionPendingChange}
               productId={product.id}
             />
           </div>

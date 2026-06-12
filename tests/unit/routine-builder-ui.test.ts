@@ -138,6 +138,28 @@ describe("Routine Builder UI foundation", () => {
     }
   });
 
+  it("guards routine form submission and keeps retry feedback truthful", () => {
+    expect(routineBuilderSource).toContain("submitLockRef");
+    expect(routineBuilderSource).toContain("aria-busy={isSaving}");
+    expect(routineBuilderSource).toContain(
+      "disabled={isSaving || formState.steps.length >= ROUTINE_STEP_LIMIT}",
+    );
+    expect(routineBuilderSource).toContain(
+      "disabled={isSaving || formState.steps.length <= 1}",
+    );
+    expect(routineBuilderSource).toContain("getRoutineSaveErrorMessage");
+    expect(routineBuilderSource).toContain(
+      "Nội dung bạn đã nhập vẫn được giữ lại",
+    );
+    expect(routineBuilderSource).toContain("Chưa thể lưu routine");
+    expect(routineBuilderSource).toContain(
+      '<Link href={routes.TODAY_LOG}>Ghi nhận routine</Link>',
+    );
+    expect(routineBuilderSource).toContain(
+      '<Link href={routes.JOURNAL}>Xem nhật ký</Link>',
+    );
+  });
+
   it("builds a safe payload with productId or custom product fields only", () => {
     const payloadSource = getPayloadSource();
 

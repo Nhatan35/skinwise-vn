@@ -98,15 +98,15 @@ export type SkinJournalValidationResult<TData> =
     };
 
 const fieldMessages: Record<SkinJournalFormField, string> = {
-  localDate: "Choose a date using YYYY-MM-DD.",
-  timezone: "Timezone is required.",
-  productsUsed: "Products used can include at most 30 items.",
-  observationsText: "Observations can include at most 20 items.",
-  symptoms: "Choose only supported symptom values.",
-  sleepHours: "Sleep hours must be between 0 and 24.",
-  stressLevel: "Stress level must be low, medium, or high.",
-  notes: "Notes can include at most 3000 characters.",
-  form: "Some journal details are invalid.",
+  localDate: "Vui lòng chọn ngày ghi nhận hợp lệ.",
+  timezone: "Vui lòng giữ múi giờ hợp lệ.",
+  productsUsed: "Danh sách sản phẩm đã dùng tối đa 30 mục.",
+  observationsText: "Quan sát tối đa 20 mục.",
+  symptoms: "Vui lòng chỉ chọn các dấu hiệu được hỗ trợ.",
+  sleepHours: "Số giờ ngủ phải nằm trong khoảng 0 đến 24.",
+  stressLevel: "Mức căng thẳng phải là thấp, vừa hoặc cao.",
+  notes: "Ghi chú tối đa 3000 ký tự.",
+  form: "Một vài thông tin nhật ký chưa hợp lệ.",
 };
 
 function padDatePart(value: number) {

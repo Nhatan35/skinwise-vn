@@ -2,7 +2,7 @@
 
 import { Check, ListChecks, XCircle } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
 import {
@@ -47,6 +47,8 @@ type RoutineLogControlsProps = {
   timezone: string;
 };
 
+type RoutineLogPendingAction = "completed" | "partial" | "skipped" | null;
+
 async function readApiResponse<TData>(
   response: Response,
 ): Promise<ApiResponse<TData>> {
@@ -76,7 +78,7 @@ function getRoutineLogApiErrorMessage(error?: ApiError | null) {
     return "Trạng thái routine chưa hợp lệ. Vui lòng kiểm tra lại.";
   }
 
-  return "Không thể lưu trạng thái routine. Vui lòng thử lại.";
+  return "Chưa thể cập nhật trạng thái hôm nay. Vui lòng thử lại.";
 }
 
 function getRoutineStepDisplayName(step: RoutineDto["steps"][number]) {
@@ -114,6 +116,9 @@ export function RoutineLogControls({
     logId: activeLogId,
     stepIds: initialSelectedStepIds,
   }));
+  const pendingActionRef = useRef<RoutineLogPendingAction>(null);
+  const [pendingAction, setPendingAction] =
+    useState<RoutineLogPendingAction>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -123,9 +128,18 @@ export function RoutineLogControls({
       : initialSelectedStepIds;
   const completedStepCount = getCompletedStepCount(routine, log);
   const canPartiallyComplete = routine.steps.length >= 2;
-  const controlsDisabled = disabled || isSaving;
+  const controlsDisabled = disabled || pendingAction !== null;
 
-  async function saveRoutineLog(payload: RoutineLogUpsertPayload) {
+  async function saveRoutineLog(
+    payload: RoutineLogUpsertPayload,
+    action: Exclude<RoutineLogPendingAction, null>,
+  ) {
+    if (pendingActionRef.current !== null) {
+      return;
+    }
+
+    pendingActionRef.current = action;
+    setPendingAction(action);
     setIsSaving(true);
     setSaveError(null);
     setSuccessMessage(null);
@@ -154,10 +168,12 @@ export function RoutineLogControls({
         stepIds: getInitialPartialStepIds(body.data.routineLog),
       });
       setIsPartialOpen(false);
-      setSuccessMessage("Đã lưu trạng thái routine.");
+      setSuccessMessage("Đã lưu ghi nhận hôm nay.");
     } catch {
-      setSaveError("Không thể lưu trạng thái routine. Vui lòng thử lại.");
+      setSaveError("Chưa thể cập nhật trạng thái hôm nay. Vui lòng thử lại.");
     } finally {
+      pendingActionRef.current = null;
+      setPendingAction(null);
       setIsSaving(false);
     }
   }
@@ -176,16 +192,22 @@ export function RoutineLogControls({
   function saveCompletedLog() {
     void saveRoutineLog(
       buildCompletedRoutineLogPayload(routine, localDate, timezone),
+      "completed",
     );
   }
 
   function saveSkippedLog() {
     void saveRoutineLog(
       buildSkippedRoutineLogPayload(routine, localDate, timezone),
+      "skipped",
     );
   }
 
   function savePartialLog() {
+    if (pendingActionRef.current !== null) {
+      return;
+    }
+
     try {
       const payload = buildPartialRoutineLogPayload(
         routine,
@@ -194,7 +216,7 @@ export function RoutineLogControls({
         timezone,
       );
 
-      void saveRoutineLog(payload);
+      void saveRoutineLog(payload, "partial");
     } catch (error) {
       setSaveError(
         error instanceof RoutineLogClientValidationError
@@ -206,7 +228,11 @@ export function RoutineLogControls({
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-border pt-4" data-testid="routine-log-controls">
+    <div
+      aria-busy={isSaving}
+      className="mt-4 space-y-3 border-t border-border pt-4"
+      data-testid="routine-log-controls"
+    >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
           <p className="text-sm font-medium text-foreground">
@@ -236,7 +262,7 @@ export function RoutineLogControls({
             type="button"
           >
             <Check aria-hidden="true" />
-            {isSaving ? "Đang lưu..." : "Hoàn thành"}
+            {pendingAction === "completed" ? "Đang ghi nhận..." : "Hoàn thành"}
           </Button>
           <Button
             data-testid="routine-log-partial-button"
@@ -251,7 +277,7 @@ export function RoutineLogControls({
             variant="outline"
           >
             <ListChecks aria-hidden="true" />
-            Một phần
+            {pendingAction === "partial" ? "Đang ghi nhận..." : "Một phần"}
           </Button>
           <Button
             data-testid="routine-log-skipped-button"
@@ -262,7 +288,7 @@ export function RoutineLogControls({
             variant="outline"
           >
             <XCircle aria-hidden="true" />
-            Bỏ qua
+            {pendingAction === "skipped" ? "Đang ghi nhận..." : "Bỏ qua"}
           </Button>
         </div>
       </div>
@@ -315,7 +341,7 @@ export function RoutineLogControls({
               type="button"
             >
               <SaveIcon />
-              {isSaving ? "Đang lưu..." : "Lưu một phần"}
+              {pendingAction === "partial" ? "Đang ghi nhận..." : "Lưu một phần"}
             </Button>
             <Badge variant="outline">
               Đã chọn {selectedStepIds.length}/{routine.steps.length} bước

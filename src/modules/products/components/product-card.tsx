@@ -159,7 +159,6 @@ export function ProductCard({
           </Button>
           <SavedProductToggleButton
             initialSaved={initialSaved}
-            key={`${product.id}-${initialSaved ? "saved" : "unsaved"}`}
             onChange={onSavedChange}
             productId={product.id}
           />

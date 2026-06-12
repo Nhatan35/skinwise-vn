@@ -466,6 +466,10 @@ These are intentional MVP boundaries, not release blockers:
 - Build and E2E were not run for v1.29 by task scope.
 - v1.30 Insights Interpretation & Dashboard Next Action polish passed scoped lint/typecheck/unit test validation.
 - Build and E2E were not run for v1.30 by task scope.
+- v1.31 Core Flow Recovery, Empty State & Navigation Consistency polish passed scoped lint/typecheck/unit test validation.
+- Build and E2E were not run for v1.31 by task scope.
+- v1.32 Core Form Submission & Action Feedback Consistency polish passed scoped lint/typecheck/unit test and diff-check validation.
+- Build and E2E were not run for v1.32 by task scope.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -474,6 +478,8 @@ These are intentional MVP boundaries, not release blockers:
 - Manual browser and production verification were not performed for v1.28.
 - Manual browser and production verification were not performed for v1.29.
 - Manual browser and production verification were not performed for v1.30.
+- Manual browser and production verification were not performed for v1.31.
+- Manual browser and production verification were not performed for v1.32.
 
 ## Final Portfolio Decision
 
@@ -502,6 +508,7 @@ MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped vali
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -510,4 +517,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish` improves selected core-flow empty states, recoverable errors, missing-resource guidance, retry clarity, and route consistency as a follow-up to v1.30 within the scoped validation boundary of lint, typecheck, and unit tests. `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.32 - Core Form Submission & Action Feedback Consistency Polish` improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states as a follow-up to v1.31 within the scoped validation boundary of lint, typecheck, unit tests, and diff check. It reuses existing local React state, Button, Alert, client API, and route-helper patterns; it does not add a new form, toast, mutation, or state-management framework, and it does not change business rules, schema, seed data, or broad API contracts. `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

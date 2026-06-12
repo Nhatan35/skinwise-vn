@@ -13,7 +13,7 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed milestone:
 
 ```txt
-MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish
 ```
 
 Completed closeout milestones:
@@ -47,6 +47,7 @@ MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped vali
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -63,6 +64,7 @@ v1.28 status: DONE within scoped local validation - Saved Products to Routine de
 v1.29 status: DONE within scoped local validation - Routine to Routine Log / Journal decision-support guidance polished. Build, E2E, manual browser verification, and production verification were not run for v1.29.
 v1.30 status: DONE within scoped local validation - Insights interpretation and Dashboard next-action guidance polished. Build, E2E, manual browser verification, and production verification were not run for v1.30.
 v1.31 status: DONE within scoped local validation - selected core-flow recovery, empty-state, retry, missing-resource, and navigation consistency states polished. Build, E2E, manual browser verification, and production verification were not run for v1.31.
+v1.32 status: DONE within scoped local validation - selected core form submission and mutation feedback states polished. Lint, typecheck, unit tests, and diff check passed; build, E2E, manual browser verification, and production verification were not run for v1.32.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -80,7 +82,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | MIXED BY MILESTONE | MVP v1.31 scoped validation passed with lint, typecheck, and unit tests. MVP v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
+| Local validation | MIXED BY MILESTONE | MVP v1.32 scoped validation passed with lint, typecheck, unit tests, and diff check. MVP v1.31, v1.30, v1.29, v1.28, v1.27, v1.26, v1.25.1, and v1.25 scoped validation passed previously. MVP v1.24 closeout validation remains incomplete: lint PASS, typecheck PASS, unit tests PASS after one test-timeout stabilization, audit PASS, but build and E2E timed out in the current environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | v1.22.1 full production smoke | NOT CHECKED | Authenticated MVP flows were not checked because browser/OAuth test access was unavailable to the coding assistant. |
@@ -94,7 +96,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Documentation truth sync | PASS | Current release status is synchronized across README, status, deployment, smoke-test, monitoring, demo, and checklist docs. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.31 Core Flow Recovery, Empty State & Navigation Consistency Polish is complete within scoped validation. MVP v1.30 Insights Interpretation & Dashboard Next Action polish, v1.29 Routine to Routine Log / Journal polish, v1.28 Saved Products to Routine polish, v1.27 Product Detail to Saved Products polish, v1.26 Product Match polish, v1.25 First-Session Guided Experience Polish, and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
+| Latest post-MVP implementation | PASS | MVP v1.32 Core Form Submission & Action Feedback Consistency Polish is complete within scoped validation. MVP v1.31 Core Flow Recovery polish, v1.30 Insights/Dashboard polish, v1.29 Routine to Routine Log / Journal polish, v1.28 Saved Products to Routine polish, v1.27 Product Detail to Saved Products polish, v1.26 Product Match polish, v1.25 First-Session Guided Experience Polish, and v1.25.1 Seed Baseline Regression & Documentation Consistency Hotfix remain preserved. v1.24 seed data closeout remains deferred and NOT DONE. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -103,6 +105,17 @@ Optional remaining media evidence tasks: screenshots and demo video.
 Local validation evidence:
 
 ```txt
+MVP v1.32 scoped local validation:
+Evidence date: 2026-06-12
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 103 files / 1011 tests
+git diff --check: PASS
+npm run build: NOT RUN for v1.32
+npm run test:e2e: NOT RUN for v1.32
+Manual browser verification: NOT CHECKED for v1.32
+Production verification: NOT CHECKED for v1.32
+
 MVP v1.31 scoped local validation:
 Evidence date: 2026-06-12
 npm run lint: PASS
@@ -546,6 +559,10 @@ MVP v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix: DONE,
 MVP v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish: DONE, scoped validation only
 MVP v1.27 - Product Detail to Saved Products Decision Support Polish: DONE, scoped validation only
 MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped validation only
+MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
+MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
+MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package documentation: PREPARED

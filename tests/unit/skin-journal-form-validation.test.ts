@@ -138,7 +138,7 @@ describe("SkinJournal form validation", () => {
       validateCreateSkinJournalForm(createFormState({ localDate: "" })),
     ).toMatchObject({
       errors: {
-        localDate: "Choose a date using YYYY-MM-DD.",
+        localDate: "Vui lòng chọn ngày ghi nhận hợp lệ.",
       },
       success: false,
     });
@@ -146,7 +146,7 @@ describe("SkinJournal form validation", () => {
       validateCreateSkinJournalForm(createFormState({ timezone: "" })),
     ).toMatchObject({
       errors: {
-        timezone: "Timezone is required.",
+        timezone: "Vui lòng giữ múi giờ hợp lệ.",
       },
       success: false,
     });
@@ -156,7 +156,7 @@ describe("SkinJournal form validation", () => {
       ),
     ).toMatchObject({
       errors: {
-        timezone: "Timezone is required.",
+        timezone: "Vui lòng giữ múi giờ hợp lệ.",
       },
       success: false,
     });
@@ -167,7 +167,7 @@ describe("SkinJournal form validation", () => {
       validateCreateSkinJournalForm(createFormState({ sleepHours: "25" })),
     ).toMatchObject({
       errors: {
-        sleepHours: "Sleep hours must be between 0 and 24.",
+        sleepHours: "Số giờ ngủ phải nằm trong khoảng 0 đến 24.",
       },
       success: false,
     });
@@ -177,7 +177,7 @@ describe("SkinJournal form validation", () => {
       ),
     ).toMatchObject({
       errors: {
-        stressLevel: "Stress level must be low, medium, or high.",
+        stressLevel: "Mức căng thẳng phải là thấp, vừa hoặc cao.",
       },
       success: false,
     });
@@ -187,7 +187,7 @@ describe("SkinJournal form validation", () => {
       ),
     ).toMatchObject({
       errors: {
-        symptoms: "Choose only supported symptom values.",
+        symptoms: "Vui lòng chỉ chọn các dấu hiệu được hỗ trợ.",
       },
       success: false,
     });
@@ -205,7 +205,7 @@ describe("SkinJournal form validation", () => {
       ),
     ).toMatchObject({
       errors: {
-        productsUsed: "Products used can include at most 30 items.",
+        productsUsed: "Danh sách sản phẩm đã dùng tối đa 30 mục.",
       },
       success: false,
     });
@@ -220,7 +220,7 @@ describe("SkinJournal form validation", () => {
       ),
     ).toMatchObject({
       errors: {
-        observationsText: "Observations can include at most 20 items.",
+        observationsText: "Quan sát tối đa 20 mục.",
       },
       success: false,
     });
