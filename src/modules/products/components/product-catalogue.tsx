@@ -124,6 +124,33 @@ function hasActiveFilters(filters: ProductFilterState) {
   );
 }
 
+function getActiveProductFilterLabels(filters: ProductFilterState) {
+  const items: string[] = [];
+  const q = filters.q.trim();
+
+  if (q) {
+    items.push(`Từ khóa: ${q}`);
+  }
+
+  if (filters.category) {
+    items.push(`Danh mục: ${categoryLabels[filters.category]}`);
+  }
+
+  if (filters.priceRange) {
+    items.push(`Mức giá: ${priceRangeLabels[filters.priceRange]}`);
+  }
+
+  if (filters.skinType) {
+    items.push(`Loại da: ${skinTypeLabels[filters.skinType]}`);
+  }
+
+  if (filters.concern) {
+    items.push(`Mối quan tâm: ${concernLabels[filters.concern]}`);
+  }
+
+  return items;
+}
+
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof ProductClientError) {
     if (error.code === "UNAUTHORIZED" || error.status === 401) {
@@ -244,6 +271,10 @@ export function ProductCatalogue() {
       return next;
     });
   }
+
+  const hasActiveProductFilters = hasActiveFilters(activeFilters);
+  const activeProductFilterLabels =
+    getActiveProductFilterLabels(activeFilters);
 
   return (
     <div className="space-y-4">
@@ -373,6 +404,21 @@ export function ProductCatalogue() {
         </Alert>
       ) : null}
 
+      {!isLoading && !loadError ? (
+        <div className="space-y-1 text-sm text-muted-foreground">
+          <p aria-live="polite">
+            {hasActiveProductFilters
+              ? `Đang hiển thị ${products.length} sản phẩm phù hợp với bộ lọc hiện tại.`
+              : `Đang hiển thị ${products.length} sản phẩm.`}
+          </p>
+          {hasActiveProductFilters ? (
+            <p>
+              Bộ lọc đang áp dụng: {activeProductFilterLabels.join(" · ")}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {savedStateError && !loadError ? (
         <Alert variant="destructive">
           <AlertTitle>Chưa tải được trạng thái đã lưu</AlertTitle>
@@ -393,19 +439,19 @@ export function ProductCatalogue() {
       {!isLoading && !loadError && products.length === 0 ? (
         <EmptyState
           action={
-            hasActiveFilters(activeFilters) ? (
+            hasActiveProductFilters ? (
               <Button onClick={handleClearFilters} type="button" variant="outline">
                 Xóa bộ lọc
               </Button>
             ) : null
           }
           description={
-            hasActiveFilters(activeFilters)
-              ? "Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để tìm thêm sản phẩm chăm sóc da."
+            hasActiveProductFilters
+              ? 'Bộ lọc hiện tại có thể đang quá hẹp. Hãy thử xóa bớt loại da, mối quan tâm hoặc tìm bằng tên thành phần như "niacinamide", "ceramide", "BHA".'
               : "Hiện chưa có sản phẩm nào trong danh mục. Bạn có thể quay lại sau khi dữ liệu được bổ sung."
           }
           title={
-            hasActiveFilters(activeFilters)
+            hasActiveProductFilters
               ? "Không tìm thấy sản phẩm phù hợp"
               : "Chưa có sản phẩm trong danh mục"
           }

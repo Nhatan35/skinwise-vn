@@ -83,15 +83,28 @@ describe("Ingredient Library UI", () => {
     expect(ingredientClientSource).not.toContain("data.ingredients");
   });
 
-  it("supports q search and reset without adding CRUD behavior", () => {
+  it("supports search, function filtering, and reset without adding CRUD behavior", () => {
     for (const requiredSource of [
       "ingredient-search",
       "Tìm thành phần",
-      "Xóa tìm kiếm",
+      "Xóa bộ lọc",
+      "Lọc theo công dụng",
+      "Tất cả công dụng",
+      "Hỗ trợ hàng rào da",
+      "IngredientFilterState",
+      "draftFilters",
+      "activeFilters",
+      "initialIngredientFilters",
+      "hasActiveIngredientFilters",
+      "getActiveIngredientFilterLabels",
       "limit: 50",
       "getIngredientsApiPath",
       'params.set("q", q)',
+      'params.set("function", ingredientFunction)',
       'params.set("limit", String(limit))',
+      "...(filters.function ? { function: filters.function } : {})",
+      "setDraftFilters(initialIngredientFilters)",
+      "setActiveFilters(initialIngredientFilters)",
     ]) {
       expect(combinedIngredientUiSource).toContain(requiredSource);
     }
@@ -110,6 +123,22 @@ describe("Ingredient Library UI", () => {
     }
   });
 
+  it("summarizes ingredient result counts, active filters, and recovery guidance", () => {
+    for (const requiredSource of [
+      "Đang hiển thị",
+      "Bộ lọc đang áp dụng",
+      'aria-live="polite"',
+      "Từ khóa:",
+      "Công dụng:",
+      "Bạn có thể tìm theo tên INCI",
+      "Bộ lọc hiện tại có thể đang quá hẹp",
+      "chọn lại nhóm công dụng",
+      "Xóa bộ lọc",
+    ]) {
+      expect(ingredientLibrarySource).toContain(requiredSource);
+    }
+  });
+
   it("renders loading, error, empty, educational, and card states", () => {
     for (const requiredCopy of [
       "Đang tải thư viện thành phần",
@@ -122,6 +151,11 @@ describe("Ingredient Library UI", () => {
     ]) {
       expect(combinedIngredientUiSource).toContain(requiredCopy);
     }
+
+    expect(ingredientCardSource).toContain(
+      "Xem chi tiết thành phần ${ingredient.inciName}",
+    );
+    expect(ingredientCardSource).not.toContain('aria-label="Xem chi tiết"');
   });
 
   it("keeps ingredient catalogue files free of server-only imports", () => {

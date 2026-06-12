@@ -18,13 +18,13 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish**.
+- Latest completed scoped task: **MVP v1.34 - Product & Ingredient Discovery Confidence Polish**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
-- Recommended next task: **TBD / Backlog grooming**. v1.24 closeout remains deferred and validation-blocked.
+- Recommended next task: **E2E Failure Triage & Extended Validation Cleanup**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.33 scoped validation** - lint, typecheck, unit tests, and diff check passed. Build, E2E, browser keyboard verification, screen-reader verification, and production verification were not run for v1.33. v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.34 scoped validation** - lint, typecheck, unit tests, and diff check passed. Build passed after an elevated rerun; E2E was attempted and failed in existing dashboard/insights/saved-products/today-log flows. Manual browser, screen-reader, and production verification were not run for v1.34. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PARTIAL / DEFERRED for v1.22.1 - public URL and `/api/health` were checked, but authenticated MVP flows were not checked.**
 - Production monitoring evidence: **NOT CHECKED for v1.22.1 - historical/user-reported Vercel/browser/OAuth/MongoDB checks remain historical only.**
@@ -77,6 +77,9 @@ MVP v1.28 - Saved Products to Routine Decision Support Polish: DONE, scoped vali
 MVP v1.29 - Routine to Routine Log / Journal Decision Support Polish: DONE, scoped validation only
 MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped validation only
 MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
+MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
+MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
+MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -117,17 +120,19 @@ MVP v1.30 is a focused Insights Interpretation & Dashboard Next Action polish mi
 
 MVP v1.31 is a focused core-flow recovery and navigation polish milestone after v1.30. It improves selected empty states, recoverable error states, missing-resource fallbacks, retry clarity, and route consistency across the existing Skin Profile -> Product Match -> Product Detail -> Saved Products -> Routine -> Routine Log / Journal -> Insights -> Dashboard flow. It does not add a new global error framework, rewrite business logic, change schema or seed data, add monitoring/analytics, AI, image analysis, medical features, payment, checkout, cart, marketplace, or admin scope. Scoped v1.31 local validation passed with `npm run lint`, `npm run typecheck`, and `npm run test`; build, E2E, manual browser verification, and production verification were not run for v1.31.
 
+MVP v1.34 is a focused Product and Ingredient Discovery Confidence polish milestone after v1.33. It adds result counts, active filter summaries, clearer no-result recovery copy, ingredient function filtering through the existing ingredient API query, ingredient reset behavior for both search and function filters, and contextual ingredient detail action labels. It does not change Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI provider behavior, product/ingredient CRUD scope, or API contracts beyond exposing the existing ingredient `function` query in the client.
+
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 
 ## Key Features
 
 - Google OAuth authentication with protected app routes.
 - Skin profile onboarding, viewing, editing, and deletion.
-- Product catalogue with product detail pages, personalized match explanation on Product Detail, and v1.27 save-decision support.
+- Product catalogue with product detail pages, personalized match explanation on Product Detail, v1.27 save-decision support, and v1.34 result-count/filter-summary confidence polish.
 - Curated demo-safe catalogue with 70 fictional/demo-safe products and 70 educational ingredient records in the current v1.24 seed implementation.
 - Saved products with clearer save-state guidance, empty-state next action, saved product comparison, and v1.28 routine decision-support guidance.
 - Personalized Product Match: rule-based educational product matching with product-fit level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, clearer v1.26 next-action copy, and Product Detail single-product matching based on existing product/profile metadata.
-- Ingredient library with ingredient detail pages.
+- Ingredient library with ingredient detail pages, v1.34 function filtering, result-count/filter-summary confidence polish, and contextual detail actions.
 - Ingredient explanation API using the validated provider flow and safe fallback behavior.
 - Routine builder with v1.28 saved-product-to-routine guidance plus v1.29 Routine to Log/Journal next-action clarity, empty state, morning/evening guidance, selected-product context, and Today Checklist navigation.
 - Routine safety analysis with deterministic rule checks, scannable result sections, and safe AI-provider fallback behavior.
@@ -472,6 +477,10 @@ These are intentional MVP boundaries, not release blockers:
 - Build and E2E were not run for v1.32 by task scope.
 - v1.33 Core Accessibility, Focus Management & Keyboard Interaction polish passed scoped lint/typecheck/unit test and diff-check validation.
 - Build and E2E were not run for v1.33 by task scope.
+- v1.34 Product & Ingredient Discovery Confidence polish passed scoped lint/typecheck/unit test and diff-check validation.
+- v1.34 build passed after an elevated rerun; the sandboxed build attempt failed with `spawn EPERM`.
+- v1.34 E2E was attempted after an elevated rerun and failed: 25 passed, 6 failed in existing dashboard, insights, saved-products, and today routine log flows.
+- v1.34 production audit passed with 0 vulnerabilities.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -483,6 +492,7 @@ These are intentional MVP boundaries, not release blockers:
 - Manual browser and production verification were not performed for v1.31.
 - Manual browser and production verification were not performed for v1.32.
 - Browser keyboard, screen-reader, manual accessibility, and production verification were not performed for v1.33.
+- Manual browser, screen-reader, and production verification were not performed for v1.34.
 
 ## Final Portfolio Decision
 
@@ -513,6 +523,7 @@ MVP v1.30 - Insights Interpretation & Dashboard Next Action Polish: DONE, scoped
 MVP v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE, scoped validation only
 MVP v1.32 - Core Form Submission & Action Feedback Consistency Polish: DONE, scoped validation only
 MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE, scoped validation only
+MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
@@ -521,4 +532,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish` improves selected accessible names, native semantics, focus recovery, keyboard-operable action groups, validation relationships, and status feedback as a follow-up to v1.32 within the scoped validation boundary of lint, typecheck, unit tests, and diff check. It reuses existing Button, Label, Alert, local React state, client API, and route-helper patterns; it does not add a new accessibility framework, component library, keyboard-navigation system, or focus-management framework, and it does not claim full WCAG compliance or certification. `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.34 - Product & Ingredient Discovery Confidence Polish` improves the existing Product Catalogue and Ingredient Library discovery experience with result counts, active filter summaries, clearer no-result recovery copy, ingredient function filtering through the existing API query, reset behavior for search/function filters, and contextual ingredient detail action labels. It preserves Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI behavior, CRUD scope, and existing API contracts. `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

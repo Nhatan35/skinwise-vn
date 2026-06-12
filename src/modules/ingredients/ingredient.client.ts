@@ -18,6 +18,7 @@ const INGREDIENT_EVIDENCE_LEVELS = [
 const INGREDIENT_EXPLANATION_SOURCES = ["ai", "fallback"] as const;
 
 export type IngredientListClientInput = {
+  function?: string;
   limit?: number;
   q?: string;
 };
@@ -59,10 +60,15 @@ export class IngredientClientError extends Error {
 export function getIngredientsApiPath(input: IngredientListClientInput = {}) {
   const params = new URLSearchParams();
   const q = input.q?.trim();
+  const ingredientFunction = input.function?.trim();
   const limit = input.limit ?? DEFAULT_INGREDIENT_LIMIT;
 
   if (q) {
     params.set("q", q);
+  }
+
+  if (ingredientFunction) {
+    params.set("function", ingredientFunction);
   }
 
   params.set("limit", String(limit));

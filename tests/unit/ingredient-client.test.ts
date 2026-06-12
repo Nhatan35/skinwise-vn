@@ -81,6 +81,27 @@ describe("Ingredient client helper", () => {
     ).toBe("/api/ingredients?q=niacinamide+serum&limit=50");
   });
 
+  it("builds the ingredient list API path with a function filter", () => {
+    expect(
+      getIngredientsApiPath({
+        function: "barrier_support",
+        limit: 50,
+      }),
+    ).toBe("/api/ingredients?function=barrier_support&limit=50");
+  });
+
+  it("combines trimmed q, function, and limit filters", () => {
+    expect(
+      getIngredientsApiPath({
+        function: "barrier_support",
+        limit: 50,
+        q: "  niacinamide  ",
+      }),
+    ).toBe(
+      "/api/ingredients?q=niacinamide&function=barrier_support&limit=50",
+    );
+  });
+
   it("builds encoded ingredient detail API paths", () => {
     expect(getIngredientApiPath("ingredient id/with spaces")).toBe(
       "/api/ingredients/ingredient%20id%2Fwith%20spaces",

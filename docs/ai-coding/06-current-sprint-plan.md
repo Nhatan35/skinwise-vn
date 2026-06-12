@@ -28,14 +28,15 @@ Insights Interpretation & Dashboard Next Action Polish: DONE in v1.30, scoped va
 Core Flow Recovery, Empty State & Navigation Consistency Polish: DONE in v1.31, scoped validation only
 Core Form Submission & Action Feedback Consistency Polish: DONE in v1.32, scoped validation only
 Core Accessibility, Focus Management & Keyboard Interaction Polish: DONE in v1.33, scoped validation only
-Latest completed scoped task: MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish
+Product & Ingredient Discovery Confidence Polish: DONE in v1.34, scoped validation only
+Latest completed scoped task: MVP v1.34 - Product & Ingredient Discovery Confidence Polish
 Current active milestone: None
 Current active milestone status: None
 Production URL public reachability: PASS for v1.22.1 public check
 Production /api/health: PASS for v1.22.1 public check
 Authenticated MVP production smoke: NOT CHECKED / DEFERRED
 Production signals: NOT CHECKED / DEFERRED
-Recommended next task: TBD / Backlog grooming
+Recommended next task: E2E Failure Triage & Extended Validation Cleanup
 Current phase: Post-MVP controlled improvement
 ```
 
@@ -43,11 +44,11 @@ v1.22.1 remains partial/deferred because only the public production URL and `/ap
 
 v1.24 seed implementation and closeout documentation are mostly complete, but v1.24 is NOT DONE because `npm run build` and `npm run test:e2e` timed out in the current environment.
 
-v1.33 is the latest completed scoped task within the validation boundary of lint, typecheck, unit tests, and diff check.
+v1.34 is the latest completed scoped task within the validation boundary of lint, typecheck, unit tests, and diff check. Build passed after an elevated rerun; E2E was attempted and failed in existing dashboard, insights, saved-products, and today routine log flows.
 
 ## 2. Objective
 
-Complete `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish` by polishing selected high-value accessibility semantics, focus recovery, keyboard-operable action groups, validation relationships, and status feedback without creating a duplicate accessibility, component, keyboard-navigation, or focus-management framework.
+Complete `v1.34 - Product & Ingredient Discovery Confidence Polish` by improving the existing `/products` and `/ingredients` discovery experience so users can understand result counts, active filters, recovery paths when no results are found, and the educational non-medical boundary.
 
 This sprint does not add new product features. It preserves:
 
@@ -59,7 +60,7 @@ No image upload, skin image analysis, diagnosis, treatment advice, or skin scori
 No database schema change
 No seed data change
 No Product Match scoring/ranking rewrite
-No Product Detail rewrite
+No Product Detail route rewrite
 No Saved Products rewrite
 No Routine logic rewrite
 No Routine Log logic rewrite
@@ -71,11 +72,11 @@ No monitoring or analytics integration
 No Routine Safety Analysis rewrite
 No new global form or toast framework
 No optimistic-update infrastructure
-No new accessibility framework
-No component-library replacement
-No global keyboard shortcut system
-No global focus-management framework
-No full WCAG compliance or certification claim
+No new global search framework
+No new state management library
+No new UI component library
+No admin/product/ingredient CRUD
+No skin score, risk score, ingredient danger grade, diagnosis, treatment advice, or personalized medical recommendation
 No secret, token, OAuth credential, database URI, raw environment variable, password, cookie, session token, or raw production database document exposure
 ```
 
@@ -91,47 +92,42 @@ docs/final-release-checklist.md
 docs/ai-coding/02-implementation-status.md
 docs/ai-coding/03-feature-status-matrix.md
 docs/ai-coding/06-current-sprint-plan.md
-src/modules/journals/components/skin-journal-entry-form.tsx
-src/modules/journals/components/skin-journal-timeline.tsx
-src/modules/product-match/components/product-match-card.tsx
-src/modules/products/components/product-card.tsx
-src/modules/products/components/product-detail.tsx
-src/modules/routines/components/routine-builder.tsx
-src/modules/routines/components/routine-log-controls.tsx
-src/modules/saved-products/components/saved-product-card.tsx
-src/modules/saved-products/components/saved-product-toggle-button.tsx
-tests/unit/product-saved-products-ui.test.ts
-tests/unit/routine-builder-ui.test.ts
-tests/unit/routine-log-ui.test.ts
-tests/unit/saved-products-ui.test.ts
-tests/unit/skin-journal-ui.test.ts
+src/modules/products/components/product-catalogue.tsx
+src/modules/ingredients/components/ingredient-library.tsx
+src/modules/ingredients/components/ingredient-card.tsx
+src/modules/ingredients/ingredient.client.ts
+tests/unit/product-catalogue-ui.test.ts
+tests/unit/ingredient-client.test.ts
+tests/unit/ingredient-library-ui.test.ts
 ```
 
-v1.25 dashboard/onboarding files remain preserved. v1.25.1 seed baseline files remain preserved. v1.26 Product Match polish files remain preserved. v1.27 Product Detail to Saved Products polish files remain preserved. v1.28 Saved Products to Routine polish files remain preserved. v1.29 Routine to Routine Log / Journal polish files remain preserved. v1.30 Insights/Dashboard polish remains preserved. v1.31 recovery and navigation polish remains preserved. v1.32 form/action feedback polish remains preserved.
+v1.25 dashboard/onboarding files remain preserved. v1.25.1 seed baseline files remain preserved. v1.26 Product Match polish files remain preserved. v1.27 Product Detail to Saved Products polish files remain preserved. v1.28 Saved Products to Routine polish files remain preserved. v1.29 Routine to Routine Log / Journal polish files remain preserved. v1.30 Insights/Dashboard polish remains preserved. v1.31 recovery and navigation polish remains preserved. v1.32 form/action feedback polish remains preserved. v1.33 accessibility polish remains preserved.
 
 ## 4. Acceptance Criteria
 
-Core accessibility, focus management, and keyboard interaction polish:
+Product and ingredient discovery confidence polish:
 
 ```txt
-[x] Reuse existing Button, Label, Alert, local React state, client API helper, and route constant patterns.
-[x] Do not add a duplicate accessibility, component, keyboard, notification, or focus-management framework.
-[x] Improve selected high-value accessibility interactions only.
-[x] Add contextual accessible names for selected repeated Product, Saved Product, and Product Match actions.
-[x] Keep selected save/unsave state and pending state understandable to assistive technology.
-[x] Add Routine Log action-group labels, current status description, and partial-panel expanded semantics.
-[x] Add invalid-submit focus recovery for selected Routine and Journal forms.
-[x] Associate selected Journal helper/error text with controls.
-[x] Use polite status semantics for selected success feedback and existing alert semantics for errors.
-[x] Preserve v1.32 pending guards, duplicate-submission prevention, success/failure feedback, and input preservation.
+[x] Reuse existing Button, Card, Alert, Input, Label, Select, EmptyState, ErrorState, LoadingState, local React state, and client API helper patterns.
+[x] Product Catalogue shows result count after successful load.
+[x] Product Catalogue shows active filter summary for q, category, priceRange, skinType, and concern.
+[x] Product Catalogue has clearer active-filter no-result recovery copy and keeps the clear-filter action.
+[x] Ingredient client supports the existing ingredient function query parameter.
+[x] Ingredient Library uses draft/active object filter state.
+[x] Ingredient Library exposes a single-select function filter.
+[x] Ingredient Library shows result count after successful load.
+[x] Ingredient Library shows active search/function filter summary and no-filter discovery guidance.
+[x] Ingredient Library no-result recovery copy is clearer.
+[x] Ingredient reset clears both search and function filters.
+[x] IngredientCard detail action label is contextual.
 [x] Preserve Product Match scoring/ranking behavior.
-[x] Preserve Product Detail behavior.
+[x] Preserve Product Detail route behavior.
 [x] Preserve Saved Products persistence behavior.
 [x] Preserve Routine, Routine Log, Journal, Insights, and Dashboard behavior.
-[x] Preserve seed data, schema, auth, AI provider behavior, broad API contracts, v1.25 onboarding polish, v1.25.1 seed baseline consistency, and v1.26 through v1.32 polish work.
+[x] Preserve seed data, schema, auth, AI provider behavior, broad API contracts, v1.25 onboarding polish, v1.25.1 seed baseline consistency, and v1.26 through v1.33 polish work.
 [x] Keep v1.24 NOT DONE / VALIDATION BLOCKED.
 [x] Keep v1.22.1 production smoke verification PARTIAL / DEFERRED.
-[x] Do not claim full WCAG compliance, accessibility certification, screen-reader verification, browser keyboard verification, build, E2E, production, screenshot, or video verification for v1.33.
+[x] Do not claim E2E, manual browser, screen-reader, production, screenshot, or video verification for v1.34.
 ```
 
 Validation:
@@ -141,41 +137,42 @@ Validation:
 [x] npm run typecheck
 [x] npm run test
 [x] git diff --check
-[ ] npm run build - not run for v1.33 by task scope
-[ ] npm run test:e2e - not run for v1.33 by task scope
+[x] npm run build - PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+[ ] npm run test:e2e - FAIL after elevated rerun; sandboxed attempt failed with spawn EPERM
+[x] npm audit --omit=dev --audit-level=moderate
 ```
 
 ## 5. Validation Status
 
-Current v1.33 validation status:
+Current v1.34 validation status:
 
 ```txt
 Evidence date: 2026-06-12
+node -v: v24.14.0
+npm -v: 11.14.1
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 103 files / 1016 tests
+npm run test: PASS - 103 files / 1020 tests
 git diff --check: PASS
-npm run build: NOT RUN for v1.33
-npm run test:e2e: NOT RUN for v1.33
-Browser keyboard verification: NOT CHECKED
+npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+npm run test:e2e: FAIL after elevated rerun - 25 passed / 6 failed; sandboxed attempt failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+Manual browser verification: NOT CHECKED
 Screen-reader verification: NOT CHECKED
-Manual accessibility verification: NOT CHECKED
 Production verification: NOT CHECKED
 ```
 
-v1.33 is done only within this scoped local validation boundary. Do not use this as full release readiness or full accessibility compliance evidence.
+v1.34 is done only within this scoped local validation boundary. Do not use this as full E2E, manual browser, screen-reader, production, screenshot, or video evidence.
 
 ## 6. Known Limitations
 
 ```txt
-Browser keyboard verification: NOT CHECKED
+Manual browser verification: NOT CHECKED
 Screen-reader verification: NOT CHECKED
-Manual accessibility verification: NOT CHECKED
 Production verification: NOT CHECKED
-Build validation: NOT RUN for v1.33 by task scope
-E2E validation: NOT RUN for v1.33 by task scope
+Build validation: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+E2E validation: FAIL after elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows
 Screenshots/video: NOT CREATED
-Full WCAG compliance/certification: NOT CLAIMED
 v1.24 closeout: DEFERRED / VALIDATION BLOCKED
 ```
 
@@ -184,17 +181,17 @@ v1.24 closeout: DEFERRED / VALIDATION BLOCKED
 Recommended next task:
 
 ```txt
-TBD / Backlog grooming
+E2E Failure Triage & Extended Validation Cleanup
 ```
 
-If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E validation in a suitable environment before marking v1.24 DONE.
+Treat the existing dashboard, insights, saved-products, and today routine log E2E failures as extended-validation debt outside v1.34 scope. If v1.24 closeout is resumed later, rerun the required v1.24 build and E2E validation in a suitable environment before marking v1.24 DONE.
 
 ## 8. Suggested Commit
 
-For the v1.33 Core Accessibility, Focus Management & Keyboard Interaction polish changes, use:
+For the v1.34 Product & Ingredient Discovery Confidence polish changes, use:
 
 ```bash
-git commit -m "feat(a11y): polish core focus and keyboard interactions"
+git commit -m "feat(discovery): polish product and ingredient filtering"
 ```
 
-Stage only reviewed v1.33 files before committing. Do not use `git add .`, and do not claim a commit was created unless it was actually created.
+Stage only reviewed v1.34 files before committing. Do not use `git add .`, and do not claim a commit was created unless it was actually created.

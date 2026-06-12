@@ -145,12 +145,34 @@ describe("Product Catalogue UI", () => {
     }
   });
 
+  it("summarizes product result counts, active filters, and recovery guidance", () => {
+    for (const requiredSource of [
+      "Đang hiển thị",
+      "Bộ lọc đang áp dụng",
+      'aria-live="polite"',
+      "getActiveProductFilterLabels",
+      "Từ khóa:",
+      "Danh mục:",
+      "Mức giá:",
+      "Loại da:",
+      "Mối quan tâm:",
+      "Bộ lọc hiện tại có thể đang quá hẹp",
+      '"niacinamide"',
+      '"ceramide"',
+      '"BHA"',
+      "Xóa bộ lọc",
+      "handleClearFilters",
+    ]) {
+      expect(productCatalogueSource).toContain(requiredSource);
+    }
+  });
+
   it("renders loading, error, empty, and educational states", () => {
     for (const requiredCopy of [
       "Đang tải danh mục sản phẩm",
       "Không thể tải danh mục sản phẩm",
       "Không tìm thấy sản phẩm phù hợp",
-      "Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm",
+      "Bộ lọc hiện tại có thể đang quá hẹp",
       "Danh mục tham khảo",
       "không phải chẩn đoán y khoa",
     ]) {
