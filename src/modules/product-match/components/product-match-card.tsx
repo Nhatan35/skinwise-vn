@@ -102,8 +102,8 @@ function getMatchedSignalItems(item: ProductMatchDto) {
 
     signals.push({
       label: matchedSkinTypeLabels
-        ? `Phù hợp với hồ sơ da: ${matchedSkinTypeLabels}`
-        : "Phù hợp với dữ liệu hồ sơ da",
+        ? `Khớp với loại da đã lưu: ${matchedSkinTypeLabels}`
+        : "Khớp với dữ liệu hồ sơ da đã lưu",
       tone: "positive",
     });
   }
@@ -114,28 +114,28 @@ function getMatchedSignalItems(item: ProductMatchDto) {
       .join(", ");
 
     signals.push({
-      label: `Liên quan đến mối quan tâm: ${matchedConcernLabels}`,
+      label: `Liên quan đến mối quan tâm đã lưu: ${matchedConcernLabels}`,
       tone: "positive",
     });
   }
 
   if (matchedSignals.budget) {
     signals.push({
-      label: "Phù hợp với ngân sách đã nhập",
+      label: "Nằm trong khoảng ngân sách đã lưu",
       tone: "positive",
     });
   }
 
   if (matchedSignals.sensitivity) {
     signals.push({
-      label: "Cần xem kỹ nếu da dễ kích ứng",
+      label: "Cần xem kỹ vì hồ sơ có độ nhạy cảm hoặc cảnh báo sản phẩm",
       tone: "caution",
     });
   }
 
   if (matchedSignals.avoidedIngredients.length > 0) {
     signals.push({
-      label: "Có thành phần bạn muốn tránh",
+      label: "Có thành phần trùng với danh sách muốn tránh",
       tone: "caution",
     });
   }
@@ -177,6 +177,13 @@ export function ProductMatchCard({
             </Badge>
           </div>
         </div>
+        <p
+          className="mt-3 text-sm leading-6 text-muted-foreground"
+          data-testid="product-match-score-helper"
+        >
+          Điểm này là tín hiệu tương thích MVP dựa trên hồ sơ đã lưu và dữ
+          liệu sản phẩm hiện có, không phải kết luận chuyên môn.
+        </p>
       </CardHeader>
       <CardContent className="space-y-5">
         {item.matchExplanation ? (
@@ -200,7 +207,7 @@ export function ProductMatchCard({
               headingId={explanationHeadingId}
               match={item}
               showMatchBadges={false}
-              title="Lý do gợi ý"
+              title="Vì sao sản phẩm này xuất hiện?"
             />
           </div>
         ) : null}
@@ -211,8 +218,9 @@ export function ProductMatchCard({
         >
           <p className="text-sm font-semibold text-foreground">Bước tiếp theo</p>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Xem chi tiết để kiểm tra thông tin sản phẩm, rồi lưu sản phẩm nếu phù
-            hợp với routine chăm sóc da của bạn.
+            Xem chi tiết để đọc bảng thành phần, lý do phù hợp và lưu ý cần
+            kiểm tra. Nếu vẫn muốn thử, hãy thử trên một vùng da nhỏ và thêm
+            từng sản phẩm mới để dễ theo dõi phản ứng da.
           </p>
         </div>
 

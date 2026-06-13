@@ -143,6 +143,12 @@ export function SavedProductsComparisonPanel({
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y khoa.
           </p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Dùng bảng này để xem khác biệt giữa loại sản phẩm, hoạt chất, cảnh
+            báo, điều kiện phù hợp và dữ liệu còn thiếu. Bảng không tự chọn
+            thay bạn; lựa chọn cuối cùng vẫn phụ thuộc vào phản ứng da và sở
+            thích cá nhân.
+          </p>
         </div>
         <Button
           data-testid="clear-saved-products-comparison"

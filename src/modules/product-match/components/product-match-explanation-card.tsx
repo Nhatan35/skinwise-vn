@@ -32,9 +32,9 @@ const ingredientEffectLabels: Record<
   ProductMatchIngredientHighlight["effect"],
   string
 > = {
-  positive: "Tín hiệu hỗ trợ",
+  positive: "Liên quan đến hồ sơ",
   caution: "Cần xem kỹ",
-  neutral: "Dữ liệu tham khảo",
+  neutral: "Thông tin tham khảo",
 };
 
 type ProductMatchExplanationCardProps = {
@@ -72,9 +72,15 @@ export function ProductMatchExplanationCard({
       data-testid="product-match-explanation-card"
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <h3 className="text-base font-semibold text-foreground" id={headingId}>
-          {title}
-        </h3>
+        <div className="space-y-1">
+          <h3 className="text-base font-semibold text-foreground" id={headingId}>
+            {title}
+          </h3>
+          <p className="text-sm leading-6 text-muted-foreground">
+            Các lý do bên dưới dùng hồ sơ đã lưu và dữ liệu sản phẩm hiện có;
+            không tự động chọn sản phẩm thay bạn.
+          </p>
+        </div>
         {match && showMatchBadges ? (
           <div className="flex flex-wrap gap-2">
             <Badge
@@ -102,7 +108,7 @@ export function ProductMatchExplanationCard({
       <div className="space-y-3" data-testid="product-match-reasons">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <CheckCircle2 aria-hidden="true" className="size-4" />
-          Tín hiệu phù hợp
+          Tín hiệu phù hợp đã dùng
         </h4>
         <IconTextList icon="positive" items={positiveReasons} />
       </div>
@@ -110,8 +116,12 @@ export function ProductMatchExplanationCard({
       <div className="space-y-3" data-testid="product-match-cautions">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <AlertTriangle aria-hidden="true" className="size-4" />
-          Lưu ý an toàn
+          Yếu tố cần xem kỹ
         </h4>
+        <p className="text-sm leading-6 text-muted-foreground">
+          Các lưu ý này giúp bạn đọc kỹ hơn; không có nghĩa sản phẩm không an
+          toàn cho mọi người.
+        </p>
         <IconTextList icon="caution" items={cautionReasons} />
       </div>
 
@@ -120,7 +130,7 @@ export function ProductMatchExplanationCard({
       {explanation.dataQualityNotes && explanation.dataQualityNotes.length > 0 ? (
         <div className="space-y-3" data-testid="product-match-data-quality-notes">
           <h4 className="text-sm font-semibold text-foreground">
-            Ghi chú dữ liệu
+            Giới hạn dữ liệu
           </h4>
           <IconTextList icon="caution" items={explanation.dataQualityNotes} />
         </div>
@@ -140,7 +150,8 @@ function ProductMatchIngredientHighlights({
         className="text-sm leading-6 text-muted-foreground"
         data-testid="product-match-ingredient-highlights"
       >
-        Chưa đủ dữ liệu thành phần để giải thích mức độ phù hợp của sản phẩm này.
+        Sản phẩm có thông tin thành phần còn giới hạn, nên phần giải thích có
+        thể chưa đầy đủ. Hãy kiểm tra nhãn hoặc nguồn chính thức trước khi dùng.
       </p>
     );
   }
@@ -150,6 +161,10 @@ function ProductMatchIngredientHighlights({
       <h4 className="text-sm font-semibold text-foreground">
         Thành phần liên quan
       </h4>
+      <p className="text-sm leading-6 text-muted-foreground">
+        Nhãn dưới đây chỉ phân loại theo tín hiệu sẵn có: liên quan đến hồ sơ,
+        cần xem kỹ hoặc thông tin tham khảo.
+      </p>
       <ul className="grid gap-2">
         {explanation.ingredientHighlights.map((highlight) => (
           <li

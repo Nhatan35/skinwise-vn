@@ -42,6 +42,7 @@ MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped valid
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
@@ -66,7 +67,7 @@ v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-produ
 v1.37 status: DONE - Product Detail now guides users to Ingredient Library searches, Ingredient Detail guides users to Product Catalogue searches by INCI/display-name query, and Product Catalogue / Ingredient Library include lightweight cross-links; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish: DONE / PASS
+Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
 Recommended next task: None
 ```
 
@@ -79,6 +80,7 @@ Primary current documents:
 - `docs/release-evidence-screen-reader-verification.md`
 - `docs/release-evidence-empty-loading-error-state-polish.md`
 - `docs/release-evidence-form-validation-inline-feedback-polish.md`
+- `docs/release-evidence-product-match-explainability-polish.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -106,6 +108,7 @@ Evidence boundary:
 - No automated accessibility test suite or WCAG certification claim was added.
 - MVP Empty / Loading / Error State Polish is DONE / PASS. It added route-level loading/error/not-found boundaries, Settings recovery guidance, Today Routine Log weekly-review state polish, Saved Products comparison-limit guidance, and clearer fallback copy without changing product scope or business behavior.
 - MVP Form Validation & Inline Feedback Polish is DONE / PASS. It added required guidance, Skin Profile invalid-field focus recovery, Routine Builder manual-entry guidance, Today Routine Log partial-selection guidance, and safe Journal/Settings feedback without changing business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, or API contracts.
+- MVP Product Match Explainability Polish is DONE / PASS. It clarified Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation guidance, and Saved Products comparison guidance without changing scoring, matching, AI behavior, business logic, auth, schema, environment, packages, dependencies, or API contracts.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
@@ -151,6 +154,8 @@ Evidence boundary:
 - Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.37.
 - MVP Form Validation & Inline Feedback Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.
 - MVP Form Validation & Inline Feedback Polish sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed. Production verification was not rerun for this local polish task.
+- MVP Product Match Explainability Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.
+- MVP Product Match Explainability Polish sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed. Manual browser and production verification were not rerun for this local polish task.
 - Manual Browser & Production Smoke Verification later passed in production. The later standalone Screen-Reader Assistive Technology Verification also passed; screenshots and demo video remain not provided.
 - Production `/api/health` continues to expose the v1.22 health endpoint contract version; v1.37 did not change that API contract.
 - Do not commit real secrets, OAuth tokens, database URIs, or private user data.

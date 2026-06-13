@@ -469,36 +469,54 @@ function ProductDetailPersonalizedMatchSection({
     return null;
   }
 
+  const interpretationNote = (
+    <Alert data-testid="product-detail-match-interpretation-note">
+      <Info aria-hidden="true" />
+      <AlertTitle>Cách đọc điểm phù hợp</AlertTitle>
+      <AlertDescription>
+        Kết quả này dựa trên hồ sơ da đã lưu và thông tin sản phẩm hiện có. Hãy
+        xem đây là tín hiệu để cân nhắc, rồi kiểm tra bảng thành phần và phản
+        ứng da thực tế.
+      </AlertDescription>
+    </Alert>
+  );
+
   if (productMatch.matchAvailable) {
     return (
-      <ProductMatchExplanationCard
-        explanation={
-          productMatch.match.matchExplanation ?? {
-            summary:
-              "Giải thích chi tiết còn giới hạn vì một số metadata còn thiếu.",
-            positiveReasons: [],
-            cautionReasons: [],
-            ingredientHighlights: [],
-            usageNote:
-              "Hãy thử trên một vùng da nhỏ trước và đưa sản phẩm vào routine từ từ.",
-            dataQualityNotes: [
-              "Chưa tải được dữ liệu giải thích chi tiết cho sản phẩm này.",
-            ],
+      <div className="space-y-3">
+        {interpretationNote}
+        <ProductMatchExplanationCard
+          explanation={
+            productMatch.match.matchExplanation ?? {
+              summary:
+                "Giải thích chi tiết còn giới hạn vì một số metadata còn thiếu.",
+              positiveReasons: [],
+              cautionReasons: [],
+              ingredientHighlights: [],
+              usageNote:
+                "Hãy thử trên một vùng da nhỏ trước và đưa sản phẩm vào routine từ từ.",
+              dataQualityNotes: [
+                "Chưa tải được dữ liệu giải thích chi tiết cho sản phẩm này.",
+              ],
+            }
           }
-        }
-        headingId={headingId}
-        match={productMatch.match}
-        title="Giải thích mức độ phù hợp cá nhân hóa"
-      />
+          headingId={headingId}
+          match={productMatch.match}
+          title="Điểm phù hợp cá nhân hóa"
+        />
+      </div>
     );
   }
 
   return (
-    <ProductMatchExplanationCard
-      explanation={productMatch.matchExplanation}
-      headingId={headingId}
-      title="Giải thích mức độ phù hợp cá nhân hóa"
-    />
+    <div className="space-y-3">
+      {interpretationNote}
+      <ProductMatchExplanationCard
+        explanation={productMatch.matchExplanation}
+        headingId={headingId}
+        title="Điểm phù hợp cá nhân hóa"
+      />
+    </div>
   );
 }
 

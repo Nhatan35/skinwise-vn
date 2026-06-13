@@ -19,7 +19,7 @@ MVP v1.22.1 production deployment/smoke verification: DONE / PASS, user-reported
 MVP v1.23 account data deletion workflow hardening: DONE
 Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Latest completed verification task: Screen-Reader Assistive Technology Verification
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish
+Latest completed MVP quality task: MVP Product Match Explainability Polish
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Critical blockers reported: None
@@ -32,6 +32,8 @@ Screen-Reader Assistive Technology Verification is also DONE / PASS based on man
 MVP Empty / Loading / Error State Polish is DONE / PASS based on local validation. It improved user-facing recovery states without changing production monitoring, API contracts, schema, auth, AI behavior, or scoring logic.
 
 MVP Form Validation & Inline Feedback Polish is DONE / PASS based on local validation. It improved existing form/action guidance and safe inline feedback without changing production monitoring, API contracts, schema, auth, AI behavior, scoring logic, matching logic, or environment configuration.
+
+MVP Product Match Explainability Polish is DONE / PASS based on local validation. It improved Product Match, Product Detail, and Saved Products comparison explanation copy without changing production monitoring, API contracts, schema, auth, AI behavior, scoring logic, matching logic, or environment configuration.
 
 ## 2. Where to Check Production Errors
 
@@ -166,11 +168,12 @@ Evidence dates: historical user-reported baseline 2026-06-04; direct public chec
 Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Screen-Reader Assistive Technology Verification: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Critical accessibility blockers: None observed
 Latest completed verification task: Screen-Reader Assistive Technology Verification
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish
+Latest completed MVP quality task: MVP Product Match Explainability Polish
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 ```

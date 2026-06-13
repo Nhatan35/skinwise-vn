@@ -139,10 +139,19 @@ export function ProductMatchPage() {
           Được tạo lúc{" "}
           {new Date(productMatch.generatedAt).toLocaleString("vi-VN")}
         </p>
+        <p className="mt-3 text-sm font-semibold text-foreground">
+          Kết quả này có ý nghĩa gì?
+        </p>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Gợi ý sản phẩm được tạo theo quy tắc cố định và chỉ mang tính tham
-          khảo. Nên xem kỹ bảng thành phần, thử trên một vùng da nhỏ và thêm
-          sản phẩm mới từ từ.
+          Điểm phù hợp là tín hiệu tương thích MVP dựa trên hồ sơ da đã lưu và
+          thông tin sản phẩm hiện có. Điểm cao hơn nghĩa là sản phẩm có nhiều
+          yếu tố khớp hơn với loại da, mối quan tâm, ngân sách hoặc danh sách
+          thành phần muốn tránh; đây là dữ liệu để cân nhắc, không phải kết
+          luận chuyên môn.
+        </p>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          Hãy xem lý do phù hợp, lưu ý cần kiểm tra, bảng thành phần và thử
+          trên một vùng da nhỏ trước khi dùng thường xuyên.
         </p>
       </div>
 

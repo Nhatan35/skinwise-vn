@@ -95,7 +95,9 @@ export function ProductMatchSummary({
       <CardHeader>
         <CardTitle>Hồ sơ da dùng để gợi ý</CardTitle>
         <CardDescription>
-          Tính năng này dùng hồ sơ đã lưu, sản phẩm hiển thị và quy tắc cố định.
+          SkinWise xét hồ sơ đã lưu, sản phẩm đang hiển thị và quy tắc cố
+          định. Điểm phù hợp là tín hiệu tương thích, không tự động chọn sản
+          phẩm thay bạn.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2">

@@ -53,6 +53,7 @@ MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped valid
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -61,7 +62,7 @@ Current phase: Post-MVP controlled improvement.
 Current active milestone: None.
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS.
 Accessibility status: Screen-Reader Assistive Technology Verification: DONE / PASS.
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish: DONE / PASS.
+Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS.
 v1.24 status: Implementation complete, validation blocked - build and E2E did not pass in the current environment.
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed. Build, E2E, manual browser verification, and production verification were not run for v1.25.
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
@@ -100,6 +101,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Screen-Reader Assistive Technology Verification | PASS | Manual production/browser verification covered keyboard navigation, focus visibility, accessible names, forms, feedback, headings, landmarks, and core MVP flows. No critical accessibility blockers were observed. |
 | MVP Empty / Loading / Error State Polish | PASS | Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review state polish, Saved Products comparison-limit guidance, and clearer fallback copy were added without product-scope expansion. |
 | MVP Form Validation & Inline Feedback Polish | PASS | Required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, valid partial-routine disabled states, safe Journal/Settings errors, and accessible status feedback passed full local validation. |
+| MVP Product Match Explainability Polish | PASS | Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance passed full local validation without scoring or matching changes. |
 | Production signals | PASS | User-reported manual checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
 | Historical production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it is historical and not v1.22.1 direct verification. |
 | Historical production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they are historical and not v1.22.1 direct verification. |
@@ -111,7 +113,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
 | Latest post-MVP implementation | PASS | MVP v1.37 Product ↔ Ingredient Learning Path Polish is complete. It adds educational search links and lightweight cross-links without a recommendation engine, related-products ranking, Product Match scoring/ranking changes, Routine Safety changes, schema or seed baseline changes, auth or AI-provider changes, CRUD scope changes, or broad API contract changes. MVP v1.35 remains DONE with full E2E PASS; v1.34 remains DONE within scoped validation only; v1.24 remains NOT DONE / VALIDATION BLOCKED. |
-| Latest MVP quality improvement | PASS | MVP Form Validation & Inline Feedback Polish is complete. It changes existing form/action guidance and presentation only; business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, and API contracts are unchanged. |
+| Latest MVP quality improvement | PASS | MVP Product Match Explainability Polish is complete. It changes Product Match, Product Detail, and Saved Products comparison copy/presentation only; business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, and API contracts are unchanged. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
 
@@ -120,6 +122,19 @@ Optional remaining media evidence tasks: screenshots and demo video.
 Local validation evidence:
 
 ```txt
+MVP Product Match Explainability Polish:
+Evidence date: 2026-06-13
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 105 files / 1032 tests
+git diff --check: PASS, with a CRLF normalization warning for src/modules/product-match/components/product-match-explanation-card.tsx
+npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM
+npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
+Manual browser verification: NOT CHECKED for this local polish task; local dev server spot-check attempt exited before serving
+Production verification: NOT RERUN for this local polish task
+
 MVP v1.37 Product ↔ Ingredient Learning Path Polish:
 Evidence date: 2026-06-13
 node -v: v24.14.0
@@ -391,6 +406,7 @@ Evidence boundary:
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and later user-reported Manual Browser & Production Smoke Verification PASS. |
 | `docs/release-evidence-screen-reader-verification.md` | PASS | Manual keyboard and screen-reader verification evidence records PASS, covered MVP flows, unknown metadata, and the no-automated-suite boundary. |
 | `docs/release-evidence-empty-loading-error-state-polish.md` | PASS | MVP empty/loading/error state polish evidence records UI-state scope, validation PASS, and unchanged product/business boundaries. |
+| `docs/release-evidence-product-match-explainability-polish.md` | PASS | Product Match explainability polish evidence records score/caution/limited-data copy scope, validation PASS, and unchanged scoring/matching boundaries. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
 | `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
 | `docs/data-control-and-deletion.md` | PASS | Data deletion boundary, ownership rules, post-deletion expectations, and privacy limits are documented. |
@@ -691,6 +707,7 @@ MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 Screen-Reader Assistive Technology Verification: DONE / PASS
 MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
 Current active milestone: None

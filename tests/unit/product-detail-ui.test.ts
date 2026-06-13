@@ -132,7 +132,10 @@ describe("Product Detail UI", () => {
   it("renders a non-blocking personalized match explanation section", () => {
     for (const requiredSource of [
       "ProductDetailPersonalizedMatchSection",
-      "Giải thích mức độ phù hợp cá nhân hóa",
+      "Điểm phù hợp cá nhân hóa",
+      'data-testid="product-detail-match-interpretation-note"',
+      "Cách đọc điểm phù hợp",
+      "Kết quả này dựa trên hồ sơ da đã lưu",
       "Đang tải giải thích phù hợp cá nhân hóa",
       "Chưa tải được giải thích cá nhân hóa",
       "Bạn vẫn có thể xem thông tin sản phẩm bên dưới.",
@@ -151,8 +154,8 @@ describe("Product Detail UI", () => {
       'data-testid="product-match-cautions"',
       'data-testid="product-match-ingredient-highlights"',
       "Mức độ phù hợp",
-      "Tín hiệu phù hợp",
-      "Lưu ý an toàn",
+      "Tín hiệu phù hợp đã dùng",
+      "Yếu tố cần xem kỹ",
       "Thành phần liên quan",
     ]) {
       expect(productMatchExplanationCardSource).toContain(requiredSource);
