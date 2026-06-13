@@ -81,6 +81,8 @@ const stressLabels: Record<SkinJournalStressLevel, string> = {
   high: "Cao",
 };
 const SKIN_JOURNAL_FORM_ERROR_ID = "skin-journal-form-error";
+const SKIN_JOURNAL_REQUIRED_GUIDANCE_ID =
+  "skin-journal-required-guidance";
 const skinJournalFieldOrder: SkinJournalFormField[] = [
   "localDate",
   "timezone",
@@ -159,7 +161,17 @@ function getFormErrorMessage(error: unknown) {
       return "Bạn đã có nhật ký cho ngày này. Nội dung bạn đã nhập vẫn được giữ lại để chỉnh ngày hoặc cập nhật mục hiện có.";
     }
 
-    return `${error.message} Nội dung bạn đã nhập vẫn được giữ lại.`;
+    if (error.code === "UNAUTHORIZED") {
+      return "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại để tiếp tục; nội dung bạn đã nhập vẫn được giữ lại.";
+    }
+
+    if (error.code === "VALIDATION_ERROR") {
+      return "Một vài thông tin nhật ký chưa hợp lệ. Vui lòng kiểm tra các trường được đánh dấu; nội dung bạn đã nhập vẫn được giữ lại.";
+    }
+
+    if (error.code === "NOT_FOUND") {
+      return "Mục nhật ký này không còn khả dụng. Vui lòng quay lại danh sách nhật ký và thử lại.";
+    }
   }
 
   return "Chưa thể lưu ghi nhận. Nội dung bạn đã nhập vẫn được giữ lại. Vui lòng thử lại.";
@@ -297,6 +309,7 @@ export function SkinJournalEntryForm({
       <CardContent>
         <form
           aria-busy={isSaving}
+          aria-describedby={SKIN_JOURNAL_REQUIRED_GUIDANCE_ID}
           className="space-y-6"
           data-testid="skin-journal-form"
           onSubmit={handleSubmit}
@@ -304,6 +317,7 @@ export function SkinJournalEntryForm({
           {formError ? (
             <Alert
               id={SKIN_JOURNAL_FORM_ERROR_ID}
+              role="alert"
               tabIndex={-1}
               variant="destructive"
             >
@@ -312,9 +326,19 @@ export function SkinJournalEntryForm({
             </Alert>
           ) : null}
 
+          <p
+            className="text-sm leading-6 text-muted-foreground"
+            id={SKIN_JOURNAL_REQUIRED_GUIDANCE_ID}
+          >
+            Ngày ghi nhận và múi giờ là bắt buộc. Các thông tin theo dõi còn
+            lại là tùy chọn và có thể bổ sung khi phù hợp.
+          </p>
+
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="skin-journal-local-date">Ngày ghi nhận</Label>
+              <Label htmlFor="skin-journal-local-date">
+                Ngày ghi nhận (Bắt buộc)
+              </Label>
               {mode === "create" ? (
                 <Input
                   aria-describedby={
@@ -323,6 +347,7 @@ export function SkinJournalEntryForm({
                       : undefined
                   }
                   aria-invalid={fieldErrors.localDate ? true : undefined}
+                  aria-required="true"
                   data-testid="skin-journal-local-date-input"
                   id="skin-journal-local-date"
                   onChange={(event) =>
@@ -351,6 +376,7 @@ export function SkinJournalEntryForm({
               id="skin-journal-timezone"
               label="Múi giờ"
               onChange={(value) => updateField("timezone", value)}
+              required
               value={formState.timezone}
             />
           </div>
@@ -664,6 +690,7 @@ type TextFieldProps = {
   min?: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  required?: boolean;
   step?: string;
   type?: "number" | "text";
   value: string;
@@ -678,6 +705,7 @@ function TextField({
   min,
   onChange,
   placeholder,
+  required = false,
   step,
   type = "text",
   value,
@@ -686,10 +714,14 @@ function TextField({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        {label}
+        {required ? " (Bắt buộc)" : ""}
+      </Label>
       <Input
         aria-describedby={error ? errorId : undefined}
         aria-invalid={error ? true : undefined}
+        aria-required={required}
         className={cn(error ? "border-red-400" : "")}
         id={id}
         inputMode={inputMode}

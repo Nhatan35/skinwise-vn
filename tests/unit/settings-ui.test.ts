@@ -230,10 +230,17 @@ describe("Settings data control UI", () => {
       "Đăng nhập lại",
       "APP_DATA_DELETE_CONFIRMATION_ID",
       "ACCOUNT_DELETE_CONFIRMATION_ID",
-      "aria-describedby={APP_DATA_DELETE_CONFIRMATION_ID}",
+      "APP_DATA_DELETE_ACTION_GUIDANCE_ID",
+      "ACCOUNT_DELETE_ACTION_GUIDANCE_ID",
+      "Chọn ô xác nhận ở trên để mở khóa nút xóa dữ liệu ứng dụng.",
+      "Chọn ô xác nhận ở trên để mở khóa nút gửi yêu cầu.",
     ]) {
       expect(settingsComponentSource).toContain(requiredSource);
     }
+
+    expect(settingsComponentSource).toContain(
+      "aria-describedby={`${APP_DATA_DELETE_CONFIRMATION_ID} ${APP_DATA_DELETE_ACTION_GUIDANCE_ID}`}",
+    );
   });
 
   it("does not import repositories, MongoDB, or server-only auth helpers", () => {

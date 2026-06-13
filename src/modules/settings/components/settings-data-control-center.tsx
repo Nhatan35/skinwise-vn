@@ -36,6 +36,10 @@ const APP_DATA_DELETE_CONFIRMATION_ID =
   "settings-app-data-delete-confirmation";
 const ACCOUNT_DELETE_CONFIRMATION_ID =
   "settings-account-delete-confirmation";
+const APP_DATA_DELETE_ACTION_GUIDANCE_ID =
+  "settings-app-data-delete-action-guidance";
+const ACCOUNT_DELETE_ACTION_GUIDANCE_ID =
+  "settings-account-delete-action-guidance";
 const SETTINGS_SIGN_IN_HREF = `/api/auth/signin?callbackUrl=${routes.SETTINGS}`;
 
 const managementCards = [
@@ -188,6 +192,21 @@ function createEmptyAccountDataSummary(
   };
 }
 
+function getSettingsActionErrorMessage(
+  error: unknown,
+  fallbackMessage: string,
+  unauthorizedMessage: string,
+) {
+  if (
+    error instanceof SettingsClientError &&
+    error.code === "UNAUTHORIZED"
+  ) {
+    return unauthorizedMessage;
+  }
+
+  return fallbackMessage;
+}
+
 export function SettingsDataControlCenter() {
   const router = useRouter();
   const [user, setUser] = useState<MeUserDto | null>(null);
@@ -234,9 +253,11 @@ export function SettingsDataControlCenter() {
     } catch (error) {
       setAccountDataSummary(null);
       setAccountDataSummaryError(
-        error instanceof SettingsClientError
-          ? error.message
-          : "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+        getSettingsActionErrorMessage(
+          error,
+          "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+          "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại để xem tóm tắt dữ liệu ứng dụng.",
+        ),
       );
     } finally {
       if (showLoading) {
@@ -261,9 +282,11 @@ export function SettingsDataControlCenter() {
       } catch (error) {
         if (isMounted) {
           setLoadError(
-            error instanceof SettingsClientError
-              ? error.message
-              : "Không thể tải phần cài đặt và quản lý dữ liệu. Vui lòng thử lại hoặc làm mới trang.",
+            getSettingsActionErrorMessage(
+              error,
+              "Không thể tải phần cài đặt và quản lý dữ liệu. Vui lòng thử lại hoặc làm mới trang.",
+              "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại để tiếp tục.",
+            ),
           );
         }
       } finally {
@@ -295,9 +318,11 @@ export function SettingsDataControlCenter() {
         if (isMounted) {
           setAccountDataSummary(null);
           setAccountDataSummaryError(
-            error instanceof SettingsClientError
-              ? error.message
-              : "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+            getSettingsActionErrorMessage(
+              error,
+              "Không thể tải tóm tắt dữ liệu ứng dụng lúc này. Bạn vẫn có thể dùng các thao tác bên dưới.",
+              "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại để xem tóm tắt dữ liệu ứng dụng.",
+            ),
           );
         }
       } finally {
@@ -338,9 +363,11 @@ export function SettingsDataControlCenter() {
       setSuccessMessage("Yêu cầu xóa tài khoản đã được ghi nhận.");
     } catch (error) {
       setSubmitError(
-        error instanceof SettingsClientError
-          ? error.message
-          : "Không thể gửi yêu cầu xóa tài khoản lúc này. Vui lòng thử lại.",
+        getSettingsActionErrorMessage(
+          error,
+          "Không thể gửi yêu cầu xóa tài khoản lúc này. Vui lòng thử lại.",
+          "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại trước khi gửi yêu cầu xóa tài khoản.",
+        ),
       );
     } finally {
       setIsSubmitting(false);
@@ -362,9 +389,11 @@ export function SettingsDataControlCenter() {
       setExportSuccessMessage("Đã tải xuống file JSON export dữ liệu skincare.");
     } catch (error) {
       setExportError(
-        error instanceof SettingsClientError
-          ? error.message
-          : "Không thể xuất dữ liệu lúc này. Vui lòng thử lại.",
+        getSettingsActionErrorMessage(
+          error,
+          "Không thể xuất dữ liệu lúc này. Vui lòng thử lại.",
+          "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại trước khi xuất dữ liệu.",
+        ),
       );
     } finally {
       setIsExporting(false);
@@ -407,9 +436,11 @@ export function SettingsDataControlCenter() {
       await loadAccountDataSummary({ showLoading: false });
     } catch (error) {
       setAppDataDeleteError(
-        error instanceof SettingsClientError
-          ? error.message
-          : "Không thể xóa dữ liệu skincare trong app lúc này. Vui lòng thử lại.",
+        getSettingsActionErrorMessage(
+          error,
+          "Không thể xóa dữ liệu skincare trong app lúc này. Vui lòng thử lại.",
+          "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại trước khi xóa dữ liệu ứng dụng.",
+        ),
       );
     } finally {
       setIsDeletingAppData(false);
@@ -572,13 +603,13 @@ export function SettingsDataControlCenter() {
           </Button>
 
           {exportSuccessMessage ? (
-            <Alert>
+            <Alert role="status">
               <AlertDescription>{exportSuccessMessage}</AlertDescription>
             </Alert>
           ) : null}
 
           {exportError ? (
-            <Alert variant="destructive">
+            <Alert role="alert" variant="destructive">
               <AlertDescription>{exportError}</AlertDescription>
             </Alert>
           ) : null}
@@ -615,20 +646,27 @@ export function SettingsDataControlCenter() {
             </span>
           </Label>
 
+          <p
+            className="text-sm text-muted-foreground"
+            id={APP_DATA_DELETE_ACTION_GUIDANCE_ID}
+          >
+            Chọn ô xác nhận ở trên để mở khóa nút xóa dữ liệu ứng dụng.
+          </p>
+
           {appDataDeleteSuccessMessage ? (
-            <Alert>
+            <Alert role="status">
               <AlertDescription>{appDataDeleteSuccessMessage}</AlertDescription>
             </Alert>
           ) : null}
 
           {appDataDeleteError ? (
-            <Alert variant="destructive">
+            <Alert role="alert" variant="destructive">
               <AlertDescription>{appDataDeleteError}</AlertDescription>
             </Alert>
           ) : null}
 
           <Button
-            aria-describedby={APP_DATA_DELETE_CONFIRMATION_ID}
+            aria-describedby={`${APP_DATA_DELETE_CONFIRMATION_ID} ${APP_DATA_DELETE_ACTION_GUIDANCE_ID}`}
             data-testid="app-data-delete-button"
             disabled={!isAppDataDeleteConfirmed || isDeletingAppData}
             onClick={deleteMySkincareAppData}
@@ -660,35 +698,45 @@ export function SettingsDataControlCenter() {
               </AlertDescription>
             </Alert>
           ) : (
-            <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-secondary/50 p-3 text-sm font-normal text-muted-foreground">
-              <input
-                data-testid="account-deletion-confirm-checkbox"
-                checked={isConfirmed}
-                className="mt-1"
-                onChange={(event) => setIsConfirmed(event.target.checked)}
-                type="checkbox"
-              />
-              <span id={ACCOUNT_DELETE_CONFIRMATION_ID}>
-                Tôi hiểu đây là yêu cầu xóa tài khoản, không phải thao tác xóa tự động ngay lập tức.
-              </span>
-            </Label>
+            <>
+              <Label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-secondary/50 p-3 text-sm font-normal text-muted-foreground">
+                <input
+                  data-testid="account-deletion-confirm-checkbox"
+                  checked={isConfirmed}
+                  className="mt-1"
+                  onChange={(event) => setIsConfirmed(event.target.checked)}
+                  type="checkbox"
+                />
+                <span id={ACCOUNT_DELETE_CONFIRMATION_ID}>
+                  Tôi hiểu đây là yêu cầu xóa tài khoản, không phải thao tác xóa tự động ngay lập tức.
+                </span>
+              </Label>
+              <p
+                className="text-sm text-muted-foreground"
+                id={ACCOUNT_DELETE_ACTION_GUIDANCE_ID}
+              >
+                Chọn ô xác nhận ở trên để mở khóa nút gửi yêu cầu.
+              </p>
+            </>
           )}
 
           {successMessage ? (
-            <Alert>
+            <Alert role="status">
               <AlertDescription>{successMessage}</AlertDescription>
             </Alert>
           ) : null}
 
           {submitError ? (
-            <Alert variant="destructive">
+            <Alert role="alert" variant="destructive">
               <AlertDescription>{submitError}</AlertDescription>
             </Alert>
           ) : null}
 
           <Button
             aria-describedby={
-              deletionRequested ? undefined : ACCOUNT_DELETE_CONFIRMATION_ID
+              deletionRequested
+                ? undefined
+                : `${ACCOUNT_DELETE_CONFIRMATION_ID} ${ACCOUNT_DELETE_ACTION_GUIDANCE_ID}`
             }
             data-testid="account-deletion-request-button"
             disabled={deletionRequested || !isConfirmed || isSubmitting}

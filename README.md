@@ -23,7 +23,7 @@ Current evidence status:
 - Current phase: **Post-MVP controlled improvement**.
 - Latest completed verification task: **Screen-Reader Assistive Technology Verification: DONE / PASS**.
 - Current accessibility verification: **Keyboard-only verification PASS; screen-reader verification PASS; no critical accessibility blockers observed**.
-- Latest completed MVP quality task: **MVP Empty / Loading / Error State Polish: DONE / PASS**.
+- Latest completed MVP quality task: **MVP Form Validation & Inline Feedback Polish: DONE / PASS**.
 - Recommended next task: **None**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
@@ -33,6 +33,7 @@ Current evidence status:
 - Production monitoring evidence: **PASS - user-reported manual checks observed no critical browser console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers.**
 - Screen-reader assistive technology evidence: **PASS - manual production/browser verification found no critical screen-reader or keyboard-accessibility blockers.**
 - Empty/loading/error state polish evidence: **PASS - route-level loading/error/not-found boundaries, Settings recovery, weekly routine-history states, Saved Products disabled guidance, and clearer fallback copy were added without product-scope expansion.**
+- Form validation and inline feedback evidence: **PASS - required guidance, first-invalid-field focus, partial-routine disabled guidance, safe Journal/Settings errors, and accessible success/error feedback passed full local validation.**
 - v1.23 deletion smoke evidence: **NOT CHECKED for manual browser and production deletion flows.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
 - Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
@@ -45,6 +46,7 @@ Evidence boundary:
 - Screen-Reader Assistive Technology Verification is based on manual evidence. Date, tester, browser, device/OS, and screen reader used were not provided.
 - No automated accessibility test suite or WCAG certification claim was added for this verification task.
 - MVP Empty / Loading / Error State Polish changed UI-state rendering/copy only. No business logic, scoring, matching, AI behavior, routine recommendation behavior, schema, environment, package, dependency, or API contract changes were added.
+- MVP Form Validation & Inline Feedback Polish changed existing form/action guidance and rendering only. No business logic, scoring, matching, AI behavior, auth behavior, schema, environment, dependency, or API contract changes were added.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
@@ -90,6 +92,7 @@ MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: 
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
+MVP Form Validation & Inline Feedback Polish: DONE / PASS
 ```
 
 MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
@@ -135,6 +138,8 @@ MVP v1.34 is a focused Product and Ingredient Discovery Confidence polish milest
 MVP v1.35 is an E2E failure triage and extended validation cleanup milestone after v1.34. It fixes stale Playwright assertions for Dashboard onboarding/next-action rendering, Insights Vietnamese section/copy labels, Saved Products exact heading matching, and Today Routine Log safety copy. It does not change product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI behavior, product/ingredient CRUD scope, or broad API contracts. Full local validation passed, including `npm run test:e2e`.
 
 MVP v1.37 is a Product ↔ Ingredient Learning Path polish milestone after v1.35. It adds educational navigation from Product Detail to Ingredient Library searches, from Ingredient Detail to Product Catalogue searches by INCI query, and light cross-links between Product Catalogue and Ingredient Library. It does not add a recommendation engine, related-products ranking, medical advice, Product Match scoring/ranking changes, Routine Safety changes, schema changes, seed baseline changes, auth changes, AI provider changes, CRUD scope, or broad API contract changes. Full local validation passed, including `npm run test:e2e`.
+
+MVP Form Validation & Inline Feedback Polish is a completed MVP quality improvement. It adds concise required-field guidance, Skin Profile invalid-field focus recovery, Routine Builder manual-entry guidance, valid partial-routine selection guidance, safer Journal/Settings errors, and accessible success/error feedback without changing business logic, scoring, matching, AI behavior, auth, schema, environment configuration, dependencies, or API contracts. Full local validation passed, including `npm run test:e2e`.
 
 The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
 

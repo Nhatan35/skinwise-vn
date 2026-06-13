@@ -19,6 +19,7 @@ Screen-Reader Assistive Technology Verification: DONE / PASS
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
 MVP Empty / Loading / Error State Polish: DONE / PASS
+MVP Form Validation & Inline Feedback Polish: DONE / PASS
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
@@ -56,6 +57,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Manual Browser & Production Smoke Verification | DONE | User-reported production checks passed for public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow. No critical production blockers observed. |
 | Screen-Reader Assistive Technology Verification | DONE | Manual production/browser verification passed for keyboard navigation, focus visibility, accessible names, forms, feedback, headings, landmarks, and core MVP flows. No critical accessibility blockers observed. |
 | MVP Empty / Loading / Error State Polish | DONE | Adds route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review state polish, Saved Products disabled guidance, and clearer fallback copy without feature expansion. |
+| MVP Form Validation & Inline Feedback Polish | DONE | Adds required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, valid partial-routine disabled states, safe Journal/Settings errors, and accessible status feedback without feature expansion. |
 | Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
@@ -138,6 +140,7 @@ v1.37 exclusions: no recommendation engine, related-products ranking, Product Ma
 Manual Browser & Production Smoke Verification: DONE / PASS, user-reported manual production verification
 Screen-Reader Assistive Technology Verification: DONE / PASS; keyboard-only and screen-reader verification passed with no critical accessibility blockers observed
 MVP Empty / Loading / Error State Polish: DONE / PASS
+MVP Form Validation & Inline Feedback Polish: DONE / PASS
 Accessibility evidence metadata: date, tester, browser, device/OS, and screen reader used were not provided
 Recommended next task: None
 Screenshots and demo video were not provided

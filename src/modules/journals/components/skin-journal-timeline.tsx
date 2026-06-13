@@ -79,7 +79,13 @@ function upsertSkinJournal(
 
 function getDeleteErrorMessage(error: unknown) {
   if (error instanceof SkinJournalClientError) {
-    return error.message;
+    if (error.code === "UNAUTHORIZED") {
+      return "Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại trước khi xóa nhật ký.";
+    }
+
+    if (error.code === "NOT_FOUND") {
+      return "Mục nhật ký này không còn tồn tại. Hãy tải lại danh sách để xem dữ liệu mới nhất.";
+    }
   }
 
   return "Không thể xóa nhật ký này. Vui lòng thử lại.";

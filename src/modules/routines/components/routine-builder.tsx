@@ -83,6 +83,7 @@ const ANALYZE_ROUTE_SEGMENT = "analyze";
 const ANALYSIS_HISTORY_ROUTE_SEGMENT = "analyses";
 const ROUTINE_STEP_LIMIT = 15;
 const ROUTINE_SAVE_ERROR_ID = "routine-save-error";
+const ROUTINE_REQUIRED_GUIDANCE_ID = "routine-required-guidance";
 
 type ApiError = {
   code: string;
@@ -1335,18 +1336,28 @@ function RoutineForm({
       <CardContent>
         <form
           aria-busy={isSaving}
+          aria-describedby={ROUTINE_REQUIRED_GUIDANCE_ID}
           className="space-y-6"
           data-testid="routine-form"
           onSubmit={onSubmit}
         >
+          <p
+            className="text-sm leading-6 text-muted-foreground"
+            id={ROUTINE_REQUIRED_GUIDANCE_ID}
+          >
+            Tên routine, buổi sử dụng và thông tin bắt buộc của từng bước cần
+            được hoàn thành trước khi lưu. Hướng dẫn sử dụng là tùy chọn.
+          </p>
+
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="routine-name">Tên routine</Label>
+              <Label htmlFor="routine-name">Tên routine (Bắt buộc)</Label>
               <Input
                 aria-describedby={
                   fieldErrors.name ? "routine-name-error" : undefined
                 }
                 aria-invalid={fieldErrors.name ? true : undefined}
+                aria-required="true"
                 data-testid="routine-name-input"
                 id="routine-name"
                 onChange={(event) =>
@@ -1373,6 +1384,7 @@ function RoutineForm({
                 label: timeOfDayLabels[value],
                 value,
               }))}
+              required
               value={formState.timeOfDay}
             />
           </div>
@@ -1491,7 +1503,9 @@ function RoutineForm({
 
                   <div className="grid gap-4 lg:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor={`step-product-${index}`}>Sản phẩm</Label>
+                      <Label htmlFor={`step-product-${index}`}>
+                        Sản phẩm hoặc nhập thủ công (Bắt buộc)
+                      </Label>
                       <Select
                         onValueChange={(value) =>
                           onStepProductSelectionChange(index, value)
@@ -1509,6 +1523,7 @@ function RoutineForm({
                               ? true
                               : undefined
                           }
+                          aria-required="true"
                           className={cn(
                             "w-full",
                             fieldErrors[`steps.${index}.productId`]
@@ -1608,18 +1623,23 @@ function RoutineForm({
                     <div className="space-y-2">
                       <Label htmlFor={`step-name-${index}`}>
                         Tên sản phẩm thủ công
+                        {!step.productId ? " (Bắt buộc)" : ""}
                       </Label>
                       <Input
-                        aria-describedby={
+                        aria-describedby={[
+                          `step-name-${index}-help`,
                           fieldErrors[`steps.${index}.customProductName`]
                             ? `step-name-${index}-error`
-                            : undefined
-                        }
+                            : undefined,
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
                         aria-invalid={
                           fieldErrors[`steps.${index}.customProductName`]
                             ? true
                             : undefined
                         }
+                        aria-required={!step.productId}
                         data-testid="routine-step-product-input"
                         disabled={Boolean(step.productId)}
                         id={`step-name-${index}`}
@@ -1637,6 +1657,14 @@ function RoutineForm({
                         }
                         value={step.customProductName}
                       />
+                      <p
+                        className="text-xs text-muted-foreground"
+                        id={`step-name-${index}-help`}
+                      >
+                        {step.productId
+                          ? "Đang dùng sản phẩm đã chọn. Chuyển lựa chọn sản phẩm sang nhập thủ công để nhập tên khác."
+                          : "Nhập tên sản phẩm để hoàn thành bước này, hoặc chọn một sản phẩm có sẵn ở mục bên cạnh."}
+                      </p>
                       {fieldErrors[`steps.${index}.customProductName`] ? (
                         <p
                           className="text-sm text-red-700"
@@ -1664,6 +1692,7 @@ function RoutineForm({
                         label: categoryLabels[value],
                         value,
                       }))}
+                      required
                       value={step.category}
                     />
 
@@ -1682,6 +1711,7 @@ function RoutineForm({
                         label: frequencyLabels[value],
                         value,
                       }))}
+                      required
                       value={step.frequency}
                     />
                   </div>
@@ -2057,6 +2087,7 @@ type SelectFieldProps = {
     label: string;
     value: string;
   }>;
+  required?: boolean;
   value: string;
 };
 
@@ -2066,18 +2097,23 @@ function SelectField({
   label,
   onValueChange,
   options,
+  required = false,
   value,
 }: SelectFieldProps) {
   const errorId = `${id}-error`;
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        {label}
+        {required ? " (Bắt buộc)" : ""}
+      </Label>
       <Select onValueChange={onValueChange} value={value}>
         <SelectTrigger
           data-testid={`${id}-select`}
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? true : undefined}
+          aria-required={required}
           className={cn("w-full", error ? "border-red-400" : "")}
           id={id}
         >

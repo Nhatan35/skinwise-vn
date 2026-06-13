@@ -130,6 +130,40 @@ const fieldMessages: Record<FieldKey, string> = {
   experienceLevel: "Vui lòng chọn mức kinh nghiệm.",
   avoidIngredients: "Danh sách thành phần muốn tránh tối đa 30 mục.",
 };
+const PROFILE_REQUIRED_GUIDANCE_ID = "skin-profile-required-guidance";
+const profileFieldOrder: FieldKey[] = [
+  "skinType",
+  "concerns",
+  "sensitivityLevel",
+  "budgetRange",
+  "experienceLevel",
+  "avoidIngredients",
+];
+
+function focusFirstProfileError(errors: FieldErrors) {
+  const firstErrorField = profileFieldOrder.find((field) => errors[field]);
+
+  if (!firstErrorField) {
+    return;
+  }
+
+  const target =
+    firstErrorField === "concerns"
+      ? document.querySelector<HTMLElement>('[data-testid^="concern-"]')
+      : document.getElementById(
+          firstErrorField === "skinType"
+            ? "skin-type"
+            : firstErrorField === "sensitivityLevel"
+              ? "sensitivity-level"
+              : firstErrorField === "budgetRange"
+                ? "budget-range"
+                : firstErrorField === "experienceLevel"
+                  ? "experience-level"
+                  : "avoid-ingredients",
+        );
+
+  window.setTimeout(() => target?.focus(), 0);
+}
 
 function createBlankFormState(): ProfileFormState {
   return {
@@ -349,7 +383,10 @@ export function SkinProfileOnboardingForm() {
       : createSkinProfileSchema.safeParse(profilePayload);
 
     if (!validation.success) {
-      setFieldErrors(mapValidationIssues(validation.error.issues));
+      const validationErrors = mapValidationIssues(validation.error.issues);
+
+      setFieldErrors(validationErrors);
+      focusFirstProfileError(validationErrors);
       return;
     }
 
@@ -416,6 +453,8 @@ export function SkinProfileOnboardingForm() {
       </CardHeader>
       <CardContent>
         <form
+          aria-describedby={PROFILE_REQUIRED_GUIDANCE_ID}
+          aria-busy={isSaving}
           className="space-y-6"
           data-testid="skin-profile-onboarding-form"
           onSubmit={handleSubmit}
@@ -431,18 +470,30 @@ export function SkinProfileOnboardingForm() {
           ) : null}
 
           {apiError ? (
-            <Alert data-testid="skin-profile-save-error" variant="destructive">
+            <Alert
+              data-testid="skin-profile-save-error"
+              role="alert"
+              variant="destructive"
+            >
               <AlertTitle>Chưa lưu được hồ sơ da</AlertTitle>
               <AlertDescription>{apiError}</AlertDescription>
             </Alert>
           ) : null}
 
           {successMessage ? (
-            <Alert data-testid="skin-profile-save-success">
+            <Alert data-testid="skin-profile-save-success" role="status">
               <AlertTitle>Đã lưu</AlertTitle>
               <AlertDescription>{successMessage}</AlertDescription>
             </Alert>
           ) : null}
+
+          <p
+            className="text-sm leading-6 text-muted-foreground"
+            id={PROFILE_REQUIRED_GUIDANCE_ID}
+          >
+            Các mục có nhãn “Bắt buộc” cần được hoàn thành trước khi lưu. Thành
+            phần muốn tránh là thông tin tùy chọn.
+          </p>
 
           <div className="grid gap-5 lg:grid-cols-2">
             <SelectField
@@ -457,6 +508,7 @@ export function SkinProfileOnboardingForm() {
                 value,
               }))}
               placeholder="Chọn loại da"
+              required
               value={formState.skinType}
             />
 
@@ -472,6 +524,7 @@ export function SkinProfileOnboardingForm() {
                 value,
               }))}
               placeholder="Chọn mức độ"
+              required
               value={formState.sensitivityLevel}
             />
 
@@ -487,6 +540,7 @@ export function SkinProfileOnboardingForm() {
                 value,
               }))}
               placeholder="Chọn khoảng ngân sách"
+              required
               value={formState.budgetRange}
             />
 
@@ -502,16 +556,19 @@ export function SkinProfileOnboardingForm() {
                 value,
               }))}
               placeholder="Chọn mức kinh nghiệm"
+              required
               value={formState.experienceLevel}
             />
           </div>
 
           <fieldset
             aria-describedby={fieldErrors.concerns ? "concerns-error" : undefined}
+            aria-invalid={fieldErrors.concerns ? true : undefined}
+            aria-required="true"
             className="space-y-3"
           >
             <legend className="text-sm font-medium text-foreground">
-              Mối quan tâm chính
+              Mối quan tâm chính (Bắt buộc)
             </legend>
             <div className="grid gap-3 sm:grid-cols-2">
               {SKIN_CONCERNS.map((concern) => {
@@ -601,6 +658,7 @@ type SelectFieldProps = {
     value: string;
   }>;
   placeholder: string;
+  required?: boolean;
   value: string;
 };
 
@@ -611,17 +669,22 @@ function SelectField({
   onValueChange,
   options,
   placeholder,
+  required = false,
   value,
 }: SelectFieldProps) {
   const errorId = `${id}-error`;
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        {label}
+        {required ? " (Bắt buộc)" : ""}
+      </Label>
       <Select onValueChange={onValueChange} value={value}>
         <SelectTrigger
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? true : undefined}
+          aria-required={required}
           className={cn("w-full", error ? "border-red-400" : "")}
           data-testid={`${id}-select`}
           id={id}

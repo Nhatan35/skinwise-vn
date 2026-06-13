@@ -28,6 +28,7 @@ Core accessibility and keyboard interaction polish: v1.33 - Core Accessibility, 
 Product and ingredient discovery confidence polish: v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 E2E failure triage and extended validation cleanup: v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 Product ↔ Ingredient learning path polish: v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
+MVP form validation and inline feedback polish: DONE / PASS
 Latest completed scoped task: v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
 Current active milestone status: None
@@ -37,7 +38,7 @@ Current phase: Post-MVP controlled improvement
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
-Latest completed MVP quality task: MVP Empty / Loading / Error State Polish: DONE / PASS
+Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish: DONE / PASS
 Recommended next task: None
 Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
@@ -108,6 +109,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Production Deployment & Smoke Verification | DONE / PASS in v1.22.1 | Manual Browser & Production Smoke Verification passed based on user-reported production checks. No critical production blockers were observed. |
 | P2 | Screen-Reader Assistive Technology Verification | DONE / PASS | Manual production/browser verification passed for keyboard-only and screen-reader checks across core MVP flows. No critical accessibility blockers were observed. |
 | P2 | MVP Empty / Loading / Error State Polish | DONE / PASS | Polishes route-level loading/error/not-found states, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and fallback copy without product-scope expansion. |
+| P2 | MVP Form Validation & Inline Feedback Polish | DONE / PASS | Polishes existing required-field guidance, inline validation, disabled-state explanations, safe action errors, and status feedback without changing product scope, business logic, scoring, matching, AI behavior, auth, schema, dependencies, or API contracts. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -881,6 +883,7 @@ Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Critical accessibility blockers: None observed
 MVP Empty / Loading / Error State Polish: DONE / PASS
+MVP Form Validation & Inline Feedback Polish: DONE / PASS
 Current active milestone: None
 Recommended next task: None
 ```
@@ -895,6 +898,7 @@ Reason:
 - Accessibility evidence metadata was not provided for date, tester, browser, device/OS, or screen reader used.
 - No automated accessibility test suite or WCAG certification claim was added.
 - MVP Empty / Loading / Error State Polish is DONE / PASS. Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy were completed without feature expansion.
+- MVP Form Validation & Inline Feedback Polish is DONE / PASS. Required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, partial-routine disabled guidance, safe Journal/Settings errors, and accessible feedback semantics were completed without feature expansion.
 - Validation passed for lint, typecheck, unit tests, elevated build, diff check, package/prisma diff checks, and elevated E2E.
 - v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
 - v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.

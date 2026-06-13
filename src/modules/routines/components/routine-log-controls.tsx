@@ -11,7 +11,6 @@ import {
   buildSkippedRoutineLogPayload,
   getCompletedStepCount,
   getRoutineLogStatusLabel,
-  RoutineLogClientValidationError,
   type RoutineLogUpsertPayload,
 } from "@/modules/routine-logs/routine-log.client";
 import type { RoutineDto } from "@/modules/routines/routine.dto";
@@ -136,6 +135,16 @@ export function RoutineLogControls({
   const currentStatusId = `${idPrefix}-routine-log-current-status`;
   const partialPanelId = `${idPrefix}-routine-log-partial-panel`;
   const partialPanelTitleId = `${idPrefix}-routine-log-partial-title`;
+  const partialSelectionGuidanceId = `${idPrefix}-routine-log-partial-guidance`;
+  const canSavePartial =
+    selectedStepIds.length > 0 &&
+    selectedStepIds.length < routine.steps.length;
+  const partialSelectionGuidance =
+    selectedStepIds.length === 0
+      ? "Chọn ít nhất một bước đã hoàn thành để lưu trạng thái một phần."
+      : selectedStepIds.length >= routine.steps.length
+        ? "Bạn đã chọn tất cả các bước. Hãy dùng nút Hoàn thành thay cho trạng thái một phần."
+        : "Lựa chọn hiện tại có thể được lưu dưới trạng thái một phần.";
   const currentStatusLabel = log
     ? getRoutineLogStatusLabel(log.status)
     : "Chưa ghi nhận";
@@ -227,11 +236,9 @@ export function RoutineLogControls({
       );
 
       void saveRoutineLog(payload, "partial");
-    } catch (error) {
+    } catch {
       setSaveError(
-        error instanceof RoutineLogClientValidationError
-          ? error.message
-          : "Không thể lưu trạng thái routine. Vui lòng thử lại.",
+        "Chưa thể lưu trạng thái một phần. Vui lòng kiểm tra các bước đã chọn và thử lại.",
       );
       setSuccessMessage(null);
     }
@@ -374,9 +381,10 @@ export function RoutineLogControls({
 
           <div className="flex flex-wrap items-center gap-2">
             <Button
+              aria-describedby={partialSelectionGuidanceId}
               aria-label={`Lưu ghi nhận một phần cho ${routine.name}`}
               data-testid="routine-log-save-partial-button"
-              disabled={controlsDisabled}
+              disabled={controlsDisabled || !canSavePartial}
               onClick={savePartialLog}
               size="sm"
               type="button"
@@ -388,6 +396,13 @@ export function RoutineLogControls({
               Đã chọn {selectedStepIds.length}/{routine.steps.length} bước
             </Badge>
           </div>
+          <p
+            className="text-xs text-muted-foreground"
+            id={partialSelectionGuidanceId}
+            role="status"
+          >
+            {partialSelectionGuidance}
+          </p>
         </div>
       ) : null}
 
