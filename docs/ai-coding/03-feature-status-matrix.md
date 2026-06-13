@@ -15,10 +15,14 @@ Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported
 Manual Browser & Production Smoke Verification: DONE / PASS
+Screen-Reader Assistive Technology Verification: DONE / PASS
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+MVP Empty / Loading / Error State Polish: DONE / PASS
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
-Recommended next task: Screen-Reader Assistive Technology Verification
+Recommended next task: None
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -50,6 +54,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Data Export | DONE | User-owned app data export. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, health API contract test, release evidence, incident note template, and monitoring/checklist updates. |
 | Manual Browser & Production Smoke Verification | DONE | User-reported production checks passed for public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow. No critical production blockers observed. |
+| Screen-Reader Assistive Technology Verification | DONE | Manual production/browser verification passed for keyboard navigation, focus visibility, accessible names, forms, feedback, headings, landmarks, and core MVP flows. No critical accessibility blockers observed. |
+| MVP Empty / Loading / Error State Polish | DONE | Adds route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review state polish, Saved Products disabled guidance, and clearer fallback copy without feature expansion. |
 | Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
@@ -111,6 +117,7 @@ Core MVP features: COMPLETE
 Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification DONE / PASS
+Accessibility status: Screen-Reader Assistive Technology Verification DONE / PASS
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional, intentionally skipped, and not product correctness blockers
 v1.24 status: NOT DONE / VALIDATION BLOCKED until build and E2E validation pass
@@ -128,6 +135,11 @@ v1.34 status: DONE within scoped local validation - Product and Ingredient disco
 v1.35 status: DONE - E2E failure triage fixed dashboard, insights, saved-products, and today routine log Playwright selector/copy drift; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 status: DONE - Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library learning paths were connected with educational query links; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 exclusions: no recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change
-Manual Browser & Production Smoke Verification: DONE / PASS, user-reported manual production verification; screen-reader verification, screenshots, and demo video were not provided
+Manual Browser & Production Smoke Verification: DONE / PASS, user-reported manual production verification
+Screen-Reader Assistive Technology Verification: DONE / PASS; keyboard-only and screen-reader verification passed with no critical accessibility blockers observed
+MVP Empty / Loading / Error State Polish: DONE / PASS
+Accessibility evidence metadata: date, tester, browser, device/OS, and screen reader used were not provided
+Recommended next task: None
+Screenshots and demo video were not provided
 Production /api/health version: remains the v1.22 health endpoint contract version
 ```

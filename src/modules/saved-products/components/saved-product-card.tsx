@@ -15,6 +15,7 @@ import {
 import { routes } from "@/shared/constants/routes";
 
 type SavedProductCardProps = {
+  comparisonDescriptionId?: string;
   comparisonDisabled?: boolean;
   isSelectedForComparison?: boolean;
   item: SavedProductDto;
@@ -40,6 +41,7 @@ function formatSavedAt(value: string) {
 }
 
 export function SavedProductCard({
+  comparisonDescriptionId,
   comparisonDisabled = false,
   isSelectedForComparison = false,
   item,
@@ -118,6 +120,7 @@ export function SavedProductCard({
                   ? `Bỏ chọn sản phẩm ${product.name} khỏi so sánh`
                   : `Thêm sản phẩm ${product.name} vào so sánh`
               }
+              aria-describedby={comparisonDescriptionId}
               aria-pressed={isSelectedForComparison}
               data-testid="saved-product-comparison-toggle"
               disabled={comparisonDisabled && !isSelectedForComparison}

@@ -34,8 +34,11 @@ Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
 Current phase: Post-MVP controlled improvement
-Latest completed verification task: Manual Browser & Production Smoke Verification: DONE / PASS
-Recommended next task: Screen-Reader Assistive Technology Verification
+Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+Latest completed MVP quality task: MVP Empty / Loading / Error State Polish: DONE / PASS
+Recommended next task: None
 Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
@@ -103,6 +106,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Insight Explainability & Tracking Quality Checklist | DONE in v1.21 | Explains how each personal insight card is calculated and shows data-availability status without scores, grades, or medical assessment. |
 | P2 | Production Observability & Release Confidence | DONE in v1.22 | Adds safe `/api/health`, health API contract coverage, release evidence, incident note template, and monitoring/checklist updates. |
 | P2 | Production Deployment & Smoke Verification | DONE / PASS in v1.22.1 | Manual Browser & Production Smoke Verification passed based on user-reported production checks. No critical production blockers were observed. |
+| P2 | Screen-Reader Assistive Technology Verification | DONE / PASS | Manual production/browser verification passed for keyboard-only and screen-reader checks across core MVP flows. No critical accessibility blockers were observed. |
+| P2 | MVP Empty / Loading / Error State Polish | DONE / PASS | Polishes route-level loading/error/not-found states, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and fallback copy without product-scope expansion. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -868,12 +873,16 @@ Large architecture rewrite
 
 These items either increase product risk, safety risk, or implementation complexity beyond the current MVP direction.
 
-## 12. Recommended Next Task
-
-The recommended next task is:
+## 12. Current Verification Status
 
 ```txt
-Screen-Reader Assistive Technology Verification
+Screen-Reader Assistive Technology Verification: DONE / PASS
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+Critical accessibility blockers: None observed
+MVP Empty / Loading / Error State Polish: DONE / PASS
+Current active milestone: None
+Recommended next task: None
 ```
 
 Reason:
@@ -881,7 +890,12 @@ Reason:
 - Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production checks.
 - No critical production blockers, production runtime blockers, console critical errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers were reported.
 - Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided.
-- Screen-reader verification remains not checked.
+- Screen-Reader Assistive Technology Verification is DONE / PASS based on manual production/browser verification.
+- Keyboard-only and screen-reader verification passed with no critical accessibility blockers observed.
+- Accessibility evidence metadata was not provided for date, tester, browser, device/OS, or screen reader used.
+- No automated accessibility test suite or WCAG certification claim was added.
+- MVP Empty / Loading / Error State Polish is DONE / PASS. Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy were completed without feature expansion.
+- Validation passed for lint, typecheck, unit tests, elevated build, diff check, package/prisma diff checks, and elevated E2E.
 - v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
 - v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.
 - v1.37 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
@@ -973,4 +987,5 @@ Reason:
 2026-06-12: Completed v1.35 E2E Failure Triage & Extended Validation Cleanup as a follow-up to v1.34. Reproduced and classified six E2E failures: dashboard selector/test expectation drift, insights selector/copy drift, saved-products accessibility query drift, and today routine log copy drift. Updated Playwright assertions to match current intentional UI without app-code changes, without weakening coverage, and without changing product behavior, Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.35. v1.24 remains deferred and validation-blocked.
 2026-06-13: Completed v1.37 Product ↔ Ingredient Learning Path Polish as a follow-up to v1.35. Added Product Detail links into Ingredient Library searches, Ingredient Detail links into Product Catalogue searches by INCI/display name, URL `q` initialization for both catalogue pages, and lightweight Product Catalogue / Ingredient Library cross-links. Copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, broad API contract change, or `/api/health` contract-version change was added. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.37. v1.24 remains deferred and validation-blocked.
 2026-06-13: Recorded Manual Browser & Production Smoke Verification as DONE / PASS based on user-reported manual production verification. Verified flows include landing page, unauthenticated protected-route redirects, Google OAuth login/callback, Dashboard, Skin Profile, Product Catalogue, Product Detail, Product Detail -> Ingredient Library learning path, Ingredient Detail, Ingredient Detail -> Product Catalogue learning path, Product Match, Saved Products save/unsave, Routine Builder, Today Routine Log, Journal create/edit/delete, Insights, Settings, export data, deletion request, `/api/health` HTTP 200, browser console, network tab, Vercel logs, and MongoDB Atlas read/write behavior. No critical production blockers were reported. Date, tester, deployment id, browser/version, and device/OS were not provided.
+2026-06-13: Recorded Screen-Reader Assistive Technology Verification as DONE / PASS based on manual production/browser verification. Keyboard-only navigation, focus behavior and visibility, accessible names, icon-only controls, form labels, feedback readability, heading structure, landmark/navigation structure, and screen-reader flow expectations were checked across core MVP flows. No critical accessibility or production blockers were observed. Date, tester, browser, device/OS, and screen reader used were not provided. No source code or automated accessibility test suite was added.
 ```

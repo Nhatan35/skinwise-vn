@@ -18,6 +18,8 @@ import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 
+const COMPARISON_GUIDANCE_ID = "saved-products-comparison-guidance";
+
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof SavedProductClientError) {
     if (error.code === "UNAUTHORIZED" || error.status === 401) {
@@ -42,6 +44,22 @@ function pruneSelectedProductIds(
   );
 
   return nextIds.size === currentIds.size ? currentIds : nextIds;
+}
+
+function getComparisonGuidance(selectedCount: number) {
+  if (selectedCount === 0) {
+    return "Chọn từ 2 đến 3 sản phẩm để xem thông tin cạnh nhau.";
+  }
+
+  if (selectedCount === 1) {
+    return "Đã chọn 1/3 sản phẩm. Chọn thêm ít nhất một sản phẩm để bắt đầu so sánh.";
+  }
+
+  if (selectedCount === 2) {
+    return "Đã chọn 2/3 sản phẩm. Bạn có thể so sánh ngay hoặc chọn thêm một sản phẩm.";
+  }
+
+  return "Đã chọn tối đa 3/3 sản phẩm. Hãy bỏ chọn một sản phẩm trước khi chọn sản phẩm khác.";
 }
 
 export function SavedProductsPage() {
@@ -250,6 +268,14 @@ export function SavedProductsPage() {
         </div>
       </section>
 
+      <p
+        className="text-sm text-muted-foreground"
+        id={COMPARISON_GUIDANCE_ID}
+        role="status"
+      >
+        {getComparisonGuidance(selectedProductIds.size)}
+      </p>
+
       {canShowComparison ? (
         <SavedProductsComparisonPanel
           items={selectedItems}
@@ -265,6 +291,7 @@ export function SavedProductsPage() {
 
           return (
             <SavedProductCard
+              comparisonDescriptionId={COMPARISON_GUIDANCE_ID}
               comparisonDisabled={
                 hasReachedComparisonLimit && !isSelectedForComparison
               }

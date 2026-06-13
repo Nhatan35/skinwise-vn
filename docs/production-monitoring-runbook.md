@@ -18,13 +18,17 @@ MVP v1.22 production observability/release confidence: DONE
 MVP v1.22.1 production deployment/smoke verification: DONE / PASS, user-reported manual verification
 MVP v1.23 account data deletion workflow hardening: DONE
 Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
-Latest completed verification task: Manual Browser & Production Smoke Verification
+Latest completed verification task: Screen-Reader Assistive Technology Verification
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Critical blockers reported: None
 ```
 
 Production monitoring PASS is based on user-reported manual production verification. Authenticated MVP flows, browser console/network, Vercel logs, MongoDB Atlas read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed. Exact verification date, tester name, deployment id, browser/version, and device/OS were not provided. Keep screenshots, deployment ids, and log snippets separately if strict audit evidence is required.
+
+Screen-Reader Assistive Technology Verification is also DONE / PASS based on manual production/browser verification. Keyboard-only and screen-reader checks passed with no critical accessibility blockers observed. Date, tester, browser, device/OS, and screen reader used were not provided. See `docs/release-evidence-screen-reader-verification.md`.
+
+MVP Empty / Loading / Error State Polish is DONE / PASS based on local validation. It improved user-facing recovery states without changing production monitoring, API contracts, schema, auth, AI behavior, or scoring logic.
 
 ## 2. Where to Check Production Errors
 
@@ -157,7 +161,11 @@ OAuth callback flow: PASS
 Critical blockers reported: None
 Evidence dates: historical user-reported baseline 2026-06-04; direct public checks 2026-06-11; manual production smoke date not provided
 Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
-Latest completed verification task: Manual Browser & Production Smoke Verification
+Screen-Reader Assistive Technology Verification: DONE / PASS
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+Critical accessibility blockers: None observed
+Latest completed verification task: Screen-Reader Assistive Technology Verification
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 ```

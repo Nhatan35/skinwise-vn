@@ -30,7 +30,7 @@ type ComparisonRow = {
   render: (item: SavedProductDto) => ReactNode;
 };
 
-const fallbackCopy = "Chưa có dữ liệu";
+const fallbackCopy = "Chưa có thông tin để so sánh";
 
 const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",

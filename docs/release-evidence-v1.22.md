@@ -215,7 +215,8 @@ Unknown fields must remain marked `Not provided`.
 | Deployment ID | Not provided |
 | Browser | Not provided |
 | Device/OS | Not provided |
-| Next recommended task | Screen-Reader Assistive Technology Verification. |
+| Later accessibility verification | Screen-Reader Assistive Technology Verification: DONE / PASS; see `docs/release-evidence-screen-reader-verification.md`. |
+| Next recommended task | None. |
 
 Status rule:
 

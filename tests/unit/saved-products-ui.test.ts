@@ -274,7 +274,7 @@ describe("Saved Products UI", () => {
       "So sánh sản phẩm đã lưu",
       "Thông tin chỉ mang tính giáo dục, không thay thế tư vấn y khoa.",
       "Xóa lựa chọn so sánh",
-      "Chưa có dữ liệu",
+      "Chưa có thông tin để so sánh",
       "Cần cân nhắc nếu",
       "Không phù hợp trong các trường hợp",
       "item.product.notRecommendedFor",
@@ -284,6 +284,23 @@ describe("Saved Products UI", () => {
     ]) {
       expect(savedProductsComparisonPanelSource).toContain(requiredSource);
     }
+  });
+
+  it("explains comparison selection and disabled limits", () => {
+    for (const requiredSource of [
+      "COMPARISON_GUIDANCE_ID",
+      "getComparisonGuidance",
+      "Chọn từ 2 đến 3 sản phẩm",
+      "Đã chọn tối đa 3/3 sản phẩm",
+      'role="status"',
+      "comparisonDescriptionId={COMPARISON_GUIDANCE_ID}",
+    ]) {
+      expect(savedProductsComponentSource).toContain(requiredSource);
+    }
+
+    expect(savedProductCardSource).toContain(
+      "aria-describedby={comparisonDescriptionId}",
+    );
   });
 
   it("keeps saved product client-side files free of server-only imports", () => {

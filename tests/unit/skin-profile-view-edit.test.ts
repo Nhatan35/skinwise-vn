@@ -61,6 +61,11 @@ describe("Skin Profile view/edit UI", () => {
     expect(componentSource).toContain("Chưa có hồ sơ da");
   });
 
+  it("uses specific fallback copy for an empty avoid-ingredient list", () => {
+    expect(componentSource).toContain("Chưa ghi nhận thành phần cần tránh.");
+    expect(componentSource).not.toContain("Chưa có mục nào.");
+  });
+
   it("stays on the Skin Profile route after a successful edit", () => {
     expect(componentSource).toContain("Đã cập nhật hồ sơ da của bạn.");
     expect(componentSource).not.toContain("useRouter");

@@ -59,6 +59,8 @@ MVP v1.11 is a documentation and presentation-readiness milestone. It does not a
 Current phase: Post-MVP controlled improvement.
 Current active milestone: None.
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS.
+Accessibility status: Screen-Reader Assistive Technology Verification: DONE / PASS.
+Latest completed MVP quality task: MVP Empty / Loading / Error State Polish: DONE / PASS.
 v1.24 status: Implementation complete, validation blocked - build and E2E did not pass in the current environment.
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed. Build, E2E, manual browser verification, and production verification were not run for v1.25.
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored. Build, E2E, manual browser verification, and production verification were not run for v1.25.1.
@@ -72,7 +74,7 @@ v1.32 status: DONE within scoped local validation - selected core form submissio
 v1.33 status: DONE within scoped local validation - selected accessibility semantics, focus recovery, keyboard action-group, validation relationship, and status feedback states polished. Lint, typecheck, unit tests, and diff check passed; build, E2E, browser keyboard verification, screen-reader verification, manual accessibility verification, and production verification were not run for v1.33.
 v1.34 status: DONE within scoped local validation - Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail action labels polished. Lint, typecheck, unit tests, and diff check passed; build passed after elevated rerun; E2E failed after elevated rerun with 25 passed / 6 failed; manual browser, screen-reader, and production verification were not run for v1.34.
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; manual browser, screen-reader, and production verification were not run for v1.35.
-v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; production smoke later passed through Manual Browser & Production Smoke Verification. Screen-reader verification, screenshots, and demo video were not performed or created.
+v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; production smoke later passed through Manual Browser & Production Smoke Verification. Screen-reader verification was not part of v1.37, but the later standalone verification passed; screenshots and demo video were not created.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -94,6 +96,8 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | Manual Browser & Production Smoke Verification | PASS | User-reported manual production verification completed: public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow passed with no critical blockers observed. |
+| Screen-Reader Assistive Technology Verification | PASS | Manual production/browser verification covered keyboard navigation, focus visibility, accessible names, forms, feedback, headings, landmarks, and core MVP flows. No critical accessibility blockers were observed. |
+| MVP Empty / Loading / Error State Polish | PASS | Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review state polish, Saved Products comparison-limit guidance, and clearer fallback copy were added without product-scope expansion. |
 | Production signals | PASS | User-reported manual checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
 | Historical production smoke test evidence | PASS | MVP v1.10 production smoke test remains recorded as user-reported completed with no blockers reported; it is historical and not v1.22.1 direct verification. |
 | Historical production monitoring evidence | PASS | Vercel/browser/OAuth/MongoDB monitoring checks remain recorded from the previously user-reported stable MVP baseline; they are historical and not v1.22.1 direct verification. |
@@ -125,7 +129,7 @@ npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EP
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 Manual browser verification: NOT CHECKED for v1.37
-Screen-reader verification: NOT CHECKED for v1.37
+Screen-reader verification: NOT CHECKED as part of v1.37; later standalone verification: PASS
 Production verification: PASS through later Manual Browser & Production Smoke Verification
 Screenshots/demo video: NOT CREATED for v1.37
 
@@ -308,11 +312,33 @@ Critical production blockers: None
 Production runtime blockers: None observed
 ```
 
+Accessibility evidence:
+
+```txt
+Screen-Reader Assistive Technology Verification: DONE / PASS
+Scope: MVP accessibility quality improvement
+Environment: Production / manual browser verification
+Date: Not provided
+Tester: Not provided
+Browser: Not provided
+Device/OS: Not provided
+Screen reader used: Not provided
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+Critical accessibility blockers: None observed
+Critical production blockers: None observed
+Source code changes required: None
+Result: PASS
+Evidence file: docs/release-evidence-screen-reader-verification.md
+```
+
 Evidence boundary:
 
 - Local validation is supported by terminal output.
 - v1.22 added a safe public health endpoint, health API contract test, release evidence, incident note template, and monitoring/checklist updates; no package, database schema, auth model, authorization, persistence, AI-provider behavior, or product feature scope changed.
 - v1.22.1 / Manual Browser & Production Smoke Verification passed based on user-reported manual production verification.
+- Screen-Reader Assistive Technology Verification passed based on manual production/browser verification. No automated accessibility test suite or WCAG certification claim was added.
+- MVP Empty / Loading / Error State Polish passed validation and did not change business logic, scoring, matching, AI behavior, routine recommendation behavior, schema, environment configuration, package files, dependency versions, auth behavior, or API contracts.
 - v1.23 hardened the existing app-data deletion workflow; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 synchronized seed docs/evidence/status with the current 70-product / 70-ingredient seed implementation, but required build and E2E validation did not pass.
 - v1.26 polished Product Match explanation clarity and safe decision-support copy using the existing v1.15 explainability system; build, E2E, manual browser verification, and production verification were not run.
@@ -360,6 +386,8 @@ Evidence boundary:
 | `docs/demo-script.md` | PASS | 3-5 minute demo script and Q&A are prepared. |
 | `docs/final-release-checklist.md` | PASS | Final release status reflects v1.37 validation PASS, v1.24 validation blocker, Manual Browser & Production Smoke Verification PASS, portfolio readiness, and remaining evidence boundaries. |
 | `docs/release-evidence-v1.22.md` | PASS | v1.22 release evidence records v1.22.1 local validation, public production URL/health PASS, and later user-reported Manual Browser & Production Smoke Verification PASS. |
+| `docs/release-evidence-screen-reader-verification.md` | PASS | Manual keyboard and screen-reader verification evidence records PASS, covered MVP flows, unknown metadata, and the no-automated-suite boundary. |
+| `docs/release-evidence-empty-loading-error-state-polish.md` | PASS | MVP empty/loading/error state polish evidence records UI-state scope, validation PASS, and unchanged product/business boundaries. |
 | `docs/release-evidence-v1.23.md` | PASS | v1.23 release evidence records deletion hardening scope, ownership boundary, validation PASS, and manual/production deletion checks as NOT CHECKED. |
 | `docs/release-evidence-v1.24.md` | PASS | File restored in v1.25.1; it records 70/70 seed baseline and validation blocker: build/E2E timed out, so v1.24 is NOT DONE. |
 | `docs/data-control-and-deletion.md` | PASS | Data deletion boundary, ownership rules, post-deletion expectations, and privacy limits are documented. |
@@ -367,8 +395,8 @@ Evidence boundary:
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects user-reported production PASS. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes `/api/health` check, its intentional limitations, current evidence boundary, and recovery plan. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.37 validation status, and recommended next task are synchronized. |
-| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase, v1.37 sprint status, validation boundary, and recommended next task are synchronized. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.37 validation status, completed accessibility verification, and current task status are synchronized. |
+| `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase, completed accessibility verification, evidence boundary, and no-active-milestone status are synchronized. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
 | `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |
 
@@ -401,7 +429,8 @@ These are intentional MVP boundaries, not release blockers:
 - v1.26 build and E2E validation were not run by task scope.
 - v1.27 build and E2E validation were not run by task scope.
 - v1.28 build and E2E validation were not run by task scope.
-- Screen-reader verification, screenshots, and demo video were not performed or created for this production smoke update.
+- Screen-reader verification was not part of the production smoke update itself; the later standalone Screen-Reader Assistive Technology Verification passed.
+- Screenshots and demo video were not performed or created for the production smoke update.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -656,8 +685,12 @@ MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: 
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
+Screen-Reader Assistive Technology Verification: DONE / PASS
+MVP Empty / Loading / Error State Polish: DONE / PASS
 Decision: READY for portfolio/demo/interview at MVP level
 Current phase: Post-MVP controlled improvement
+Current active milestone: None
+Recommended next task: None
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```

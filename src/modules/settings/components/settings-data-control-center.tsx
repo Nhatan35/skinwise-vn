@@ -32,6 +32,12 @@ import {
 import { Label } from "@/shared/components/ui/label";
 import { routes } from "@/shared/constants/routes";
 
+const APP_DATA_DELETE_CONFIRMATION_ID =
+  "settings-app-data-delete-confirmation";
+const ACCOUNT_DELETE_CONFIRMATION_ID =
+  "settings-account-delete-confirmation";
+const SETTINGS_SIGN_IN_HREF = `/api/auth/signin?callbackUrl=${routes.SETTINGS}`;
+
 const managementCards = [
   {
     testId: "settings-data-card-skin-profile",
@@ -187,6 +193,7 @@ export function SettingsDataControlCenter() {
   const [user, setUser] = useState<MeUserDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [accountDataSummary, setAccountDataSummary] =
     useState<AccountAppDataSummaryDto | null>(null);
   const [isAccountDataSummaryLoading, setIsAccountDataSummaryLoading] =
@@ -271,7 +278,7 @@ export function SettingsDataControlCenter() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [reloadKey]);
 
   useEffect(() => {
     let isMounted = true;
@@ -416,6 +423,19 @@ export function SettingsDataControlCenter() {
   if (loadError) {
     return (
       <ErrorState
+        action={
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={() => setReloadKey((current) => current + 1)}
+              type="button"
+            >
+              Thử lại
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={routes.DASHBOARD}>Về dashboard</Link>
+            </Button>
+          </div>
+        }
         description={loadError}
         title="Không thể tải phần cài đặt và quản lý dữ liệu"
       />
@@ -425,6 +445,11 @@ export function SettingsDataControlCenter() {
   if (!user) {
     return (
       <EmptyState
+        action={
+          <Button asChild>
+            <Link href={SETTINGS_SIGN_IN_HREF}>Đăng nhập lại</Link>
+          </Button>
+        }
         description="Không tìm thấy thông tin tài khoản hiện tại. Vui lòng đăng nhập lại."
         title="Chưa có thông tin tài khoản"
       />
@@ -585,7 +610,7 @@ export function SettingsDataControlCenter() {
               }
               type="checkbox"
             />
-            <span>
+            <span id={APP_DATA_DELETE_CONFIRMATION_ID}>
               Tôi hiểu thao tác này sẽ xóa vĩnh viễn dữ liệu SkinWise VN app của tôi và không thể hoàn tác.
             </span>
           </Label>
@@ -603,6 +628,7 @@ export function SettingsDataControlCenter() {
           ) : null}
 
           <Button
+            aria-describedby={APP_DATA_DELETE_CONFIRMATION_ID}
             data-testid="app-data-delete-button"
             disabled={!isAppDataDeleteConfirmed || isDeletingAppData}
             onClick={deleteMySkincareAppData}
@@ -642,7 +668,7 @@ export function SettingsDataControlCenter() {
                 onChange={(event) => setIsConfirmed(event.target.checked)}
                 type="checkbox"
               />
-              <span>
+              <span id={ACCOUNT_DELETE_CONFIRMATION_ID}>
                 Tôi hiểu đây là yêu cầu xóa tài khoản, không phải thao tác xóa tự động ngay lập tức.
               </span>
             </Label>
@@ -661,6 +687,9 @@ export function SettingsDataControlCenter() {
           ) : null}
 
           <Button
+            aria-describedby={
+              deletionRequested ? undefined : ACCOUNT_DELETE_CONFIRMATION_ID
+            }
             data-testid="account-deletion-request-button"
             disabled={deletionRequested || !isConfirmed || isSubmitting}
             onClick={submitAccountDeletionRequest}

@@ -3,7 +3,10 @@ import type {
   RoutineWeeklyReviewDay,
   RoutineWeeklyReviewDayStatus,
 } from "@/modules/routine-logs/routine-weekly-review";
+import { ErrorState } from "@/shared/components/error-state";
+import { LoadingState } from "@/shared/components/loading-state";
 import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,6 +17,7 @@ import {
 type RoutineWeeklyReviewCardProps = {
   errorMessage?: string | null;
   isLoading?: boolean;
+  onRetry?: () => void;
   review: RoutineWeeklyReview;
 };
 
@@ -37,6 +41,7 @@ const statusBadgeVariants: Record<
 export function RoutineWeeklyReviewCard({
   errorMessage,
   isLoading = false,
+  onRetry,
   review,
 }: RoutineWeeklyReviewCardProps) {
   return (
@@ -55,15 +60,21 @@ export function RoutineWeeklyReviewCard({
         </p>
 
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">
-            Đang tải lịch sử routine gần đây...
-          </p>
+          <LoadingState label="Đang tải lịch sử routine gần đây..." />
         ) : null}
 
         {errorMessage ? (
-          <p className="text-sm text-red-700" role="alert">
-            {errorMessage}
-          </p>
+          <ErrorState
+            action={
+              onRetry ? (
+                <Button onClick={onRetry} size="sm" type="button" variant="outline">
+                  Thử lại
+                </Button>
+              ) : null
+            }
+            description={`${errorMessage} Bạn vẫn có thể ghi nhận routine hôm nay.`}
+            title="Chưa thể tải lịch sử routine"
+          />
         ) : null}
 
         {!isLoading && !errorMessage && !review.hasLogs ? (
@@ -95,11 +106,13 @@ export function RoutineWeeklyReviewCard({
           </div>
         ) : null}
 
-        <div className="space-y-2">
-          {[...review.days].reverse().map((day) => (
-            <RoutineWeeklyReviewDayRow day={day} key={day.localDate} />
-          ))}
-        </div>
+        {!isLoading && !errorMessage ? (
+          <div className="space-y-2">
+            {[...review.days].reverse().map((day) => (
+              <RoutineWeeklyReviewDayRow day={day} key={day.localDate} />
+            ))}
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );

@@ -323,6 +323,11 @@ describe("SkinJournal Timeline UI", () => {
     }
   });
 
+  it("uses specific fallback copy for empty journal details", () => {
+    expect(cardSource).toContain("Chưa ghi nhận thông tin cho mục này.");
+    expect(cardSource).not.toContain("Chưa có mục nào.");
+  });
+
   it("guards journal submission while preserving recoverable failure input", () => {
     expect(formSource).toContain("submitLockRef");
     expect(formSource).toContain("aria-busy={isSaving}");

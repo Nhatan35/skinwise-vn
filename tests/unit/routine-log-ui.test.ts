@@ -217,6 +217,21 @@ describe("RoutineLog UI integration", () => {
     ]) {
       expect(routineWeeklyReviewCardSource).toContain(testId);
     }
+
+    for (const stateSource of [
+      "LoadingState",
+      "ErrorState",
+      "onRetry",
+      "Chưa thể tải lịch sử routine",
+      "Bạn vẫn có thể ghi nhận routine hôm nay.",
+      "Thử lại",
+    ]) {
+      expect(routineWeeklyReviewCardSource).toContain(stateSource);
+    }
+
+    expect(todayRoutineChecklistSource).toContain(
+      "onRetry={() => setReloadKey((current) => current + 1)}",
+    );
   });
 
   it("keeps weekly review language away from overclaiming patterns", () => {

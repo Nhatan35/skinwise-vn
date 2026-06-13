@@ -220,6 +220,22 @@ describe("Settings data control UI", () => {
     expect(settingsClientSource).toContain('method: "POST"');
   });
 
+  it("provides retry, sign-in recovery, and disabled-action descriptions", () => {
+    for (const requiredSource of [
+      "reloadKey",
+      "setReloadKey((current) => current + 1)",
+      "Thử lại",
+      "Về dashboard",
+      "SETTINGS_SIGN_IN_HREF",
+      "Đăng nhập lại",
+      "APP_DATA_DELETE_CONFIRMATION_ID",
+      "ACCOUNT_DELETE_CONFIRMATION_ID",
+      "aria-describedby={APP_DATA_DELETE_CONFIRMATION_ID}",
+    ]) {
+      expect(settingsComponentSource).toContain(requiredSource);
+    }
+  });
+
   it("does not import repositories, MongoDB, or server-only auth helpers", () => {
     for (const forbiddenImport of [
       "repository",

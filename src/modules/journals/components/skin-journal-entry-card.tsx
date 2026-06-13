@@ -218,7 +218,9 @@ function JournalList({ label, values }: JournalListProps) {
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-muted-foreground">Chưa có mục nào.</p>
+        <p className="text-sm text-muted-foreground">
+          Chưa ghi nhận thông tin cho mục này.
+        </p>
       )}
     </div>
   );

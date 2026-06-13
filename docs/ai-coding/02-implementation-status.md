@@ -60,6 +60,8 @@ v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
+Accessibility status: Screen-Reader Assistive Technology Verification: DONE / PASS
+Latest completed MVP quality task: MVP Empty / Loading / Error State Polish: DONE / PASS
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` timed out
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored
@@ -75,7 +77,8 @@ v1.34 status: DONE within scoped local validation - Product Catalogue and Ingred
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was fixed; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 v1.37 status: DONE - Product Detail ingredient-learning links, Ingredient Detail product-discovery links by INCI/display-name query, URL-initialized Product Catalogue / Ingredient Library searches, and lightweight cross-links were added; lint, typecheck, unit tests, diff check, build, audit, and full E2E passed
 Manual Browser & Production Smoke Verification: DONE / PASS
-Recommended next task: Screen-Reader Assistive Technology Verification
+Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
+Recommended next task: None
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -88,6 +91,10 @@ Evidence boundary:
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
 - Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow were reported as checked with no critical blockers observed.
 - Unknown production smoke metadata is recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.
+- Screen-Reader Assistive Technology Verification is DONE / PASS based on manual production/browser verification.
+- Keyboard-only and screen-reader verification passed with no critical accessibility blockers observed.
+- Accessibility evidence metadata is recorded as `Not provided`: date, tester, browser, device/OS, and screen reader used.
+- MVP Empty / Loading / Error State Polish is DONE / PASS. It improved route-level loading/error/not-found states, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and fallback copy without changing product scope, business logic, scoring, matching, AI behavior, schema, environment, package files, dependency versions, auth behavior, or API contracts.
 - v1.23 local implementation and validation passed; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 seed data implementation reached 70 products and 70 ingredients; lint, typecheck, unit tests, and audit passed, but build/E2E validation timed out.
 - v1.25 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.
@@ -129,6 +136,8 @@ Evidence boundary:
 | UX state polish | DONE | v1.13 improved loading, empty, error, helper, CTA, and first-time guidance states. |
 | Portfolio docs | DONE | README, portfolio evidence package, case study, demo script, checklists, runbooks. |
 | Production observability / health check | DONE | v1.22 added safe public `GET /api/health`, release evidence, incident note template, and monitoring/checklist updates. |
+| Screen-Reader Assistive Technology Verification | DONE / PASS | Manual production/browser verification passed for keyboard-only and screen-reader checks across core MVP flows. No critical accessibility blockers were observed. |
+| MVP Empty / Loading / Error State Polish | DONE / PASS | Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy are complete. |
 | Seed baseline consistency hotfix | DONE, scoped validation only | v1.25.1 restored the v1.24 70/70 seed baseline in code/tests, restored missing v1.24 release evidence, and kept v1.24 validation-blocked. |
 | Product Match explanation clarity polish | DONE, scoped validation only | v1.26 polished existing Product Match explanation UI/copy without changing scoring/ranking, seed data, schema, auth, AI provider behavior, or API contracts. |
 | Product Detail to Saved Products decision support polish | DONE, scoped validation only | v1.27 polished Product Detail summary, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference copy without changing Product Match scoring/ranking, Routine logic, seed data, schema, auth, AI provider behavior, or API contracts. |
@@ -212,7 +221,7 @@ npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EP
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 Manual browser verification: NOT CHECKED
-Screen-reader verification: NOT CHECKED
+Screen-reader verification: NOT CHECKED as part of v1.37; later standalone verification: PASS
 Production verification: NOT CHECKED
 Screenshots/demo video: NOT CREATED
 
@@ -408,7 +417,7 @@ Completed v1.23 scope:
 Recommended next task:
 
 ```txt
-Screen-Reader Assistive Technology Verification
+None
 ```
 
 Portfolio evidence tasks:
@@ -789,7 +798,7 @@ npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 ```
 
-Manual Browser & Production Smoke Verification later passed in production based on user-reported production checks. Screen-reader verification, screenshots, and demo video were not run or created. v1.24 build/E2E blockers remain deferred.
+Manual Browser & Production Smoke Verification later passed in production based on user-reported production checks. Screen-reader verification was not part of v1.37, but the later standalone Screen-Reader Assistive Technology Verification passed. Screenshots and demo video were not created. v1.24 build/E2E blockers remain deferred.
 
 ## Manual Browser & Production Smoke Verification
 
@@ -850,3 +859,34 @@ Manually verified production flows:
 ```
 
 No source code, business logic, schema, environment variables, package files, dependency versions, auth behavior, AI-provider behavior, Product Match scoring, Routine Safety logic, or API contracts changed for this documentation update.
+
+## Screen-Reader Assistive Technology Verification
+
+Status: DONE / PASS.
+
+Scope: MVP accessibility quality improvement.
+
+Evidence source: manual production/browser verification.
+
+Known metadata:
+
+```txt
+Task: Screen-Reader Assistive Technology Verification
+Status: DONE / PASS
+Environment: Production / manual browser verification
+Date: Not provided
+Tester: Not provided
+Browser: Not provided
+Device/OS: Not provided
+Screen reader used: Not provided
+Keyboard-only verification: PASS
+Screen-reader verification: PASS
+Critical accessibility blockers: None observed
+Critical production blockers: None observed
+Source code changes required: None
+Result: PASS
+```
+
+Verification covered keyboard navigation, focus behavior and visibility, accessible names, icon-only controls, form labels and readability, error/success feedback, heading structure, landmark/navigation structure, and screen-reader flow expectations across the core MVP flows.
+
+No automated accessibility test suite was added, and this result is not a WCAG certification claim. Detailed evidence is recorded in `docs/release-evidence-screen-reader-verification.md`.

@@ -21,14 +21,18 @@ Current evidence status:
 - Latest completed scoped task: **MVP v1.37 - Product ↔ Ingredient Learning Path Polish**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
-- Latest completed verification task: **Manual Browser & Production Smoke Verification: DONE / PASS**.
-- Recommended next task: **Screen-Reader Assistive Technology Verification**. v1.24 closeout remains deferred and validation-blocked.
+- Latest completed verification task: **Screen-Reader Assistive Technology Verification: DONE / PASS**.
+- Current accessibility verification: **Keyboard-only verification PASS; screen-reader verification PASS; no critical accessibility blockers observed**.
+- Latest completed MVP quality task: **MVP Empty / Loading / Error State Polish: DONE / PASS**.
+- Recommended next task: **None**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
 - Local validation evidence: **PASS for MVP v1.37 Product ↔ Ingredient Learning Path Polish** - lint, typecheck, unit tests, diff check, build, audit, and full E2E passed. v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PASS - Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production verification; no critical production blockers observed.**
 - Production monitoring evidence: **PASS - user-reported manual checks observed no critical browser console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers.**
+- Screen-reader assistive technology evidence: **PASS - manual production/browser verification found no critical screen-reader or keyboard-accessibility blockers.**
+- Empty/loading/error state polish evidence: **PASS - route-level loading/error/not-found boundaries, Settings recovery, weekly routine-history states, Saved Products disabled guidance, and clearer fallback copy were added without product-scope expansion.**
 - v1.23 deletion smoke evidence: **NOT CHECKED for manual browser and production deletion flows.**
 - Portfolio demo readiness documentation: **MVP v1.11 completed.**
 - Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
@@ -38,6 +42,9 @@ Evidence boundary:
 - Automated local evidence is supported by terminal output.
 - Current production smoke PASS status is based on user-reported manual production verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
 - Manual Browser & Production Smoke Verification did not provide screenshots, demo video, deployment id, browser version, device/OS, tester name, or exact verification date in repository documentation.
+- Screen-Reader Assistive Technology Verification is based on manual evidence. Date, tester, browser, device/OS, and screen reader used were not provided.
+- No automated accessibility test suite or WCAG certification claim was added for this verification task.
+- MVP Empty / Loading / Error State Polish changed UI-state rendering/copy only. No business logic, scoring, matching, AI behavior, routine recommendation behavior, schema, environment, package, dependency, or API contract changes were added.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
 ## Current Status
@@ -235,7 +242,7 @@ npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EP
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
 npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 Manual browser verification: NOT CHECKED for v1.37
-Screen-reader verification: NOT CHECKED for v1.37
+Screen-reader verification: NOT CHECKED as part of v1.37; later standalone verification: PASS
 Production verification: PASS through later Manual Browser & Production Smoke Verification
 Screenshots/demo video: NOT CREATED for v1.37
 
@@ -346,7 +353,8 @@ v1.37 polished Product ↔ Ingredient learning paths without adding recommendati
 v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
 Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production verification.
 The production `/api/health` response remains the v1.22 contract; its version was not changed for v1.37.
-Do not claim screen-reader verification, screenshots, or demo video for this production smoke task.
+Screen-reader verification was not part of the production smoke task itself; the later standalone Screen-Reader Assistive Technology Verification passed.
+Do not claim screenshots or demo video for the production smoke task.
 ```
 
 Production evidence:
@@ -406,6 +414,8 @@ Landing page
 - Demo script: `docs/demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
 - v1.22 release evidence: `docs/release-evidence-v1.22.md`
+- Screen-reader verification evidence: `docs/release-evidence-screen-reader-verification.md`
+- Empty/loading/error state polish evidence: `docs/release-evidence-empty-loading-error-state-polish.md`
 - v1.23 release evidence: `docs/release-evidence-v1.23.md`
 - v1.24 release evidence: `docs/release-evidence-v1.24.md`
 - Data control and deletion boundary: `docs/data-control-and-deletion.md`
@@ -523,6 +533,7 @@ These are intentional MVP boundaries, not release blockers:
 - v1.37 Product ↔ Ingredient Learning Path Polish passed lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
 - v1.37 added educational Product Detail ↔ Ingredient Library, Ingredient Detail ↔ Product Catalogue, Product Catalogue → Ingredient Library, and Ingredient Library → Product Catalogue learning-path links without adding recommendations or product-scope changes.
 - Manual Browser & Production Smoke Verification passed in production based on user-reported manual verification. No critical production blockers were observed.
+- Screen-Reader Assistive Technology Verification passed through later manual production/browser verification. Keyboard-only and screen-reader verification passed with no critical accessibility blockers observed.
 - Manual browser deletion smoke and production deletion verification were not performed for v1.23.
 - Manual browser and production verification were not performed for v1.24.
 - Manual browser and production verification were not performed for v1.25.
@@ -536,7 +547,7 @@ These are intentional MVP boundaries, not release blockers:
 - Browser keyboard, screen-reader, manual accessibility, and production verification were not performed for v1.33.
 - Manual browser, screen-reader, and production verification were not performed for v1.34.
 - Manual browser, screen-reader, and production verification were not performed for v1.35.
-- Screen-reader verification was not performed for v1.37 or for the manual production smoke task.
+- Screen-reader verification was not performed as part of v1.37 or the manual production smoke task; the later standalone Screen-Reader Assistive Technology Verification passed.
 
 ## Final Portfolio Decision
 

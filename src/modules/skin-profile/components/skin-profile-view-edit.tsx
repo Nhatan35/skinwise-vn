@@ -738,7 +738,9 @@ export function SkinProfileViewEdit() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Chưa có mục nào.</p>
+            <p className="text-sm text-muted-foreground">
+              Chưa ghi nhận thành phần cần tránh.
+            </p>
           )}
         </div>
       </CardContent>

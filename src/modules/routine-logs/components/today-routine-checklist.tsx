@@ -579,6 +579,7 @@ export function TodayRoutineChecklist() {
         <RoutineWeeklyReviewCard
           errorMessage={weeklyReviewError}
           isLoading={isWeeklyReviewLoading}
+          onRetry={() => setReloadKey((current) => current + 1)}
           review={weeklyReview}
         />
       </div>
@@ -619,6 +620,7 @@ export function TodayRoutineChecklist() {
       <RoutineWeeklyReviewCard
         errorMessage={weeklyReviewError}
         isLoading={isWeeklyReviewLoading}
+        onRetry={() => setReloadKey((current) => current + 1)}
         review={weeklyReview}
       />
 
