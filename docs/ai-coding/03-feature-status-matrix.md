@@ -7,10 +7,10 @@ Last updated: 2026-06-13
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed scoped task: MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.38 lint/typecheck/unit tests/build/full E2E/diff checks. MVP Product Match Explainability Polish and v1.37 remain PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported
@@ -20,6 +20,8 @@ Keyboard-only verification: PASS
 Screen-reader verification: PASS
 MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
+MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
@@ -46,6 +48,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Ingredient Library | DONE | Ingredient list/detail with v1.34 function filtering, result count, active filter summary, search/function reset, contextual detail action labels, and v1.37 Product Catalogue discovery links by INCI query. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
 | Routine Builder | DONE | Morning/evening routine support with v1.28 saved-product-to-routine guidance and v1.29 Routine to Log/Journal next-action clarity. |
+| Routine Coverage Review | DONE / PASS | v1.38 adds an educational Routines page structure review using existing routine data only: routine presence, morning/evening coverage, morning sunscreen, moisturizer, multiple treatment steps, and safe next-step guidance. Dashboard update intentionally skipped. |
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
 | Today Routine Checklist | DONE | Daily completion flow with v1.31 load-error retry and Routine fallback navigation. |
 | Routine Logs | DONE | Tracking history with v1.17 weekly habit review and v1.29 safer log-to-journal guidance. |
@@ -58,12 +61,14 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Screen-Reader Assistive Technology Verification | DONE | Manual production/browser verification passed for keyboard navigation, focus visibility, accessible names, forms, feedback, headings, landmarks, and core MVP flows. No critical accessibility blockers observed. |
 | MVP Empty / Loading / Error State Polish | DONE | Adds route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review state polish, Saved Products disabled guidance, and clearer fallback copy without feature expansion. |
 | MVP Form Validation & Inline Feedback Polish | DONE | Adds required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, valid partial-routine disabled states, safe Journal/Settings errors, and accessible status feedback without feature expansion. |
+| MVP Product Match Explainability Polish | DONE | Clarifies Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance without scoring, matching, AI, business-logic, schema, dependency, auth, or API-contract changes. |
+| Routine Coverage Review & Safe Next-Step Guidance | DONE / PASS | Adds a Routines page habit-support review without changing Routine Safety, Product Match scoring/ranking, AI, auth, schema, env, package dependencies, dashboard, or API contracts. |
 | Core Form Submission & Action Feedback Consistency Polish | DONE, scoped validation only | v1.32 improves selected pending, disabled, success, failure, retry, duplicate-submission, and next-action states using existing form, Button, Alert, client API, and route patterns without adding a new framework or changing business rules, schema, seed data, or broad API contracts. |
 | Core Accessibility, Focus Management & Keyboard Interaction Polish | DONE, scoped validation only | v1.33 improves selected accessible names, native semantics, invalid-submit focus, validation relationships, keyboard-operable action groups, and status feedback without claiming full WCAG compliance or adding a new accessibility/component framework. |
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | E2E Failure Triage & Extended Validation Cleanup | DONE | v1.35 fixes stale E2E selectors/copy expectations in dashboard, insights, saved-products, and today routine log flows. Full local validation passed, including build, audit, and `npm run test:e2e`. |
 | Product ↔ Ingredient Learning Path Polish | DONE | v1.37 adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight Product Catalogue / Ingredient Library cross-links without recommendation or ranking behavior. |
-| Local validation evidence | MIXED BY MILESTONE | v1.37 validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. v1.35 remains DONE with full E2E PASS. v1.34 remains DONE within scoped validation only. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
+| Local validation evidence | MIXED BY MILESTONE | v1.38 passed lint, typecheck, 107 unit-test files / 1046 tests, diff check, package/env/prisma no-diff checks, build after elevated rerun, and full E2E with 31 passed. MVP Product Match Explainability Polish and v1.37 remain PASS. v1.35 remains DONE with full E2E PASS. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | DONE | Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported manual production verification. Exact date, tester, deployment id, browser/version, and device/OS were not provided. |
 | Production monitoring evidence | DONE | User-reported production signal checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
@@ -97,6 +102,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Product & Ingredient Discovery Confidence Polish | Discovery UX Polish | v1.34 | DONE, scoped validation only |
 | E2E Failure Triage & Extended Validation Cleanup | Validation / E2E Cleanup | v1.35 | DONE |
 | Product ↔ Ingredient Learning Path Polish | Educational Discovery UX Polish | v1.37 | DONE |
+| Routine Coverage Review & Safe Next-Step Guidance | Routine UX / Habit Support | v1.38 | DONE / PASS |
 
 ## Out-of-Scope Matrix
 
@@ -116,7 +122,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed scoped task: MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification DONE / PASS
 Accessibility status: Screen-Reader Assistive Technology Verification DONE / PASS
@@ -141,6 +147,8 @@ Manual Browser & Production Smoke Verification: DONE / PASS, user-reported manua
 Screen-Reader Assistive Technology Verification: DONE / PASS; keyboard-only and screen-reader verification passed with no critical accessibility blockers observed
 MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
+MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 Accessibility evidence metadata: date, tester, browser, device/OS, and screen reader used were not provided
 Recommended next task: None
 Screenshots and demo video were not provided

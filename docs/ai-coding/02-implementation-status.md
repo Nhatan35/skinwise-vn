@@ -46,6 +46,8 @@ MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped valid
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
+MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 ```
 
 SkinWise VN is ready for portfolio/demo/interview use as an MVP. The core user journey is implemented, completed milestones have local validation evidence, production smoke/monitoring has been recorded as user-reported PASS, and portfolio/demo documentation has been refreshed. v1.35 restored full E2E PASS after v1.34. v1.37 now connects Product Detail to Ingredient Library searches, Ingredient Detail to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links. The v1.37 copy remains educational and non-medical, and no recommendation engine or related-products ranking was added. v1.24 seed data closeout remains deferred and not done because its own build/E2E validation timed out.
@@ -56,13 +58,13 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed scoped task: MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled improvement
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 Accessibility status: Screen-Reader Assistive Technology Verification: DONE / PASS
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish: DONE / PASS
+Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` timed out
 v1.25 status: DONE within scoped local validation - lint, typecheck, and unit tests passed
 v1.25.1 status: DONE within scoped local validation - v1.24 seed baseline and release-evidence consistency restored
@@ -80,6 +82,8 @@ v1.37 status: DONE - Product Detail ingredient-learning links, Ingredient Detail
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
+v1.38 status: DONE / PASS - Routine Coverage Review added to the Routines page using existing routine data only; dashboard update intentionally skipped; full validation passed
 Recommended next task: None
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
@@ -98,6 +102,8 @@ Evidence boundary:
 - Accessibility evidence metadata is recorded as `Not provided`: date, tester, browser, device/OS, and screen reader used.
 - MVP Empty / Loading / Error State Polish is DONE / PASS. It improved route-level loading/error/not-found states, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and fallback copy without changing product scope, business logic, scoring, matching, AI behavior, schema, environment, package files, dependency versions, auth behavior, or API contracts.
 - MVP Form Validation & Inline Feedback Polish is DONE / PASS. It improved required guidance, inline validation, disabled-state explanations, safe action errors, and accessible status feedback without changing product scope, business logic, scoring, matching, AI behavior, schema, environment, package files, dependency versions, auth behavior, or API contracts.
+- MVP Product Match Explainability Polish is DONE / PASS. It clarified Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation guidance, and Saved Products comparison guidance without changing product scope, business logic, scoring, matching, AI behavior, schema, environment, package files, dependency versions, auth behavior, or API contracts.
+- v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a habit-support review card to the existing Routines page using `RoutineDto[]` only, with no dashboard mapper/use-case changes and no Routine Safety, Product Match scoring, AI, schema, auth, env, package, or API contract changes.
 - v1.23 local implementation and validation passed; manual browser deletion smoke and production deletion verification were not performed.
 - v1.24 seed data implementation reached 70 products and 70 ingredients; lint, typecheck, unit tests, and audit passed, but build/E2E validation timed out.
 - v1.25 scoped local validation passed: lint, typecheck, and unit tests. Build, E2E, manual browser verification, and production verification were not run for v1.25.
@@ -114,6 +120,8 @@ Evidence boundary:
 - v1.35 extended validation cleanup passed: lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. Manual browser, screen-reader, production verification, screenshots, and demo video were not run for v1.35.
 - v1.37 full local validation passed: lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E. Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.37.
 - v1.37 did not change Product Match scoring/ranking, Routine Safety logic, schema, seed baseline, auth, AI-provider behavior, CRUD scope, broad API contracts, or the v1.22 `/api/health` contract version.
+- v1.38 full local validation passed: lint, typecheck, 107 unit-test files / 1046 tests, diff check, package/env/prisma no-diff checks, build after elevated rerun, and full E2E with 31 passed. Sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.38.
 
 ## 2. Implemented Product Scope
 
@@ -142,6 +150,8 @@ Evidence boundary:
 | Screen-Reader Assistive Technology Verification | DONE / PASS | Manual production/browser verification passed for keyboard-only and screen-reader checks across core MVP flows. No critical accessibility blockers were observed. |
 | MVP Empty / Loading / Error State Polish | DONE / PASS | Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy are complete. |
 | MVP Form Validation & Inline Feedback Polish | DONE / PASS | Required-field guidance, Skin Profile invalid-field focus recovery, Routine Builder manual-entry guidance, valid partial-routine disabled states, safe Journal/Settings errors, and accessible feedback semantics are complete. |
+| MVP Product Match Explainability Polish | DONE / PASS | Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance are clearer without scoring or matching changes. |
+| Routine Coverage Review | DONE / PASS | v1.38 adds a Routines page habit-support structure review for routine presence, morning/evening coverage, morning sunscreen, moisturizer, multiple treatment steps, and safe next-step guidance. |
 | Seed baseline consistency hotfix | DONE, scoped validation only | v1.25.1 restored the v1.24 70/70 seed baseline in code/tests, restored missing v1.24 release evidence, and kept v1.24 validation-blocked. |
 | Product Match explanation clarity polish | DONE, scoped validation only | v1.26 polished existing Product Match explanation UI/copy without changing scoring/ranking, seed data, schema, auth, AI provider behavior, or API contracts. |
 | Product Detail to Saved Products decision support polish | DONE, scoped validation only | v1.27 polished Product Detail summary, save/unsave helper copy, after-save next actions, Saved Products empty-state guidance, and safe reference copy without changing Product Match scoring/ranking, Routine logic, seed data, schema, auth, AI provider behavior, or API contracts. |
@@ -925,3 +935,33 @@ npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
 ```
 
 No business logic, scoring logic, ingredient/product matching, AI/routine recommendation behavior, auth behavior, schema, environment configuration, package files, dependency versions, E2E specs, or broad API contracts were changed. Production verification was not rerun for this local polish task.
+
+## MVP Product Match Explainability Polish
+
+Status: DONE / PASS.
+
+Scope: MVP quality improvement.
+
+Completed scope:
+
+- Clarified that Product Match score is an MVP compatibility signal based on saved profile and available product data.
+- Improved Product Match result-card match-signal labels for saved skin type, concerns, budget, sensitivity/caution, and avoid-ingredient matches.
+- Improved Product Match explanation headings, caution helper copy, ingredient-highlight labels, limited-data copy, and next-step guidance.
+- Added Product Detail helper copy explaining how to read the personalized match result.
+- Added Saved Products comparison guidance explaining that comparison helps review differences and does not choose automatically for the user.
+- Updated focused source-inspection tests for Product Match, Product Detail, and Saved Products comparison copy.
+
+Validation result:
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 105 files / 1032 tests
+git diff --check: PASS, with a CRLF normalization warning for src/modules/product-match/components/product-match-explanation-card.tsx
+npm run build: PASS after elevated rerun; sandboxed attempt failed with spawn EPERM after compiling successfully
+npm run test:e2e: PASS - 31 passed; sandboxed attempt failed with spawn EPERM
+```
+
+No Product Match scoring/ranking, ingredient/product matching, AI/routine recommendation behavior, business logic, auth behavior, schema, environment configuration, package files, dependency versions, E2E specs, or broad API contracts were changed. Manual browser and production verification were not rerun for this local polish task.

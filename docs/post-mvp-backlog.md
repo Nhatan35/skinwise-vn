@@ -29,7 +29,9 @@ Product and ingredient discovery confidence polish: v1.34 - Product & Ingredient
 E2E failure triage and extended validation cleanup: v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 Product ↔ Ingredient learning path polish: v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP form validation and inline feedback polish: DONE / PASS
-Latest completed scoped task: v1.37 - Product ↔ Ingredient Learning Path Polish
+MVP Product Match Explainability Polish: DONE / PASS
+Routine coverage review: v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
+Latest completed scoped task: v1.38 - Routine Coverage Review & Safe Next-Step Guidance
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
@@ -38,9 +40,9 @@ Current phase: Post-MVP controlled improvement
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
-Latest completed MVP quality task: MVP Form Validation & Inline Feedback Polish: DONE / PASS
+Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
 Recommended next task: None
-Local validation: PASS for v1.37 lint/typecheck/unit tests/diff check/build/audit/full E2E; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.38 lint/typecheck/unit tests/build/full E2E/diff checks. MVP Product Match Explainability Polish and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported
@@ -110,6 +112,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Screen-Reader Assistive Technology Verification | DONE / PASS | Manual production/browser verification passed for keyboard-only and screen-reader checks across core MVP flows. No critical accessibility blockers were observed. |
 | P2 | MVP Empty / Loading / Error State Polish | DONE / PASS | Polishes route-level loading/error/not-found states, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and fallback copy without product-scope expansion. |
 | P2 | MVP Form Validation & Inline Feedback Polish | DONE / PASS | Polishes existing required-field guidance, inline validation, disabled-state explanations, safe action errors, and status feedback without changing product scope, business logic, scoring, matching, AI behavior, auth, schema, dependencies, or API contracts. |
+| P2 | MVP Product Match Explainability Polish | DONE / PASS | Polishes Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation, and Saved Products comparison guidance without changing scoring, matching, AI behavior, business logic, auth, schema, dependencies, or API contracts. |
+| P2 | Routine Coverage Review & Safe Next-Step Guidance | DONE / PASS in v1.38 | Adds an educational routine-structure review on the Routines page using existing routine data only. Dashboard update intentionally skipped; no Routine Safety, scoring, AI, schema, auth, env, package, or API contract changes were made. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -884,6 +888,8 @@ Screen-reader verification: PASS
 Critical accessibility blockers: None observed
 MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
+MVP Product Match Explainability Polish: DONE / PASS
+v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 Current active milestone: None
 Recommended next task: None
 ```
@@ -899,7 +905,9 @@ Reason:
 - No automated accessibility test suite or WCAG certification claim was added.
 - MVP Empty / Loading / Error State Polish is DONE / PASS. Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy were completed without feature expansion.
 - MVP Form Validation & Inline Feedback Polish is DONE / PASS. Required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, partial-routine disabled guidance, safe Journal/Settings errors, and accessible feedback semantics were completed without feature expansion.
-- Validation passed for lint, typecheck, unit tests, elevated build, diff check, package/prisma diff checks, and elevated E2E.
+- MVP Product Match Explainability Polish is DONE / PASS. Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance were completed without scoring, matching, AI behavior, business logic, auth, schema, dependency, or API-contract changes.
+- v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a Routines page habit-support review using existing routine data only. Dashboard summary was intentionally skipped to keep scope small and avoid dashboard mapper/use-case changes.
+- v1.38 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env/prisma diff checks, and elevated E2E.
 - v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
 - v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.
 - v1.37 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
@@ -992,4 +1000,6 @@ Reason:
 2026-06-13: Completed v1.37 Product ↔ Ingredient Learning Path Polish as a follow-up to v1.35. Added Product Detail links into Ingredient Library searches, Ingredient Detail links into Product Catalogue searches by INCI/display name, URL `q` initialization for both catalogue pages, and lightweight Product Catalogue / Ingredient Library cross-links. Copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, broad API contract change, or `/api/health` contract-version change was added. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser verification, screen-reader verification, production verification, screenshots, and demo video were not run or created for v1.37. v1.24 remains deferred and validation-blocked.
 2026-06-13: Recorded Manual Browser & Production Smoke Verification as DONE / PASS based on user-reported manual production verification. Verified flows include landing page, unauthenticated protected-route redirects, Google OAuth login/callback, Dashboard, Skin Profile, Product Catalogue, Product Detail, Product Detail -> Ingredient Library learning path, Ingredient Detail, Ingredient Detail -> Product Catalogue learning path, Product Match, Saved Products save/unsave, Routine Builder, Today Routine Log, Journal create/edit/delete, Insights, Settings, export data, deletion request, `/api/health` HTTP 200, browser console, network tab, Vercel logs, and MongoDB Atlas read/write behavior. No critical production blockers were reported. Date, tester, deployment id, browser/version, and device/OS were not provided.
 2026-06-13: Recorded Screen-Reader Assistive Technology Verification as DONE / PASS based on manual production/browser verification. Keyboard-only navigation, focus behavior and visibility, accessible names, icon-only controls, form labels, feedback readability, heading structure, landmark/navigation structure, and screen-reader flow expectations were checked across core MVP flows. No critical accessibility or production blockers were observed. Date, tester, browser, device/OS, and screen reader used were not provided. No source code or automated accessibility test suite was added.
+2026-06-13: Completed MVP Product Match Explainability Polish. Clarified Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation guidance, and Saved Products comparison guidance without changing Product Match scoring/ranking, ingredient/product matching, AI behavior, business logic, auth, schema, dependencies, environment configuration, or API contracts. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser and production verification were not rerun for this local polish task.
+2026-06-13: Completed v1.38 Routine Coverage Review & Safe Next-Step Guidance. Added a pure routine coverage helper, Routines page review card, and focused routine coverage/source-safety tests without changing database schema, Product Match scoring/ranking, Routine Safety logic, AI provider behavior, auth, environment configuration, package dependencies, or API contracts. Dashboard update intentionally skipped to keep v1.38 scoped to the Routines page. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `git diff -- package.json package-lock.json`, `git diff -- .env .env.local .env.example src/config/env.ts`, `git diff -- prisma`, `npm run build` after elevated rerun, and `npm run test:e2e` after elevated rerun with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed.
 ```

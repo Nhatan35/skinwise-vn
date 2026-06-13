@@ -17,6 +17,7 @@ import {
   getBrowserTimezone,
   groupRoutineLogsByRoutineId,
 } from "@/modules/routine-logs/routine-log.client";
+import { RoutineCoverageReviewCard } from "@/modules/routines/components/routine-coverage-review-card";
 import { RoutineAnalysisPanel } from "@/modules/routines/components/routine-analysis-panel";
 import { RoutineLogControls } from "@/modules/routines/components/routine-log-controls";
 import { RoutineLogStatusBadge } from "@/modules/routines/components/routine-log-status-badge";
@@ -1229,6 +1230,11 @@ export function RoutineBuilder() {
           savedProductLoadError={savedProductLoadError}
         />
       ) : null}
+
+      <RoutineCoverageReviewCard
+        onCreateRoutine={routines.length > 0 ? startCreate : undefined}
+        routines={routines}
+      />
 
       {routines.length === 0 && formMode === "none" ? (
         <EmptyState
