@@ -25,6 +25,10 @@ import {
   buildProductDetailDecisionSupport,
   type ProductDetailDecisionSupport,
 } from "@/modules/products/product-detail-decision-support";
+import {
+  ProductDetailSavedDecisionShortcut,
+  type ProductDetailSavedDecisionState,
+} from "@/modules/products/components/product-detail-saved-decision-shortcut";
 import type { ProductDto } from "@/modules/products/product.dto";
 import type {
   ProductCategory,
@@ -36,6 +40,7 @@ import {
   listSavedProducts,
   SavedProductClientError,
 } from "@/modules/saved-products/saved-product.client";
+import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -104,12 +109,16 @@ function getLoadError(error: unknown) {
   };
 }
 
-function getSavedStateError(error: unknown) {
+function getSavedDecisionState(
+  error: unknown,
+): Exclude<ProductDetailSavedDecisionState, "loading" | "ready"> {
   if (error instanceof SavedProductClientError) {
-    return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
+    if (error.code === "UNAUTHORIZED" || error.status === 401) {
+      return "signed-out";
+    }
   }
 
-  return "Chưa thể tải trạng thái đã lưu của sản phẩm.";
+  return "error";
 }
 
 function getProductMatchError(error: unknown) {
@@ -128,7 +137,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
   const [product, setProduct] = useState<ProductDto | null>(null);
   const [productMatch, setProductMatch] =
     useState<ProductDetailMatchResponseDto | null>(null);
-  const [isSaved, setIsSaved] = useState(false);
+  const [savedProduct, setSavedProduct] = useState<SavedProductDto | null>(
+    null,
+  );
+  const [savedDecisionState, setSavedDecisionState] =
+    useState<ProductDetailSavedDecisionState>("loading");
   const [isSaveActionPending, setIsSaveActionPending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductMatchLoading, setIsProductMatchLoading] = useState(false);
@@ -136,11 +149,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
     message: string;
     status: number;
   } | null>(null);
-  const [savedStateError, setSavedStateError] = useState<string | null>(null);
   const [productMatchError, setProductMatchError] = useState<string | null>(
     null,
   );
   const [reloadKey, setReloadKey] = useState(0);
+  const isSaved = savedProduct !== null;
 
   async function loadPersonalizedMatch() {
     setIsProductMatchLoading(true);
@@ -164,9 +177,9 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       setLoadError(null);
       setProduct(null);
       setProductMatch(null);
-      setIsSaved(false);
+      setSavedProduct(null);
+      setSavedDecisionState("loading");
       setIsSaveActionPending(false);
-      setSavedStateError(null);
       setProductMatchError(null);
       setIsProductMatchLoading(false);
 
@@ -192,13 +205,16 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         }
 
         if (savedProductsResult.status === "fulfilled") {
-          setIsSaved(
-            savedProductsResult.value.some(
-              (savedProduct) => savedProduct.productId === productId,
-            ),
+          setSavedProduct(
+            savedProductsResult.value.find(
+              (item) => item.productId === productId,
+            ) ?? null,
           );
+          setSavedDecisionState("ready");
         } else {
-          setSavedStateError(getSavedStateError(savedProductsResult.reason));
+          setSavedDecisionState(
+            getSavedDecisionState(savedProductsResult.reason),
+          );
         }
 
         if (productMatchResult.status === "fulfilled") {
@@ -294,7 +310,10 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         decisionSupport={decisionSupport}
         isSaved={isSaved}
         isSaveActionPending={isSaveActionPending}
-        onSavedChange={setIsSaved}
+        onSavedProductChange={(item) => {
+          setSavedProduct(item);
+          setSavedDecisionState("ready");
+        }}
         onSaveActionPendingChange={setIsSaveActionPending}
         product={product}
       />
@@ -316,15 +335,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         productMatch={productMatch}
       />
 
-      {savedStateError ? (
-        <Alert variant="destructive">
-          <AlertTriangle aria-hidden="true" />
-          <AlertTitle>Chưa tải được trạng thái đã lưu</AlertTitle>
-          <AlertDescription>
-            {savedStateError} Bạn vẫn có thể xem chi tiết sản phẩm.
-          </AlertDescription>
-        </Alert>
-      ) : null}
+      <ProductDetailSavedDecisionShortcut
+        item={savedProduct}
+        onUpdated={setSavedProduct}
+        state={savedDecisionState}
+      />
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)]">
         <div className="space-y-5">
@@ -350,8 +365,11 @@ export function ProductDetail({ productId }: ProductDetailProps) {
             disabled={isSaveActionPending}
             initialSaved={isSaved}
             mode="full"
-            onChange={setIsSaved}
             onPendingChange={setIsSaveActionPending}
+            onSavedProductChange={(item) => {
+              setSavedProduct(item);
+              setSavedDecisionState("ready");
+            }}
             productId={product.id}
             productName={product.name}
           />
@@ -367,7 +385,7 @@ type ProductHeroProps = {
   decisionSupport: ProductDetailDecisionSupport;
   isSaved: boolean;
   isSaveActionPending: boolean;
-  onSavedChange: (isSaved: boolean) => void;
+  onSavedProductChange: (item: SavedProductDto | null) => void;
   onSaveActionPendingChange: (isPending: boolean) => void;
   product: ProductDto;
 };
@@ -376,7 +394,7 @@ function ProductHero({
   decisionSupport,
   isSaved,
   isSaveActionPending,
-  onSavedChange,
+  onSavedProductChange,
   onSaveActionPendingChange,
   product,
 }: ProductHeroProps) {
@@ -404,8 +422,8 @@ function ProductHero({
               disabled={isSaveActionPending}
               initialSaved={isSaved}
               mode="full"
-              onChange={onSavedChange}
               onPendingChange={onSaveActionPendingChange}
+              onSavedProductChange={onSavedProductChange}
               productId={product.id}
               productName={product.name}
             />

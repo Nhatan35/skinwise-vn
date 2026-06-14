@@ -43,6 +43,10 @@ const savedProductFiltersPath = join(
   projectRoot,
   "src/modules/saved-products/saved-product-filters.ts",
 );
+const savedProductLabelsPath = join(
+  projectRoot,
+  "src/modules/saved-products/saved-product-labels.ts",
+);
 const proxyPath = join(projectRoot, "src/proxy.ts");
 
 const savedProductsPageSource = readFileSync(savedProductsPagePath, "utf8");
@@ -65,8 +69,9 @@ const savedProductToggleButtonSource = readFileSync(
 );
 const savedProductClientSource = readFileSync(savedProductClientPath, "utf8");
 const savedProductFiltersSource = readFileSync(savedProductFiltersPath, "utf8");
+const savedProductLabelsSource = readFileSync(savedProductLabelsPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
-const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductDecisionSupportSource}\n${savedProductsComparisonPanelSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}\n${savedProductFiltersSource}`;
+const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductDecisionSupportSource}\n${savedProductsComparisonPanelSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}\n${savedProductFiltersSource}\n${savedProductLabelsSource}`;
 
 describe("Saved Products UI", () => {
   it("adds the protected /saved-products dashboard page and route constant", () => {
@@ -189,6 +194,9 @@ describe("Saved Products UI", () => {
     expect(savedProductToggleButtonSource).toContain("Đã lưu sản phẩm.");
     expect(savedProductToggleButtonSource).toContain("Đã bỏ lưu sản phẩm.");
     expect(savedProductToggleButtonSource).toContain(
+      "onSavedProductChange?.(changedItem)",
+    );
+    expect(savedProductToggleButtonSource).toContain(
       "Chưa thể lưu sản phẩm lúc này. Vui lòng thử lại.",
     );
     expect(savedProductToggleButtonSource).toContain(
@@ -281,6 +289,7 @@ describe("Saved Products UI", () => {
 
   it("renders private saved-product decision-support controls and safe feedback", () => {
     expect(existsSync(savedProductDecisionSupportPath)).toBe(true);
+    expect(existsSync(savedProductLabelsPath)).toBe(true);
 
     for (const requiredSource of [
       'data-testid="saved-product-decision-support"',
@@ -305,7 +314,9 @@ describe("Saved Products UI", () => {
       "maxLength={1000}",
       "updateSavedProductMetadata",
     ]) {
-      expect(savedProductDecisionSupportSource).toContain(requiredSource);
+      expect(
+        `${savedProductDecisionSupportSource}\n${savedProductLabelsSource}`,
+      ).toContain(requiredSource);
     }
 
     expect(savedProductCardSource).toContain(

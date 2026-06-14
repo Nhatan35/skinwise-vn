@@ -56,6 +56,7 @@ MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 ```
 
 Known implementation status:
@@ -76,7 +77,7 @@ Production smoke evidence: PASS, user-reported
 Production monitoring evidence: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.40 - Saved Products Decision Queue & Review Filters
+Latest completed milestone: MVP v1.41 - Product Detail Saved Decision Shortcut
 Current phase: Post-MVP controlled improvement
 Recommended next task: None
 ```
@@ -711,7 +712,7 @@ README should accurately state:
 - MVP v1.13 UX polish and empty state improvement is complete.
 - MVP v1.14 Data Quality Expansion is complete.
 - MVP v1.15 Product Match Explainability & Safety Guardrails implementation is complete.
-- MVP v1.40 Saved Products Decision Queue & Review Filters is the latest completed milestone.
+- MVP v1.41 Product Detail Saved Decision Shortcut is the latest completed milestone.
 - Current phase is post-MVP controlled improvement.
 - Recommended next task is None.
 - Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study are optional evidence tasks, not product correctness blockers.
@@ -1123,7 +1124,7 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.40 - Saved Products Decision Queue & Review Filters`, the recommended next task is:
+After `MVP v1.41 - Product Detail Saved Decision Shortcut`, the recommended next task is:
 
 ```txt
 None
@@ -1143,6 +1144,7 @@ Reason:
 - MVP v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS.
 - MVP v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS.
 - MVP v1.40 Saved Products Decision Queue & Review Filters is DONE / PASS.
+- MVP v1.41 Product Detail Saved Decision Shortcut is DONE / PASS.
 - Further product work should not start unless the user explicitly starts another scoped post-MVP enhancement.
 
 Portfolio evidence tasks remain optional:
@@ -1191,7 +1193,7 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix is the completed documentati
 MVP v1.13 - UX Polish & Empty State Improvement is complete.
 MVP v1.14 - Data Quality Expansion is complete.
 MVP v1.15 - Product Match Explainability & Safety Guardrails implementation is complete.
-MVP v1.40 - Saved Products Decision Queue & Review Filters is the latest completed milestone.
+MVP v1.41 - Product Detail Saved Decision Shortcut is the latest completed milestone.
 Current phase: Post-MVP controlled improvement.
 Recommended next task: None.
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.

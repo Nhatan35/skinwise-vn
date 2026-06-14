@@ -46,10 +46,11 @@ MVP Product Match Explainability Polish: DONE / PASS
 MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.40 - Saved Products Decision Queue & Review Filters
+Latest completed scoped task: MVP v1.41 - Product Detail Saved Decision Shortcut
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
@@ -71,6 +72,7 @@ v1.37 status: DONE - Product Detail now guides users to Ingredient Library searc
 v1.38 status: DONE / PASS - Routine Coverage Review added to the Routines page using existing routine data only; dashboard update intentionally skipped; full validation passed
 v1.39 status: DONE / PASS - Saved Product Personal Notes & Trial Decision Support added optional private saved-product metadata, PATCH update support, Saved Products card controls, and comparison display; full validation passed
 v1.40 status: DONE / PASS - Saved Products Decision Queue & Review Filters added client-side filters, search, summary counts, result count, reset behavior, filtered empty state, and hidden selected-comparison warning without API or data-model changes; full validation passed
+v1.41 status: DONE / PASS - Product Detail Saved Decision Shortcut added safe saved-state handling and compact editing of existing private metadata through the v1.39 PATCH client without API or data-model changes; full validation passed
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
@@ -90,6 +92,7 @@ Primary current documents:
 - `docs/release-evidence-routine-coverage-review.md`
 - `docs/release-evidence-saved-product-personal-notes.md`
 - `docs/release-evidence-saved-products-decision-filters.md`
+- `docs/release-evidence-product-detail-saved-decision-shortcut.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -121,6 +124,7 @@ Evidence boundary:
 - v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a Routines page habit-support review using existing routine data only and does not change Routine Safety, Product Match scoring, AI behavior, schema, auth, env, packages, dashboard, or API contracts.
 - v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS. It adds optional private saved-product decision metadata, strict PATCH validation, owner-scoped updates, Saved Products card controls, and comparison display without changing Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, package dependencies, seed baselines, or routine behavior.
 - v1.40 Saved Products Decision Queue & Review Filters is DONE / PASS. It adds client-side saved-product decision filters, search, all-loaded-products summary counts, filtered result count, reset filters, filtered empty state, and a hidden selected-comparison warning without API contract changes, data model changes, Product Match scoring/ranking changes, Routine Safety changes, Routine Coverage changes, AI-provider changes, auth changes, env changes, package changes, seed changes, or routine behavior changes.
+- v1.41 Product Detail Saved Decision Shortcut is DONE / PASS. It adds safe Product Detail saved-state handling and compact editing of the existing private saved-product metadata through the existing v1.39 PATCH client without API contract, data model, Product Match scoring/ranking, Routine Safety, Routine Coverage, auth, env, package, seed, or AI-provider changes.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
@@ -174,6 +178,10 @@ Evidence boundary:
 - v1.40 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
 - v1.40 targeted rendered UI check passed via Playwright fallback after the in-app Browser surface was unavailable.
 - Manual production verification, screen-reader verification, screenshots, and demo video were not run or created for v1.40.
+- v1.41 full local validation passed: lint, typecheck, 110 unit-test files / 1129 tests, diff check, package/env no-diff checks, build after elevated rerun, and full E2E with 31 passed.
+- v1.41 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- The in-app Browser surface was unavailable for v1.41; no separate interactive panel smoke or screenshot was captured.
+- Manual production verification and screen-reader verification were not rerun for v1.41.
 - MVP Form Validation & Inline Feedback Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.
 - MVP Form Validation & Inline Feedback Polish sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed. Production verification was not rerun for this local polish task.
 - MVP Product Match Explainability Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.

@@ -10,10 +10,10 @@ import type {
   ProductSkinType,
 } from "@/modules/products/product.types";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
-import type {
-  SavedProductDecisionStatus,
-  SavedProductPlannedRoutineSlot,
-} from "@/modules/saved-products/saved-product.types";
+import {
+  savedProductDecisionStatusLabels,
+  savedProductPlannedRoutineSlotLabels,
+} from "@/modules/saved-products/saved-product-labels";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -37,23 +37,6 @@ type ComparisonRow = {
 const fallbackCopy = "Chưa có thông tin để so sánh";
 const missingSelectionCopy = "Chưa chọn";
 const missingPersonalNoteCopy = "Chưa ghi chú";
-
-const decisionStatusLabels: Record<SavedProductDecisionStatus, string> = {
-  considering: "Đang cân nhắc",
-  testing: "Đang dùng thử",
-  paused: "Tạm dừng",
-  kept: "Muốn giữ lại",
-};
-
-const plannedRoutineSlotLabels: Record<
-  SavedProductPlannedRoutineSlot,
-  string
-> = {
-  morning: "Buổi sáng",
-  evening: "Buổi tối",
-  either: "Sáng hoặc tối",
-  not_sure: "Chưa chắc",
-};
 
 const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
@@ -146,14 +129,14 @@ const comparisonRows: ComparisonRow[] = [
     label: "Trạng thái cân nhắc",
     render: (item) =>
       item.decisionStatus
-        ? decisionStatusLabels[item.decisionStatus]
+        ? savedProductDecisionStatusLabels[item.decisionStatus]
         : missingSelectionCopy,
   },
   {
     label: "Dự định dùng trong routine",
     render: (item) =>
       item.plannedRoutineSlot
-        ? plannedRoutineSlotLabels[item.plannedRoutineSlot]
+        ? savedProductPlannedRoutineSlotLabels[item.plannedRoutineSlot]
         : missingSelectionCopy,
   },
   {

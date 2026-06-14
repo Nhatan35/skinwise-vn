@@ -17,7 +17,7 @@ Screen-Reader Assistive Technology Verification: DONE / PASS
 MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
-Latest completed product milestone: MVP v1.40 - Saved Products Decision Queue & Review Filters
+Latest completed product milestone: MVP v1.41 - Product Detail Saved Decision Shortcut
 Current active milestone: None
 Current active milestone status: None
 Recommended next task: None
@@ -25,9 +25,8 @@ Recommended next task: None
 
 ## 2. Objective
 
-Improve the Saved Products page with client-side decision-support filters,
-search, summary counts, filtered result count, reset filters action, and
-filtered empty states based on v1.39 saved-product metadata.
+Add a compact Product Detail shortcut for viewing and updating the existing
+private saved-product decision metadata.
 
 The feature remains organization and personal decision support only. It does
 not provide medical advice, diagnose, guarantee suitability/safety, choose a
@@ -36,21 +35,17 @@ best product, change Product Match scoring, or modify routines automatically.
 ## 3. Implementation Scope
 
 ```txt
-[x] Added pure Saved Products filter and summary helper.
-[x] Added client-side decision-status filter.
-[x] Added client-side planned-routine-slot filter.
-[x] Added client-side personal-note-status filter.
-[x] Added client-side search over product name, brand, and personal note.
-[x] Added all-loaded-products summary counts.
-[x] Added filtered result count when filters/search are active.
-[x] Added reset filters action.
-[x] Added distinct filtered empty state.
-[x] Preserved comparison selections across filters.
-[x] Added hidden selected-product comparison warning.
-[x] Added focused helper and UI/source tests.
+[x] Retained the matching SavedProductDto on Product Detail.
+[x] Added loading, signed-out, load-error, not-saved, and saved editor states.
+[x] Reused the existing saved-product metadata editor in compact layout.
+[x] Reused updateSavedProductMetadata and the existing v1.39 PATCH endpoint.
+[x] Added immediate local synchronization after confirmed save/remove.
+[x] Added shared client-safe saved-product labels/options.
+[x] Preserved Product Match and Saved Products v1.39/v1.40 behavior.
+[x] Added focused Product Detail and saved-product source tests.
 [x] Created release evidence documentation.
 [x] Ran full required validation.
-[x] Marked v1.40 DONE / PASS after validation passed.
+[x] Marked v1.41 DONE / PASS after validation passed.
 ```
 
 Explicitly unchanged:
@@ -75,28 +70,28 @@ Marketplace behavior
 Notification behavior
 Medical recommendation behavior
 Routine create/edit/delete flow
-Saved product save/list/remove behavior
+Saved Products v1.40 filters/search/summary behavior
 ```
 
 ## 4. Validation Results
 
 ```txt
-npm run test -- saved-product-filters saved-products-ui: PASS - 3 files / 56 tests
+npm run test -- product-detail-saved-decision-shortcut product-detail-ui product-saved-products-ui saved-products-ui saved-product-client: PASS - 5 files / 59 tests
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 109 files / 1120 tests
+npm run test: PASS - 110 files / 1129 tests
 npm run build: PASS after elevated rerun; sandboxed attempt compiled successfully, then failed with spawn EPERM
 npm run test:e2e: PASS after elevated rerun - 31 passed; sandboxed attempt failed immediately with spawn EPERM
-git diff --check: PASS, with existing CRLF normalization warning for AGENTS.md
+git diff --check: PASS, with AGENTS.md CRLF normalization warning
 git diff -- package.json package-lock.json: PASS - no diff
 git diff -- .env .env.local .env.example src/config/env.ts: PASS - no diff
-Targeted rendered UI check: PASS via Playwright fallback after in-app Browser was unavailable
+In-app Browser: unavailable; full Playwright E2E suite passed
 ```
 
 ## 5. Current Task Decision
 
 ```txt
-MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 Current active milestone: None
 Recommended next task: None
 ```

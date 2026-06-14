@@ -18,7 +18,7 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.40 - Saved Products Decision Queue & Review Filters**.
+- Latest completed scoped task: **MVP v1.41 - Product Detail Saved Decision Shortcut**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
 - Latest completed verification task: **Screen-Reader Assistive Technology Verification: DONE / PASS**.
@@ -27,7 +27,7 @@ Current evidence status:
 - Recommended next task: **None**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.40** - lint, typecheck, unit tests, diff check, build after elevated rerun, full E2E, and targeted rendered UI verification passed. MVP v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 also remain PASS; v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.41** - lint, typecheck, unit tests, diff check, build after elevated rerun, and full E2E passed. MVP v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 also remain PASS; v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PASS - Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production verification; no critical production blockers observed.**
 - Production monitoring evidence: **PASS - user-reported manual checks observed no critical browser console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers.**
@@ -97,6 +97,7 @@ MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
@@ -619,4 +620,4 @@ Portfolio Evidence Package: Documentation prepared; optional media capture remai
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

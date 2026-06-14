@@ -6,6 +6,66 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## MVP v1.41 - Product Detail Saved Decision Shortcut
+
+Date: 2026-06-14
+
+### Task
+
+Add a compact Product Detail shortcut for viewing and updating existing private
+saved-product decision metadata without leaving Product Detail.
+
+### Files Updated
+
+- `src/modules/products/components/product-detail.tsx`
+- `src/modules/products/components/product-detail-saved-decision-shortcut.tsx`
+- `src/modules/saved-products/components/saved-product-decision-support.tsx`
+- `src/modules/saved-products/components/saved-product-toggle-button.tsx`
+- `src/modules/saved-products/components/saved-products-comparison-panel.tsx`
+- `src/modules/saved-products/saved-product-labels.ts`
+- `tests/unit/product-detail-saved-decision-shortcut.test.ts`
+- `tests/unit/product-detail-ui.test.ts`
+- `tests/unit/product-saved-products-ui.test.ts`
+- `tests/unit/saved-products-ui.test.ts`
+- `docs/release-evidence-product-detail-saved-decision-shortcut.md`
+- current status documentation
+
+### Outcome
+
+- Product Detail retains the matching `SavedProductDto`.
+- Added safe loading, signed-out, load-error, not-saved, and saved editor states.
+- Reused the existing metadata editor and `updateSavedProductMetadata` client.
+- Successful save/remove actions update Product Detail from the confirmed DTO.
+- Shared saved-product labels now keep editor and comparison wording aligned.
+
+### Safety and Contract Guardrails
+
+- Existing v1.39 PATCH API reused.
+- No API contract changes.
+- No data model changes.
+- No package or environment changes.
+- No Product Match scoring/ranking, Routine Safety, Routine Coverage, auth,
+  seed, AI-provider, or automatic product-selection changes.
+
+### Validation
+
+```txt
+Focused tests: PASS - 5 files / 59 tests
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 110 files / 1129 tests
+npm run build: PASS after elevated rerun; sandboxed attempt ended with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 31 passed; sandboxed attempt ended with spawn EPERM
+git diff --check: PASS, with AGENTS.md CRLF normalization warning
+package and env diff checks: PASS - no diff
+```
+
+### Status
+
+```txt
+DONE / PASS after full local validation passed.
+```
+
 ## MVP v1.40 - Saved Products Decision Queue & Review Filters
 
 Date: 2026-06-14

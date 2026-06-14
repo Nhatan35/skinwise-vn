@@ -7,10 +7,10 @@ Last updated: 2026-06-14
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.40 - Saved Products Decision Queue & Review Filters
+Latest completed scoped task: MVP v1.41 - Product Detail Saved Decision Shortcut
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.40 lint/typecheck/unit tests/build/full E2E/diff checks. v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.41 lint/typecheck/unit tests/build/full E2E/diff checks. v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported
@@ -24,6 +24,7 @@ MVP Product Match Explainability Polish: DONE / PASS
 MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled improvement
@@ -42,13 +43,14 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Skin Profile onboarding | DONE | Create/update/view profile. |
 | Skin Profile management | DONE | View/edit/delete supported. |
 | Product Catalogue | DONE | Seeded demo products with v1.34 result count, active filter summary, clearer no-result recovery copy, and v1.37 cross-link to Ingredient Library. |
-| Product Detail | DONE | Product detail, personalized match section, v1.15 decision-support safety wording, v1.27 save-decision polish, v1.31 missing-resource fallback navigation, and v1.37 ingredient-learning search links. |
+| Product Detail | DONE | Product detail, personalized match section, v1.15 decision-support safety wording, v1.27 save-decision polish, v1.31 missing-resource fallback navigation, v1.37 ingredient-learning search links, and v1.41 saved decision metadata shortcut. |
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability/caution guardrails, v1.26 clarity polish for product-fit labels, safety notes, no-profile guidance, and v1.31 no-result/error recovery actions. |
 | Product and ingredient seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation contains 70 products and 70 ingredients with v1.24 seed quality tests, but the milestone is not DONE until build/E2E validation passes. |
-| Saved Products | DONE | Save/unsave flow with v1.27 save-context and empty-state clarity polish, v1.28 routine decision-support guidance, v1.31 load-error fallback navigation, v1.39 private personal notes/trial decision metadata, and v1.40 client-side decision filters/search/summary. |
+| Saved Products | DONE | Save/unsave flow with v1.27 save-context and empty-state clarity polish, v1.28 routine decision-support guidance, v1.31 load-error fallback navigation, v1.39 private personal notes/trial decision metadata, v1.40 client-side decision filters/search/summary, and v1.41 Product Detail shortcut reuse. |
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
 | Saved Product Personal Notes & Trial Decision Support | DONE / PASS | v1.39 adds optional private saved-product decision status, planned routine slot, and personal note metadata with strict owner-scoped PATCH updates and comparison display. |
 | Saved Products Decision Queue & Review Filters | DONE / PASS | v1.40 adds client-side filters, search, all-loaded-products summary counts, filtered result count, reset behavior, filtered empty state, and hidden selected-comparison warning without API or data-model changes. |
+| Product Detail Saved Decision Shortcut | DONE / PASS | v1.41 adds Product Detail saved-state loading/not-saved/saved handling and compact editing of existing private metadata through the existing v1.39 PATCH client, without API or data-model changes. |
 | Ingredient Library | DONE | Ingredient list/detail with v1.34 function filtering, result count, active filter summary, search/function reset, contextual detail action labels, and v1.37 Product Catalogue discovery links by INCI query. |
 | Ingredient Explanation | DONE | Provider/fallback-safe explanation flow. |
 | Routine Builder | DONE | Morning/evening routine support with v1.28 saved-product-to-routine guidance and v1.29 Routine to Log/Journal next-action clarity. |
@@ -72,7 +74,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | E2E Failure Triage & Extended Validation Cleanup | DONE | v1.35 fixes stale E2E selectors/copy expectations in dashboard, insights, saved-products, and today routine log flows. Full local validation passed, including build, audit, and `npm run test:e2e`. |
 | Product ↔ Ingredient Learning Path Polish | DONE | v1.37 adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight Product Catalogue / Ingredient Library cross-links without recommendation or ranking behavior. |
-| Local validation evidence | MIXED BY MILESTONE | v1.40 passed lint, typecheck, 109 unit-test files / 1120 tests, diff check, package/env no-diff checks, build after elevated rerun, and full E2E with 31 passed. v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS. v1.35 remains DONE with full E2E PASS. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
+| Local validation evidence | MIXED BY MILESTONE | v1.41 passed lint, typecheck, 110 unit-test files / 1129 tests, diff check, package/env no-diff checks, build after elevated rerun, and full E2E with 31 passed. v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS. v1.35 remains DONE with full E2E PASS. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | DONE | Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported manual production verification. Exact date, tester, deployment id, browser/version, and device/OS were not provided. |
 | Production monitoring evidence | DONE | User-reported production signal checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
@@ -109,6 +111,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Routine Coverage Review & Safe Next-Step Guidance | Routine UX / Habit Support | v1.38 | DONE / PASS |
 | Saved Product Personal Notes & Trial Decision Support | Saved Products UX / Decision Support | v1.39 | DONE / PASS |
 | Saved Products Decision Queue & Review Filters | Saved Products UX / Decision Support | v1.40 | DONE / PASS |
+| Product Detail Saved Decision Shortcut | Product Detail / Saved Products Decision Support | v1.41 | DONE / PASS |
 
 ## Out-of-Scope Matrix
 
@@ -128,7 +131,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.40 - Saved Products Decision Queue & Review Filters
+Latest completed scoped task: MVP v1.41 - Product Detail Saved Decision Shortcut
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification DONE / PASS
 Accessibility status: Screen-Reader Assistive Technology Verification DONE / PASS

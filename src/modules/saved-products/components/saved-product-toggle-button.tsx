@@ -8,6 +8,7 @@ import {
   saveProduct,
   SavedProductClientError,
 } from "@/modules/saved-products/saved-product.client";
+import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
 import { Button } from "@/shared/components/ui/button";
 
 type SavedProductToggleButtonProps = {
@@ -16,6 +17,7 @@ type SavedProductToggleButtonProps = {
   mode?: "compact" | "full";
   onChange?: (isSaved: boolean) => void;
   onPendingChange?: (isPending: boolean) => void;
+  onSavedProductChange?: (item: SavedProductDto | null) => void;
   onSuccess?: (isSaved: boolean) => void;
   productId: string;
   productName?: string;
@@ -57,6 +59,7 @@ export function SavedProductToggleButton({
   mode = "compact",
   onChange,
   onPendingChange,
+  onSavedProductChange,
   onSuccess,
   productId,
   productName,
@@ -84,8 +87,10 @@ export function SavedProductToggleButton({
     setSuccessMessage(null);
 
     try {
+      let changedItem: SavedProductDto | null = null;
+
       if (nextSaved) {
-        await saveProduct(productId);
+        changedItem = await saveProduct(productId);
       } else {
         await removeSavedProduct(productId);
       }
@@ -93,6 +98,7 @@ export function SavedProductToggleButton({
         nextSaved ? "Đã lưu sản phẩm." : "Đã bỏ lưu sản phẩm.",
       );
       onChange?.(nextSaved);
+      onSavedProductChange?.(changedItem);
       onSuccess?.(nextSaved);
     } catch (error) {
       setErrorMessage(getErrorMessage(error, nextSaved));

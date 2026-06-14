@@ -7,6 +7,10 @@ import {
   updateSavedProductMetadata,
 } from "@/modules/saved-products/saved-product.client";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import {
+  savedProductDecisionStatusOptions,
+  savedProductPlannedRoutineSlotOptions,
+} from "@/modules/saved-products/saved-product-labels";
 import type { UpdateSavedProductMetadataInput } from "@/modules/saved-products/saved-product.schema";
 import type {
   SavedProductDecisionStatus,
@@ -18,33 +22,14 @@ import { Textarea } from "@/shared/components/ui/textarea";
 
 type SavedProductDecisionSupportProps = {
   item: SavedProductDto;
+  layout?: "compact" | "standalone";
   onUpdated: (item: SavedProductDto) => void;
 };
 
 type DecisionStatusValue = SavedProductDecisionStatus | "";
 type PlannedRoutineSlotValue = SavedProductPlannedRoutineSlot | "";
 
-const decisionStatusOptions: Array<{
-  label: string;
-  value: SavedProductDecisionStatus;
-}> = [
-  { label: "Đang cân nhắc", value: "considering" },
-  { label: "Đang dùng thử", value: "testing" },
-  { label: "Tạm dừng", value: "paused" },
-  { label: "Muốn giữ lại", value: "kept" },
-];
-
-const plannedRoutineSlotOptions: Array<{
-  label: string;
-  value: SavedProductPlannedRoutineSlot;
-}> = [
-  { label: "Buổi sáng", value: "morning" },
-  { label: "Buổi tối", value: "evening" },
-  { label: "Sáng hoặc tối", value: "either" },
-  { label: "Chưa chắc", value: "not_sure" },
-];
-
-function getUpdateErrorMessage(error: unknown) {
+function getUpdateErrorMessage(error: unknown, layout: "compact" | "standalone") {
   if (error instanceof SavedProductClientError) {
     if (error.code === "UNAUTHORIZED" || error.status === 401) {
       return "Bạn cần đăng nhập để cập nhật thông tin cân nhắc.";
@@ -55,11 +40,14 @@ function getUpdateErrorMessage(error: unknown) {
     }
   }
 
-  return "Chưa thể lưu thông tin cân nhắc lúc này. Vui lòng thử lại.";
+  return layout === "compact"
+    ? "Chưa thể cập nhật ghi chú lúc này. Vui lòng thử lại."
+    : "Chưa thể lưu thông tin cân nhắc lúc này. Vui lòng thử lại.";
 }
 
 export function SavedProductDecisionSupport({
   item,
+  layout = "standalone",
   onUpdated,
 }: SavedProductDecisionSupportProps) {
   const fieldId = useId();
@@ -104,10 +92,14 @@ export function SavedProductDecisionSupport({
       setDecisionStatus(updatedItem.decisionStatus ?? "");
       setPlannedRoutineSlot(updatedItem.plannedRoutineSlot ?? "");
       setPersonalNote(updatedItem.personalNote ?? "");
-      setSuccessMessage("Đã lưu thông tin cân nhắc cá nhân.");
+      setSuccessMessage(
+        layout === "compact"
+          ? "Đã cập nhật ghi chú sản phẩm đã lưu."
+          : "Đã lưu thông tin cân nhắc cá nhân.",
+      );
       onUpdated(updatedItem);
     } catch (error) {
-      setErrorMessage(getUpdateErrorMessage(error));
+      setErrorMessage(getUpdateErrorMessage(error, layout));
     } finally {
       setIsSaving(false);
     }
@@ -117,14 +109,20 @@ export function SavedProductDecisionSupport({
 
   return (
     <form
-      className="space-y-4 rounded-lg border border-border bg-card p-4"
+      className={
+        layout === "compact"
+          ? "space-y-4"
+          : "space-y-4 rounded-lg border border-border bg-card p-4"
+      }
       data-testid="saved-product-decision-support"
       onSubmit={handleSubmit}
     >
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold text-foreground">
-          Ghi nhớ quyết định của bạn
-        </h3>
+        {layout === "standalone" ? (
+          <h3 className="text-sm font-semibold text-foreground">
+            Ghi nhớ quyết định của bạn
+          </h3>
+        ) : null}
         <p className="text-sm leading-6 text-muted-foreground" id={helperId}>
           Ghi chú này chỉ giúp bạn nhớ lý do cân nhắc sản phẩm.
         </p>
@@ -147,7 +145,7 @@ export function SavedProductDecisionSupport({
             <option disabled value="">
               Chưa chọn
             </option>
-            {decisionStatusOptions.map((option) => (
+            {savedProductDecisionStatusOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -175,7 +173,7 @@ export function SavedProductDecisionSupport({
             <option disabled value="">
               Chưa chọn
             </option>
-            {plannedRoutineSlotOptions.map((option) => (
+            {savedProductPlannedRoutineSlotOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -213,7 +211,13 @@ export function SavedProductDecisionSupport({
           disabled={isSaving}
           type="submit"
         >
-          {isSaving ? "Đang lưu..." : "Lưu thông tin cân nhắc"}
+          {isSaving
+            ? layout === "compact"
+              ? "Đang cập nhật..."
+              : "Đang lưu..."
+            : layout === "compact"
+              ? "Cập nhật thông tin cân nhắc"
+              : "Lưu thông tin cân nhắc"}
         </Button>
         {feedbackMessage ? (
           <p

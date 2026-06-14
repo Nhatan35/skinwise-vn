@@ -12,6 +12,10 @@ const productDetailPath = join(
   projectRoot,
   "src/modules/products/components/product-detail.tsx",
 );
+const productDetailSavedDecisionShortcutPath = join(
+  projectRoot,
+  "src/modules/products/components/product-detail-saved-decision-shortcut.tsx",
+);
 const productCardPath = join(
   projectRoot,
   "src/modules/products/components/product-card.tsx",
@@ -35,6 +39,10 @@ const decisionSupportPath = join(
 
 const productDetailPageSource = readFileSync(productDetailPagePath, "utf8");
 const productDetailSource = readFileSync(productDetailPath, "utf8");
+const productDetailSavedDecisionShortcutSource = readFileSync(
+  productDetailSavedDecisionShortcutPath,
+  "utf8",
+);
 const productCardSource = readFileSync(productCardPath, "utf8");
 const productClientSource = readFileSync(productClientPath, "utf8");
 const productMatchExplanationCardSource = readFileSync(
@@ -43,13 +51,14 @@ const productMatchExplanationCardSource = readFileSync(
 );
 const productMatchClientSource = readFileSync(productMatchClientPath, "utf8");
 const decisionSupportSource = readFileSync(decisionSupportPath, "utf8");
-const combinedClientSource = `${productDetailSource}\n${productCardSource}\n${productClientSource}\n${productMatchExplanationCardSource}\n${productMatchClientSource}\n${decisionSupportSource}`;
+const combinedClientSource = `${productDetailSource}\n${productDetailSavedDecisionShortcutSource}\n${productCardSource}\n${productClientSource}\n${productMatchExplanationCardSource}\n${productMatchClientSource}\n${decisionSupportSource}`;
 const combinedProductDetailUiSource = `${productDetailPageSource}\n${combinedClientSource}`;
 
 describe("Product Detail UI", () => {
   it("adds the protected product detail dashboard page and component files", () => {
     expect(existsSync(productDetailPagePath)).toBe(true);
     expect(existsSync(productDetailPath)).toBe(true);
+    expect(existsSync(productDetailSavedDecisionShortcutPath)).toBe(true);
     expect(existsSync(decisionSupportPath)).toBe(true);
     expect(productDetailPageSource).toContain(
       "@/modules/products/components/product-detail",
@@ -72,6 +81,9 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain("getProductMatchForProduct");
     expect(productDetailSource).toContain("ProductMatchExplanationCard");
     expect(productDetailSource).toContain("SavedProductToggleButton");
+    expect(productDetailSource).toContain(
+      "ProductDetailSavedDecisionShortcut",
+    );
     expect(productDetailSource).toContain('mode="full"');
     expect(productDetailSource).toContain("useEffect");
     expect(productDetailSource).toContain("let isMounted = true");
@@ -127,6 +139,26 @@ describe("Product Detail UI", () => {
     expect(productDetailSource).toContain("không thay thế tư vấn chuyên môn");
     expect(productDetailSource).toContain("Lưu sản phẩm để xem lại");
     expect(productDetailSource).toContain("Xem sản phẩm đã lưu");
+  });
+
+  it("renders the saved decision shortcut without blocking product details", () => {
+    for (const requiredSource of [
+      'data-testid="product-detail-saved-decision-shortcut"',
+      "Thông tin cân nhắc cá nhân",
+      "Lưu lại cách bạn đang cân nhắc sản phẩm này",
+      "Đang tải thông tin cân nhắc đã lưu",
+      "Đăng nhập và lưu sản phẩm",
+      "Chưa tải được thông tin cân nhắc đã lưu",
+      "Lưu sản phẩm để thêm trạng thái cân nhắc và ghi chú cá nhân.",
+      "Bạn vẫn có thể xem thông",
+      "tin sản phẩm.",
+      'state === "ready" && item',
+      'layout="compact"',
+    ]) {
+      expect(productDetailSavedDecisionShortcutSource).toContain(
+        requiredSource,
+      );
+    }
   });
 
   it("renders a non-blocking personalized match explanation section", () => {

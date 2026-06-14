@@ -62,14 +62,16 @@ describe("Product UI saved product integration", () => {
   it("renders Vietnamese save/remove saved actions on product detail", () => {
     expect(productDetailSource).toContain("SavedProductToggleButton");
     expect(productDetailSource).toContain("listSavedProducts");
-    expect(productDetailSource).toContain("setIsSaved");
+    expect(productDetailSource).toContain("setSavedProduct");
+    expect(productDetailSource).toContain("savedProduct !== null");
+    expect(productDetailSource).toContain("onSavedProductChange");
     expect(savedProductToggleButtonSource).toContain("Lưu sản phẩm");
     expect(savedProductToggleButtonSource).toContain("Bỏ lưu sản phẩm");
     expect(savedProductToggleButtonSource).toContain("Chưa thể lưu sản phẩm");
     expect(savedProductToggleButtonSource).toContain(
       "Chưa thể bỏ lưu sản phẩm",
     );
-    expect(productDetailSource).toContain("Chưa tải được trạng thái đã lưu");
+    expect(productDetailSource).toContain("getSavedDecisionState");
   });
 
   it("prevents overlapping Product Detail save and unsave actions", () => {
