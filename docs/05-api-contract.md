@@ -616,6 +616,9 @@ Response:
           "name": "Niacinamide 5% Serum",
           "brand": "SkinWise Demo"
         },
+        "decisionStatus": "testing",
+        "plannedRoutineSlot": "evening",
+        "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn.",
         "createdAt": "2026-05-26T00:00:00.000Z",
         "updatedAt": "2026-05-26T00:00:00.000Z"
       }
@@ -628,6 +631,10 @@ Response:
 DTO safety:
 
 - `SavedProductDto` must not expose `userId`.
+- `SavedProductDto` must not expose `_id`, `ObjectId`, owner, ownership fields,
+  or Mongo internals.
+- Optional personal metadata may include only `decisionStatus`,
+  `plannedRoutineSlot`, and `personalNote`.
 - Product data is returned through the existing public `ProductDto`.
 
 Errors:
@@ -669,6 +676,72 @@ Response:
       },
       "createdAt": "2026-05-26T00:00:00.000Z",
       "updatedAt": "2026-05-26T00:00:00.000Z"
+    }
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- VALIDATION_ERROR
+- NOT_FOUND
+- INTERNAL_ERROR
+
+### PATCH /api/saved-products/:productId
+
+Update private personal decision-support metadata for the current
+authenticated user's saved product.
+
+Request:
+
+```json
+{
+  "decisionStatus": "testing",
+  "plannedRoutineSlot": "evening",
+  "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn."
+}
+```
+
+Validation and behavior:
+
+- Authentication is required.
+- `productId` route param must be a valid MongoDB ObjectId string.
+- Request body is strict.
+- At least one supported metadata field is required.
+- Supported `decisionStatus` values:
+  `considering`, `testing`, `paused`, `kept`.
+- Supported `plannedRoutineSlot` values:
+  `morning`, `evening`, `either`, `not_sure`.
+- `personalNote` is trimmed.
+- `personalNote` maximum length is 1000 characters.
+- Empty `personalNote` after trimming is accepted and clears the note.
+- Unknown fields are rejected.
+- Client-submitted internal/ownership fields are rejected, including `id`, `_id`,
+  `userId`, `productId`, `createdAt`, `updatedAt`, `product`, `owner`, and
+  `ownership`.
+- Update is scoped by `currentUser.id + productId`.
+- Only `decisionStatus`, `plannedRoutineSlot`, `personalNote`, and server-owned
+  `updatedAt` may be written.
+
+Response:
+
+```json
+{
+  "data": {
+    "item": {
+      "id": "saved_product_123",
+      "productId": "665000000000000000000320",
+      "product": {
+        "id": "665000000000000000000320",
+        "name": "Niacinamide 5% Serum"
+      },
+      "decisionStatus": "testing",
+      "plannedRoutineSlot": "evening",
+      "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn.",
+      "createdAt": "2026-05-26T00:00:00.000Z",
+      "updatedAt": "2026-06-13T00:00:00.000Z"
     }
   },
   "error": null

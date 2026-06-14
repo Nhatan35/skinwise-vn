@@ -7,12 +7,19 @@ import {
   PRODUCT_VERIFICATION_STATUSES,
 } from "@/modules/products/product.types";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import type { UpdateSavedProductMetadataInput } from "@/modules/saved-products/saved-product.schema";
+import {
+  SAVED_PRODUCT_DECISION_STATUSES,
+  SAVED_PRODUCT_PLANNED_ROUTINE_SLOTS,
+} from "@/modules/saved-products/saved-product.types";
 
 const SAVED_PRODUCTS_API_PATH = "/api/saved-products";
 const SAVED_PRODUCTS_LIST_ERROR_MESSAGE = "Could not load saved products.";
 const SAVE_PRODUCT_ERROR_MESSAGE = "Could not save this product.";
 const REMOVE_SAVED_PRODUCT_ERROR_MESSAGE =
   "Could not remove this saved product.";
+const UPDATE_SAVED_PRODUCT_METADATA_ERROR_MESSAGE =
+  "Could not update this saved product.";
 
 type ApiError = {
   code: string;
@@ -117,9 +124,47 @@ function isSavedProductDto(value: unknown): value is SavedProductDto {
     isString(value.id) &&
     isString(value.productId) &&
     isProductDto(value.product) &&
+    (!("decisionStatus" in value) ||
+      isOneOf(SAVED_PRODUCT_DECISION_STATUSES, value.decisionStatus)) &&
+    (!("plannedRoutineSlot" in value) ||
+      isOneOf(
+        SAVED_PRODUCT_PLANNED_ROUTINE_SLOTS,
+        value.plannedRoutineSlot,
+      )) &&
+    (!("personalNote" in value) || isString(value.personalNote)) &&
     isString(value.createdAt) &&
     isString(value.updatedAt)
   );
+}
+
+function hasOwnField<TObject extends object>(
+  value: TObject,
+  field: keyof TObject,
+) {
+  return Object.prototype.hasOwnProperty.call(value, field);
+}
+
+function toSavedProductMetadataRequestBody(
+  input: UpdateSavedProductMetadataInput,
+): UpdateSavedProductMetadataInput {
+  const body: UpdateSavedProductMetadataInput = {};
+
+  if (hasOwnField(input, "decisionStatus") && input.decisionStatus !== undefined) {
+    body.decisionStatus = input.decisionStatus;
+  }
+
+  if (
+    hasOwnField(input, "plannedRoutineSlot") &&
+    input.plannedRoutineSlot !== undefined
+  ) {
+    body.plannedRoutineSlot = input.plannedRoutineSlot;
+  }
+
+  if (hasOwnField(input, "personalNote") && input.personalNote !== undefined) {
+    body.personalNote = input.personalNote;
+  }
+
+  return body;
 }
 
 async function readApiResponse(
@@ -273,4 +318,46 @@ export async function removeSavedProduct(productId: string): Promise<true> {
   }
 
   return body.data.removed;
+}
+
+export async function updateSavedProductMetadata(
+  productId: string,
+  input: UpdateSavedProductMetadataInput,
+): Promise<SavedProductDto> {
+  let response: Response;
+
+  try {
+    response = await fetch(getSavedProductApiPath(productId), {
+      body: JSON.stringify(toSavedProductMetadataRequestBody(input)),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+    });
+  } catch {
+    throw new SavedProductClientError(
+      UPDATE_SAVED_PRODUCT_METADATA_ERROR_MESSAGE,
+    );
+  }
+
+  const body = await readApiResponse(response);
+
+  if (!response.ok || body.error !== null || body.data === null) {
+    throw toClientError(
+      UPDATE_SAVED_PRODUCT_METADATA_ERROR_MESSAGE,
+      response,
+      body.error,
+    );
+  }
+
+  if (!isRecord(body.data) || !isSavedProductDto(body.data.item)) {
+    throw new SavedProductClientError(
+      UPDATE_SAVED_PRODUCT_METADATA_ERROR_MESSAGE,
+      "INTERNAL_ERROR",
+      response.status,
+    );
+  }
+
+  return body.data.item;
 }

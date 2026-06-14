@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-13
+Last updated: 2026-06-14
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -43,10 +43,13 @@ MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
+MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
+MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
+MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed scoped task: MVP v1.40 - Saved Products Decision Queue & Review Filters
 Current phase: Post-MVP controlled improvement
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
@@ -65,6 +68,9 @@ v1.33 status: DONE within scoped local validation - selected accessibility seman
 v1.34 status: DONE within scoped local validation - product and ingredient discovery result counts, active filter summaries, ingredient function filtering, clearer no-result recovery copy, and contextual ingredient detail action labels polished; `npm run lint`, `npm run typecheck`, `npm run test`, and `git diff --check` passed; `npm run build` passed after an elevated rerun; `npm run test:e2e` failed after an elevated rerun with 25 passed / 6 failed in existing dashboard, insights, saved-products, and today routine log flows; audit passed
 v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-products, and today routine log flows was triaged and fixed; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
 v1.37 status: DONE - Product Detail now guides users to Ingredient Library searches, Ingredient Detail guides users to Product Catalogue searches by INCI/display-name query, and Product Catalogue / Ingredient Library include lightweight cross-links; `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build`, `npm audit --omit=dev --audit-level=moderate`, and `npm run test:e2e` passed
+v1.38 status: DONE / PASS - Routine Coverage Review added to the Routines page using existing routine data only; dashboard update intentionally skipped; full validation passed
+v1.39 status: DONE / PASS - Saved Product Personal Notes & Trial Decision Support added optional private saved-product metadata, PATCH update support, Saved Products card controls, and comparison display; full validation passed
+v1.40 status: DONE / PASS - Saved Products Decision Queue & Review Filters added client-side filters, search, summary counts, result count, reset behavior, filtered empty state, and hidden selected-comparison warning without API or data-model changes; full validation passed
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
@@ -81,6 +87,9 @@ Primary current documents:
 - `docs/release-evidence-empty-loading-error-state-polish.md`
 - `docs/release-evidence-form-validation-inline-feedback-polish.md`
 - `docs/release-evidence-product-match-explainability-polish.md`
+- `docs/release-evidence-routine-coverage-review.md`
+- `docs/release-evidence-saved-product-personal-notes.md`
+- `docs/release-evidence-saved-products-decision-filters.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -109,6 +118,9 @@ Evidence boundary:
 - MVP Empty / Loading / Error State Polish is DONE / PASS. It added route-level loading/error/not-found boundaries, Settings recovery guidance, Today Routine Log weekly-review state polish, Saved Products comparison-limit guidance, and clearer fallback copy without changing product scope or business behavior.
 - MVP Form Validation & Inline Feedback Polish is DONE / PASS. It added required guidance, Skin Profile invalid-field focus recovery, Routine Builder manual-entry guidance, Today Routine Log partial-selection guidance, and safe Journal/Settings feedback without changing business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, or API contracts.
 - MVP Product Match Explainability Polish is DONE / PASS. It clarified Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation guidance, and Saved Products comparison guidance without changing scoring, matching, AI behavior, business logic, auth, schema, environment, packages, dependencies, or API contracts.
+- v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a Routines page habit-support review using existing routine data only and does not change Routine Safety, Product Match scoring, AI behavior, schema, auth, env, packages, dashboard, or API contracts.
+- v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS. It adds optional private saved-product decision metadata, strict PATCH validation, owner-scoped updates, Saved Products card controls, and comparison display without changing Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, package dependencies, seed baselines, or routine behavior.
+- v1.40 Saved Products Decision Queue & Review Filters is DONE / PASS. It adds client-side saved-product decision filters, search, all-loaded-products summary counts, filtered result count, reset filters, filtered empty state, and a hidden selected-comparison warning without API contract changes, data model changes, Product Match scoring/ranking changes, Routine Safety changes, Routine Coverage changes, AI-provider changes, auth changes, env changes, package changes, seed changes, or routine behavior changes.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
@@ -152,6 +164,16 @@ Evidence boundary:
 - v1.37 full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, unit tests, diff check, build after elevated rerun, audit, and full E2E.
 - v1.37 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
 - Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.37.
+- v1.38 full local validation passed: lint, typecheck, 107 unit-test files / 1046 tests, diff check, package/env/prisma no-diff checks, build after elevated rerun, and full E2E with 31 passed.
+- v1.38 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.38.
+- v1.39 full local validation passed: lint, typecheck, 108 unit-test files / 1088 tests, diff check, package/env/prisma/tests-e2e no-diff checks, build after elevated rerun, and full E2E with 31 passed.
+- v1.39 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- Manual browser, screen-reader, production verification, screenshots, and demo video were not run or created for v1.39.
+- v1.40 full local validation passed: lint, typecheck, 109 unit-test files / 1120 tests, diff check, package/env no-diff checks, build after elevated rerun, and full E2E with 31 passed.
+- v1.40 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- v1.40 targeted rendered UI check passed via Playwright fallback after the in-app Browser surface was unavailable.
+- Manual production verification, screen-reader verification, screenshots, and demo video were not run or created for v1.40.
 - MVP Form Validation & Inline Feedback Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.
 - MVP Form Validation & Inline Feedback Polish sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed. Production verification was not rerun for this local polish task.
 - MVP Product Match Explainability Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.

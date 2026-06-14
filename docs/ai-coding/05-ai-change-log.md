@@ -6,6 +6,158 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## MVP v1.40 - Saved Products Decision Queue & Review Filters
+
+Date: 2026-06-14
+
+### Task
+
+Improve the Saved Products page with client-side decision-support filters,
+search, summary counts, filtered result count, reset filters action, and
+filtered empty states based on v1.39 saved-product metadata.
+
+### Files Updated
+
+- `src/modules/saved-products/saved-product-filters.ts`
+- `src/modules/saved-products/components/saved-products-page.tsx`
+- `tests/unit/saved-product-filters.test.ts`
+- `tests/unit/saved-products-ui.test.ts`
+- `docs/release-evidence-saved-products-decision-filters.md`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/00-source-of-truth.md`
+- `AGENTS.md`
+
+### Outcome
+
+- Added pure client-side filtering/search helpers and summary counts.
+- Added Saved Products page controls for decision status, planned routine slot,
+  note status, and product/name/brand/note search.
+- Added filtered result count, reset filters action, and filtered empty state.
+- Preserved selected comparison products across filters and added safe hidden
+  selected-product copy.
+- Preserved existing save/list/remove and v1.39 PATCH behavior.
+
+### Safety and Privacy Guardrails
+
+- Filtering is client-side only.
+- No API contract changes.
+- No data model changes.
+- No medical advice, diagnosis, treatment claim, guaranteed suitability/safety,
+  automatic product selection, automatic routine modification, Product Match
+  scoring/ranking change, Routine Safety change, Routine Coverage change, AI
+  provider behavior change, auth behavior change, env change, package change, or
+  seed baseline change was added.
+
+### Validation
+
+```txt
+npm run test -- saved-product-filters saved-products-ui: PASS - 3 files / 56 tests
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 109 files / 1120 tests
+npm run build: PASS after elevated rerun; sandboxed attempt compiled successfully, then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 31 passed; sandboxed attempt failed immediately with spawn EPERM
+git diff --check: PASS, with existing CRLF normalization warning for AGENTS.md
+git diff -- package.json package-lock.json: PASS - no diff
+git diff -- .env .env.local .env.example src/config/env.ts: PASS - no diff
+Targeted rendered UI check: PASS via Playwright fallback after in-app Browser was unavailable
+```
+
+### Status
+
+```txt
+DONE / PASS after full local validation passed.
+```
+
+## MVP v1.39 - Saved Product Personal Notes & Trial Decision Support
+
+Date: 2026-06-13
+
+### Task
+
+Add private personal decision-support metadata to existing Saved Products so
+authenticated users can remember why they saved a product, whether they are
+considering/testing/pausing/keeping it, where they may use it in a routine, and
+any personal note before changing a routine.
+
+### Files Updated
+
+- `src/app/api/saved-products/[productId]/route.ts`
+- `src/modules/saved-products/saved-product.types.ts`
+- `src/modules/saved-products/saved-product.dto.ts`
+- `src/modules/saved-products/saved-product.schema.ts`
+- `src/modules/saved-products/saved-product.mapper.ts`
+- `src/modules/saved-products/saved-product.repository.ts`
+- `src/modules/saved-products/saved-product.use-case.ts`
+- `src/modules/saved-products/saved-product.client.ts`
+- `src/modules/saved-products/components/saved-product-decision-support.tsx`
+- `src/modules/saved-products/components/saved-product-card.tsx`
+- `src/modules/saved-products/components/saved-products-page.tsx`
+- `src/modules/saved-products/components/saved-products-comparison-panel.tsx`
+- `tests/unit/saved-product-schema.test.ts`
+- `tests/unit/saved-product-api-contract.test.ts`
+- `tests/unit/saved-product-repository.test.ts`
+- `tests/unit/saved-product-use-case.test.ts`
+- `tests/unit/saved-product-client.test.ts`
+- `tests/unit/saved-products-ui.test.ts`
+- `docs/release-evidence-saved-product-personal-notes.md`
+- `docs/post-mvp-backlog.md`
+- `docs/ai-coding/02-implementation-status.md`
+- `docs/ai-coding/03-feature-status-matrix.md`
+- `docs/ai-coding/05-ai-change-log.md`
+- `docs/ai-coding/06-current-sprint-plan.md`
+- `docs/00-source-of-truth.md`
+- `docs/04-data-model.md`
+- `docs/05-api-contract.md`
+- `AGENTS.md`
+
+### Outcome
+
+- Added optional `decisionStatus`, `plannedRoutineSlot`, and `personalNote`
+  fields to saved products and the public DTO.
+- Added strict metadata update validation and authenticated
+  `PATCH /api/saved-products/[productId]`.
+- Scoped metadata updates by authenticated `userId + productId`.
+- Added Saved Products card controls and comparison display for the metadata.
+- Preserved existing save/list/remove behavior.
+
+### Safety and Privacy Guardrails
+
+- Metadata is personal decision support only.
+- No diagnosis, treatment advice, guaranteed suitability, guaranteed safety,
+  automatic product selection, automatic routine modification, Product Match
+  scoring/ranking change, Routine Safety change, Routine Coverage change, AI
+  provider behavior change, auth behavior change, env change, package change, or
+  seed baseline change was added.
+- Public DTOs do not expose `userId`, `_id`, `ObjectId`, owner, ownership fields,
+  or Mongo internals.
+
+### Validation
+
+```txt
+npm run test -- saved-product: PASS - 7 files / 94 tests
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 108 files / 1088 tests
+npm run build: PASS after elevated rerun; sandboxed attempt compiled successfully, then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 31 passed; sandboxed attempt failed immediately with spawn EPERM
+git diff --check: PASS
+git diff -- package.json package-lock.json: PASS - no diff
+git diff -- .env .env.local .env.example src/config/env.ts: PASS - no diff
+git diff -- prisma: PASS - no diff
+git diff -- tests/e2e: PASS - no diff
+```
+
+### Status
+
+```txt
+DONE / PASS after full local validation passed.
+```
+
 ## MVP v1.21 - Insight Explainability & Tracking Quality Checklist
 
 Date: 2026-06-09

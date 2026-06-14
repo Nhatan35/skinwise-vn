@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import type {
   SavedProduct,
   SavedProductDocument,
+  SavedProductMetadataUpdate,
 } from "@/modules/saved-products/saved-product.types";
 
 const mongoObjectIdPattern = /^[a-f\d]{24}$/i;
@@ -32,6 +33,13 @@ function isDuplicateKeyError(error: unknown) {
     "code" in error &&
     (error as { code?: unknown }).code === 11000
   );
+}
+
+function hasOwnField<TObject extends object>(
+  value: TObject,
+  field: keyof TObject,
+) {
+  return Object.prototype.hasOwnProperty.call(value, field);
 }
 
 export async function listSavedProductsByUser(
@@ -126,4 +134,49 @@ export async function removeSavedProductForUser(
   const result = await collection.deleteOne({ userId, productId: productObjectId });
 
   return result.deletedCount > 0;
+}
+
+export async function updateSavedProductMetadataForUser(
+  userId: string,
+  productId: string,
+  input: SavedProductMetadataUpdate,
+): Promise<SavedProduct | null> {
+  const productObjectId = toSavedProductObjectId(productId);
+
+  if (!productObjectId) {
+    return null;
+  }
+
+  const collection = await getSavedProductCollection();
+  const updateSet: Partial<SavedProductDocument> = {
+    updatedAt: new Date(),
+  };
+  const updateUnset: Record<string, ""> = {};
+
+  if (input.decisionStatus !== undefined) {
+    updateSet.decisionStatus = input.decisionStatus;
+  }
+
+  if (input.plannedRoutineSlot !== undefined) {
+    updateSet.plannedRoutineSlot = input.plannedRoutineSlot;
+  }
+
+  if (hasOwnField(input, "personalNote")) {
+    if (input.personalNote) {
+      updateSet.personalNote = input.personalNote;
+    } else {
+      updateUnset.personalNote = "";
+    }
+  }
+
+  return collection.findOneAndUpdate(
+    { userId, productId: productObjectId },
+    {
+      $set: updateSet,
+      ...(Object.keys(updateUnset).length > 0 ? { $unset: updateUnset } : {}),
+    },
+    {
+      returnDocument: "after",
+    },
+  );
 }

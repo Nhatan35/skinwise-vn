@@ -7,7 +7,9 @@ import {
   listSavedProductsByUser,
   removeSavedProductForUser as removeSavedProductRecordForUser,
   saveProductForUser as saveProductRecordForUser,
+  updateSavedProductMetadataForUser as updateSavedProductMetadataRecordForUser,
 } from "@/modules/saved-products/saved-product.repository";
+import type { UpdateSavedProductMetadataInput } from "@/modules/saved-products/saved-product.schema";
 
 export class SavedProductProductNotFoundError extends Error {
   constructor(message = "Product was not found.") {
@@ -74,4 +76,28 @@ export async function isProductSavedForUser(
   productId: string,
 ): Promise<boolean> {
   return isProductSavedByUser(userId, productId);
+}
+
+export async function updateSavedProductMetadata(
+  userId: string,
+  productId: string,
+  input: UpdateSavedProductMetadataInput,
+): Promise<SavedProductDto | null> {
+  const savedProduct = await updateSavedProductMetadataRecordForUser(
+    userId,
+    productId,
+    input,
+  );
+
+  if (!savedProduct) {
+    return null;
+  }
+
+  const product = await getProductById(savedProduct.productId.toString());
+
+  if (!product) {
+    return null;
+  }
+
+  return toSavedProductDto(savedProduct, product);
 }

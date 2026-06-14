@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-13
+Last updated: 2026-06-14
 
 ## 1. Current Stable Baseline
 
@@ -31,7 +31,9 @@ Product ↔ Ingredient learning path polish: v1.37 - Product ↔ Ingredient Lear
 MVP form validation and inline feedback polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 Routine coverage review: v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
-Latest completed scoped task: v1.38 - Routine Coverage Review & Safe Next-Step Guidance
+Saved product personal notes: v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
+Saved products decision filters: v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
+Latest completed scoped task: v1.40 - Saved Products Decision Queue & Review Filters
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
@@ -42,7 +44,7 @@ Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
 Recommended next task: None
-Local validation: PASS for v1.38 lint/typecheck/unit tests/build/full E2E/diff checks. MVP Product Match Explainability Polish and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.40 lint/typecheck/unit tests/build/full E2E/diff checks. v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported
@@ -114,6 +116,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | MVP Form Validation & Inline Feedback Polish | DONE / PASS | Polishes existing required-field guidance, inline validation, disabled-state explanations, safe action errors, and status feedback without changing product scope, business logic, scoring, matching, AI behavior, auth, schema, dependencies, or API contracts. |
 | P2 | MVP Product Match Explainability Polish | DONE / PASS | Polishes Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation, and Saved Products comparison guidance without changing scoring, matching, AI behavior, business logic, auth, schema, dependencies, or API contracts. |
 | P2 | Routine Coverage Review & Safe Next-Step Guidance | DONE / PASS in v1.38 | Adds an educational routine-structure review on the Routines page using existing routine data only. Dashboard update intentionally skipped; no Routine Safety, scoring, AI, schema, auth, env, package, or API contract changes were made. |
+| P2 | Saved Product Personal Notes & Trial Decision Support | DONE / PASS in v1.39 | Adds private saved-product decision status, planned routine slot, and personal note metadata with strict owner-scoped PATCH updates and comparison display, without changing Product Match scoring/ranking or routine behavior. |
+| P2 | Saved Products Decision Queue & Review Filters | DONE / PASS in v1.40 | Adds client-side Saved Products decision filters, search, summary counts, result count, reset behavior, filtered empty state, and comparison hidden-selection warning without API or data-model changes. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -890,6 +894,8 @@ MVP Empty / Loading / Error State Polish: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
+v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
+v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 Current active milestone: None
 Recommended next task: None
 ```
@@ -908,6 +914,10 @@ Reason:
 - MVP Product Match Explainability Polish is DONE / PASS. Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance were completed without scoring, matching, AI behavior, business logic, auth, schema, dependency, or API-contract changes.
 - v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a Routines page habit-support review using existing routine data only. Dashboard summary was intentionally skipped to keep scope small and avoid dashboard mapper/use-case changes.
 - v1.38 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env/prisma diff checks, and elevated E2E.
+- v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS. It adds optional private saved-product decision metadata, strict owner-scoped PATCH updates, Saved Products card controls, and comparison display without changing Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, packages, seed baselines, or routine behavior.
+- v1.39 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env/prisma/tests-e2e diff checks, and elevated E2E.
+- v1.40 Saved Products Decision Queue & Review Filters is DONE / PASS. It adds client-side saved-product decision filters, search, all-loaded-products summary counts, filtered result count, reset filters, filtered empty state, and comparison hidden-selection warning without changing API contracts, data models, Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, packages, seed baselines, or routine behavior.
+- v1.40 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env diff checks, elevated E2E, and targeted rendered UI verification.
 - v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
 - v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.
 - v1.37 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.
@@ -1002,4 +1012,6 @@ Reason:
 2026-06-13: Recorded Screen-Reader Assistive Technology Verification as DONE / PASS based on manual production/browser verification. Keyboard-only navigation, focus behavior and visibility, accessible names, icon-only controls, form labels, feedback readability, heading structure, landmark/navigation structure, and screen-reader flow expectations were checked across core MVP flows. No critical accessibility or production blockers were observed. Date, tester, browser, device/OS, and screen reader used were not provided. No source code or automated accessibility test suite was added.
 2026-06-13: Completed MVP Product Match Explainability Polish. Clarified Product Match score meaning, match/caution reasons, ingredient-highlight labels, limited-data copy, Product Detail interpretation guidance, and Saved Products comparison guidance without changing Product Match scoring/ranking, ingredient/product matching, AI behavior, business logic, auth, schema, dependencies, environment configuration, or API contracts. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `npm run build` after elevated rerun, and `npm run test:e2e` with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed. Manual browser and production verification were not rerun for this local polish task.
 2026-06-13: Completed v1.38 Routine Coverage Review & Safe Next-Step Guidance. Added a pure routine coverage helper, Routines page review card, and focused routine coverage/source-safety tests without changing database schema, Product Match scoring/ranking, Routine Safety logic, AI provider behavior, auth, environment configuration, package dependencies, or API contracts. Dashboard update intentionally skipped to keep v1.38 scoped to the Routines page. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `git diff -- package.json package-lock.json`, `git diff -- .env .env.local .env.example src/config/env.ts`, `git diff -- prisma`, `npm run build` after elevated rerun, and `npm run test:e2e` after elevated rerun with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed.
+2026-06-13: Completed v1.39 Saved Product Personal Notes & Trial Decision Support. Added optional private saved-product decision metadata, strict metadata validation, authenticated owner-scoped `PATCH /api/saved-products/[productId]`, Saved Products card controls, and comparison rows for decision status, planned routine slot, and personal note. Existing save/list/remove behavior remains unchanged. No Product Match scoring/ranking, Product Match explanation algorithm, Routine Safety logic, Routine Coverage logic, AI provider behavior, auth provider behavior, environment configuration, package dependencies, seed baselines, medical recommendation behavior, or routine behavior was changed. Validation PASS: `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `git diff -- package.json package-lock.json`, `git diff -- .env .env.local .env.example src/config/env.ts`, `git diff -- prisma`, `git diff -- tests/e2e`, `npm run build` after elevated rerun, and `npm run test:e2e` after elevated rerun with 31 passed. Sandboxed build/E2E attempts failed with `spawn EPERM`; elevated reruns passed.
+2026-06-14: Completed v1.40 Saved Products Decision Queue & Review Filters. Added pure client-side saved-product filtering/search/summary helpers, Saved Products filter controls, all-loaded-products summary counts, filtered result count, reset filters action, filtered empty state, and comparison hidden-selection warning. Existing save/list/remove and v1.39 PATCH behavior remain unchanged. No API contract changes, data model changes, Product Match scoring/ranking changes, Product Match explanation algorithm changes, Routine Safety changes, Routine Coverage changes, AI provider behavior changes, auth behavior changes, environment configuration changes, package dependency changes, seed baseline changes, medical recommendation behavior, automatic product selection, or routine behavior changes were made. Validation PASS: `npm run test -- saved-product-filters saved-products-ui`, `npm run lint`, `npm run typecheck`, `npm run test`, `git diff --check`, `git diff -- package.json package-lock.json`, `git diff -- .env .env.local .env.example src/config/env.ts`, `npm run build` after elevated rerun, `npm run test:e2e` after elevated rerun with 31 passed, and targeted rendered UI verification via Playwright fallback.
 ```

@@ -141,12 +141,22 @@ type SavedProduct = {
   _id: ObjectId;
   userId: string;
   productId: ObjectId;
+  decisionStatus?: "considering" | "testing" | "paused" | "kept";
+  plannedRoutineSlot?: "morning" | "evening" | "either" | "not_sure";
+  personalNote?: string;
   createdAt: Date;
   updatedAt: Date;
 };
 ```
 
-Saved Products are user-owned bookmarks for visible products. The public DTO includes the saved record id, `productId`, product DTO, and timestamps, but never exposes `userId`.
+Saved Products are user-owned bookmarks for visible products. v1.39 adds
+optional private decision-support metadata to help users remember why they saved
+a product, whether they are considering/testing/pausing/keeping it, where they
+may use it in a routine, and any personal note before routine changes.
+
+The public DTO includes the saved record id, `productId`, product DTO, optional
+decision-support metadata, and timestamps, but never exposes `userId`, `_id`,
+`ObjectId`, owner, ownership fields, or Mongo internals.
 
 ### Indexes
 

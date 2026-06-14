@@ -10,6 +10,10 @@ import type {
   ProductSkinType,
 } from "@/modules/products/product.types";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import type {
+  SavedProductDecisionStatus,
+  SavedProductPlannedRoutineSlot,
+} from "@/modules/saved-products/saved-product.types";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -31,6 +35,25 @@ type ComparisonRow = {
 };
 
 const fallbackCopy = "Chưa có thông tin để so sánh";
+const missingSelectionCopy = "Chưa chọn";
+const missingPersonalNoteCopy = "Chưa ghi chú";
+
+const decisionStatusLabels: Record<SavedProductDecisionStatus, string> = {
+  considering: "Đang cân nhắc",
+  testing: "Đang dùng thử",
+  paused: "Tạm dừng",
+  kept: "Muốn giữ lại",
+};
+
+const plannedRoutineSlotLabels: Record<
+  SavedProductPlannedRoutineSlot,
+  string
+> = {
+  morning: "Buổi sáng",
+  evening: "Buổi tối",
+  either: "Sáng hoặc tối",
+  not_sure: "Chưa chắc",
+};
 
 const categoryLabels: Record<ProductCategory, string> = {
   cleanser: "Sữa rửa mặt",
@@ -120,6 +143,29 @@ const comparisonRows: ComparisonRow[] = [
     render: (item) => <TextList values={item.product.notRecommendedFor} />,
   },
   {
+    label: "Trạng thái cân nhắc",
+    render: (item) =>
+      item.decisionStatus
+        ? decisionStatusLabels[item.decisionStatus]
+        : missingSelectionCopy,
+  },
+  {
+    label: "Dự định dùng trong routine",
+    render: (item) =>
+      item.plannedRoutineSlot
+        ? plannedRoutineSlotLabels[item.plannedRoutineSlot]
+        : missingSelectionCopy,
+  },
+  {
+    label: "Ghi chú cá nhân",
+    render: (item) =>
+      item.personalNote ? (
+        <p className="whitespace-pre-wrap leading-6">{item.personalNote}</p>
+      ) : (
+        missingPersonalNoteCopy
+      ),
+  },
+  {
     label: "Chi tiết",
     render: (item) => (
       <Button asChild size="sm" variant="outline">
@@ -148,6 +194,10 @@ export function SavedProductsComparisonPanel({
             báo, điều kiện phù hợp và dữ liệu còn thiếu. Bảng không tự chọn
             thay bạn; lựa chọn cuối cùng vẫn phụ thuộc vào phản ứng da và sở
             thích cá nhân.
+          </p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Thông tin này giúp bạn nhớ cách mình đang cân nhắc từng sản phẩm.
+            So sánh không thay thế việc theo dõi phản ứng thực tế của da.
           </p>
         </div>
         <Button

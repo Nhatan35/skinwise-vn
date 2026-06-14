@@ -11,6 +11,7 @@ vi.mock("@/modules/saved-products/saved-product.repository", () => ({
   listSavedProductsByUser: vi.fn(),
   removeSavedProductForUser: vi.fn(),
   saveProductForUser: vi.fn(),
+  updateSavedProductMetadataForUser: vi.fn(),
 }));
 
 import { getProductById } from "@/modules/products/product.use-case";
@@ -21,6 +22,7 @@ import {
   listSavedProductsByUser,
   removeSavedProductForUser as removeSavedProductRecordForUser,
   saveProductForUser as saveProductRecordForUser,
+  updateSavedProductMetadataForUser as updateSavedProductMetadataRecordForUser,
 } from "@/modules/saved-products/saved-product.repository";
 import type { SavedProduct } from "@/modules/saved-products/saved-product.types";
 import {
@@ -29,6 +31,7 @@ import {
   removeSavedProductForUser,
   saveProductForUser,
   SavedProductProductNotFoundError,
+  updateSavedProductMetadata,
 } from "@/modules/saved-products/saved-product.use-case";
 
 const mockedGetProductById = vi.mocked(getProductById);
@@ -41,6 +44,9 @@ const mockedRemoveSavedProductRecordForUser = vi.mocked(
   removeSavedProductRecordForUser,
 );
 const mockedSaveProductRecordForUser = vi.mocked(saveProductRecordForUser);
+const mockedUpdateSavedProductMetadataRecordForUser = vi.mocked(
+  updateSavedProductMetadataRecordForUser,
+);
 
 const userId = "auth-user-id";
 const otherUserId = "other-user-id";
@@ -92,6 +98,7 @@ describe("Saved Product use cases", () => {
     mockedListSavedProductsByUser.mockReset();
     mockedRemoveSavedProductRecordForUser.mockReset();
     mockedSaveProductRecordForUser.mockReset();
+    mockedUpdateSavedProductMetadataRecordForUser.mockReset();
   });
 
   it("lists saved products for only the requested user and skips missing products", async () => {
@@ -184,5 +191,71 @@ describe("Saved Product use cases", () => {
 
     await expect(isProductSavedForUser(userId, productId)).resolves.toBe(true);
     expect(mockedIsProductSavedByUser).toHaveBeenCalledWith(userId, productId);
+  });
+
+  it("updates metadata through the owner-scoped repository and returns a safe DTO", async () => {
+    mockedUpdateSavedProductMetadataRecordForUser.mockResolvedValue(
+      createSavedProduct({
+        decisionStatus: "testing",
+        plannedRoutineSlot: "evening",
+        personalNote: "Muốn thử sau khi routine ổn định hơn.",
+      }),
+    );
+    mockedGetProductById.mockResolvedValue(createProduct());
+
+    const result = await updateSavedProductMetadata(userId, productId, {
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Muốn thử sau khi routine ổn định hơn.",
+    });
+    const serializedResult = JSON.stringify(result);
+
+    expect(
+      mockedUpdateSavedProductMetadataRecordForUser,
+    ).toHaveBeenCalledWith(userId, productId, {
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Muốn thử sau khi routine ổn định hơn.",
+    });
+    expect(mockedGetProductById).toHaveBeenCalledWith(productId);
+    expect(result).toMatchObject({
+      id: savedProductId,
+      productId,
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Muốn thử sau khi routine ổn định hơn.",
+    });
+
+    for (const privateField of [
+      "userId",
+      "_id",
+      "ObjectId",
+      "owner",
+      "ownership",
+    ]) {
+      expect(serializedResult).not.toContain(privateField);
+    }
+  });
+
+  it("returns null when the current user has no matching saved product", async () => {
+    mockedUpdateSavedProductMetadataRecordForUser.mockResolvedValue(null);
+
+    await expect(
+      updateSavedProductMetadata(otherUserId, productId, {
+        decisionStatus: "paused",
+      }),
+    ).resolves.toBeNull();
+    expect(mockedGetProductById).not.toHaveBeenCalled();
+  });
+
+  it("maps existing saved products without metadata", async () => {
+    mockedListSavedProductsByUser.mockResolvedValue([createSavedProduct()]);
+    mockedGetProductById.mockResolvedValue(createProduct());
+
+    const [result] = await listSavedProductsForUser(userId);
+
+    expect(result).not.toHaveProperty("decisionStatus");
+    expect(result).not.toHaveProperty("plannedRoutineSlot");
+    expect(result).not.toHaveProperty("personalNote");
   });
 });

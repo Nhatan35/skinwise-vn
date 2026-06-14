@@ -11,6 +11,15 @@ export function toSavedProductDto(
     id: savedProduct._id.toString(),
     productId: savedProduct.productId.toString(),
     product: toProductDto(product),
+    ...(savedProduct.decisionStatus
+      ? { decisionStatus: savedProduct.decisionStatus }
+      : {}),
+    ...(savedProduct.plannedRoutineSlot
+      ? { plannedRoutineSlot: savedProduct.plannedRoutineSlot }
+      : {}),
+    ...(savedProduct.personalNote
+      ? { personalNote: savedProduct.personalNote }
+      : {}),
     createdAt: savedProduct.createdAt.toISOString(),
     updatedAt: savedProduct.updatedAt.toISOString(),
   };

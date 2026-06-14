@@ -17,6 +17,7 @@ vi.mock("@/modules/saved-products/saved-product.use-case", () => {
     removeSavedProductForUser: vi.fn(),
     saveProductForUser: vi.fn(),
     SavedProductProductNotFoundError,
+    updateSavedProductMetadata: vi.fn(),
   };
 });
 
@@ -29,12 +30,16 @@ import {
   removeSavedProductForUser,
   saveProductForUser,
   SavedProductProductNotFoundError,
+  updateSavedProductMetadata,
 } from "@/modules/saved-products/saved-product.use-case";
 
 const mockedGetCurrentUser = vi.mocked(getCurrentUser);
 const mockedListSavedProductsForUser = vi.mocked(listSavedProductsForUser);
 const mockedRemoveSavedProductForUser = vi.mocked(removeSavedProductForUser);
 const mockedSaveProductForUser = vi.mocked(saveProductForUser);
+const mockedUpdateSavedProductMetadata = vi.mocked(
+  updateSavedProductMetadata,
+);
 
 const authUserId = "auth-user-id";
 const productId = "665000000000000000000320";
@@ -102,6 +107,7 @@ describe("/api/saved-products contract", () => {
     mockedListSavedProductsForUser.mockReset();
     mockedRemoveSavedProductForUser.mockReset();
     mockedSaveProductForUser.mockReset();
+    mockedUpdateSavedProductMetadata.mockReset();
   });
 
   it("uses the Node.js runtime and exports expected handlers", () => {
@@ -109,6 +115,7 @@ describe("/api/saved-products contract", () => {
     expect(savedProductByProductIdRoute.runtime).toBe("nodejs");
     expect(savedProductsRoute.GET).toBeTypeOf("function");
     expect(savedProductsRoute.POST).toBeTypeOf("function");
+    expect(savedProductByProductIdRoute.PATCH).toBeTypeOf("function");
     expect(savedProductByProductIdRoute.DELETE).toBeTypeOf("function");
   });
 
@@ -125,8 +132,21 @@ describe("/api/saved-products contract", () => {
       }),
       routeContext(productId),
     );
+    const patchResponse = await savedProductByProductIdRoute.PATCH(
+      jsonRequest(
+        `http://localhost/api/saved-products/${productId}`,
+        "PATCH",
+        { decisionStatus: "testing" },
+      ),
+      routeContext(productId),
+    );
 
-    for (const response of [getResponse, postResponse, deleteResponse]) {
+    for (const response of [
+      getResponse,
+      postResponse,
+      deleteResponse,
+      patchResponse,
+    ]) {
       await expect(readJson(response)).resolves.toMatchObject({
         data: null,
         error: {
@@ -138,6 +158,7 @@ describe("/api/saved-products contract", () => {
     expect(mockedListSavedProductsForUser).not.toHaveBeenCalled();
     expect(mockedSaveProductForUser).not.toHaveBeenCalled();
     expect(mockedRemoveSavedProductForUser).not.toHaveBeenCalled();
+    expect(mockedUpdateSavedProductMetadata).not.toHaveBeenCalled();
   });
 
   it("returns current user saved products in the expected envelope", async () => {
@@ -247,6 +268,165 @@ describe("/api/saved-products contract", () => {
       authUserId,
       productId,
     );
+  });
+
+  it("updates saved product metadata for the authenticated owner", async () => {
+    mockAuthenticatedUser();
+    const updatedItem = createSavedProduct({
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Muốn thử sau khi routine hiện tại ổn định hơn.",
+    });
+
+    mockedUpdateSavedProductMetadata.mockResolvedValue(updatedItem);
+
+    const response = await savedProductByProductIdRoute.PATCH(
+      jsonRequest(
+        `http://localhost/api/saved-products/${productId}`,
+        "PATCH",
+        {
+          decisionStatus: "testing",
+          plannedRoutineSlot: "evening",
+          personalNote: "  Muốn thử sau khi routine hiện tại ổn định hơn.  ",
+        },
+      ),
+      routeContext(productId),
+    );
+    const body = await readJson(response);
+    const serializedBody = JSON.stringify(body);
+
+    expect(response.status).toBe(200);
+    expect(body).toEqual({
+      data: {
+        item: updatedItem,
+      },
+      error: null,
+    });
+    expect(mockedUpdateSavedProductMetadata).toHaveBeenCalledWith(
+      authUserId,
+      productId,
+      {
+        decisionStatus: "testing",
+        plannedRoutineSlot: "evening",
+        personalNote: "Muốn thử sau khi routine hiện tại ổn định hơn.",
+      },
+    );
+
+    for (const privateField of [
+      "userId",
+      "_id",
+      "ObjectId",
+      "owner",
+      "ownership",
+    ]) {
+      expect(serializedBody).not.toContain(privateField);
+    }
+  });
+
+  it("rejects invalid PATCH params, bodies, metadata, JSON, and internal fields", async () => {
+    mockAuthenticatedUser();
+
+    const invalidRequests: Array<{
+      body: BodyInit;
+      id: string;
+    }> = [
+      { body: JSON.stringify({ decisionStatus: "testing" }), id: "bad-id" },
+      { body: JSON.stringify({}), id: productId },
+      {
+        body: JSON.stringify({ decisionStatus: "recommended" }),
+        id: productId,
+      },
+      {
+        body: JSON.stringify({ plannedRoutineSlot: "weekly" }),
+        id: productId,
+      },
+      {
+        body: JSON.stringify({ personalNote: "a".repeat(1001) }),
+        id: productId,
+      },
+      { body: JSON.stringify({ userId: authUserId }), id: productId },
+      { body: JSON.stringify({ productId }), id: productId },
+      { body: JSON.stringify({ product: {} }), id: productId },
+      { body: JSON.stringify({ owner: authUserId }), id: productId },
+      { body: JSON.stringify({ ownership: "current" }), id: productId },
+      { body: "{", id: productId },
+    ];
+
+    for (const invalidRequest of invalidRequests) {
+      const response = await savedProductByProductIdRoute.PATCH(
+        new Request(
+          `http://localhost/api/saved-products/${invalidRequest.id}`,
+          {
+            body: invalidRequest.body,
+            method: "PATCH",
+          },
+        ),
+        routeContext(invalidRequest.id),
+      );
+
+      await expect(readJson(response)).resolves.toMatchObject({
+        data: null,
+        error: {
+          code: "VALIDATION_ERROR",
+        },
+      });
+      expect(response.status).toBe(400);
+    }
+
+    expect(mockedUpdateSavedProductMetadata).not.toHaveBeenCalled();
+  });
+
+  it("returns NOT_FOUND when the current user has not saved the product", async () => {
+    mockAuthenticatedUser();
+    mockedUpdateSavedProductMetadata.mockResolvedValue(null);
+
+    const response = await savedProductByProductIdRoute.PATCH(
+      jsonRequest(
+        `http://localhost/api/saved-products/${productId}`,
+        "PATCH",
+        { personalNote: "Ghi chú riêng." },
+      ),
+      routeContext(productId),
+    );
+
+    await expect(readJson(response)).resolves.toMatchObject({
+      data: null,
+      error: {
+        code: "NOT_FOUND",
+      },
+    });
+    expect(response.status).toBe(404);
+  });
+
+  it("returns generic INTERNAL_ERROR when PATCH fails unexpectedly", async () => {
+    mockAuthenticatedUser();
+    mockedUpdateSavedProductMetadata.mockRejectedValue(
+      new Error("MongoServerError secret ownership stack"),
+    );
+
+    const response = await savedProductByProductIdRoute.PATCH(
+      jsonRequest(
+        `http://localhost/api/saved-products/${productId}`,
+        "PATCH",
+        { decisionStatus: "kept" },
+      ),
+      routeContext(productId),
+    );
+    const body = await readJson(response);
+    const serializedBody = JSON.stringify(body);
+
+    expect(response.status).toBe(500);
+    expect(body).toEqual({
+      data: null,
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "Something went wrong.",
+        details: {},
+      },
+    });
+    expect(serializedBody).not.toContain("MongoServerError");
+    expect(serializedBody).not.toContain("secret");
+    expect(serializedBody).not.toContain("stack");
   });
 
   it("rejects invalid DELETE productId params", async () => {

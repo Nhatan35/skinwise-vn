@@ -2,7 +2,7 @@
 
 import { ArrowRight, RotateCcw } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { SavedProductCard } from "@/modules/saved-products/components/saved-product-card";
 import { SavedProductsComparisonPanel } from "@/modules/saved-products/components/saved-products-comparison-panel";
@@ -11,14 +11,25 @@ import {
   SavedProductClientError,
 } from "@/modules/saved-products/saved-product.client";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import {
+  DEFAULT_SAVED_PRODUCTS_FILTERS,
+  filterSavedProducts,
+  getSavedProductDecisionSummary,
+  hasActiveSavedProductFilters,
+  type SavedProductsFilterState,
+} from "@/modules/saved-products/saved-product-filters";
 import { routes } from "@/shared/constants/routes";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
 
 const COMPARISON_GUIDANCE_ID = "saved-products-comparison-guidance";
+const filterSelectClassName =
+  "h-11 w-full rounded-xl border border-input bg-card px-3.5 text-sm shadow-sm shadow-stone-950/5 outline-none focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/25";
 
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof SavedProductClientError) {
@@ -63,13 +74,35 @@ function getComparisonGuidance(selectedCount: number) {
 }
 
 export function SavedProductsPage() {
+  const filterFieldId = useId();
   const [items, setItems] = useState<SavedProductDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [filters, setFilters] = useState<SavedProductsFilterState>(() => ({
+    ...DEFAULT_SAVED_PRODUCTS_FILTERS,
+  }));
   const [selectedProductIds, setSelectedProductIds] = useState<Set<string>>(
     () => new Set(),
   );
+  const filteredItems = filterSavedProducts(items, filters);
+  const decisionSummary = getSavedProductDecisionSummary(items);
+  const hasActiveFilters = hasActiveSavedProductFilters(filters);
+  const selectedItems = items.filter((item) =>
+    selectedProductIds.has(item.productId),
+  );
+  const visibleProductIds = new Set(
+    filteredItems.map((item) => item.productId),
+  );
+  const hasHiddenSelectedProducts =
+    hasActiveFilters &&
+    selectedItems.some((item) => !visibleProductIds.has(item.productId));
+  const canShowComparison = selectedItems.length >= 2;
+  const hasReachedComparisonLimit = selectedProductIds.size >= 3;
+  const searchInputId = `${filterFieldId}-search`;
+  const decisionStatusFilterId = `${filterFieldId}-decision-status`;
+  const plannedRoutineSlotFilterId = `${filterFieldId}-planned-routine-slot`;
+  const noteStatusFilterId = `${filterFieldId}-note-status`;
 
   useEffect(() => {
     let isMounted = true;
@@ -152,6 +185,28 @@ export function SavedProductsPage() {
     });
   }
 
+  function handleUpdated(updatedItem: SavedProductDto) {
+    setItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item,
+      ),
+    );
+  }
+
+  function handleFilterChange<TKey extends keyof SavedProductsFilterState>(
+    field: TKey,
+    value: SavedProductsFilterState[TKey],
+  ) {
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [field]: value,
+    }));
+  }
+
+  function handleResetFilters() {
+    setFilters({ ...DEFAULT_SAVED_PRODUCTS_FILTERS });
+  }
+
   if (loadError) {
     return (
       <ErrorState
@@ -205,12 +260,6 @@ export function SavedProductsPage() {
     );
   }
 
-  const selectedItems = items.filter((item) =>
-    selectedProductIds.has(item.productId),
-  );
-  const canShowComparison = selectedItems.length >= 2;
-  const hasReachedComparisonLimit = selectedProductIds.size >= 3;
-
   return (
     <div className="space-y-4">
       <section
@@ -226,7 +275,7 @@ export function SavedProductsPage() {
             <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
               Sản phẩm đã lưu dùng để xem lại thông tin tham khảo, so sánh các lựa
               chọn và cân nhắc từng sản phẩm trước khi đưa vào routine. Việc lưu
-              sản phẩm không có nghĩa là sản phẩm chắc chắn phù hợp với mọi routine.
+              sản phẩm không đồng nghĩa với việc sản phẩm sẽ phù hợp với mọi routine.
             </p>
           </div>
           <Button asChild>
@@ -268,6 +317,149 @@ export function SavedProductsPage() {
         </div>
       </section>
 
+      <section
+        className="space-y-5 rounded-lg border border-border bg-card p-4"
+        data-testid="saved-products-decision-filters"
+      >
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            Sắp xếp việc cân nhắc
+          </h2>
+          <p className="text-sm leading-6 text-muted-foreground">
+            Phần này giúp bạn xem lại các sản phẩm đã lưu theo trạng thái cân
+            nhắc cá nhân.
+          </p>
+        </div>
+
+        <div
+          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+          data-testid="saved-products-decision-summary"
+        >
+          {[
+            ["Tổng sản phẩm đã lưu", decisionSummary.total],
+            ["Đang cân nhắc", decisionSummary.considering],
+            ["Đang dùng thử", decisionSummary.testing],
+            ["Tạm dừng", decisionSummary.paused],
+            ["Muốn giữ lại", decisionSummary.kept],
+            ["Chưa chọn trạng thái", decisionSummary.unset],
+          ].map(([label, count]) => (
+            <div
+              className="rounded-md border border-border bg-secondary/30 p-3"
+              key={label}
+            >
+              <p className="text-xs font-medium text-muted-foreground">
+                {label}
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-foreground">
+                {count}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+          <div className="space-y-2">
+            <Label htmlFor={searchInputId}>Tìm sản phẩm đã lưu</Label>
+            <Input
+              id={searchInputId}
+              onChange={(event) => handleFilterChange("query", event.target.value)}
+              placeholder="Tìm theo tên sản phẩm, thương hiệu hoặc ghi chú..."
+              type="search"
+              value={filters.query}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={decisionStatusFilterId}>
+              Lọc theo trạng thái cân nhắc
+            </Label>
+            <select
+              className={filterSelectClassName}
+              id={decisionStatusFilterId}
+              onChange={(event) =>
+                handleFilterChange(
+                  "decisionStatus",
+                  event.target
+                    .value as SavedProductsFilterState["decisionStatus"],
+                )
+              }
+              value={filters.decisionStatus}
+            >
+              <option value="all">Tất cả trạng thái</option>
+              <option value="considering">Đang cân nhắc</option>
+              <option value="testing">Đang dùng thử</option>
+              <option value="paused">Tạm dừng</option>
+              <option value="kept">Muốn giữ lại</option>
+              <option value="unset">Chưa chọn trạng thái</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={plannedRoutineSlotFilterId}>
+              Lọc theo thời điểm dự định dùng
+            </Label>
+            <select
+              className={filterSelectClassName}
+              id={plannedRoutineSlotFilterId}
+              onChange={(event) =>
+                handleFilterChange(
+                  "plannedRoutineSlot",
+                  event.target
+                    .value as SavedProductsFilterState["plannedRoutineSlot"],
+                )
+              }
+              value={filters.plannedRoutineSlot}
+            >
+              <option value="all">Tất cả thời điểm</option>
+              <option value="morning">Buổi sáng</option>
+              <option value="evening">Buổi tối</option>
+              <option value="either">Sáng hoặc tối</option>
+              <option value="not_sure">Chưa chắc</option>
+              <option value="unset">Chưa chọn thời điểm</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={noteStatusFilterId}>
+              Lọc theo ghi chú cá nhân
+            </Label>
+            <select
+              className={filterSelectClassName}
+              id={noteStatusFilterId}
+              onChange={(event) =>
+                handleFilterChange(
+                  "noteStatus",
+                  event.target.value as SavedProductsFilterState["noteStatus"],
+                )
+              }
+              value={filters.noteStatus}
+            >
+              <option value="all">Tất cả ghi chú</option>
+              <option value="with_note">Có ghi chú</option>
+              <option value="without_note">Chưa có ghi chú</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Button onClick={handleResetFilters} type="button" variant="outline">
+            <RotateCcw aria-hidden="true" />
+            Đặt lại bộ lọc
+          </Button>
+          {hasActiveFilters ? (
+            <p
+              aria-live="polite"
+              className="text-sm text-muted-foreground"
+              data-testid="saved-products-filtered-result-count"
+              role="status"
+            >
+              Đang hiển thị {filteredItems.length}/{items.length} sản phẩm đã
+              lưu.
+            </p>
+          ) : null}
+        </div>
+      </section>
+
       <p
         className="text-sm text-muted-foreground"
         id={COMPARISON_GUIDANCE_ID}
@@ -276,6 +468,16 @@ export function SavedProductsPage() {
         {getComparisonGuidance(selectedProductIds.size)}
       </p>
 
+      {hasHiddenSelectedProducts ? (
+        <p
+          className="rounded-md border border-border bg-secondary/40 p-3 text-sm text-muted-foreground"
+          data-testid="saved-products-hidden-selection-warning"
+          role="status"
+        >
+          Một số sản phẩm đã chọn để so sánh có thể đang bị ẩn bởi bộ lọc.
+        </p>
+      ) : null}
+
       {canShowComparison ? (
         <SavedProductsComparisonPanel
           items={selectedItems}
@@ -283,27 +485,40 @@ export function SavedProductsPage() {
         />
       ) : null}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item) => {
-          const isSelectedForComparison = selectedProductIds.has(
-            item.productId,
-          );
+      {filteredItems.length === 0 ? (
+        <EmptyState
+          action={
+            <Button onClick={handleResetFilters} type="button" variant="outline">
+              Đặt lại bộ lọc
+            </Button>
+          }
+          description="Bạn có thể đặt lại bộ lọc hoặc thử từ khóa khác."
+          title="Không có sản phẩm nào khớp với bộ lọc hiện tại."
+        />
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredItems.map((item) => {
+            const isSelectedForComparison = selectedProductIds.has(
+              item.productId,
+            );
 
-          return (
-            <SavedProductCard
-              comparisonDescriptionId={COMPARISON_GUIDANCE_ID}
-              comparisonDisabled={
-                hasReachedComparisonLimit && !isSelectedForComparison
-              }
-              isSelectedForComparison={isSelectedForComparison}
-              item={item}
-              key={item.id}
-              onComparisonToggle={handleComparisonToggle}
-              onRemoved={handleRemoved}
-            />
-          );
-        })}
-      </div>
+            return (
+              <SavedProductCard
+                comparisonDescriptionId={COMPARISON_GUIDANCE_ID}
+                comparisonDisabled={
+                  hasReachedComparisonLimit && !isSelectedForComparison
+                }
+                isSelectedForComparison={isSelectedForComparison}
+                item={item}
+                key={item.id}
+                onComparisonToggle={handleComparisonToggle}
+                onRemoved={handleRemoved}
+                onUpdated={handleUpdated}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

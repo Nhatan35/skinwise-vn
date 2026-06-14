@@ -8,6 +8,7 @@ import {
   removeSavedProduct,
   saveProduct,
   SavedProductClientError,
+  updateSavedProductMetadata,
 } from "@/modules/saved-products/saved-product.client";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
 
@@ -136,6 +137,120 @@ describe("Saved Product client helper", () => {
         method: "DELETE",
       }),
     );
+  });
+
+  it("updates supported metadata through PATCH and reads data.item", async () => {
+    const item = createSavedProduct({
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Theo dõi cảm nhận trước khi thêm vào routine.",
+    });
+
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { item },
+        error: null,
+      }),
+    );
+
+    await expect(
+      updateSavedProductMetadata(item.productId, {
+        decisionStatus: "testing",
+        plannedRoutineSlot: "evening",
+        personalNote: "Theo dõi cảm nhận trước khi thêm vào routine.",
+      }),
+    ).resolves.toEqual(item);
+    expect(mockedFetch).toHaveBeenCalledWith(
+      `/api/saved-products/${item.productId}`,
+      expect.objectContaining({
+        body: JSON.stringify({
+          decisionStatus: "testing",
+          plannedRoutineSlot: "evening",
+          personalNote: "Theo dõi cảm nhận trước khi thêm vào routine.",
+        }),
+        headers: expect.objectContaining({
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }),
+        method: "PATCH",
+      }),
+    );
+  });
+
+  it("sends only supported metadata fields", async () => {
+    const item = createSavedProduct({ decisionStatus: "kept" });
+
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { item },
+        error: null,
+      }),
+    );
+
+    await updateSavedProductMetadata(
+      item.productId,
+      {
+        decisionStatus: "kept",
+        userId: "not-allowed",
+        productId: "not-allowed",
+      } as never,
+    );
+
+    const request = mockedFetch.mock.calls[0]?.[1] as RequestInit;
+    const requestBody = JSON.parse(String(request.body)) as Record<
+      string,
+      unknown
+    >;
+
+    expect(requestBody).toEqual({ decisionStatus: "kept" });
+  });
+
+  it("rejects malformed optional metadata in a successful response", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: {
+          item: createSavedProduct({
+            decisionStatus: "recommended" as never,
+          }),
+        },
+        error: null,
+      }),
+    );
+
+    await expect(
+      updateSavedProductMetadata("product-id", {
+        decisionStatus: "testing",
+      }),
+    ).rejects.toMatchObject({
+      code: "INTERNAL_ERROR",
+      message: "Could not update this saved product.",
+      status: 200,
+    });
+  });
+
+  it("preserves API errors from metadata updates", async () => {
+    mockedFetch.mockResolvedValue(
+      jsonResponse(
+        {
+          data: null,
+          error: {
+            code: "NOT_FOUND",
+            message: "Saved product was not found.",
+          },
+        },
+        404,
+      ),
+    );
+
+    await expect(
+      updateSavedProductMetadata("missing", {
+        personalNote: "Ghi chú.",
+      }),
+    ).rejects.toMatchObject({
+      code: "NOT_FOUND",
+      message: "Could not update this saved product.",
+      status: 404,
+    });
   });
 
   it("throws SavedProductClientError for API error envelopes", async () => {

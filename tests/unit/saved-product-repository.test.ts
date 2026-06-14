@@ -14,6 +14,7 @@ import {
   listSavedProductsByUser,
   removeSavedProductForUser,
   saveProductForUser,
+  updateSavedProductMetadataForUser,
 } from "@/modules/saved-products/saved-product.repository";
 import type { SavedProduct } from "@/modules/saved-products/saved-product.types";
 
@@ -171,5 +172,110 @@ describe("Saved Product repository", () => {
 
     expect(filter?.userId).toBe(userId);
     expect(filter?.productId.toString()).toBe(productId);
+  });
+
+  it("updates only allowed metadata fields with a user-product scoped filter", async () => {
+    const updatedSavedProduct = createSavedProduct({
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Theo dõi trước khi thêm vào routine.",
+      updatedAt: new Date("2026-06-13T12:00:00.000Z"),
+    });
+    const collection = createCollectionMock();
+
+    collection.findOneAndUpdate.mockResolvedValue(updatedSavedProduct);
+    setCollectionMock(collection);
+
+    await expect(
+      updateSavedProductMetadataForUser(userId, productId, {
+        decisionStatus: "testing",
+        plannedRoutineSlot: "evening",
+        personalNote: "Theo dõi trước khi thêm vào routine.",
+      }),
+    ).resolves.toBe(updatedSavedProduct);
+
+    const [filter, update, options] = collection.findOneAndUpdate.mock
+      .calls[0] as [
+      { productId: ObjectId; userId: string },
+      {
+        $set: Record<string, unknown>;
+        $unset?: Record<string, "">;
+      },
+      { returnDocument: "after" },
+    ];
+
+    expect(filter.userId).toBe(userId);
+    expect(filter.productId.toString()).toBe(productId);
+    expect(update.$set).toMatchObject({
+      decisionStatus: "testing",
+      plannedRoutineSlot: "evening",
+      personalNote: "Theo dõi trước khi thêm vào routine.",
+      updatedAt: expect.any(Date),
+    });
+    expect(update.$set).not.toHaveProperty("userId");
+    expect(update.$set).not.toHaveProperty("productId");
+    expect(update.$set).not.toHaveProperty("createdAt");
+    expect(update.$set).not.toHaveProperty("product");
+    expect(update.$set).not.toHaveProperty("owner");
+    expect(update.$set).not.toHaveProperty("ownership");
+    expect(update.$unset).toBeUndefined();
+    expect(options).toEqual({ returnDocument: "after" });
+  });
+
+  it("clears personalNote without changing other saved product fields", async () => {
+    const collection = createCollectionMock();
+
+    collection.findOneAndUpdate.mockResolvedValue(
+      createSavedProduct({ decisionStatus: "kept" }),
+    );
+    setCollectionMock(collection);
+
+    await updateSavedProductMetadataForUser(userId, productId, {
+      personalNote: "",
+    });
+
+    const update = collection.findOneAndUpdate.mock.calls[0]?.[1] as {
+      $set: Record<string, unknown>;
+      $unset: Record<string, "">;
+    };
+
+    expect(update.$set).toEqual({
+      updatedAt: expect.any(Date),
+    });
+    expect(update.$unset).toEqual({ personalNote: "" });
+  });
+
+  it("returns null for invalid product ids without updating", async () => {
+    const collection = createCollectionMock();
+
+    setCollectionMock(collection);
+
+    await expect(
+      updateSavedProductMetadataForUser(userId, "not-an-object-id", {
+        decisionStatus: "paused",
+      }),
+    ).resolves.toBeNull();
+    expect(collection.findOneAndUpdate).not.toHaveBeenCalled();
+  });
+
+  it("returns null when no saved product matches the current user", async () => {
+    const collection = createCollectionMock();
+
+    collection.findOneAndUpdate.mockResolvedValue(null);
+    setCollectionMock(collection);
+
+    await expect(
+      updateSavedProductMetadataForUser("other-user-id", productId, {
+        decisionStatus: "paused",
+      }),
+    ).resolves.toBeNull();
+
+    const filter = collection.findOneAndUpdate.mock.calls[0]?.[0] as {
+      productId: ObjectId;
+      userId: string;
+    };
+
+    expect(filter.userId).toBe("other-user-id");
+    expect(filter.productId.toString()).toBe(productId);
   });
 });

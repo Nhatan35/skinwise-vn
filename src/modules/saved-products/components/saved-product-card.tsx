@@ -2,6 +2,7 @@ import { CheckCircle2, Plus } from "lucide-react";
 import Link from "next/link";
 
 import type { ProductCategory } from "@/modules/products/product.types";
+import { SavedProductDecisionSupport } from "@/modules/saved-products/components/saved-product-decision-support";
 import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
 import { Badge } from "@/shared/components/ui/badge";
@@ -21,6 +22,7 @@ type SavedProductCardProps = {
   item: SavedProductDto;
   onComparisonToggle?: (productId: string) => void;
   onRemoved: (productId: string) => void;
+  onUpdated: (item: SavedProductDto) => void;
 };
 
 const categoryLabels: Record<ProductCategory, string> = {
@@ -47,6 +49,7 @@ export function SavedProductCard({
   item,
   onComparisonToggle,
   onRemoved,
+  onUpdated,
 }: SavedProductCardProps) {
   const product = item.product;
   const keyActives = product.keyActives.slice(0, 4);
@@ -98,6 +101,8 @@ export function SavedProductCard({
             </p>
           </div>
         ) : null}
+
+        <SavedProductDecisionSupport item={item} onUpdated={onUpdated} />
 
         <div
           className="rounded-lg border border-border bg-secondary/40 p-3"

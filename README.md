@@ -18,7 +18,7 @@ Current evidence status:
 - Core MVP: **COMPLETE**.
 - Portfolio demo readiness: **COMPLETE**.
 - Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.37 - Product ↔ Ingredient Learning Path Polish**.
+- Latest completed scoped task: **MVP v1.40 - Saved Products Decision Queue & Review Filters**.
 - Current active milestone: **None**.
 - Current phase: **Post-MVP controlled improvement**.
 - Latest completed verification task: **Screen-Reader Assistive Technology Verification: DONE / PASS**.
@@ -27,7 +27,7 @@ Current evidence status:
 - Recommended next task: **None**. v1.24 closeout remains deferred and validation-blocked.
 - Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
 - Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP Product Match Explainability Polish** - lint, typecheck, unit tests, diff check, build after elevated rerun, and full E2E passed. MVP v1.37 Product ↔ Ingredient Learning Path Polish also remains PASS; v1.24 remains validation-blocked.
+- Local validation evidence: **PASS for MVP v1.40** - lint, typecheck, unit tests, diff check, build after elevated rerun, full E2E, and targeted rendered UI verification passed. MVP v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 also remain PASS; v1.24 remains validation-blocked.
 - Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
 - Production smoke test evidence: **PASS - Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production verification; no critical production blockers observed.**
 - Production monitoring evidence: **PASS - user-reported manual checks observed no critical browser console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers.**
@@ -94,6 +94,9 @@ MVP v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish: 
 MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped validation only
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
+MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
+MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
+MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
