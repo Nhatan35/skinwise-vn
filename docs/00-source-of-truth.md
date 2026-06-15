@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-14
+Last updated: 2026-06-15
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -47,11 +47,13 @@ MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
+MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.41 - Product Detail Saved Decision Shortcut
-Current phase: Post-MVP controlled improvement
+Latest completed scoped task: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 Accessibility verification status: Screen-Reader Assistive Technology Verification: DONE / PASS
@@ -73,10 +75,12 @@ v1.38 status: DONE / PASS - Routine Coverage Review added to the Routines page u
 v1.39 status: DONE / PASS - Saved Product Personal Notes & Trial Decision Support added optional private saved-product metadata, PATCH update support, Saved Products card controls, and comparison display; full validation passed
 v1.40 status: DONE / PASS - Saved Products Decision Queue & Review Filters added client-side filters, search, summary counts, result count, reset behavior, filtered empty state, and hidden selected-comparison warning without API or data-model changes; full validation passed
 v1.41 status: DONE / PASS - Product Detail Saved Decision Shortcut added safe saved-state handling and compact editing of existing private metadata through the v1.39 PATCH client without API or data-model changes; full validation passed
+v1.42 status: DONE / PASS - Routine Builder Saved Product Decision Context shows existing saved-product decision metadata for selected saved products without routine payload, API, data-model, scoring, safety, coverage, package, or environment changes; full validation passed
+v1.43 status: DONE / PASS - Release evidence and validation cleanup refreshed README/status docs, captured fresh local validation, verified npm audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product or business-logic changes
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: None
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 ```
 
 Primary current documents:
@@ -93,6 +97,8 @@ Primary current documents:
 - `docs/release-evidence-saved-product-personal-notes.md`
 - `docs/release-evidence-saved-products-decision-filters.md`
 - `docs/release-evidence-product-detail-saved-decision-shortcut.md`
+- `docs/release-evidence-routine-builder-saved-product-decision-context.md`
+- `docs/release-evidence-v1.43.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -111,6 +117,8 @@ Historical planning documents remain useful for context, but they should not ove
 Evidence boundary:
 
 - Local validation is supported by terminal output.
+- v1.43 fresh local validation passed on 2026-06-15: `npm ci`, lint, typecheck, 110 unit-test files / 1134 tests, build after unsandboxed rerun, full E2E with 31 passed after unsandboxed rerun, `npm audit`, and `npm audit --omit=dev`.
+- v1.43 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
 - Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, `/api/health`, browser console/network, Vercel runtime logs, MongoDB read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed.
 - Unknown production smoke evidence fields are recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.
@@ -125,6 +133,7 @@ Evidence boundary:
 - v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS. It adds optional private saved-product decision metadata, strict PATCH validation, owner-scoped updates, Saved Products card controls, and comparison display without changing Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, package dependencies, seed baselines, or routine behavior.
 - v1.40 Saved Products Decision Queue & Review Filters is DONE / PASS. It adds client-side saved-product decision filters, search, all-loaded-products summary counts, filtered result count, reset filters, filtered empty state, and a hidden selected-comparison warning without API contract changes, data model changes, Product Match scoring/ranking changes, Routine Safety changes, Routine Coverage changes, AI-provider changes, auth changes, env changes, package changes, seed changes, or routine behavior changes.
 - v1.41 Product Detail Saved Decision Shortcut is DONE / PASS. It adds safe Product Detail saved-state handling and compact editing of the existing private saved-product metadata through the existing v1.39 PATCH client without API contract, data model, Product Match scoring/ranking, Routine Safety, Routine Coverage, auth, env, package, seed, or AI-provider changes.
+- v1.42 Routine Builder Saved Product Decision Context is DONE / PASS. It shows existing saved-product decision metadata for selected saved products in Routine Builder without API contract changes, data model changes, routine save payload changes, Product Match scoring/ranking changes, Routine Safety changes, Routine Coverage changes, auth, env, package, seed, AI-provider, or automatic routine modification changes.
 - v1.12 is completed documentation/planning only and did not include source-code changes.
 - Portfolio evidence tasks are optional presentation artifacts, not product correctness blockers.
 - v1.14 expanded seed data to 58 products and 59 ingredients without schema or feature-scope changes.
@@ -182,6 +191,11 @@ Evidence boundary:
 - v1.41 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
 - The in-app Browser surface was unavailable for v1.41; no separate interactive panel smoke or screenshot was captured.
 - Manual production verification and screen-reader verification were not rerun for v1.41.
+- v1.42 full local validation passed: lint, typecheck, 110 unit-test files / 1134 tests, diff check, package/env no-diff checks, build after elevated rerun, full E2E with 31 passed, and a focused rendered Routine Builder check through a temporary Playwright spec.
+- v1.42 sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed.
+- The in-app Browser surface was unavailable for v1.42; the Playwright fallback rendered check passed. Manual production verification and screen-reader verification were not rerun for v1.42.
+- v1.43 full local validation passed: Node v24.14.0, npm 11.14.1, `npm ci` after unsandboxed rerun, lint, typecheck, 110 unit-test files / 1134 tests, build after unsandboxed rerun, E2E after unsandboxed rerun with 31 passed, `npm audit`, and `npm audit --omit=dev`.
+- v1.43 sandboxed `npm ci`, build, and E2E attempts hit `spawn EPERM`; unsandboxed reruns passed. No fresh production smoke, screenshots, demo video, or real external AI verification was performed for v1.43.
 - MVP Form Validation & Inline Feedback Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.
 - MVP Form Validation & Inline Feedback Polish sandboxed build/E2E attempts hit `spawn EPERM`; elevated reruns passed. Production verification was not rerun for this local polish task.
 - MVP Product Match Explainability Polish full local validation passed: Node v24.14.0, npm 11.14.1, lint, typecheck, 105 unit-test files / 1032 tests, diff check, build after elevated rerun, and full E2E with 31 passed.

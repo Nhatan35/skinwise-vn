@@ -1,6 +1,6 @@
 # Portfolio Evidence Package - SkinWise VN
 
-Last updated: 2026-06-09
+Last updated: 2026-06-15
 
 ## 1. Purpose
 
@@ -43,9 +43,9 @@ Do not present the app as:
 | Actual screenshot files | Not verified | This package does not claim screenshots exist in the repository. |
 | Demo video file | Not recorded | This package does not claim a demo video exists. |
 | CV/resume summary | Drafted | See section 5. |
-| Latest local validation | PASS | Recorded from MVP v1.21 on 2026-06-09. |
+| Latest local validation | PASS | Recorded from MVP v1.43 on 2026-06-15. |
 | Historical production smoke/monitoring | PASS, user-reported | Recorded from the stable MVP baseline on 2026-06-04. |
-| Current task app validation | PASS | v1.21 lint, typecheck, test, build, E2E, and production audit passed locally. |
+| Current task app validation | PASS | v1.43 install, lint, typecheck, unit tests, build, E2E, full audit, and production-only audit passed locally after required unsandboxed reruns for sandbox `spawn EPERM`. |
 
 No new production smoke, screenshot, video, traffic, performance, or user-metric evidence is claimed by this file.
 
@@ -69,7 +69,7 @@ Bullet version:
 - Designed rule-based Product Match and deterministic Routine Safety Analysis so guidance stays explainable, testable, and non-medical.
 - Used an AI-provider abstraction as an explanation/fallback layer rather than a safety decision-maker.
 - Documented release evidence, demo flow, portfolio case study, safety boundaries, and post-MVP backlog for recruiter and interview review.
-- Latest validation evidence records lint, typecheck, 102 test files / 987 tests, production build, 31/31 Playwright E2E tests, and production dependency audit passing on 2026-06-09.
+- Latest validation evidence records install, lint, typecheck, 110 test files / 1134 tests, production build, 31/31 Playwright E2E tests, full npm audit, and production-only npm audit passing on 2026-06-15.
 
 ## 6. Interview Narrative
 
@@ -142,14 +142,15 @@ Before capturing screenshots or video:
 Historical validation evidence:
 
 ```txt
-Evidence date: 2026-06-09
-npm ci: NOT RUN for v1.21
+Evidence date: 2026-06-15
+npm ci: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
 npm run lint: PASS
 npm run typecheck: PASS
-npm run test: PASS - 102 files / 987 tests
-npm run build: PASS after sandbox spawn EPERM rerun outside the sandbox
-npm run test:e2e: PASS after sandbox spawn EPERM rerun outside the sandbox - 31/31 Playwright tests
-npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+npm run test: PASS - 110 files / 1134 tests
+npm run build: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+npm run test:e2e: PASS after unsandboxed rerun - 31/31 Playwright tests; sandboxed attempt failed with spawn EPERM
+npm audit: PASS - found 0 vulnerabilities
+npm audit --omit=dev: PASS - found 0 vulnerabilities
 ```
 
 Historical production evidence:
@@ -164,7 +165,7 @@ Strict audit artifacts such as screenshots, deployment ids, browser logs, and sa
 Current task validation:
 
 ```txt
-MVP v1.21 product update.
+MVP v1.43 release evidence and validation cleanup.
 Product validation commands: PASS.
 Production smoke test: Not run.
 Screenshot capture: Not run.

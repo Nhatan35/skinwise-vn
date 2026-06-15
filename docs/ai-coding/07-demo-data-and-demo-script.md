@@ -1,6 +1,6 @@
 # Demo Data and Demo Script - SkinWise VN
 
-Last updated: 2026-06-07
+Last updated: 2026-06-15
 
 ## 1. Current Release Context
 
@@ -9,13 +9,14 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 Portfolio Evidence Package documentation: PREPARED
 Actual screenshots in repository: NOT VERIFIED
 Demo video in repository: NOT RECORDED
 Production URL: https://skinwise-vn.vercel.app
+Fresh v1.43 production smoke: NOT RUN
 ```
 
 This document explains what demo data should exist before presenting SkinWise VN. It complements `docs/demo-script.md` and `docs/portfolio-case-study.md`.
@@ -33,11 +34,19 @@ User-owned demo data should not be hardcoded into the public seed script because
 
 The existing public seed script supports Product Catalogue, Product Match, Ingredient Library, routine safety behavior, and demo walkthroughs.
 
-Expected seeded data:
+Historical v1.14 seeded data baseline:
 
 ```txt
 Products: 58
 Ingredients: 59
+```
+
+Current expected seeded data, based on the v1.24 seed baseline preserved in
+code/tests and verified by v1.43 E2E seeding:
+
+```txt
+Products: 70
+Ingredients: 70
 ```
 
 Safe seed command for local/demo database only:

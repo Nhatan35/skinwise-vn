@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-14
+Last updated: 2026-06-15
 
 ## 1. Current Stable Baseline
 
@@ -34,21 +34,23 @@ Routine coverage review: v1.38 - Routine Coverage Review & Safe Next-Step Guidan
 Saved product personal notes: v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 Saved products decision filters: v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 Product Detail saved decision shortcut: v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
-Latest completed scoped task: v1.41 - Product Detail Saved Decision Shortcut
+Routine Builder saved product decision context: v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
+Release evidence and validation cleanup: v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+Latest completed scoped task: v1.43 - Release Evidence & Validation Cleanup
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
 Portfolio demo readiness: COMPLETE
-Current phase: Post-MVP controlled improvement
+Current phase: Post-MVP validation cleanup
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: None
-Local validation: PASS for v1.41 lint/typecheck/unit tests/build/full E2E/diff checks. v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Local validation: PASS for v1.43 install/lint/typecheck/unit tests/build/full E2E/audit. v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
-Full production smoke/monitoring: PASS, user-reported
+Full production smoke/monitoring: PASS, user-reported historical evidence; not freshly rerun for v1.43
 Manual Browser & Production Smoke Verification: DONE / PASS
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped for this milestone
@@ -120,6 +122,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Saved Product Personal Notes & Trial Decision Support | DONE / PASS in v1.39 | Adds private saved-product decision status, planned routine slot, and personal note metadata with strict owner-scoped PATCH updates and comparison display, without changing Product Match scoring/ranking or routine behavior. |
 | P2 | Saved Products Decision Queue & Review Filters | DONE / PASS in v1.40 | Adds client-side Saved Products decision filters, search, summary counts, result count, reset behavior, filtered empty state, and comparison hidden-selection warning without API or data-model changes. |
 | P2 | Product Detail Saved Decision Shortcut | DONE / PASS in v1.41 | Adds compact Product Detail access to existing saved-product decision metadata through the v1.39 PATCH client, with safe signed-out/not-saved/error states and no API or data-model changes. |
+| P2 | Routine Builder Saved Product Decision Context | DONE / PASS in v1.42 | Shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. |
+| P2 | Release Evidence & Validation Cleanup | DONE / PASS in v1.43 | Refreshes README/status docs, local validation evidence, npm audit status, E2E prerequisites/results, and deferred production/AI/media boundaries without product behavior changes. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -899,8 +903,10 @@ v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
+v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
+v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Current active milestone: None
-Recommended next task: None
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 ```
 
 Reason:
@@ -923,6 +929,8 @@ Reason:
 - v1.40 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env diff checks, elevated E2E, and targeted rendered UI verification.
 - v1.41 Product Detail Saved Decision Shortcut is DONE / PASS. It adds safe Product Detail saved-state handling and compact editing of existing private saved-product metadata through the v1.39 PATCH client without changing API contracts, data models, Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, packages, seed baselines, or routine behavior.
 - v1.41 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env diff checks, and elevated E2E.
+- v1.42 Routine Builder Saved Product Decision Context is DONE / PASS. It shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, data models, Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, packages, seed baselines, Saved Products v1.39/v1.40 behavior, or Product Detail v1.41 behavior.
+- v1.42 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env diff checks, elevated E2E, and a focused rendered Routine Builder Playwright check.
 - v1.37 Product ↔ Ingredient Learning Path Polish connects Product Detail to Ingredient Library search, Ingredient Detail to Product Catalogue search by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links.
 - v1.37 copy remains educational and non-medical. No recommendation engine, related-products ranking, Product Match scoring/ranking change, Routine Safety change, schema change, seed baseline change, auth change, AI-provider change, CRUD scope change, or broad API contract change was added.
 - v1.37 full local validation passed with lint, typecheck, unit tests, diff check, build after elevated rerun, production audit, and full E2E.

@@ -1,6 +1,6 @@
 # Production Monitoring and Demo Recovery Runbook
 
-Last updated: 2026-06-13
+Last updated: 2026-06-15
 
 ## 1. Purpose
 
@@ -17,11 +17,13 @@ MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.22 production observability/release confidence: DONE
 MVP v1.22.1 production deployment/smoke verification: DONE / PASS, user-reported manual verification
 MVP v1.23 account data deletion workflow hardening: DONE
-Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Fresh v1.43 local validation: PASS
+Fresh v1.43 production smoke: NOT RUN
 Latest completed verification task: Screen-Reader Assistive Technology Verification
 Latest completed MVP quality task: MVP Product Match Explainability Polish
 Current active milestone: None
-Current phase: Post-MVP controlled improvement
+Current phase: Post-MVP validation cleanup
 Critical blockers reported: None
 ```
 
@@ -164,8 +166,8 @@ Vercel critical runtime errors: None observed
 MongoDB read/write issue: None observed
 OAuth callback flow: PASS
 Critical blockers reported: None
-Evidence dates: historical user-reported baseline 2026-06-04; direct public checks 2026-06-11; manual production smoke date not provided
-Latest completed product milestone: MVP v1.37 - Product ↔ Ingredient Learning Path Polish
+Evidence dates: historical user-reported baseline 2026-06-04; direct public checks 2026-06-11; manual production smoke date not provided; v1.43 fresh production smoke not run
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
 Screen-Reader Assistive Technology Verification: DONE / PASS
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
@@ -175,7 +177,7 @@ Critical accessibility blockers: None observed
 Latest completed verification task: Screen-Reader Assistive Technology Verification
 Latest completed MVP quality task: MVP Product Match Explainability Polish
 Current active milestone: None
-Current phase: Post-MVP controlled improvement
+Current phase: Post-MVP validation cleanup
 ```
 
 ## 10. Safety and Privacy Rules

@@ -6,6 +6,129 @@ This file records AI-assisted changes so future coding sessions understand what 
 
 Current-status note: this file is a chronological change log. Older sections may say "latest" or "current" relative to their original date. For the current project state and validation evidence, use `docs/ai-coding/02-implementation-status.md`, `docs/ai-coding/06-current-sprint-plan.md`, and `docs/final-release-checklist.md`.
 
+## MVP v1.43 - Release Evidence & Validation Cleanup
+
+Date: 2026-06-15
+
+### Task
+
+Refresh current release status, README validation evidence, npm audit status,
+E2E status, and deferred item boundaries without adding product features.
+
+### Files Updated
+
+- `README.md`
+- `docs/release-evidence-v1.43.md`
+- current status and release documentation
+
+### Outcome
+
+- Current portfolio release is documented as `MVP v1.43 - Release Evidence &
+  Validation Cleanup`.
+- Fresh local validation evidence was captured for install, lint, typecheck,
+  unit tests, build, E2E, full npm audit, and production-only npm audit.
+- README now separates current v1.43 evidence from historical v1.8 product
+  release history.
+- Production readiness is not claimed for v1.43 because no fresh deployed-URL
+  production smoke test was performed.
+- Deferred items were clarified: real external AI provider integration, v1.43
+  production smoke, screenshots/demo video, image upload, marketplace/payment,
+  skin scoring, and medical diagnosis remain out of scope or unverified.
+
+### Safety and Contract Guardrails
+
+- No product feature changes.
+- No business logic changes.
+- No API contract changes.
+- No package or environment schema changes.
+- No AI provider integration changes.
+- No Product Match scoring/ranking, Routine Safety, Routine Coverage, auth,
+  seed, image upload, marketplace, payment, skin score, or diagnosis changes.
+
+### Validation
+
+```txt
+node -v: v24.14.0
+npm -v: 11.14.1
+npm ci: PASS after unsandboxed rerun; sandboxed attempt ended with spawn EPERM
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 110 files / 1134 tests
+npm run build: PASS after unsandboxed rerun; sandboxed attempt ended with spawn EPERM
+npm run test:e2e: PASS after unsandboxed rerun - 31 passed; sandboxed attempt ended with spawn EPERM
+npm audit: PASS - found 0 vulnerabilities
+npm audit --omit=dev: PASS - found 0 vulnerabilities
+Production smoke on deployed URL: NOT RUN for v1.43
+```
+
+### Status
+
+```txt
+DONE / PASS for local validation and release evidence cleanup.
+Production-ready status is not claimed for v1.43.
+Recommended next milestone: MVP v1.44 - Production Smoke Test & Deployment Evidence.
+```
+
+## MVP v1.42 - Routine Builder Saved Product Decision Context
+
+Date: 2026-06-14
+
+### Task
+
+Show existing saved-product decision metadata in Routine Builder when a user
+selects a saved product while creating or editing a routine.
+
+### Files Updated
+
+- `src/modules/routines/routine-product-options.ts`
+- `src/modules/routines/components/routine-builder.tsx`
+- `tests/unit/routine-product-options.test.ts`
+- `tests/unit/routine-builder-ui.test.ts`
+- `docs/release-evidence-routine-builder-saved-product-decision-context.md`
+- current status documentation
+
+### Outcome
+
+- Saved product options now carry optional `decisionStatus`,
+  `plannedRoutineSlot`, and `personalNote` context from `SavedProductDto`.
+- Catalogue product options do not receive user-specific saved metadata.
+- The selected-product context shows "Thông tin cân nhắc đã lưu" for saved
+  products with safe empty states for missing metadata.
+- Shared saved-product label maps are reused for consistent Vietnamese labels.
+- Routine step category auto-fill behavior is preserved and not expanded.
+- Routine save payload remains unchanged.
+
+### Safety and Contract Guardrails
+
+- Existing saved-product metadata is reused.
+- No API contract changes.
+- No data model changes.
+- No routine API contract or routine save payload changes.
+- No package or environment changes.
+- No Product Match scoring/ranking, Routine Safety, Routine Coverage, auth,
+  seed, AI-provider, automatic product-selection, or automatic routine
+  modification changes.
+
+### Validation
+
+```txt
+Focused tests: PASS - 5 files / 65 tests
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 110 files / 1134 tests
+npm run build: PASS after elevated rerun; sandboxed attempt ended with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 31 passed; sandboxed attempt ended with spawn EPERM
+Focused rendered Routine Builder check: PASS via temporary Playwright spec
+git diff --check: PASS, with AGENTS.md CRLF normalization warning
+package and env diff checks: PASS - no diff
+```
+
+### Status
+
+```txt
+DONE / PASS after full local validation passed.
+```
+
 ## MVP v1.41 - Product Detail Saved Decision Shortcut
 
 Date: 2026-06-14

@@ -1,6 +1,6 @@
 # Vercel Deployment Runbook - SkinWise VN
 
-Last updated: 2026-06-06
+Last updated: 2026-06-15
 
 ## 1. Current Deployment Status
 
@@ -9,13 +9,13 @@ Deployment target: Vercel
 Production URL: https://skinwise-vn.vercel.app
 Production branch: main
 Runtime baseline: Node.js 24.x / npm 11.x
-Local validation: PASS
-Production smoke/monitoring: PASS, user-reported
+Fresh local validation: PASS for v1.43
+Production smoke/monitoring: PASS, user-reported historical evidence; not freshly rerun for v1.43
 Portfolio readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 ```
 
 This document explains the expected Vercel setup and how to verify/recover production behavior.
@@ -77,6 +77,7 @@ Current status:
 Production smoke test: PASS - user-reported manual verification completed
 Production monitoring: PASS - user-reported checks completed
 Critical blockers reported: None
+v1.43 fresh production smoke: NOT RUN
 ```
 
 ## 6. Recovery Steps
@@ -100,6 +101,7 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
-Deployment readiness: READY at MVP level
-Current phase: Post-MVP controlled improvement
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+Deployment readiness: CONDITIONAL / not claimed as production-ready without fresh deployed-URL smoke evidence
+Current phase: Post-MVP validation cleanup
 ```

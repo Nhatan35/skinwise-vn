@@ -12,48 +12,49 @@ Production demo:
 
 - https://skinwise-vn.vercel.app
 
-Current evidence status:
+## Current Status
 
-- MVP portfolio/demo/interview readiness: **READY** at MVP level.
-- Core MVP: **COMPLETE**.
-- Portfolio demo readiness: **COMPLETE**.
-- Post-MVP backlog planning: **COMPLETE**.
-- Latest completed scoped task: **MVP v1.41 - Product Detail Saved Decision Shortcut**.
-- Current active milestone: **None**.
-- Current phase: **Post-MVP controlled improvement**.
-- Latest completed verification task: **Screen-Reader Assistive Technology Verification: DONE / PASS**.
-- Current accessibility verification: **Keyboard-only verification PASS; screen-reader verification PASS; no critical accessibility blockers observed**.
-- Latest completed MVP quality task: **MVP Product Match Explainability Polish: DONE / PASS**.
-- Recommended next task: **None**. v1.24 closeout remains deferred and validation-blocked.
-- Portfolio Evidence Package documentation: **PREPARED** in `docs/portfolio-evidence-package.md`.
-- Portfolio media evidence tasks: **screenshots and demo video are intentionally skipped for v1.22 and are not claimed unless actual files are captured separately**.
-- Local validation evidence: **PASS for MVP v1.41** - lint, typecheck, unit tests, diff check, build after elevated rerun, and full E2E passed. MVP v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 also remain PASS; v1.24 remains validation-blocked.
-- Production health endpoint evidence: **PASS - direct public check of `/api/health` returned HTTP 200 and the expected v1.22 JSON contract.**
-- Production smoke test evidence: **PASS - Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported production verification; no critical production blockers observed.**
-- Production monitoring evidence: **PASS - user-reported manual checks observed no critical browser console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, or OAuth callback blockers.**
-- Screen-reader assistive technology evidence: **PASS - manual production/browser verification found no critical screen-reader or keyboard-accessibility blockers.**
-- Empty/loading/error state polish evidence: **PASS - route-level loading/error/not-found boundaries, Settings recovery, weekly routine-history states, Saved Products disabled guidance, and clearer fallback copy were added without product-scope expansion.**
-- Form validation and inline feedback evidence: **PASS - required guidance, first-invalid-field focus, partial-routine disabled guidance, safe Journal/Settings errors, and accessible success/error feedback passed full local validation.**
-- Product Match explainability polish evidence: **PASS - score meaning, match/caution reasons, limited-data copy, Product Detail interpretation, and Saved Products comparison guidance were clarified without changing scoring or matching logic.**
-- v1.23 deletion smoke evidence: **NOT CHECKED for manual browser and production deletion flows.**
-- Portfolio demo readiness documentation: **MVP v1.11 completed.**
-- Post-MVP UX polish: **MVP v1.13 completed locally; production smoke was not rerun for this polish task.**
+- Current Portfolio Release: **MVP v1.43 - Release Evidence & Validation Cleanup**
+- Core MVP: **Complete**
+- Current Phase: **Post-MVP validation cleanup**
+- Portfolio demo readiness: **Yes, with local validation evidence and documented production-evidence boundaries**
+- Production readiness: **Not claimed for v1.43** because no fresh production smoke test was performed against the deployed URL during this milestone
+- Latest fresh local validation: **PASS for install, lint, typecheck, unit tests, build, E2E, and audit on 2026-06-15**
+- Release evidence: `docs/release-evidence-v1.43.md`
+- Historical production smoke/monitoring evidence: **PASS, user-reported** from the earlier production verification baseline; screenshots, deployment id, browser/version, device/OS, and exact verification metadata are not stored in this repository
+- Portfolio media evidence: screenshots and demo video remain optional artifacts and are not claimed unless captured separately
+- Real production AI provider integration: **not verified**; local/demo AI behavior remains mock/provider-abstraction based
+
+Fresh validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Install | `npm ci` | PASS | Sandboxed run failed with `spawn EPERM`; unsandboxed rerun installed 749 packages. Install output reported 2 high vulnerabilities, but direct audit commands below returned 0 vulnerabilities. |
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 110 test files / 1134 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; unsandboxed rerun completed route generation successfully. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed with `spawn EPERM`; unsandboxed rerun passed 31 Playwright tests after E2E seeding. |
+| Audit | `npm audit` | PASS | `found 0 vulnerabilities`. |
+| Production audit | `npm audit --omit=dev` | PASS | `found 0 vulnerabilities`. |
+
+Deferred / not in MVP:
+
+- Fresh production smoke test on deployed URL for v1.43: **Deferred / not verified**
+- Real OpenAI/Gemini provider integration: **Deferred / not verified**
+- v1.24 seed-data closeout: **historically NOT DONE / VALIDATION BLOCKED**; v1.43 does not retroactively close that milestone
+- Marketplace/payment, skin score, medical diagnosis, image upload, subscriptions, and community features: **Out of MVP scope**
 
 Evidence boundary:
 
-- Automated local evidence is supported by terminal output.
-- Current production smoke PASS status is based on user-reported manual production verification. Keep screenshots, Vercel deployment id, browser/network notes, or issue records separately if stricter audit evidence is required.
-- Manual Browser & Production Smoke Verification did not provide screenshots, demo video, deployment id, browser version, device/OS, tester name, or exact verification date in repository documentation.
-- Screen-Reader Assistive Technology Verification is based on manual evidence. Date, tester, browser, device/OS, and screen reader used were not provided.
-- No automated accessibility test suite or WCAG certification claim was added for this verification task.
-- MVP Empty / Loading / Error State Polish changed UI-state rendering/copy only. No business logic, scoring, matching, AI behavior, routine recommendation behavior, schema, environment, package, dependency, or API contract changes were added.
-- MVP Form Validation & Inline Feedback Polish changed existing form/action guidance and rendering only. No business logic, scoring, matching, AI behavior, auth behavior, schema, environment, dependency, or API contract changes were added.
-- MVP Product Match Explainability Polish changed Product Match, Product Detail, and Saved Products comparison copy/presentation only. No scoring, matching, AI behavior, routine recommendation behavior, business logic, schema, environment, package, dependency, auth, or API contract changes were added.
+- v1.43 automated local evidence is supported by command output from this workspace.
+- Production readiness is not claimed unless a fresh deployed-URL smoke test is performed and recorded.
+- Historical production PASS status remains user-reported and should be supplemented with screenshots, deployment ids, browser/network notes, or sanitized logs if strict audit traceability is required.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
 
-## Current Status
+## Release History
 
-Current completed product release:
+Last core MVP product release:
 
 ```txt
 MVP v1.8 - Insights Usability & Progress Story Refinement
@@ -98,11 +99,13 @@ MVP v1.38 - Routine Coverage Review & Safe Next-Step Guidance: DONE / PASS
 MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
+MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
 
-MVP v1.8 is the current completed product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
+MVP v1.8 is the last core MVP product release. It refines the existing Insights experience, progress-story copy, calendar readability, journal/product usage safety wording, next actions, and empty/error/loading states without changing the Insights API response shape, adding unsafe AI claims, or introducing medical/product-causality logic.
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features or change source logic. It prepares the repository for portfolio review, demo walkthrough, and interview discussion.
 
@@ -150,7 +153,9 @@ MVP Form Validation & Inline Feedback Polish is a completed MVP quality improvem
 
 MVP Product Match Explainability Polish is a completed MVP quality improvement. It clarifies Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail personalized-match interpretation, limited-data copy, and Saved Products comparison tradeoff guidance without changing Product Match scoring/ranking, ingredient/product matching, AI behavior, business logic, schema, environment configuration, dependencies, auth, or API contracts. Full local validation passed, including `npm run test:e2e`.
 
-The current phase remains post-MVP controlled improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are intentionally skipped for v1.22.
+MVP v1.43 is a release evidence and validation cleanup milestone. It refreshes README status, records fresh local validation, verifies audit results, documents E2E prerequisites/results, and clarifies deferred items. It does not add product features, change business logic, change API contracts, add dependencies, or claim fresh production readiness.
+
+The current phase is post-MVP validation cleanup. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are not claimed unless actual files are captured separately.
 
 ## Key Features
 
@@ -244,6 +249,21 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.43 - Release Evidence & Validation Cleanup:
+Evidence date: 2026-06-15
+OS: Microsoft Windows 10.0.26200
+node -v: v24.14.0
+npm -v: 11.14.1
+npm ci: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 110 files / 1134 tests
+npm run build: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+npm run test:e2e: PASS after unsandboxed rerun - 31 passed; sandboxed attempt failed with spawn EPERM
+npm audit: PASS - found 0 vulnerabilities
+npm audit --omit=dev: PASS - found 0 vulnerabilities
+Production smoke test on deployed URL: NOT RUN for v1.43
+
 MVP Product Match Explainability Polish:
 Evidence date: 2026-06-13
 node -v: v24.14.0
@@ -612,12 +632,14 @@ MVP v1.34 - Product & Ingredient Discovery Confidence Polish: DONE, scoped valid
 MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Product Match Explainability Polish: DONE / PASS
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Decision: READY for portfolio/demo/interview at MVP level
-Current phase: Post-MVP controlled improvement
+Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
+Current phase: Post-MVP validation cleanup
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
 ```
 
 
 ## Post-MVP Backlog
 
-Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.
+Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.42 - Routine Builder Saved Product Decision Context` shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

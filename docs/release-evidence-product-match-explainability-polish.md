@@ -7,7 +7,7 @@ Task: MVP Product Match Explainability Polish
 Scope: MVP quality improvement
 Date: Not provided
 Tester: Not provided
-Environment: Local validation / production-ready MVP baseline
+Environment: Local validation / portfolio-ready MVP baseline
 
 ## Goal
 

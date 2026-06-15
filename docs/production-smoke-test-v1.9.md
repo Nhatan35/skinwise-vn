@@ -1,6 +1,6 @@
 # Production Smoke Test Checklist - MVP v1.10
 
-Last updated: 2026-06-06
+Last updated: 2026-06-15
 
 ## Purpose
 
@@ -16,8 +16,9 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke test and monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
-Current phase: Post-MVP controlled improvement
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
+v1.43 fresh production smoke: NOT RUN
 ```
 
 Allowed statuses:

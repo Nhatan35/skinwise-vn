@@ -1,20 +1,21 @@
 # Deployment and Production Readiness Checklist - SkinWise VN MVP
 
-Last updated: 2026-06-06
+Last updated: 2026-06-15
 
 ## 1. Current Deployment Status
 
 ```txt
-Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY
+Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY with v1.43 local validation
+Production-ready status: NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
 Documentation closeout: MVP v1.8.1 and MVP v1.8.2 DONE
-Local validation evidence: MVP v1.9 PASS
-Production smoke/monitoring evidence: MVP v1.10 PASS, user-reported
+Fresh local validation evidence: MVP v1.43 PASS
+Production smoke/monitoring evidence: historical PASS, user-reported; not freshly rerun for v1.43
 Portfolio demo readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.15.1 - Audit Cleanup & Evidence Sync
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
@@ -25,7 +26,7 @@ Evidence boundary:
 
 - Local validation evidence is supported by terminal output.
 - Production smoke/monitoring PASS remains recorded from the previously user-reported stable MVP baseline.
-- Production smoke and monitoring were not rerun specifically for v1.15.1 because v1.15.1 is an audit/documentation evidence cleanup patch.
+- Production smoke and monitoring were not rerun specifically for v1.43, so production-ready status is not claimed for this milestone.
 - Keep deployment id, screenshots, and sanitized logs separately if formal evidence is required.
 - Do not expose secrets in docs or screenshots.
 
@@ -33,17 +34,18 @@ Evidence boundary:
 
 | Check | Status | Notes |
 |---|---|---|
-| `npm ci` | PASS | Completed in the v1.15.1 validation evidence. |
-| `npm run lint` | PASS | `eslint .` completed with no reported errors. |
-| `npm run typecheck` | PASS | `tsc --noEmit` completed with no reported errors. |
-| `npm run test` | PASS | 97 test files passed; 899 tests passed. |
-| `npm run build` | PASS | Next.js production build completed successfully. |
-| `npm run db:indexes` | PASS | 32 indexes ensured. |
-| E2E seed data | PASS | v1.14 E2E seed verified 59 ingredients and 58 products in the local test database. |
-| `npm run test:e2e` | PASS | 29/29 Playwright tests passed. |
-| `npm audit --omit=dev --audit-level=moderate` | PASS | 0 vulnerabilities found. |
+| `npm ci` | PASS | v1.43 unsandboxed rerun completed after sandboxed `spawn EPERM`; 749 packages installed. |
+| `npm run lint` | PASS | v1.43 `eslint .` completed with no reported errors. |
+| `npm run typecheck` | PASS | v1.43 `tsc --noEmit` completed with no reported errors. |
+| `npm run test` | PASS | v1.43: 110 test files / 1134 tests passed. |
+| `npm run build` | PASS | v1.43 unsandboxed rerun completed after sandboxed `spawn EPERM`. |
+| `npm run db:indexes` | NOT RUN for v1.43 | Historical evidence recorded 32 indexes ensured; this command was not part of the v1.43 validation run. |
+| E2E seed data | PASS | v1.43 E2E seed matched 70 ingredients and 70 products in `skinwise-e2e-check`. |
+| `npm run test:e2e` | PASS | v1.43 unsandboxed rerun passed 31/31 Playwright tests after sandboxed `spawn EPERM`. |
+| `npm audit` | PASS | v1.43 `found 0 vulnerabilities`. |
+| `npm audit --omit=dev` | PASS | v1.43 `found 0 vulnerabilities`. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.15.1 status, Portfolio Evidence Package next task, and portfolio evidence boundaries. |
+| README setup instructions accurate | PASS | Updated for v1.43 status, fresh validation, production evidence boundary, and deferred items. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
@@ -110,6 +112,9 @@ FEATURE_SKIN_SCORE=false
 
 ## 7. Manual Production Smoke Test
 
+Status note: the table below is historical, user-reported production evidence
+from the stable MVP baseline. It was not freshly rerun for v1.43.
+
 | Flow | Status |
 |---|---|
 | Public landing page loads | PASS |
@@ -145,7 +150,9 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Decision: READY for portfolio/demo/interview at MVP level
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 ```

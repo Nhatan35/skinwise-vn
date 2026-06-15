@@ -1,6 +1,6 @@
 # Release Plan - SkinWise VN Current MVP Status
 
-Last updated: 2026-06-07
+Last updated: 2026-06-15
 
 ## 1. Current Release Chain
 
@@ -16,9 +16,11 @@ MVP v1.13 - UX Polish & Empty State Improvement: DONE
 MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
+MVP v1.16 through MVP v1.42: preserved in `docs/00-source-of-truth.md`
+MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 ```
 
-The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP improvements. The active post-MVP backlog is `docs/post-mvp-backlog.md`.
+The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP validation, evidence, and deployment-preparation cleanup. The full current release chain is maintained in `docs/00-source-of-truth.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -85,6 +87,7 @@ The MVP product scope is complete. Current work is no longer core feature implem
 | MVP v1.14 | DONE | Product and ingredient seed data expanded without schema or feature-scope changes. |
 | MVP v1.15 | DONE | Product Match and Product Detail explainability, caution wording, and profile guidance improved without schema or route changes. |
 | MVP v1.15.1 | DONE | npm audit/dependency-risk evidence reviewed and documentation synchronized without product behavior or dependency changes. |
+| MVP v1.43 | DONE / PASS | Fresh local validation, audit, E2E evidence, README cleanup, and deferred production/AI/media boundary clarification. |
 
 ## 4. Validation Evidence
 
@@ -101,6 +104,24 @@ npm run test: PASS - 97 files / 899 tests
 npm run build: PASS
 npm run test:e2e: PASS - 29/29 Playwright tests
 npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+```
+
+Fresh v1.43 local evidence:
+
+```txt
+Evidence date: 2026-06-15
+Environment: Microsoft Windows 10.0.26200 / PowerShell
+Node: v24.14.0
+npm: 11.14.1
+npm ci: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 110 files / 1134 tests
+npm run build: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+npm run test:e2e: PASS after unsandboxed rerun - 31 passed
+npm audit: PASS - found 0 vulnerabilities
+npm audit --omit=dev: PASS - found 0 vulnerabilities
+Production smoke on deployed URL: NOT RUN for v1.43
 ```
 
 Validation notes:
@@ -135,8 +156,9 @@ Post-MVP UX polish decision: v1.13 complete
 Post-MVP data quality decision: v1.14 complete
 Post-MVP explainability and safety decision: v1.15 complete
 Audit cleanup and evidence sync decision: v1.15.1 complete
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package
+Release evidence and validation cleanup decision: v1.43 complete
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -176,7 +198,7 @@ Do not expand scope before portfolio submission.
 Recommended next task:
 
 ```txt
-Portfolio Evidence Package media follow-up, if needed
+MVP v1.44 - Production Smoke Test & Deployment Evidence
 ```
 
-This is presentation/evidence work, not a product blocker. The central documentation package is prepared; actual screenshot and demo-video files are not claimed until captured.
+This is evidence work, not a product feature blocker. The central documentation package is prepared; actual screenshot and demo-video files are not claimed until captured, and production-ready status should not be claimed until fresh deployed-URL smoke evidence is recorded.

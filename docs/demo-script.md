@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-06-09
+Last updated: 2026-06-15
 
 ## 1. Demo Objective
 
@@ -16,16 +16,18 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.21 - Insight Explainability & Tracking Quality Checklist
-Current phase: Post-MVP controlled improvement
-Recommended next task: Portfolio Evidence Package media capture
+Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
+Current phase: Post-MVP validation cleanup
+Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
 Portfolio Evidence Package documentation: PREPARED
 Actual screenshots in repository: NOT VERIFIED
 Demo video in repository: NOT RECORDED
+Fresh v1.43 local validation: PASS
+Fresh v1.43 production smoke: NOT RUN
 Critical blockers reported: None
 ```
 
-Evidence note: production PASS status is based on the user's reported manual verification. This docs-only Portfolio Evidence Package task does not claim a fresh production smoke test, screenshots, or demo video. Keep screenshots or log snippets separately if a stricter review needs trace evidence.
+Evidence note: production PASS status is based on historical user-reported manual verification. v1.43 does not claim a fresh production smoke test, screenshots, or demo video. Keep screenshots or log snippets separately if a stricter review needs trace evidence.
 
 ## 3. Demo Account Preparation
 
