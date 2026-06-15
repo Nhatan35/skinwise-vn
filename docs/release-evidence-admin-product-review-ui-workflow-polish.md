@@ -95,6 +95,51 @@ readiness claims.
 | Unit tests | `npm run test` | PASS | 114 test files / 1170 tests passed. |
 | Build | `npm run build` | PASS | Sandboxed build compiled then failed with `spawn EPERM`; unsandboxed rerun passed and listed `/admin/products`. |
 
+## Browser Smoke Evidence Boundary
+
+Browser behavior was not directly verified in this task. Browser smoke scenarios
+are documented as NOT VERIFIED unless user-provided evidence is available.
+
+| Area | Scenario | Status | Evidence / Notes |
+|---|---|---|---|
+| Local browser smoke | Open local `/admin/products` in a browser | NOT VERIFIED | Browser was not opened or directly observed in this task. |
+| Auth | Unauthenticated user blocked or redirected | NOT VERIFIED | Browser redirect behavior was not directly observed. |
+| Auth | Non-admin cannot view admin product data | BLOCKED | No non-admin demo account was used for browser smoke. |
+| Admin | Admin can access `/admin/products` | BLOCKED | No admin demo account was used for browser smoke. |
+| Admin | Admin can view unverified/reviewed/verified products | BLOCKED | Browser smoke did not verify account access or demo product status coverage. |
+| Workflow | Admin can update `verificationStatus` from UI | BLOCKED | No browser update test was performed. No product status was changed. |
+| Public visibility regression | Public `/api/products` or `/products` visibility after admin update | NOT VERIFIED | Public side was covered by automated tests only, not browser/API smoke in this task. |
+| Console | Serious browser console errors | NOT VERIFIED | Browser console was not observed. |
+| Network | Admin GET/PATCH API behavior in browser network panel | NOT VERIFIED | Browser network activity was not observed. |
+| Production | Deployed URL smoke | NOT VERIFIED | No deployed URL was tested in this task. |
+
+Required smoke follow-up:
+
+- Browser Smoke: NOT VERIFIED.
+- Reason: Browser was not opened or browser behavior was not directly observed.
+- Next step: User must manually run the browser smoke checklist and provide
+  results, or run a separate browser automation task with an available admin and
+  non-admin demo account.
+
+Account/data availability for browser smoke:
+
+| Requirement | Status | Notes |
+|---|---|---|
+| Admin account | NOT AVAILABLE | No admin credential or masked admin account evidence was used in this task. |
+| Non-admin account | NOT AVAILABLE | No non-admin credential or masked account evidence was used in this task. |
+| Product with `unverified` status | NOT VERIFIED | Not checked through browser/API smoke in this task. |
+| Product with `reviewed` status | NOT VERIFIED | Not checked through browser/API smoke in this task. |
+| Product with `verified` status | NOT VERIFIED | Not checked through browser/API smoke in this task. |
+| Public product for visibility check | NOT VERIFIED | Public browser/API smoke was not performed in this task. |
+
+Production smoke boundary:
+
+- Environment: Local commands only; no browser smoke.
+- App URL: NOT VERIFIED.
+- Deployed URL smoke: NOT VERIFIED.
+- Reason: Deployed URL was not tested in this task.
+- Production-ready claimed: No.
+
 ## Important Test Output
 
 - Targeted tests: 3 test files passed, 18 tests passed.
@@ -111,6 +156,7 @@ readiness claims.
 - No image upload.
 - No marketplace/payment.
 - No real AI provider.
+- No browser smoke test in this task.
 - No production smoke test in this task.
 - No bulk moderation workflow.
 - No global admin nav link; v1.45 uses direct URL `/admin/products` because the
@@ -121,9 +167,10 @@ readiness claims.
 
 ## Final Decision
 
-- Ready for portfolio demo: YES for local/demo use with an admin account and
-  direct URL `/admin/products`.
+- Ready for portfolio demo: CONDITIONAL. Code validation passed, but browser
+  behavior was not directly verified.
 - Ready for production deployment: NOT CLAIMED.
 - Production-ready claimed: NO.
+- Reason: browser smoke and deployed URL smoke were not performed.
 - Follow-up recommended: MVP v1.46 - Admin Product Review Browser Smoke &
   Deployment Evidence.
