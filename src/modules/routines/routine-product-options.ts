@@ -5,6 +5,10 @@ import type {
 } from "@/modules/products/product.types";
 import type { RoutineStepCategory } from "@/modules/routines/routine.types";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import type {
+  SavedProductDecisionStatus,
+  SavedProductPlannedRoutineSlot,
+} from "@/modules/saved-products/saved-product.types";
 
 export type RoutineProductOptionSource = "saved" | "catalogue";
 
@@ -14,7 +18,10 @@ export type RoutineProductOption = {
   brand: string;
   category?: RoutineStepCategory;
   concerns: ProductConcern[];
+  decisionStatus?: SavedProductDecisionStatus;
   keyActives: string[];
+  personalNote?: string;
+  plannedRoutineSlot?: SavedProductPlannedRoutineSlot;
   skinTypes: ProductSkinType[];
   source: RoutineProductOptionSource;
   tags: string[];
@@ -51,6 +58,23 @@ function toRoutineProductOption(
   };
 }
 
+function toSavedRoutineProductOption(
+  savedProduct: SavedProductDto,
+): RoutineProductOption {
+  return {
+    ...toRoutineProductOption(savedProduct.product, "saved"),
+    ...(savedProduct.decisionStatus
+      ? { decisionStatus: savedProduct.decisionStatus }
+      : {}),
+    ...(savedProduct.plannedRoutineSlot
+      ? { plannedRoutineSlot: savedProduct.plannedRoutineSlot }
+      : {}),
+    ...(savedProduct.personalNote !== undefined
+      ? { personalNote: savedProduct.personalNote }
+      : {}),
+  };
+}
+
 function appendUniqueOption(
   options: RoutineProductOption[],
   option: RoutineProductOption,
@@ -74,7 +98,7 @@ export function buildRoutineProductOptions(input: {
   for (const savedProduct of input.savedProducts) {
     appendUniqueOption(
       savedProductOptions,
-      toRoutineProductOption(savedProduct.product, "saved"),
+      toSavedRoutineProductOption(savedProduct),
       savedProductIds,
     );
   }

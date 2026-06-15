@@ -43,6 +43,10 @@ import {
 } from "@/modules/routines/routine.types";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
 import { listSavedProducts } from "@/modules/saved-products/saved-product.client";
+import {
+  savedProductDecisionStatusLabels,
+  savedProductPlannedRoutineSlotLabels,
+} from "@/modules/saved-products/saved-product-labels";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
 import { LoadingState } from "@/shared/components/loading-state";
@@ -1862,6 +1866,54 @@ function SelectedProductContext({
           </div>
         ) : null}
       </dl>
+      {option.source === "saved" ? (
+        <section
+          className="space-y-2 border-t border-border pt-3"
+          data-testid="routine-saved-product-decision-context"
+        >
+          <div className="space-y-1">
+            <h4 className="font-semibold text-foreground">
+              Thông tin cân nhắc đã lưu
+            </h4>
+            <p className="leading-5">
+              Thông tin này giúp bạn nhớ lý do đã lưu sản phẩm trước khi thêm
+              vào routine.
+            </p>
+          </div>
+          <dl className="grid gap-2 sm:grid-cols-2">
+            <div>
+              <dt className="font-medium text-foreground">
+                Trạng thái cân nhắc
+              </dt>
+              <dd>
+                {option.decisionStatus
+                  ? savedProductDecisionStatusLabels[option.decisionStatus]
+                  : "Chưa chọn trạng thái cân nhắc"}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-foreground">
+                Dự định dùng trong routine
+              </dt>
+              <dd>
+                {option.plannedRoutineSlot
+                  ? savedProductPlannedRoutineSlotLabels[
+                      option.plannedRoutineSlot
+                    ]
+                  : "Chưa chọn thời điểm dự định dùng"}
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="font-medium text-foreground">Ghi chú cá nhân</dt>
+              <dd className="whitespace-pre-wrap">
+                {option.personalNote?.trim()
+                  ? option.personalNote.trim()
+                  : "Chưa có ghi chú cá nhân"}
+              </dd>
+            </div>
+          </dl>
+        </section>
+      ) : null}
     </div>
   );
 }

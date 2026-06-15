@@ -83,6 +83,9 @@ describe("Routine Builder UI foundation", () => {
       "catalogueProductOptions",
       "combinedProductOptions",
       "savedProduct.product",
+      "savedProduct.decisionStatus",
+      "savedProduct.plannedRoutineSlot",
+      "savedProduct.personalNote",
     ]) {
       expect(routineProductOptionsSource).toContain(requiredSource);
     }
@@ -200,6 +203,9 @@ describe("Routine Builder UI foundation", () => {
       /\bbrandSnapshot\b/,
       /\bkeyActivesSnapshot\b/,
       /\bingredientTextSnapshot\b/,
+      /\bdecisionStatus\b/,
+      /\bplannedRoutineSlot\b/,
+      /\bpersonalNote\b/,
     ]) {
       expect(payloadSource).not.toMatch(forbiddenField);
     }
@@ -246,6 +252,51 @@ describe("Routine Builder UI foundation", () => {
     expect(routineBuilderSource).toContain(
       "<Link href={routes.PRODUCT_MATCH}>Xem gợi ý sản phẩm</Link>",
     );
+  });
+
+  it("shows saved decision context only for selected saved products", () => {
+    for (const requiredSource of [
+      "@/modules/saved-products/saved-product-labels",
+      "savedProductDecisionStatusLabels",
+      "savedProductPlannedRoutineSlotLabels",
+      'option.source === "saved"',
+      'data-testid="routine-saved-product-decision-context"',
+      "Thông tin cân nhắc đã lưu",
+      "Thông tin này giúp bạn nhớ lý do đã lưu sản phẩm trước khi thêm",
+      "Trạng thái cân nhắc",
+      "Chưa chọn trạng thái cân nhắc",
+      "Dự định dùng trong routine",
+      "Chưa chọn thời điểm dự định dùng",
+      "Ghi chú cá nhân",
+      "option.personalNote?.trim()",
+      "Chưa có ghi chú cá nhân",
+    ]) {
+      expect(routineBuilderSource).toContain(requiredSource);
+    }
+
+    expect(routineBuilderSource).toContain(
+      "savedProductDecisionStatusLabels[option.decisionStatus]",
+    );
+    expect(routineBuilderSource).toContain(
+      "savedProductPlannedRoutineSlotLabels[",
+    );
+  });
+
+  it("keeps saved decision metadata display-only", () => {
+    const payloadSource = getPayloadSource();
+    const selectionSource =
+      routineProductOptionsSource.match(
+        /export function applyRoutineProductSelection[\s\S]*$/,
+      )?.[0] ?? "";
+
+    for (const metadataField of [
+      "decisionStatus",
+      "plannedRoutineSlot",
+      "personalNote",
+    ]) {
+      expect(payloadSource).not.toContain(metadataField);
+      expect(selectionSource).not.toContain(`input.selectedOption.${metadataField}`);
+    }
   });
 
   it("guides saved products into routine decisions with safe reference copy", () => {
