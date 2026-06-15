@@ -117,6 +117,16 @@ type Product = {
 };
 ```
 
+Visibility note:
+
+- Public catalogue, product detail, Product Match, Saved Products, Routine
+  Builder product options, and product lookup flows treat `reviewed` and
+  `verified` products as visible.
+- `unverified` products are hidden from public product flows and can be
+  reviewed through the admin-only v1.44 API foundation.
+- Product visibility is controlled by `verificationStatus`. The model does not
+  use `isActive`, and v1.44 does not add hard delete behavior.
+
 ### Why add product-fit fields?
 
 The MVP may not fully implement Product Fit Checker, but these fields prevent future over-reliance on AI guessing from raw ingredient text. They make product matching more deterministic, auditable, and scalable.

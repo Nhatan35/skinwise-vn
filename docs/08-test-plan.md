@@ -264,13 +264,16 @@ Cases:
 ### Product trust and visibility tests
 
 ```txt
-[ ] Normal user cannot set verificationStatus = verified.
-[ ] Normal user-created product becomes source = user_submitted.
-[ ] Normal user-created product becomes verificationStatus = unverified.
-[ ] GET /api/products hides unverified products submitted by other users.
-[ ] GET /api/products?includeMine=true returns the current user's own unverified submissions.
-[ ] GET /api/products/:id blocks access to another user's unverified product.
-[ ] Future admin route can set verificationStatus = reviewed or verified only with ADMIN role.
+[ ] Future normal-user product submission cannot set verificationStatus = verified.
+[ ] Future normal-user product submission becomes source = user_submitted.
+[ ] Future normal-user product submission becomes verificationStatus = unverified.
+[x] GET /api/products hides unverified products.
+[x] GET /api/products rejects unsupported includeMine query semantics.
+[x] GET /api/products/:id returns NOT_FOUND for unverified products.
+[x] Admin product list requires ADMIN role through AppUserProfile.
+[x] Admin product list includes unverified/reviewed/verified products.
+[x] Admin verificationStatus update requires ADMIN role through AppUserProfile.
+[x] Admin verificationStatus update rejects invalid statuses and client-submitted internal fields.
 ```
 
 ### Active normalization tests
@@ -340,9 +343,10 @@ Cases:
 ```txt
 [ ] Unauthenticated user cannot access GET /api/products in MVP.
 [ ] GET /api/products returns only verified/reviewed products by default.
-[ ] includeMine=true returns current user's own unverified submissions.
-[ ] includeMine=true never returns other users' unverified products.
-[ ] GET /api/products/:id blocks access to another user's unverified product.
+[ ] Unsupported includeMine query returns VALIDATION_ERROR in current source.
+[ ] GET /api/products/:id blocks access to unverified products.
+[ ] GET /api/admin/products requires ADMIN role.
+[ ] PATCH /api/admin/products/:id/verification-status requires ADMIN role and rejects invalid status values.
 ```
 
 ### SkinJournal one-entry-per-day tests

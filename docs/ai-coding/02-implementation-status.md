@@ -53,9 +53,10 @@ MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP with documented evidence boundaries. The core user journey is implemented, v1.43 refreshed local validation evidence, production smoke/monitoring remains historical and user-reported, and portfolio/demo documentation has been refreshed. v1.35 restored full E2E PASS after v1.34. v1.37 connects Product Detail to Ingredient Library searches, Ingredient Detail to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links. v1.42 shows existing saved-product decision metadata in Routine Builder. v1.43 does not add product behavior and does not claim fresh production readiness. v1.24 seed data closeout remains deferred and not done because its own build/E2E validation timed out.
+SkinWise VN is ready for portfolio/demo/interview use as an MVP with documented evidence boundaries. The core user journey is implemented, v1.43 refreshed local validation evidence, production smoke/monitoring remains historical and user-reported, and portfolio/demo documentation has been refreshed. v1.35 restored full E2E PASS after v1.34. v1.37 connects Product Detail to Ingredient Library searches, Ingredient Detail to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links. v1.42 shows existing saved-product decision metadata in Routine Builder. v1.43 does not add product behavior and does not claim fresh production readiness. v1.44 adds an admin-only Product Review API foundation using AppUserProfile ADMIN authorization without full admin UI or product hard delete. v1.24 seed data closeout remains deferred and not done because its own build/E2E validation timed out.
 
 Current status:
 
@@ -63,10 +64,10 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.43 - Release Evidence & Validation Cleanup
+Latest completed scoped task: MVP v1.44 - Admin Product Review API Foundation
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
-Current phase: Post-MVP validation cleanup
+Current phase: Post-MVP controlled product improvement
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 Accessibility status: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
@@ -94,7 +95,8 @@ v1.40 status: DONE / PASS - Saved Products Decision Queue & Review Filters added
 v1.41 status: DONE / PASS - Product Detail Saved Decision Shortcut added safe saved-state handling and compact editing of existing private metadata through the existing v1.39 PATCH client; full validation passed
 v1.42 status: DONE / PASS - Routine Builder Saved Product Decision Context shows existing saved-product decision metadata for selected saved products without changing routine payloads, routine API contracts, or automatic behavior; full validation passed
 v1.43 status: DONE / PASS - release evidence and validation cleanup refreshed current status docs, captured fresh local validation, verified audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product behavior changes
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+v1.44 status: DONE / PASS - admin-only Product Review API foundation added AppUserProfile ADMIN authorization, all-status admin product list, verificationStatus update route, validation, tests, and docs without full admin UI, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
+Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -469,11 +471,12 @@ Completed v1.23 scope:
 - Added `docs/data-control-and-deletion.md` and `docs/release-evidence-v1.23.md`.
 - Manual Browser & Production Smoke Verification is now DONE / PASS based on user-reported production checks; manual browser deletion smoke for v1.23 remains separate and was not performed in v1.23.
 - Avoided schema changes, shared catalogue deletion, OAuth/Google account deletion, new collections, new dependencies, admin scope, AI-provider changes, image upload, skin scoring, diagnosis logic, and treatment advice.
+- v1.44 intentionally avoided full admin dashboard UI, product create/edit full CRUD, product hard delete, `isActive`, marketplace/payment, image upload, real AI provider work, diagnosis logic, and production-ready claims.
 
 Recommended next task:
 
 ```txt
-MVP v1.44 - Production Smoke Test & Deployment Evidence
+MVP v1.45 - Admin Product Review UI & Workflow Polish
 ```
 
 Portfolio evidence tasks:
@@ -485,7 +488,8 @@ Portfolio evidence tasks:
 
 Optional later product scope:
 
-- Admin product/ingredient management.
+- Admin product review UI on top of the v1.44 API foundation.
+- Admin ingredient management.
 - More complete account deletion workflow.
 - Better production observability.
 - Optional real provider integration with strict safety controls.

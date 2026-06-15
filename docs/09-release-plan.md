@@ -18,9 +18,10 @@ MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 MVP v1.16 through MVP v1.42: preserved in `docs/00-source-of-truth.md`
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 ```
 
-The MVP product scope is complete. Current work is no longer core feature implementation; it has moved into controlled post-MVP validation, evidence, and deployment-preparation cleanup. The full current release chain is maintained in `docs/00-source-of-truth.md`.
+The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.44 adds a small admin-only Product Review API foundation without full admin UI, marketplace/payment, product hard delete, or production-ready claims. The full current release chain is maintained in `docs/00-source-of-truth.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -157,8 +158,9 @@ Post-MVP data quality decision: v1.14 complete
 Post-MVP explainability and safety decision: v1.15 complete
 Audit cleanup and evidence sync decision: v1.15.1 complete
 Release evidence and validation cleanup decision: v1.43 complete
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Admin product review API foundation decision: v1.44 complete
+Current phase: Post-MVP controlled product improvement
+Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -188,7 +190,8 @@ Do not expand scope before portfolio submission.
 
 ### Post-MVP candidates
 
-- Admin product/ingredient management.
+- Admin product review UI and workflow polish on top of the v1.44 API foundation.
+- Admin ingredient management.
 - More complete account deletion automation.
 - Stronger observability and error tracking.
 - More curated product/ingredient data.
@@ -198,7 +201,7 @@ Do not expand scope before portfolio submission.
 Recommended next task:
 
 ```txt
-MVP v1.44 - Production Smoke Test & Deployment Evidence
+MVP v1.45 - Admin Product Review UI & Workflow Polish
 ```
 
-This is evidence work, not a product feature blocker. The central documentation package is prepared; actual screenshot and demo-video files are not claimed until captured, and production-ready status should not be claimed until fresh deployed-URL smoke evidence is recorded.
+Keep this optional and scoped: use the existing v1.44 admin API foundation, avoid full CRUD unless explicitly scheduled, and continue not to claim production-ready status until fresh deployed-URL smoke evidence is recorded.

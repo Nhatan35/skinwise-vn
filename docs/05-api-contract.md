@@ -175,7 +175,8 @@ Authentication:
 
 - MVP requires authentication for `GET /api/products`.
 - If unauthenticated, return `UNAUTHORIZED`.
-- `includeMine=true` is only valid for authenticated users.
+- `includeMine=true` is not implemented in the current source and is rejected as
+  an unsupported query parameter.
 
 Query params:
 
@@ -185,16 +186,17 @@ category?: string
 priceRange?: string
 skinType?: string
 concern?: string
-includeMine?: boolean = false
 limit?: number
 ```
 
 Visibility rules:
 
-- By default, return only products with `verificationStatus` in `["verified", "reviewed"]`.
-- If `includeMine=true`, also return unverified products where `createdByUserId = currentUser.id`.
-- `includeMine=true` must never return another user's unverified submissions.
-- Admin-only product review/search must use future `/api/admin/products` routes.
+- Return only products with `verificationStatus` in `["verified", "reviewed"]`.
+- `verificationStatus = "unverified"` products are not returned by the public
+  catalogue.
+- Current source does not implement `includeMine`; unknown query parameters are
+  rejected with `VALIDATION_ERROR`.
+- Admin-only review/search uses `/api/admin/products` routes.
 
 Response:
 
@@ -291,17 +293,114 @@ Authentication:
 
 Visibility rules:
 
-A product is readable if:
+- Current public implementation returns a product only when
+  `verificationStatus` is `verified` or `reviewed`.
+- Invalid, missing, or unverified products return `NOT_FOUND` from the public
+  detail route.
+- Admin all-status review is handled by `/api/admin/products` foundation routes,
+  not by broadening the public detail route.
 
-- `verificationStatus` is `verified` or `reviewed`; or
-- `createdByUserId = currentUser.id`; or
-- `currentUser.role = "ADMIN"`.
+Errors:
+
+- UNAUTHORIZED
+- NOT_FOUND
+
+### GET /api/admin/products
+
+Implementation status: MVP v1.44 admin product review API foundation.
+
+Lists products for admin review across all `verificationStatus` values,
+including `unverified`, `reviewed`, and `verified`.
+
+Authentication and authorization:
+
+- Requires authenticated user.
+- Requires `AppUserProfile.role = "ADMIN"`.
+- Role is read from `AppUserProfile`, not from client input or raw session
+  claims.
+
+Query params:
+
+```txt
+q?: string
+category?: string
+priceRange?: string
+skinType?: string
+concern?: string
+verificationStatus?: "unverified" | "reviewed" | "verified"
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "items": [
+      {
+        "id": "product_123",
+        "name": "Pending Product",
+        "brand": "Example",
+        "category": "serum",
+        "verificationStatus": "unverified"
+      }
+    ]
+  },
+  "error": null
+}
+```
 
 Errors:
 
 - UNAUTHORIZED
 - FORBIDDEN
+- VALIDATION_ERROR
+- INTERNAL_ERROR
+
+Notes:
+
+- Response DTOs omit raw MongoDB `_id`, `ObjectId`, `source`,
+  `createdByUserId`, and private internals.
+- This is not a full admin dashboard and does not add product create/edit CRUD.
+
+### PATCH /api/admin/products/:id/verification-status
+
+Implementation status: MVP v1.44 admin product review API foundation.
+
+Updates only `verificationStatus` for an existing product.
+
+Authentication and authorization:
+
+- Requires authenticated user.
+- Requires `AppUserProfile.role = "ADMIN"`.
+
+Request:
+
+```json
+{
+  "verificationStatus": "reviewed"
+}
+```
+
+Validation:
+
+- `id` must be a MongoDB ObjectId string.
+- `verificationStatus` must be one of `unverified`, `reviewed`, or `verified`.
+- Client-submitted `source`, `createdByUserId`, `createdAt`, `updatedAt`, or
+  other product fields are rejected.
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
 - NOT_FOUND
+- INTERNAL_ERROR
+
+Notes:
+
+- The server updates `updatedAt`.
+- The route does not hard-delete products.
+- The route does not add `isActive`.
 
 ### GET /api/products/:id/match
 

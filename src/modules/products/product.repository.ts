@@ -2,11 +2,15 @@ import "server-only";
 
 import { ObjectId, type Filter } from "mongodb";
 
-import type { ProductListQueryInput } from "@/modules/products/product.schema";
+import type {
+  AdminProductListQueryInput,
+  ProductListQueryInput,
+} from "@/modules/products/product.schema";
 import {
   VISIBLE_PRODUCT_VERIFICATION_STATUSES,
   type Product,
   type ProductDocument,
+  type ProductVerificationStatus,
 } from "@/modules/products/product.types";
 
 const mongoObjectIdPattern = /^[a-f\d]{24}$/i;
@@ -43,12 +47,10 @@ function visibleProductFilter(): Filter<ProductDocument> {
   };
 }
 
-export async function searchVisibleProducts(
-  input: ProductListQueryInput,
-): Promise<Product[]> {
-  const collection = await getProductCollection();
-  const filter: Filter<ProductDocument> = visibleProductFilter();
-
+function applySharedProductFilters(
+  filter: Filter<ProductDocument>,
+  input: Omit<AdminProductListQueryInput, "verificationStatus">,
+) {
   if (input.q) {
     const searchRegex = toSearchRegex(input.q);
 
@@ -76,6 +78,15 @@ export async function searchVisibleProducts(
   if (input.concern) {
     filter.concerns = input.concern;
   }
+}
+
+export async function searchVisibleProducts(
+  input: ProductListQueryInput,
+): Promise<Product[]> {
+  const collection = await getProductCollection();
+  const filter: Filter<ProductDocument> = visibleProductFilter();
+
+  applySharedProductFilters(filter, input);
 
   return collection
     .find(filter)
@@ -132,4 +143,59 @@ export async function findVisibleProductById(
     ...visibleProductFilter(),
     _id: objectId,
   });
+}
+
+export async function searchProductsForAdmin(
+  input: AdminProductListQueryInput,
+): Promise<Product[]> {
+  const collection = await getProductCollection();
+  const filter: Filter<ProductDocument> = {};
+
+  applySharedProductFilters(filter, input);
+
+  if (input.verificationStatus) {
+    filter.verificationStatus = input.verificationStatus;
+  }
+
+  return collection.find(filter).sort({ brand: 1, name: 1 }).toArray();
+}
+
+export async function findProductById(id: string): Promise<Product | null> {
+  const objectId = toObjectId(id);
+
+  if (!objectId) {
+    return null;
+  }
+
+  const collection = await getProductCollection();
+
+  return collection.findOne({
+    _id: objectId,
+  });
+}
+
+export async function updateProductVerificationStatus(
+  id: string,
+  verificationStatus: ProductVerificationStatus,
+): Promise<Product | null> {
+  const objectId = toObjectId(id);
+
+  if (!objectId) {
+    return null;
+  }
+
+  const collection = await getProductCollection();
+
+  return collection.findOneAndUpdate(
+    { _id: objectId },
+    {
+      $set: {
+        verificationStatus,
+        updatedAt: new Date(),
+      },
+    },
+    {
+      returnDocument: "after",
+    },
+  );
 }

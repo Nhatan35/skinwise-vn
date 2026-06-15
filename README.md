@@ -14,40 +14,42 @@ Production demo:
 
 ## Current Status
 
-- Current Portfolio Release: **MVP v1.43 - Release Evidence & Validation Cleanup**
+- Current Portfolio Release: **MVP v1.44 - Admin Product Review API Foundation**
 - Core MVP: **Complete**
-- Current Phase: **Post-MVP validation cleanup**
+- Current Phase: **Post-MVP controlled product improvement**
 - Portfolio demo readiness: **Yes, with local validation evidence and documented production-evidence boundaries**
-- Production readiness: **Not claimed for v1.43** because no fresh production smoke test was performed against the deployed URL during this milestone
-- Latest fresh local validation: **PASS for install, lint, typecheck, unit tests, build, E2E, and audit on 2026-06-15**
-- Release evidence: `docs/release-evidence-v1.43.md`
+- Production readiness: **Not claimed for v1.44** because no fresh production smoke test was performed against the deployed URL during this milestone
+- Latest fresh v1.44 local validation: **PASS for lint, typecheck, unit tests, and build on 2026-06-15**
+- Release evidence: `docs/release-evidence-admin-product-review-api-foundation.md`
 - Historical production smoke/monitoring evidence: **PASS, user-reported** from the earlier production verification baseline; screenshots, deployment id, browser/version, device/OS, and exact verification metadata are not stored in this repository
 - Portfolio media evidence: screenshots and demo video remain optional artifacts and are not claimed unless captured separately
 - Real production AI provider integration: **not verified**; local/demo AI behavior remains mock/provider-abstraction based
 
-Fresh validation:
+Fresh v1.44 validation:
 
 | Check | Command | Status | Notes |
 |---|---|---|---|
-| Install | `npm ci` | PASS | Sandboxed run failed with `spawn EPERM`; unsandboxed rerun installed 749 packages. Install output reported 2 high vulnerabilities, but direct audit commands below returned 0 vulnerabilities. |
+| Install | `npm ci` | NOT RUN | Not part of v1.44 scope; v1.43 install evidence remains PASS. |
 | Lint | `npm run lint` | PASS | ESLint completed successfully. |
 | Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
-| Unit tests | `npm run test` | PASS | 110 test files / 1134 tests passed. |
-| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; unsandboxed rerun completed route generation successfully. |
-| E2E | `npm run test:e2e` | PASS | Sandboxed run failed with `spawn EPERM`; unsandboxed rerun passed 31 Playwright tests after E2E seeding. |
-| Audit | `npm audit` | PASS | `found 0 vulnerabilities`. |
-| Production audit | `npm audit --omit=dev` | PASS | `found 0 vulnerabilities`. |
+| Unit tests | `npm run test` | PASS | 112 test files / 1157 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; unsandboxed rerun completed successfully and listed the new admin API routes. |
+| E2E | `npm run test:e2e` | NOT RUN | Not part of v1.44 scope; v1.43 E2E evidence remains PASS. |
+| Audit | `npm audit` | NOT RUN | Not part of v1.44 scope; v1.43 audit evidence remains PASS. |
+| Production audit | `npm audit --omit=dev` | NOT RUN | Not part of v1.44 scope; v1.43 production audit evidence remains PASS. |
 
 Deferred / not in MVP:
 
-- Fresh production smoke test on deployed URL for v1.43: **Deferred / not verified**
+- Fresh production smoke test on deployed URL for v1.44: **Deferred / not verified**
+- Full admin dashboard UI: **Deferred / not implemented**
+- Admin product create/edit full CRUD and hard delete: **Deferred / not implemented**
 - Real OpenAI/Gemini provider integration: **Deferred / not verified**
 - v1.24 seed-data closeout: **historically NOT DONE / VALIDATION BLOCKED**; v1.43 does not retroactively close that milestone
 - Marketplace/payment, skin score, medical diagnosis, image upload, subscriptions, and community features: **Out of MVP scope**
 
 Evidence boundary:
 
-- v1.43 automated local evidence is supported by command output from this workspace.
+- v1.44 automated local evidence is supported by command output from this workspace.
 - Production readiness is not claimed unless a fresh deployed-URL smoke test is performed and recorded.
 - Historical production PASS status remains user-reported and should be supplemented with screenshots, deployment ids, browser/network notes, or sanitized logs if strict audit traceability is required.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
@@ -101,6 +103,7 @@ MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
@@ -633,13 +636,18 @@ MVP v1.35 - E2E Failure Triage & Extended Validation Cleanup: DONE
 MVP v1.37 - Product ↔ Ingredient Learning Path Polish: DONE
 MVP Product Match Explainability Polish: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Decision: READY for portfolio/demo/interview at MVP level
-Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
-Current phase: Post-MVP validation cleanup
+Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.44 without fresh deployed-URL smoke evidence
+Current phase: Post-MVP controlled product improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
 ```
 
 
 ## Post-MVP Backlog
+
+`v1.44 - Admin Product Review API Foundation` adds admin-only product review
+APIs for all-status listing and `verificationStatus` updates without full admin
+UI, hard delete, `isActive`, or public visibility changes.
 
 Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.42 - Routine Builder Saved Product Decision Context` shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

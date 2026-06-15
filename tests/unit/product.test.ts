@@ -1,12 +1,15 @@
 import { ObjectId } from "mongodb";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ZodError } from "zod";
 
 vi.mock("server-only", () => ({}));
 
 const toArrayMock = vi.fn();
 const limitMock = vi.fn(() => ({ toArray: toArrayMock }));
-const sortMock = vi.fn(() => ({ limit: limitMock }));
+const sortMock = vi.fn(() => ({
+  limit: limitMock,
+  toArray: toArrayMock,
+}));
 const collectionMock = {
   find: vi.fn((filter?: unknown) => {
     void filter;
@@ -18,6 +21,7 @@ const collectionMock = {
 
     return undefined;
   }),
+  findOneAndUpdate: vi.fn(),
 };
 
 vi.mock("@/infrastructure/database/collections", () => ({
@@ -25,10 +29,17 @@ vi.mock("@/infrastructure/database/collections", () => ({
 }));
 
 import { toProductDto } from "@/modules/products/product.mapper";
-import { productListQuerySchema } from "@/modules/products/product.schema";
 import {
+  adminProductListQuerySchema,
+  productListQuerySchema,
+  updateProductVerificationStatusBodySchema,
+} from "@/modules/products/product.schema";
+import {
+  findProductById,
   findVisibleProductById,
+  searchProductsForAdmin,
   searchVisibleProducts,
+  updateProductVerificationStatus,
 } from "@/modules/products/product.repository";
 import type { Product } from "@/modules/products/product.types";
 
@@ -90,6 +101,49 @@ describe("Product query schema", () => {
     expect(() => productListQuerySchema.parse({ limit: "51" })).toThrow(
       ZodError,
     );
+  });
+
+  it("validates admin product list query input without includeMine semantics", () => {
+    expect(
+      adminProductListQuerySchema.parse({
+        q: " pending ",
+        category: "serum",
+        verificationStatus: "unverified",
+      }),
+    ).toEqual({
+      q: "pending",
+      category: "serum",
+      verificationStatus: "unverified",
+    });
+
+    expect(() =>
+      adminProductListQuerySchema.parse({ verificationStatus: "draft" }),
+    ).toThrow(ZodError);
+    expect(() =>
+      adminProductListQuerySchema.parse({ includeMine: "true" }),
+    ).toThrow(ZodError);
+  });
+
+  it("validates admin verificationStatus update body strictly", () => {
+    expect(
+      updateProductVerificationStatusBodySchema.parse({
+        verificationStatus: "reviewed",
+      }),
+    ).toEqual({
+      verificationStatus: "reviewed",
+    });
+
+    expect(() =>
+      updateProductVerificationStatusBodySchema.parse({
+        verificationStatus: "draft",
+      }),
+    ).toThrow(ZodError);
+    expect(() =>
+      updateProductVerificationStatusBodySchema.parse({
+        verificationStatus: "verified",
+        source: "admin",
+      }),
+    ).toThrow(ZodError);
   });
 });
 
@@ -156,14 +210,24 @@ describe("Product mapper", () => {
 });
 
 describe("Product repository", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow);
     collectionMock.find.mockReset();
     collectionMock.findOne.mockReset();
+    collectionMock.findOneAndUpdate.mockReset();
     sortMock.mockReset();
     limitMock.mockReset();
     toArrayMock.mockReset();
     collectionMock.find.mockReturnValue({ sort: sortMock });
-    sortMock.mockReturnValue({ limit: limitMock });
+    sortMock.mockReturnValue({
+      limit: limitMock,
+      toArray: toArrayMock,
+    });
     limitMock.mockReturnValue({ toArray: toArrayMock });
   });
 
@@ -247,5 +311,91 @@ describe("Product repository", () => {
   it("returns null for invalid product ids without querying", async () => {
     await expect(findVisibleProductById("not-an-object-id")).resolves.toBeNull();
     expect(collectionMock.findOne).not.toHaveBeenCalled();
+  });
+
+  it("admin search can list products across all verification statuses", async () => {
+    const unverifiedProduct = createProduct({ verificationStatus: "unverified" });
+    const verifiedProduct = createProduct({ verificationStatus: "verified" });
+    toArrayMock.mockResolvedValue([unverifiedProduct, verifiedProduct]);
+
+    await expect(searchProductsForAdmin({})).resolves.toEqual([
+      unverifiedProduct,
+      verifiedProduct,
+    ]);
+
+    expect(collectionMock.find).toHaveBeenCalledWith({});
+    expect(JSON.stringify(collectionMock.find.mock.calls[0]?.[0])).not.toContain(
+      '"$in"',
+    );
+    expect(sortMock).toHaveBeenCalledWith({ brand: 1, name: 1 });
+    expect(limitMock).not.toHaveBeenCalled();
+  });
+
+  it("admin search can filter specifically to unverified products", async () => {
+    toArrayMock.mockResolvedValue([]);
+
+    await searchProductsForAdmin({
+      q: "pending",
+      category: "serum",
+      verificationStatus: "unverified",
+    });
+
+    const filter = collectionMock.find.mock.calls[0]?.[0] as {
+      $or?: Array<Record<string, RegExp>>;
+      category?: string;
+      verificationStatus?: string;
+    };
+
+    expect(filter.category).toBe("serum");
+    expect(filter.verificationStatus).toBe("unverified");
+    expect(filter.$or?.[0]?.name.test("Pending product")).toBe(true);
+  });
+
+  it("admin find by id does not apply public visibility filters", async () => {
+    const product = createProduct({ verificationStatus: "unverified" });
+    collectionMock.findOne.mockResolvedValue(product);
+
+    await expect(findProductById(productId)).resolves.toBe(product);
+
+    const filter = collectionMock.findOne.mock.calls[0]?.[0] as {
+      _id?: ObjectId;
+      verificationStatus?: unknown;
+    };
+    expect(filter._id?.toString()).toBe(productId);
+    expect(filter).not.toHaveProperty("verificationStatus");
+  });
+
+  it("admin updates verificationStatus and server-owned updatedAt only", async () => {
+    const updatedProduct = createProduct({
+      verificationStatus: "reviewed",
+      updatedAt: fixedNow,
+    });
+    collectionMock.findOneAndUpdate.mockResolvedValue(updatedProduct);
+
+    await expect(
+      updateProductVerificationStatus(productId, "reviewed"),
+    ).resolves.toBe(updatedProduct);
+
+    expect(collectionMock.findOneAndUpdate).toHaveBeenCalledWith(
+      {
+        _id: new ObjectId(productId),
+      },
+      {
+        $set: {
+          verificationStatus: "reviewed",
+          updatedAt: fixedNow,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+    );
+  });
+
+  it("admin update returns null for invalid product ids without querying", async () => {
+    await expect(
+      updateProductVerificationStatus("not-an-object-id", "reviewed"),
+    ).resolves.toBeNull();
+    expect(collectionMock.findOneAndUpdate).not.toHaveBeenCalled();
   });
 });
