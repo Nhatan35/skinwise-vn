@@ -274,6 +274,16 @@ Cases:
 [x] Admin product list includes unverified/reviewed/verified products.
 [x] Admin verificationStatus update requires ADMIN role through AppUserProfile.
 [x] Admin verificationStatus update rejects invalid statuses and client-submitted internal fields.
+[x] Admin product review route exists at /admin/products.
+[x] Admin product review page uses server-side admin guard and protected /admin matcher.
+[x] Admin product review UI uses the admin product client, not public product client.
+[x] Admin product client calls GET /api/admin/products.
+[x] Admin product client calls PATCH /api/admin/products/[id]/verification-status.
+[x] Admin product client handles 401/403 safely.
+[x] Admin product review UI includes loading, empty, error, and unauthorized states.
+[x] Admin product review UI renders Pending review, Reviewed, and Verified labels.
+[x] Admin product review client UI does not import server-only admin guards or repositories.
+[x] Dashboard navigation does not expose a global admin link to non-admin users.
 ```
 
 ### Active normalization tests

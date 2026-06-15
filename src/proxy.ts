@@ -8,6 +8,7 @@ export const proxy = auth;
 
 export const config = {
   matcher: [
+    "/admin/:path*",
     "/dashboard/:path*",
     "/onboarding/:path*",
     "/skin-profile/:path*",

@@ -307,7 +307,8 @@ Rules:
 - `src/modules/products/components/product-catalogue.tsx` owns Product API list browsing, search/filter controls, loading/error/empty states, and saved-state display by calling the Saved Products client helper. It must not implement Product CRUD, product submission, AI recommendation, skin score, or image upload.
 - `src/modules/products/components/product-card.tsx` owns display of public Product DTO fields, `View details` navigation to `/products/[id]`, and the composed Saved Products toggle. It must not expose `_id`, raw ObjectId values, `createdByUserId`, `source`, or user-owned internals.
 - `src/modules/products/components/product-detail.tsx` owns Product API detail loading through `getProduct(productId)`, loading/error/not-found/success states, educational copy, public Product DTO field display, and the composed Saved Products toggle.
-- `POST /api/products`, `includeMine` UI, Product CRUD UI, admin product management, seed scripts, external product APIs, image upload, AI recommendation, routine integration, skin score, and medical diagnosis are out of scope for this ownership status.
+- `src/modules/products/admin-product.client.ts` and `src/modules/products/components/admin-product-review.tsx` own the lightweight v1.45 admin review workflow for all-status listing and `verificationStatus` updates through `/api/admin/products`.
+- `POST /api/products`, `includeMine` UI, full Product CRUD UI, admin create/edit management, seed scripts, external product APIs, image upload, AI recommendation, routine integration, skin score, and medical diagnosis are out of scope for this ownership status.
 
 Current status:
 

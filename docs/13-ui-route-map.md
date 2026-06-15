@@ -7,10 +7,10 @@ Current status:
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
+Latest completed milestone: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Current phase: Post-MVP controlled product improvement
 Production URL: https://skinwise-vn.vercel.app
-Production smoke for v1.43: NOT RUN; historical production PASS remains user-reported
+Production smoke for v1.45: NOT RUN; historical production PASS remains user-reported
 ```
 
 ## Implemented UI Routes
@@ -18,6 +18,7 @@ Production smoke for v1.43: NOT RUN; historical production PASS remains user-rep
 | Route | Status | Purpose |
 |---|---|---|
 | `/` | DONE | Landing page. |
+| `/admin/products` | DONE / PASS | Protected direct admin product review page for all-status product catalogue review and verificationStatus updates. |
 | `/dashboard` | DONE | Authenticated dashboard summary. |
 | `/onboarding/skin-profile` | DONE | Skin profile onboarding. |
 | `/skin-profile` | DONE | Skin profile view/edit/delete. |
@@ -39,9 +40,16 @@ Production smoke for v1.43: NOT RUN; historical production PASS remains user-rep
 / -> /dashboard -> /skin-profile -> /product-match -> /products/[id] -> /saved-products -> /ingredients -> /routines -> /routine-logs/today -> /journal -> /insights -> /settings
 ```
 
+Admin demo route, direct URL only in v1.45:
+
+```txt
+/admin/products
+```
+
 ## Final Route Decision
 
 ```txt
 All MVP UI routes required for portfolio/demo are implemented.
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence.
+Admin product review UI is implemented as a direct protected route, not a global navigation item.
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence.
 ```

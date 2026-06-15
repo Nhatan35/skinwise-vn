@@ -37,7 +37,8 @@ Product Detail saved decision shortcut: v1.41 - Product Detail Saved Decision Sh
 Routine Builder saved product decision context: v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 Release evidence and validation cleanup: v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Admin product review API foundation: v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
-Latest completed scoped task: v1.44 - Admin Product Review API Foundation
+Admin product review UI workflow: v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+Latest completed scoped task: v1.45 - Admin Product Review UI & Workflow Polish
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
@@ -47,8 +48,8 @@ Latest completed verification task: Screen-Reader Assistive Technology Verificat
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
-Local validation: PASS for v1.44 lint/typecheck/unit tests/build. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+Local validation: PASS for v1.45 lint/typecheck/unit tests/build. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported historical evidence; not freshly rerun for v1.43
@@ -792,9 +793,9 @@ This is larger than UX polish because it touches access control and content-writ
 ```txt
 [x] Admin product review API routes are protected by AppUserProfile ADMIN role.
 [x] Normal users cannot access admin product review API routes.
-[ ] Admin pages are not implemented in v1.44.
-[ ] Product/ingredient edits validate input.
-[ ] No secret or privileged data is exposed to users.
+[x] Lightweight admin product review page is implemented in v1.45 at /admin/products.
+[ ] Full product/ingredient create/edit forms are not implemented.
+[x] No secret or privileged data is exposed to users.
 [x] Existing public catalogue behavior is preserved.
 ```
 
@@ -909,8 +910,9 @@ v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Current active milestone: None
-Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
 ```
 
 Reason:

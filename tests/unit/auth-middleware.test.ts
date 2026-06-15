@@ -9,7 +9,8 @@ const proxySource = readFileSync(
 );
 
 describe("auth proxy foundation", () => {
-  it("matches protected dashboard, onboarding, Skin Profile, Routines, Routine Logs, Journal, Products, Product Match, Saved Products, Insights, Ingredients, and Settings routes", () => {
+  it("matches protected admin, dashboard, onboarding, Skin Profile, Routines, Routine Logs, Journal, Products, Product Match, Saved Products, Insights, Ingredients, and Settings routes", () => {
+    expect(proxySource).toContain('"/admin/:path*"');
     expect(proxySource).toContain('"/dashboard/:path*"');
     expect(proxySource).toContain('"/onboarding/:path*"');
     expect(proxySource).toContain('"/skin-profile/:path*"');

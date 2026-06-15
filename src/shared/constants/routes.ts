@@ -1,5 +1,6 @@
 export const routes = {
   HOME: "/",
+  ADMIN_PRODUCTS: "/admin/products",
   DASHBOARD: "/dashboard",
   ONBOARDING_SKIN_PROFILE: "/onboarding/skin-profile",
   ROUTINES: "/routines",

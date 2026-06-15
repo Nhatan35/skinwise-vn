@@ -7,10 +7,10 @@ Last updated: 2026-06-15
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed scoped task: MVP v1.44 - Admin Product Review API Foundation
+Latest completed scoped task: MVP v1.45 - Admin Product Review UI & Workflow Polish
 Current active milestone: None
 Product core: COMPLETE
-Local validation: PASS for v1.44 lint/typecheck/unit tests/build. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.45 lint/typecheck/unit tests/build. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported historical evidence; not freshly rerun for v1.43
@@ -28,10 +28,11 @@ MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled product improvement
-Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -60,6 +61,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Routine Builder Saved Product Decision Context | DONE / PASS | v1.42 shows existing saved-product decision metadata for selected saved products without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. |
 | Release Evidence & Validation Cleanup | DONE / PASS | v1.43 refreshed current release status, README, release evidence, validation/audit records, E2E prerequisites/results, and deferred item boundaries without product feature or business-logic changes. |
 | Admin Product Review API Foundation | DONE / PASS | v1.44 adds ADMIN-only product review API routes for all-status product listing and verificationStatus update using AppUserProfile role authorization, without admin UI, hard delete, full CRUD, or public visibility changes. |
+| Admin Product Review UI & Workflow Polish | DONE / PASS | v1.45 adds protected `/admin/products` direct admin review UI, admin client, all-status list, verificationStatus update workflow, and loading/empty/error/unauthorized states without full admin dashboard, full CRUD, hard delete, or public visibility changes. |
 | Routine Coverage Review | DONE / PASS | v1.38 adds an educational Routines page structure review using existing routine data only: routine presence, morning/evening coverage, morning sunscreen, moisturizer, multiple treatment steps, and safe next-step guidance. Dashboard update intentionally skipped. |
 | Routine Safety Analysis | DONE | Deterministic rules and safe fallback. |
 | Today Routine Checklist | DONE | Daily completion flow with v1.31 load-error retry and Routine fallback navigation. |
@@ -121,6 +123,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Routine Builder Saved Product Decision Context | Routine Builder / Saved Products Decision Support | v1.42 | DONE / PASS |
 | Release Evidence & Validation Cleanup | Release / Validation Evidence | v1.43 | DONE / PASS, production smoke not freshly verified |
 | Admin Product Review API Foundation | Admin / Content Review API | v1.44 | DONE / PASS, production smoke not performed |
+| Admin Product Review UI & Workflow Polish | Admin / Content Review UI | v1.45 | DONE / PASS, production smoke not performed |
 
 ## Out-of-Scope Matrix
 
@@ -131,7 +134,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Skin/face score | OUT OF SCOPE | Avoids appearance pressure and unsupported scoring. |
 | Image upload/skin analysis | OUT OF SCOPE | Requires privacy, safety, and ML governance. |
 | Marketplace/cart/checkout/payment | OUT OF SCOPE | Commercial scope not required for MVP. |
-| Admin Product Review API Foundation | DONE / PASS | v1.44 provides review API foundation only; admin UI and full CRUD remain optional future scope. |
+| Admin Product Review UI & API Foundation | DONE / PASS | v1.44 provides review API foundation and v1.45 adds a lightweight direct review UI; full admin dashboard and full CRUD remain out of scope. |
 | Real external AI provider | POST-MVP | Optional only with strict validation and safety controls. |
 | Reviews/ratings | POST-MVP | Not needed for core tracking/education journey. |
 | Notifications | POST-MVP | Optional engagement feature. |
@@ -140,9 +143,9 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed scoped task: MVP v1.44 - Admin Product Review API Foundation
+Latest completed scoped task: MVP v1.45 - Admin Product Review UI & Workflow Polish
 Current active milestone: None
-Production status: Manual Browser & Production Smoke Verification DONE / PASS as historical user-reported evidence; not freshly rerun for v1.44
+Production status: Manual Browser & Production Smoke Verification DONE / PASS as historical user-reported evidence; not freshly rerun for v1.45
 Accessibility status: Screen-Reader Assistive Technology Verification DONE / PASS
 Portfolio Evidence Package documentation: PREPARED
 Portfolio media evidence tasks are optional, intentionally skipped, and not product correctness blockers
@@ -171,8 +174,9 @@ MVP v1.39 - Saved Product Personal Notes & Trial Decision Support: DONE / PASS
 MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Accessibility evidence metadata: date, tester, browser, device/OS, and screen reader used were not provided
-Recommended next task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
 Screenshots and demo video were not provided
 Production /api/health version: remains the v1.22 health endpoint contract version
 ```

@@ -49,11 +49,13 @@ MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
+Latest completed scoped task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Current phase: Post-MVP controlled product improvement
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 Accessibility verification status: Screen-Reader Assistive Technology Verification: DONE / PASS
@@ -77,10 +79,12 @@ v1.40 status: DONE / PASS - Saved Products Decision Queue & Review Filters added
 v1.41 status: DONE / PASS - Product Detail Saved Decision Shortcut added safe saved-state handling and compact editing of existing private metadata through the v1.39 PATCH client without API or data-model changes; full validation passed
 v1.42 status: DONE / PASS - Routine Builder Saved Product Decision Context shows existing saved-product decision metadata for selected saved products without routine payload, API, data-model, scoring, safety, coverage, package, or environment changes; full validation passed
 v1.43 status: DONE / PASS - Release evidence and validation cleanup refreshed README/status docs, captured fresh local validation, verified npm audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product or business-logic changes
+v1.44 status: DONE / PASS - admin-only Product Review API foundation added AppUserProfile ADMIN authorization, all-status admin product list, verificationStatus update route, validation, tests, and docs without full admin UI, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
+v1.45 status: DONE / PASS - lightweight Admin Product Review UI added protected `/admin/products`, server-side admin guard, admin product client, all-status product review list, verificationStatus update workflow, loading/empty/error/unauthorized states, tests, and release evidence without full admin dashboard, full CRUD, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
 ```
 
 Primary current documents:
@@ -99,6 +103,8 @@ Primary current documents:
 - `docs/release-evidence-product-detail-saved-decision-shortcut.md`
 - `docs/release-evidence-routine-builder-saved-product-decision-context.md`
 - `docs/release-evidence-v1.43.md`
+- `docs/release-evidence-admin-product-review-api-foundation.md`
+- `docs/release-evidence-admin-product-review-ui-workflow-polish.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -117,8 +123,8 @@ Historical planning documents remain useful for context, but they should not ove
 Evidence boundary:
 
 - Local validation is supported by terminal output.
-- v1.43 fresh local validation passed on 2026-06-15: `npm ci`, lint, typecheck, 110 unit-test files / 1134 tests, build after unsandboxed rerun, full E2E with 31 passed after unsandboxed rerun, `npm audit`, and `npm audit --omit=dev`.
-- v1.43 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
+- v1.45 fresh local validation passed on 2026-06-15: lint, typecheck, 114 unit-test files / 1170 tests, and build after unsandboxed rerun. The sandboxed build compiled then failed with `spawn EPERM`.
+- v1.45 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
 - Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, `/api/health`, browser console/network, Vercel runtime logs, MongoDB read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed.
 - Unknown production smoke evidence fields are recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.
