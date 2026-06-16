@@ -50,6 +50,8 @@ describe("parseEnv", () => {
     const parsed = parseEnv(envSource({}));
 
     expect(parsed.E2E_TEST_AUTH).toBe(false);
+    expect(parsed.E2E_TEST_ADMIN_EMAIL).toBe("e2e-admin@skinwise.test");
+    expect(parsed.E2E_TEST_ADMIN_NAME).toBe("SkinWise E2E Admin");
     expect(parsed.E2E_TEST_USER_EMAIL).toBe("e2e-user@skinwise.test");
     expect(parsed.E2E_TEST_USER_NAME).toBe("SkinWise E2E User");
   });

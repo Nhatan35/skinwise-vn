@@ -1,6 +1,6 @@
 # SkinWise VN Post-MVP Backlog
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Current Stable Baseline
 
@@ -38,7 +38,9 @@ Routine Builder saved product decision context: v1.42 - Routine Builder Saved Pr
 Release evidence and validation cleanup: v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 Admin product review API foundation: v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 Admin product review UI workflow: v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
-Latest completed scoped task: v1.45 - Admin Product Review UI & Workflow Polish
+Admin product review browser smoke: v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+Admin product review repeatable smoke data: v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+Latest completed scoped task: v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
 Current active milestone: None
 Current active milestone status: None
 MVP core scope: COMPLETE
@@ -48,8 +50,8 @@ Latest completed verification task: Screen-Reader Assistive Technology Verificat
 Keyboard-only verification: PASS
 Screen-reader verification: PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
-Local validation: PASS for v1.45 lint/typecheck/unit tests/build. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
+Local validation: PASS for v1.47 local admin browser smoke, targeted unit tests, lint, typecheck, and full E2E. v1.47 resolves the v1.46 local MissingSecret/demo-data blockers for E2E smoke with test-only admin/non-admin auth and an idempotent unverified smoke product. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.35 remains DONE with full E2E PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported historical evidence; not freshly rerun for v1.43
@@ -126,6 +128,8 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Product Detail Saved Decision Shortcut | DONE / PASS in v1.41 | Adds compact Product Detail access to existing saved-product decision metadata through the v1.39 PATCH client, with safe signed-out/not-saved/error states and no API or data-model changes. |
 | P2 | Routine Builder Saved Product Decision Context | DONE / PASS in v1.42 | Shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. |
 | P2 | Release Evidence & Validation Cleanup | DONE / PASS in v1.43 | Refreshes README/status docs, local validation evidence, npm audit status, E2E prerequisites/results, and deferred production/AI/media boundaries without product behavior changes. |
+| P2 | Admin Product Review Browser Smoke & Evidence | DONE / MIXED in v1.46 | Records local Playwright/Chrome smoke for `/admin/products`; documents Auth.js local `MissingSecret` blocker, missing repeatable admin/non-admin demo data, and no production-ready claim. |
+| P2 | Admin Product Review Repeatable Smoke Data & Auth Config Fix | DONE / PASS locally in v1.47 | Adds E2E-only repeatable admin/non-admin auth, idempotent `unverified` smoke product data, and local Playwright admin smoke coverage for unauthenticated, non-admin, admin, update/revert, public visibility, console/network, and secret-exposure checks. |
 | P2 | Account Data Deletion Workflow Hardening | DONE in v1.23 | Hardens existing app-data deletion confirmation, ownership tests, sensitive-response checks, and deletion-boundary documentation. |
 | P2 | Seed Data Quality Expansion Round 2 closeout | NOT DONE in v1.24 | Seed implementation and docs were synchronized to 70 products / 70 ingredients, but build/E2E validation is blocked in the current environment. |
 | P2 | First-Session Guided Experience Polish | DONE in v1.25 | Improves dashboard onboarding guidance and next-step clarity without adding product scope; scoped validation passed with lint, typecheck, and unit tests. |
@@ -141,7 +145,7 @@ For documentation-only tasks, a full test rerun is optional, but the changed doc
 | P2 | Product & Ingredient Discovery Confidence Polish | DONE in v1.34 | Follow-up discovery polish after v1.33; improves result counts, active filter summaries, ingredient function filtering, no-result recovery copy, reset behavior, and contextual ingredient detail labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | P2 | E2E Failure Triage & Extended Validation Cleanup | DONE in v1.35 | Follow-up validation cleanup after v1.34; fixes stale dashboard, insights, saved-products, and today routine log Playwright selectors/copy expectations without changing app product behavior. |
 | P2 | Product ↔ Ingredient Learning Path Polish | DONE in v1.37 | Adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight catalogue/library cross-links without recommendations, ranking, scoring, schema, seed, auth, AI, CRUD, or broad API changes. |
-| P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow. |
+| P3 | Admin/content management | Optional | Useful only if product/ingredient content will grow; next safe step is deployed admin review smoke evidence, not full CRUD. |
 | P3 | Real AI provider integration | Optional, high control needed | Valuable, but requires safety, cost, fallback, and validation controls. |
 | P4 | Portfolio assets | Documentation package prepared; media capture optional | Useful for presentation, but not required for product correctness. |
 
@@ -911,8 +915,10 @@ v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 Current active milestone: None
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 ```
 
 Reason:
@@ -927,6 +933,8 @@ Reason:
 - MVP Empty / Loading / Error State Polish is DONE / PASS. Route-level loading/error/not-found boundaries, Settings recovery, Today Routine Log weekly-review states, Saved Products disabled guidance, and clearer fallback copy were completed without feature expansion.
 - MVP Form Validation & Inline Feedback Polish is DONE / PASS. Required guidance, Skin Profile invalid-field focus, Routine Builder manual-entry guidance, partial-routine disabled guidance, safe Journal/Settings errors, and accessible feedback semantics were completed without feature expansion.
 - MVP Product Match Explainability Polish is DONE / PASS. Product Match score meaning, match/caution reasons, ingredient-highlight labels, Product Detail interpretation, limited-data copy, and Saved Products comparison guidance were completed without scoring, matching, AI behavior, business logic, auth, schema, dependency, or API-contract changes.
+- v1.46 Admin Product Review Browser Smoke & Evidence is DONE / MIXED. It opened local `/admin/products` with Playwright/Chrome and documented that unauthenticated access redirects but local Auth.js sign-in returns 500 due `MissingSecret`; authenticated admin/non-admin review workflows remained blocked until repeatable demo accounts and all-status product data existed.
+- v1.47 Admin Product Review Repeatable Smoke Data & Auth Config Fix is DONE / PASS locally. It adds E2E-only repeatable admin/non-admin auth, idempotent `unverified` smoke product data, and Playwright smoke coverage for unauthenticated, non-admin, admin, update/revert, public visibility, console/network, and no browser-visible secret exposure. Production/deployed URL smoke was not performed.
 - v1.38 Routine Coverage Review & Safe Next-Step Guidance is DONE / PASS. It adds a Routines page habit-support review using existing routine data only. Dashboard summary was intentionally skipped to keep scope small and avoid dashboard mapper/use-case changes.
 - v1.38 validation passed for lint, typecheck, unit tests, elevated build, diff check, package/env/prisma diff checks, and elevated E2E.
 - v1.39 Saved Product Personal Notes & Trial Decision Support is DONE / PASS. It adds optional private saved-product decision metadata, strict owner-scoped PATCH updates, Saved Products card controls, and comparison display without changing Product Match scoring/ranking, Routine Safety, Routine Coverage, AI provider behavior, auth provider behavior, env, packages, seed baselines, or routine behavior.

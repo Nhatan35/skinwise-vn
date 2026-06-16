@@ -1,6 +1,6 @@
 # Source of Truth - SkinWise VN
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 This file is the current source-of-truth pointer for release/status documentation.
 
@@ -51,10 +51,12 @@ MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Latest completed scoped task: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
 Current phase: Post-MVP controlled product improvement
 Current active milestone: None
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
@@ -81,10 +83,12 @@ v1.42 status: DONE / PASS - Routine Builder Saved Product Decision Context shows
 v1.43 status: DONE / PASS - Release evidence and validation cleanup refreshed README/status docs, captured fresh local validation, verified npm audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product or business-logic changes
 v1.44 status: DONE / PASS - admin-only Product Review API foundation added AppUserProfile ADMIN authorization, all-status admin product list, verificationStatus update route, validation, tests, and docs without full admin UI, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
 v1.45 status: DONE / PASS - lightweight Admin Product Review UI added protected `/admin/products`, server-side admin guard, admin product client, all-status product review list, verificationStatus update workflow, loading/empty/error/unauthorized states, tests, and release evidence without full admin dashboard, full CRUD, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
+v1.46 status: DONE / MIXED - local Playwright/Chrome browser smoke for `/admin/products` found Auth.js sign-in 500 caused by local `MissingSecret`; admin/non-admin browser workflow was blocked by missing repeatable demo accounts and all-status product data; lint/typecheck/unit/build passed; production smoke not performed
+v1.47 status: DONE / PASS locally - repeatable E2E-only admin/non-admin auth and idempotent unverified smoke product seed data were added; local Playwright/Chrome verified unauthenticated redirect without Auth.js 500, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure; production smoke not performed
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 ```
 
 Primary current documents:
@@ -105,6 +109,8 @@ Primary current documents:
 - `docs/release-evidence-v1.43.md`
 - `docs/release-evidence-admin-product-review-api-foundation.md`
 - `docs/release-evidence-admin-product-review-ui-workflow-polish.md`
+- `docs/release-evidence-admin-product-review-browser-smoke.md`
+- `docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -123,8 +129,9 @@ Historical planning documents remain useful for context, but they should not ove
 Evidence boundary:
 
 - Local validation is supported by terminal output.
-- v1.45 fresh local validation passed on 2026-06-15: lint, typecheck, 114 unit-test files / 1170 tests, and build after unsandboxed rerun. The sandboxed build compiled then failed with `spawn EPERM`.
-- v1.45 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
+- v1.47 local browser smoke passed on 2026-06-16 using Playwright headless Chrome with the system Chrome executable. It verified unauthenticated `/admin/products` redirects without Auth.js 500, non-admin blocking, admin access, list/search/filter behavior, `verificationStatus` update and revert, public product visibility regression, console/network checks, and no browser-visible secret exposure.
+- v1.47 seed/auth prerequisites are repeatable and local/E2E scoped: E2E-only admin/non-admin credential providers remain gated by `APP_ENV=test` plus `E2E_TEST_AUTH=true`, and the admin smoke product is seeded idempotently with `verificationStatus="unverified"`.
+- v1.47 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
 - Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, `/api/health`, browser console/network, Vercel runtime logs, MongoDB read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed.
 - Unknown production smoke evidence fields are recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.

@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 
-import { E2E_USER_EMAIL } from "./test-data";
+import { E2E_ADMIN_USER_EMAIL, E2E_USER_EMAIL } from "./test-data";
 
 type CsrfResponse = {
   csrfToken?: string;
@@ -12,7 +12,11 @@ type SessionResponse = {
   };
 };
 
-export async function loginAsE2EUser(page: Page) {
+async function loginWithE2EProvider(
+  page: Page,
+  providerId: "e2e-admin-test" | "e2e-test",
+  expectedEmail: string,
+) {
   const csrfResponse = await page.request.get("/api/auth/csrf");
 
   expect(csrfResponse.ok()).toBe(true);
@@ -22,7 +26,7 @@ export async function loginAsE2EUser(page: Page) {
   expect(csrf.csrfToken).toBeTruthy();
 
   const signInResponse = await page.request.post(
-    "/api/auth/callback/e2e-test",
+    `/api/auth/callback/${providerId}`,
     {
       form: {
         callbackUrl: "/dashboard",
@@ -46,7 +50,11 @@ export async function loginAsE2EUser(page: Page) {
 
       return session.user?.email ?? null;
     })
-    .toBe(E2E_USER_EMAIL);
+    .toBe(expectedEmail);
+}
+
+export async function loginAsE2EUser(page: Page) {
+  await loginWithE2EProvider(page, "e2e-test", E2E_USER_EMAIL);
 
   await page.goto("/dashboard");
 
@@ -57,4 +65,8 @@ export async function loginAsE2EUser(page: Page) {
   await expect(
     page.getByRole("heading", { name: "SkinWise overview" }),
   ).toBeVisible();
+}
+
+export async function loginAsE2EAdmin(page: Page) {
+  await loginWithE2EProvider(page, "e2e-admin-test", E2E_ADMIN_USER_EMAIL);
 }

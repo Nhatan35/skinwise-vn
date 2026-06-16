@@ -11,6 +11,8 @@ import type { AuthEnvironment } from "@/modules/auth/types";
 function authEnv(overrides: Partial<AuthEnvironment> = {}): AuthEnvironment {
   return {
     E2E_TEST_AUTH: false,
+    E2E_TEST_ADMIN_EMAIL: "e2e-admin@skinwise.test",
+    E2E_TEST_ADMIN_NAME: "SkinWise E2E Admin",
     E2E_TEST_USER_EMAIL: "e2e-user@skinwise.test",
     E2E_TEST_USER_NAME: "SkinWise E2E User",
     ...overrides,
@@ -56,6 +58,7 @@ describe("Auth.js edge-safe config", () => {
     expect(providerIds(providers)).not.toContain("fake");
     expect(providerIds(providers)).not.toContain("mock");
     expect(providerIds(providers)).not.toContain("e2e-test");
+    expect(providerIds(providers)).not.toContain("e2e-admin-test");
   });
 
   it("enables the E2E test credentials provider only in test mode", () => {
@@ -65,7 +68,10 @@ describe("Auth.js edge-safe config", () => {
     });
 
     expect(hasE2ETestCredentialsProvider(input)).toBe(true);
-    expect(providerIds(getAuthProviders(input))).toEqual(["e2e-test"]);
+    expect(providerIds(getAuthProviders(input))).toEqual([
+      "e2e-test",
+      "e2e-admin-test",
+    ]);
   });
 
   it.each(["development", "production"])(
@@ -78,6 +84,9 @@ describe("Auth.js edge-safe config", () => {
 
       expect(hasE2ETestCredentialsProvider(input)).toBe(false);
       expect(providerIds(getAuthProviders(input))).not.toContain("e2e-test");
+      expect(providerIds(getAuthProviders(input))).not.toContain(
+        "e2e-admin-test",
+      );
     },
   );
 
@@ -89,7 +98,7 @@ describe("Auth.js edge-safe config", () => {
       }),
     );
 
-    expect(providerIds(providers)).toEqual(["e2e-test"]);
+    expect(providerIds(providers)).toEqual(["e2e-test", "e2e-admin-test"]);
   });
 
   it("keeps Google and E2E providers independent when both are configured", () => {
@@ -102,7 +111,11 @@ describe("Auth.js edge-safe config", () => {
       }),
     );
 
-    expect(providerIds(providers)).toEqual(["google", "e2e-test"]);
+    expect(providerIds(providers)).toEqual([
+      "google",
+      "e2e-test",
+      "e2e-admin-test",
+    ]);
   });
 
   it("returns the stable E2E user from the test credentials provider", async () => {
@@ -133,6 +146,37 @@ describe("Auth.js edge-safe config", () => {
       id: "e2e-user",
       email: "custom-e2e@skinwise.test",
       name: "Custom E2E User",
+    });
+  });
+
+  it("returns the stable E2E admin from the admin test credentials provider", async () => {
+    const providers = getAuthProviders(
+      authEnv({
+        APP_ENV: "test",
+        E2E_TEST_ADMIN_EMAIL: "custom-admin@skinwise.test",
+        E2E_TEST_ADMIN_NAME: "Custom E2E Admin",
+        E2E_TEST_AUTH: true,
+      }),
+    );
+    const provider = providers.find(
+      (item) => (item as { id?: string }).id === "e2e-admin-test",
+    );
+
+    expect(provider).toBeDefined();
+
+    const user = await (
+      provider as unknown as {
+        authorize: (
+          credentials: Record<string, unknown>,
+          request: Request,
+        ) => Promise<unknown>;
+      }
+    ).authorize({}, new Request("http://localhost"));
+
+    expect(user).toEqual({
+      id: "e2e-admin",
+      email: "custom-admin@skinwise.test",
+      name: "Custom E2E Admin",
     });
   });
 

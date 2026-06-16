@@ -14,33 +14,34 @@ Production demo:
 
 ## Current Status
 
-- Current Portfolio Release: **MVP v1.45 - Admin Product Review UI & Workflow Polish**
+- Current Portfolio Release: **MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix**
 - Core MVP: **Complete**
 - Current Phase: **Post-MVP controlled product improvement**
-- Portfolio demo readiness: **Yes, with local validation evidence and documented production-evidence boundaries**
-- Production readiness: **Not claimed for v1.45** because no fresh production smoke test was performed against the deployed URL during this milestone
-- Latest fresh v1.45 local validation: **PASS for lint, typecheck, unit tests, and build on 2026-06-15**
-- Release evidence: `docs/release-evidence-admin-product-review-ui-workflow-polish.md`
+- Portfolio demo readiness: **Yes for local admin review demo** based on v1.47 repeatable local browser smoke; production readiness is not claimed
+- Production readiness: **Not claimed for v1.47** because no fresh production smoke test was performed against the deployed URL during this milestone
+- Latest fresh v1.47 local validation: **PASS for lint, typecheck, unit tests, build, targeted admin browser smoke, and full E2E**
+- Release evidence: `docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md`
 - Historical production smoke/monitoring evidence: **PASS, user-reported** from the earlier production verification baseline; screenshots, deployment id, browser/version, device/OS, and exact verification metadata are not stored in this repository
 - Portfolio media evidence: screenshots and demo video remain optional artifacts and are not claimed unless captured separately
 - Real production AI provider integration: **not verified**; local/demo AI behavior remains mock/provider-abstraction based
 
-Fresh v1.45 validation:
+Fresh v1.47 validation:
 
 | Check | Command | Status | Notes |
 |---|---|---|---|
-| Install | `npm ci` | NOT RUN | Not part of v1.45 scope; v1.43 install evidence remains PASS. |
+| Install | `npm ci` | NOT RUN | Existing `node_modules` was present; not rerun for this smoke/evidence task. |
+| Browser smoke | Playwright headless Chrome against `/admin/products` | PASS | Local E2E smoke verified unauth redirect, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure. |
 | Lint | `npm run lint` | PASS | ESLint completed successfully. |
 | Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
-| Unit tests | `npm run test` | PASS | 114 test files / 1170 tests passed. |
-| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; unsandboxed rerun completed successfully and listed `/admin/products` plus the admin API routes. |
-| E2E | `npm run test:e2e` | NOT RUN | Not part of v1.45 scope; v1.43 E2E evidence remains PASS. |
-| Audit | `npm audit` | NOT RUN | Not part of v1.44 scope; v1.43 audit evidence remains PASS. |
-| Production audit | `npm audit --omit=dev` | NOT RUN | Not part of v1.44 scope; v1.43 production audit evidence remains PASS. |
+| Unit tests | `npm run test` | PASS | 114 test files / 1171 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun completed successfully and listed `/admin/products` plus the admin API routes. |
+| E2E | `npm run test:e2e` | PASS | 34 Playwright tests passed with local Chrome path. |
+| Audit | `npm audit` | NOT RUN | Optional for this smoke/evidence task. |
+| Production audit | `npm audit --omit=dev` | NOT RUN | Optional for this smoke/evidence task. |
 
 Deferred / not in MVP:
 
-- Fresh production smoke test on deployed URL for v1.45: **Deferred / not verified**
+- Fresh production smoke test on deployed URL for v1.47: **Deferred / not verified**
 - Full admin dashboard UI: **Deferred / not implemented**; v1.45 adds only a lightweight direct admin review page
 - Admin product create/edit full CRUD and hard delete: **Deferred / not implemented**
 - Real OpenAI/Gemini provider integration: **Deferred / not verified**
@@ -49,7 +50,8 @@ Deferred / not in MVP:
 
 Evidence boundary:
 
-- v1.45 automated local evidence is supported by command output from this workspace.
+- v1.47 automated local evidence is supported by command output and Playwright/Chrome browser output from this workspace.
+- v1.47 browser smoke fixed the repeatable local admin review prerequisites using E2E-only admin/non-admin accounts and a dedicated `unverified` smoke product. Production smoke was not performed.
 - Production readiness is not claimed unless a fresh deployed-URL smoke test is performed and recorded.
 - Historical production PASS status remains user-reported and should be supplemented with screenshots, deployment ids, browser/network notes, or sanitized logs if strict audit traceability is required.
 - No real secrets, OAuth tokens, database URIs, or private user data should be committed, uploaded, documented, or screenshotted.
@@ -105,6 +107,8 @@ MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable admin/non-admin E2E auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
@@ -161,6 +165,26 @@ MVP v1.43 is a release evidence and validation cleanup milestone. It refreshes R
 
 MVP v1.45 is a lightweight Admin Product Review UI and workflow polish milestone. It adds the protected `/admin/products` route, server-side admin guard, admin product client, all-status review list, verificationStatus update workflow, and loading/empty/error/unauthorized states on top of the v1.44 API foundation. It does not add a full admin dashboard, product create/edit CRUD, hard delete, `isActive`, marketplace/payment, image upload, real AI provider work, or production-ready claims.
 
+MVP v1.46 is an admin product review browser smoke and evidence milestone. It
+opened local `/admin/products` in headless Chrome and recorded real browser,
+console, network, and validation evidence. Local browser smoke found that the
+unauthenticated admin redirect reaches Auth.js sign-in but the sign-in page
+returns 500 because local auth configuration is missing `AUTH_SECRET`.
+Authenticated admin/non-admin product review workflows were blocked by missing
+repeatable demo accounts and all-status product data. Production readiness is
+not claimed.
+
+MVP v1.47 is an admin product review repeatable smoke-data and local auth
+configuration fix milestone. It keeps E2E-only credentials-provider auth gated
+to `APP_ENV=test` plus `E2E_TEST_AUTH=true`, adds a repeatable E2E admin user,
+keeps the repeatable E2E non-admin user, seeds a dedicated `unverified` admin
+smoke product idempotently, and verifies `/admin/products` with Playwright
+headless Chrome. Local admin review smoke passes, including unauthenticated
+redirect without Auth.js 500, non-admin block, admin list/search/filter,
+`verificationStatus` update/revert, public visibility regression, console and
+network checks, and browser-visible secret checks. Production smoke was not
+performed, so production-ready status is not claimed.
+
 The current phase is post-MVP validation cleanup. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are not claimed unless actual files are captured separately.
 
 ## Key Features
@@ -188,6 +212,7 @@ The current phase is post-MVP validation cleanup. The Portfolio Evidence Package
 Implemented UI routes:
 
 - `/`
+- `/admin/products`
 - `/dashboard`
 - `/onboarding/skin-profile`
 - `/skin-profile`
@@ -641,8 +666,10 @@ MVP Product Match Explainability Polish: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
-Decision: READY for portfolio/demo/interview at MVP level
-Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.45 without fresh deployed-URL smoke evidence
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable admin/non-admin E2E auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+Decision: READY for core MVP portfolio/demo/interview; READY for local admin review portfolio demo based on v1.47 local browser smoke
+Production-ready decision: NOT CLAIMED for v1.47 without fresh deployed-URL smoke evidence
 Current phase: Post-MVP controlled product improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
 ```
@@ -656,5 +683,20 @@ v1.44 admin API foundation. It supports direct URL access, search/status
 filtering, all-status product review, `verificationStatus` updates, and
 loading/empty/error/unauthorized states without full admin CRUD, hard delete,
 `isActive`, or public visibility changes.
+
+`v1.46 - Admin Product Review Browser Smoke & Evidence` records local
+Playwright/Chrome browser evidence for `/admin/products`. It found a local
+Auth.js `MissingSecret` sign-in blocker and could not verify authenticated
+admin/non-admin product review workflows without repeatable demo account/data.
+Production/deployed URL smoke was not performed and production-ready status is
+not claimed.
+
+`v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix` resolves
+the repeatable local smoke blockers by adding E2E-only admin/non-admin auth
+configuration, idempotent smoke product seed data with one `unverified` product,
+and Playwright coverage for unauthenticated, non-admin, admin, update/revert,
+public visibility, console/network, and secret-exposure checks. This is local
+browser smoke only; deployed URL smoke remains not performed and production-ready
+status is not claimed.
 
 Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.42 - Routine Builder Saved Product Decision Context` shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

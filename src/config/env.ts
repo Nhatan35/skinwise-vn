@@ -3,6 +3,8 @@ import "server-only";
 import { z } from "zod";
 
 const DEFAULT_LOCAL_URL = "http://localhost:3000";
+const DEFAULT_E2E_TEST_ADMIN_EMAIL = "e2e-admin@skinwise.test";
+const DEFAULT_E2E_TEST_ADMIN_NAME = "SkinWise E2E Admin";
 const DEFAULT_E2E_TEST_USER_EMAIL = "e2e-user@skinwise.test";
 const DEFAULT_E2E_TEST_USER_NAME = "SkinWise E2E User";
 const APP_ENV_VALUES = ["development", "test", "production"] as const;
@@ -44,6 +46,11 @@ const envSchema = z
     AI_API_KEY: z.string().optional(),
     AI_MODEL: z.string().optional(),
     E2E_TEST_AUTH: e2eTestAuthSchema,
+    E2E_TEST_ADMIN_EMAIL: z
+      .string()
+      .email()
+      .default(DEFAULT_E2E_TEST_ADMIN_EMAIL),
+    E2E_TEST_ADMIN_NAME: z.string().min(1).default(DEFAULT_E2E_TEST_ADMIN_NAME),
     E2E_TEST_USER_EMAIL: z
       .string()
       .email()

@@ -1,6 +1,6 @@
 # Release Plan - SkinWise VN Current MVP Status
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Current Release Chain
 
@@ -20,9 +20,11 @@ MVP v1.16 through MVP v1.42: preserved in `docs/00-source-of-truth.md`
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 ```
 
-The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.45 adds a lightweight admin product review UI on top of the v1.44 API foundation without full admin dashboard scope, marketplace/payment, product hard delete, or production-ready claims. The full current release chain is maintained in `docs/00-source-of-truth.md`.
+The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.47 resolves the repeatable local smoke blockers found in v1.46 without adding production bypasses or feature scope: E2E-only admin/non-admin auth, idempotent `unverified` admin smoke product data, and local Playwright browser smoke for `/admin/products` now pass. Production-ready status is not claimed because deployed URL smoke was not performed. The full current release chain is maintained in `docs/00-source-of-truth.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -126,6 +128,39 @@ npm audit --omit=dev: PASS - found 0 vulnerabilities
 Production smoke on deployed URL: NOT RUN for v1.43
 ```
 
+Fresh v1.46 admin browser smoke evidence:
+
+```txt
+Evidence date: 2026-06-15
+Environment: Local Windows / PowerShell
+Browser: Playwright headless Google Chrome 149.0.7827.104
+App URL: http://localhost:3000
+Unauthenticated /admin/products browser smoke: FAIL - redirected to Auth.js sign-in, then sign-in returned 500 due local MissingSecret
+Admin/non-admin browser smoke: BLOCKED - no repeatable demo accounts available
+verificationStatus update smoke: BLOCKED - no admin account or safe all-status demo product data available
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 114 files / 1170 tests
+npm run build: PASS after unsandboxed rerun; sandboxed attempt failed with spawn EPERM
+Production smoke on deployed URL: NOT RUN for v1.46
+```
+
+Fresh v1.47 admin browser smoke evidence:
+
+```txt
+Evidence date: 2026-06-16
+Environment: Local Windows / PowerShell
+Browser: Playwright headless Google Chrome via system Chrome executable
+App URL: http://localhost:3000
+Unauthenticated /admin/products browser smoke: PASS - redirected to Auth.js sign-in without critical Auth.js 500
+Non-admin browser smoke: PASS - regular E2E user saw admin-access-required state and API returned 403
+Admin browser smoke: PASS - E2E admin loaded `/admin/products`, saw the smoke product, searched, filtered, updated status, and reverted it
+Public visibility regression: PASS - public `/api/products` did not expose unverified products or the admin smoke product
+Console/network/security checks: PASS - no serious console errors, no critical admin-flow 500s, and no browser-visible secret/env exposure observed
+Full E2E: PASS - 34 Playwright tests passed
+Production smoke on deployed URL: NOT RUN for v1.47
+```
+
 Validation notes:
 
 ```txt
@@ -161,8 +196,10 @@ Audit cleanup and evidence sync decision: v1.15.1 complete
 Release evidence and validation cleanup decision: v1.43 complete
 Admin product review API foundation decision: v1.44 complete
 Admin product review UI workflow decision: v1.45 complete
+Admin product review browser smoke decision: v1.46 complete as evidence, mixed result; local auth/data blockers documented
+Admin product review repeatable smoke decision: v1.47 complete locally; auth/data blockers resolved for local E2E smoke
 Current phase: Post-MVP controlled product improvement
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -192,7 +229,7 @@ Do not expand scope before portfolio submission.
 
 ### Post-MVP candidates
 
-- Admin product review browser smoke and deployment evidence for the v1.45 direct admin review page.
+- Deployed admin product review smoke verification using a safe admin account and deployed URL evidence.
 - Admin ingredient management.
 - More complete account deletion automation.
 - Stronger observability and error tracking.
@@ -203,7 +240,7 @@ Do not expand scope before portfolio submission.
 Recommended next task:
 
 ```txt
-MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+MVP v1.48 - Deployed Admin Product Review Smoke Verification
 ```
 
-Keep this optional and scoped: verify the existing v1.45 admin review page with a real admin account in browser/production only if credentials and deployment evidence are available, avoid full CRUD unless explicitly scheduled, and continue not to claim production-ready status until fresh deployed-URL smoke evidence is recorded.
+Keep this optional and scoped: rerun the existing v1.45/v1.47 admin review workflow against a deployed URL with safe demo credentials, record browser/network/console evidence, avoid full CRUD unless explicitly scheduled, and continue not to claim production-ready status until fresh deployed-URL smoke evidence is recorded.

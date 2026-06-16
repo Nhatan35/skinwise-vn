@@ -1,6 +1,6 @@
 # Current Sprint Plan - SkinWise VN MVP
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Current Phase
 
@@ -12,47 +12,50 @@ Status:
 
 ```txt
 Product implementation: COMPLETE at MVP level
-Latest product behavior milestone: MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS
-Current portfolio release: MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS
+Latest product behavior milestone: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally
+Current portfolio release: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally
 Current active milestone: None
 Current active milestone status: None
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 ```
 
 Evidence boundary:
 
 ```txt
-v1.45 local validation: PASS
-v1.45 production smoke on deployed URL: NOT RUN
+v1.47 local validation: PASS for targeted unit tests, lint, typecheck, unit tests, build after elevated rerun, targeted admin browser smoke, and full E2E
+v1.47 local browser smoke: PASS - unauthenticated redirect, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and secret-exposure checks passed
+v1.47 production smoke on deployed URL: NOT RUN
 Historical production smoke/monitoring: PASS, user-reported
-Production-ready claim for v1.45: NOT CLAIMED
+Production-ready claim for v1.47: NOT CLAIMED
 Screenshots/demo video: NOT VERIFIED / NOT RECORDED
 Real external AI provider integration: NOT VERIFIED
 ```
 
 ## 2. Objective
 
-Add a lightweight admin product review UI and workflow on top of the v1.44
-admin API foundation for portfolio, mentor review, and controlled post-MVP
-product maintenance.
+Resolve the v1.46 repeatable local smoke blockers for the v1.45 admin product
+review UI, then verify `/admin/products` through local browser automation with
+strict evidence.
 
-This milestone adds a protected direct admin review page and admin product
-client only. It does not add full admin dashboard scope, full product CRUD,
-hard delete, `isActive`, dependencies, environment changes, or production-ready
-claims.
+This milestone adds E2E-only auth/test-data support and smoke evidence. It does
+not add full admin dashboard scope, full product CRUD, hard delete, `isActive`,
+production auth bypasses, production credentials, or production-ready claims.
 
 ## 3. Implementation Scope
 
 ```txt
 [x] Inspected repository structure, package scripts, routes, API handlers, env schema, product/admin modules, navigation, and tests.
 [x] Checked dirty Git state before editing.
-[x] Added `/admin/products` with server-side admin guard.
-[x] Added `"/admin/:path*"` proxy matcher coverage.
-[x] Added client-safe admin product API helper.
-[x] Added admin product review UI with list, search, status filter, status update, and loading/empty/error/unauthorized states.
-[x] Added unit/source-level tests.
-[x] Created docs/release-evidence-admin-product-review-ui-workflow-polish.md.
-[x] Ran lint, typecheck, unit tests, and build.
+[x] Confirmed `/admin/products`, server-side admin guard, admin client, and `"/admin/:path*"` proxy matcher from v1.45.
+[x] Added repeatable E2E-only admin and non-admin auth provider configuration gated by `APP_ENV=test` and `E2E_TEST_AUTH=true`.
+[x] Added idempotent E2E smoke account/profile seed data using the existing AppUserProfile role convention.
+[x] Added a dedicated idempotent `unverified` admin smoke product.
+[x] Opened local `/admin/products` with Playwright headless Chrome.
+[x] Verified unauthenticated redirect behavior without critical Auth.js 500.
+[x] Verified non-admin block and admin access/list/search/filter/update/revert behavior.
+[x] Verified public product visibility regression, console, network, and secret-exposure checks.
+[x] Created docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md.
+[x] Ran targeted unit tests, lint, typecheck, targeted admin smoke, and full E2E.
 ```
 
 Explicitly unchanged:
@@ -66,10 +69,9 @@ Routine Safety logic
 Routine Coverage logic
 Saved Products behavior
 Routine Builder payload behavior
-Auth provider behavior
-Environment validation logic
+Production auth behavior
 Package dependencies
-Product seed baseline
+Main product seed baseline
 Ingredient seed baseline
 AI provider behavior
 Image upload behavior
@@ -83,29 +85,30 @@ Medical recommendation behavior
 
 | Check | Command | Status | Notes |
 |---|---|---|---|
-| Install | `npm ci` | NOT RUN | Not part of v1.45 scope; v1.43 install evidence remains PASS. |
+| Install | `npm ci` | NOT RUN | Existing `node_modules` was present; not rerun for this smoke/evidence task. |
+| Browser smoke | Playwright headless Chrome | PASS | Local `/admin/products` verified unauthenticated redirect, non-admin block, admin list/search/filter/update/revert, public visibility regression, console/network, and no browser-visible secret exposure. |
 | Lint | `npm run lint` | PASS | ESLint completed successfully. |
-| Typecheck | `npm run typecheck` | PASS | Initial test comparison issue was fixed; rerun passed. |
-| Unit tests | `npm run test` | PASS | 114 test files / 1170 tests passed. |
-| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; unsandboxed rerun completed successfully and listed `/admin/products`. |
-| E2E | `npm run test:e2e` | NOT RUN | Not part of v1.45 scope. |
-| Audit | `npm audit` | NOT RUN | Not part of v1.45 scope. |
-| Production audit | `npm audit --omit=dev` | NOT RUN | Not part of v1.45 scope. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 114 test files / 1171 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun completed successfully and listed `/admin/products`. |
+| E2E | `npm run test:e2e` | PASS | 34 Playwright tests passed with local Chrome path. |
+| Audit | `npm audit` | NOT RUN | Optional for this smoke/evidence task. |
+| Production audit | `npm audit --omit=dev` | NOT RUN | Optional for this smoke/evidence task. |
 
 E2E prerequisites:
 
 ```txt
-Not checked for v1.45 because E2E/database validation was outside this scope.
+Checked for v1.47 through `npm run test:e2e` with E2E-only auth and seeded smoke data.
 ```
 
 ## 5. Current Task Decision
 
 ```txt
-MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS
-Ready for portfolio demo: Yes, with evidence boundaries
-Ready for production deployment: Conditional / not claimed as production-ready
-Reason: fresh local validation passed, but no fresh production smoke test was performed against the deployed URL for v1.45
-Next recommended milestone: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally
+Ready for portfolio demo: Yes for local admin review demo
+Ready for production deployment: No / not claimed as production-ready
+Reason: local admin review browser smoke passed with repeatable test data, but no deployed URL smoke was performed
+Next recommended milestone: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 ```
 
 No new clinical, AI, recommendation-engine, dashboard, schema, auth,

@@ -1,6 +1,6 @@
 # Portfolio Evidence Package - SkinWise VN
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Purpose
 
@@ -43,9 +43,10 @@ Do not present the app as:
 | Actual screenshot files | Not verified | This package does not claim screenshots exist in the repository. |
 | Demo video file | Not recorded | This package does not claim a demo video exists. |
 | CV/resume summary | Drafted | See section 5. |
-| Latest local validation | PASS | Recorded from MVP v1.43 on 2026-06-15. |
+| Latest local validation | PASS | v1.47 local evidence records targeted unit tests, lint, typecheck, unit tests, build after elevated rerun, admin browser smoke, and full E2E passing. |
+| Admin product review browser smoke | PASS locally | v1.47 local Playwright/Chrome smoke verified unauthenticated redirect without Auth.js 500, non-admin block, admin list/search/filter/update/revert, public visibility regression, console/network checks, and no browser-visible secret exposure. |
 | Historical production smoke/monitoring | PASS, user-reported | Recorded from the stable MVP baseline on 2026-06-04. |
-| Current task app validation | PASS | v1.43 install, lint, typecheck, unit tests, build, E2E, full audit, and production-only audit passed locally after required unsandboxed reruns for sandbox `spawn EPERM`. |
+| Current task app validation | PASS locally | v1.47 repeatable local smoke prerequisites and admin product review browser smoke passed; production smoke was not performed. |
 
 No new production smoke, screenshot, video, traffic, performance, or user-metric evidence is claimed by this file.
 
@@ -69,7 +70,7 @@ Bullet version:
 - Designed rule-based Product Match and deterministic Routine Safety Analysis so guidance stays explainable, testable, and non-medical.
 - Used an AI-provider abstraction as an explanation/fallback layer rather than a safety decision-maker.
 - Documented release evidence, demo flow, portfolio case study, safety boundaries, and post-MVP backlog for recruiter and interview review.
-- Latest validation evidence records install, lint, typecheck, 110 test files / 1134 tests, production build, 31/31 Playwright E2E tests, full npm audit, and production-only npm audit passing on 2026-06-15.
+- Latest v1.47 validation evidence records repeatable local admin browser smoke passing with Playwright/Chrome, including admin/non-admin E2E auth, a dedicated `unverified` smoke product, update/revert coverage, public visibility regression, console/network checks, and no browser-visible secret exposure. Production/deployed URL smoke was not performed.
 
 ## 6. Interview Narrative
 
@@ -165,8 +166,9 @@ Strict audit artifacts such as screenshots, deployment ids, browser logs, and sa
 Current task validation:
 
 ```txt
-MVP v1.43 release evidence and validation cleanup.
-Product validation commands: PASS.
+MVP v1.47 admin product review repeatable smoke data and auth config fix.
+Product validation commands: PASS for targeted unit tests, lint, typecheck, unit tests, build after elevated rerun, targeted admin browser smoke, and full E2E.
+Browser smoke: PASS locally - unauthenticated redirect, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure verified.
 Production smoke test: Not run.
 Screenshot capture: Not run.
 Demo video recording: Not run.
@@ -181,3 +183,5 @@ Demo video recording: Not run.
 - Demo data checklist: `docs/ai-coding/07-demo-data-and-demo-script.md`
 - Final release checklist: `docs/final-release-checklist.md`
 - Post-MVP backlog: `docs/post-mvp-backlog.md`
+- Admin product review browser smoke evidence: `docs/release-evidence-admin-product-review-browser-smoke.md`
+- Admin product review repeatable smoke evidence: `docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md`

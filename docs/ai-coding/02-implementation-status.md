@@ -1,6 +1,6 @@
 # Implementation Status - SkinWise VN MVP
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Current Phase
 
@@ -55,9 +55,11 @@ MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
 MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 ```
 
-SkinWise VN is ready for portfolio/demo/interview use as an MVP with documented evidence boundaries. The core user journey is implemented, v1.43 refreshed local validation evidence, production smoke/monitoring remains historical and user-reported, and portfolio/demo documentation has been refreshed. v1.35 restored full E2E PASS after v1.34. v1.37 connects Product Detail to Ingredient Library searches, Ingredient Detail to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links. v1.42 shows existing saved-product decision metadata in Routine Builder. v1.43 does not add product behavior and does not claim fresh production readiness. v1.44 adds an admin-only Product Review API foundation using AppUserProfile ADMIN authorization without full admin UI or product hard delete. v1.45 adds a lightweight protected `/admin/products` admin review UI on top of that API foundation without full admin dashboard or CRUD scope. v1.24 seed data closeout remains deferred and not done because its own build/E2E validation timed out.
+SkinWise VN is ready for core MVP portfolio/demo/interview use with documented evidence boundaries. The core user journey is implemented, v1.43 refreshed local validation evidence, production smoke/monitoring remains historical and user-reported, and portfolio/demo documentation has been refreshed. v1.35 restored full E2E PASS after v1.34. v1.37 connects Product Detail to Ingredient Library searches, Ingredient Detail to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library through lightweight cross-links. v1.42 shows existing saved-product decision metadata in Routine Builder. v1.43 does not add product behavior and does not claim fresh production readiness. v1.44 adds an admin-only Product Review API foundation using AppUserProfile ADMIN authorization without full admin UI or product hard delete. v1.45 adds a lightweight protected `/admin/products` admin review UI on top of that API foundation without full admin dashboard or CRUD scope. v1.46 records real local browser smoke for that route and documents local auth/data blockers before any production-ready claim. v1.47 fixes those repeatable local smoke blockers through E2E-only admin/non-admin auth, idempotent unverified smoke product seed data, and local Playwright admin review smoke coverage; deployed production smoke remains not performed. v1.24 seed data closeout remains deferred and not done because its own build/E2E validation timed out.
 
 Current status:
 
@@ -65,7 +67,7 @@ Current status:
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.45 - Admin Product Review UI & Workflow Polish
+Latest completed scoped task: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
 v1.24 - Seed Data Quality Expansion Round 2: NOT DONE / VALIDATION BLOCKED
 Current active milestone: None
 Current phase: Post-MVP controlled product improvement
@@ -98,7 +100,9 @@ v1.42 status: DONE / PASS - Routine Builder Saved Product Decision Context shows
 v1.43 status: DONE / PASS - release evidence and validation cleanup refreshed current status docs, captured fresh local validation, verified audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product behavior changes
 v1.44 status: DONE / PASS - admin-only Product Review API foundation added AppUserProfile ADMIN authorization, all-status admin product list, verificationStatus update route, validation, tests, and docs without full admin UI, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
 v1.45 status: DONE / PASS - lightweight Admin Product Review UI added protected `/admin/products`, server-side admin guard, admin product client, all-status product review list, verificationStatus update workflow, loading/empty/error/unauthorized states, tests, and release evidence without full admin dashboard, full CRUD, hard delete, isActive, marketplace/payment, image upload, or production-ready claims
-Recommended next task: MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+v1.46 status: DONE / MIXED - local Playwright/Chrome smoke for `/admin/products` found Auth.js sign-in 500 caused by local `MissingSecret`; admin/non-admin product review workflow was blocked by missing repeatable demo accounts and all-status product data; lint/typecheck/unit/build passed; production smoke not performed
+v1.47 status: DONE / PASS locally - repeatable E2E-only admin/non-admin auth, idempotent unverified smoke product data, local Playwright admin review smoke, full E2E, lint, and typecheck passed; production smoke not performed
+Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video intentionally skipped
 ```
@@ -108,6 +112,7 @@ Evidence boundary:
 - Local validation is supported by terminal output.
 - v1.43 fresh local validation passed: Node v24.14.0, npm 11.14.1, `npm ci`, lint, typecheck, 110 unit-test files / 1134 tests, build after unsandboxed rerun, full E2E with 31 passed after unsandboxed rerun, `npm audit`, and `npm audit --omit=dev`.
 - v1.43 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
+- v1.47 browser smoke was local only. It passed for `/admin/products` with repeatable E2E admin/non-admin auth, update/revert coverage, public visibility regression, console/network checks, and no browser-visible secret exposure. Production/deployed URL smoke was not verified.
 - Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Screenshots, deployment ids, browser logs, and Vercel logs should be stored separately if strict evidence is required.
 - The Portfolio Evidence Package documentation task does not claim new app validation, production smoke, screenshots, demo video, traffic, performance, or user-metric evidence.
@@ -474,11 +479,12 @@ Completed v1.23 scope:
 - Manual Browser & Production Smoke Verification is now DONE / PASS based on user-reported production checks; manual browser deletion smoke for v1.23 remains separate and was not performed in v1.23.
 - Avoided schema changes, shared catalogue deletion, OAuth/Google account deletion, new collections, new dependencies, admin scope, AI-provider changes, image upload, skin scoring, diagnosis logic, and treatment advice.
 - v1.45 intentionally avoided full admin dashboard UI, product create/edit full CRUD, product hard delete, `isActive`, marketplace/payment, image upload, real AI provider work, diagnosis logic, and production-ready claims.
+- v1.46 intentionally avoided feature changes and recorded browser smoke/evidence only. It documented local Auth.js `MissingSecret`, missing repeatable admin/non-admin demo account data, and no production-ready claim.
 
 Recommended next task:
 
 ```txt
-MVP v1.46 - Admin Product Review Browser Smoke & Deployment Evidence
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
 ```
 
 Portfolio evidence tasks:
@@ -490,7 +496,7 @@ Portfolio evidence tasks:
 
 Optional later product scope:
 
-- Admin product review browser smoke and deployment evidence for the v1.45 direct admin review page.
+- Admin product review repeatable smoke data and local auth prerequisite cleanup for the v1.45 direct admin review page.
 - Admin ingredient management.
 - More complete account deletion workflow.
 - Better production observability.

@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 import {
+  E2E_ADMIN_USER_EMAIL,
+  E2E_ADMIN_USER_NAME,
   E2E_BASE_URL,
   E2E_MONGODB_URI,
   E2E_USER_EMAIL,
@@ -21,6 +23,8 @@ const safeE2EEnv: Record<string, string> = {
   AI_API_KEY: "",
   AI_MODEL: "",
   E2E_TEST_AUTH: "true",
+  E2E_TEST_ADMIN_EMAIL: E2E_ADMIN_USER_EMAIL,
+  E2E_TEST_ADMIN_NAME: E2E_ADMIN_USER_NAME,
   E2E_TEST_USER_EMAIL: E2E_USER_EMAIL,
   E2E_TEST_USER_NAME: E2E_USER_NAME,
   CLOUDINARY_CLOUD_NAME: "",
@@ -55,7 +59,17 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+          ? {
+              launchOptions: {
+                executablePath:
+                  process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+              },
+            }
+          : {}),
+      },
     },
   ],
   webServer: {

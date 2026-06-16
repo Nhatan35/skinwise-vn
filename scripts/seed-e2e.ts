@@ -1,5 +1,9 @@
 import { main as seedDemoData } from "./seed";
 import {
+  ADMIN_SMOKE_PRODUCT,
+  E2E_ADMIN_USER_ID,
+  E2E_ADMIN_USER_EMAIL,
+  E2E_ADMIN_USER_NAME,
   E2E_BASE_URL,
   E2E_MONGODB_URI,
   E2E_USER_EMAIL,
@@ -32,6 +36,8 @@ function configureSafeE2EEnvironment() {
   process.env.AI_API_KEY = "";
   process.env.AI_MODEL = "";
   process.env.E2E_TEST_AUTH = "true";
+  process.env.E2E_TEST_ADMIN_EMAIL = E2E_ADMIN_USER_EMAIL;
+  process.env.E2E_TEST_ADMIN_NAME = E2E_ADMIN_USER_NAME;
   process.env.E2E_TEST_USER_EMAIL = E2E_USER_EMAIL;
   process.env.E2E_TEST_USER_NAME = E2E_USER_NAME;
   process.env.CLOUDINARY_CLOUD_NAME = "";
@@ -89,13 +95,17 @@ async function resetDeterministicE2EUserData() {
       collections.getRateLimitsCollection(),
     ]);
 
+    const e2eUserIds = [E2E_USER_ID, E2E_ADMIN_USER_ID];
+
     await Promise.all([
-      routinesCollection.deleteMany({ userId: E2E_USER_ID }),
-      routineLogsCollection.deleteMany({ userId: E2E_USER_ID }),
-      routineAnalysesCollection.deleteMany({ userId: E2E_USER_ID }),
-      skinJournalsCollection.deleteMany({ userId: E2E_USER_ID }),
-      savedProductsCollection.deleteMany({ userId: E2E_USER_ID }),
-      rateLimitsCollection.deleteMany({ key: `routine_analysis:${E2E_USER_ID}` }),
+      routinesCollection.deleteMany({ userId: { $in: e2eUserIds } }),
+      routineLogsCollection.deleteMany({ userId: { $in: e2eUserIds } }),
+      routineAnalysesCollection.deleteMany({ userId: { $in: e2eUserIds } }),
+      skinJournalsCollection.deleteMany({ userId: { $in: e2eUserIds } }),
+      savedProductsCollection.deleteMany({ userId: { $in: e2eUserIds } }),
+      rateLimitsCollection.deleteMany({
+        key: { $in: e2eUserIds.map((userId) => `routine_analysis:${userId}`) },
+      }),
       appUserProfilesCollection.updateOne(
         { userId: E2E_USER_ID },
         {
@@ -115,11 +125,102 @@ async function resetDeterministicE2EUserData() {
   }
 }
 
+async function seedAdminProductReviewSmokeData() {
+  assertSafeE2EResetEnvironment();
+
+  const [{ closeMongoClient }, collections] = await Promise.all([
+    import("@/infrastructure/database/mongodb"),
+    import("@/infrastructure/database/collections"),
+  ]);
+
+  try {
+    const [appUserProfilesCollection, productsCollection] = await Promise.all([
+      collections.getAppUserProfilesCollection(),
+      collections.getProductsCollection(),
+    ]);
+    const now = new Date();
+
+    await Promise.all([
+      appUserProfilesCollection.updateOne(
+        { userId: E2E_USER_ID },
+        {
+          $set: {
+            accountDeletionRequestedAt: null,
+            onboardingCompleted: true,
+            role: "USER",
+            updatedAt: now,
+          },
+          $setOnInsert: {
+            createdAt: now,
+            userId: E2E_USER_ID,
+          },
+        },
+        { upsert: true },
+      ),
+      appUserProfilesCollection.updateOne(
+        { userId: E2E_ADMIN_USER_ID },
+        {
+          $set: {
+            accountDeletionRequestedAt: null,
+            onboardingCompleted: true,
+            role: "ADMIN",
+            updatedAt: now,
+          },
+          $setOnInsert: {
+            createdAt: now,
+            userId: E2E_ADMIN_USER_ID,
+          },
+        },
+        { upsert: true },
+      ),
+      productsCollection.updateOne(
+        {
+          brand: ADMIN_SMOKE_PRODUCT.brand,
+          name: ADMIN_SMOKE_PRODUCT.name,
+          source: "user_submitted",
+        },
+        {
+          $set: {
+            brand: ADMIN_SMOKE_PRODUCT.brand,
+            category: "serum",
+            concerns: ["barrier_support", "redness"],
+            ingredientsText: "Water, Glycerin, Panthenol, Centella Asiatica Extract",
+            keyActives: ["Panthenol", "Centella Asiatica Extract"],
+            name: ADMIN_SMOKE_PRODUCT.name,
+            notRecommendedFor: ["users looking for a reviewed public catalogue product"],
+            priceRange: "budget",
+            skinTypes: ["sensitive", "normal"],
+            source: "user_submitted",
+            suitableFor: ["admin product review smoke testing"],
+            tags: ["admin-smoke", "pending-review"],
+            updatedAt: now,
+            verificationStatus: "unverified",
+            warnings: [
+              "Smoke-test product only; keep hidden from the public catalogue until reviewed.",
+            ],
+          },
+          $setOnInsert: {
+            createdAt: now,
+          },
+        },
+        { upsert: true },
+      ),
+    ]);
+
+    console.info(
+      `db:seed:e2e ensured admin smoke profiles and product for ${E2E_USER_ID}/${E2E_ADMIN_USER_ID}`,
+    );
+  } finally {
+    await closeMongoClient();
+  }
+}
+
 configureSafeE2EEnvironment();
 
 async function run() {
   try {
     await resetDeterministicE2EUserData();
+    await seedAdminProductReviewSmokeData();
     await seedDemoData();
   } catch (error: unknown) {
     console.error("db:seed:e2e failed");

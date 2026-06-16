@@ -293,6 +293,7 @@ export function AdminProductReview() {
                 >
                   <SelectTrigger
                     className="min-h-11 w-full rounded-xl bg-card"
+                    data-testid="admin-product-status-filter-select"
                     id="admin-product-status-filter"
                   >
                     <SelectValue />
@@ -302,7 +303,11 @@ export function AdminProductReview() {
                       All statuses
                     </SelectItem>
                     {PRODUCT_VERIFICATION_STATUSES.map((status) => (
-                      <SelectItem key={status} value={status}>
+                      <SelectItem
+                        data-testid={`admin-product-status-filter-option-${status}`}
+                        key={status}
+                        value={status}
+                      >
                         {adminProductVerificationStatusLabels[status]}
                       </SelectItem>
                     ))}
@@ -499,13 +504,18 @@ function AdminProductReviewRow({
           >
             <SelectTrigger
               className="min-h-11 w-full rounded-xl bg-card"
+              data-testid={`admin-product-status-select-${product.id}`}
               id={`admin-product-status-${product.id}`}
             >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {PRODUCT_VERIFICATION_STATUSES.map((status) => (
-                <SelectItem key={status} value={status}>
+                <SelectItem
+                  data-testid={`admin-product-status-option-${product.id}-${status}`}
+                  key={status}
+                  value={status}
+                >
                   {adminProductVerificationStatusLabels[status]}
                 </SelectItem>
               ))}

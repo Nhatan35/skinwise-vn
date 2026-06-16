@@ -2,7 +2,7 @@
 
 # Test Plan — MVP v1.2.6
 
-Last updated: 2026-05-28
+Last updated: 2026-06-15
 
 ## 1. Testing strategy
 
@@ -284,6 +284,13 @@ Cases:
 [x] Admin product review UI renders Pending review, Reviewed, and Verified labels.
 [x] Admin product review client UI does not import server-only admin guards or repositories.
 [x] Dashboard navigation does not expose a global admin link to non-admin users.
+[x] v1.46 local browser smoke opened `/admin/products` with Playwright/Chrome and recorded real browser/network evidence.
+[x] v1.47 local unauthenticated admin route smoke passes without critical Auth.js sign-in 500 in the E2E environment.
+[x] v1.47 admin authenticated browser workflow passes with a repeatable E2E admin account.
+[x] v1.47 non-admin browser workflow blocks a repeatable regular E2E account from admin product data.
+[x] v1.47 admin `verificationStatus` update browser smoke passes with a dedicated `unverified` smoke product and reverts the product to its initial status.
+[x] v1.47 public product visibility regression smoke confirms unverified products are not exposed through the public product list.
+[ ] Deployed URL admin product review browser smoke is verified.
 ```
 
 ### Active normalization tests

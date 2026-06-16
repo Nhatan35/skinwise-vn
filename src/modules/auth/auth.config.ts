@@ -6,6 +6,8 @@ import type { AuthEnvironment } from "@/modules/auth/types";
 
 const DEFAULT_E2E_TEST_USER_EMAIL = "e2e-user@skinwise.test";
 const DEFAULT_E2E_TEST_USER_NAME = "SkinWise E2E User";
+const DEFAULT_E2E_TEST_ADMIN_EMAIL = "e2e-admin@skinwise.test";
+const DEFAULT_E2E_TEST_ADMIN_NAME = "SkinWise E2E Admin";
 
 function normalizeValue(value: string | undefined) {
   return value?.trim() ? value : undefined;
@@ -23,6 +25,12 @@ export function readAuthEnvironment(
     AUTH_GOOGLE_ID: normalizeValue(source.AUTH_GOOGLE_ID),
     AUTH_GOOGLE_SECRET: normalizeValue(source.AUTH_GOOGLE_SECRET),
     E2E_TEST_AUTH: source.E2E_TEST_AUTH === "true",
+    E2E_TEST_ADMIN_EMAIL:
+      normalizeValue(source.E2E_TEST_ADMIN_EMAIL) ??
+      DEFAULT_E2E_TEST_ADMIN_EMAIL,
+    E2E_TEST_ADMIN_NAME:
+      normalizeValue(source.E2E_TEST_ADMIN_NAME) ??
+      DEFAULT_E2E_TEST_ADMIN_NAME,
     E2E_TEST_USER_EMAIL:
       normalizeValue(source.E2E_TEST_USER_EMAIL) ?? DEFAULT_E2E_TEST_USER_EMAIL,
     E2E_TEST_USER_NAME:
@@ -74,6 +82,27 @@ export function getAuthProviders(input: AuthEnvironment) {
         ...e2eTestProvider,
         authorize: authorizeE2ETestUser,
         id: "e2e-test",
+      } as (typeof providers)[number],
+    );
+
+    const authorizeE2ETestAdmin = () => {
+      return {
+        id: "e2e-admin",
+        email: input.E2E_TEST_ADMIN_EMAIL,
+        name: input.E2E_TEST_ADMIN_NAME,
+      };
+    };
+    const e2eAdminTestProvider = Credentials({
+      name: "E2E Admin Test",
+      credentials: {},
+      authorize: authorizeE2ETestAdmin,
+    });
+
+    providers.push(
+      {
+        ...e2eAdminTestProvider,
+        authorize: authorizeE2ETestAdmin,
+        id: "e2e-admin-test",
       } as (typeof providers)[number],
     );
   }
