@@ -22,9 +22,10 @@ MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typeche
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
 ```
 
-The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.47 resolves the repeatable local smoke blockers found in v1.46 without adding production bypasses or feature scope: E2E-only admin/non-admin auth, idempotent `unverified` admin smoke product data, and local Playwright browser smoke for `/admin/products` now pass. Production-ready status is not claimed because deployed URL smoke was not performed. The full current release chain is maintained in `docs/00-source-of-truth.md`.
+The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.47 resolves the repeatable local smoke blockers found in v1.46 without adding production bypasses or feature scope. v1.48 records local pre-deploy validation PASS, but deployed admin product review smoke evidence is missing or incomplete. Production-ready status is not claimed. The full current release chain is maintained in `docs/00-source-of-truth.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -161,6 +162,23 @@ Full E2E: PASS - 34 Playwright tests passed
 Production smoke on deployed URL: NOT RUN for v1.47
 ```
 
+MVP v1.48 local pre-deploy evidence:
+
+```txt
+Evidence date: 2026-06-16
+Commit: 39373b6
+npm ci: PASS
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 114 test files / 1171 tests
+npm run build: PASS
+isolated admin product review smoke: PASS - 3/3 tests
+npm run test:e2e: PASS - 34/34 tests
+Deployed admin product review smoke: NOT RUN / INCOMPLETE
+Production-ready claimed: No
+Evidence file: docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md
+```
+
 Validation notes:
 
 ```txt
@@ -198,8 +216,9 @@ Admin product review API foundation decision: v1.44 complete
 Admin product review UI workflow decision: v1.45 complete
 Admin product review browser smoke decision: v1.46 complete as evidence, mixed result; local auth/data blockers documented
 Admin product review repeatable smoke decision: v1.47 complete locally; auth/data blockers resolved for local E2E smoke
+Deployed admin product review smoke decision: v1.48 remains open; local pre-deploy validation passed, but deployed smoke evidence is missing or incomplete
 Current phase: Post-MVP controlled product improvement
-Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 Portfolio Evidence Package documentation: PREPARED
 Optional media evidence tasks: screenshots and demo video
 ```
@@ -240,7 +259,7 @@ Do not expand scope before portfolio submission.
 Recommended next task:
 
 ```txt
-MVP v1.48 - Deployed Admin Product Review Smoke Verification
+Complete deployed smoke evidence for MVP v1.48
 ```
 
-Keep this optional and scoped: rerun the existing v1.45/v1.47 admin review workflow against a deployed URL with safe demo credentials, record browser/network/console evidence, avoid full CRUD unless explicitly scheduled, and continue not to claim production-ready status until fresh deployed-URL smoke evidence is recorded.
+Keep this scoped: rerun the existing v1.45/v1.47 admin review workflow against a deployed URL with safe demo credentials, record browser/network/console evidence in `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`, avoid full CRUD unless explicitly scheduled, and continue not to claim production-ready status until all critical deployed smoke checks pass.

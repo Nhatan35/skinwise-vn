@@ -43,12 +43,12 @@ Do not present the app as:
 | Actual screenshot files | Not verified | This package does not claim screenshots exist in the repository. |
 | Demo video file | Not recorded | This package does not claim a demo video exists. |
 | CV/resume summary | Drafted | See section 5. |
-| Latest local validation | PASS | v1.47 local evidence records targeted unit tests, lint, typecheck, unit tests, build after elevated rerun, admin browser smoke, and full E2E passing. |
+| Latest local validation | PASS | v1.48 local pre-deploy evidence records npm ci, lint, typecheck, 114 test files / 1171 tests, build, isolated admin product review smoke 3/3 tests, and full E2E 34/34 tests passing. |
 | Admin product review browser smoke | PASS locally | v1.47 local Playwright/Chrome smoke verified unauthenticated redirect without Auth.js 500, non-admin block, admin list/search/filter/update/revert, public visibility regression, console/network checks, and no browser-visible secret exposure. |
 | Historical production smoke/monitoring | PASS, user-reported | Recorded from the stable MVP baseline on 2026-06-04. |
-| Current task app validation | PASS locally | v1.47 repeatable local smoke prerequisites and admin product review browser smoke passed; production smoke was not performed. |
+| Current task app validation | BLOCKED / DEPLOYED SMOKE INCOMPLETE | v1.48 local pre-deploy validation passed, but deployed admin product review smoke evidence is missing or incomplete. Production-ready is not claimed. |
 
-No new production smoke, screenshot, video, traffic, performance, or user-metric evidence is claimed by this file.
+No new deployed smoke PASS, screenshot, video, traffic, performance, production-ready, or user-metric evidence is claimed by this file.
 
 ## 4. Recruiter Summary
 
@@ -70,7 +70,7 @@ Bullet version:
 - Designed rule-based Product Match and deterministic Routine Safety Analysis so guidance stays explainable, testable, and non-medical.
 - Used an AI-provider abstraction as an explanation/fallback layer rather than a safety decision-maker.
 - Documented release evidence, demo flow, portfolio case study, safety boundaries, and post-MVP backlog for recruiter and interview review.
-- Latest v1.47 validation evidence records repeatable local admin browser smoke passing with Playwright/Chrome, including admin/non-admin E2E auth, a dedicated `unverified` smoke product, update/revert coverage, public visibility regression, console/network checks, and no browser-visible secret exposure. Production/deployed URL smoke was not performed.
+- Latest v1.48 local pre-deploy validation passed for npm ci, lint, typecheck, 114 test files / 1171 tests, build, isolated admin product review smoke 3/3 tests, and full E2E 34/34 tests. Deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed.
 
 ## 6. Interview Narrative
 
@@ -166,10 +166,11 @@ Strict audit artifacts such as screenshots, deployment ids, browser logs, and sa
 Current task validation:
 
 ```txt
-MVP v1.47 admin product review repeatable smoke data and auth config fix.
-Product validation commands: PASS for targeted unit tests, lint, typecheck, unit tests, build after elevated rerun, targeted admin browser smoke, and full E2E.
-Browser smoke: PASS locally - unauthenticated redirect, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure verified.
-Production smoke test: Not run.
+MVP v1.48 deployed admin product review smoke verification.
+Product validation commands: PASS for npm ci, lint, typecheck, unit tests, build, isolated admin product review smoke, and full E2E.
+Browser smoke: PASS locally in v1.47 - unauthenticated redirect, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure verified.
+Deployed admin product review smoke: NOT RUN / INCOMPLETE.
+Production-ready claimed: No.
 Screenshot capture: Not run.
 Demo video recording: Not run.
 ```
@@ -185,3 +186,4 @@ Demo video recording: Not run.
 - Post-MVP backlog: `docs/post-mvp-backlog.md`
 - Admin product review browser smoke evidence: `docs/release-evidence-admin-product-review-browser-smoke.md`
 - Admin product review repeatable smoke evidence: `docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md`
+- Admin product review deployed smoke evidence: `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`

@@ -1,6 +1,6 @@
 # Screenshots Checklist - SkinWise VN
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 Status: **Optional portfolio evidence task**
 
@@ -25,11 +25,12 @@ MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
 MVP v1.13 UX Polish & Empty State Improvement: DONE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
-Fresh v1.43 local validation: PASS
-Fresh v1.43 production smoke: NOT RUN
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
+MVP v1.48 deployed admin product review smoke: NOT RUN / INCOMPLETE
+Production-ready claimed: No
 ```
 
 ## Recommended Screenshot List

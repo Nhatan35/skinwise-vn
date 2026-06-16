@@ -1,21 +1,22 @@
 # Deployment and Production Readiness Checklist - SkinWise VN MVP
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Current Deployment Status
 
 ```txt
-Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY with v1.43 local validation
-Production-ready status: NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
+Deployment status: MVP PORTFOLIO/DEMO/INTERVIEW READY with v1.48 local pre-deploy validation PASS
+Production-ready status: NOT CLAIMED because v1.48 deployed admin product review smoke evidence is missing or incomplete
 Current completed product release: MVP v1.8 - Insights Usability & Progress Story Refinement
 Documentation closeout: MVP v1.8.1 and MVP v1.8.2 DONE
-Fresh local validation evidence: MVP v1.43 PASS
-Production smoke/monitoring evidence: historical PASS, user-reported; not freshly rerun for v1.43
+Fresh local validation evidence: MVP v1.48 local pre-deploy validation PASS
+Production smoke/monitoring evidence: historical PASS, user-reported; v1.48 deployed admin product review smoke evidence is missing or incomplete
 Portfolio demo readiness: MVP v1.11 DONE
 Post-MVP backlog planning: MVP v1.12 DONE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 Deployment target: Vercel
 Production branch: main
 Production URL: https://skinwise-vn.vercel.app
@@ -26,7 +27,7 @@ Evidence boundary:
 
 - Local validation evidence is supported by terminal output.
 - Production smoke/monitoring PASS remains recorded from the previously user-reported stable MVP baseline.
-- Production smoke and monitoring were not rerun specifically for v1.43, so production-ready status is not claimed for this milestone.
+- v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready status is not claimed.
 - Keep deployment id, screenshots, and sanitized logs separately if formal evidence is required.
 - Do not expose secrets in docs or screenshots.
 
@@ -34,18 +35,19 @@ Evidence boundary:
 
 | Check | Status | Notes |
 |---|---|---|
-| `npm ci` | PASS | v1.43 unsandboxed rerun completed after sandboxed `spawn EPERM`; 749 packages installed. |
-| `npm run lint` | PASS | v1.43 `eslint .` completed with no reported errors. |
-| `npm run typecheck` | PASS | v1.43 `tsc --noEmit` completed with no reported errors. |
-| `npm run test` | PASS | v1.43: 110 test files / 1134 tests passed. |
-| `npm run build` | PASS | v1.43 unsandboxed rerun completed after sandboxed `spawn EPERM`. |
-| `npm run db:indexes` | NOT RUN for v1.43 | Historical evidence recorded 32 indexes ensured; this command was not part of the v1.43 validation run. |
-| E2E seed data | PASS | v1.43 E2E seed matched 70 ingredients and 70 products in `skinwise-e2e-check`. |
-| `npm run test:e2e` | PASS | v1.43 unsandboxed rerun passed 31/31 Playwright tests after sandboxed `spawn EPERM`. |
-| `npm audit` | PASS | v1.43 `found 0 vulnerabilities`. |
-| `npm audit --omit=dev` | PASS | v1.43 `found 0 vulnerabilities`. |
+| `npm ci` | PASS | v1.48 local pre-deploy validation passed. |
+| `npm run lint` | PASS | v1.48 local pre-deploy validation passed. |
+| `npm run typecheck` | PASS | v1.48 local pre-deploy validation passed. |
+| `npm run test` | PASS | v1.48: 114 test files / 1171 tests passed. |
+| `npm run build` | PASS | v1.48 local pre-deploy validation passed. |
+| isolated admin product review smoke | PASS | v1.48: 3/3 tests passed. |
+| `npm run db:indexes` | NOT RUN for v1.48 | Database index verification was not part of the v1.48 evidence lock. |
+| E2E seed data | NOT SEPARATELY RECORDED for v1.48 | Full E2E passed, but separate seed-output evidence was not recorded for v1.48. |
+| `npm run test:e2e` | PASS | v1.48: 34/34 Playwright tests passed. |
+| `npm audit` | NOT RUN for v1.48 | Audit was not part of the v1.48 evidence lock. |
+| `npm audit --omit=dev` | NOT RUN for v1.48 | Production audit was not part of the v1.48 evidence lock. |
 | No out-of-scope feature added | PASS | MVP boundaries preserved. |
-| README setup instructions accurate | PASS | Updated for v1.43 status, fresh validation, production evidence boundary, and deferred items. |
+| README setup instructions accurate | PASS | Updated for v1.48 local validation, incomplete deployed smoke evidence, production evidence boundary, and deferred items. |
 | Runtime baseline documented | PASS | Node 24.x / npm 11.x. |
 | CI workflow present | PASS | GitHub Actions workflow includes MongoDB service. |
 | `.env.example` placeholder-only | PASS | No real secret values. |
@@ -113,7 +115,8 @@ FEATURE_SKIN_SCORE=false
 ## 7. Manual Production Smoke Test
 
 Status note: the table below is historical, user-reported production evidence
-from the stable MVP baseline. It was not freshly rerun for v1.43.
+from the stable MVP baseline. v1.48 deployed admin product review smoke evidence
+is missing or incomplete.
 
 | Flow | Status |
 |---|---|
@@ -151,8 +154,14 @@ MVP v1.14 - Data Quality Expansion: DONE
 MVP v1.15 - Product Match Explainability & Safety Guardrails: DONE
 MVP v1.15.1 - Audit Cleanup & Evidence Sync: DONE
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
 Decision: READY for portfolio/demo/interview at MVP level
-Production-ready decision: CONDITIONAL / NOT CLAIMED for v1.43 without fresh deployed-URL smoke evidence
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Production-ready decision: NOT CLAIMED for v1.48 because deployed admin product review smoke evidence is missing or incomplete
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 ```

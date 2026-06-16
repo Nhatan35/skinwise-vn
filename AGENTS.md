@@ -59,6 +59,11 @@ MVP v1.40 - Saved Products Decision Queue & Review Filters: DONE / PASS
 MVP v1.41 - Product Detail Saved Decision Shortcut: DONE / PASS
 MVP v1.42 - Routine Builder Saved Product Decision Context: DONE / PASS
 MVP v1.43 - Release Evidence & Validation Cleanup: DONE / PASS, local validation; production smoke not freshly verified
+MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
+MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
+MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
 ```
 
 Known implementation status:
@@ -79,21 +84,26 @@ Production smoke evidence: PASS, user-reported
 Production monitoring evidence: PASS, user-reported
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
+Production smoke: NOT RUN / INCOMPLETE for v1.48 deployed admin product review smoke
+Production-ready claimed: No
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 ```
 
 Evidence boundary:
 
 - Local validation is supported by terminal output.
+- v1.48 local pre-deploy validation is recorded as PASS for `npm ci`, lint, typecheck, unit tests, build, isolated admin product review smoke, and full E2E.
+- v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed.
 - Production PASS is based on the user's reported manual verification with no blockers reported.
 - Portfolio evidence tasks such as screenshots, demo video, CV/portfolio case study, Vercel deployment ids, browser logs, and sanitized production log snippets should be stored separately if strict traceability is required.
 
 Recommended next task:
 
 ```txt
-MVP v1.44 - Production Smoke Test & Deployment Evidence
+Complete deployed smoke evidence for MVP v1.48
 ```
 
 Portfolio evidence tasks:
@@ -714,9 +724,11 @@ README should accurately state:
 - MVP v1.13 UX polish and empty state improvement is complete.
 - MVP v1.14 Data Quality Expansion is complete.
 - MVP v1.15 Product Match Explainability & Safety Guardrails implementation is complete.
-- MVP v1.43 Release Evidence & Validation Cleanup is the latest completed milestone.
-- Current phase is post-MVP validation cleanup.
-- Recommended next task is MVP v1.44 - Production Smoke Test & Deployment Evidence.
+- MVP v1.48 local pre-deploy validation is the latest completed local validation.
+- MVP v1.48 deployed admin product review smoke evidence is missing or incomplete.
+- Current active milestone is MVP v1.48 deployed smoke remains open.
+- Production-ready claimed is No.
+- Recommended next task is to complete deployed smoke evidence for MVP v1.48.
 - Portfolio evidence tasks such as screenshots, demo video, and CV/portfolio case study are optional evidence tasks, not product correctness blockers.
 - Production smoke test and monitoring/demo recovery evidence must be described according to the latest verified evidence.
 - Real production AI provider integration is not verified unless actually verified.
@@ -1126,10 +1138,10 @@ Decision rules:
 
 ## 27. Current recommended next task
 
-After `MVP v1.43 - Release Evidence & Validation Cleanup`, the recommended next task is:
+After `MVP v1.48 - Deployed Admin Product Review Smoke Verification`, the recommended next task is:
 
 ```txt
-MVP v1.44 - Production Smoke Test & Deployment Evidence
+Complete deployed smoke evidence for MVP v1.48
 ```
 
 Reason:
@@ -1149,7 +1161,9 @@ Reason:
 - MVP v1.41 Product Detail Saved Decision Shortcut is DONE / PASS.
 - MVP v1.42 Routine Builder Saved Product Decision Context is DONE / PASS.
 - MVP v1.43 Release Evidence & Validation Cleanup is DONE / PASS with fresh local validation; production smoke was not freshly rerun.
-- Further product work should not start unless the user explicitly starts another scoped post-MVP enhancement. The recommended next milestone is evidence-only production smoke/deployment traceability.
+- MVP v1.44, v1.45, v1.46, and v1.47 admin product review work is recorded, with v1.47 local admin review smoke passing.
+- MVP v1.48 local pre-deploy validation is PASS, but deployed admin product review smoke evidence is missing or incomplete.
+- Further product work should not start unless the user explicitly starts another scoped post-MVP enhancement. The recommended next work is evidence-only deployed smoke traceability for v1.48.
 
 Portfolio evidence tasks remain optional:
 
@@ -1197,9 +1211,10 @@ MVP v1.8.2 - Final Documentation Consistency Hotfix is the completed documentati
 MVP v1.13 - UX Polish & Empty State Improvement is complete.
 MVP v1.14 - Data Quality Expansion is complete.
 MVP v1.15 - Product Match Explainability & Safety Guardrails implementation is complete.
-MVP v1.43 - Release Evidence & Validation Cleanup is the latest completed milestone.
-Current phase: Post-MVP validation cleanup.
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence.
+MVP v1.48 local pre-deploy validation is the latest completed local validation.
+MVP v1.48 deployed smoke remains open.
+Current phase: Post-MVP controlled product improvement.
+Recommended next task: Complete deployed smoke evidence for MVP v1.48.
 Portfolio evidence tasks: screenshots, demo video, CV/portfolio case study.
 SkinWise VN is ready for portfolio/demo/interview use at MVP level.
 AI provider abstraction is implemented, with a mock provider available for local/demo use.

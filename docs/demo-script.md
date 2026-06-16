@@ -1,6 +1,6 @@
 # SkinWise VN Demo Script
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Demo Objective
 
@@ -16,18 +16,20 @@ MVP v1.9 local validation: PASS
 MVP v1.10 production smoke/monitoring: PASS, user-reported
 MVP v1.11 portfolio demo readiness: DONE
 MVP v1.12 post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
-Recommended next task: MVP v1.44 - Production Smoke Test & Deployment Evidence
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 Portfolio Evidence Package documentation: PREPARED
 Actual screenshots in repository: NOT VERIFIED
 Demo video in repository: NOT RECORDED
-Fresh v1.43 local validation: PASS
-Fresh v1.43 production smoke: NOT RUN
+MVP v1.48 local pre-deploy validation: PASS
+MVP v1.48 deployed admin product review smoke: NOT RUN / INCOMPLETE
+Production-ready claimed: No
 Critical blockers reported: None
 ```
 
-Evidence note: production PASS status is based on historical user-reported manual verification. v1.43 does not claim a fresh production smoke test, screenshots, or demo video. Keep screenshots or log snippets separately if a stricter review needs trace evidence.
+Evidence note: production PASS status is based on historical user-reported manual verification. v1.48 does not claim deployed admin review smoke PASS, production-ready status, screenshots, or demo video. Keep screenshots or log snippets separately if a stricter review needs trace evidence.
 
 ## 3. Demo Account Preparation
 
