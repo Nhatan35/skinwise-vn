@@ -17,6 +17,18 @@ const onboardingProgressCardPath = join(
   projectRoot,
   "src/modules/dashboard/components/onboarding-progress-card.tsx",
 );
+const routineCoverageSummaryCardPath = join(
+  projectRoot,
+  "src/modules/dashboard/components/routine-coverage-summary-card.tsx",
+);
+const savedProductTagsSummaryCardPath = join(
+  projectRoot,
+  "src/modules/dashboard/components/saved-product-tags-summary-card.tsx",
+);
+const savedProductDecisionQueueCardPath = join(
+  projectRoot,
+  "src/modules/dashboard/components/saved-product-decision-queue-card.tsx",
+);
 const dashboardNextActionCopyPath = join(
   projectRoot,
   "src/modules/dashboard/dashboard-next-action-copy.ts",
@@ -36,10 +48,25 @@ const onboardingProgressCardSource = readFileSync(
   onboardingProgressCardPath,
   "utf8",
 );
+const routineCoverageSummaryCardSource = readFileSync(
+  routineCoverageSummaryCardPath,
+  "utf8",
+);
+const savedProductTagsSummaryCardSource = readFileSync(
+  savedProductTagsSummaryCardPath,
+  "utf8",
+);
+const savedProductDecisionQueueCardSource = readFileSync(
+  savedProductDecisionQueueCardPath,
+  "utf8",
+);
 const componentSources = [
   "skin-profile-summary-card.tsx",
   "today-routine-progress-card.tsx",
   "routine-summary-card.tsx",
+  "routine-coverage-summary-card.tsx",
+  "saved-product-tags-summary-card.tsx",
+  "saved-product-decision-queue-card.tsx",
   "latest-journal-card.tsx",
   "latest-analysis-card.tsx",
   "next-actions-card.tsx",
@@ -74,6 +101,14 @@ describe("Dashboard DB-001 UI integration", () => {
     expect(dashboardOverviewSource).toContain("getBrowserLocalDate");
     expect(dashboardOverviewSource).toContain("LatestJournalCard");
     expect(dashboardOverviewSource).toContain("dashboard.latestJournal");
+    expect(dashboardOverviewSource).toContain("RoutineCoverageSummaryCard");
+    expect(dashboardOverviewSource).toContain("dashboard.routineCoverage");
+    expect(dashboardOverviewSource).toContain("SavedProductTagsSummaryCard");
+    expect(dashboardOverviewSource).toContain("dashboard.savedProductTags");
+    expect(dashboardOverviewSource).toContain("SavedProductDecisionQueueCard");
+    expect(dashboardOverviewSource).toContain(
+      "dashboard.savedProductDecisionQueue",
+    );
     expect(dashboardOverviewSource).toContain("Đang tải dashboard chăm sóc da");
     expect(dashboardOverviewSource).toContain("Không thể tải tổng quan dashboard");
     expect(dashboardOverviewSource).toContain("Cập nhật hồ sơ da");
@@ -195,6 +230,155 @@ describe("Dashboard DB-001 UI integration", () => {
 
     for (const forbiddenTerm of forbiddenTerms) {
       expect(guidedDashboardCopySource).not.toContain(forbiddenTerm);
+    }
+  });
+
+  it("renders the dashboard routine coverage summary card from safe UI source", () => {
+    expect(existsSync(routineCoverageSummaryCardPath)).toBe(true);
+    expect(routineCoverageSummaryCardSource).toContain(
+      "RoutineCoverageSummaryCard",
+    );
+    expect(routineCoverageSummaryCardSource).toContain(
+      'testId="dashboard-routine-coverage-summary-card"',
+    );
+    expect(routineCoverageSummaryCardSource).toContain(
+      'data-testid="dashboard-routine-coverage-next-action"',
+    );
+    expect(routineCoverageSummaryCardSource).toContain(
+      'data-testid={`dashboard-routine-coverage-item-${item.id}`}',
+    );
+
+    for (const label of [
+      "Tổng quan routine",
+      "Routine đã được tạo",
+      "Routine buổi sáng",
+      "Routine buổi tối",
+      "Chống nắng buổi sáng",
+      "Dưỡng ẩm",
+      "Bước nên kiểm tra tiếp theo",
+      "Quản lý routine",
+      "không thay thế tư vấn chuyên môn",
+    ]) {
+      expect(routineCoverageSummaryCardSource).toContain(label);
+    }
+
+    for (const forbiddenTerm of [
+      "diagnosis",
+      "treatment",
+      "skinScore",
+      "severityScore",
+      "chẩn đoán",
+      "điều trị",
+      "điểm da",
+    ]) {
+      expect(routineCoverageSummaryCardSource).not.toContain(forbiddenTerm);
+    }
+  });
+
+  it("renders the dashboard saved product tags summary card from safe UI source", () => {
+    expect(existsSync(savedProductTagsSummaryCardPath)).toBe(true);
+    expect(savedProductTagsSummaryCardSource).toContain(
+      "SavedProductTagsSummaryCard",
+    );
+    expect(savedProductTagsSummaryCardSource).toContain(
+      'testId="dashboard-saved-product-tags-summary-card"',
+    );
+    expect(savedProductTagsSummaryCardSource).toContain(
+      'data-testid="dashboard-saved-product-tags-top-tags"',
+    );
+    expect(savedProductTagsSummaryCardSource).toContain(
+      "dashboard-saved-product-tag-${toTagTestId",
+    );
+
+    for (const label of [
+      "Phân loại sản phẩm đã lưu",
+      "Tóm tắt này giúp bạn xem cách bạn đang tự phân loại sản phẩm đã lưu",
+      "Tổng sản phẩm đã lưu",
+      "Đã có tag cá nhân",
+      "Chưa có tag",
+      "Tag dùng nhiều",
+      "Quản lý sản phẩm đã lưu",
+      "Các tag này đến từ ghi chú cá nhân của bạn",
+    ]) {
+      expect(savedProductTagsSummaryCardSource).toContain(label);
+    }
+
+    for (const forbiddenTerm of [
+      "diagnosis",
+      "treatment",
+      "skinScore",
+      "severityScore",
+      "chẩn đoán",
+      "điều trị",
+      "điểm da",
+    ]) {
+      expect(savedProductTagsSummaryCardSource).not.toContain(forbiddenTerm);
+    }
+  });
+
+  it("renders the dashboard saved product decision queue card from safe UI source", () => {
+    expect(existsSync(savedProductDecisionQueueCardPath)).toBe(true);
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "SavedProductDecisionQueueCard",
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      'testId="dashboard-saved-product-decision-queue-card"',
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      'data-testid="dashboard-saved-product-decision-breakdown"',
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      'data-testid="dashboard-saved-product-missing-routine-slot"',
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      'data-testid="dashboard-saved-product-missing-personal-note"',
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "savedProductDecisionQueue.totalSavedProducts === 0",
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "savedProductDecisionQueue.reviewNeededCount === 0",
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "savedProductDecisionQueue.reviewNeededCount > 0",
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "savedProductDecisionQueue.nextAction.href",
+    );
+    expect(savedProductDecisionQueueCardSource).toContain(
+      "savedProductDecisionQueue.nextAction.label",
+    );
+
+    for (const label of [
+      "Hàng chờ xem lại sản phẩm",
+      "Tóm tắt này giúp bạn biết sản phẩm nào vẫn cần xem lại trước khi đưa vào routine.",
+      "Bạn chưa lưu sản phẩm nào. Khi lưu sản phẩm, dashboard sẽ giúp bạn xem sản phẩm nào cần cân nhắc tiếp.",
+      "Các sản phẩm đã lưu hiện đã có đủ trạng thái, kế hoạch routine và ghi chú cá nhân.",
+      "Tổng sản phẩm đã lưu",
+      "Cần xem lại",
+      "Trạng thái quyết định cá nhân",
+      "Đang cân nhắc",
+      "Đang dùng thử",
+      "Tạm dừng",
+      "Muốn giữ lại",
+      "Chưa chọn trạng thái",
+      "Thiếu kế hoạch routine",
+      "Thiếu ghi chú cá nhân",
+      "Bước tiếp theo",
+      "Đây là công cụ tổ chức cá nhân, không phải khuyến nghị điều trị hoặc",
+      "đảm bảo sản phẩm phù hợp với da.",
+    ]) {
+      expect(savedProductDecisionQueueCardSource).toContain(label);
+    }
+
+    for (const forbiddenTerm of [
+      "diagnosis",
+      "skinScore",
+      "severityScore",
+      "chẩn đoán",
+      "điểm da",
+    ]) {
+      expect(savedProductDecisionQueueCardSource).not.toContain(forbiddenTerm);
     }
   });
 

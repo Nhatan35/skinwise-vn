@@ -56,6 +56,19 @@ test.describe("SkinWise VN authenticated dashboard summary", () => {
     });
     await expect(page.getByTestId("dashboard-routine-progress-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-routine-summary-card")).toBeVisible();
+    await expect(
+      page.getByTestId("dashboard-routine-coverage-summary-card"),
+    ).toBeVisible();
+    await expect(page.getByText("Tổng quan routine")).toBeVisible();
+    await expect(
+      page.getByTestId("dashboard-saved-product-tags-summary-card"),
+    ).toBeVisible();
+    await expect(
+      page.getByTestId("dashboard-saved-product-decision-queue-card"),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Phân loại sản phẩm đã lưu", { exact: true }),
+    ).toBeVisible();
     await expect(page.getByTestId("dashboard-latest-journal-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-latest-analysis-card")).toBeVisible();
     await expect(page.getByTestId("dashboard-onboarding-progress-card")).toBeVisible();

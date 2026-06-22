@@ -7,7 +7,10 @@ import { LatestAnalysisCard } from "@/modules/dashboard/components/latest-analys
 import { LatestJournalCard } from "@/modules/dashboard/components/latest-journal-card";
 import { NextActionsCard } from "@/modules/dashboard/components/next-actions-card";
 import { PrimaryNextActionCard } from "@/modules/dashboard/components/primary-next-action-card";
+import { RoutineCoverageSummaryCard } from "@/modules/dashboard/components/routine-coverage-summary-card";
 import { RoutineSummaryCard } from "@/modules/dashboard/components/routine-summary-card";
+import { SavedProductDecisionQueueCard } from "@/modules/dashboard/components/saved-product-decision-queue-card";
+import { SavedProductTagsSummaryCard } from "@/modules/dashboard/components/saved-product-tags-summary-card";
 import { SavedProductsSummaryCard } from "@/modules/dashboard/components/saved-products-summary-card";
 import { SkinProfileSummaryCard } from "@/modules/dashboard/components/skin-profile-summary-card";
 import { TodayRoutineProgressCard } from "@/modules/dashboard/components/today-routine-progress-card";
@@ -233,6 +236,15 @@ export function DashboardOverview() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
+        <RoutineCoverageSummaryCard
+          routineCoverage={dashboard.routineCoverage}
+        />
+        <SavedProductTagsSummaryCard
+          savedProductTags={dashboard.savedProductTags}
+        />
+        <SavedProductDecisionQueueCard
+          savedProductDecisionQueue={dashboard.savedProductDecisionQueue}
+        />
         <LatestJournalCard
           journalTrend={dashboard.journalTrend}
           latestJournal={dashboard.latestJournal}

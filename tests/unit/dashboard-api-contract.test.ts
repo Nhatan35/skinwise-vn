@@ -28,6 +28,31 @@ const dashboardDto: DashboardDto = {
     evening: 0,
     hasAnyRoutine: false,
   },
+  routineCoverage: {
+    hasRoutines: false,
+    totalRoutines: 0,
+    hasMorningRoutine: false,
+    hasEveningRoutine: false,
+    hasMorningSunscreen: false,
+    hasMoisturizer: false,
+    summary:
+      "Bắt đầu với một routine đơn giản rồi kiểm tra lại theo thói quen sử dụng.",
+    coverageItems: [
+      {
+        id: "routine-created",
+        label: "Routine đã được tạo",
+        status: "missing",
+        description: "Bạn chưa có routine nào để xem lại.",
+      },
+    ],
+    cautionItems: [],
+    nextAction: {
+      label: "Tạo routine đầu tiên",
+      description: "Bắt đầu với một routine đơn giản.",
+      actionType: "create-routine",
+      href: "/routines",
+    },
+  },
   todayRoutineLogs: {
     localDate: "2026-05-17",
     totalRoutines: 0,
@@ -64,6 +89,28 @@ const dashboardDto: DashboardDto = {
     ],
   },
   savedProducts: { count: 0 },
+  savedProductTags: {
+    totalSavedProducts: 0,
+    taggedProductCount: 0,
+    untaggedProductCount: 0,
+    topTags: [],
+  },
+  savedProductDecisionQueue: {
+    totalSavedProducts: 0,
+    consideringCount: 0,
+    testingCount: 0,
+    pausedCount: 0,
+    keptCount: 0,
+    unsetDecisionStatusCount: 0,
+    withoutPlannedRoutineSlotCount: 0,
+    withoutPersonalNoteCount: 0,
+    reviewNeededCount: 0,
+    nextAction: {
+      label: "Xem lại sản phẩm đã lưu",
+      description: "Lưu sản phẩm để bắt đầu xây dựng hàng chờ xem lại.",
+      href: "/saved-products",
+    },
+  },
   routineConsistency: {
     completedDays: 0,
     totalDays: 7,
@@ -204,13 +251,38 @@ describe("/api/dashboard contract", () => {
     expect(serializedBody).toContain("latestJournal");
     expect(serializedBody).toContain("profileCompletion");
     expect(serializedBody).toContain("savedProducts");
+    expect(serializedBody).toContain("savedProductTags");
+    expect(serializedBody).toContain("savedProductDecisionQueue");
+    expect(serializedBody).toContain("totalSavedProducts");
+    expect(serializedBody).toContain("taggedProductCount");
+    expect(serializedBody).toContain("untaggedProductCount");
+    expect(serializedBody).toContain("topTags");
+    expect(serializedBody).toContain("consideringCount");
+    expect(serializedBody).toContain("testingCount");
+    expect(serializedBody).toContain("pausedCount");
+    expect(serializedBody).toContain("keptCount");
+    expect(serializedBody).toContain("unsetDecisionStatusCount");
+    expect(serializedBody).toContain("withoutPlannedRoutineSlotCount");
+    expect(serializedBody).toContain("withoutPersonalNoteCount");
+    expect(serializedBody).toContain("reviewNeededCount");
+    expect(serializedBody).toContain("label");
+    expect(serializedBody).toContain("description");
+    expect(serializedBody).toContain("href");
     expect(serializedBody).toContain("routineConsistency");
+    expect(serializedBody).toContain("routineCoverage");
+    expect(serializedBody).toContain("coverageItems");
+    expect(serializedBody).toContain("cautionItems");
+    expect(serializedBody).toContain("nextAction");
     expect(serializedBody).toContain("journalTrend");
     expect(serializedBody).toContain("maintainedDays");
     expect(serializedBody).toContain("mostCommonSymptomCount");
     expect(serializedBody).not.toContain("userId");
     expect(serializedBody).not.toContain("_id");
     expect(serializedBody).not.toContain("ObjectId");
+    expect(serializedBody).not.toContain("recommendationScore");
+    expect(serializedBody).not.toContain("productScore");
+    expect(serializedBody).not.toContain("skinScore");
+    expect(serializedBody).not.toContain("severityScore");
   });
 
   it("returns INTERNAL_ERROR for unexpected failures", async () => {
