@@ -1,5 +1,6 @@
 import { main as seedDemoData } from "./seed";
 import {
+  ADMIN_CREATE_EDIT_SMOKE_INGREDIENT,
   ADMIN_CREATE_EDIT_SMOKE_PRODUCT,
   ADMIN_SMOKE_PRODUCT,
   E2E_ADMIN_USER_ID,
@@ -135,8 +136,13 @@ async function seedAdminProductReviewSmokeData() {
   ]);
 
   try {
-    const [appUserProfilesCollection, productsCollection] = await Promise.all([
+    const [
+      appUserProfilesCollection,
+      ingredientsCollection,
+      productsCollection,
+    ] = await Promise.all([
       collections.getAppUserProfilesCollection(),
+      collections.getIngredientsCollection(),
       collections.getProductsCollection(),
     ]);
     const now = new Date();
@@ -217,6 +223,14 @@ async function seedAdminProductReviewSmokeData() {
           $in: [
             ADMIN_CREATE_EDIT_SMOKE_PRODUCT.name,
             ADMIN_CREATE_EDIT_SMOKE_PRODUCT.editedName,
+          ],
+        },
+      }),
+      ingredientsCollection.deleteMany({
+        inciName: {
+          $in: [
+            ADMIN_CREATE_EDIT_SMOKE_INGREDIENT.name,
+            ADMIN_CREATE_EDIT_SMOKE_INGREDIENT.editedName,
           ],
         },
       }),

@@ -2,7 +2,12 @@ import "server-only";
 
 import { ObjectId, type Filter } from "mongodb";
 
-import type { IngredientListQueryInput } from "@/modules/ingredients/ingredient.schema";
+import type {
+  AdminCreateIngredientBodyInput,
+  AdminIngredientListQueryInput,
+  AdminUpdateIngredientBodyInput,
+  IngredientListQueryInput,
+} from "@/modules/ingredients/ingredient.schema";
 import type {
   Ingredient,
   IngredientDocument,
@@ -34,6 +39,13 @@ function toSearchRegex(value: string) {
   return new RegExp(escapeRegex(value), "i");
 }
 
+function toExactCaseInsensitiveRegex(value: string) {
+  return new RegExp(`^${escapeRegex(value)}$`, "i");
+}
+
+export type CreateIngredientData = AdminCreateIngredientBodyInput;
+export type UpdateIngredientData = AdminUpdateIngredientBodyInput;
+
 export async function searchIngredients(
   input: IngredientListQueryInput,
 ): Promise<Ingredient[]> {
@@ -62,6 +74,12 @@ export async function searchIngredients(
     .toArray();
 }
 
+export async function searchIngredientsForAdmin(
+  input: AdminIngredientListQueryInput,
+): Promise<Ingredient[]> {
+  return searchIngredients(input);
+}
+
 export async function findIngredientById(
   id: string,
 ): Promise<Ingredient | null> {
@@ -74,4 +92,62 @@ export async function findIngredientById(
   const collection = await getIngredientCollection();
 
   return collection.findOne({ _id: objectId });
+}
+
+export async function findIngredientByNormalizedInciName(
+  inciName: string,
+): Promise<Ingredient | null> {
+  const normalizedInciName = inciName.trim();
+
+  if (!normalizedInciName) {
+    return null;
+  }
+
+  const collection = await getIngredientCollection();
+
+  return collection.findOne({
+    inciName: toExactCaseInsensitiveRegex(normalizedInciName),
+  });
+}
+
+export async function createIngredient(
+  input: CreateIngredientData,
+): Promise<Ingredient> {
+  const collection = await getIngredientCollection();
+  const now = new Date();
+  const ingredient: IngredientDocument = {
+    ...input,
+    createdAt: now,
+    updatedAt: now,
+  };
+  const result = await collection.insertOne(ingredient);
+
+  return {
+    _id: result.insertedId,
+    ...ingredient,
+  };
+}
+
+export async function updateIngredient(
+  id: string,
+  input: UpdateIngredientData,
+): Promise<Ingredient | null> {
+  const objectId = toObjectId(id);
+
+  if (!objectId) {
+    return null;
+  }
+
+  const collection = await getIngredientCollection();
+
+  return collection.findOneAndUpdate(
+    { _id: objectId },
+    {
+      $set: {
+        ...input,
+        updatedAt: new Date(),
+      },
+    },
+    { returnDocument: "after" },
+  );
 }

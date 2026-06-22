@@ -18,6 +18,8 @@ const collectionMock = {
 
     return undefined;
   }),
+  findOneAndUpdate: vi.fn(),
+  insertOne: vi.fn(),
 };
 
 vi.mock("@/infrastructure/database/collections", () => ({
@@ -25,10 +27,17 @@ vi.mock("@/infrastructure/database/collections", () => ({
 }));
 
 import { toIngredientDto } from "@/modules/ingredients/ingredient.mapper";
-import { ingredientListQuerySchema } from "@/modules/ingredients/ingredient.schema";
 import {
+  adminCreateIngredientBodySchema,
+  adminUpdateIngredientBodySchema,
+  ingredientListQuerySchema,
+} from "@/modules/ingredients/ingredient.schema";
+import {
+  createIngredient as createIngredientDocument,
+  findIngredientByNormalizedInciName,
   findIngredientById,
   searchIngredients,
+  updateIngredient,
 } from "@/modules/ingredients/ingredient.repository";
 import type { Ingredient } from "@/modules/ingredients/ingredient.types";
 
@@ -55,6 +64,20 @@ function createIngredient(
   };
 }
 
+function createAdminIngredientPayload() {
+  return {
+    aliases: [" Vitamin B3 ", "", "Nicotinamide"],
+    avoidWith: ["known sensitivity"],
+    cautionFor: ["very sensitive skin"],
+    commonUses: ["barrier support"],
+    evidenceLevel: "moderate",
+    functions: [" barrier_support ", "oil_control_support"],
+    inciName: " Niacinamide ",
+    sourceRefs: [" manual-curation "],
+    suitableFor: ["oily", "combination"],
+  } as const;
+}
+
 describe("Ingredient query schema", () => {
   it("validates list query input and defaults limit", () => {
     expect(
@@ -76,6 +99,102 @@ describe("Ingredient query schema", () => {
     expect(() => ingredientListQuerySchema.parse({ limit: "51" })).toThrow(
       ZodError,
     );
+  });
+});
+
+describe("Admin ingredient schemas", () => {
+  it("accepts valid create payloads and normalizes arrays", () => {
+    expect(
+      adminCreateIngredientBodySchema.parse(createAdminIngredientPayload()),
+    ).toEqual({
+      aliases: ["Vitamin B3", "Nicotinamide"],
+      avoidWith: ["known sensitivity"],
+      cautionFor: ["very sensitive skin"],
+      commonUses: ["barrier support"],
+      evidenceLevel: "moderate",
+      functions: ["barrier_support", "oil_control_support"],
+      inciName: "Niacinamide",
+      sourceRefs: ["manual-curation"],
+      suitableFor: ["oily", "combination"],
+    });
+  });
+
+  it("defaults omitted create array fields to empty arrays", () => {
+    expect(
+      adminCreateIngredientBodySchema.parse({
+        evidenceLevel: "basic",
+        inciName: "Panthenol",
+      }),
+    ).toEqual({
+      aliases: [],
+      avoidWith: [],
+      cautionFor: [],
+      commonUses: [],
+      evidenceLevel: "basic",
+      functions: [],
+      inciName: "Panthenol",
+      sourceRefs: [],
+      suitableFor: [],
+    });
+  });
+
+  it("rejects empty inciName and invalid evidence levels", () => {
+    for (const body of [
+      { ...createAdminIngredientPayload(), inciName: "" },
+      { ...createAdminIngredientPayload(), inciName: " " },
+      { ...createAdminIngredientPayload(), evidenceLevel: "clinical" },
+    ]) {
+      expect(() => adminCreateIngredientBodySchema.parse(body)).toThrow(
+        ZodError,
+      );
+    }
+  });
+
+  it("rejects internal fields and overly long inputs", () => {
+    for (const body of [
+      { ...createAdminIngredientPayload(), _id: ingredientId },
+      { ...createAdminIngredientPayload(), id: ingredientId },
+      { ...createAdminIngredientPayload(), createdAt: fixedNow.toISOString() },
+      { ...createAdminIngredientPayload(), updatedAt: fixedNow.toISOString() },
+      { ...createAdminIngredientPayload(), inciName: "a".repeat(161) },
+      { ...createAdminIngredientPayload(), aliases: ["a".repeat(241)] },
+      { ...createAdminIngredientPayload(), sourceRefs: ["a".repeat(501)] },
+    ]) {
+      expect(() => adminCreateIngredientBodySchema.parse(body)).toThrow(
+        ZodError,
+      );
+    }
+  });
+
+  it("accepts valid partial updates", () => {
+    expect(
+      adminUpdateIngredientBodySchema.parse({
+        aliases: [" Vitamin B3 ", ""],
+        evidenceLevel: "strong",
+        inciName: " Niacinamide Updated ",
+      }),
+    ).toEqual({
+      aliases: ["Vitamin B3"],
+      evidenceLevel: "strong",
+      inciName: "Niacinamide Updated",
+    });
+  });
+
+  it("rejects empty update payloads, empty inciName, invalid evidenceLevel, and internal fields", () => {
+    for (const body of [
+      {},
+      { inciName: "" },
+      { inciName: "   " },
+      { evidenceLevel: "clinical" },
+      { createdAt: fixedNow.toISOString() },
+      { updatedAt: fixedNow.toISOString() },
+      { id: ingredientId },
+      { _id: ingredientId },
+    ]) {
+      expect(() => adminUpdateIngredientBodySchema.parse(body)).toThrow(
+        ZodError,
+      );
+    }
   });
 });
 
@@ -139,6 +258,8 @@ describe("Ingredient repository", () => {
   beforeEach(() => {
     collectionMock.find.mockReset();
     collectionMock.findOne.mockReset();
+    collectionMock.findOneAndUpdate.mockReset();
+    collectionMock.insertOne.mockReset();
     sortMock.mockReset();
     limitMock.mockReset();
     toArrayMock.mockReset();
@@ -206,5 +327,83 @@ describe("Ingredient repository", () => {
   it("returns null for invalid ingredient ids without querying", async () => {
     await expect(findIngredientById("not-an-object-id")).resolves.toBeNull();
     expect(collectionMock.findOne).not.toHaveBeenCalled();
+  });
+
+  it("finds duplicate ingredients by trimmed case-insensitive INCI name", async () => {
+    const ingredient = createIngredient();
+    collectionMock.findOne.mockResolvedValue(ingredient);
+
+    await expect(
+      findIngredientByNormalizedInciName(" niacinamide "),
+    ).resolves.toBe(ingredient);
+
+    const filter = collectionMock.findOne.mock.calls[0]?.[0] as {
+      inciName?: RegExp;
+    };
+    expect(filter.inciName?.test("Niacinamide")).toBe(true);
+    expect(filter.inciName?.test("NIACINAMIDE")).toBe(true);
+    expect(filter.inciName?.test("Not Niacinamide")).toBe(false);
+  });
+
+  it("does not query duplicate lookup for blank normalized INCI names", async () => {
+    await expect(findIngredientByNormalizedInciName("   ")).resolves.toBeNull();
+    expect(collectionMock.findOne).not.toHaveBeenCalled();
+  });
+
+  it("creates ingredients with server timestamps", async () => {
+    const insertedId = new ObjectId(ingredientId);
+    collectionMock.insertOne.mockResolvedValue({ insertedId });
+
+    const result = await createIngredientDocument({
+      aliases: ["Vitamin B3"],
+      avoidWith: [],
+      cautionFor: [],
+      commonUses: ["barrier support"],
+      evidenceLevel: "moderate",
+      functions: ["barrier_support"],
+      inciName: "Niacinamide",
+      sourceRefs: ["manual-curation"],
+      suitableFor: ["oily"],
+    });
+
+    expect(collectionMock.insertOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        createdAt: expect.any(Date),
+        inciName: "Niacinamide",
+        updatedAt: expect.any(Date),
+      }),
+    );
+    expect(result).toMatchObject({
+      _id: insertedId,
+      inciName: "Niacinamide",
+    });
+  });
+
+  it("updates only provided ingredient fields and updatedAt", async () => {
+    const updatedIngredient = createIngredient({
+      commonUses: ["updated use"],
+      updatedAt: new Date("2026-05-15T00:00:00.000Z"),
+    });
+    collectionMock.findOneAndUpdate.mockResolvedValue(updatedIngredient);
+
+    await expect(
+      updateIngredient(ingredientId, { commonUses: ["updated use"] }),
+    ).resolves.toBe(updatedIngredient);
+
+    const [, update, options] = collectionMock.findOneAndUpdate.mock.calls[0];
+    expect(update).toEqual({
+      $set: {
+        commonUses: ["updated use"],
+        updatedAt: expect.any(Date),
+      },
+    });
+    expect(options).toEqual({ returnDocument: "after" });
+  });
+
+  it("returns null for invalid update ids without querying", async () => {
+    await expect(
+      updateIngredient("not-an-object-id", { inciName: "Panthenol" }),
+    ).resolves.toBeNull();
+    expect(collectionMock.findOneAndUpdate).not.toHaveBeenCalled();
   });
 });
