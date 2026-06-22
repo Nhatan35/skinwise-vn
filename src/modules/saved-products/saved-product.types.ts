@@ -24,6 +24,7 @@ export type SavedProductMetadataUpdate = {
   decisionStatus?: SavedProductDecisionStatus;
   plannedRoutineSlot?: SavedProductPlannedRoutineSlot;
   personalNote?: string;
+  tags?: string[];
 };
 
 export type SavedProductDocument = {
@@ -32,6 +33,7 @@ export type SavedProductDocument = {
   decisionStatus?: SavedProductDecisionStatus;
   plannedRoutineSlot?: SavedProductPlannedRoutineSlot;
   personalNote?: string;
+  tags?: string[];
   createdAt: Date;
   updatedAt: Date;
 };

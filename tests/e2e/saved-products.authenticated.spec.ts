@@ -84,6 +84,20 @@ function waitForRemoveSavedProductResponse(page: Page, productId: string) {
   );
 }
 
+function waitForUpdateSavedProductResponse(page: Page, productId: string) {
+  return page.waitForResponse(
+    (response) => {
+      const url = new URL(response.url());
+
+      return (
+        url.pathname === `/api/saved-products/${productId}` &&
+        response.request().method() === "PATCH"
+      );
+    },
+    { timeout: 15_000 },
+  );
+}
+
 async function getSeededProduct(page: Page) {
   const response = await page.request.get(
     `/api/products?q=${encodeURIComponent(deterministicProductName)}&limit=50`,
@@ -189,11 +203,85 @@ test.describe("SkinWise VN authenticated saved products", () => {
       .first();
 
     await expect(savedCard).toBeVisible({ timeout: 15_000 });
+    const reviewReasons = savedCard.getByTestId(
+      "saved-product-review-reasons",
+    );
+
+    await expect(reviewReasons).toBeVisible();
+    await expect(
+      reviewReasons.getByTestId(
+        "saved-product-review-reason-missing-decision-status",
+      ),
+    ).toBeVisible();
+    await expect(
+      reviewReasons.getByTestId(
+        "saved-product-review-reason-missing-routine-slot",
+      ),
+    ).toBeVisible();
+    await expect(
+      reviewReasons.getByTestId(
+        "saved-product-review-reason-missing-personal-note",
+      ),
+    ).toBeVisible();
+
+    await expect(
+      page.getByTestId("saved-products-review-filter-controls"),
+    ).toBeVisible();
+
+    await page.getByTestId("saved-products-review-filter-needs-review").click();
+    await expect(
+      page.getByTestId("saved-products-review-filter-needs-review"),
+    ).toHaveAttribute("aria-pressed", "true");
+    await expect(savedCard).toBeVisible();
+
+    await page.getByTestId("saved-products-review-filter-kept").click();
+    await expect(
+      page.getByTestId("saved-products-review-filter-kept"),
+    ).toHaveAttribute("aria-pressed", "true");
+    await expect(
+      page
+        .getByTestId("saved-product-card")
+        .filter({ hasText: deterministicProductName }),
+    ).toHaveCount(0);
+
+    await page.getByTestId("saved-products-review-filter-all").click();
+    await expect(savedCard).toBeVisible();
+
+    const completeSavedProductResponse = await page.request.patch(
+      `/api/saved-products/${product.id}`,
+      {
+        data: {
+          decisionStatus: "kept",
+          plannedRoutineSlot: "morning",
+          personalNote: "Đã đủ thông tin tổ chức cá nhân.",
+        },
+      },
+    );
+
+    expect(completeSavedProductResponse.ok()).toBe(true);
+
+    const completedListResponsePromise = waitForSavedProductsResponse(page);
+
+    await page.goto("/saved-products");
+
+    expect((await completedListResponsePromise).ok()).toBe(true);
+
+    const completedSavedCard = page
+      .getByTestId("saved-product-card")
+      .filter({ hasText: deterministicProductName })
+      .first();
+
+    await expect(completedSavedCard).toBeVisible({ timeout: 15_000 });
+    await expect(
+      completedSavedCard.getByTestId("saved-product-review-reasons"),
+    ).toHaveCount(0);
 
     const detailResponsePromise = waitForProductDetailResponse(page, product.id);
     const detailSavedStateResponsePromise = waitForSavedProductsResponse(page);
 
-    await savedCard.getByRole("link", { name: "Xem chi tiết" }).click();
+    await completedSavedCard
+      .getByRole("link", { name: "Xem chi tiết" })
+      .click();
 
     expect((await detailResponsePromise).ok()).toBe(true);
     expect((await detailSavedStateResponsePromise).ok()).toBe(true);
@@ -282,6 +370,111 @@ test.describe("SkinWise VN authenticated saved products", () => {
       ).toHaveCount(0);
     } finally {
       for (const product of products) {
+        await removeSavedProductIfPresent(page, product.id);
+      }
+    }
+  });
+
+  test("authenticated user can add, filter, and remove saved product tags", async ({
+    page,
+  }) => {
+    await loginAsE2EUser(page);
+
+    const [taggedProduct, otherProduct] = await getSeededProducts(page, 2);
+
+    try {
+      for (const product of [taggedProduct, otherProduct]) {
+        await removeSavedProductIfPresent(page, product.id);
+        await saveProductForTest(page, product.id);
+      }
+
+      const savedListResponsePromise = waitForSavedProductsResponse(page);
+
+      await page.goto("/saved-products");
+
+      expect((await savedListResponsePromise).ok()).toBe(true);
+
+      const taggedCard = page
+        .getByTestId("saved-product-card")
+        .filter({ hasText: taggedProduct.name })
+        .first();
+      const otherCard = page
+        .getByTestId("saved-product-card")
+        .filter({ hasText: otherProduct.name })
+        .first();
+
+      await expect(taggedCard).toBeVisible({ timeout: 15_000 });
+      await expect(otherCard).toBeVisible({ timeout: 15_000 });
+
+      await taggedCard.getByTestId("saved-product-edit-tags-button").click();
+      await taggedCard.getByTestId("saved-product-tags-input").fill("To buy");
+
+      const addTagResponsePromise = waitForUpdateSavedProductResponse(
+        page,
+        taggedProduct.id,
+      );
+
+      await taggedCard.getByTestId("saved-product-save-tags-button").click();
+
+      expect((await addTagResponsePromise).ok()).toBe(true);
+      await expect(
+        taggedCard
+          .getByTestId("saved-product-personal-tag")
+          .filter({ hasText: "To buy" }),
+      ).toBeVisible();
+
+      const publicListResponse = await page.request.get(
+        `/api/products?q=${encodeURIComponent(taggedProduct.name)}`,
+      );
+      const publicDetailResponse = await page.request.get(
+        `/api/products/${taggedProduct.id}`,
+      );
+
+      expect(publicListResponse.ok()).toBe(true);
+      expect(publicDetailResponse.ok()).toBe(true);
+      expect(JSON.stringify(await publicListResponse.json())).not.toContain(
+        "To buy",
+      );
+      expect(JSON.stringify(await publicDetailResponse.json())).not.toContain(
+        "To buy",
+      );
+
+      await page.getByTestId("saved-products-tag-filter").selectOption("To buy");
+
+      await expect(
+        page
+          .getByTestId("saved-product-card")
+          .filter({ hasText: taggedProduct.name }),
+      ).toBeVisible();
+      await expect(
+        page
+          .getByTestId("saved-product-card")
+          .filter({ hasText: otherProduct.name }),
+      ).toHaveCount(0);
+
+      await page.getByTestId("saved-products-tag-filter").selectOption("");
+
+      await expect(otherCard).toBeVisible();
+
+      await taggedCard.getByTestId("saved-product-edit-tags-button").click();
+      await taggedCard.getByTestId("saved-product-tags-input").fill("");
+
+      const removeTagResponsePromise = waitForUpdateSavedProductResponse(
+        page,
+        taggedProduct.id,
+      );
+
+      await taggedCard.getByTestId("saved-product-save-tags-button").click();
+
+      expect((await removeTagResponsePromise).ok()).toBe(true);
+      await expect(
+        taggedCard
+          .getByTestId("saved-product-personal-tag")
+          .filter({ hasText: "To buy" }),
+      ).toHaveCount(0);
+      await expect(taggedCard.getByText("No tags yet")).toBeVisible();
+    } finally {
+      for (const product of [taggedProduct, otherProduct]) {
         await removeSavedProductIfPresent(page, product.id);
       }
     }

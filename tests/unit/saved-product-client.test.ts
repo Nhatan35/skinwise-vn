@@ -45,6 +45,7 @@ function createSavedProduct(
     id: "665000000000000000000620",
     productId: product.id,
     product,
+    tags: [],
     createdAt: "2026-05-24T00:00:00.000Z",
     updatedAt: "2026-05-24T00:00:00.000Z",
     ...overrides,
@@ -203,6 +204,29 @@ describe("Saved Product client helper", () => {
     >;
 
     expect(requestBody).toEqual({ decisionStatus: "kept" });
+  });
+
+  it("sends saved product tags as user-owned metadata", async () => {
+    const item = createSavedProduct({ tags: ["To buy", "Patch test"] });
+
+    mockedFetch.mockResolvedValue(
+      jsonResponse({
+        data: { item },
+        error: null,
+      }),
+    );
+
+    await expect(
+      updateSavedProductMetadata(item.productId, {
+        tags: ["To buy", "Patch test"],
+      }),
+    ).resolves.toEqual(item);
+
+    const request = mockedFetch.mock.calls[0]?.[1] as RequestInit;
+
+    expect(JSON.parse(String(request.body))).toEqual({
+      tags: ["To buy", "Patch test"],
+    });
   });
 
   it("rejects malformed optional metadata in a successful response", async () => {

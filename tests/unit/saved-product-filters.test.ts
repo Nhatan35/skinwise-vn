@@ -5,6 +5,7 @@ import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto
 import {
   DEFAULT_SAVED_PRODUCTS_FILTERS,
   filterSavedProducts,
+  getAvailableSavedProductTags,
   getSavedProductDecisionSummary,
   hasActiveSavedProductFilters,
   type SavedProductsFilterState,
@@ -47,6 +48,7 @@ function createSavedProduct(
     id: `saved-${id}`,
     productId: id,
     product,
+    tags: [],
     createdAt: fixedDate,
     updatedAt: fixedDate,
     ...overrides,
@@ -57,6 +59,7 @@ const items: SavedProductDto[] = [
   createSavedProduct("product-1", {
     decisionStatus: "considering",
     plannedRoutineSlot: "morning",
+    tags: ["To buy", "Morning routine"],
     personalNote: "Theo dõi cảm nhận với niacinamide.",
     product: createProduct("product-1", {
       name: "Serum Niacinamide Dịu Nhẹ",
@@ -66,6 +69,7 @@ const items: SavedProductDto[] = [
   createSavedProduct("product-2", {
     decisionStatus: "testing",
     plannedRoutineSlot: "evening",
+    tags: ["Patch test"],
     personalNote: "   ",
     product: createProduct("product-2", {
       name: "Kem dưỡng ẩm phục hồi",
@@ -75,6 +79,7 @@ const items: SavedProductDto[] = [
   createSavedProduct("product-3", {
     decisionStatus: "paused",
     plannedRoutineSlot: "either",
+    tags: ["Sensitive skin"],
     product: createProduct("product-3", {
       name: "Toner dịu nhẹ",
       brand: "Mộc",
@@ -83,6 +88,7 @@ const items: SavedProductDto[] = [
   createSavedProduct("product-4", {
     decisionStatus: "kept",
     plannedRoutineSlot: "not_sure",
+    tags: ["To buy"],
     personalNote: "Muốn giữ lại để xem sau.",
     product: createProduct("product-4", {
       name: "Sữa rửa mặt hằng ngày",
@@ -123,6 +129,59 @@ describe("saved product decision filters", () => {
   it("shows all products by default, including unset metadata", () => {
     expect(filterSavedProducts(items, filters())).toEqual(items);
     expect(hasActiveSavedProductFilters(filters())).toBe(false);
+  });
+
+  it.each([
+    [
+      "all",
+      [
+        "product-1",
+        "product-2",
+        "product-3",
+        "product-4",
+        "product-5",
+        "product-6",
+      ],
+    ],
+    [
+      "needs-review",
+      ["product-1", "product-2", "product-3", "product-5", "product-6"],
+    ],
+    ["considering", ["product-1"]],
+    ["testing", ["product-2"]],
+    ["paused", ["product-3"]],
+    ["kept", ["product-4"]],
+    ["missing-decision-status", ["product-5", "product-6"]],
+    ["missing-routine-slot", ["product-5", "product-6"]],
+    [
+      "missing-personal-note",
+      ["product-2", "product-3", "product-5", "product-6"],
+    ],
+  ] as const)("filters review queue %s", (reviewFilter, expectedIds) => {
+    expect(
+      productIds(filterSavedProducts(items, filters({ reviewFilter }))),
+    ).toEqual(expectedIds);
+  });
+
+  it("treats unknown non-blank decisionStatus as review-needed without mutating ordering", () => {
+    const itemsWithUnknownStatus = [
+      items[3],
+      createSavedProduct("product-legacy", {
+        decisionStatus: "legacy-status" as never,
+        plannedRoutineSlot: "morning",
+        personalNote: "Review existing imported status.",
+      }),
+      items[0],
+    ];
+
+    expect(
+      productIds(
+        filterSavedProducts(
+          itemsWithUnknownStatus,
+          filters({ reviewFilter: "needs-review" }),
+        ),
+      ),
+    ).toEqual(["product-legacy", "product-1"]);
   });
 
   it.each([
@@ -188,6 +247,24 @@ describe("saved product decision filters", () => {
     ).toHaveLength(items.length);
   });
 
+  it("filters saved products by personal tag case-insensitively", () => {
+    expect(
+      productIds(filterSavedProducts(items, filters({ tag: "to buy" }))),
+    ).toEqual(["product-1", "product-4"]);
+    expect(
+      productIds(filterSavedProducts(items, filters({ tag: "Patch test" }))),
+    ).toEqual(["product-2"]);
+  });
+
+  it("builds available personal tags from the current user's saved products", () => {
+    expect(getAvailableSavedProductTags(items)).toEqual([
+      "Morning routine",
+      "Patch test",
+      "Sensitive skin",
+      "To buy",
+    ]);
+  });
+
   it.each([
     ["niacinamide dịu", ["product-1"]],
     ["lá xanh", ["product-1"]],
@@ -247,6 +324,7 @@ describe("saved product decision filters", () => {
   it("returns to all items when filters are reset to the default state", () => {
     const activeFilters = filters({
       query: "lá xanh",
+      reviewFilter: "needs-review",
       decisionStatus: "considering",
       plannedRoutineSlot: "morning",
       noteStatus: "with_note",
@@ -263,6 +341,10 @@ describe("saved product decision filters", () => {
     expect(hasActiveSavedProductFilters(filters({ query: "   " }))).toBe(
       false,
     );
+  });
+
+  it("treats whitespace-only tag filters as inactive", () => {
+    expect(hasActiveSavedProductFilters(filters({ tag: "   " }))).toBe(false);
   });
 
   it("does not mutate the input items", () => {

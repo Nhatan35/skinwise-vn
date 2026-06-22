@@ -1,7 +1,15 @@
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import {
+  isBlankSavedProductReviewValue,
+  matchesSavedProductReviewFilter,
+  type SavedProductReviewFilter,
+} from "@/modules/saved-products/saved-product-review";
+import { getSavedProductTagKey } from "@/modules/saved-products/saved-product-tags";
 
 export type SavedProductsFilterState = {
   query: string;
+  tag: string;
+  reviewFilter: SavedProductReviewFilter;
   decisionStatus:
     | "all"
     | "considering"
@@ -30,21 +38,23 @@ export type SavedProductDecisionSummary = {
 
 export const DEFAULT_SAVED_PRODUCTS_FILTERS: SavedProductsFilterState = {
   query: "",
+  tag: "",
+  reviewFilter: "all",
   decisionStatus: "all",
   plannedRoutineSlot: "all",
   noteStatus: "all",
 };
 
 function isUnsetValue(value: unknown) {
-  return (
-    value === null ||
-    value === undefined ||
-    (typeof value === "string" && value.trim() === "")
-  );
+  return isBlankSavedProductReviewValue(value);
 }
 
 function hasPersonalNote(value: unknown) {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function getItemTags(item: SavedProductDto) {
+  return Array.isArray(item.tags) ? item.tags : [];
 }
 
 function normalizeSearchText(value: unknown) {
@@ -73,8 +83,13 @@ export function filterSavedProducts(
   filters: SavedProductsFilterState,
 ) {
   const normalizedQuery = normalizeSearchText(filters.query.trim());
+  const normalizedTag = getSavedProductTagKey(filters.tag);
 
   return items.filter((item) => {
+    if (!matchesSavedProductReviewFilter(item, filters.reviewFilter)) {
+      return false;
+    }
+
     if (
       !matchesOptionalValue(item.decisionStatus, filters.decisionStatus) ||
       !matchesOptionalValue(
@@ -99,6 +114,15 @@ export function filterSavedProducts(
       return false;
     }
 
+    if (
+      normalizedTag &&
+      !getItemTags(item).some(
+        (tag) => getSavedProductTagKey(tag) === normalizedTag,
+      )
+    ) {
+      return false;
+    }
+
     if (!normalizedQuery) {
       return true;
     }
@@ -107,6 +131,7 @@ export function filterSavedProducts(
       item.product?.name,
       item.product?.brand,
       item.personalNote,
+      ...getItemTags(item),
     ]
       .map(normalizeSearchText)
       .join("\n");
@@ -120,9 +145,33 @@ export function hasActiveSavedProductFilters(
 ) {
   return (
     filters.query.trim().length > 0 ||
+    filters.tag.trim().length > 0 ||
+    filters.reviewFilter !== "all" ||
     filters.decisionStatus !== "all" ||
     filters.plannedRoutineSlot !== "all" ||
     filters.noteStatus !== "all"
+  );
+}
+
+export function getAvailableSavedProductTags(
+  items: readonly SavedProductDto[],
+) {
+  const tagsByKey = new Map<string, string>();
+
+  for (const item of items) {
+    for (const tag of getItemTags(item)) {
+      const tagKey = getSavedProductTagKey(tag);
+
+      if (tagKey && !tagsByKey.has(tagKey)) {
+        tagsByKey.set(tagKey, tag.trim());
+      }
+    }
+  }
+
+  return [...tagsByKey.values()].sort((first, second) =>
+    first.localeCompare(second, "vi-VN", {
+      sensitivity: "base",
+    }),
   );
 }
 
