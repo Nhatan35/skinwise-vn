@@ -1,6 +1,6 @@
 # Final Release Checklist - SkinWise VN
 
-Last updated: 2026-06-16
+Last updated: 2026-06-22
 
 ## 1. Release Summary
 
@@ -13,7 +13,13 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed local validation:
 
 ```txt
-MVP v1.48 local pre-deploy validation PASS
+MVP v1.60 local validation PASS
+```
+
+Latest completed scoped task:
+
+```txt
+MVP v1.60 - Admin Ingredient Create/Edit Lite
 ```
 
 Completed closeout milestones:
@@ -65,6 +71,8 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.59 - Admin Product Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.60 - Admin Ingredient Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -92,6 +100,8 @@ v1.35 status: DONE - E2E selector/copy drift in dashboard, insights, saved-produ
 v1.37 status: DONE - Product Detail now links to Ingredient Library searches, Ingredient Detail links to Product Catalogue searches by INCI/display name, and Product Catalogue / Ingredient Library include lightweight cross-links. Lint, typecheck, unit tests, diff check, build, audit, and full E2E passed; production smoke later passed through Manual Browser & Production Smoke Verification. Screen-reader verification was not part of v1.37, but the later standalone verification passed; screenshots and demo video were not created.
 v1.43 status: DONE / PASS - release evidence and validation cleanup refreshed README/current status docs, captured fresh local validation, verified audit, documented E2E prerequisites/results, and clarified deferred production smoke/real AI/media evidence without product behavior changes.
 v1.48 status: BLOCKED / DEPLOYED SMOKE INCOMPLETE - local pre-deploy validation passed, but deployed admin product review smoke evidence is missing or incomplete; production-ready is not claimed.
+v1.59 status: DONE / PASS locally - Admin Product Create/Edit Lite adds admin-only product create/edit routes and UI, preserves the status-only verification route, keeps public catalogue visibility limited to reviewed/verified products, and does not claim production-ready because v1.48 deployed smoke remains open.
+v1.60 status: DONE / PASS locally - Admin Ingredient Create/Edit Lite adds admin-only ingredient list/create/edit routes and UI, prevents duplicate normalized INCI names, preserves user-facing Ingredient Library/Detail/Explanation flows, and does not claim production-ready because v1.48 deployed smoke remains open.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -109,7 +119,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | PASS FOR LATEST LOCAL VALIDATION | MVP v1.48 local pre-deploy validation passed with npm ci, lint, typecheck, 114 test files / 1171 tests, build, isolated admin product review smoke 3/3 tests, and full E2E 34/34 tests. MVP v1.43, v1.42, v1.37, and v1.35 remain PASS/DONE as historical evidence. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
+| Local validation | PASS FOR LATEST LOCAL VALIDATION | MVP v1.60 local validation passed with lint, typecheck, 120 test files / 1343 tests, build after elevated rerun, full E2E after elevated rerun with 39/39 tests, and audit. MVP v1.59 local validation also passed with lint, typecheck, 117 test files / 1298 tests, build after elevated rerun, full E2E after elevated rerun with 36/36 tests, and audit. MVP v1.48 local pre-deploy validation remains PASS, but deployed admin product review smoke evidence is missing or incomplete. MVP v1.43, v1.42, v1.37, and v1.35 remain PASS/DONE as historical evidence. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | Manual Browser & Production Smoke Verification | PASS | User-reported manual production verification completed: public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow passed with no critical blockers observed. |
@@ -124,10 +134,10 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Portfolio case study | PASS | `docs/portfolio-case-study.md` is updated for portfolio/demo readiness and current post-MVP status. |
 | Demo script | PASS | `docs/demo-script.md` contains a 3-5 minute demo flow and backup plan. |
 | Screenshot checklist | PASS | `docs/screenshots-checklist.md` contains optional portfolio evidence guidance; actual screenshot files are not claimed by repository docs. |
-| Documentation truth sync | PASS | Current release status is synchronized for v1.48 local validation PASS, incomplete deployed smoke evidence, and no production-ready claim. |
+| Documentation truth sync | PASS | Current release status is synchronized for v1.59/v1.60 local validation PASS, v1.48 incomplete deployed smoke evidence, and no production-ready claim. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.47 Admin Product Review Repeatable Smoke Data & Auth Config Fix is complete locally. MVP v1.48 deployed smoke remains open because deployed evidence is missing or incomplete. MVP v1.35 remains DONE with full E2E PASS; v1.24 remains NOT DONE / VALIDATION BLOCKED as a historical closeout. |
+| Latest post-MVP implementation | PASS | MVP v1.60 Admin Ingredient Create/Edit Lite is complete locally based on repository evidence. MVP v1.59 Admin Product Create/Edit Lite is present. MVP v1.48 deployed smoke remains open because deployed evidence is missing or incomplete. MVP v1.35 remains DONE with full E2E PASS; v1.24 remains NOT DONE / VALIDATION BLOCKED as a historical closeout. |
 | Latest MVP quality improvement | PASS | MVP Product Match Explainability Polish is complete. It changes Product Match, Product Detail, and Saved Products comparison copy/presentation only; business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, and API contracts are unchanged. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
