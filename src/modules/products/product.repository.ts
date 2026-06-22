@@ -9,7 +9,11 @@ import type {
 import {
   VISIBLE_PRODUCT_VERIFICATION_STATUSES,
   type Product,
+  type ProductCategory,
+  type ProductConcern,
   type ProductDocument,
+  type ProductPriceRange,
+  type ProductSkinType,
   type ProductVerificationStatus,
 } from "@/modules/products/product.types";
 
@@ -158,6 +162,83 @@ export async function searchProductsForAdmin(
   }
 
   return collection.find(filter).sort({ brand: 1, name: 1 }).toArray();
+}
+
+export type CreateProductData = Pick<
+  ProductDocument,
+  | "brand"
+  | "category"
+  | "concerns"
+  | "ingredientsText"
+  | "keyActives"
+  | "name"
+  | "notRecommendedFor"
+  | "priceRange"
+  | "skinTypes"
+  | "source"
+  | "suitableFor"
+  | "tags"
+  | "verificationStatus"
+  | "warnings"
+> &
+  Partial<Pick<ProductDocument, "createdByUserId">>;
+
+export type UpdateProductData = Partial<{
+  brand: string;
+  category: ProductCategory;
+  concerns: ProductConcern[];
+  ingredientsText: string;
+  keyActives: string[];
+  name: string;
+  notRecommendedFor: string[];
+  priceRange: ProductPriceRange;
+  skinTypes: ProductSkinType[];
+  suitableFor: string[];
+  tags: string[];
+  verificationStatus: ProductVerificationStatus;
+  warnings: string[];
+}>;
+
+export async function createProduct(input: CreateProductData): Promise<Product> {
+  const collection = await getProductCollection();
+  const now = new Date();
+  const product: ProductDocument = {
+    ...input,
+    createdAt: now,
+    updatedAt: now,
+  };
+  const result = await collection.insertOne(product);
+
+  return {
+    _id: result.insertedId,
+    ...product,
+  };
+}
+
+export async function updateProduct(
+  id: string,
+  input: UpdateProductData,
+): Promise<Product | null> {
+  const objectId = toObjectId(id);
+
+  if (!objectId) {
+    return null;
+  }
+
+  const collection = await getProductCollection();
+
+  return collection.findOneAndUpdate(
+    { _id: objectId },
+    {
+      $set: {
+        ...input,
+        updatedAt: new Date(),
+      },
+    },
+    {
+      returnDocument: "after",
+    },
+  );
 }
 
 export async function findProductById(id: string): Promise<Product | null> {

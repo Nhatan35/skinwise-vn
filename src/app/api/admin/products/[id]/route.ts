@@ -9,20 +9,24 @@ import { AuthenticationRequiredError } from "@/modules/auth/types";
 import type { ProductDto } from "@/modules/products/product.dto";
 import { toProductDto } from "@/modules/products/product.mapper";
 import {
-  adminCreateProductBodySchema,
-  adminProductListQuerySchema,
+  adminUpdateProductBodySchema,
+  productRouteParamsSchema,
 } from "@/modules/products/product.schema";
-import {
-  createProductForAdmin,
-  listProductsForAdmin,
-} from "@/modules/products/product.use-case";
+import { updateProductForAdmin } from "@/modules/products/product.use-case";
 
 export const runtime = "nodejs";
+
+type RouteContext = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
 type ApiErrorCode =
   | "UNAUTHORIZED"
   | "FORBIDDEN"
   | "VALIDATION_ERROR"
+  | "NOT_FOUND"
   | "INTERNAL_ERROR";
 
 type ApiError = {
@@ -88,17 +92,21 @@ function forbiddenResponse() {
 function validationErrorResponse() {
   return errorResponse(
     "VALIDATION_ERROR",
-    "Query parameters or request body are invalid.",
+    "Request body or route parameters are invalid.",
     400,
   );
+}
+
+function notFoundResponse() {
+  return errorResponse("NOT_FOUND", "Product was not found.", 404);
 }
 
 function internalErrorResponse() {
   return errorResponse("INTERNAL_ERROR", "Something went wrong.", 500);
 }
 
-function getQueryParams(request: Request) {
-  return Object.fromEntries(new URL(request.url).searchParams.entries());
+async function getRouteParams(context: RouteContext) {
+  return productRouteParamsSchema.parse(await context.params);
 }
 
 async function getRequestJson(request: Request) {
@@ -109,50 +117,23 @@ async function getRequestJson(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
+export async function PATCH(request: Request, context: RouteContext) {
   try {
     await requireAdminUser();
 
-    const input = adminProductListQuerySchema.parse(getQueryParams(request));
-    const products = await listProductsForAdmin(input);
-
-    return jsonResponse<{ items: ProductDto[] }>({
-      items: products.map(toProductDto),
-    });
-  } catch (error) {
-    if (error instanceof AuthenticationRequiredError) {
-      return unauthorizedResponse();
-    }
-
-    if (error instanceof AdminPermissionRequiredError) {
-      return forbiddenResponse();
-    }
-
-    if (error instanceof ZodError) {
-      return validationErrorResponse();
-    }
-
-    return internalErrorResponse();
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const adminUser = await requireAdminUser();
-
-    const input = adminCreateProductBodySchema.parse(
+    const { id } = await getRouteParams(context);
+    const input = adminUpdateProductBodySchema.parse(
       await getRequestJson(request),
     );
-    const product = await createProductForAdmin(input, {
-      createdByUserId: adminUser.profile._id,
-    });
+    const product = await updateProductForAdmin(id, input);
 
-    return jsonResponse<{ product: ProductDto }>(
-      {
-        product: toProductDto(product),
-      },
-      201,
-    );
+    if (!product) {
+      return notFoundResponse();
+    }
+
+    return jsonResponse<{ product: ProductDto }>({
+      product: toProductDto(product),
+    });
   } catch (error) {
     if (error instanceof AuthenticationRequiredError) {
       return unauthorizedResponse();

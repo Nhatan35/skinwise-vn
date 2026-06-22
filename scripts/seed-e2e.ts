@@ -1,5 +1,6 @@
 import { main as seedDemoData } from "./seed";
 import {
+  ADMIN_CREATE_EDIT_SMOKE_PRODUCT,
   ADMIN_SMOKE_PRODUCT,
   E2E_ADMIN_USER_ID,
   E2E_ADMIN_USER_EMAIL,
@@ -205,6 +206,20 @@ async function seedAdminProductReviewSmokeData() {
         },
         { upsert: true },
       ),
+      productsCollection.deleteMany({
+        brand: {
+          $in: [
+            ADMIN_CREATE_EDIT_SMOKE_PRODUCT.brand,
+            ADMIN_CREATE_EDIT_SMOKE_PRODUCT.editedBrand,
+          ],
+        },
+        name: {
+          $in: [
+            ADMIN_CREATE_EDIT_SMOKE_PRODUCT.name,
+            ADMIN_CREATE_EDIT_SMOKE_PRODUCT.editedName,
+          ],
+        },
+      }),
     ]);
 
     console.info(

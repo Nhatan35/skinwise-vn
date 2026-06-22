@@ -1,4 +1,8 @@
 import type { ProductDto } from "@/modules/products/product.dto";
+import type {
+  AdminCreateProductBodyInput,
+  AdminUpdateProductBodyInput,
+} from "@/modules/products/product.schema";
 import {
   PRODUCT_CATEGORIES,
   PRODUCT_CONCERNS,
@@ -13,7 +17,9 @@ import {
 } from "@/modules/products/product.types";
 
 const ADMIN_PRODUCTS_API_BASE_PATH = "/api/admin/products";
+const ADMIN_PRODUCT_CREATE_ERROR_MESSAGE = "Could not create admin product.";
 const ADMIN_PRODUCT_LIST_ERROR_MESSAGE = "Could not load admin products.";
+const ADMIN_PRODUCT_SAVE_ERROR_MESSAGE = "Could not save admin product.";
 const ADMIN_PRODUCT_UPDATE_ERROR_MESSAGE =
   "Could not update product verification status.";
 
@@ -145,6 +151,10 @@ export function getAdminProductVerificationStatusApiPath(productId: string) {
   )}/verification-status`;
 }
 
+export function getAdminProductApiPath(productId: string) {
+  return `${ADMIN_PRODUCTS_API_BASE_PATH}/${encodeURIComponent(productId)}`;
+}
+
 async function readApiResponse<TData>(
   response: Response,
 ): Promise<ApiResponse<TData>> {
@@ -194,6 +204,67 @@ export async function listAdminProducts(
   }
 
   return body.data.items;
+}
+
+export async function createAdminProduct(input: AdminCreateProductBodyInput) {
+  let response: Response;
+
+  try {
+    response = await fetch(ADMIN_PRODUCTS_API_BASE_PATH, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+  } catch {
+    throw new AdminProductClientError(ADMIN_PRODUCT_CREATE_ERROR_MESSAGE);
+  }
+
+  const body = await readApiResponse<{ product: ProductDto }>(response);
+
+  if (!response.ok || !hasApiData(body) || !body.data.product) {
+    throw new AdminProductClientError(
+      ADMIN_PRODUCT_CREATE_ERROR_MESSAGE,
+      body.error?.code,
+      response.status,
+    );
+  }
+
+  return body.data.product;
+}
+
+export async function updateAdminProduct(
+  productId: string,
+  input: AdminUpdateProductBodyInput,
+) {
+  let response: Response;
+
+  try {
+    response = await fetch(getAdminProductApiPath(productId), {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+    });
+  } catch {
+    throw new AdminProductClientError(ADMIN_PRODUCT_SAVE_ERROR_MESSAGE);
+  }
+
+  const body = await readApiResponse<{ product: ProductDto }>(response);
+
+  if (!response.ok || !hasApiData(body) || !body.data.product) {
+    throw new AdminProductClientError(
+      ADMIN_PRODUCT_SAVE_ERROR_MESSAGE,
+      body.error?.code,
+      response.status,
+    );
+  }
+
+  return body.data.product;
 }
 
 export async function updateAdminProductVerificationStatus(
