@@ -22,6 +22,7 @@ const collectionMock = {
     return undefined;
   }),
   findOneAndUpdate: vi.fn(),
+  insertOne: vi.fn(),
 };
 
 vi.mock("@/infrastructure/database/collections", () => ({
@@ -30,15 +31,19 @@ vi.mock("@/infrastructure/database/collections", () => ({
 
 import { toProductDto } from "@/modules/products/product.mapper";
 import {
+  adminCreateProductBodySchema,
   adminProductListQuerySchema,
+  adminUpdateProductBodySchema,
   productListQuerySchema,
   updateProductVerificationStatusBodySchema,
 } from "@/modules/products/product.schema";
 import {
+  createProduct as createProductRecord,
   findProductById,
   findVisibleProductById,
   searchProductsForAdmin,
   searchVisibleProducts,
+  updateProduct as updateProductRecord,
   updateProductVerificationStatus,
 } from "@/modules/products/product.repository";
 import type { Product } from "@/modules/products/product.types";
@@ -68,6 +73,23 @@ function createProduct(overrides: Partial<Product> = {}): Product {
     createdAt: fixedNow,
     updatedAt: fixedNow,
     ...overrides,
+  };
+}
+
+function createAdminProductPayload() {
+  return {
+    brand: "SkinWise Demo",
+    category: "serum",
+    concerns: ["barrier_support"],
+    ingredientsText: " Water, Glycerin, Panthenol ",
+    keyActives: [" Panthenol ", "", "Glycerin"],
+    name: " Admin Lite Product ",
+    notRecommendedFor: ["known allergy to listed ingredients"],
+    priceRange: "budget",
+    skinTypes: ["sensitive"],
+    suitableFor: ["basic routine"],
+    tags: [" demo ", ""],
+    warnings: ["Patch test first"],
   };
 }
 
@@ -145,6 +167,88 @@ describe("Product query schema", () => {
       }),
     ).toThrow(ZodError);
   });
+
+  it("validates admin create product bodies and defaults unverified status", () => {
+    expect(adminCreateProductBodySchema.parse(createAdminProductPayload())).toEqual({
+      brand: "SkinWise Demo",
+      category: "serum",
+      concerns: ["barrier_support"],
+      ingredientsText: "Water, Glycerin, Panthenol",
+      keyActives: ["Panthenol", "Glycerin"],
+      name: "Admin Lite Product",
+      notRecommendedFor: ["known allergy to listed ingredients"],
+      priceRange: "budget",
+      skinTypes: ["sensitive"],
+      suitableFor: ["basic routine"],
+      tags: ["demo"],
+      verificationStatus: "unverified",
+      warnings: ["Patch test first"],
+    });
+
+    expect(
+      adminCreateProductBodySchema.parse({
+        ...createAdminProductPayload(),
+        verificationStatus: "reviewed",
+      }),
+    ).toMatchObject({
+      verificationStatus: "reviewed",
+    });
+  });
+
+  it("rejects invalid admin create product bodies", () => {
+    for (const body of [
+      { ...createAdminProductPayload(), name: " " },
+      { ...createAdminProductPayload(), brand: "" },
+      { ...createAdminProductPayload(), category: "device" },
+      { ...createAdminProductPayload(), priceRange: "luxury" },
+      { ...createAdminProductPayload(), skinTypes: ["reactive"] },
+      { ...createAdminProductPayload(), concerns: ["wrinkles"] },
+      { ...createAdminProductPayload(), source: "admin" },
+      {
+        ...createAdminProductPayload(),
+        createdByUserId: createdByUserId.toString(),
+      },
+      { ...createAdminProductPayload(), createdAt: fixedNow.toISOString() },
+      { ...createAdminProductPayload(), updatedAt: fixedNow.toISOString() },
+      { ...createAdminProductPayload(), _id: productId },
+      { ...createAdminProductPayload(), id: productId },
+    ]) {
+      expect(() => adminCreateProductBodySchema.parse(body)).toThrow(ZodError);
+    }
+  });
+
+  it("validates admin update product bodies as partial strict updates", () => {
+    expect(
+      adminUpdateProductBodySchema.parse({
+        brand: " Updated Brand ",
+        keyActives: [" Niacinamide ", ""],
+        verificationStatus: "verified",
+      }),
+    ).toEqual({
+      brand: "Updated Brand",
+      keyActives: ["Niacinamide"],
+      verificationStatus: "verified",
+    });
+
+    expect(() => adminUpdateProductBodySchema.parse({})).toThrow(ZodError);
+  });
+
+  it("rejects invalid admin update product bodies", () => {
+    for (const body of [
+      { verificationStatus: "draft" },
+      { name: "" },
+      { brand: " " },
+      { category: "device" },
+      { source: "admin" },
+      { createdByUserId: createdByUserId.toString() },
+      { createdAt: fixedNow.toISOString() },
+      { updatedAt: fixedNow.toISOString() },
+      { _id: productId },
+      { id: productId },
+    ]) {
+      expect(() => adminUpdateProductBodySchema.parse(body)).toThrow(ZodError);
+    }
+  });
 });
 
 describe("Product mapper", () => {
@@ -220,6 +324,7 @@ describe("Product repository", () => {
     collectionMock.find.mockReset();
     collectionMock.findOne.mockReset();
     collectionMock.findOneAndUpdate.mockReset();
+    collectionMock.insertOne.mockReset();
     sortMock.mockReset();
     limitMock.mockReset();
     toArrayMock.mockReset();
@@ -249,6 +354,26 @@ describe("Product repository", () => {
     );
     expect(sortMock).toHaveBeenCalledWith({ brand: 1, name: 1 });
     expect(limitMock).toHaveBeenCalledWith(20);
+  });
+
+  it("keeps unverified products out of the public catalogue filter", async () => {
+    toArrayMock.mockResolvedValue([
+      createProduct({ verificationStatus: "reviewed" }),
+      createProduct({ verificationStatus: "verified" }),
+    ]);
+
+    await searchVisibleProducts({ limit: 50 });
+
+    expect(collectionMock.find).toHaveBeenCalledWith({
+      verificationStatus: {
+        $in: ["reviewed", "verified"],
+      },
+    });
+    expect(collectionMock.find).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        verificationStatus: "unverified",
+      }),
+    );
   });
 
   it("applies product filters", async () => {
@@ -349,6 +474,95 @@ describe("Product repository", () => {
     expect(filter.category).toBe("serum");
     expect(filter.verificationStatus).toBe("unverified");
     expect(filter.$or?.[0]?.name.test("Pending product")).toBe(true);
+  });
+
+  it("creates admin-managed products with server-owned timestamps", async () => {
+    const insertedId = new ObjectId("665000000000000000000398");
+    collectionMock.insertOne.mockResolvedValue({ insertedId });
+
+    await expect(
+      createProductRecord({
+        brand: "SkinWise Demo",
+        category: "serum",
+        concerns: ["barrier_support"],
+        createdByUserId,
+        ingredientsText: "Water, Panthenol",
+        keyActives: ["Panthenol"],
+        name: "Admin Lite Product",
+        notRecommendedFor: [],
+        priceRange: "budget",
+        skinTypes: ["sensitive"],
+        source: "admin",
+        suitableFor: ["demo catalogue management"],
+        tags: ["admin-lite"],
+        verificationStatus: "unverified",
+        warnings: [],
+      }),
+    ).resolves.toMatchObject({
+      _id: insertedId,
+      source: "admin",
+      verificationStatus: "unverified",
+    });
+
+    expect(collectionMock.insertOne).toHaveBeenCalledWith({
+      brand: "SkinWise Demo",
+      category: "serum",
+      concerns: ["barrier_support"],
+      createdAt: fixedNow,
+      createdByUserId,
+      ingredientsText: "Water, Panthenol",
+      keyActives: ["Panthenol"],
+      name: "Admin Lite Product",
+      notRecommendedFor: [],
+      priceRange: "budget",
+      skinTypes: ["sensitive"],
+      source: "admin",
+      suitableFor: ["demo catalogue management"],
+      tags: ["admin-lite"],
+      updatedAt: fixedNow,
+      verificationStatus: "unverified",
+      warnings: [],
+    });
+  });
+
+  it("updates only provided product fields plus server-owned updatedAt", async () => {
+    const updatedProduct = createProduct({
+      name: "Updated Lite Product",
+      verificationStatus: "reviewed",
+    });
+    collectionMock.findOneAndUpdate.mockResolvedValue(updatedProduct);
+
+    await expect(
+      updateProductRecord(productId, {
+        name: "Updated Lite Product",
+        verificationStatus: "reviewed",
+      }),
+    ).resolves.toBe(updatedProduct);
+
+    expect(collectionMock.findOneAndUpdate).toHaveBeenCalledWith(
+      {
+        _id: new ObjectId(productId),
+      },
+      {
+        $set: {
+          name: "Updated Lite Product",
+          updatedAt: fixedNow,
+          verificationStatus: "reviewed",
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+    );
+  });
+
+  it("admin content update returns null for invalid product ids without querying", async () => {
+    await expect(
+      updateProductRecord("not-an-object-id", {
+        name: "Updated Lite Product",
+      }),
+    ).resolves.toBeNull();
+    expect(collectionMock.findOneAndUpdate).not.toHaveBeenCalled();
   });
 
   it("admin find by id does not apply public visibility filters", async () => {

@@ -8,7 +8,7 @@ import {
   getRoutineLogsForDateRange,
 } from "@/modules/routine-logs/routine-log.use-case";
 import { listRoutinesForUser } from "@/modules/routines/routine.use-case";
-import { countSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
+import { listSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
 import { getSkinProfileForUser } from "@/modules/skin-profile/skin-profile.use-case";
 
 function addLocalDateDays(localDate: string, days: number) {
@@ -36,7 +36,7 @@ export async function getDashboardForUser(
     latestJournals,
     todayJournals,
     journalsLast14Days,
-    savedProductCount,
+    savedProducts,
   ] = await Promise.all([
     getSkinProfileForUser(userId),
     listRoutinesForUser(userId),
@@ -54,7 +54,7 @@ export async function getDashboardForUser(
       to: input.localDate,
       limit: 14,
     }),
-    countSavedProductsByUser(userId),
+    listSavedProductsByUser(userId),
   ]);
 
   return toDashboardDto({
@@ -65,7 +65,7 @@ export async function getDashboardForUser(
     latestRoutineAnalysis,
     latestJournal: latestJournals[0] ?? null,
     journalsLast14Days,
-    savedProductCount,
+    savedProducts,
     hasJournalToday: todayJournals.length > 0,
     localDate: input.localDate,
   });

@@ -66,6 +66,7 @@ function createSnapshot(): AccountDataExportSnapshot {
           _id: new ObjectId("665000000000000000000103"),
           userId: authUserId,
           productId,
+          tags: ["To buy"],
           createdAt,
           updatedAt,
         },
@@ -197,6 +198,7 @@ describe("account data export/delete use cases", () => {
       savedProducts: [
         {
           productId: productId.toString(),
+          tags: ["To buy"],
           product: {
             id: productId.toString(),
             name: "Gentle Cleanser",

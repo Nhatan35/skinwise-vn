@@ -8,8 +8,14 @@ import {
 import { AuthenticationRequiredError } from "@/modules/auth/types";
 import type { ProductDto } from "@/modules/products/product.dto";
 import { toProductDto } from "@/modules/products/product.mapper";
-import { adminProductListQuerySchema } from "@/modules/products/product.schema";
-import { listProductsForAdmin } from "@/modules/products/product.use-case";
+import {
+  adminCreateProductBodySchema,
+  adminProductListQuerySchema,
+} from "@/modules/products/product.schema";
+import {
+  createProductForAdmin,
+  listProductsForAdmin,
+} from "@/modules/products/product.use-case";
 
 export const runtime = "nodejs";
 
@@ -80,7 +86,11 @@ function forbiddenResponse() {
 }
 
 function validationErrorResponse() {
-  return errorResponse("VALIDATION_ERROR", "Query parameters are invalid.", 400);
+  return errorResponse(
+    "VALIDATION_ERROR",
+    "Query parameters or request body are invalid.",
+    400,
+  );
 }
 
 function internalErrorResponse() {
@@ -89,6 +99,14 @@ function internalErrorResponse() {
 
 function getQueryParams(request: Request) {
   return Object.fromEntries(new URL(request.url).searchParams.entries());
+}
+
+async function getRequestJson(request: Request) {
+  try {
+    return await request.json();
+  } catch {
+    throw new ZodError([]);
+  }
 }
 
 export async function GET(request: Request) {
@@ -101,6 +119,40 @@ export async function GET(request: Request) {
     return jsonResponse<{ items: ProductDto[] }>({
       items: products.map(toProductDto),
     });
+  } catch (error) {
+    if (error instanceof AuthenticationRequiredError) {
+      return unauthorizedResponse();
+    }
+
+    if (error instanceof AdminPermissionRequiredError) {
+      return forbiddenResponse();
+    }
+
+    if (error instanceof ZodError) {
+      return validationErrorResponse();
+    }
+
+    return internalErrorResponse();
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const adminUser = await requireAdminUser();
+
+    const input = adminCreateProductBodySchema.parse(
+      await getRequestJson(request),
+    );
+    const product = await createProductForAdmin(input, {
+      createdByUserId: adminUser.profile._id,
+    });
+
+    return jsonResponse<{ product: ProductDto }>(
+      {
+        product: toProductDto(product),
+      },
+      201,
+    );
   } catch (error) {
     if (error instanceof AuthenticationRequiredError) {
       return unauthorizedResponse();

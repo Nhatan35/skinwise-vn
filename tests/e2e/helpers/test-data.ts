@@ -13,6 +13,18 @@ export const ADMIN_SMOKE_PRODUCT = {
   name: "Admin Smoke Pending Review Gel",
 } as const;
 
+export const ADMIN_CREATE_EDIT_SMOKE_PRODUCT = {
+  brand: "SkinWise Admin Lite",
+  editedBrand: "SkinWise Admin Lite Edited",
+  editedName: "Admin Create Edit Smoke Product Edited",
+  name: "Admin Create Edit Smoke Product",
+} as const;
+
+export const ADMIN_CREATE_EDIT_SMOKE_INGREDIENT = {
+  editedName: "Admin Smoke Ingredient Edited",
+  name: "Admin Smoke Ingredient",
+} as const;
+
 export const SKIN_PROFILE_TEST_DATA = {
   avoidIngredients: "e2e-fragrance-marker\nalcohol denat",
   budgetRange: "300k_700k",

@@ -19,6 +19,23 @@ function createDashboard(overrides: Partial<DashboardDto> = {}): DashboardDto {
       evening: 0,
       hasAnyRoutine: false,
     },
+    routineCoverage: {
+      hasRoutines: false,
+      totalRoutines: 0,
+      hasMorningRoutine: false,
+      hasEveningRoutine: false,
+      hasMorningSunscreen: false,
+      hasMoisturizer: false,
+      summary: "Chưa có routine để xem lại ở mức tổng quan.",
+      coverageItems: [],
+      cautionItems: [],
+      nextAction: {
+        label: "Tạo routine đầu tiên",
+        description: "Bắt đầu với một routine đơn giản.",
+        actionType: "create-routine",
+        href: routes.ROUTINES,
+      },
+    },
     todayRoutineLogs: {
       localDate: "2026-05-31",
       totalRoutines: 0,
@@ -48,6 +65,28 @@ function createDashboard(overrides: Partial<DashboardDto> = {}): DashboardDto {
     },
     savedProducts: {
       count: 0,
+    },
+    savedProductTags: {
+      totalSavedProducts: 0,
+      taggedProductCount: 0,
+      untaggedProductCount: 0,
+      topTags: [],
+    },
+    savedProductDecisionQueue: {
+      totalSavedProducts: 0,
+      consideringCount: 0,
+      testingCount: 0,
+      pausedCount: 0,
+      keptCount: 0,
+      unsetDecisionStatusCount: 0,
+      withoutPlannedRoutineSlotCount: 0,
+      withoutPersonalNoteCount: 0,
+      reviewNeededCount: 0,
+      nextAction: {
+        label: "Xem lại sản phẩm đã lưu",
+        description: "Lưu sản phẩm để bắt đầu xây dựng hàng chờ xem lại.",
+        href: routes.SAVED_PRODUCTS,
+      },
     },
     routineConsistency: {
       completedDays: 0,

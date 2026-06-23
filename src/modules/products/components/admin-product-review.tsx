@@ -1,15 +1,25 @@
 "use client";
 
-import { RefreshCcw, Search, X } from "lucide-react";
+import { Pencil, Plus, RefreshCcw, Search, X } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 
 import {
   AdminProductClientError,
+  createAdminProduct,
   listAdminProducts,
+  updateAdminProduct,
   updateAdminProductVerificationStatus,
   type AdminProductListClientInput,
 } from "@/modules/products/admin-product.client";
+import {
+  AdminProductForm,
+  type AdminProductFormPayload,
+} from "@/modules/products/components/admin-product-form";
 import type { ProductDto } from "@/modules/products/product.dto";
+import type {
+  AdminCreateProductBodyInput,
+  AdminUpdateProductBodyInput,
+} from "@/modules/products/product.schema";
 import {
   PRODUCT_VERIFICATION_STATUSES,
   type ProductVerificationStatus,
@@ -44,8 +54,19 @@ type ProductReviewFilterState = {
 
 type FeedbackState = {
   message: string;
+  title: string;
   type: "error" | "success";
 };
+
+type ProductEditorState =
+  | {
+      mode: "create";
+      product?: never;
+    }
+  | {
+      mode: "edit";
+      product: ProductDto;
+    };
 
 const initialFilters: ProductReviewFilterState = {
   q: "",
@@ -128,6 +149,40 @@ function getUpdateErrorMessage(error: unknown) {
   return "Could not update product verification status. Please retry.";
 }
 
+function getSaveProductErrorMessage(error: unknown) {
+  if (error instanceof AdminProductClientError) {
+    if (error.status === 401 || error.code === "UNAUTHORIZED") {
+      return "Bạn cần đăng nhập bằng tài khoản admin trước khi lưu sản phẩm.";
+    }
+
+    if (error.status === 403 || error.code === "FORBIDDEN") {
+      return "Chỉ admin mới có thể tạo hoặc chỉnh sửa sản phẩm.";
+    }
+
+    if (error.status === 404 || error.code === "NOT_FOUND") {
+      return "Không tìm thấy sản phẩm. Hãy tải lại danh sách và thử lại.";
+    }
+
+    if (error.status === 400 || error.code === "VALIDATION_ERROR") {
+      return "Một số thông tin sản phẩm chưa hợp lệ. Vui lòng kiểm tra lại form.";
+    }
+  }
+
+  return "Không thể lưu sản phẩm. Vui lòng thử lại.";
+}
+
+function upsertProduct(products: ProductDto[], product: ProductDto) {
+  const withoutProduct = products.filter((item) => item.id !== product.id);
+
+  return [product, ...withoutProduct].sort((first, second) => {
+    const brandComparison = first.brand.localeCompare(second.brand);
+
+    return brandComparison !== 0
+      ? brandComparison
+      : first.name.localeCompare(second.name);
+  });
+}
+
 function formatUpdatedAt(value: string) {
   return new Intl.DateTimeFormat("en", {
     dateStyle: "medium",
@@ -149,6 +204,9 @@ export function AdminProductReview() {
   const [updatingProductId, setUpdatingProductId] = useState<string | null>(
     null,
   );
+  const [editor, setEditor] = useState<ProductEditorState | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSavingProduct, setIsSavingProduct] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -217,6 +275,62 @@ export function AdminProductReview() {
     setActiveFilters(initialFilters);
   }
 
+  function handleCreateProduct() {
+    setEditor({ mode: "create" });
+    setSaveError(null);
+    setFeedback(null);
+  }
+
+  function handleEditProduct(product: ProductDto) {
+    setEditor({ mode: "edit", product });
+    setSaveError(null);
+    setFeedback(null);
+  }
+
+  function handleCancelEditor() {
+    if (isSavingProduct) {
+      return;
+    }
+
+    setEditor(null);
+    setSaveError(null);
+  }
+
+  async function handleSaveProduct(payload: AdminProductFormPayload) {
+    if (!editor || isSavingProduct) {
+      return;
+    }
+
+    setIsSavingProduct(true);
+    setSaveError(null);
+    setFeedback(null);
+
+    try {
+      const savedProduct =
+        editor.mode === "create"
+          ? await createAdminProduct(payload as AdminCreateProductBodyInput)
+          : await updateAdminProduct(
+              editor.product.id,
+              payload as AdminUpdateProductBodyInput,
+            );
+
+      setProducts((current) => upsertProduct(current, savedProduct));
+      setEditor(null);
+      setFeedback({
+        message:
+          editor.mode === "create"
+            ? "Tạo sản phẩm thành công"
+            : "Cập nhật sản phẩm thành công",
+        title: "Đã lưu sản phẩm",
+        type: "success",
+      });
+    } catch (error) {
+      setSaveError(getSaveProductErrorMessage(error));
+    } finally {
+      setIsSavingProduct(false);
+    }
+  }
+
   async function handleStatusChange(
     product: ProductDto,
     verificationStatus: ProductVerificationStatus,
@@ -245,11 +359,13 @@ export function AdminProductReview() {
             updatedProduct.verificationStatus
           ]
         }.`,
+        title: "Status updated",
         type: "success",
       });
     } catch (error) {
       setFeedback({
         message: getUpdateErrorMessage(error),
+        title: "Update failed",
         type: "error",
       });
     } finally {
@@ -262,6 +378,17 @@ export function AdminProductReview() {
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button
+          aria-label="Create Product"
+          onClick={handleCreateProduct}
+          type="button"
+        >
+          <Plus aria-hidden="true" />
+          Tạo sản phẩm
+        </Button>
+      </div>
+
       <Card>
         <CardContent className="pt-1">
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -338,19 +465,33 @@ export function AdminProductReview() {
       <Alert>
         <AlertTitle>Review boundary</AlertTitle>
         <AlertDescription>
-          This page changes only product verificationStatus. Public product
-          visibility remains based on reviewed or verified status.
+          Product content can be created or edited here. Public product
+          visibility still remains based on reviewed or verified status.
         </AlertDescription>
       </Alert>
+
+      {editor ? (
+        <AdminProductForm
+          isSaving={isSavingProduct}
+          key={
+            editor.mode === "edit"
+              ? `edit-${editor.product.id}`
+              : "create-product"
+          }
+          mode={editor.mode}
+          onCancel={handleCancelEditor}
+          onSubmit={(payload) => void handleSaveProduct(payload)}
+          product={editor.mode === "edit" ? editor.product : undefined}
+          saveError={saveError}
+        />
+      ) : null}
 
       {feedback ? (
         <Alert
           role={feedback.type === "success" ? "status" : "alert"}
           variant={feedback.type === "error" ? "destructive" : "default"}
         >
-          <AlertTitle>
-            {feedback.type === "success" ? "Status updated" : "Update failed"}
-          </AlertTitle>
+          <AlertTitle>{feedback.title}</AlertTitle>
           <AlertDescription>{feedback.message}</AlertDescription>
         </Alert>
       ) : null}
@@ -429,6 +570,7 @@ export function AdminProductReview() {
             <AdminProductReviewRow
               isUpdating={updatingProductId === product.id}
               key={product.id}
+              onEdit={() => handleEditProduct(product)}
               onStatusChange={(verificationStatus) =>
                 void handleStatusChange(product, verificationStatus)
               }
@@ -443,12 +585,14 @@ export function AdminProductReview() {
 
 type AdminProductReviewRowProps = {
   isUpdating: boolean;
+  onEdit: () => void;
   onStatusChange: (verificationStatus: ProductVerificationStatus) => void;
   product: ProductDto;
 };
 
 function AdminProductReviewRow({
   isUpdating,
+  onEdit,
   onStatusChange,
   product,
 }: AdminProductReviewRowProps) {
@@ -492,6 +636,17 @@ function AdminProductReviewRow({
         </div>
 
         <div className="space-y-2 rounded-xl border border-border bg-background p-3">
+          <Button
+            aria-label={`Edit ${product.name}`}
+            className="w-full"
+            onClick={onEdit}
+            type="button"
+            variant="outline"
+          >
+            <Pencil aria-hidden="true" />
+            Edit
+          </Button>
+
           <Label htmlFor={`admin-product-status-${product.id}`}>
             Verification status
           </Label>

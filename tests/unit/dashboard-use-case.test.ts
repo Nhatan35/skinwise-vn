@@ -23,7 +23,7 @@ vi.mock("@/modules/journals/list-skin-journal.use-case", () => ({
 }));
 
 vi.mock("@/modules/saved-products/saved-product.repository", () => ({
-  countSavedProductsByUser: vi.fn(),
+  listSavedProductsByUser: vi.fn(),
 }));
 
 import { findLatestRoutineAnalysisByUserId } from "@/modules/ai-analysis/routine-analysis.repository";
@@ -37,10 +37,12 @@ import {
   getRoutineLogsForDateRange,
 } from "@/modules/routine-logs/routine-log.use-case";
 import { listRoutinesForUser } from "@/modules/routines/routine.use-case";
-import { countSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
 import type { Routine } from "@/modules/routines/routine.types";
+import { listSavedProductsByUser } from "@/modules/saved-products/saved-product.repository";
+import type { SavedProduct } from "@/modules/saved-products/saved-product.types";
 import { getSkinProfileForUser } from "@/modules/skin-profile/skin-profile.use-case";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
+import { routes } from "@/shared/constants/routes";
 
 const mockedGetSkinProfileForUser = vi.mocked(getSkinProfileForUser);
 const mockedListRoutinesForUser = vi.mocked(listRoutinesForUser);
@@ -50,7 +52,7 @@ const mockedFindLatestRoutineAnalysisByUserId = vi.mocked(
   findLatestRoutineAnalysisByUserId,
 );
 const mockedListSkinJournalsForUser = vi.mocked(listSkinJournalsForUser);
-const mockedCountSavedProductsByUser = vi.mocked(countSavedProductsByUser);
+const mockedListSavedProductsByUser = vi.mocked(listSavedProductsByUser);
 
 const userId = "auth-user-id";
 const localDate = "2026-05-17";
@@ -171,6 +173,19 @@ function createJournal(overrides: Partial<SkinJournalDto> = {}): SkinJournalDto 
   };
 }
 
+function createSavedProduct(
+  overrides: Partial<SavedProduct> = {},
+): SavedProduct {
+  return {
+    _id: new ObjectId("665000000000000000000600"),
+    userId,
+    productId: new ObjectId("665000000000000000000700"),
+    createdAt: fixedDate,
+    updatedAt: fixedDate,
+    ...overrides,
+  };
+}
+
 function mockDashboardSources(input: {
   skinProfile?: SkinProfile | null;
   routines?: Routine[];
@@ -180,8 +195,26 @@ function mockDashboardSources(input: {
   latestJournals?: SkinJournalDto[];
   todayJournals?: SkinJournalDto[];
   journalsLast14Days?: SkinJournalDto[];
+  savedProducts?: SavedProduct[];
   savedProductCount?: number;
 }) {
+  const savedProducts =
+    input.savedProducts ??
+    Array.from(
+      {
+        length: input.savedProductCount ?? (input.skinProfile ? 1 : 0),
+      },
+      (_, index) =>
+        createSavedProduct({
+          _id: new ObjectId(
+            `6650000000000000000006${String(index).padStart(2, "0")}`,
+          ),
+          productId: new ObjectId(
+            `6650000000000000000007${String(index).padStart(2, "0")}`,
+          ),
+        }),
+    );
+
   mockedGetSkinProfileForUser.mockResolvedValue(input.skinProfile ?? null);
   mockedListRoutinesForUser.mockResolvedValue(input.routines ?? []);
   mockedGetRoutineLogsForDate.mockResolvedValue(input.routineLogs ?? []);
@@ -195,9 +228,7 @@ function mockDashboardSources(input: {
     .mockResolvedValueOnce(input.latestJournals ?? [])
     .mockResolvedValueOnce(input.todayJournals ?? [])
     .mockResolvedValueOnce(input.journalsLast14Days ?? []);
-  mockedCountSavedProductsByUser.mockResolvedValue(
-    input.savedProductCount ?? (input.skinProfile ? 1 : 0),
-  );
+  mockedListSavedProductsByUser.mockResolvedValue(savedProducts);
 }
 
 describe("Dashboard use case", () => {
@@ -208,7 +239,7 @@ describe("Dashboard use case", () => {
     mockedGetRoutineLogsForDateRange.mockReset();
     mockedFindLatestRoutineAnalysisByUserId.mockReset();
     mockedListSkinJournalsForUser.mockReset();
-    mockedCountSavedProductsByUser.mockReset();
+    mockedListSavedProductsByUser.mockReset();
   });
 
   it("returns missing optional sections safely", async () => {
@@ -222,6 +253,25 @@ describe("Dashboard use case", () => {
         evening: 0,
         hasAnyRoutine: false,
       },
+      routineCoverage: expect.objectContaining({
+        hasRoutines: false,
+        totalRoutines: 0,
+        hasMorningRoutine: false,
+        hasEveningRoutine: false,
+        hasMorningSunscreen: false,
+        hasMoisturizer: false,
+        coverageItems: expect.arrayContaining([
+          expect.objectContaining({
+            id: "routine-created",
+            status: "missing",
+          }),
+        ]),
+        cautionItems: [],
+        nextAction: expect.objectContaining({
+          actionType: "create-routine",
+          href: routes.ROUTINES,
+        }),
+      }),
       todayRoutineLogs: {
         localDate,
         totalRoutines: 0,
@@ -246,6 +296,28 @@ describe("Dashboard use case", () => {
         ],
       },
       savedProducts: { count: 0 },
+      savedProductTags: {
+        totalSavedProducts: 0,
+        taggedProductCount: 0,
+        untaggedProductCount: 0,
+        topTags: [],
+      },
+      savedProductDecisionQueue: {
+        totalSavedProducts: 0,
+        consideringCount: 0,
+        testingCount: 0,
+        pausedCount: 0,
+        keptCount: 0,
+        unsetDecisionStatusCount: 0,
+        withoutPlannedRoutineSlotCount: 0,
+        withoutPersonalNoteCount: 0,
+        reviewNeededCount: 0,
+        nextAction: {
+          label: "Xem lại sản phẩm đã lưu",
+          description: "Lưu sản phẩm để bắt đầu xây dựng hàng chờ xem lại.",
+          href: routes.SAVED_PRODUCTS,
+        },
+      },
       routineConsistency: {
         completedDays: 0,
         totalDays: 7,
@@ -279,6 +351,222 @@ describe("Dashboard use case", () => {
         },
       ],
     });
+  });
+
+  it("summarizes no saved product personal tags when there are no saved products", async () => {
+    mockDashboardSources({
+      savedProductCount: 0,
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.savedProductTags).toEqual({
+      totalSavedProducts: 0,
+      taggedProductCount: 0,
+      untaggedProductCount: 0,
+      topTags: [],
+    });
+  });
+
+  it("summarizes saved products without personal tags", async () => {
+    mockDashboardSources({
+      savedProducts: [
+        createSavedProduct({
+          _id: new ObjectId("665000000000000000000610"),
+          productId: new ObjectId("665000000000000000000710"),
+        }),
+        createSavedProduct({
+          _id: new ObjectId("665000000000000000000611"),
+          productId: new ObjectId("665000000000000000000711"),
+        }),
+      ],
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.savedProductTags).toEqual({
+      totalSavedProducts: 2,
+      taggedProductCount: 0,
+      untaggedProductCount: 2,
+      topTags: [],
+    });
+  });
+
+  it("summarizes top personal tags across saved products", async () => {
+    mockDashboardSources({
+      savedProducts: [
+        createSavedProduct({
+          _id: new ObjectId("665000000000000000000620"),
+          productId: new ObjectId("665000000000000000000720"),
+          tags: ["dưỡng ẩm", "dùng sáng"],
+        }),
+        createSavedProduct({
+          _id: new ObjectId("665000000000000000000621"),
+          productId: new ObjectId("665000000000000000000721"),
+          tags: ["dưỡng ẩm", "chống nắng"],
+        }),
+        createSavedProduct({
+          _id: new ObjectId("665000000000000000000622"),
+          productId: new ObjectId("665000000000000000000722"),
+          tags: ["dùng tối"],
+        }),
+      ],
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.savedProductTags).toMatchObject({
+      totalSavedProducts: 3,
+      taggedProductCount: 3,
+      untaggedProductCount: 0,
+      topTags: [
+        { label: "dưỡng ẩm", count: 2 },
+        { label: "chống nắng", count: 1 },
+        { label: "dùng sáng", count: 1 },
+        { label: "dùng tối", count: 1 },
+      ],
+    });
+  });
+
+  it("counts duplicate tags once per saved product", async () => {
+    mockDashboardSources({
+      savedProducts: [
+        createSavedProduct({
+          tags: ["dưỡng ẩm", "dưỡng ẩm", " Dưỡng ẩm "],
+        }),
+      ],
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.savedProductTags).toEqual({
+      totalSavedProducts: 1,
+      taggedProductCount: 1,
+      untaggedProductCount: 0,
+      topTags: [{ label: "dưỡng ẩm", count: 1 }],
+    });
+  });
+
+  it("adds dashboard routine coverage when a morning routine is missing sunscreen", async () => {
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      routines: [createRoutine()],
+      savedProductCount: 1,
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.routineCoverage.hasMorningRoutine).toBe(true);
+    expect(dashboard.routineCoverage.hasMorningSunscreen).toBe(false);
+    expect(
+      dashboard.routineCoverage.cautionItems.some(
+        (item) => item.id === "missing-morning-sunscreen",
+      ),
+    ).toBe(true);
+    expect(dashboard.routineCoverage.nextAction.actionType).toBe(
+      "review-morning-routine",
+    );
+    expect(dashboard.routineCoverage.nextAction.href).toBe(routes.ROUTINES);
+  });
+
+  it("marks moisturizer and morning sunscreen covered when routine steps include both", async () => {
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      routines: [
+        createRoutine({
+          steps: [
+            {
+              stepId: "step-cleanser",
+              customProductName: "Cleanser",
+              category: "cleanser",
+              order: 1,
+              frequency: "daily",
+            },
+            {
+              stepId: "step-moisturizer",
+              customProductName: "Moisturizer",
+              category: "moisturizer",
+              order: 2,
+              frequency: "daily",
+            },
+            {
+              stepId: "step-sunscreen",
+              customProductName: "Sunscreen",
+              category: "sunscreen",
+              order: 3,
+              frequency: "daily",
+            },
+          ],
+        }),
+      ],
+      savedProductCount: 1,
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(dashboard.routineCoverage.hasMorningSunscreen).toBe(true);
+    expect(dashboard.routineCoverage.hasMoisturizer).toBe(true);
+    expect(dashboard.routineCoverage.nextAction.href).toBe(routes.ROUTINES);
+  });
+
+  it("surfaces dashboard routine coverage caution for multiple active steps", async () => {
+    mockDashboardSources({
+      skinProfile: createSkinProfile(),
+      routines: [
+        createRoutine({
+          steps: [
+            {
+              stepId: "step-cleanser",
+              customProductName: "Cleanser",
+              category: "cleanser",
+              order: 1,
+              frequency: "daily",
+            },
+            {
+              stepId: "step-active-1",
+              customProductName: "Active 1",
+              category: "treatment",
+              order: 2,
+              frequency: "daily",
+            },
+            {
+              stepId: "step-active-2",
+              customProductName: "Active 2",
+              category: "treatment",
+              order: 3,
+              frequency: "weekly_1_2",
+            },
+            {
+              stepId: "step-moisturizer",
+              customProductName: "Moisturizer",
+              category: "moisturizer",
+              order: 4,
+              frequency: "daily",
+            },
+            {
+              stepId: "step-sunscreen",
+              customProductName: "Sunscreen",
+              category: "sunscreen",
+              order: 5,
+              frequency: "daily",
+            },
+          ],
+        }),
+      ],
+      savedProductCount: 1,
+    });
+
+    const dashboard = await getDashboardForUser(userId, { localDate });
+
+    expect(
+      dashboard.routineCoverage.cautionItems.some(
+        (item) => item.id === "multiple-treatments",
+      ),
+    ).toBe(true);
+    expect(dashboard.routineCoverage.nextAction.actionType).toBe(
+      "review-treatment-pacing",
+    );
+    expect(dashboard.routineCoverage.nextAction.label).toContain("active");
   });
 
   it("builds a dashboard summary from current user data", async () => {
@@ -348,6 +636,18 @@ describe("Dashboard use case", () => {
       hasAnyRoutine: true,
     });
     expect(dashboard.routines).not.toHaveProperty("both");
+    expect(dashboard.routineCoverage).toMatchObject({
+      hasRoutines: true,
+      totalRoutines: 3,
+      hasMorningRoutine: true,
+      hasEveningRoutine: true,
+      hasMorningSunscreen: false,
+      hasMoisturizer: false,
+      nextAction: {
+        actionType: "review-morning-routine",
+        href: routes.ROUTINES,
+      },
+    });
     expect(dashboard.todayRoutineLogs).toEqual({
       localDate,
       totalRoutines: 3,
@@ -364,6 +664,29 @@ describe("Dashboard use case", () => {
       missingFields: [],
     });
     expect(dashboard.savedProducts).toEqual({ count: 4 });
+    expect(dashboard.savedProductTags).toEqual({
+      totalSavedProducts: 4,
+      taggedProductCount: 0,
+      untaggedProductCount: 4,
+      topTags: [],
+    });
+    expect(dashboard.savedProductDecisionQueue).toEqual({
+      totalSavedProducts: 4,
+      consideringCount: 0,
+      testingCount: 0,
+      pausedCount: 0,
+      keptCount: 0,
+      unsetDecisionStatusCount: 4,
+      withoutPlannedRoutineSlotCount: 4,
+      withoutPersonalNoteCount: 4,
+      reviewNeededCount: 4,
+      nextAction: {
+        label: "Xem lại sản phẩm đã lưu",
+        description:
+          "Xem các sản phẩm còn thiếu trạng thái, kế hoạch routine hoặc ghi chú cá nhân.",
+        href: routes.SAVED_PRODUCTS,
+      },
+    });
     expect(dashboard.routineConsistency).toEqual({
       completedDays: 3,
       totalDays: 7,
@@ -695,6 +1018,6 @@ describe("Dashboard use case", () => {
       to: localDate,
       limit: 14,
     });
-    expect(mockedCountSavedProductsByUser).toHaveBeenCalledWith(userId);
+    expect(mockedListSavedProductsByUser).toHaveBeenCalledWith(userId);
   });
 });

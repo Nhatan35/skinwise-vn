@@ -53,12 +53,15 @@ MVP v1.44 - Admin Product Review API Foundation: DONE / PASS, local lint/typeche
 MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/typecheck/unit/build; production smoke not performed
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
+MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
 Core MVP: COMPLETE
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
-Latest completed scoped task: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
 Current phase: Post-MVP controlled product improvement
-Current active milestone: None
+Current active milestone: MVP v1.48 deployed smoke remains open
+Production smoke: NOT RUN / INCOMPLETE for v1.48 deployed admin product review smoke
+Production-ready claimed: No
 Production status: Manual Browser & Production Smoke Verification: DONE / PASS
 Accessibility verification status: Screen-Reader Assistive Technology Verification: DONE / PASS
 v1.24 status: Implementation complete, validation blocked - `npm run build` and `npm run test:e2e` did not pass in the current environment
@@ -85,10 +88,11 @@ v1.44 status: DONE / PASS - admin-only Product Review API foundation added AppUs
 v1.45 status: DONE / PASS - lightweight Admin Product Review UI added protected `/admin/products`, server-side admin guard, admin product client, all-status product review list, verificationStatus update workflow, loading/empty/error/unauthorized states, tests, and release evidence without full admin dashboard, full CRUD, product hard delete, isActive, marketplace/payment, image upload, or production-ready claims
 v1.46 status: DONE / MIXED - local Playwright/Chrome browser smoke for `/admin/products` found Auth.js sign-in 500 caused by local `MissingSecret`; admin/non-admin browser workflow was blocked by missing repeatable demo accounts and all-status product data; lint/typecheck/unit/build passed; production smoke not performed
 v1.47 status: DONE / PASS locally - repeatable E2E-only admin/non-admin auth and idempotent unverified smoke product seed data were added; local Playwright/Chrome verified unauthenticated redirect without Auth.js 500, non-admin block, admin list/search/filter/update/revert, public visibility, console/network, and no browser-visible secret exposure; production smoke not performed
+v1.48 status: BLOCKED / DEPLOYED SMOKE INCOMPLETE - local pre-deploy validation passed, but deployed admin product review smoke evidence is missing or incomplete; production-ready is not claimed
 Manual Browser & Production Smoke Verification: DONE / PASS
 Latest completed verification task: Screen-Reader Assistive Technology Verification: DONE / PASS
 Latest completed MVP quality task: MVP Product Match Explainability Polish: DONE / PASS
-Recommended next task: MVP v1.48 - Deployed Admin Product Review Smoke Verification
+Recommended next task: Complete deployed smoke evidence for MVP v1.48
 ```
 
 Primary current documents:
@@ -111,6 +115,7 @@ Primary current documents:
 - `docs/release-evidence-admin-product-review-ui-workflow-polish.md`
 - `docs/release-evidence-admin-product-review-browser-smoke.md`
 - `docs/release-evidence-admin-product-review-repeatable-smoke-v1.47.md`
+- `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`
 - `docs/release-evidence-v1.23.md`
 - `docs/release-evidence-v1.24.md`
 - `docs/data-control-and-deletion.md`
@@ -132,6 +137,8 @@ Evidence boundary:
 - v1.47 local browser smoke passed on 2026-06-16 using Playwright headless Chrome with the system Chrome executable. It verified unauthenticated `/admin/products` redirects without Auth.js 500, non-admin blocking, admin access, list/search/filter behavior, `verificationStatus` update and revert, public product visibility regression, console/network checks, and no browser-visible secret exposure.
 - v1.47 seed/auth prerequisites are repeatable and local/E2E scoped: E2E-only admin/non-admin credential providers remain gated by `APP_ENV=test` plus `E2E_TEST_AUTH=true`, and the admin smoke product is seeded idempotently with `verificationStatus="unverified"`.
 - v1.47 production readiness is not claimed because no fresh deployed-URL production smoke test was performed for this milestone.
+- v1.48 local pre-deploy validation passed for `npm ci`, lint, typecheck, unit tests, build, isolated admin product review smoke, and full E2E.
+- v1.48 deployed admin product review smoke evidence is missing or incomplete. All deployed smoke checks remain NOT RUN in `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`, so production-ready is not claimed.
 - Production PASS is based on user-reported manual verification with no critical blockers reported.
 - Manual Browser & Production Smoke Verification is DONE / PASS. Authenticated MVP flows, `/api/health`, browser console/network, Vercel runtime logs, MongoDB read/write behavior, and OAuth callback behavior were reported as checked with no critical blockers observed.
 - Unknown production smoke evidence fields are recorded as `Not provided`: exact verification date, tester name, Vercel deployment id, browser/version, and device/OS.

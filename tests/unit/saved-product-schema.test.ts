@@ -63,6 +63,26 @@ describe("saved product metadata schema", () => {
     ).toThrow();
   });
 
+  it("accepts trimmed user-owned tags", () => {
+    expect(
+      updateSavedProductMetadataBodySchema.parse({
+        tags: ["  To buy  ", "Patch test"],
+      }),
+    ).toEqual({ tags: ["To buy", "Patch test"] });
+  });
+
+  it.each([
+    [[""]],
+    [["To buy", "to buy"]],
+    [["not allowed!"]],
+    [["a".repeat(31)]],
+    [["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]],
+  ])("rejects invalid tags %s", (tags) => {
+    expect(() =>
+      updateSavedProductMetadataBodySchema.parse({ tags }),
+    ).toThrow();
+  });
+
   it.each([
     "unknown",
     "id",

@@ -2,25 +2,31 @@ import { ObjectId } from "mongodb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/modules/products/product.repository", () => ({
+  createProduct: vi.fn(),
   findProductById: vi.fn(),
   findVisibleProductById: vi.fn(),
   searchProductsForAdmin: vi.fn(),
   searchVisibleProducts: vi.fn(),
+  updateProduct: vi.fn(),
   updateProductVerificationStatus: vi.fn(),
 }));
 
 import {
+  createProductForAdmin,
   getProductByIdForAdmin,
   getProductById,
   listProductsForAdmin,
   listProducts,
+  updateProductForAdmin,
   updateProductVerificationStatusForAdmin,
 } from "@/modules/products/product.use-case";
 import {
+  createProduct,
   findProductById,
   findVisibleProductById,
   searchProductsForAdmin,
   searchVisibleProducts,
+  updateProduct,
   updateProductVerificationStatus,
 } from "@/modules/products/product.repository";
 import type { Product } from "@/modules/products/product.types";
@@ -29,6 +35,8 @@ const mockedFindProductById = vi.mocked(findProductById);
 const mockedFindVisibleProductById = vi.mocked(findVisibleProductById);
 const mockedSearchProductsForAdmin = vi.mocked(searchProductsForAdmin);
 const mockedSearchVisibleProducts = vi.mocked(searchVisibleProducts);
+const mockedCreateProduct = vi.mocked(createProduct);
+const mockedUpdateProduct = vi.mocked(updateProduct);
 const mockedUpdateProductVerificationStatus = vi.mocked(
   updateProductVerificationStatus,
 );
@@ -62,6 +70,8 @@ describe("Product use cases", () => {
     mockedFindVisibleProductById.mockReset();
     mockedSearchProductsForAdmin.mockReset();
     mockedSearchVisibleProducts.mockReset();
+    mockedCreateProduct.mockReset();
+    mockedUpdateProduct.mockReset();
     mockedUpdateProductVerificationStatus.mockReset();
   });
 
@@ -170,6 +180,80 @@ describe("Product use cases", () => {
     });
     expect(mockedFindProductById).toHaveBeenCalledWith(productId);
     expect(mockedFindVisibleProductById).not.toHaveBeenCalled();
+  });
+
+  it("creates admin products with admin source and optional profile ObjectId", async () => {
+    const adminProfileId = new ObjectId("665000000000000000000314");
+    mockedCreateProduct.mockResolvedValue({
+      ...product,
+      createdByUserId: adminProfileId,
+      source: "admin",
+      verificationStatus: "unverified",
+    });
+
+    await expect(
+      createProductForAdmin(
+        {
+          brand: "SkinWise Demo",
+          category: "serum",
+          concerns: ["barrier_support"],
+          ingredientsText: "Water, Panthenol",
+          keyActives: ["Panthenol"],
+          name: "Admin Lite Product",
+          notRecommendedFor: [],
+          priceRange: "budget",
+          skinTypes: ["sensitive"],
+          suitableFor: ["demo catalogue management"],
+          tags: ["admin-lite"],
+          verificationStatus: "unverified",
+          warnings: [],
+        },
+        {
+          createdByUserId: adminProfileId,
+        },
+      ),
+    ).resolves.toMatchObject({
+      source: "admin",
+      verificationStatus: "unverified",
+    });
+
+    expect(mockedCreateProduct).toHaveBeenCalledWith({
+      brand: "SkinWise Demo",
+      category: "serum",
+      concerns: ["barrier_support"],
+      createdByUserId: adminProfileId,
+      ingredientsText: "Water, Panthenol",
+      keyActives: ["Panthenol"],
+      name: "Admin Lite Product",
+      notRecommendedFor: [],
+      priceRange: "budget",
+      skinTypes: ["sensitive"],
+      source: "admin",
+      suitableFor: ["demo catalogue management"],
+      tags: ["admin-lite"],
+      verificationStatus: "unverified",
+      warnings: [],
+    });
+  });
+
+  it("updates admin product content through the repository", async () => {
+    mockedUpdateProduct.mockResolvedValue({
+      ...product,
+      name: "Updated Admin Lite Product",
+    });
+
+    await expect(
+      updateProductForAdmin(productId, {
+        name: "Updated Admin Lite Product",
+        tags: ["admin-lite"],
+      }),
+    ).resolves.toMatchObject({
+      name: "Updated Admin Lite Product",
+    });
+    expect(mockedUpdateProduct).toHaveBeenCalledWith(productId, {
+      name: "Updated Admin Lite Product",
+      tags: ["admin-lite"],
+    });
   });
 
   it("updates verificationStatus for admin through the repository", async () => {

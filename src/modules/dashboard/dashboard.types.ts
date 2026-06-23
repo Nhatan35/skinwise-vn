@@ -8,6 +8,11 @@ import type {
   SkinConcern,
   SkinType,
 } from "@/modules/skin-profile/skin-profile.types";
+import type {
+  RoutineCoverageCautionItem,
+  RoutineCoverageItem,
+  RoutineCoverageNextActionType,
+} from "@/modules/routines/routine-coverage-review";
 
 export type DashboardSkinProfileSummary =
   | {
@@ -26,6 +31,24 @@ export type DashboardRoutineSummary = {
   morning: number;
   evening: number;
   hasAnyRoutine: boolean;
+};
+
+export type DashboardRoutineCoverageSummary = {
+  hasRoutines: boolean;
+  totalRoutines: number;
+  hasMorningRoutine: boolean;
+  hasEveningRoutine: boolean;
+  hasMorningSunscreen: boolean;
+  hasMoisturizer: boolean;
+  summary: string;
+  coverageItems: RoutineCoverageItem[];
+  cautionItems: RoutineCoverageCautionItem[];
+  nextAction: {
+    label: string;
+    description: string;
+    actionType: RoutineCoverageNextActionType;
+    href: string;
+  };
 };
 
 export type DashboardTodayRoutineLogsSummary = {
@@ -77,6 +100,35 @@ export type DashboardProfileCompletionSummary = {
 
 export type DashboardSavedProductsSummary = {
   count: number;
+};
+
+export type DashboardSavedProductTagSummaryItem = {
+  label: string;
+  count: number;
+};
+
+export type DashboardSavedProductTagsSummary = {
+  totalSavedProducts: number;
+  taggedProductCount: number;
+  untaggedProductCount: number;
+  topTags: DashboardSavedProductTagSummaryItem[];
+};
+
+export type DashboardSavedProductDecisionQueueSummary = {
+  totalSavedProducts: number;
+  consideringCount: number;
+  testingCount: number;
+  pausedCount: number;
+  keptCount: number;
+  unsetDecisionStatusCount: number;
+  withoutPlannedRoutineSlotCount: number;
+  withoutPersonalNoteCount: number;
+  reviewNeededCount: number;
+  nextAction: {
+    label: string;
+    description: string;
+    href: string;
+  };
 };
 
 export type DashboardRoutineConsistencyLabel =

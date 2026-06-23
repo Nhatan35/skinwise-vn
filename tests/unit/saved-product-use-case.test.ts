@@ -248,6 +248,29 @@ describe("Saved Product use cases", () => {
     expect(mockedGetProductById).not.toHaveBeenCalled();
   });
 
+  it("returns user-owned tags when saved product metadata is updated", async () => {
+    mockedUpdateSavedProductMetadataRecordForUser.mockResolvedValue(
+      createSavedProduct({
+        tags: ["To buy", "Patch test"],
+      }),
+    );
+    mockedGetProductById.mockResolvedValue(createProduct());
+
+    await expect(
+      updateSavedProductMetadata(userId, productId, {
+        tags: ["To buy", "Patch test"],
+      }),
+    ).resolves.toMatchObject({
+      productId,
+      tags: ["To buy", "Patch test"],
+    });
+    expect(
+      mockedUpdateSavedProductMetadataRecordForUser,
+    ).toHaveBeenCalledWith(userId, productId, {
+      tags: ["To buy", "Patch test"],
+    });
+  });
+
   it("maps existing saved products without metadata", async () => {
     mockedListSavedProductsByUser.mockResolvedValue([createSavedProduct()]);
     mockedGetProductById.mockResolvedValue(createProduct());
@@ -257,5 +280,6 @@ describe("Saved Product use cases", () => {
     expect(result).not.toHaveProperty("decisionStatus");
     expect(result).not.toHaveProperty("plannedRoutineSlot");
     expect(result).not.toHaveProperty("personalNote");
+    expect(result).toHaveProperty("tags", []);
   });
 });

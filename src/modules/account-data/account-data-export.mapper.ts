@@ -64,6 +64,9 @@ function toSavedProductExportDto(
     id: snapshot.savedProduct._id.toString(),
     productId: snapshot.savedProduct.productId.toString(),
     ...(snapshot.product ? { product: toLinkedProductDto(snapshot.product) } : {}),
+    tags: Array.isArray(snapshot.savedProduct.tags)
+      ? [...snapshot.savedProduct.tags]
+      : [],
     createdAt: snapshot.savedProduct.createdAt.toISOString(),
     updatedAt: snapshot.savedProduct.updatedAt.toISOString(),
   };

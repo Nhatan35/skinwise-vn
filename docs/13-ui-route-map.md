@@ -7,10 +7,12 @@ Current status:
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed milestone: MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
 Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
 Production URL: https://skinwise-vn.vercel.app
-Production smoke for v1.47: NOT RUN; historical production PASS remains user-reported
+MVP v1.48 deployed admin product review smoke: NOT RUN / INCOMPLETE
+Production-ready claimed: No
 Admin product review browser smoke for v1.47: DONE / PASS locally with repeatable E2E admin/non-admin auth, an idempotent `unverified` smoke product, update/revert coverage, public visibility regression, and console/network/security checks
 ```
 

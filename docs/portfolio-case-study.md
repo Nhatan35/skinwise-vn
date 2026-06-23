@@ -1,6 +1,6 @@
 # SkinWise VN - Portfolio Case Study
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## 1. Executive Summary
 
@@ -24,15 +24,16 @@ MVP v1.9 - Local validation evidence: PASS
 MVP v1.10 - Production smoke/monitoring evidence: PASS, user-reported
 MVP v1.11 - Portfolio demo readiness: DONE
 MVP v1.12 - Post-MVP backlog planning: DONE
-Latest completed milestone: MVP v1.43 - Release Evidence & Validation Cleanup
-Current phase: Post-MVP validation cleanup
+Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Current phase: Post-MVP controlled product improvement
+Current active milestone: MVP v1.48 deployed smoke remains open
 Portfolio Evidence Package: Documentation prepared
 Optional media evidence still separate: screenshots and demo video
-Fresh v1.43 local validation: PASS
-Fresh v1.43 production smoke: NOT RUN
+MVP v1.48 deployed admin product review smoke: NOT RUN / INCOMPLETE
+Production-ready claimed: No
 ```
 
-Evidence note: local validation is supported by command output from the v1.43 release evidence cleanup milestone. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline and were not rerun specifically for v1.43. v1.43 does not claim production-ready status, fresh production smoke, screenshots, demo video, performance, traffic, or user-metric evidence. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
+Evidence note: local validation is supported by v1.48 local pre-deploy validation evidence. Production smoke and monitoring PASS remain recorded from the previously user-reported stable MVP baseline, but v1.48 deployed admin product review smoke evidence is missing or incomplete. v1.48 does not claim production-ready status, deployed smoke PASS, screenshots, demo video, performance, traffic, or user-metric evidence. Keep screenshots/log excerpts separately if a reviewer requires stricter traceability.
 
 ## 1A. Portfolio Evidence Package Snapshot
 
@@ -52,7 +53,7 @@ Current package status:
 | Demo data checklist | Prepared | Separates seeded public data from user-owned demo account data. |
 | Screenshot checklist | Prepared | Recommended captures are listed, but actual screenshot files are not claimed. |
 | Demo video | Not recorded | No demo video file is claimed by repository docs. |
-| Current task product validation | PASS | v1.43 local validation passed; product behavior was not changed. |
+| Current task product validation | BLOCKED / DEPLOYED SMOKE INCOMPLETE | v1.48 local pre-deploy validation passed, but deployed admin product review smoke evidence is missing or incomplete. Product behavior was not changed. |
 
 Recruiter summary:
 
@@ -209,7 +210,7 @@ Production evidence:
 ```txt
 Production URL: https://skinwise-vn.vercel.app
 Production smoke/monitoring evidence: PASS - previously user-reported stable MVP baseline
-Production smoke and monitoring were not rerun specifically for v1.43 because v1.43 is a local validation and release evidence cleanup milestone.
+MVP v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed for v1.48.
 Critical blockers reported: None
 Evidence date: 2026-06-04
 ```

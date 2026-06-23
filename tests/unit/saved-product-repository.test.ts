@@ -245,6 +245,39 @@ describe("Saved Product repository", () => {
     expect(update.$unset).toEqual({ personalNote: "" });
   });
 
+  it("updates tags without clearing existing note or decision metadata", async () => {
+    const collection = createCollectionMock();
+
+    collection.findOneAndUpdate.mockResolvedValue(
+      createSavedProduct({
+        decisionStatus: "testing",
+        personalNote: "Existing note.",
+        tags: ["To buy"],
+      }),
+    );
+    setCollectionMock(collection);
+
+    await updateSavedProductMetadataForUser(userId, productId, {
+      tags: ["To buy"],
+    });
+
+    const [filter, update] = collection.findOneAndUpdate.mock.calls[0] as [
+      { productId: ObjectId; userId: string },
+      {
+        $set: Record<string, unknown>;
+        $unset?: Record<string, "">;
+      },
+    ];
+
+    expect(filter.userId).toBe(userId);
+    expect(filter.productId.toString()).toBe(productId);
+    expect(update.$set).toEqual({
+      tags: ["To buy"],
+      updatedAt: expect.any(Date),
+    });
+    expect(update.$unset).toBeUndefined();
+  });
+
   it("returns null for invalid product ids without updating", async () => {
     const collection = createCollectionMock();
 

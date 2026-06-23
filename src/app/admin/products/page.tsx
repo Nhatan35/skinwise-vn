@@ -40,9 +40,8 @@ export default async function AdminProductsPage() {
             Admin Product Review
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
-            Review product catalogue visibility status through
-            verificationStatus. This workflow changes only whether products are
-            pending review, reviewed, or verified.
+            Create and edit lightweight product catalogue content while keeping
+            public visibility controlled through verificationStatus.
           </p>
         </div>
 

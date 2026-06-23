@@ -4,13 +4,27 @@ import type {
   DashboardJournalTrendSummary,
   DashboardLatestJournalSummary,
   DashboardNextAction,
+  DashboardRoutineCoverageSummary,
   DashboardRoutineConsistencyLabel,
   DashboardRoutineConsistencyLevel,
   DashboardRoutineConsistencySummary,
+  DashboardSavedProductDecisionQueueSummary,
+  DashboardSavedProductTagsSummary,
 } from "@/modules/dashboard/dashboard.types";
 import type { SkinJournalDto } from "@/modules/journals/skin-journal.dto";
 import type { RoutineLogDto } from "@/modules/routine-logs/routine-log.dto";
+import { toRoutineDto } from "@/modules/routines/routine.mapper";
+import { buildRoutineCoverageReview } from "@/modules/routines/routine-coverage-review";
 import type { Routine } from "@/modules/routines/routine.types";
+import {
+  isBlankSavedProductReviewValue,
+  needsSavedProductReview,
+} from "@/modules/saved-products/saved-product-review";
+import {
+  getSavedProductTagKey,
+  normalizeSavedProductTag,
+} from "@/modules/saved-products/saved-product-tags";
+import type { SavedProduct } from "@/modules/saved-products/saved-product.types";
 import type { SkinProfile } from "@/modules/skin-profile/skin-profile.types";
 import { routes } from "@/shared/constants/routes";
 
@@ -116,6 +130,204 @@ export function mapRoutineSummary(routines: Routine[]) {
     morning,
     evening,
     hasAnyRoutine: routines.length > 0,
+  };
+}
+
+function mapDashboardRoutineCoverageCautionItems(
+  cautionItems: DashboardRoutineCoverageSummary["cautionItems"],
+) {
+  return cautionItems.map((item) => {
+    if (item.id !== "multiple-treatments") {
+      return item;
+    }
+
+    return {
+      ...item,
+      label: "Xem lại nhịp dùng active",
+      description:
+        "Một số routine có nhiều bước active. Bạn có thể kiểm tra lại cách sắp xếp, tần suất dùng và theo dõi cảm nhận của da theo thời gian.",
+    };
+  });
+}
+
+function mapDashboardRoutineCoverageNextAction(
+  nextAction: DashboardRoutineCoverageSummary["nextAction"],
+) {
+  if (nextAction.actionType !== "review-treatment-pacing") {
+    return nextAction;
+  }
+
+  return {
+    ...nextAction,
+    label: "Xem lại nhịp dùng active",
+    description:
+      "Nếu routine có nhiều bước active, hãy xem lại tần suất, thứ tự và cảm nhận của da theo thời gian.",
+  };
+}
+
+export function mapRoutineCoverageSummary(
+  routines: Routine[],
+): DashboardRoutineCoverageSummary {
+  const review = buildRoutineCoverageReview(routines.map(toRoutineDto));
+  const nextAction = mapDashboardRoutineCoverageNextAction({
+    ...review.nextAction,
+    href: routes.ROUTINES,
+  });
+
+  return {
+    hasRoutines: review.hasRoutines,
+    totalRoutines: review.totalRoutines,
+    hasMorningRoutine: review.hasMorningRoutine,
+    hasEveningRoutine: review.hasEveningRoutine,
+    hasMorningSunscreen: review.hasMorningSunscreen,
+    hasMoisturizer: review.hasMoisturizer,
+    summary: review.summary,
+    coverageItems: review.coverageItems,
+    cautionItems: mapDashboardRoutineCoverageCautionItems(review.cautionItems),
+    nextAction,
+  };
+}
+
+function getSavedProductTags(savedProduct: SavedProduct) {
+  return Array.isArray(savedProduct.tags) ? savedProduct.tags : [];
+}
+
+export function mapSavedProductTagsSummary(
+  savedProducts: SavedProduct[],
+): DashboardSavedProductTagsSummary {
+  const tagCountsByKey = new Map<string, number>();
+  const labelsByKey = new Map<string, string>();
+  let taggedProductCount = 0;
+
+  for (const savedProduct of savedProducts) {
+    const uniqueTagsByKey = new Map<string, string>();
+
+    for (const rawTag of getSavedProductTags(savedProduct)) {
+      const tag = normalizeSavedProductTag(rawTag);
+
+      if (!tag) {
+        continue;
+      }
+
+      const tagKey = getSavedProductTagKey(tag);
+
+      if (tagKey && !uniqueTagsByKey.has(tagKey)) {
+        uniqueTagsByKey.set(tagKey, tag);
+      }
+    }
+
+    if (uniqueTagsByKey.size > 0) {
+      taggedProductCount += 1;
+    }
+
+    for (const [tagKey, tag] of uniqueTagsByKey) {
+      labelsByKey.set(tagKey, labelsByKey.get(tagKey) ?? tag);
+      tagCountsByKey.set(tagKey, (tagCountsByKey.get(tagKey) ?? 0) + 1);
+    }
+  }
+
+  const topTags = Array.from(tagCountsByKey.entries())
+    .map(([tagKey, count]) => ({
+      label: labelsByKey.get(tagKey) ?? tagKey,
+      count,
+    }))
+    .sort((first, second) => {
+      return (
+        second.count - first.count ||
+        first.label.localeCompare(second.label, "vi")
+      );
+    })
+    .slice(0, 5);
+
+  return {
+    totalSavedProducts: savedProducts.length,
+    taggedProductCount,
+    untaggedProductCount: savedProducts.length - taggedProductCount,
+    topTags,
+  };
+}
+
+function getSavedProductDecisionQueueNextActionDescription(input: {
+  totalSavedProducts: number;
+  reviewNeededCount: number;
+}) {
+  if (input.totalSavedProducts === 0) {
+    return "Lưu sản phẩm để bắt đầu xây dựng hàng chờ xem lại.";
+  }
+
+  if (input.reviewNeededCount === 0) {
+    return "Tất cả sản phẩm đã lưu hiện có đủ thông tin tổ chức cá nhân.";
+  }
+
+  return "Xem các sản phẩm còn thiếu trạng thái, kế hoạch routine hoặc ghi chú cá nhân.";
+}
+
+export function mapSavedProductDecisionQueueSummary(
+  savedProducts: SavedProduct[],
+): DashboardSavedProductDecisionQueueSummary {
+  let consideringCount = 0;
+  let testingCount = 0;
+  let pausedCount = 0;
+  let keptCount = 0;
+  let unsetDecisionStatusCount = 0;
+  let withoutPlannedRoutineSlotCount = 0;
+  let withoutPersonalNoteCount = 0;
+  let reviewNeededCount = 0;
+
+  for (const savedProduct of savedProducts) {
+    const decisionStatus = savedProduct.decisionStatus as unknown;
+    const plannedRoutineSlot = savedProduct.plannedRoutineSlot as unknown;
+    const personalNote = savedProduct.personalNote as unknown;
+    const hasBlankDecisionStatus =
+      isBlankSavedProductReviewValue(decisionStatus);
+    const hasBlankPlannedRoutineSlot =
+      isBlankSavedProductReviewValue(plannedRoutineSlot);
+    const hasBlankPersonalNote =
+      isBlankSavedProductReviewValue(personalNote);
+
+    if (decisionStatus === "considering") {
+      consideringCount += 1;
+    } else if (decisionStatus === "testing") {
+      testingCount += 1;
+    } else if (decisionStatus === "paused") {
+      pausedCount += 1;
+    } else if (decisionStatus === "kept") {
+      keptCount += 1;
+    } else if (hasBlankDecisionStatus) {
+      unsetDecisionStatusCount += 1;
+    }
+
+    if (hasBlankPlannedRoutineSlot) {
+      withoutPlannedRoutineSlotCount += 1;
+    }
+
+    if (hasBlankPersonalNote) {
+      withoutPersonalNoteCount += 1;
+    }
+
+    if (needsSavedProductReview(savedProduct)) {
+      reviewNeededCount += 1;
+    }
+  }
+
+  return {
+    totalSavedProducts: savedProducts.length,
+    consideringCount,
+    testingCount,
+    pausedCount,
+    keptCount,
+    unsetDecisionStatusCount,
+    withoutPlannedRoutineSlotCount,
+    withoutPersonalNoteCount,
+    reviewNeededCount,
+    nextAction: {
+      label: "Xem lại sản phẩm đã lưu",
+      description: getSavedProductDecisionQueueNextActionDescription({
+        totalSavedProducts: savedProducts.length,
+        reviewNeededCount,
+      }),
+      href: routes.SAVED_PRODUCTS,
+    },
   };
 }
 
@@ -528,12 +740,13 @@ export function toDashboardDto(input: {
   latestRoutineAnalysis: RoutineAnalysis | null;
   latestJournal: SkinJournalDto | null;
   journalsLast14Days: SkinJournalDto[];
-  savedProductCount: number;
+  savedProducts: SavedProduct[];
   hasJournalToday: boolean;
   localDate: string;
 }): DashboardDto {
   const skinProfile = mapSkinProfileSummary(input.skinProfile);
   const routines = mapRoutineSummary(input.routines);
+  const routineCoverage = mapRoutineCoverageSummary(input.routines);
   const todayRoutineLogs = mapTodayRoutineLogsSummary(
     input.routines,
     input.routineLogs,
@@ -544,7 +757,11 @@ export function toDashboardDto(input: {
   );
   const latestJournal = mapLatestJournalSummary(input.latestJournal);
   const profileCompletion = mapProfileCompletionSummary(input.skinProfile);
-  const savedProducts = { count: input.savedProductCount };
+  const savedProducts = { count: input.savedProducts.length };
+  const savedProductTags = mapSavedProductTagsSummary(input.savedProducts);
+  const savedProductDecisionQueue = mapSavedProductDecisionQueueSummary(
+    input.savedProducts,
+  );
   const routineConsistency = mapRoutineConsistencySummary(
     input.routineLogsLast7Days,
     input.localDate,
@@ -554,16 +771,19 @@ export function toDashboardDto(input: {
   return {
     skinProfile,
     routines,
+    routineCoverage,
     todayRoutineLogs,
     latestRoutineAnalysis,
     latestJournal,
     profileCompletion,
     savedProducts,
+    savedProductTags,
+    savedProductDecisionQueue,
     routineConsistency,
     journalTrend,
     nextActions: buildDashboardNextActions({
       hasSkinProfile: skinProfile.exists,
-      savedProductCount: input.savedProductCount,
+      savedProductCount: input.savedProducts.length,
       hasAnyRoutine: routines.hasAnyRoutine,
       hasAnyRoutineLogToday:
         todayRoutineLogs.completed +

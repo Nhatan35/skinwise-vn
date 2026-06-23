@@ -70,6 +70,7 @@ function createSavedProduct(
       createdAt: fixedDate,
       updatedAt: fixedDate,
     },
+    tags: [],
     createdAt: fixedDate,
     updatedAt: fixedDate,
     ...overrides,
@@ -323,6 +324,39 @@ describe("/api/saved-products contract", () => {
     }
   });
 
+  it("updates saved product tags for the authenticated owner", async () => {
+    mockAuthenticatedUser();
+    const updatedItem = createSavedProduct({ tags: ["To buy", "Patch test"] });
+
+    mockedUpdateSavedProductMetadata.mockResolvedValue(updatedItem);
+
+    const response = await savedProductByProductIdRoute.PATCH(
+      jsonRequest(
+        `http://localhost/api/saved-products/${productId}`,
+        "PATCH",
+        {
+          tags: ["  To buy  ", "Patch test"],
+        },
+      ),
+      routeContext(productId),
+    );
+
+    expect(response.status).toBe(200);
+    await expect(readJson(response)).resolves.toEqual({
+      data: {
+        item: updatedItem,
+      },
+      error: null,
+    });
+    expect(mockedUpdateSavedProductMetadata).toHaveBeenCalledWith(
+      authUserId,
+      productId,
+      {
+        tags: ["To buy", "Patch test"],
+      },
+    );
+  });
+
   it("rejects invalid PATCH params, bodies, metadata, JSON, and internal fields", async () => {
     mockAuthenticatedUser();
 
@@ -342,6 +376,26 @@ describe("/api/saved-products contract", () => {
       },
       {
         body: JSON.stringify({ personalNote: "a".repeat(1001) }),
+        id: productId,
+      },
+      { body: JSON.stringify({ tags: [""] }), id: productId },
+      { body: JSON.stringify({ tags: ["To buy", "to buy"] }), id: productId },
+      { body: JSON.stringify({ tags: ["a".repeat(31)] }), id: productId },
+      { body: JSON.stringify({ tags: ["not allowed!"] }), id: productId },
+      {
+        body: JSON.stringify({
+          tags: [
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+          ],
+        }),
         id: productId,
       },
       { body: JSON.stringify({ userId: authUserId }), id: productId },

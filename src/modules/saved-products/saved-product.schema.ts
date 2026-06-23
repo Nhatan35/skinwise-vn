@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { validateSavedProductTags } from "@/modules/saved-products/saved-product-tags";
 import {
   SAVED_PRODUCT_DECISION_STATUSES,
   SAVED_PRODUCT_PLANNED_ROUTINE_SLOTS,
@@ -7,6 +8,20 @@ import {
 
 const mongoObjectIdPattern = /^[a-f\d]{24}$/i;
 const personalNoteSchema = z.string().trim().max(1000);
+const savedProductTagsSchema = z.array(z.string()).transform((value, ctx) => {
+  const result = validateSavedProductTags(value);
+
+  if (!result.ok) {
+    ctx.addIssue({
+      code: "custom",
+      message: result.error,
+    });
+
+    return z.NEVER;
+  }
+
+  return result.tags;
+});
 
 export const savedProductObjectIdSchema = z
   .string()
@@ -34,6 +49,7 @@ export const updateSavedProductMetadataBodySchema = z
       .enum(SAVED_PRODUCT_PLANNED_ROUTINE_SLOTS)
       .optional(),
     personalNote: personalNoteSchema.optional(),
+    tags: savedProductTagsSchema.optional(),
   })
   .strict()
   .refine((value) => Object.keys(value).length > 0, {

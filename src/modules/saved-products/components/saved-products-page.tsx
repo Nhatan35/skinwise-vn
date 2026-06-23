@@ -14,10 +14,12 @@ import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto
 import {
   DEFAULT_SAVED_PRODUCTS_FILTERS,
   filterSavedProducts,
+  getAvailableSavedProductTags,
   getSavedProductDecisionSummary,
   hasActiveSavedProductFilters,
   type SavedProductsFilterState,
 } from "@/modules/saved-products/saved-product-filters";
+import type { SavedProductReviewFilter } from "@/modules/saved-products/saved-product-review";
 import { routes } from "@/shared/constants/routes";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorState } from "@/shared/components/error-state";
@@ -30,6 +32,20 @@ import { Label } from "@/shared/components/ui/label";
 const COMPARISON_GUIDANCE_ID = "saved-products-comparison-guidance";
 const filterSelectClassName =
   "h-11 w-full rounded-xl border border-input bg-card px-3.5 text-sm shadow-sm shadow-stone-950/5 outline-none focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/25";
+const reviewFilterOptions: Array<{
+  value: SavedProductReviewFilter;
+  label: string;
+}> = [
+  { value: "all", label: "Tất cả" },
+  { value: "needs-review", label: "Cần xem lại" },
+  { value: "considering", label: "Đang cân nhắc" },
+  { value: "testing", label: "Đang dùng thử" },
+  { value: "paused", label: "Tạm dừng" },
+  { value: "kept", label: "Muốn giữ lại" },
+  { value: "missing-decision-status", label: "Chưa chọn trạng thái" },
+  { value: "missing-routine-slot", label: "Chưa có kế hoạch routine" },
+  { value: "missing-personal-note", label: "Chưa có ghi chú" },
+];
 
 function getLoadErrorMessage(error: unknown) {
   if (error instanceof SavedProductClientError) {
@@ -73,6 +89,28 @@ function getComparisonGuidance(selectedCount: number) {
   return "Đã chọn tối đa 3/3 sản phẩm. Hãy bỏ chọn một sản phẩm trước khi chọn sản phẩm khác.";
 }
 
+function getFilteredEmptyState(filters: SavedProductsFilterState) {
+  if (filters.reviewFilter === "needs-review") {
+    return {
+      title: "Không có sản phẩm nào trong bộ lọc này.",
+      description:
+        "Hiện không có sản phẩm nào cần xem lại theo tiêu chí tổ chức cá nhân.",
+    };
+  }
+
+  if (filters.tag.trim().length > 0) {
+    return {
+      title: "Không có sản phẩm nào trong bộ lọc này.",
+      description: "Hãy bỏ bộ lọc tag để xem lại các sản phẩm đã lưu.",
+    };
+  }
+
+  return {
+    title: "Không có sản phẩm nào trong bộ lọc này.",
+    description: "Bạn có thể đặt lại bộ lọc hoặc thử từ khóa khác.",
+  };
+}
+
 export function SavedProductsPage() {
   const filterFieldId = useId();
   const [items, setItems] = useState<SavedProductDto[]>([]);
@@ -86,6 +124,7 @@ export function SavedProductsPage() {
     () => new Set(),
   );
   const filteredItems = filterSavedProducts(items, filters);
+  const availableTags = getAvailableSavedProductTags(items);
   const decisionSummary = getSavedProductDecisionSummary(items);
   const hasActiveFilters = hasActiveSavedProductFilters(filters);
   const selectedItems = items.filter((item) =>
@@ -100,9 +139,12 @@ export function SavedProductsPage() {
   const canShowComparison = selectedItems.length >= 2;
   const hasReachedComparisonLimit = selectedProductIds.size >= 3;
   const searchInputId = `${filterFieldId}-search`;
+  const reviewFilterGroupId = `${filterFieldId}-review-filter`;
   const decisionStatusFilterId = `${filterFieldId}-decision-status`;
   const plannedRoutineSlotFilterId = `${filterFieldId}-planned-routine-slot`;
   const noteStatusFilterId = `${filterFieldId}-note-status`;
+  const tagFilterId = `${filterFieldId}-tag`;
+  const filteredEmptyState = getFilteredEmptyState(filters);
 
   useEffect(() => {
     let isMounted = true;
@@ -323,11 +365,51 @@ export function SavedProductsPage() {
       >
         <div className="space-y-2">
           <h2 className="text-xl font-semibold text-foreground">
-            Sắp xếp việc cân nhắc
+            Lọc sản phẩm đã lưu
           </h2>
           <p className="text-sm leading-6 text-muted-foreground">
-            Phần này giúp bạn xem lại các sản phẩm đã lưu theo trạng thái cân
-            nhắc cá nhân.
+            Lọc nhanh các sản phẩm cần xem lại, còn thiếu trạng thái, kế hoạch
+            routine hoặc ghi chú cá nhân.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <p
+            className="text-sm font-semibold text-foreground"
+            id={reviewFilterGroupId}
+          >
+            Bộ lọc xem lại
+          </p>
+          <div
+            aria-labelledby={reviewFilterGroupId}
+            className="flex flex-wrap gap-2"
+            data-testid="saved-products-review-filter-controls"
+            role="group"
+          >
+            {reviewFilterOptions.map((option) => {
+              const isSelected = filters.reviewFilter === option.value;
+
+              return (
+                <Button
+                  aria-pressed={isSelected}
+                  className="min-h-9 whitespace-normal"
+                  data-testid={`saved-products-review-filter-${option.value}`}
+                  key={option.value}
+                  onClick={() =>
+                    handleFilterChange("reviewFilter", option.value)
+                  }
+                  size="sm"
+                  type="button"
+                  variant={isSelected ? "secondary" : "outline"}
+                >
+                  {option.label}
+                </Button>
+              );
+            })}
+          </div>
+          <p className="text-sm leading-6 text-muted-foreground">
+            Đây là công cụ tổ chức cá nhân, không phải khuyến nghị điều trị
+            hoặc đảm bảo sản phẩm phù hợp với da.
           </p>
         </div>
 
@@ -357,7 +439,7 @@ export function SavedProductsPage() {
           ))}
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-5">
           <div className="space-y-2">
             <Label htmlFor={searchInputId}>Tìm sản phẩm đã lưu</Label>
             <Input
@@ -439,6 +521,26 @@ export function SavedProductsPage() {
               <option value="without_note">Chưa có ghi chú</option>
             </select>
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={tagFilterId}>Filter by tag</Label>
+            <select
+              className={filterSelectClassName}
+              data-testid="saved-products-tag-filter"
+              id={tagFilterId}
+              onChange={(event) =>
+                handleFilterChange("tag", event.target.value)
+              }
+              value={filters.tag}
+            >
+              <option value="">All tags</option>
+              {availableTags.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -492,8 +594,10 @@ export function SavedProductsPage() {
               Đặt lại bộ lọc
             </Button>
           }
-          description="Bạn có thể đặt lại bộ lọc hoặc thử từ khóa khác."
-          title="Không có sản phẩm nào khớp với bộ lọc hiện tại."
+          description={
+            filteredEmptyState.description
+          }
+          title={filteredEmptyState.title}
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

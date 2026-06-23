@@ -27,6 +27,10 @@ const savedProductDecisionSupportPath = join(
   projectRoot,
   "src/modules/saved-products/components/saved-product-decision-support.tsx",
 );
+const savedProductPersonalTagsPath = join(
+  projectRoot,
+  "src/modules/saved-products/components/saved-product-personal-tags.tsx",
+);
 const savedProductsComparisonPanelPath = join(
   projectRoot,
   "src/modules/saved-products/components/saved-products-comparison-panel.tsx",
@@ -42,6 +46,10 @@ const savedProductClientPath = join(
 const savedProductFiltersPath = join(
   projectRoot,
   "src/modules/saved-products/saved-product-filters.ts",
+);
+const savedProductReviewPath = join(
+  projectRoot,
+  "src/modules/saved-products/saved-product-review.ts",
 );
 const savedProductLabelsPath = join(
   projectRoot,
@@ -59,6 +67,10 @@ const savedProductDecisionSupportSource = readFileSync(
   savedProductDecisionSupportPath,
   "utf8",
 );
+const savedProductPersonalTagsSource = readFileSync(
+  savedProductPersonalTagsPath,
+  "utf8",
+);
 const savedProductsComparisonPanelSource = readFileSync(
   savedProductsComparisonPanelPath,
   "utf8",
@@ -69,9 +81,10 @@ const savedProductToggleButtonSource = readFileSync(
 );
 const savedProductClientSource = readFileSync(savedProductClientPath, "utf8");
 const savedProductFiltersSource = readFileSync(savedProductFiltersPath, "utf8");
+const savedProductReviewSource = readFileSync(savedProductReviewPath, "utf8");
 const savedProductLabelsSource = readFileSync(savedProductLabelsPath, "utf8");
 const proxySource = readFileSync(proxyPath, "utf8");
-const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductDecisionSupportSource}\n${savedProductsComparisonPanelSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}\n${savedProductFiltersSource}\n${savedProductLabelsSource}`;
+const combinedSavedProductClientSource = `${savedProductsComponentSource}\n${savedProductCardSource}\n${savedProductDecisionSupportSource}\n${savedProductPersonalTagsSource}\n${savedProductsComparisonPanelSource}\n${savedProductToggleButtonSource}\n${savedProductClientSource}\n${savedProductFiltersSource}\n${savedProductReviewSource}\n${savedProductLabelsSource}`;
 
 describe("Saved Products UI", () => {
   it("adds the protected /saved-products dashboard page and route constant", () => {
@@ -168,6 +181,12 @@ describe("Saved Products UI", () => {
       "Bỏ lưu sản phẩm",
       "data-testid=\"saved-product-card\"",
       "remove-saved-product-button",
+      "getSavedProductReviewReasons",
+      "getSavedProductReviewReasonDefinition",
+      'data-testid="saved-product-review-reasons"',
+      "Cần xem lại vì:",
+      "Những nhãn này giúp bạn biết thông tin tổ chức cá nhân nào còn",
+      'data-testid={`saved-product-review-reason-${reason}`}',
     ]) {
       expect(combinedSavedProductClientSource).toContain(requiredSource);
     }
@@ -322,6 +341,9 @@ describe("Saved Products UI", () => {
     expect(savedProductCardSource).toContain(
       "<SavedProductDecisionSupport item={item} onUpdated={onUpdated} />",
     );
+    expect(savedProductCardSource).toContain(
+      "<SavedProductPersonalTags item={item} onUpdated={onUpdated} />",
+    );
     expect(savedProductsComponentSource).toContain("handleUpdated");
     expect(savedProductsComponentSource).toContain(
       "item.id === updatedItem.id ? updatedItem : item",
@@ -335,6 +357,57 @@ describe("Saved Products UI", () => {
 
     expect(patchIndex).toBeGreaterThan(-1);
     expect(parentUpdateIndex).toBeGreaterThan(patchIndex);
+  });
+
+  it("renders non-interactive saved product review reason indicators", () => {
+    for (const requiredSource of [
+      "reviewReasons.length > 0",
+      "getSavedProductReviewReasons(item)",
+      "getSavedProductReviewReasonDefinition(reason)",
+      'data-testid="saved-product-review-reasons"',
+      'data-testid={`saved-product-review-reason-${reason}`}',
+      "Chưa chọn trạng thái",
+      "Chưa có kế hoạch routine",
+      "Chưa có ghi chú",
+      "Trạng thái cần kiểm tra lại",
+      "Đang cân nhắc",
+      "Đang dùng thử",
+      "Sản phẩm này chưa có trạng thái quyết định cá nhân.",
+      "Sản phẩm này chưa có kế hoạch đưa vào routine.",
+      "Sản phẩm này chưa có ghi chú cá nhân.",
+      "Trạng thái hiện tại không thuộc nhóm được hỗ trợ nên cần kiểm tra lại.",
+      "Sản phẩm này vẫn đang trong giai đoạn cân nhắc.",
+      "Sản phẩm này đang được theo dõi trong giai đoạn dùng thử.",
+    ]) {
+      expect(combinedSavedProductClientSource).toContain(requiredSource);
+    }
+
+    expect(savedProductCardSource).not.toContain("onClick={reason");
+    expect(savedProductCardSource).not.toContain("tabIndex={0");
+  });
+
+  it("renders editable personal tags on saved product cards", () => {
+    expect(existsSync(savedProductPersonalTagsPath)).toBe(true);
+
+    for (const requiredSource of [
+      "SavedProductPersonalTags",
+      'data-testid="saved-product-tags-section"',
+      'data-testid="saved-product-personal-tag"',
+      'data-testid="saved-product-edit-tags-button"',
+      'data-testid="saved-product-tags-input"',
+      'data-testid="saved-product-save-tags-button"',
+      "Tags",
+      "Edit tags",
+      "No tags yet",
+      "Save tags",
+      "Cancel",
+      "parseSavedProductTagsInput",
+      "updateSavedProductMetadata",
+      "tags: result.tags",
+      "onUpdated(updatedItem)",
+    ]) {
+      expect(savedProductPersonalTagsSource).toContain(requiredSource);
+    }
   });
 
   it("renders a safe educational comparison panel", () => {
@@ -381,7 +454,23 @@ describe("Saved Products UI", () => {
     for (const requiredSource of [
       'data-testid="saved-products-decision-filters"',
       'data-testid="saved-products-decision-summary"',
-      "Phần này giúp bạn xem lại các sản phẩm đã lưu theo trạng thái cân",
+      'data-testid="saved-products-review-filter-controls"',
+      "Lọc sản phẩm đã lưu",
+      "Lọc nhanh các sản phẩm cần xem lại, còn thiếu trạng thái, kế hoạch",
+      "Bộ lọc xem lại",
+      "Tất cả",
+      "Cần xem lại",
+      "Đang cân nhắc",
+      "Đang dùng thử",
+      "Tạm dừng",
+      "Muốn giữ lại",
+      "Chưa chọn trạng thái",
+      "Chưa có kế hoạch routine",
+      "Chưa có ghi chú",
+      'data-testid={`saved-products-review-filter-${option.value}`}',
+      "aria-pressed={isSelected}",
+      'role="group"',
+      "Đây là công cụ tổ chức cá nhân, không phải khuyến nghị điều trị",
       "Tổng sản phẩm đã lưu",
       "Tìm sản phẩm đã lưu",
       "Tìm theo tên sản phẩm, thương hiệu hoặc ghi chú...",
@@ -398,14 +487,25 @@ describe("Saved Products UI", () => {
       "Đặt lại bộ lọc",
       'data-testid="saved-products-filtered-result-count"',
       "Đang hiển thị",
-      "Không có sản phẩm nào khớp với bộ lọc hiện tại.",
+      "Không có sản phẩm nào trong bộ lọc này.",
       "Bạn có thể đặt lại bộ lọc hoặc thử từ khóa khác.",
+      "Hiện không có sản phẩm nào cần xem lại theo tiêu chí tổ chức cá nhân.",
       "filterSavedProducts(items, filters)",
       "hasActiveSavedProductFilters(filters)",
       "getSavedProductDecisionSummary(items)",
       "filteredItems.map",
       "handleResetFilters",
       "setFilters({ ...DEFAULT_SAVED_PRODUCTS_FILTERS })",
+    ]) {
+      expect(savedProductsComponentSource).toContain(requiredSource);
+    }
+
+    for (const requiredSource of [
+      "Filter by tag",
+      "All tags",
+      'data-testid="saved-products-tag-filter"',
+      "Hãy bỏ bộ lọc tag để xem lại các sản phẩm đã lưu.",
+      "getAvailableSavedProductTags(items)",
     ]) {
       expect(savedProductsComponentSource).toContain(requiredSource);
     }
@@ -440,6 +540,8 @@ describe("Saved Products UI", () => {
       "filterSavedProducts",
       "hasActiveSavedProductFilters",
       "getSavedProductDecisionSummary",
+      "matchesSavedProductReviewFilter",
+      "filters.reviewFilter",
       'toLocaleLowerCase("vi-VN")',
       "filters.query.trim()",
       "item.product?.name",
@@ -449,10 +551,32 @@ describe("Saved Products UI", () => {
       expect(savedProductFiltersSource).toContain(requiredSource);
     }
 
-    expect(savedProductFiltersPath.toLowerCase()).not.toContain("review");
-    expect(savedProductFiltersSource).not.toMatch(/\breview\b/i);
+    for (const requiredSource of [
+      "item.tags",
+      "filters.tag",
+      "getAvailableSavedProductTags",
+    ]) {
+      expect(savedProductFiltersSource).toContain(requiredSource);
+    }
+
+    for (const requiredSource of [
+      "SavedProductReviewFilter",
+      "needsSavedProductReview",
+      "getSavedProductReviewReasons",
+      "savedProductReviewReasonDefinitions",
+      "hasUnknownSavedProductDecisionStatus",
+      "filterSavedProductsByReviewFilter",
+      "isBlankSavedProductReviewValue",
+      "decisionStatus === \"considering\"",
+      "decisionStatus === \"testing\"",
+    ]) {
+      expect(savedProductReviewSource).toContain(requiredSource);
+    }
+
     expect(savedProductFiltersSource).not.toContain("fetch(");
     expect(savedProductFiltersSource).not.toContain("PATCH");
+    expect(savedProductReviewSource).not.toContain("fetch(");
+    expect(savedProductReviewSource).not.toContain("PATCH");
   });
 
   it("explains comparison selection and disabled limits", () => {
@@ -495,7 +619,6 @@ describe("Saved Products UI", () => {
       "payment",
       "marketplace",
       "recommendation",
-      "review",
       "rating",
       "like",
       "share",
@@ -530,7 +653,6 @@ describe("Saved Products UI", () => {
     for (const unsafeCopy of [
       "chắc chắn phù hợp",
       "an toàn tuyệt đối",
-      "điều trị",
       "chữa khỏi",
       "kết quả đảm bảo",
       "đảm bảo hiệu quả",

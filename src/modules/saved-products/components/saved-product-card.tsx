@@ -3,8 +3,13 @@ import Link from "next/link";
 
 import type { ProductCategory } from "@/modules/products/product.types";
 import { SavedProductDecisionSupport } from "@/modules/saved-products/components/saved-product-decision-support";
+import { SavedProductPersonalTags } from "@/modules/saved-products/components/saved-product-personal-tags";
 import { SavedProductToggleButton } from "@/modules/saved-products/components/saved-product-toggle-button";
 import type { SavedProductDto } from "@/modules/saved-products/saved-product.dto";
+import {
+  getSavedProductReviewReasonDefinition,
+  getSavedProductReviewReasons,
+} from "@/modules/saved-products/saved-product-review";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -54,6 +59,7 @@ export function SavedProductCard({
   const product = item.product;
   const keyActives = product.keyActives.slice(0, 4);
   const hiddenKeyActiveCount = product.keyActives.length - keyActives.length;
+  const reviewReasons = getSavedProductReviewReasons(item);
   const ComparisonIcon = isSelectedForComparison ? CheckCircle2 : Plus;
 
   return (
@@ -102,7 +108,41 @@ export function SavedProductCard({
           </div>
         ) : null}
 
+        {reviewReasons.length > 0 ? (
+          <div
+            className="space-y-2 rounded-lg border border-border bg-secondary/30 p-3"
+            data-testid="saved-product-review-reasons"
+          >
+            <h3 className="text-sm font-semibold text-foreground">
+              Cần xem lại vì:
+            </h3>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Những nhãn này giúp bạn biết thông tin tổ chức cá nhân nào còn
+              thiếu hoặc cần xem lại.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {reviewReasons.map((reason) => {
+                const definition =
+                  getSavedProductReviewReasonDefinition(reason);
+
+                return (
+                  <Badge
+                    className="whitespace-normal text-left"
+                    data-testid={`saved-product-review-reason-${reason}`}
+                    key={reason}
+                    variant="secondary"
+                  >
+                    {definition.label}
+                    <span className="sr-only">: {definition.description}</span>
+                  </Badge>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
         <SavedProductDecisionSupport item={item} onUpdated={onUpdated} />
+        <SavedProductPersonalTags item={item} onUpdated={onUpdated} />
 
         <div
           className="rounded-lg border border-border bg-secondary/40 p-3"

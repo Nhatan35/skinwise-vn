@@ -11,6 +11,7 @@ export type SavedProductDto = {
   decisionStatus?: SavedProductDecisionStatus;
   plannedRoutineSlot?: SavedProductPlannedRoutineSlot;
   personalNote?: string;
+  tags: string[];
   createdAt: string;
   updatedAt: string;
 };

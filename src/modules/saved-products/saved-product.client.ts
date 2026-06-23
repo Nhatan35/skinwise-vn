@@ -132,6 +132,7 @@ function isSavedProductDto(value: unknown): value is SavedProductDto {
         value.plannedRoutineSlot,
       )) &&
     (!("personalNote" in value) || isString(value.personalNote)) &&
+    isStringArray(value.tags) &&
     isString(value.createdAt) &&
     isString(value.updatedAt)
   );
@@ -162,6 +163,10 @@ function toSavedProductMetadataRequestBody(
 
   if (hasOwnField(input, "personalNote") && input.personalNote !== undefined) {
     body.personalNote = input.personalNote;
+  }
+
+  if (hasOwnField(input, "tags") && input.tags !== undefined) {
+    body.tags = input.tags;
   }
 
   return body;

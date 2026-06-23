@@ -169,6 +169,10 @@ export async function updateSavedProductMetadataForUser(
     }
   }
 
+  if (input.tags !== undefined) {
+    updateSet.tags = input.tags;
+  }
+
   return collection.findOneAndUpdate(
     { userId, productId: productObjectId },
     {
