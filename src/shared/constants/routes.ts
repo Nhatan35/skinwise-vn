@@ -1,5 +1,6 @@
 export const routes = {
   HOME: "/",
+  ADMIN: "/admin",
   ADMIN_INGREDIENTS: "/admin/ingredients",
   ADMIN_PRODUCTS: "/admin/products",
   DASHBOARD: "/dashboard",

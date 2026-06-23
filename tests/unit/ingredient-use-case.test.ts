@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/modules/ingredients/ingredient.repository", () => ({
+  countIngredients: vi.fn(),
   createIngredient: vi.fn(),
   findIngredientByNormalizedInciName: vi.fn(),
   findIngredientById: vi.fn(),
@@ -11,6 +12,7 @@ vi.mock("@/modules/ingredients/ingredient.repository", () => ({
 }));
 
 import {
+  countIngredientsForAdmin,
   createIngredientForAdmin,
   DuplicateIngredientInciNameError,
   getIngredientById,
@@ -19,6 +21,7 @@ import {
   updateIngredientForAdmin,
 } from "@/modules/ingredients/ingredient.use-case";
 import {
+  countIngredients,
   createIngredient,
   findIngredientByNormalizedInciName,
   findIngredientById,
@@ -28,6 +31,7 @@ import {
 } from "@/modules/ingredients/ingredient.repository";
 import type { Ingredient } from "@/modules/ingredients/ingredient.types";
 
+const mockedCountIngredients = vi.mocked(countIngredients);
 const mockedCreateIngredient = vi.mocked(createIngredient);
 const mockedFindIngredientByNormalizedInciName = vi.mocked(
   findIngredientByNormalizedInciName,
@@ -57,6 +61,7 @@ const ingredient = {
 
 describe("Ingredient use cases", () => {
   beforeEach(() => {
+    mockedCountIngredients.mockReset();
     mockedCreateIngredient.mockReset();
     mockedFindIngredientByNormalizedInciName.mockReset();
     mockedFindIngredientById.mockReset();
@@ -124,6 +129,13 @@ describe("Ingredient use cases", () => {
       limit: 50,
       q: "nia",
     });
+  });
+
+  it("counts ingredients for admin through the repository", async () => {
+    mockedCountIngredients.mockResolvedValue(70);
+
+    await expect(countIngredientsForAdmin()).resolves.toBe(70);
+    expect(mockedCountIngredients).toHaveBeenCalledWith();
   });
 
   it("creates ingredients for admin when INCI name is not duplicated", async () => {

@@ -43,10 +43,10 @@ Do not present the app as:
 | Actual screenshot files | Not verified | This package does not claim screenshots exist in the repository. |
 | Demo video file | Not recorded | This package does not claim a demo video exists. |
 | CV/resume summary | Drafted | See section 5. |
-| Latest local validation | PASS | v1.60 local validation passed for lint, typecheck, 120 test files / 1343 tests, build after elevated rerun, full E2E after elevated rerun with 39/39 tests, and audit. |
+| Latest local validation | PASS | v1.62 local validation passed for lint, typecheck, 122 test files / 1353 tests, build after elevated rerun, and full E2E after elevated rerun with 42/42 tests. |
 | Admin product review browser smoke | PASS locally | v1.47 local Playwright/Chrome smoke verified unauthenticated redirect without Auth.js 500, non-admin block, admin list/search/filter/update/revert, public visibility regression, console/network checks, and no browser-visible secret exposure. |
 | Historical production smoke/monitoring | PASS, user-reported | Recorded from the stable MVP baseline on 2026-06-04. |
-| Latest scoped task app validation | PASS locally | v1.60 Admin Ingredient Create/Edit Lite and v1.59 Admin Product Create/Edit Lite passed local validation. v1.48 deployed admin product review smoke evidence remains missing or incomplete, so production-ready is not claimed. |
+| Latest scoped task app validation | PASS locally | v1.62 Admin Content Dashboard Lite, v1.60 Admin Ingredient Create/Edit Lite, and v1.59 Admin Product Create/Edit Lite passed local validation. v1.48 deployed admin product review smoke evidence remains missing or incomplete, so production-ready is not claimed. |
 
 No new deployed smoke PASS, screenshot, video, traffic, performance, production-ready, or user-metric evidence is claimed by this file.
 
@@ -70,7 +70,7 @@ Bullet version:
 - Designed rule-based Product Match and deterministic Routine Safety Analysis so guidance stays explainable, testable, and non-medical.
 - Used an AI-provider abstraction as an explanation/fallback layer rather than a safety decision-maker.
 - Documented release evidence, demo flow, portfolio case study, safety boundaries, and post-MVP backlog for recruiter and interview review.
-- Latest v1.60 local validation passed. v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed.
+- Latest v1.62 local validation passed. v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed.
 
 ## 6. Interview Narrative
 

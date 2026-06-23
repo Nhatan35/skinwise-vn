@@ -80,6 +80,12 @@ export async function searchIngredientsForAdmin(
   return searchIngredients(input);
 }
 
+export async function countIngredients(): Promise<number> {
+  const collection = await getIngredientCollection();
+
+  return collection.countDocuments({});
+}
+
 export async function findIngredientById(
   id: string,
 ): Promise<Ingredient | null> {

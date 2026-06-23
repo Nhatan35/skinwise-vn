@@ -5,6 +5,7 @@ import type {
   IngredientListQueryInput,
 } from "@/modules/ingredients/ingredient.schema";
 import {
+  countIngredients,
   createIngredient,
   findIngredientByNormalizedInciName,
   findIngredientById,
@@ -32,6 +33,10 @@ export async function listIngredientsForAdmin(
   input: AdminIngredientListQueryInput,
 ) {
   return searchIngredientsForAdmin(input);
+}
+
+export async function countIngredientsForAdmin() {
+  return countIngredients();
 }
 
 export async function createIngredientForAdmin(
