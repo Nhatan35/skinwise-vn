@@ -14,14 +14,15 @@ Production demo:
 
 ## Current Status
 
-- Current Portfolio Release: **MVP v1.48 - Deployed Admin Product Review Smoke Verification**
+- Current Portfolio Release: **MVP v1.62 - Admin Content Dashboard Lite**
 - Core MVP: **Complete**
 - Current Phase: **Post-MVP controlled product improvement**
 - Portfolio demo readiness: **Yes for local admin review demo** based on v1.47 repeatable local browser smoke; deployed admin review smoke remains open
-- Production readiness: **Not claimed for v1.48** because deployed admin product review smoke evidence is missing or incomplete
-- Latest completed local validation: **MVP v1.48 local pre-deploy validation PASS**
+- Production readiness: **Not claimed** because deployed admin product review smoke evidence for v1.48 is missing or incomplete
+- Latest completed local validation: **MVP v1.62 local validation PASS**
+- Latest completed scoped task: **MVP v1.62 - Admin Content Dashboard Lite**
 - Current active milestone: **MVP v1.48 deployed smoke remains open**
-- Release evidence: `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`
+- Release evidence: `docs/release-evidence-admin-content-dashboard-lite-v1.62.md`; deployed smoke blocker evidence remains `docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md`
 - Historical production smoke/monitoring evidence: **PASS, user-reported** from the earlier production verification baseline; screenshots, deployment id, browser/version, device/OS, and exact verification metadata are not stored in this repository
 - Portfolio media evidence: screenshots and demo video remain optional artifacts and are not claimed unless captured separately
 - Real production AI provider integration: **not verified**; local/demo AI behavior remains mock/provider-abstraction based
@@ -38,11 +39,89 @@ MVP v1.48 local pre-deploy validation:
 | Isolated admin smoke | Admin product review smoke | PASS | 3/3 tests passed. |
 | E2E | `npm run test:e2e` | PASS | 34 Playwright tests passed. |
 
+MVP v1.50 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Diff check | `git diff --check` | PASS | Command passed with an `AGENTS.md` CRLF normalization warning. |
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 115 test files / 1193 tests passed. |
+| Build | `npm run build` | PASS | Passed after elevated rerun; sandboxed run failed with `spawn EPERM`. |
+| E2E | `npm run test:e2e` | PASS | 35 Playwright tests passed after elevated rerun; sandboxed run failed with `spawn EPERM`. |
+
+MVP v1.53 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | Initial pre-final fixture issue was fixed; final rerun passed. |
+| Unit tests | `npm run test` | PASS | 116 test files / 1224 tests passed. |
+| Build | `npm run build` | PASS | Passed after elevated rerun; sandboxed run failed with `spawn EPERM`. |
+| E2E | `npm run test:e2e` | PASS | 35 Playwright tests passed after elevated rerun; sandboxed run failed with `spawn EPERM`. |
+| Audit | `npm audit --omit=dev --audit-level=moderate` | PASS | Found 0 vulnerabilities. |
+
+MVP v1.54 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 117 test files / 1260 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun passed. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed immediately with `spawn EPERM`; elevated rerun passed with 35/35 tests. |
+| Audit | `npm audit --omit=dev --audit-level=moderate` | PASS | Found 0 vulnerabilities. |
+| Diff check | `git diff --check` | PASS | Command passed with existing CRLF normalization warnings. |
+
+MVP v1.55 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 117 test files / 1281 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun passed. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed immediately with `spawn EPERM`; elevated rerun passed after fixing a test assertion, 35/35 tests passed. |
+| Audit | `npm audit --omit=dev --audit-level=moderate` | PASS | Found 0 vulnerabilities. |
+| Diff check | `git diff --check` | PASS | Command passed with existing CRLF normalization warnings. |
+
+MVP v1.59 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 117 test files / 1298 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun passed. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed immediately with `spawn EPERM`; elevated rerun passed with 36/36 tests. |
+| Audit | `npm audit --omit=dev --audit-level=moderate` | PASS | Found 0 vulnerabilities. |
+
+MVP v1.60 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 120 test files / 1343 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun passed. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed immediately with `spawn EPERM`; elevated rerun passed with 39/39 tests. |
+| Audit | `npm audit --omit=dev --audit-level=moderate` | PASS | Found 0 vulnerabilities. |
+
+MVP v1.62 local feature validation:
+
+| Check | Command | Status | Notes |
+|---|---|---|---|
+| Lint | `npm run lint` | PASS | ESLint completed successfully. |
+| Typecheck | `npm run typecheck` | PASS | `tsc --noEmit` completed successfully. |
+| Unit tests | `npm run test` | PASS | 122 test files / 1353 tests passed. |
+| Build | `npm run build` | PASS | Sandboxed run compiled then failed with `spawn EPERM`; elevated rerun passed. |
+| E2E | `npm run test:e2e` | PASS | Sandboxed run failed immediately with `spawn EPERM`; elevated rerun passed with 42/42 tests. |
+
 Deferred / not in MVP:
 
 - Deployed admin product review smoke for v1.48: **NOT RUN / INCOMPLETE**
-- Full admin dashboard UI: **Deferred / not implemented**; v1.45 adds only a lightweight direct admin review page
-- Admin product create/edit full CRUD and hard delete: **Deferred / not implemented**
+- Full admin CMS dashboard: **Deferred / not implemented**; v1.62 adds only a lightweight admin content overview at `/admin`
+- Full admin product/ingredient CMS, hard delete, delete/merge workflows, image management, marketplace/payment: **Deferred / not implemented**; v1.59 adds only Admin Product Create/Edit Lite and v1.60 adds only Admin Ingredient Create/Edit Lite
 - Real OpenAI/Gemini provider integration: **Deferred / not verified**
 - v1.24 seed-data closeout: **historically NOT DONE / VALIDATION BLOCKED**; v1.43 does not retroactively close that milestone
 - Marketplace/payment, skin score, medical diagnosis, image upload, subscriptions, and community features: **Out of MVP scope**
@@ -50,6 +129,13 @@ Deferred / not in MVP:
 Evidence boundary:
 
 - v1.48 local pre-deploy validation is recorded as PASS for `npm ci`, lint, typecheck, unit tests, build, isolated admin product review smoke, and full E2E.
+- v1.50 local validation passed for lint, typecheck, full unit tests, build, and full E2E. Build and E2E required elevated reruns after sandbox `spawn EPERM`.
+- v1.53 local validation passed for lint, typecheck, full unit tests, build, full E2E, and production dependency audit. Build and E2E required elevated reruns after sandbox `spawn EPERM`.
+- v1.54 adds Saved Products review queue filters using existing saved-product records only. Final validation is recorded in `docs/release-evidence-saved-products-review-queue-filters-v1.54.md`.
+- v1.55 adds Saved Product review reason indicators using existing saved-product records only. Final validation is recorded in `docs/release-evidence-saved-product-review-reason-indicators-v1.55.md`.
+- v1.59 adds admin-only product create/edit lite while preserving the status-only verification route and public visibility rules. Final validation is recorded in `docs/release-evidence-admin-product-create-edit-lite-v1.59.md`.
+- v1.60 adds admin-only ingredient create/edit lite while preserving user-facing Ingredient Library, Ingredient Detail, and Ingredient Explanation flows. Final validation is recorded in `docs/release-evidence-admin-ingredient-create-edit-lite-v1.60.md`.
+- v1.62 adds admin-only `/admin` content dashboard lite with product/ingredient summary counts and links to existing admin tools. Final validation is recorded in `docs/release-evidence-admin-content-dashboard-lite-v1.62.md`.
 - v1.47 browser smoke fixed the repeatable local admin review prerequisites using E2E-only admin/non-admin accounts and a dedicated `unverified` smoke product. Production smoke was not performed.
 - v1.48 deployed admin product review smoke evidence is missing or incomplete, so production-ready is not claimed.
 - Historical production PASS status remains user-reported and should be supplemented with screenshots, deployment ids, browser/network notes, or sanitized logs if strict audit traceability is required.
@@ -109,6 +195,12 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable admin/non-admin E2E auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.50 - Saved Product Personal Tags: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.51 - Dashboard Routine Coverage Summary: DONE / PASS locally
+MVP v1.52 - Dashboard Saved Product Tags Summary: DONE / PASS locally
+MVP v1.53 - Dashboard Saved Product Decision Queue Summary: DONE / PASS locally
+MVP v1.54 - Saved Products Review Queue Filters: DONE / PASS locally
+MVP v1.55 - Saved Product Review Reason Indicators: DONE / PASS locally
 MVP Form Validation & Inline Feedback Polish: DONE / PASS
 MVP Product Match Explainability Polish: DONE / PASS
 ```
@@ -131,7 +223,7 @@ MVP v1.21 extends the existing Personal Insight Review with calculation metadata
 
 MVP v1.22 is a completed controlled post-MVP release-confidence milestone. It improves production confidence by adding a safe public health check endpoint, health API contract test, release evidence documentation, production incident note template, and monitoring/release checklist updates. It does not add product features, database schema changes, real AI provider integration, external observability vendors, diagnosis logic, treatment advice, skin scoring, image upload, admin CRUD, marketplace, payment, checkout, or order workflow.
 
-MVP v1.23 is the latest completed controlled post-MVP privacy and data-control hardening milestone. It hardens the existing account app-data deletion workflow with clearer destructive confirmation copy, user-isolation tests, sensitive-response checks, and data-control documentation. It does not delete Google/OAuth accounts, shared product catalogue data, shared ingredient library data, other users' data, production configuration, or release documentation.
+MVP v1.23 is a completed controlled post-MVP privacy and data-control hardening milestone. It hardens the existing account app-data deletion workflow with clearer destructive confirmation copy, user-isolation tests, sensitive-response checks, and data-control documentation. It does not delete Google/OAuth accounts, shared product catalogue data, shared ingredient library data, other users' data, production configuration, or release documentation.
 
 MVP v1.24 remains deferred and validation-blocked. The implementation appears to have reached 70 products and 70 ingredients with v1.24 seed quality tests, but v1.24 is NOT DONE because required build and E2E validation did not pass in the current environment.
 
@@ -185,7 +277,14 @@ redirect without Auth.js 500, non-admin block, admin list/search/filter,
 network checks, and browser-visible secret checks. Production smoke was not
 performed, so production-ready status is not claimed.
 
-The current phase is post-MVP validation cleanup. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are not claimed unless actual files are captured separately.
+MVP v1.50 is a saved-product organization milestone. It adds private user-owned
+personal tags to saved products, validation, card display/edit/remove controls,
+and client-side tag filtering. Tags are stored on saved-product records, not
+global Product records, and are not exposed through public product catalogue or
+product detail APIs. It does not add AI tag suggestions, shared/public tags,
+admin tag management, tag analytics, or production-ready claims.
+
+The current phase is Post-MVP controlled product improvement. The Portfolio Evidence Package documentation has been prepared; optional screenshot and demo-video capture remain separate media evidence tasks and are not claimed unless actual files are captured separately.
 
 ## Key Features
 
@@ -193,7 +292,7 @@ The current phase is post-MVP validation cleanup. The Portfolio Evidence Package
 - Skin profile onboarding, viewing, editing, and deletion.
 - Product catalogue with product detail pages, personalized match explanation on Product Detail, v1.27 save-decision support, v1.34 result-count/filter-summary confidence polish, and v1.37 ingredient-learning cross-links.
 - Curated demo-safe catalogue with 70 fictional/demo-safe products and 70 educational ingredient records in the current v1.24 seed implementation.
-- Saved products with clearer save-state guidance, empty-state next action, saved product comparison, and v1.28 routine decision-support guidance.
+- Saved products with clearer save-state guidance, empty-state next action, saved product comparison, private notes/decision metadata, personal tags, and client-side filters.
 - Personalized Product Match: rule-based educational product matching with product-fit level, matched-factor labels, Vietnamese explanations, ingredient highlights, caution notes, fallback guidance, clearer v1.26 next-action copy, Product Detail single-product matching based on existing product/profile metadata, and MVP Product Match Explainability Polish copy that explains score meaning, cautions, limited data, and comparison tradeoffs without changing scoring/ranking.
 - Ingredient library with ingredient detail pages, v1.34 function filtering, result-count/filter-summary confidence polish, contextual detail actions, and v1.37 product-discovery cross-links.
 - Ingredient explanation API using the validated provider flow and safe fallback behavior.
@@ -280,6 +379,21 @@ Auth.js owns `/api/auth/*` and its response format.
 Latest local validation evidence:
 
 ```txt
+MVP v1.55 - Saved Product Review Reason Indicators:
+Evidence date: 2026-06-17
+OS: Microsoft Windows NT 10.0.26200.0
+node -v: v24.14.0
+npm -v: 11.14.1
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 117 files / 1281 tests
+npm run build: PASS after elevated rerun; sandboxed attempt compiled then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 35/35 tests; sandboxed attempt failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+git diff --check: PASS, with existing CRLF normalization warnings
+Production-ready claimed: No
+Production smoke test on deployed URL: NOT RUN for v1.55
+
 MVP v1.43 - Release Evidence & Validation Cleanup:
 Evidence date: 2026-06-15
 OS: Microsoft Windows 10.0.26200
@@ -669,8 +783,14 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable admin/non-admin E2E auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.50 - Saved Product Personal Tags: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.51 - Dashboard Routine Coverage Summary: DONE / PASS locally
+MVP v1.52 - Dashboard Saved Product Tags Summary: DONE / PASS locally
+MVP v1.53 - Dashboard Saved Product Decision Queue Summary: DONE / PASS locally
+MVP v1.54 - Saved Products Review Queue Filters: DONE / PASS locally
+MVP v1.55 - Saved Product Review Reason Indicators: DONE / PASS locally
 Decision: READY for core MVP portfolio/demo/interview; READY for local admin review portfolio demo based on v1.47 local browser smoke
-Production-ready decision: NOT CLAIMED for v1.48 because deployed admin review smoke evidence is missing or incomplete
+Production-ready decision: NOT CLAIMED because v1.48 deployed admin review smoke evidence is missing or incomplete
 Current phase: Post-MVP controlled product improvement
 Portfolio Evidence Package: Documentation prepared; optional media capture remains separate and is intentionally skipped
 ```
@@ -704,5 +824,10 @@ status is not claimed.
 deployed smoke evidence structure and the known local pre-deploy validation PASS.
 The deployed admin review smoke evidence is missing or incomplete, so the
 milestone remains open and production-ready status is not claimed.
+
+`v1.50 - Saved Product Personal Tags` adds private user-owned saved-product
+tags, tag validation, card display/edit/remove controls, and client-side tag
+filtering. Tags remain saved-product metadata only and are not exposed through
+public product catalogue or product detail APIs.
 
 Post-MVP work is tracked in `docs/post-mvp-backlog.md`. `v1.42 - Routine Builder Saved Product Decision Context` shows existing saved-product decision metadata for selected saved products in Routine Builder without changing routine payloads, API contracts, category auto-fill behavior, Routine Safety, or Routine Coverage. `v1.41 - Product Detail Saved Decision Shortcut` adds compact Product Detail access to existing saved-product decision metadata through the existing v1.39 PATCH client without API or data-model changes. `v1.40 - Saved Products Decision Queue & Review Filters` adds client-side Saved Products filters/search/summary. `v1.37 - Product ↔ Ingredient Learning Path Polish` improves educational navigation between Product Detail, Product Catalogue, Ingredient Detail, and Ingredient Library without adding recommendations or new product scope. `v1.35 - E2E Failure Triage & Extended Validation Cleanup` resolves the dashboard, insights, saved-products, and today routine log E2E failures left by v1.34 extended validation by updating stale Playwright selectors/copy expectations to current intentional UI. `v1.34 - Product & Ingredient Discovery Confidence Polish`, `v1.33 - Core Accessibility, Focus Management & Keyboard Interaction Polish`, `v1.32 - Core Form Submission & Action Feedback Consistency Polish`, `v1.31 - Core Flow Recovery, Empty State & Navigation Consistency Polish`, `v1.30 - Insights Interpretation & Dashboard Next Action Polish`, `v1.29 - Routine to Routine Log / Journal Decision Support Polish`, `v1.28 - Saved Products to Routine Decision Support Polish`, `v1.27 - Product Detail to Saved Products Decision Support Polish`, `v1.26 - Product Match Explanation Clarity & Safe Decision Support Polish`, `v1.25.1 - Seed Baseline Regression & Documentation Consistency Hotfix`, and `v1.25 - First-Session Guided Experience Polish` remain preserved. `v1.24 - Seed Data Quality Expansion Round 2` remains deferred and NOT DONE until required build and E2E validation pass. The Portfolio Evidence Package is presentation/evidence work, not a product correctness blocker; screenshot and demo-video capture remain optional media tasks and are intentionally skipped.

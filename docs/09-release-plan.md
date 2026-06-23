@@ -1,6 +1,6 @@
 # Release Plan - SkinWise VN Current MVP Status
 
-Last updated: 2026-06-16
+Last updated: 2026-06-22
 
 ## 1. Current Release Chain
 
@@ -23,9 +23,18 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.50 - Saved Product Personal Tags: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.51 - Dashboard Routine Coverage Summary: DONE / PASS locally
+MVP v1.52 - Dashboard Saved Product Tags Summary: DONE / PASS locally
+MVP v1.53 - Dashboard Saved Product Decision Queue Summary: DONE / PASS locally
+MVP v1.54 - Saved Products Review Queue Filters: DONE / PASS locally
+MVP v1.55 - Saved Product Review Reason Indicators: DONE / PASS locally
+MVP v1.59 - Admin Product Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.60 - Admin Ingredient Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.62 - Admin Content Dashboard Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 ```
 
-The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.47 resolves the repeatable local smoke blockers found in v1.46 without adding production bypasses or feature scope. v1.48 records local pre-deploy validation PASS, but deployed admin product review smoke evidence is missing or incomplete. Production-ready status is not claimed. The full current release chain is maintained in `docs/00-source-of-truth.md`.
+The MVP product scope is complete. Current work is controlled post-MVP improvement with explicit release-evidence boundaries. v1.47 resolves the repeatable local smoke blockers found in v1.46 without adding production bypasses or feature scope. v1.48 records local pre-deploy validation PASS, but deployed admin product review smoke evidence is missing or incomplete. v1.50-v1.55 add saved-product organization and dashboard summary improvements with local validation evidence. v1.59 adds admin product create/edit lite while preserving the status-only review route and public visibility rules. v1.60 adds admin ingredient create/edit lite while preserving the user-facing Ingredient Library, Ingredient Detail, and Ingredient Explanation flows. v1.62 adds a protected admin content dashboard lite at `/admin` without schema or public behavior changes. Production-ready status is not claimed. The full current release chain is maintained in `docs/00-source-of-truth.md`.
 
 ## 2. Historical Six-Week MVP Roadmap
 
@@ -179,6 +188,77 @@ Production-ready claimed: No
 Evidence file: docs/release-evidence-admin-product-review-deployed-smoke-v1.48.md
 ```
 
+MVP v1.50 local feature evidence:
+
+```txt
+Evidence date: 2026-06-16
+Branch: feature/v1.50-saved-product-personal-tags
+git diff --check: PASS
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 115 test files / 1193 tests
+npm run build: PASS after elevated rerun; sandboxed run failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 35/35 tests; sandboxed run failed with spawn EPERM
+Production-ready claimed: No
+Evidence file: docs/release-evidence-saved-product-personal-tags-v1.50.md
+```
+
+MVP v1.55 local feature evidence:
+
+```txt
+Evidence date: 2026-06-17
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 117 test files / 1281 tests
+npm run build: PASS after elevated rerun; sandboxed run compiled then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 35/35 tests; sandboxed run failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+git diff --check: PASS, with existing CRLF normalization warnings
+Production-ready claimed: No
+Evidence file: docs/release-evidence-saved-product-review-reason-indicators-v1.55.md
+```
+
+MVP v1.59 local feature evidence:
+
+```txt
+Evidence date: 2026-06-21
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 117 test files / 1298 tests
+npm run build: PASS after elevated rerun; sandboxed run compiled then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 36/36 tests; sandboxed run failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+Production-ready claimed: No
+Evidence file: docs/release-evidence-admin-product-create-edit-lite-v1.59.md
+```
+
+MVP v1.60 local feature evidence:
+
+```txt
+Evidence date: 2026-06-21
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 120 test files / 1343 tests
+npm run build: PASS after elevated rerun; sandboxed run compiled then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 39/39 tests; sandboxed run failed with spawn EPERM
+npm audit --omit=dev --audit-level=moderate: PASS - 0 vulnerabilities
+Production-ready claimed: No
+Evidence file: docs/release-evidence-admin-ingredient-create-edit-lite-v1.60.md
+```
+
+MVP v1.62 local feature evidence:
+
+```txt
+Evidence date: 2026-06-22
+npm run lint: PASS
+npm run typecheck: PASS
+npm run test: PASS - 122 test files / 1353 tests
+npm run build: PASS after elevated rerun; sandboxed run compiled then failed with spawn EPERM
+npm run test:e2e: PASS after elevated rerun - 42/42 tests; sandboxed run failed with spawn EPERM
+Production-ready claimed: No
+Evidence file: docs/release-evidence-admin-content-dashboard-lite-v1.62.md
+```
+
 Validation notes:
 
 ```txt
@@ -217,6 +297,9 @@ Admin product review UI workflow decision: v1.45 complete
 Admin product review browser smoke decision: v1.46 complete as evidence, mixed result; local auth/data blockers documented
 Admin product review repeatable smoke decision: v1.47 complete locally; auth/data blockers resolved for local E2E smoke
 Deployed admin product review smoke decision: v1.48 remains open; local pre-deploy validation passed, but deployed smoke evidence is missing or incomplete
+Admin product create/edit lite decision: v1.59 complete locally; no production-ready claim because v1.48 deployed smoke remains open
+Admin ingredient create/edit lite decision: v1.60 complete locally; no production-ready claim because v1.48 deployed smoke remains open
+Admin content dashboard lite decision: v1.62 complete locally; no production-ready claim because v1.48 deployed smoke remains open
 Current phase: Post-MVP controlled product improvement
 Recommended next task: Complete deployed smoke evidence for MVP v1.48
 Portfolio Evidence Package documentation: PREPARED

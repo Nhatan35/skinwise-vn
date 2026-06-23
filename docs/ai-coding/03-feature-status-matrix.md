@@ -1,16 +1,17 @@
 # Feature Status Matrix - SkinWise VN MVP
 
-Last updated: 2026-06-16
+Last updated: 2026-06-22
 
 ## Current Status
 
 ```txt
 MVP v1.11 - Portfolio Demo Readiness: DONE
 MVP v1.12 - Post-MVP Backlog Planning: DONE
-Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Latest completed local validation: MVP v1.62 local validation PASS
+Latest completed scoped task: MVP v1.62 - Admin Content Dashboard Lite
 Current active milestone: MVP v1.48 deployed smoke remains open
 Product core: COMPLETE
-Local validation: PASS for v1.48 local pre-deploy validation: npm ci, lint, typecheck, 114 test files / 1171 tests, build, isolated admin product review smoke 3/3 tests, and full E2E 34/34 tests. v1.47 resolves the v1.46 local Auth.js `MissingSecret`/demo-data blockers for E2E smoke with test-only admin/non-admin auth and an idempotent `unverified` smoke product. v1.43 install/lint/typecheck/unit tests/build/full E2E/audit remains PASS; v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
+Local validation: PASS for v1.62 local validation: lint, typecheck, 122 test files / 1353 tests, build after elevated rerun, and full E2E after elevated rerun with 42/42 tests. v1.48 local pre-deploy validation remains PASS, but deployed admin product review smoke evidence is missing or incomplete. v1.47 resolves the v1.46 local Auth.js `MissingSecret`/demo-data blockers for E2E smoke with test-only admin/non-admin auth and an idempotent `unverified` smoke product. v1.60, v1.59, v1.55, v1.54, v1.53, v1.52, v1.51, v1.50, v1.43, v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS; v1.24 closeout remains validation-blocked
 Production URL public reachability: PASS
 Production health endpoint: PASS
 Full production smoke/monitoring: PASS, user-reported historical evidence; v1.48 deployed admin review smoke evidence is missing or incomplete
@@ -33,6 +34,15 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.50 - Saved Product Personal Tags: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.51 - Dashboard Routine Coverage Summary: DONE / PASS locally
+MVP v1.52 - Dashboard Saved Product Tags Summary: DONE / PASS locally
+MVP v1.53 - Dashboard Saved Product Decision Queue Summary: DONE / PASS locally
+MVP v1.54 - Saved Products Review Queue Filters: DONE / PASS locally
+MVP v1.55 - Saved Product Review Reason Indicators: DONE / PASS locally
+MVP v1.59 - Admin Product Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.60 - Admin Ingredient Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.62 - Admin Content Dashboard Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 Portfolio demo readiness: COMPLETE
 Post-MVP backlog planning: COMPLETE
 Current phase: Post-MVP controlled product improvement
@@ -47,14 +57,23 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 |---|---|---|
 | Landing page | DONE | Public app entry. |
 | Google OAuth / Auth.js | DONE | Protected app routes. |
-| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish, v1.30 next-action reason copy, and v1.31 recoverable-error fallback actions. |
+| Dashboard | DONE | User-owned summary with v1.25 first-session guided next-step polish, v1.30 next-action reason copy, v1.31 recoverable-error fallback actions, v1.51 routine coverage summary, v1.52 saved product tags summary, and v1.53 saved product decision queue summary. |
 | Skin Profile onboarding | DONE | Create/update/view profile. |
 | Skin Profile management | DONE | View/edit/delete supported. |
 | Product Catalogue | DONE | Seeded demo products with v1.34 result count, active filter summary, clearer no-result recovery copy, and v1.37 cross-link to Ingredient Library. |
 | Product Detail | DONE | Product detail, personalized match section, v1.15 decision-support safety wording, v1.27 save-decision polish, v1.31 missing-resource fallback navigation, v1.37 ingredient-learning search links, and v1.41 saved decision metadata shortcut. |
 | Product Match | DONE | Rule-based educational matching with v1.15 explainability/caution guardrails, v1.26 clarity polish for product-fit labels, safety notes, no-profile guidance, and v1.31 no-result/error recovery actions. |
 | Product and ingredient seed data | IN PROGRESS / VALIDATION BLOCKED | v1.24 implementation contains 70 products and 70 ingredients with v1.24 seed quality tests, but the milestone is not DONE until build/E2E validation passes. |
-| Saved Products | DONE | Save/unsave flow with v1.27 save-context and empty-state clarity polish, v1.28 routine decision-support guidance, v1.31 load-error fallback navigation, v1.39 private personal notes/trial decision metadata, v1.40 client-side decision filters/search/summary, and v1.41 Product Detail shortcut reuse. |
+| Saved Products | DONE | Save/unsave flow with v1.27 save-context and empty-state clarity polish, v1.28 routine decision-support guidance, v1.31 load-error fallback navigation, v1.39 private personal notes/trial decision metadata, v1.40 client-side decision filters/search/summary, v1.41 Product Detail shortcut reuse, and v1.50 private personal tags. |
+| Saved Product Personal Tags | DONE / PASS | v1.50 adds private user-owned saved-product tags, validation, card display/edit/remove controls, client-side tag filtering, DTO backward compatibility, and public API privacy boundaries without AI suggestions, shared/public tags, or global product metadata changes. |
+| Dashboard Routine Coverage Summary | DONE / PASS locally | v1.51 reuses routine coverage review logic to add a dashboard routine coverage card and `routineCoverage` dashboard API field without schema, AI, Product Match scoring, or Routine Safety Engine changes. |
+| Dashboard Saved Product Tags Summary | DONE / PASS locally | v1.52 shows saved product personal tag summary on dashboard; no schema, AI, scoring, recommendation ranking, or admin workflow changes. |
+| Dashboard Saved Product Decision Queue Summary | DONE / PASS locally | v1.53 shows saved product decision status, missing organization metadata, and review-needed summary on dashboard using existing saved-product records only; no schema, saved-product mutation, AI, scoring, Routine Safety, recommendation ranking, or admin workflow changes. |
+| Saved Products Review Queue Filters | DONE / PASS locally | v1.54 adds client-side Saved Products review queue filters for needs-review, supported decision statuses, and missing organization metadata using existing saved-product records only; no schema, saved-product mutation, AI, scoring, Routine Safety, admin workflow, routing refactor, or new sorting changes. |
+| Saved Product Review Reason Indicators | DONE / PASS locally | v1.55 adds display-only review reason labels to Saved Product cards using existing saved-product records only; no schema, saved-product mutation, AI, scoring, Routine Safety, admin workflow, routing refactor, new sorting, new filter, or API contract changes. |
+| Admin Product Create/Edit Lite | DONE / PASS locally | v1.59 adds admin-only product create/edit lite on `/admin/products` with strict validation, `source = admin`, default `unverified`, preserved status-only review route, and unchanged public visibility rules. No hard delete, image upload, full CMS, marketplace/payment, real AI, or production-ready claim. |
+| Admin Ingredient Create/Edit Lite | DONE / PASS locally | v1.60 adds admin-only ingredient list/create/edit lite on `/admin/ingredients` with strict validation, duplicate normalized `inciName` prevention, preserved user-facing Ingredient Library/Detail/Explanation flows, and no delete, merge/deduplication, bulk import, image upload, Product-to-Ingredient mapping, or production-ready claim. |
+| Admin Content Dashboard Lite | DONE / PASS locally | v1.62 adds protected `/admin` with Product and Ingredient summary cards and links to existing admin pages. No schema, public catalogue behavior, product review status logic, ingredient explanation, delete, image upload, bulk import/export, marketplace/payment, real AI, or production-ready claim. |
 | Saved Product Comparison | DONE | Post-MVP v1.16 comparison panel for 2-3 saved products using existing educational product fields only. |
 | Saved Product Personal Notes & Trial Decision Support | DONE / PASS | v1.39 adds optional private saved-product decision status, planned routine slot, and personal note metadata with strict owner-scoped PATCH updates and comparison display. |
 | Saved Products Decision Queue & Review Filters | DONE / PASS | v1.40 adds client-side filters, search, all-loaded-products summary counts, filtered result count, reset behavior, filtered empty state, and hidden selected-comparison warning without API or data-model changes. |
@@ -89,7 +108,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Product & Ingredient Discovery Confidence Polish | DONE, scoped validation only | v1.34 improves Product Catalogue and Ingredient Library result counts, active filter summaries, ingredient function filtering through the existing API query, no-result recovery copy, reset behavior, and contextual ingredient detail action labels without changing Product Match scoring/ranking, Routine Safety logic, seed data, schema, auth, AI, CRUD scope, or broad API contracts. |
 | E2E Failure Triage & Extended Validation Cleanup | DONE | v1.35 fixes stale E2E selectors/copy expectations in dashboard, insights, saved-products, and today routine log flows. Full local validation passed, including build, audit, and `npm run test:e2e`. |
 | Product ↔ Ingredient Learning Path Polish | DONE | v1.37 adds educational Product Detail ingredient-search links, Ingredient Detail product-search links by INCI/display-name query, URL-initialized catalogue searches, and lightweight Product Catalogue / Ingredient Library cross-links without recommendation or ranking behavior. |
-| Local validation evidence | MIXED BY MILESTONE | v1.43 passed `npm ci` after unsandboxed rerun, lint, typecheck, 110 unit-test files / 1134 tests, build after unsandboxed rerun, full E2E with 31 passed after unsandboxed rerun, `npm audit`, and `npm audit --omit=dev`. v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS. v1.35 remains DONE with full E2E PASS. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
+| Local validation evidence | MIXED BY MILESTONE | v1.62 passed lint, typecheck, 122 unit-test files / 1353 tests, build after elevated rerun, and full E2E after elevated rerun with 42/42 tests. v1.60 passed lint, typecheck, 120 unit-test files / 1343 tests, build after elevated rerun, full E2E after elevated rerun with 39/39 tests, and audit. v1.48 local pre-deploy validation remains PASS, but deployed admin product review smoke evidence is missing or incomplete. v1.59, v1.55, v1.54, v1.53, v1.52, v1.51, v1.50, v1.43, v1.42, v1.41, v1.40, v1.39, v1.38, MVP Product Match Explainability Polish, and v1.37 remain PASS. v1.35 remains DONE with full E2E PASS. v1.24 closeout remains NOT DONE because build and E2E timed out in the prior closeout environment. |
 | Audit/evidence cleanup | DONE | v1.15.1 reviewed npm audit/dependency-risk evidence and synchronized docs without product behavior changes. |
 | Production smoke evidence | DONE | Manual Browser & Production Smoke Verification is DONE / PASS based on user-reported manual production verification. Exact date, tester, deployment id, browser/version, and device/OS were not provided. |
 | Production monitoring evidence | DONE | User-reported production signal checks observed no critical console errors, unexpected network 4xx/5xx errors, Vercel critical runtime errors, MongoDB read/write issues, production runtime blockers, or OAuth callback blockers. |
@@ -134,6 +153,15 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Admin Product Review Browser Smoke & Evidence | Admin / Browser Smoke Evidence | v1.46 | DONE / MIXED, local browser smoke found Auth.js MissingSecret; production smoke not performed |
 | Admin Product Review Repeatable Smoke Data & Auth Config Fix | Admin / Browser Smoke Data | v1.47 | DONE / PASS locally, production smoke not performed |
 | Deployed Admin Product Review Smoke Verification | Admin / Deployed Smoke Evidence | v1.48 | BLOCKED / DEPLOYED SMOKE INCOMPLETE, production-ready not claimed |
+| Saved Product Personal Tags | Saved Products UX / Organization | v1.50 | DONE / PASS locally, production-ready not claimed |
+| Dashboard Routine Coverage Summary | Dashboard / Routine UX | v1.51 | DONE / PASS locally |
+| Dashboard Saved Product Tags Summary | Dashboard / Saved Products UX | v1.52 | DONE / PASS locally |
+| Dashboard Saved Product Decision Queue Summary | Dashboard / Saved Products UX | v1.53 | DONE / PASS locally |
+| Saved Products Review Queue Filters | Saved Products UX | v1.54 | DONE / PASS locally |
+| Saved Product Review Reason Indicators | Saved Products UX | v1.55 | DONE / PASS locally |
+| Admin Product Create/Edit Lite | Admin / Content Management Lite | v1.59 | DONE / PASS locally, production-ready not claimed |
+| Admin Ingredient Create/Edit Lite | Admin / Content Management Lite | v1.60 | DONE / PASS locally, production-ready not claimed |
+| Admin Content Dashboard Lite | Admin / Content Management Lite | v1.62 | DONE / PASS locally, production-ready not claimed |
 
 ## Out-of-Scope Matrix
 
@@ -144,7 +172,7 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 | Skin/face score | OUT OF SCOPE | Avoids appearance pressure and unsupported scoring. |
 | Image upload/skin analysis | OUT OF SCOPE | Requires privacy, safety, and ML governance. |
 | Marketplace/cart/checkout/payment | OUT OF SCOPE | Commercial scope not required for MVP. |
-| Admin Product Review UI & API Foundation | DONE / PASS | v1.44 provides review API foundation and v1.45 adds a lightweight direct review UI; full admin dashboard and full CRUD remain out of scope. |
+| Admin Product/Ingredient Management Lite | DONE / PASS | v1.44 provides review API foundation, v1.45 adds a lightweight direct product review UI, v1.59 adds product create/edit lite, v1.60 adds ingredient create/edit lite, and v1.62 adds a lightweight admin content overview. Full CMS, hard delete, image management, marketplace/payment, ingredient delete/merge/import, and production-ready claims remain out of scope. |
 | Real external AI provider | POST-MVP | Optional only with strict validation and safety controls. |
 | Reviews/ratings | POST-MVP | Not needed for core tracking/education journey. |
 | Notifications | POST-MVP | Optional engagement feature. |
@@ -153,7 +181,8 @@ Optional media evidence tasks: screenshots and demo video intentionally skipped
 
 ```txt
 Core MVP features: COMPLETE
-Latest completed local validation: MVP v1.48 local pre-deploy validation PASS
+Latest completed local validation: MVP v1.62 local validation PASS
+Latest completed scoped task: MVP v1.62 - Admin Content Dashboard Lite
 Current active milestone: MVP v1.48 deployed smoke remains open
 Production status: Manual Browser & Production Smoke Verification DONE / PASS as historical user-reported evidence; v1.48 deployed admin review smoke evidence is missing or incomplete
 Production-ready claimed: No
@@ -189,6 +218,8 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.59 - Admin Product Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.60 - Admin Ingredient Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 Accessibility evidence metadata: date, tester, browser, device/OS, and screen reader used were not provided
 Recommended next task: Complete deployed smoke evidence for MVP v1.48
 Screenshots and demo video were not provided
