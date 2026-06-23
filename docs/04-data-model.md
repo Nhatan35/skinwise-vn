@@ -123,9 +123,13 @@ Visibility note:
   Builder product options, and product lookup flows treat `reviewed` and
   `verified` products as visible.
 - `unverified` products are hidden from public product flows and can be
-  reviewed through the admin-only v1.44 API foundation.
+  reviewed through the admin-only v1.44/v1.45 review workflow.
+- MVP v1.59 adds admin-only create/edit lite for product catalogue content.
+  Admin-created products use `source = "admin"` and default to
+  `verificationStatus = "unverified"` unless an admin explicitly selects a
+  different supported status.
 - Product visibility is controlled by `verificationStatus`. The model does not
-  use `isActive`, and v1.44 does not add hard delete behavior.
+  use `isActive`, and v1.59 does not add hard delete behavior.
 
 ### Why add product-fit fields?
 
@@ -154,6 +158,7 @@ type SavedProduct = {
   decisionStatus?: "considering" | "testing" | "paused" | "kept";
   plannedRoutineSlot?: "morning" | "evening" | "either" | "not_sure";
   personalNote?: string;
+  tags?: string[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -163,10 +168,14 @@ Saved Products are user-owned bookmarks for visible products. v1.39 adds
 optional private decision-support metadata to help users remember why they saved
 a product, whether they are considering/testing/pausing/keeping it, where they
 may use it in a routine, and any personal note before routine changes.
+v1.50 adds optional private personal tags for organizing saved products. Tags
+belong to the user-owned saved-product record and must not be stored on global
+Product documents.
 
 The public DTO includes the saved record id, `productId`, product DTO, optional
-decision-support metadata, and timestamps, but never exposes `userId`, `_id`,
-`ObjectId`, owner, ownership fields, or Mongo internals.
+decision-support metadata, `tags: string[]`, and timestamps, but never exposes
+`userId`, `_id`, `ObjectId`, owner, ownership fields, or Mongo internals.
+Existing saved products without `tags` map to an empty array in the DTO.
 
 ### Indexes
 
@@ -195,6 +204,15 @@ type Ingredient = {
   updatedAt: Date;
 };
 ```
+
+MVP v1.60 adds admin-only create/edit lite for Ingredient Library records.
+Admin ingredient create/edit keeps `sourceRefs` as `string[]`, uses the existing
+`evidenceLevel` enum (`basic`, `moderate`, `strong`, `uncertain`), and rejects
+client-submitted `_id`, `id`, `createdAt`, and `updatedAt`. New records and
+updates set timestamps server-side. Create and `inciName` update flows prevent
+case-insensitive duplicate normalized `inciName` values, but v1.60 does not add
+delete, soft delete, merge/deduplication, bulk import, image upload, or
+product-to-ingredient auto-linking.
 
 ### Indexes
 

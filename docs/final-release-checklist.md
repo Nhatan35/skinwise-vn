@@ -13,13 +13,13 @@ MVP v1.8 - Insights Usability & Progress Story Refinement
 Latest completed local validation:
 
 ```txt
-MVP v1.60 local validation PASS
+MVP v1.62 local validation PASS
 ```
 
 Latest completed scoped task:
 
 ```txt
-MVP v1.60 - Admin Ingredient Create/Edit Lite
+MVP v1.62 - Admin Content Dashboard Lite
 ```
 
 Completed closeout milestones:
@@ -71,8 +71,15 @@ MVP v1.45 - Admin Product Review UI & Workflow Polish: DONE / PASS, local lint/t
 MVP v1.46 - Admin Product Review Browser Smoke & Evidence: DONE / MIXED, local browser smoke found Auth.js MissingSecret blocker; authenticated admin workflow blocked by missing demo account/data; production smoke not performed
 MVP v1.47 - Admin Product Review Repeatable Smoke Data & Auth Config Fix: DONE / PASS locally, repeatable E2E admin/non-admin auth, unverified smoke product, admin browser smoke, and full E2E passed; production smoke not performed
 MVP v1.48 - Deployed Admin Product Review Smoke Verification: BLOCKED / DEPLOYED SMOKE INCOMPLETE, local pre-deploy validation PASS; deployed smoke evidence missing or incomplete; production-ready not claimed
+MVP v1.50 - Saved Product Personal Tags: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.51 - Dashboard Routine Coverage Summary: DONE / PASS locally
+MVP v1.52 - Dashboard Saved Product Tags Summary: DONE / PASS locally
+MVP v1.53 - Dashboard Saved Product Decision Queue Summary: DONE / PASS locally
+MVP v1.54 - Saved Products Review Queue Filters: DONE / PASS locally
+MVP v1.55 - Saved Product Review Reason Indicators: DONE / PASS locally
 MVP v1.59 - Admin Product Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 MVP v1.60 - Admin Ingredient Create/Edit Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
+MVP v1.62 - Admin Content Dashboard Lite: DONE / PASS locally; production-ready not claimed because v1.48 deployed smoke remains open
 ```
 
 MVP v1.11 is a documentation and presentation-readiness milestone. It does not add product features, change business logic, change schema behavior, or modify the MVP safety boundary.
@@ -102,6 +109,7 @@ v1.43 status: DONE / PASS - release evidence and validation cleanup refreshed RE
 v1.48 status: BLOCKED / DEPLOYED SMOKE INCOMPLETE - local pre-deploy validation passed, but deployed admin product review smoke evidence is missing or incomplete; production-ready is not claimed.
 v1.59 status: DONE / PASS locally - Admin Product Create/Edit Lite adds admin-only product create/edit routes and UI, preserves the status-only verification route, keeps public catalogue visibility limited to reviewed/verified products, and does not claim production-ready because v1.48 deployed smoke remains open.
 v1.60 status: DONE / PASS locally - Admin Ingredient Create/Edit Lite adds admin-only ingredient list/create/edit routes and UI, prevents duplicate normalized INCI names, preserves user-facing Ingredient Library/Detail/Explanation flows, and does not claim production-ready because v1.48 deployed smoke remains open.
+v1.62 status: DONE / PASS locally - Admin Content Dashboard Lite adds protected `/admin` product/ingredient summary cards and links to existing admin content pages without schema changes, public behavior changes, delete/bulk/image scope, marketplace/payment, real AI, or production-ready claim.
 Portfolio Evidence Package documentation: Prepared.
 Optional remaining media evidence tasks: screenshots and demo video.
 
@@ -119,7 +127,7 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Skin Journal | PASS | Journal create/edit/delete flows are implemented and covered by tests. |
 | Insights usability refinement | PASS | Progress-story framing, calendar readability, reflective product usage copy, next actions, Personal Insight Review, calculation explanations, and tracking quality checklist are complete. |
 | Settings / Data Control | PASS | Settings page, data export, app-data deletion, account deletion request marker, and account app-data summary are implemented; v1.23 hardened app-data deletion confirmation, ownership tests, and documentation. |
-| Local validation | PASS FOR LATEST LOCAL VALIDATION | MVP v1.60 local validation passed with lint, typecheck, 120 test files / 1343 tests, build after elevated rerun, full E2E after elevated rerun with 39/39 tests, and audit. MVP v1.59 local validation also passed with lint, typecheck, 117 test files / 1298 tests, build after elevated rerun, full E2E after elevated rerun with 36/36 tests, and audit. MVP v1.48 local pre-deploy validation remains PASS, but deployed admin product review smoke evidence is missing or incomplete. MVP v1.43, v1.42, v1.37, and v1.35 remain PASS/DONE as historical evidence. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
+| Local validation | PASS FOR LATEST LOCAL VALIDATION | MVP v1.62 local validation passed with lint, typecheck, 122 test files / 1353 tests, build after elevated rerun, and full E2E after elevated rerun with 42/42 tests. MVP v1.60 local validation passed with lint, typecheck, 120 test files / 1343 tests, build after elevated rerun, full E2E after elevated rerun with 39/39 tests, and audit. MVP v1.59 local validation also passed with lint, typecheck, 117 test files / 1298 tests, build after elevated rerun, full E2E after elevated rerun with 36/36 tests, and audit. MVP v1.48 local pre-deploy validation remains PASS, but deployed admin product review smoke evidence is missing or incomplete. MVP v1.55, v1.43, v1.42, v1.37, and v1.35 remain PASS/DONE as historical evidence. MVP v1.24 closeout remains NOT DONE / VALIDATION BLOCKED because build and E2E timed out in the prior closeout environment. |
 | Production URL public reachability | PASS | Direct unauthenticated public HTTP check of `https://skinwise-vn.vercel.app/` returned HTTP 200 on 2026-06-11. |
 | Production health endpoint | PASS | Direct unauthenticated public HTTP check of `/api/health` returned HTTP 200 and expected v1.22 JSON contract on 2026-06-11. |
 | Manual Browser & Production Smoke Verification | PASS | User-reported manual production verification completed: public/protected routes, Google OAuth, authenticated MVP flows, Product ↔ Ingredient learning links, `/api/health`, browser console/network, Vercel logs, MongoDB read/write behavior, and OAuth callback flow passed with no critical blockers observed. |
@@ -134,10 +142,10 @@ Optional remaining media evidence tasks: screenshots and demo video.
 | Portfolio case study | PASS | `docs/portfolio-case-study.md` is updated for portfolio/demo readiness and current post-MVP status. |
 | Demo script | PASS | `docs/demo-script.md` contains a 3-5 minute demo flow and backup plan. |
 | Screenshot checklist | PASS | `docs/screenshots-checklist.md` contains optional portfolio evidence guidance; actual screenshot files are not claimed by repository docs. |
-| Documentation truth sync | PASS | Current release status is synchronized for v1.59/v1.60 local validation PASS, v1.48 incomplete deployed smoke evidence, and no production-ready claim. |
+| Documentation truth sync | PASS | Current release status is synchronized for v1.62/v1.60/v1.59 local validation PASS, v1.48 incomplete deployed smoke evidence, and no production-ready claim. |
 | Portfolio/demo/interview readiness | READY | Ready at MVP level. |
 | Post-MVP backlog planning | PASS | MVP v1.12 backlog planning is complete. |
-| Latest post-MVP implementation | PASS | MVP v1.60 Admin Ingredient Create/Edit Lite is complete locally based on repository evidence. MVP v1.59 Admin Product Create/Edit Lite is present. MVP v1.48 deployed smoke remains open because deployed evidence is missing or incomplete. MVP v1.35 remains DONE with full E2E PASS; v1.24 remains NOT DONE / VALIDATION BLOCKED as a historical closeout. |
+| Latest post-MVP implementation | PASS | MVP v1.62 Admin Content Dashboard Lite is complete locally based on repository evidence. MVP v1.60 Admin Ingredient Create/Edit Lite, MVP v1.59 Admin Product Create/Edit Lite, and MVP v1.50-v1.55 scoped work/release evidence are present. MVP v1.48 deployed smoke remains open because deployed evidence is missing or incomplete. MVP v1.35 remains DONE with full E2E PASS; v1.24 remains NOT DONE / VALIDATION BLOCKED as a historical closeout. |
 | Latest MVP quality improvement | PASS | MVP Product Match Explainability Polish is complete. It changes Product Match, Product Detail, and Saved Products comparison copy/presentation only; business logic, scoring, matching, AI behavior, auth, schema, environment, packages, dependencies, and API contracts are unchanged. |
 | Latest audit/evidence cleanup | PASS | MVP v1.15.1 audit/dependency-risk review and documentation evidence sync are complete as a historical patch. |
 | Historical release docs | PASS | Historical v1.3/v1.0 notes remain preserved as historical records. |
@@ -453,7 +461,7 @@ Evidence boundary:
 | `docs/18-deployment-checklist.md` | PASS | Deployment and production checklist reflects v1.48 local validation PASS and keeps production smoke as historical user-reported PASS, not a v1.48 production-ready claim. |
 | `docs/production-smoke-test-v1.9.md` | PASS | Production smoke and monitoring evidence recorded as user-reported PASS. |
 | `docs/production-monitoring-runbook.md` | PASS | Monitoring runbook includes `/api/health` check, its intentional limitations, current evidence boundary, and recovery plan. |
-| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, v1.48 local validation PASS, completed accessibility verification, incomplete deployed smoke evidence, and current task status are synchronized. |
+| `docs/ai-coding/02-implementation-status.md` | PASS | Current phase, latest v1.55 local validation PASS, completed accessibility verification, incomplete v1.48 deployed smoke evidence, and latest scoped task status are synchronized. |
 | `docs/ai-coding/06-current-sprint-plan.md` | PASS | Current phase, v1.48 incomplete deployed smoke boundary, and active-milestone status are synchronized. |
 | `docs/ai-coding/07-demo-data-and-demo-script.md` | PASS | Demo data checklist and demo script are aligned. |
 | `docs/screenshots-checklist.md` | PASS | Optional screenshot checklist prepared. |

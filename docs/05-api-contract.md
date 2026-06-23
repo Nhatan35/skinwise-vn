@@ -265,8 +265,8 @@ Server-side rules:
 - If current user role is `USER`, set `createdByUserId = currentUser.id`.
 - Ignore any client-provided `source`, `verificationStatus`, or `createdByUserId`.
 - Public `POST /api/products` is for user-submitted products only.
-- Admin product creation/verification is out of MVP UI scope.
-- If implemented later, admin product management must use `/api/admin/products` routes and require `ADMIN` role.
+- Admin product management uses `/api/admin/products` routes and requires
+  `ADMIN` role.
 
 Errors:
 
@@ -280,8 +280,8 @@ Server-side trust rules:
 - Server sets `source = "user_submitted"`.
 - Server sets `verificationStatus = "unverified"`.
 - Server sets `createdByUserId = currentUser.id`.
-- Admin product verification is out of MVP UI scope.
-- If implemented later, admin product creation/review must use `/api/admin/products` routes and require `ADMIN` role.
+- Admin product creation/review uses `/api/admin/products` routes and requires
+  `ADMIN` role.
 
 ### GET /api/products/:id
 
@@ -307,7 +307,8 @@ Errors:
 
 ### GET /api/admin/products
 
-Implementation status: MVP v1.44 admin product review API foundation.
+Implementation status: MVP v1.44 admin product review API foundation, extended
+by MVP v1.59 admin product create/edit lite.
 
 Lists products for admin review across all `verificationStatus` values,
 including `unverified`, `reviewed`, and `verified`.
@@ -360,7 +361,124 @@ Notes:
 
 - Response DTOs omit raw MongoDB `_id`, `ObjectId`, `source`,
   `createdByUserId`, and private internals.
-- This is not a full admin dashboard and does not add product create/edit CRUD.
+- This is not a full admin CMS. MVP v1.59 adds create/edit lite only; hard
+  delete, image management, full ingredient CRUD, marketplace, payment, and
+  real AI generation remain out of scope.
+
+### POST /api/admin/products
+
+Implementation status: MVP v1.59 admin product create/edit lite.
+
+Creates a product through the admin-only catalogue workflow.
+
+Authentication and authorization:
+
+- Requires authenticated user.
+- Requires `AppUserProfile.role = "ADMIN"`.
+- Role is read from `AppUserProfile`, not from client input or raw session
+  claims.
+
+Request:
+
+```json
+{
+  "name": "Product name",
+  "brand": "Brand",
+  "category": "serum",
+  "priceRange": "budget",
+  "ingredientsText": "Water, Glycerin, Panthenol",
+  "keyActives": ["Panthenol"],
+  "tags": ["admin-lite"],
+  "warnings": [],
+  "skinTypes": ["sensitive"],
+  "concerns": ["barrier_support"],
+  "suitableFor": ["basic routine"],
+  "notRecommendedFor": [],
+  "verificationStatus": "unverified"
+}
+```
+
+Validation and server-side rules:
+
+- `name`, `brand`, `category`, `priceRange`, and `ingredientsText` are required.
+- Enum fields must use the existing product enum values.
+- Text fields are trimmed.
+- Text array fields are trimmed and empty items are removed.
+- `verificationStatus` defaults to `unverified` when omitted.
+- The server sets `source = "admin"`.
+- The server may set `createdByUserId` from the admin profile ObjectId; clients
+  cannot submit it directly.
+- Client-submitted `_id`, `id`, `source`, `createdByUserId`, `createdAt`, and
+  `updatedAt` are rejected.
+- Response DTOs do not expose `source` or `createdByUserId`.
+
+Response:
+
+```json
+{
+  "data": {
+    "product": {
+      "id": "product_123",
+      "name": "Product name",
+      "brand": "Brand",
+      "category": "serum",
+      "priceRange": "budget",
+      "verificationStatus": "unverified"
+    }
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
+- INTERNAL_ERROR
+
+### PATCH /api/admin/products/:id
+
+Implementation status: MVP v1.59 admin product create/edit lite.
+
+Updates editable product content fields for an existing product. This route is
+separate from the status-only `PATCH /api/admin/products/:id/verification-status`
+route.
+
+Authentication and authorization:
+
+- Requires authenticated user.
+- Requires `AppUserProfile.role = "ADMIN"`.
+
+Request:
+
+```json
+{
+  "name": "Updated product name",
+  "brand": "Updated brand",
+  "verificationStatus": "reviewed"
+}
+```
+
+Validation and server-side rules:
+
+- Partial updates are supported.
+- If `name` or `brand` is provided, it must not be empty after trimming.
+- Enum fields must use the existing product enum values.
+- Text array fields are trimmed and empty items are removed.
+- The server updates `updatedAt`.
+- Existing fields are preserved when they are omitted from the request.
+- Client-submitted `_id`, `id`, `source`, `createdByUserId`, `createdAt`, and
+  `updatedAt` are rejected.
+- Response DTOs do not expose `source` or `createdByUserId`.
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
+- NOT_FOUND
+- INTERNAL_ERROR
 
 ### PATCH /api/admin/products/:id/verification-status
 
@@ -718,6 +836,7 @@ Response:
         "decisionStatus": "testing",
         "plannedRoutineSlot": "evening",
         "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn.",
+        "tags": ["To buy", "Patch test"],
         "createdAt": "2026-05-26T00:00:00.000Z",
         "updatedAt": "2026-05-26T00:00:00.000Z"
       }
@@ -733,8 +852,10 @@ DTO safety:
 - `SavedProductDto` must not expose `_id`, `ObjectId`, owner, ownership fields,
   or Mongo internals.
 - Optional personal metadata may include only `decisionStatus`,
-  `plannedRoutineSlot`, and `personalNote`.
+  `plannedRoutineSlot`, `personalNote`, and private user-owned `tags`.
 - Product data is returned through the existing public `ProductDto`.
+- Personal saved-product tags are not exposed through public product catalogue or
+  product detail APIs.
 
 Errors:
 
@@ -773,6 +894,7 @@ Response:
         "id": "product_123",
         "name": "Niacinamide 5% Serum"
       },
+      "tags": [],
       "createdAt": "2026-05-26T00:00:00.000Z",
       "updatedAt": "2026-05-26T00:00:00.000Z"
     }
@@ -799,7 +921,8 @@ Request:
 {
   "decisionStatus": "testing",
   "plannedRoutineSlot": "evening",
-  "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn."
+  "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn.",
+  "tags": ["To buy", "Patch test"]
 }
 ```
 
@@ -816,13 +939,24 @@ Validation and behavior:
 - `personalNote` is trimmed.
 - `personalNote` maximum length is 1000 characters.
 - Empty `personalNote` after trimming is accepted and clears the note.
+- `tags` is an optional array of private personal tag labels.
+- Tags are trimmed.
+- Empty tags are rejected.
+- Duplicate tags on the same saved product are rejected case-insensitively.
+- Maximum tag length is 30 characters.
+- Maximum tags per saved product is 8.
+- Tags may contain letters, numbers, spaces, hyphen, and underscore only.
+- Missing saved-product tags are returned to clients as an empty array.
 - Unknown fields are rejected.
 - Client-submitted internal/ownership fields are rejected, including `id`, `_id`,
   `userId`, `productId`, `createdAt`, `updatedAt`, `product`, `owner`, and
   `ownership`.
 - Update is scoped by `currentUser.id + productId`.
-- Only `decisionStatus`, `plannedRoutineSlot`, `personalNote`, and server-owned
-  `updatedAt` may be written.
+- Only `decisionStatus`, `plannedRoutineSlot`, `personalNote`, `tags`, and
+  server-owned `updatedAt` may be written.
+- Updating `tags` must preserve existing `decisionStatus`, `plannedRoutineSlot`,
+  and `personalNote` unless those fields are explicitly included in the same
+  request.
 
 Response:
 
@@ -839,6 +973,7 @@ Response:
       "decisionStatus": "testing",
       "plannedRoutineSlot": "evening",
       "personalNote": "Muốn thử sau khi routine hiện tại ổn định hơn.",
+      "tags": ["To buy", "Patch test"],
       "createdAt": "2026-05-26T00:00:00.000Z",
       "updatedAt": "2026-06-13T00:00:00.000Z"
     }
@@ -908,7 +1043,8 @@ Visibility rules:
 - Ingredient records do not use product `verificationStatus`.
 - Ingredient records do not use `includeMine`.
 - User-submitted ingredient creation is out of MVP scope.
-- Admin ingredient management is out of MVP UI scope.
+- Admin ingredient create/edit lite uses `/api/admin/ingredients` routes and
+  requires `ADMIN` role.
 
 Response:
 
@@ -1012,6 +1148,138 @@ Errors:
 - RATE_LIMITED
 - VALIDATION_ERROR
 - INTERNAL_ERROR
+
+### GET /api/admin/ingredients
+
+Implementation status: MVP v1.60 admin ingredient create/edit lite.
+
+Lists Ingredient Library records for admin management. This is a separate
+admin-only route and does not broaden public write behavior.
+
+Authentication and authorization:
+
+- Requires authenticated user.
+- Requires `AppUserProfile.role = "ADMIN"`.
+- Role is read from `AppUserProfile`, not from client input or raw session
+  claims.
+
+Query params:
+
+```txt
+q?: string
+function?: string
+limit?: number
+```
+
+Search behavior:
+
+- `q` searches `inciName`, `aliases`, `functions`, and `commonUses`.
+- `function` filters by an existing function string.
+- Results are sorted by `inciName` and limited to a max of 50.
+
+Response:
+
+```json
+{
+  "data": {
+    "items": [
+      {
+        "id": "ingredient_123",
+        "inciName": "Niacinamide",
+        "aliases": ["Vitamin B3"],
+        "functions": ["barrier_support"],
+        "evidenceLevel": "moderate",
+        "sourceRefs": ["manual-curation"]
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
+- INTERNAL_ERROR
+
+### POST /api/admin/ingredients
+
+Implementation status: MVP v1.60 admin ingredient create/edit lite.
+
+Creates an Ingredient Library record through the admin-only workflow.
+
+Request:
+
+```json
+{
+  "inciName": "Niacinamide",
+  "aliases": ["Vitamin B3"],
+  "functions": ["barrier_support"],
+  "commonUses": ["barrier support"],
+  "suitableFor": ["oily skin"],
+  "cautionFor": ["very sensitive skin"],
+  "avoidWith": ["known sensitivity"],
+  "evidenceLevel": "moderate",
+  "sourceRefs": ["manual-curation"]
+}
+```
+
+Validation and server-side rules:
+
+- `inciName` is required, trimmed, non-empty, and max 160 chars.
+- `evidenceLevel` must be one of `basic`, `moderate`, `strong`, or
+  `uncertain`.
+- Array fields are trimmed, empty items are removed, and ordering is preserved.
+- `sourceRefs` remains `string[]`; each item is trimmed and max 500 chars.
+- Client-submitted `_id`, `id`, `createdAt`, and `updatedAt` are rejected.
+- Server sets `createdAt` and `updatedAt`.
+- Duplicate normalized `inciName` values are rejected case-insensitively with
+  `CONFLICT`.
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
+- CONFLICT
+- INTERNAL_ERROR
+
+### PATCH /api/admin/ingredients/:id
+
+Implementation status: MVP v1.60 admin ingredient create/edit lite.
+
+Partially updates editable Ingredient Library fields.
+
+Validation and server-side rules:
+
+- `id` must be a MongoDB ObjectId string; invalid ids return
+  `VALIDATION_ERROR` / HTTP 400.
+- Valid ids with no matching ingredient return `NOT_FOUND` / HTTP 404.
+- Partial updates are supported.
+- If `inciName` is provided, it must be trimmed and non-empty.
+- Updating `inciName` checks duplicate normalized names against other
+  ingredients; keeping the same ingredient's own `inciName` is allowed.
+- `evidenceLevel` must use the existing enum when provided.
+- Array fields are normalized the same way as create.
+- Client-submitted `_id`, `id`, `createdAt`, and `updatedAt` are rejected.
+- Server updates `updatedAt` and preserves omitted fields.
+
+Errors:
+
+- UNAUTHORIZED
+- FORBIDDEN
+- VALIDATION_ERROR
+- NOT_FOUND
+- CONFLICT
+- INTERNAL_ERROR
+
+Notes:
+
+- v1.60 does not add ingredient delete, soft delete, publish/unpublish,
+  merge/deduplication, bulk import/export, image upload, AI auto-generation, or
+  product-to-ingredient relational mapping.
 
 ## 7. Routines
 
@@ -1350,7 +1618,7 @@ Usage notes:
 
 ### GET /api/dashboard?localDate=YYYY-MM-DD
 
-Returns the authenticated user's MVP dashboard summary for the requested browser/user local date, including additive closeout summary fields for profile completion, saved products, 7-day routine consistency, and 7-day journal trend.
+Returns the authenticated user's MVP dashboard summary for the requested browser/user local date, including additive closeout summary fields for profile completion, saved products, routine coverage, 7-day routine consistency, and 7-day journal trend.
 
 Authentication and ownership:
 
@@ -1380,6 +1648,23 @@ Successful response:
     "dashboard": {
       "skinProfile": {},
       "routines": {},
+      "routineCoverage": {
+        "hasRoutines": false,
+        "totalRoutines": 0,
+        "hasMorningRoutine": false,
+        "hasEveningRoutine": false,
+        "hasMorningSunscreen": false,
+        "hasMoisturizer": false,
+        "summary": "string",
+        "coverageItems": [],
+        "cautionItems": [],
+        "nextAction": {
+          "label": "string",
+          "description": "string",
+          "actionType": "create-routine",
+          "href": "/routines"
+        }
+      },
       "todayRoutineLogs": {},
       "latestRoutineAnalysis": {},
       "latestJournal": {},
@@ -1391,6 +1676,28 @@ Successful response:
       },
       "savedProducts": {
         "count": 0
+      },
+      "savedProductTags": {
+        "totalSavedProducts": 0,
+        "taggedProductCount": 0,
+        "untaggedProductCount": 0,
+        "topTags": []
+      },
+      "savedProductDecisionQueue": {
+        "totalSavedProducts": 0,
+        "consideringCount": 0,
+        "testingCount": 0,
+        "pausedCount": 0,
+        "keptCount": 0,
+        "unsetDecisionStatusCount": 0,
+        "withoutPlannedRoutineSlotCount": 0,
+        "withoutPersonalNoteCount": 0,
+        "reviewNeededCount": 0,
+        "nextAction": {
+          "label": "Xem lại sản phẩm đã lưu",
+          "description": "Lưu sản phẩm để bắt đầu xây dựng hàng chờ xem lại.",
+          "href": "/saved-products"
+        }
       },
       "routineConsistency": {
         "completedDays": 0,
@@ -1408,6 +1715,108 @@ Successful response:
   "error": null
 }
 ```
+
+`routineCoverage` response shape:
+
+```ts
+routineCoverage: {
+  hasRoutines: boolean;
+  totalRoutines: number;
+  hasMorningRoutine: boolean;
+  hasEveningRoutine: boolean;
+  hasMorningSunscreen: boolean;
+  hasMoisturizer: boolean;
+  summary: string;
+  coverageItems: Array<{
+    id:
+      | "routine-created"
+      | "morning-routine"
+      | "evening-routine"
+      | "morning-sunscreen"
+      | "moisturizer";
+    label: string;
+    status: "complete" | "note" | "missing";
+    description: string;
+  }>;
+  cautionItems: Array<{
+    id:
+      | "missing-morning-sunscreen"
+      | "missing-moisturizer"
+      | "multiple-treatments";
+    label: string;
+    description: string;
+    severity: "info" | "caution";
+  }>;
+  nextAction: {
+    label: string;
+    description: string;
+    actionType:
+      | "create-routine"
+      | "review-morning-routine"
+      | "review-moisturizer"
+      | "review-treatment-pacing"
+      | "keep-monitoring";
+    href: string;
+  };
+};
+```
+
+`savedProductTags` response shape:
+
+```ts
+savedProductTags: {
+  totalSavedProducts: number;
+  taggedProductCount: number;
+  untaggedProductCount: number;
+  topTags: Array<{
+    label: string;
+    count: number;
+  }>;
+};
+```
+
+Saved product tag summary notes:
+
+- `topTags` only reflects user personal tags on saved products.
+- `topTags` does not imply recommendation ranking.
+- `topTags` does not include global product tags.
+- No `userId` or `ObjectId` is returned.
+- User-generated tag labels are returned as labels and should not be treated as system-generated recommendations.
+
+`savedProductDecisionQueue` response shape:
+
+```ts
+savedProductDecisionQueue: {
+  totalSavedProducts: number;
+  consideringCount: number;
+  testingCount: number;
+  pausedCount: number;
+  keptCount: number;
+  unsetDecisionStatusCount: number;
+  withoutPlannedRoutineSlotCount: number;
+  withoutPersonalNoteCount: number;
+  reviewNeededCount: number;
+  nextAction: {
+    label: string;
+    description: string;
+    href: string;
+  };
+};
+```
+
+Saved product decision queue notes:
+
+- `totalSavedProducts` is the number of current user's saved-product records read by the dashboard use case.
+- `consideringCount`, `testingCount`, `pausedCount`, and `keptCount` count only supported `decisionStatus` values.
+- `unsetDecisionStatusCount` counts missing, null, undefined, empty, or whitespace-only decision status values.
+- `withoutPlannedRoutineSlotCount` counts missing, null, undefined, empty, or whitespace-only planned routine slot values.
+- `withoutPersonalNoteCount` counts missing, null, undefined, empty, or whitespace-only personal notes.
+- `reviewNeededCount` counts each saved product at most once when it has a blank decision status, unknown non-blank decision status, blank planned routine slot, blank personal note, `decisionStatus: "considering"`, or `decisionStatus: "testing"`.
+- Unknown non-blank decision status values are not displayed as supported categories and are treated as review-needed.
+- `nextAction.href` points to `/saved-products`.
+- This field is read-only and does not mutate, normalize, or backfill saved-product records.
+- This field does not change Product Match scoring, Routine Safety logic, or AI behavior.
+- No `userId`, `_id`, raw `ObjectId`, or public product API saved-product metadata is exposed.
 
 Response safety:
 
