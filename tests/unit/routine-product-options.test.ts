@@ -44,6 +44,7 @@ function createSavedProduct(
     id: `saved-${product.id}`,
     productId: product.id,
     product,
+    tags: [],
     createdAt: fixedDate,
     updatedAt: fixedDate,
     ...overrides,
